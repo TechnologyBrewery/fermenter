@@ -1,0 +1,29 @@
+package ${basePackage}.service;
+
+import org.tigris.atlas.service.AbstractServiceFactory;
+import org.tigris.atlas.service.Service;
+
+public class ServiceFactory extends AbstractServiceFactory {
+
+	private static ServiceFactoryInterface getServiceFactory() {
+		return (ServiceFactoryInterface) AbstractServiceFactory.getAbstractServiceFactory(ServiceFactory.class);
+	}
+	
+	public static Service createService(String name) {
+		return getServiceFactory().createService( name );
+	}
+
+	public static EntityMaintenanceService createEntityMaintenanceService() {
+		return getServiceFactory().createEntityMaintenanceService();
+	}
+
+#foreach( $service in $serviceNames )
+	/**
+	 * Create a(n) ${service}Service instance
+	 */
+	public static ${service}Service create${service}Service() {
+		return getServiceFactory().create${service}Service();
+	}
+	
+#end
+}

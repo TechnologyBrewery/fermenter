@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ejb-jar PUBLIC "-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN" "http://java.sun.com/dtd/ejb-jar_2_0.dtd">
+<ejb-jar>
+  <description>Here is the description of the test's beans</description>
+  <enterprise-beans>
+#foreach($service in $services)	
+    <session>
+      <description>J2EE enabled ${service.name} implementation</description>
+      <display-name>${service.name}SB</display-name>
+      <ejb-name>${service.name}Bean</ejb-name>
+      <home>${prefix}.service.ejb.${service.name}ServiceHome</home>
+      <remote>${prefix}.service.ejb.${service.name}ServiceRemote</remote>
+      <local-home>${prefix}.service.ejb.${service.name}ServiceLocalHome</local-home>
+      <local>${prefix}.service.ejb.${service.name}ServiceLocal</local>
+      <ejb-class>${prefix}.service.ejb.${service.name}ServiceBean</ejb-class>
+      <session-type>Stateless</session-type>
+      <transaction-type>Container</transaction-type>
+    </session>
+#end
+    <session>
+      <description>J2EE enabled EntityMaintenance implementation</description>
+      <display-name>EntityMaintenanceSB</display-name>
+      <ejb-name>EntityMaintenanceBean</ejb-name>
+      <home>${prefix}.service.ejb.EntityMaintenanceServiceHome</home>
+      <remote>${prefix}.service.ejb.EntityMaintenanceServiceRemote</remote>
+      <local-home>${prefix}.service.ejb.EntityMaintenanceServiceLocalHome</local-home>
+      <local>${prefix}.service.ejb.EntityMaintenanceServiceLocal</local>
+      <ejb-class>${prefix}.service.ejb.EntityMaintenanceServiceBean</ejb-class>
+      <session-type>Stateless</session-type>
+      <transaction-type>Container</transaction-type>
+    </session>
+	<message-driven>
+	  <ejb-name>CoreMessageDrivenBean</ejb-name>
+	  <ejb-class>org.tigris.atlas.service.jms.CoreMessageDrivenBean</ejb-class>
+	  <transaction-type>Container</transaction-type>
+	  <message-driven-destination>
+        <destination-type>javax.jms.Queue</destination-type>
+      </message-driven-destination>
+	</message-driven>
+  </enterprise-beans>
+  <assembly-descriptor>
+  	<!-- transactions are currently handled by spring, so this is a bit of a mess -->
+#foreach($service in $services)
+	<container-transaction>
+      <method>
+        <ejb-name>${service.name}Bean</ejb-name>
+        <method-name>*</method-name>
+      </method>
+      <trans-attribute>Supports</trans-attribute>
+    </container-transaction>
+#foreach($operation in $service.operations)	
+    <!--<container-transaction>
+      <method>
+        <ejb-name>${service.name}Bean</ejb-name>
+        <method-name>${operation.lowercaseName}</method-name>
+      </method>
+      <trans-attribute>${operation.transactionAttribute}</trans-attribute>
+    </container-transaction>-->
+#end
+#end
+	<container-transaction>
+      <method>
+        <ejb-name>EntityMaintenanceBean</ejb-name>
+        <method-name>*</method-name>
+      </method>
+      <trans-attribute>Supports</trans-attribute>
+    </container-transaction>
+    <!--<container-transaction>
+      <method>
+        <ejb-name>EntityMaintenanceBean</ejb-name>
+        <method-name>*</method-name>
+      </method>
+      <trans-attribute>Required</trans-attribute>
+    </container-transaction>-->
+	<container-transaction>
+      <method>
+        <ejb-name>CoreMessageDrivenBean</ejb-name>
+        <method-name>*</method-name>
+      </method>
+      <trans-attribute>NotSupported</trans-attribute>
+    </container-transaction>
+  </assembly-descriptor>
+  <ejb-client-jar>${artifactId}-ejb-client-${version}.jar</ejb-client-jar>
+</ejb-jar>

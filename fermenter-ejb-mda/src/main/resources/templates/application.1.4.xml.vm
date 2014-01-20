@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<application xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.4">
+	<description>Services pertaining to ${artifactId} functionality</description>
+	<display-name>${artifactId} Services</display-name>  
+
+	<module>
+		<ejb>${ejb-jar-name}.jar</ejb>
+	</module>
+
+</application>

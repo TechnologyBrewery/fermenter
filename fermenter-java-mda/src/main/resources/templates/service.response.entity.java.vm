@@ -1,0 +1,38 @@
+package ${basePackage}.service;
+
+import ${basePackage}.transfer.${entityType};
+import org.tigris.atlas.service.EntityServiceResponse;
+
+/**
+ * A result holder that contains a list of entity ${entityType}
+ *
+ * Generated Code - DO NOT MODIFY
+ */
+public class ${responseName}ServiceResponse extends EntityServiceResponse {
+	
+	/**
+	 * Default constructor
+	 */
+	public ${responseName}ServiceResponse() {
+		super();
+	}
+
+	/**
+	 * Set the ${entityType} on the response
+	 *
+	 * @param ${entityType} The ${entityType} entity
+	 */
+	public void set${entityType}(${entityType} entity) {
+		setEntity( entity );
+	}
+	
+	/**
+	 * Answer the ${entityType} from the response
+	 *
+	 * @return ${entityType} The ${entityType} entity
+	 */
+	public ${entityType} get${entityType}() {
+		return (${entityType}) getEntity();
+	}
+		
+}

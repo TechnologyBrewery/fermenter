@@ -1,0 +1,18 @@
+<project name="count-loce" basedir="../../../../" default="count">
+	<target name="count">
+		<taskdef name="LOCECounter" classname="com.numbersix.ant.locetask.LOCECounter">
+			<classpath>
+				<path refid="maven.dependency.classpath"/>
+			</classpath>
+		</taskdef>
+		<LOCECounter reportLocation="target/site">
+			<!-- each fileset will create a different section on the loc report -->
+			<fileset description="main" dir="src/main"/>
+			<fileset description="generated" dir="src/generated">
+				<exclude name="resources/site/**"/>
+				<exclude name="**/*.sql"/>
+			</fileset>
+			<fileset description="test" dir="src/test"/>			
+		</LOCECounter>
+	</target>
+</project>

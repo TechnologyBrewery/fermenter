@@ -1,0 +1,54 @@
+package ${basePackage}.bizobj;
+
+import java.util.Map;
+import java.util.HashMap;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import org.tigris.atlas.bizobj.BusinessObject;
+import ${basePackage}.transfer.*;
+
+public class BusinessObjectFactoryImpl implements BusinessObjectFactoryInterface {
+	
+	private static Log log = LogFactory.getLog( BusinessObjectFactoryImpl.class );
+	private static Map BUSINESS_OBJECT_TYPES = null;
+	
+	private static final String PREFIX = "${basePackage}.bizobj.";
+	
+	static {
+		BUSINESS_OBJECT_TYPES = new HashMap( ${entities.size()} );
+#foreach( $entity in $entities )
+		BUSINESS_OBJECT_TYPES.put( ${entity.name}.ENTITY, PREFIX + "${entity.name}BO" );
+#end
+	}
+	
+	public BusinessObject createBusinessObject(String entityName) { 
+		BusinessObject businessObject = null;
+		String type = (String) BUSINESS_OBJECT_TYPES.get( entityName );
+		
+		try {
+			Class clazz = Class.forName( type );
+			businessObject = (BusinessObject) clazz.newInstance();
+		} catch (InstantiationException e) {
+			log.error( "Unable to instantiate type: " + type );
+		} catch (IllegalAccessException e) {
+			log.error( "Unable to access type: " + type );
+		} catch (ClassNotFoundException e) {
+			log.error( "Unable to find class: " + type );
+		}
+		
+		return businessObject;
+	}
+	
+#foreach( $entity in $entities )
+	/**
+	 * Create a(n) ${entity.name} business object instance
+	 */
+	public ${entity.name}BO create${entity.name}BO() {
+		return (${entity.name}BO) createBusinessObject( ${entity.name}.ENTITY );
+	}
+
+#end
+
+}

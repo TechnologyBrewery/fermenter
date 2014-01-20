@@ -1,0 +1,55 @@
+package ${basePackage}.service.delegate;
+
+#foreach( $import in $service.imports )
+import $import;
+#end
+
+import ${basePackage}.service.ServiceFactory;
+import ${basePackage}.service.${service.name}Service;
+import org.tigris.atlas.service.delegate.pojo.AbstractServiceDelegate;
+
+import org.tigris.atlas.messages.Message;
+import org.tigris.atlas.messages.Messages;
+import org.tigris.atlas.messages.MessageFactory;
+import org.tigris.atlas.messages.Severity;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+/**
+ * Service delegate for the ${service.name} service
+ *
+ * Generated Code - DO NOT MODIFY
+ */
+public class ${service.name}ServiceDelegateImpl extends AbstractServiceDelegate implements ${service.name}ServiceDelegate {
+
+	private static Log log = LogFactory.getLog(${service.name}ServiceDelegateImpl.class);
+
+	/** Service implementation to which work is delegated. */
+	private ${service.name}Service serviceImpl;
+
+	/**
+	 * Create a new delegate.
+	 */
+	public ${service.name}ServiceDelegateImpl() {
+		super();
+		serviceImpl = ServiceFactory.create${service.name}Service();
+
+	}
+
+#foreach( $operation in $service.operations )
+#if ($operation.isRemote())
+
+	/**
+	 * Execute the ${operation.name} service
+	 *
+	 * @return ${operation.responseType}
+	 */
+	public ${operation.responseType} ${operation.lowercaseName}(${operation.signature}) {
+		return serviceImpl.${operation.lowercaseName}(${operation.parameterNames});
+		
+	}
+
+#end	 
+#end
+}

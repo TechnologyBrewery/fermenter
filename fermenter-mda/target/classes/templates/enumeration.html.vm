@@ -1,0 +1,30 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    	<link rel="stylesheet" type="text/css" href="../metadata.css">
+		<title>${enumeration.name}</title>
+	</head>
+	
+	<body>
+		<h1>${enumeration.name}</h1>
+	
+		<table border="1" cellpadding="10" cellspacing="0">
+			<tr>
+				<th>Name</th>
+#if( ! $enumeration.isNamed() )
+				<th>Value</th>
+#end
+			</tr>
+			
+#foreach( $enum in $enumeration.enumList )
+			<tr>
+				<td>${enum.name}</td>
+#if( ! $enumeration.isNamed() )
+				<td>${enum.value}</td>
+#end
+			</tr>
+#end
+		</table>
+	</body>
+</html>			
+				

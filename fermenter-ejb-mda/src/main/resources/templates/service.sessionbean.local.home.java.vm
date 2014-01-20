@@ -1,0 +1,17 @@
+package ${basePackage}.service.ejb;
+
+import javax.ejb.EJBLocalHome;
+import javax.ejb.CreateException;
+
+/**
+ * Home interface for the ${service.name} service
+ *
+ * Generated Code - DO NOT MODIFY
+ */
+public interface ${service.name}ServiceLocalHome extends EJBLocalHome {
+
+	public static final String JNDI_NAME = "ejb/${service.getBaseJndiName(${basePackage})}/service/ejb/${service.name}Local";
+
+	public ${service.name}ServiceLocal create() throws CreateException;
+
+}

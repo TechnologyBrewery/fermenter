@@ -1,0 +1,56 @@
+package ${basePackage}.persist.hibernate;
+
+import java.util.Map;
+import java.util.HashMap;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import org.tigris.atlas.persist.Dao;
+
+import ${basePackage}.persist.*;
+import ${basePackage}.transfer.*;
+
+public class DaoFactoryImpl implements DaoFactoryInterface {
+	
+	private static Log log = LogFactory.getLog( DaoFactoryImpl.class );
+	private static Map DAO_TYPES = null;
+	
+	private static final String PREFIX = "${basePackage}.persist.hibernate.";
+	
+	static {
+		DAO_TYPES = new HashMap( ${entities.size()} );
+#foreach( $entity in $entities )
+		DAO_TYPES.put( ${entity.name}.ENTITY, PREFIX + "${entity.name}DaoImpl" );
+#end
+	}
+	
+	public Dao createDao(String entityName) { 
+		Dao dao = null;
+		String type = (String) DAO_TYPES.get( entityName );
+		
+		try {
+			Class clazz = Class.forName( type );
+			dao = (Dao) clazz.newInstance();
+		} catch (InstantiationException e) {
+			log.error( "Unable to instantiate type: " + type );
+		} catch (IllegalAccessException e) {
+			log.error( "Unable to access type: " + type );
+		} catch (ClassNotFoundException e) {
+			log.error( "Unable to find class: " + type );
+		}
+		
+		return dao;
+	}
+	
+#foreach( $entity in $entities )
+	/**
+	 * Create a(n) ${entity.name} data access object instance
+	 */
+	public ${entity.name}Dao create${entity.name}Dao() {
+		return (${entity.name}Dao) createDao( ${entity.name}.ENTITY );
+	}
+
+#end
+
+}

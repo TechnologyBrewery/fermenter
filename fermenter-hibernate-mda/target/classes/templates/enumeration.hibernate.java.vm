@@ -1,0 +1,30 @@
+package ${basePackage}.persist.hibernate;
+
+#if ($enumeration.isNamed() == true) 
+import org.tigris.atlas.persist.hibernate.NamedEnumerationUserType;
+#else 
+import org.tigris.atlas.persist.hibernate.ValuedEnumerationUserType;
+#end
+
+/**
+ * Enumeration ${enumeration.name} custom user type.  This allows enumerations to be 
+ * used within HQL queries.
+ * 
+ * Generated Code - DO NOT MODIFY
+ * 		- Group Id: ${groupId}
+ * 		- Artifact Id: ${artifactId}
+ * 		- Version: ${version}
+ * 		- Enumeration file name: ${enumeration.name}
+ */
+public class ${enumeration.name}UserType 
+#if ($enumeration.isNamed() == true) 
+	extends NamedEnumerationUserType {
+#else 
+	extends ValuedEnumerationUserType { 
+#end
+
+	public ${enumeration.name}UserType() {
+		super(${basePackage}.enumeration.${enumeration.name}.class);
+	}
+
+}

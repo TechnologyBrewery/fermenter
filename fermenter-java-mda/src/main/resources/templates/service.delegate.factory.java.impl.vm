@@ -1,0 +1,59 @@
+package ${basePackage}.service.delegate;
+
+import java.util.Map;
+import java.util.HashMap;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.tigris.atlas.service.Service;
+
+
+public class ServiceDelegateFactoryImpl implements ServiceDelegateFactoryInterface {
+		
+	private static Log log = LogFactory.getLog( ServiceDelegateFactoryImpl.class );
+	private static Map DELEGATE_TYPES = null;
+	
+	private static final String PREFIX = "${basePackage}.service.delegate.";
+	private static final String SUFFIX = "ServiceDelegateImpl";
+	
+	static {
+		DELEGATE_TYPES = new HashMap( ${entities.size()} );
+#foreach( $serviceName in $serviceNames )
+		DELEGATE_TYPES.put( ${serviceName}ServiceDelegate.SERVICE_NAME, PREFIX + "${serviceName}" + SUFFIX );
+#end
+		DELEGATE_TYPES.put( EntityMaintenanceServiceDelegate.SERVICE_NAME, PREFIX + "EntityMaintenance" + SUFFIX );
+	}
+	
+	public Service createServiceDelegate(String serviceDelegateName) {
+		Service serviceDelegate = null;
+		String serviceDelegateType = (String) DELEGATE_TYPES.get( serviceDelegateName );
+		
+		try {
+			Class clazz = Class.forName( serviceDelegateType );
+			serviceDelegate = (Service) clazz.newInstance();
+		} catch (InstantiationException e) {
+			log.error( "Unable to instantiate type: " + serviceDelegateType );
+		} catch (IllegalAccessException e) {
+			log.error( "Unable to access type: " + serviceDelegateType );
+		} catch (ClassNotFoundException e) {
+			log.error( "Unable to find class: " + serviceDelegateType );
+		}
+		
+		return serviceDelegate;
+	}
+		
+	public EntityMaintenanceServiceDelegate createEntityMaintenanceServiceDelegate() {
+		return (EntityMaintenanceServiceDelegate) createServiceDelegate( EntityMaintenanceServiceDelegate.SERVICE_NAME );
+	}
+
+#foreach( $serviceName in $serviceNames )
+	/**
+	 * Create a(n) ${serviceName}ServiceDelegate instance
+	 */
+	public ${serviceName}ServiceDelegate create${serviceName}ServiceDelegate() {
+		return (${serviceName}ServiceDelegate) createServiceDelegate( ${serviceName}ServiceDelegate.SERVICE_NAME ); 
+	}
+
+#end
+
+}

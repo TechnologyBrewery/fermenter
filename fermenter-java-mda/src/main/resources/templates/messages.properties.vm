@@ -1,0 +1,4 @@
+#foreach ($message in $messages)
+${message.key}.summary=${message.getSummary($locale).text}
+${message.key}.detail=${message.getDetail($locale).text}
+#end

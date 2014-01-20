@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE profiles PUBLIC "-//ATLAS//DTD PROFILES//EN" "http://atlas.tigris.org/svn/atlas/trunk/atlas-mda/src/main/resources/profiles.dtd">
+
+<profiles>
+	
+	<profile name="java-interfaces">
+		<target name="transferObjectFactoryInterface"/>
+		<target name="businessObjectFactoryInterface"/>
+		<target name="serviceDelegateInterfaces"/>
+		<target name="serviceInterfaces"/>
+		<target name="serviceFactoryInterface"/>
+		<target name="serviceDelegateFactoryInterface"/>
+		<target name="dataAccessObjectFactoryInterface"/>
+		<target name="dataAccessObjects"/>
+		<target name="entityMaintenanceService"/>
+		<target name="entityMaintenanceServiceDelegateInterface"/>
+	</profile>
+	
+	<profile name="java-base" extends="java-interfaces">
+		<target name="baseBusinessObjects"/>
+		<target name="businessObjects"/>
+		<target name="businessObjectFactory"/>
+		<target name="businessObjectFactoryJava"/>
+		<target name="primaryKeys"/>
+		<target name="enumerationObjects"/>
+		<target name="transferObjects"/>
+		<target name="transferObjectFactory"/>
+		<target name="transferObjectFactoryJava"/>
+		<target name="transferObjectAssemblers"/>
+		<target name="serviceResponseIteratorObjects"/>
+		<target name="entityServiceResponseObjects"/>
+		<target name="entityCollectionServiceResponseObjects"/>
+		<target name="transferObjectComposites"/>				
+		<target name="baseBusinessObjectComposites"/>					
+		<target name="businessObjectComposites"/>
+		<target name="dataAccessObjectFactory"/>
+		<target name="serviceImplObjects"/>
+		<target name="serviceBaseImplObjects"/>
+		<target name="serviceFactory"/>	
+		<target name="serviceFactoryJava"/>				
+		<target name="serviceDelegateFactory"/>	
+		<target name="serviceDelegateFactoryJava"/>								
+		<target name="packageProperties"/>
+		<target name="messageProperties"/>
+		<target name="countLocAntXml"/>
+		<target name="entityMaintenanceServiceImpl"/>
+		<target name="factoryPropertiesPojo"/>
+	</profile>
+	
+	<profile name="java-pojo-services" extends="java-base">		
+		<target name="pojoServiceDelegateObjects"/>
+		<target name="pojoEntityMaintenanceServiceDelegate"/>
+		<target name="serviceDelegateFactoryJava"/>
+	</profile>
+	
+</profiles>

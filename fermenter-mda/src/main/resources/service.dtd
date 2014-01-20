@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!ELEMENT documentation (#PCDATA)>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT operation (name, documentation?, (return|return-many),parameters?, transaction-attribute?, view-type?, transmission-method?)>
+<!ELEMENT operations (operation+)>
+<!ELEMENT parameter (name, documentation?, type,project?,many?)>
+<!ELEMENT parameters (parameter*)>
+<!ELEMENT project (#PCDATA)>
+<!ELEMENT many (#PCDATA)>
+<!ELEMENT return (#PCDATA)>
+<!ELEMENT return-many (#PCDATA)>
+<!ELEMENT service (name, documentation?, operations)>
+<!ELEMENT type (#PCDATA)>
+<!ELEMENT transaction-attribute (#PCDATA)>
+<!ELEMENT transmission-method (#PCDATA)>
+<!ELEMENT view-type (#PCDATA)>

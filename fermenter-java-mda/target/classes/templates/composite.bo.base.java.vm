@@ -1,0 +1,152 @@
+package ${basePackage}.bizobj;
+
+#foreach($import in ${composite.imports})
+import ${import};
+#end
+import org.tigris.atlas.bizobj.ComplexType;
+import org.tigris.atlas.messages.Messages;
+import org.tigris.atlas.messages.MessagesSet;
+import org.tigris.atlas.validate.Validations;
+import org.apache.commons.lang.StringUtils;
+#foreach ($validator in $composite.validators)
+import ${validator.import};
+#end
+
+public abstract class ${composite.type}BaseBOComposite extends ComplexType {
+
+#foreach ( $field in $composite.fields )
+#if( ${field.isSimpleType()} )
+#if( ${field.hasMinValue()} )	
+	private static final ${field.javaType} ${field.uppercasedName}_MIN_VALUE = new ${field.javaType}("${field.minValue}");
+#end
+#if( ${field.hasMaxValue()} )
+	private static final ${field.javaType} ${field.uppercasedName}_MAX_VALUE = new ${field.javaType}("${field.maxValue}");
+#end
+#if( ${field.hasMinLength()} )
+	private static final int ${field.uppercasedName}_MIN_LENGTH = ${field.minLength};
+#end
+#if( ${field.hasMaxLength()} )
+	private static final int ${field.uppercasedName}_MAX_LENGTH = ${field.maxLength};
+#end
+#if( ${field.hasScale()} )
+	private static final int ${field.uppercasedName}_SCALE = ${field.scale};
+#end
+#if(${field.hasFormat()})
+	private static final String [] ${field.uppercasedName}_VALID_PATTERNS = new String [] {${field.patterns}};
+#end
+#end
+#end
+
+#foreach ( $field in ${composite.fields} )
+	private ${field.javaType} ${field.name};
+#end
+
+#foreach ($validator in $composite.validators)
+	private ${validator.capitalizedName} ${validator.name} = new ${validator.capitalizedName}();
+#end
+#foreach ( $field in ${composite.fields} )
+
+	/**
+	 * Get the ${field.label}
+	 *
+	 * @return The ${field.label}
+	 */
+	public ${field.javaType} get${field.capitalizedName}() {
+		return ${field.name};
+	}
+	
+	/**
+	 * Set the ${field.label}
+	 *
+	 * @param The ${field.label}
+	 */
+	public void set${field.capitalizedName}(${field.javaType} ${field.name}) {
+#if ($field.getJavaType().equals("String"))
+		${field.name} = StringUtils.trimToNull(${field.name});
+#end	
+		this.${field.name} = ${field.name};
+	}
+	
+	/**
+	 * Validates ${field.label}
+	 */
+	protected void validate${field.capitalizedName}() {
+		${field.javaType} value = get${field.capitalizedName}();
+#if( ${field.isRequired()} )		
+		//check requiredness:		
+		if( value == null ) {
+			Validations.validateRequired(value, "${field.name}", "${field.label}", getMessages());
+						
+			//no need to continue:
+			return;
+		}		
+#else
+		//check for a value to validate:
+		if ( value == null ) {
+			//nothing to validate
+			return;
+		}						
+#end
+#if( ${field.isSimpleType()} )
+#if( ${field.hasMinValue()} )
+		// check min value
+		Validations.validateMinValue(value, ${field.uppercasedName}_MIN_VALUE, "${field.name}", "${field.label}", getMessages());
+#end
+#if( ${field.hasMaxValue()} )
+		//check max value
+		Validations.validateMaxValue(value, ${field.uppercasedName}_MAX_VALUE, "${field.name}", "${field.label}", getMessages());
+#end
+#if( ${field.hasMinLength()} )
+		//check min length
+		Validations.validateMinLength(value, ${field.uppercasedName}_MIN_LENGTH, "${field.name}", "${field.label}", getMessages());
+#end
+#if( ${field.hasMaxLength()} )
+		//check max length
+		Validations.validateMaxLength(value, ${field.uppercasedName}_MAX_LENGTH, "${field.name}", "${field.label}", getMessages());
+#end
+#if( ${field.hasScale()} )
+		//check scale
+		Validations.validateScale(value, ${field.uppercasedName}_SCALE, "${field.name}", "${field.label}", getMessages());
+#end
+#if (${field.hasFormat()})
+		Validations.validateFormat(value, ${field.uppercasedName}_VALID_PATTERNS, "${field.name}", "${field.label}", getMessages());
+#end
+#elseif( ${field.isEnumerationType()} )
+		
+		//validate a valid enumeration value:
+		String enumName = value.getName();
+		Validations.validateEnumeration(value, ${field.javaType}.getEnum(enumName), "${field.name}", "${field.label}", getMessages());
+#end
+	}	
+	
+#end
+
+	/**
+	 * Executes all field-level validations
+	 */
+	protected void fieldValidation() {
+		super.fieldValidation();
+		
+#foreach ( $field in ${composite.fields} )		
+		validate${field.capitalizedName}();
+#end		
+	}
+	
+	protected void referenceValidation() {
+		super.referenceValidation();
+	}
+	
+	protected void complexValidationOnChildren() {
+		super.complexValidationOnChildren();
+	}
+	
+	// The methods below will need to be implemented if composites
+	// ever support children.
+
+	public final Messages getAllMessages() {
+		return getMessages();
+	}
+	
+	protected void gatherMessages(MessagesSet set) {}
+
+}

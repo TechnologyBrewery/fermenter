@@ -1,0 +1,15 @@
+package ${prefix}.bizobj;
+
+/**
+ * Business object for the ${entityName} application entity.
+ * @see ${prefix}.bizobj.${entityName}BaseBO
+ *
+ * Generated Skeleton Code
+ */
+ 
+public class ${entityName}BO extends ${entityName}BaseBO {
+	
+	protected void complexValidation() {
+	}
+
+}

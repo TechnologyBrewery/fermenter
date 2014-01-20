@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE profiles PUBLIC "-//ATLAS//DTD PROFILES//EN" "http://atlas.tigris.org/svn/atlas/trunk/atlas-mda/src/main/resources/profiles.dtd">
+
+<profiles>
+	<profile name="html-docs">
+		<target name="serviceHtml"/>
+		<target name="entityHtml"/>
+		<target name="entityListHtml"/>
+		<target name="enumerationHtml"/>
+		<target name="metadataHtml"/>
+		<target name="metadataCss"/>
+	</profile>
+</profiles>

@@ -1,0 +1,183 @@
+package ${basePackage}.service.delegate;
+
+#foreach( $import in $service.imports )
+import $import;
+#end
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.ArrayList;
+import java.rmi.RemoteException;
+import javax.ejb.CreateException;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.rmi.PortableRemoteObject;
+import ${basePackage}.service.ejb.${service.name}ServiceHome;
+import ${basePackage}.service.ejb.${service.name}ServiceRemote;
+
+import org.tigris.atlas.service.AsynchronousServiceDescriptor;
+import org.tigris.atlas.service.AsynchronousServiceResponse;
+import org.tigris.atlas.service.ServiceResponse;
+import org.tigris.atlas.service.delegate.AnsynchronousServiceDelegateImpl;
+import org.tigris.atlas.service.delegate.AsynchronousServiceDelegate;
+import org.tigris.atlas.service.ejb.EjbUtil;
+
+import org.tigris.atlas.messages.Message;
+import org.tigris.atlas.messages.Messages;
+import org.tigris.atlas.messages.MessageFactory;
+import org.tigris.atlas.messages.Severity;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+/**
+ * Service delegate for the ${service.name} service
+ *
+ * Generated Code - DO NOT MODIFY
+ */
+public class ${service.name}ServiceDelegateImpl implements ${service.name}ServiceDelegate {
+
+	private static Log log = LogFactory.getLog(${service.name}ServiceDelegateImpl.class);
+
+	/**
+	 * Create a new delegate.
+	 */
+	public ${service.name}ServiceDelegateImpl() {
+		super();
+		
+	}
+
+#foreach( $operation in $service.operations )
+#if ($operation.isRemote())
+
+	/**
+	 * Execute the ${operation.name} service
+	 *
+	 * @return ${operation.responseType}
+	 */
+	public ${operation.responseType} ${operation.lowercaseName}(${operation.signature}) {
+#if  ($operation.isAsynchronous())
+
+		${operation.responseType} response = new ${operation.responseType}();
+		
+		AsynchronousServiceDescriptor descriptor = new AsynchronousServiceDescriptor();
+		//TODO: genericize parameters:
+		descriptor.setOperationName("${operation.lowercaseName}");
+		descriptor.setServiceName(${service.name}ServiceDelegate.SERVICE_NAME);
+		List parameterList = new ArrayList();
+		List classList = new ArrayList();
+#foreach( $parameter in $operation.parameters )
+		parameterList.add(${parameter.name});
+		classList.add(${parameter.javaType}.class);
+#end				
+		descriptor.setParameterList(parameterList);
+		descriptor.setClassList(classList);
+		//TODO: move instatiation to spring:
+		AsynchronousServiceDelegate asyncDelegate = new AnsynchronousServiceDelegateImpl();
+		AsynchronousServiceResponse enqueueResponse = asyncDelegate.enqueue(descriptor);
+		Messages enqueueResponseMessages = enqueueResponse.getMessages();
+		if (enqueueResponseMessages.hasErrorMessages()) {
+			Messages responseMessages = response.getMessages();
+			Iterator enqueueResponseMessageIterator = enqueueResponseMessages.getErrorMessages().iterator();
+			while (enqueueResponseMessageIterator.hasNext()) {
+				responseMessages.addMessage((Message)enqueueResponseMessageIterator.next());
+			}
+		}
+		
+		//TODO: transfer info messages
+
+		return response;			
+				
+#else
+		${operation.responseType} response = null;
+
+		try {
+			${service.name}ServiceRemote remote = getRemoteService();
+			response = (remote != null) ? remote.${operation.lowercaseName}(${operation.parameterNames})
+				: (${operation.responseType})serverUnavailable(new ${operation.responseType}());
+			
+		} catch (RemoteException re) {
+			String methodName = "${operation.responseType} ${operation.lowercaseName}(${operation.signature})";
+			response = (${operation.responseType})handleRemoteException(methodName, re, new ${operation.responseType}());
+			
+		}
+		
+		return response;
+		
+#end
+	}
+
+#end	 
+#end
+
+	/**
+	 * Gets the remote stub for a session bean call
+	 * @return The <tt>${service.name}ServiceRemote</tt> to use to perform a remote call
+	 */
+	protected ${service.name}ServiceRemote getRemoteService() {
+		${service.name}ServiceRemote remote = null;
+		Context ic = null;
+		Object o = null;
+		try {		
+			ic = new InitialContext();
+			o = PortableRemoteObject.narrow(ic.lookup(${service.name}ServiceHome.JNDI_NAME),
+					${service.name}ServiceHome.class);
+			${service.name}ServiceHome home = (${service.name}ServiceHome)o;
+			remote = home.create();
+		} catch (ClassCastException cce) {
+			if (log.isErrorEnabled()) {				
+				log.error("A class cast exception occurred looking up service \"${service.name}Service\"'s remote stub." +
+					" Expected \"${service.name}Service\", but returned \"" + o.getClass() + "\"", cce);		
+			}
+			
+		} catch (RemoteException re) {
+			if (log.isErrorEnabled()) {
+				log.error("A remote exception occurred looking up service \"${service.name}Service\"'s remote stub", re);			
+			}
+			
+		} catch (NamingException ne) {
+			if (log.isErrorEnabled()) {
+				log.error("A naming exception occurred looking up service \"${service.name}Service\"'s remote stub", ne);			
+			}
+			
+		} catch (CreateException ce) {
+			if (log.isErrorEnabled()) {
+				log.error("A creation exception occurred looking up service \"${service.name}Service\"'s remote stub", ce);			
+			}
+			
+		} finally {
+			EjbUtil.closeContext(ic);
+			
+		}
+
+		return remote;
+	}
+	
+	private ServiceResponse handleRemoteException(String methodName, RemoteException re, ServiceResponse response) {
+		if (log.isErrorEnabled()) {
+			log.error("Exception occurred during " + methodName, re);
+			
+		}
+		
+		Message m = MessageFactory.createMessage();
+		m.setKey("unknown.exception");
+		m.setSeverity(Severity.getSeverity(Severity.ERROR));
+		response.getMessages().addMessage( m );
+		return response;
+	}
+	
+	private ServiceResponse serverUnavailable(ServiceResponse response) {
+		if (log.isErrorEnabled()) {
+			log.error("EntityMaintenanceServiceRemote could not be found!");
+			
+		}
+		
+		Message m = MessageFactory.createMessage();
+		m.setKey("server.unavailable");
+		m.setSeverity(Severity.getSeverity(Severity.ERROR));
+		response.getMessages().addMessage( m );
+		return response;
+	}
+	
+}

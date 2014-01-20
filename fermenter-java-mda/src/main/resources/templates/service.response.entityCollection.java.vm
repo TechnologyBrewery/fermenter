@@ -1,0 +1,59 @@
+package ${basePackage}.service;
+
+import java.util.Collection;
+import java.util.Collections;
+
+import ${basePackage}.transfer.${entity.name};
+import org.tigris.atlas.service.EntityCollectionServiceResponse;
+
+/**
+ * A result holder that contains a list of entity ${entity.name}
+ *
+ * Generated Code - DO NOT MODIFY
+ */
+public class ${entity.name}CollectionServiceResponse extends EntityCollectionServiceResponse {
+
+	/**
+	 * Add a new ${entity.name} to the response
+	 *
+	 * @param entity The ${entity.name} to add
+	 */
+	public void add${entity.name}(${entity.name} entity) {
+		addEntity( entity );
+	}
+	
+	/**
+	 * Add a collection of ${entity.name} instances to the response
+	 *
+	 * @param entities The ${entity.name}s to add
+	 */
+	public void add${entity.name}s(Collection entities) {
+		addEntities( entities );
+	}
+	
+	/**
+	 * Return an iterator on the ${entity.name} collection
+	 *
+	 * @return ${entity.name}Iterator The ${entity.name} iterator
+	 */
+	public ${entity.name}Iterator iterator() {
+		Collection entityCollection = getEntities();
+		if (entityCollection == null) {
+			entityCollection = Collections.EMPTY_LIST;
+		}
+		
+		return new ${entity.name}Iterator( entityCollection );
+		
+	}
+	
+	/**
+	 * Return the list of ${entity.name} entities.
+	 *
+	 * @return Collection A immutable collection of ${entity.name} entities
+	 */
+	public Collection get${entity.name}s() {
+		Collection entityCollection = getEntities();
+		return (entityCollection != null) ? Collections.unmodifiableCollection( entityCollection )
+			: Collections.EMPTY_LIST;
+	}
+}

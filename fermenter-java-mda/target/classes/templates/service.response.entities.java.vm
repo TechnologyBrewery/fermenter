@@ -1,0 +1,59 @@
+package ${basePackage}.service;
+
+import java.util.Collection;
+import java.util.Collections;
+
+import ${basePackage}.transfer.${operation.returnManyType};
+import org.tigris.atlas.service.EntityCollectionServiceResponse;
+
+/**
+ * A result holder that contains a list of entity ${operation.returnManyType}
+ *
+ * Generated Code - DO NOT MODIFY
+ */
+public class ${operation.name}ServiceResponse extends EntityCollectionServiceResponse {
+
+	/**
+	 * Add a new ${operation.returnManyType} to the response
+	 *
+	 * @param entity The ${operation.returnManyType} to add
+	 */
+	public void add${operation.returnManyType}(${operation.returnManyType} entity) {
+		addEntity( entity );
+	}
+	
+	/**
+	 * Add a collection of ${operation.returnManyType} instances to the response
+	 *
+	 * @param entities The ${operation.returnManyType}s to add
+	 */
+	public void add${operation.returnManyType}s(Collection entities) {
+		addEntities( entities );
+	}
+	
+	/**
+	 * Return an iterator on the ${operation.returnManyType} collection
+	 *
+	 * @return ${operation.returnManyType}Iterator The ${operation.returnManyType} iterator
+	 */
+	public ${operation.returnManyType}Iterator iterator() {
+		Collection entityCollection = getEntities();
+		if (entityCollection == null) {
+			entityCollection = Collections.EMPTY_LIST;
+		}
+		
+		return new ${operation.returnManyType}Iterator( entityCollection );
+		
+	}
+	
+	/**
+	 * Return the list of ${operation.returnManyType} entities.
+	 *
+	 * @return Collection A immutable collection of ${operation.returnManyType} entities
+	 */
+	public Collection get${operation.returnManyType}s() {
+		Collection entityCollection = getEntities();
+		return (entityCollection != null) ? Collections.unmodifiableCollection( entityCollection )
+			: Collections.EMPTY_LIST;
+	}
+}

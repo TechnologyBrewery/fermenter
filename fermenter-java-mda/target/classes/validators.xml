@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<!DOCTYPE validators PUBLIC "-//ATLAS//DTD VALIDATORS//EN" "http://atlas.tigris.org/svn/atlas/trunk/atlas-mda/src/main/resources/validators.dtd">
+
+<validators>
+	<validator name="emailValidator" class="org.tigris.atlas.validate.EmailValidator"/>
+	<validator name="phoneNumberValidator" class="org.tigris.atlas.validate.PhoneNumberValidator"/>
+	<validator name="zipCodeValidator" class="org.tigris.atlas.validate.ZipCodeValidator"/>
+	<validator name="ssnValidator" class="org.tigris.atlas.validate.SsnValidator"/>
+</validators>

@@ -1,0 +1,29 @@
+package ${basePackage}.service;
+
+import org.tigris.atlas.service.ServiceRequest;
+
+#foreach( $import in $operation.parameterImports )
+import ${import};
+#end
+
+/**
+ * Service request parameters for the ${operation.name} service operation
+ *
+ * Generated Code - DO NOT MODIFY
+ */
+public class ${operation.name}ServiceRequest extends ServiceRequest {
+
+#foreach( $parameter in $operation.parameters )
+	private ${parameter.javaType}	${parameter.name};
+#end
+#foreach( $parameter in $operation.parameters )
+	
+	public ${parameter.javaType} get${parameter.uppercaseName}() {
+		return ${parameter.name};
+	}
+	
+	public void set${parameter.uppercaseName}(${parameter.javaType} ${parameter.name}) {
+		this.${parameter.name} = ${parameter.name};
+	}
+#end
+}

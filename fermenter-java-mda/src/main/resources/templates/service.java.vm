@@ -1,0 +1,44 @@
+package ${basePackage}.service;
+
+import org.tigris.atlas.service.Service;
+#foreach( $import in $service.imports )
+import ${import};
+#end
+
+/**
+#if ($service.documentation)
+ * ${service.documentation}
+#else
+ * Application service interface for the ${service.name} service
+#end
+ *
+ * Generated Code - DO NOT MODIFY
+ */
+public interface ${service.name}Service extends Service {
+
+	/** Name which uniquely identifies the ${service.name} service. */
+	public static final String SERVICE_NAME = "${basePackage}.${service.name}Service";
+
+#foreach( $operation in $service.operations )
+	/**
+#if ($operation.documentation)
+	 * ${operation.documentation}
+#else
+	 * Execute the ${operation.name} operation
+#end
+	 *
+#if( $operation.parameters.size() > 0 )
+#foreach( $parameter in $operation.parameters )
+#if( $parameter.documentation )
+	 * @param ${parameter.name} ${parameter.documentation}
+#else
+	 * @param ${parameter.name}  
+#end								
+#end								
+#end
+	 * @return ${operation.responseType}
+	 */
+	public ${operation.responseType} ${operation.lowercaseName}(${operation.signature});
+
+#end
+}

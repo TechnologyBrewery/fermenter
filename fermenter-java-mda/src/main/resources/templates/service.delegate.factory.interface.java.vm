@@ -1,0 +1,20 @@
+package ${basePackage}.service.delegate;
+
+import org.tigris.atlas.service.delegate.AbstractServiceDelegateFactoryInterface;
+
+public interface ServiceDelegateFactoryInterface extends AbstractServiceDelegateFactoryInterface {
+	
+	/**
+	 * Create an EntityMaintenanceServiceDelegate instance 
+	 */
+	public EntityMaintenanceServiceDelegate createEntityMaintenanceServiceDelegate();
+	
+#foreach( $service in $serviceNames )
+	/**
+	 * Create a(n) ${service}ServiceDelegate instance
+	 */
+	public ${service}ServiceDelegate create${service}ServiceDelegate();
+	
+#end
+
+}

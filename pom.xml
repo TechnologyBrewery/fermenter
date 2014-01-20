@@ -1,0 +1,85 @@
+<project>
+	<name>Fermenter</name>
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.ask</groupId>
+	<version>1-SNAPSHOT</version>
+	<artifactId>fermenter</artifactId>
+	<packaging>pom</packaging>
+
+	<scm>
+		<connection>scm:git: https://ashcradr@bitbucket.org/askllc/Fermenter.git</connection>
+	</scm>
+
+	<modules>
+		<module>fermenter-mda</module>
+		<module>fermenter-java</module>
+		<module>fermenter-java-mda</module>
+		<module>fermenter-hibernate</module>
+		<module>fermenter-hibernate-mda</module>
+		<module>fermenter-ejb</module>
+		<module>fermenter-ejb-mda</module>			
+	</modules>
+
+	<properties>
+		<sample.version>1.1</sample.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>1.6.4</version>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-log4j12</artifactId>
+				<version>1.6.4</version>
+				<scope>runtime</scope>
+			</dependency>
+			<dependency>
+				<groupId>commons-lang</groupId>
+				<artifactId>commons-lang</artifactId>
+				<version>2.6</version>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>2.4</version>
+				<scope>compile</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>javax</groupId>
+				<artifactId>javaee-api</artifactId>
+				<version>6.0</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.spec</groupId>
+				<artifactId>jboss-javaee-web-6.0</artifactId>
+				<version>2.0.0.Final</version>
+				<type>pom</type>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>javax.annotation</groupId>
+				<artifactId>jsr250-api</artifactId>
+				<version>1.0</version>
+				<scope>provided</scope>
+			</dependency>
+
+			<!-- For Unit Testing -->
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.10</version>
+				<scope>test</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+</project>

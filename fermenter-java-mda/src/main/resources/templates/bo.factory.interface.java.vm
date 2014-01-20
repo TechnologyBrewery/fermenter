@@ -1,0 +1,15 @@
+package ${basePackage}.bizobj;
+
+import org.tigris.atlas.bizobj.AbstractBusinessObjectFactoryInterface;
+
+public interface BusinessObjectFactoryInterface extends AbstractBusinessObjectFactoryInterface {
+	
+#foreach( $entity in $entities )
+	/**
+	 * Create a(n) ${entity.name} business object instance
+	 */
+	public ${entity.name}BO create${entity.name}BO();
+	
+#end
+
+}

@@ -1,0 +1,20 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    	<link rel="stylesheet" type="text/css" href="./metadata.css">
+		<title>Metadata</title>
+	</head>
+	
+	<body>
+		<h1>${name} Metadata</h1>
+		
+		<ul>
+			<li>
+				<a href="./entities/entities.html">Entities</a>
+			</li>
+			<li>
+				<a href="./services/services.html">Services</a>
+			</li>
+		</ul>
+	</body>
+</html>

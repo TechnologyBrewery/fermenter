@@ -1,0 +1,25 @@
+package ${basePackage}.persist;
+
+import org.tigris.atlas.persist.AbstractDaoFactory;
+import org.tigris.atlas.persist.Dao;
+
+public class DaoFactory extends AbstractDaoFactory {
+
+	private static DaoFactoryInterface getDaoFactory() {
+		return (DaoFactoryInterface) AbstractDaoFactory.getAbstractDaoFactory(DaoFactory.class);
+	}
+	
+	public static Dao createDao(String type) {
+		return getDaoFactory().createDao( type );
+	}
+
+#foreach( $entity in $entities )
+	/**
+	 * Create a(n) ${entity.name} data access object instance
+	 */
+	public static ${entity.name}Dao create${entity.name}Dao() {
+		return getDaoFactory().create${entity.name}Dao();
+	}
+	
+#end
+}

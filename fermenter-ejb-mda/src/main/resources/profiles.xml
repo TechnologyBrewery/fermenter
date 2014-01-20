@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE profiles PUBLIC "-//ATLAS//DTD PROFILES//EN" "http://atlas.tigris.org/svn/atlas/trunk/atlas-mda/src/main/resources/profiles.dtd">
+
+<profiles>
+
+	<profile name="java-application-descriptor">
+		<target name="applicationXml"/>
+	</profile>
+
+	<profile name="java-application-descriptor-1.4">
+		<target name="application14Xml"/>
+	</profile>
+
+	<profile name="java-ejb-jar-descriptor">
+		<target name="ejbJarXml"/>
+	</profile>
+
+	<profile name="java-service-session-beans">
+		<target name="serviceSessionBeanRemoteInterfaces"/>
+		<target name="serviceSessionBeanLocalInterfaces"/>
+		<target name="serviceSessionBeanHomeInterfaces"/>
+		<target name="serviceSessionBeanLocalHomeInterfaces"/>
+		<target name="serviceSessionBeanObjects"/>
+		<target name="sessionBeanServiceDelegateObjects"/>
+	</profile>
+
+	<profile name="java-entity-maintenance-session-beans">
+		<target name="entityMaintenanceServiceHome"/>
+		<target name="entityMaintenanceServiceLocalHome"/>
+		<target name="entityMaintenanceServiceRemote"/>
+		<target name="entityMaintenanceServiceLocal"/>
+		<target name="entityMaintenanceServiceBean"/>
+		<target name="sessionBeanEntityMaintenanceServiceDelegateImpl"/>
+	</profile>
+
+</profiles>

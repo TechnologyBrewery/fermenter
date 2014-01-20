@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!ELEMENT profiles (profile+)>
+
+<!ELEMENT profile (target*,include*)>
+<!ATTLIST profile name CDATA #REQUIRED>
+<!ATTLIST profile extends CDATA #IMPLIED>
+
+<!ELEMENT target EMPTY>
+<!ATTLIST target name CDATA #REQUIRED>
+
+<!ELEMENT include EMPTY>
+<!ATTLIST include name CDATA #REQUIRED>
+
+

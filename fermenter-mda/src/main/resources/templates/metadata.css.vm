@@ -1,0 +1,25 @@
+@CHARSET "ISO-8859-1";
+
+BODY {
+	font-family: arial;
+}
+
+TABLE {
+	font-size: 10pt;
+}
+
+H1 {
+	font-size: 24pt;
+}
+
+H2 {
+	font-size: 18pt;
+}
+
+P {
+	font-size: 10pt;
+}
+
+LI {
+	font-size: 10pt;
+}

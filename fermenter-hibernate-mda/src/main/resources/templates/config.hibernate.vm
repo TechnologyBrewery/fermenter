@@ -1,0 +1,172 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+      "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+          "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+			
+<hibernate-mapping package="${prefix}.bizobj">
+	<class name="${entityName}BO" table="${table}" lazy="false" 
+	 	 
+#if ($useOptimisticLocking)	 	
+	 	optimistic-lock="version" select-before-update="true"
+#end	 	
+	 	dynamic-update="true">
+
+#if( $idFields.size() == 1 )
+#foreach( $idField in $idFields )
+		<id name="${idField.name}" column="${idField.column}" type="${idField.type}">
+			<generator class="${idField.generator}"/>			
+		</id>
+#end
+#else
+## composite id
+		<composite-id name="key" class="${entityName}PK">
+#foreach( $idField in $idFields )
+			
+			<key-property	name	=	"${idField.name}"
+							column	=	"${idField.column}"
+							type	=	"${idField.type}"/>
+#end
+#foreach( $idReference in $idReferences )
+#foreach( $fk in $idReference.foreignKeyFields )
+		
+			<key-property	name	=	"${idReference.name}${fk.capitalizedName}" 
+							column	=	"${fk.column}" 
+							type	=	"${fk.type}"/>
+#end
+#end
+		</composite-id>		
+#end
+#if ($useOptimisticLocking)	 
+		<version column="OPLOCK" name="oplock"/>	
+#end
+#foreach( $field in $fields )	
+
+#if ($field.isEnumerationType() && $field.isExternal())
+		<property	name="${field.name}"
+					access="field"
+#else
+		<property 	name="${field.name}"
+#end
+#if ($field.isSimpleType())
+#if (${field.javaType} == 'Date')
+					type="date"
+#elseif (${field.javaType} == 'Timestamp')
+					type="timestamp"
+#else
+					type="${field.type}"
+#end
+#elseif ($field.isEnumerationType())
+#if ($field.isExternal())
+#if (${field.enumeration.type} == 'named')
+					type="string"
+#else
+					type="integer"
+#end
+#else
+					type="${prefix}.persist.hibernate.${field.type}UserType"
+#end
+#end									
+#if (${field.isRequired()})
+					not-null="true"
+#end					
+#if(${field.hasMaxLength()})
+					length="${field.maxLength}"
+#end
+					column="${field.column}"/>
+#end
+#foreach( $composite in $composites )
+
+		<component access="field" name="${composite.name}Composite" class="${composite.type}BOComposite">
+#foreach( $field in $composite.fields )
+			<property 	name="${field.name}" 
+						column="${field.column}" 
+#if ($field.isSimpleType())		
+						type="${field.type}"/>
+#elseif ($field.isEnumerationType())
+#if ($field.isExternal())
+#if (${field.enumeration.type} == 'named')
+						type="string"/>
+#else
+						type="integer"/>
+#end
+#else
+						type="${prefix}.persist.hibernate.${field.type}UserType"/>
+#end
+#end
+#end
+		</component>	
+#end
+#foreach( $reference in $references )
+#if( $reference.isExternal() )
+#foreach( $fk in $reference.foreignKeyFields )
+
+		<property	name="${reference.name}${fk.capitalizedName}"
+					type="${fk.type}"									
+#if (${field.isRequired()})
+					not-null="true"
+#end
+					column="${fk.column}"/>			
+#end	
+#else
+
+		<many-to-one name	= "${reference.name}"
+					 class	= "${reference.type}BO"
+					 lazy="false">
+#foreach( $fk in $reference.foreignKeyFields )
+			<column	name = "${fk.column}"/>
+#end
+		</many-to-one>
+
+#end
+#end
+#foreach( $inverseRelation in $inverseRelations )
+
+		<many-to-one name	= "${inverseRelation.name}"
+					 class	= "${inverseRelation.name}BO"					
+#foreach( $id in $inverseRelation.idFields )					 			 
+					 column="${id.column}"					 
+#end
+#if($inverseRelation.isSelfRelation())
+					 not-null="false"/>
+#else
+					 not-null="true"/>
+#end					 
+
+#end
+#foreach( $inverseRelation in $inverseRelations )
+#if($inverseRelation.isSelfRelation())
+		<set name="${inverseRelation.label}s"
+			 cascade="all-delete-orphan"	
+			 inverse="true"
+			 lazy="false">			 	
+#foreach( $idField in $inverseRelation.idFields )
+				<!-- with a self relation, someone has to be the parent -->
+				<key column="${idField.column}" not-null="false"/>
+#end
+				<one-to-many class="${inverseRelation.name}BO"/>
+		</set>
+#end			
+#end
+
+#foreach( $relation in $relations )
+#if( ${relation.type} != ${entityName} )
+		<set name="${relation.label}s"
+			 cascade="all-delete-orphan"	
+			 inverse="true"
+			 lazy="false">			 	
+#foreach( $idField in $idFields )
+				<key column="${idField.column}" not-null="true"/>
+#end
+				<one-to-many class="${relation.type}BO"/>
+		</set>
+#end		
+#end
+	</class>
+
+#foreach( $query in $queries )
+    <query name="${query.name}">
+    	<![CDATA[${query.statement}]]>
+	</query>
+#end   		
+	
+</hibernate-mapping>

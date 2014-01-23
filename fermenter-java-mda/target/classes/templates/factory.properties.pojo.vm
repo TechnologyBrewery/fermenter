@@ -1,5 +1,0 @@
-business.object=${basePackage}.bizobj.BusinessObjectFactoryImpl
-service=${basePackage}.service.ServiceFactoryImpl
-service.delegate=${basePackage}.service.delegate.ServiceDelegateFactoryImpl
-transfer.object=${basePackage}.transfer.TransferObjectFactoryImpl
-

@@ -25,3 +25,6 @@ fermenter-mda/.classpath
 fermenter-mda/.project
 fermenter-mda/.settings
 fermenter-mda/target
+.project
+.settings/org.eclipse.m2e.core.prefs
+fermenter-hibernate/target/

@@ -1,6 +1,5 @@
 package org.tigris.atlas.service.delegate;
 
-
 import javax.jms.JMSException;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
@@ -13,8 +12,8 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.tigris.atlas.messages.Message;
 import org.tigris.atlas.messages.MessageFactory;
 import org.tigris.atlas.messages.Severity;
@@ -24,7 +23,7 @@ import org.tigris.atlas.service.ServiceResponse;
 
 public class AnsynchronousServiceDelegateImpl implements AsynchronousServiceDelegate {
 	
-	private static Log log = LogFactory.getLog(AnsynchronousServiceDelegateImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AnsynchronousServiceDelegateImpl.class);
 
 	public AsynchronousServiceResponse enqueue(AsynchronousServiceDescriptor serviceDescriptor) {
 		AsynchronousServiceResponse response = new AsynchronousServiceResponse();
@@ -34,7 +33,7 @@ public class AnsynchronousServiceDelegateImpl implements AsynchronousServiceDele
 			m.setKey("unknown.exception");
 			m.setSeverity(Severity.getSeverity(Severity.ERROR));				
 			response.getMessages().addMessage( m );
-			log.error("Cannot invoke an asynchronous service with a null AsynchronousServiceDescriptor!");
+			LOGGER.error("Cannot invoke an asynchronous service with a null AsynchronousServiceDescriptor!");
 			
 		} else { 			
 			try {
@@ -56,7 +55,7 @@ public class AnsynchronousServiceDelegateImpl implements AsynchronousServiceDele
 					m.setKey("unknown.exception");
 					m.setSeverity(Severity.getSeverity(Severity.ERROR));				
 					response.getMessages().addMessage( m );
-					log.error("Could not connect to JMS resources to perform asynchronous action!");
+					LOGGER.error("Could not connect to JMS resources to perform asynchronous action!");
 					
 				}
 				
@@ -74,8 +73,8 @@ public class AnsynchronousServiceDelegateImpl implements AsynchronousServiceDele
 	}
 	
 	private ServiceResponse handleJMSException(String methodName, JMSException jmse, ServiceResponse response) {
-		if (log.isErrorEnabled()) {
-			log.error("Exception occurred during " + methodName, jmse);
+		if (LOGGER.isErrorEnabled()) {
+			LOGGER.error("Exception occurred during " + methodName, jmse);
 			
 		}
 		
@@ -87,8 +86,8 @@ public class AnsynchronousServiceDelegateImpl implements AsynchronousServiceDele
 	}
 	
 	private ServiceResponse serverUnavailable(NamingException ne, ServiceResponse response) {
-		if (log.isErrorEnabled()) {
-			log.error("async resource(s) could not be found!", ne);
+		if (LOGGER.isErrorEnabled()) {
+			LOGGER.error("async resource(s) could not be found!", ne);
 			
 		}
 		

@@ -24,20 +24,16 @@ import org.tigris.atlas.transfer.PrimaryKey;
 import org.tigris.atlas.validate.Validated;
 
 /**
- * The base class for Hibernate persistence
- *
- * @author Steve Andrews
- *
+ * The base class for Hibernate persistence.
  */
 public abstract class DaoImpl implements Dao {
-
+	
 	private static final Logger LOG = LoggerFactory.getLogger(DaoImpl.class);
 	private static final String DATABASE_EXCEPTION_KEY = "database.exception";
-
-
+	
 	private Session getSession() {
 		SessionFactory hibernateSessionFactory = HibernateSessionFactoryManager.getInstance()
-				.getHibernateSessionFactory();
+				.getSessionFactory();
 		Session hibernateSession;
 		try {
 			hibernateSession = hibernateSessionFactory.getCurrentSession();

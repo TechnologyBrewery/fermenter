@@ -17,7 +17,7 @@
 	
 	<target name="hibernateMappings"
 			generator="org.tigris.atlas.mda.hibernate.generator.entity.EntityHibernateGenerator"
-			templateName="templates/config.hibernate.vm"
+			templateName="templates/mapping.hibernate.vm"
 			outputFile="${basePackage}/${entityName}.hbm.xml"
 			overwritable="true"/>
 	

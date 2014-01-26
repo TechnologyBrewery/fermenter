@@ -1,6 +1,5 @@
 package org.tigris.atlas.service.jms;
 
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collections;
@@ -16,8 +15,8 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.tigris.atlas.factory.FactoryFactory;
 import org.tigris.atlas.service.AbstractServiceFactoryInterface;
 import org.tigris.atlas.service.Service;
@@ -25,7 +24,9 @@ import org.tigris.atlas.service.AsynchronousServiceDescriptor;
 
 public class CoreMessageDrivenBean implements MessageDrivenBean, MessageListener {
 	
-	private static Log log = LogFactory.getLog(CoreMessageDrivenBean.class);
+	private static final long serialVersionUID = -4880598904719510378L;
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(CoreMessageDrivenBean.class);
 	
 	private MessageDrivenContext context;
 	
@@ -33,7 +34,7 @@ public class CoreMessageDrivenBean implements MessageDrivenBean, MessageListener
 	 * @see javax.jms.MessageListener#onMessage(javax.jms.Message)
 	 */
 	public void onMessage(Message message) {
-		log.debug("Message received...");
+		LOGGER.debug("Message received...");
 		
 		ObjectMessage objectMessage = getObjectMessage(message);		
 		AsynchronousServiceDescriptor serviceDescriptor = getPayload(objectMessage);
@@ -70,7 +71,7 @@ public class CoreMessageDrivenBean implements MessageDrivenBean, MessageListener
 			e.printStackTrace();
 		} catch (NoSuchMethodException e) {
 			String opName = buildMethodName(operationName, classList).toString();
-			log.error("Cannot find method: " + opName, e);
+			LOGGER.error("Cannot find method: " + opName, e);
 			//TODO: remove
 			System.out.println("Cannot find method: " + opName);
 		} catch (IllegalArgumentException e) {
@@ -113,7 +114,7 @@ public class CoreMessageDrivenBean implements MessageDrivenBean, MessageListener
 		try {
 			objectMessage = (ObjectMessage)message;
 		} catch (ClassCastException cce) {
-			log.error("CoreMessageDrivenBean only accepts ObjectMessages - the passed message was :" 
+			LOGGER.error("CoreMessageDrivenBean only accepts ObjectMessages - the passed message was :" 
 				+ message.getClass(), cce);			
 		}
 		return objectMessage;
@@ -132,14 +133,14 @@ public class CoreMessageDrivenBean implements MessageDrivenBean, MessageListener
 			if (o != null) {
 				serviceDescriptor = (AsynchronousServiceDescriptor)o;
 			} else {
-				log.error("A payload must exist!");
+				LOGGER.error("A payload must exist!");
 			}
 		} catch (ClassCastException cce) {
-			log.error("CoreMessageDrivenBean must have object payloads of AsynchronousServiceDescriptor - " +
+			LOGGER.error("CoreMessageDrivenBean must have object payloads of AsynchronousServiceDescriptor - " +
 				"the passed object was :" + o.getClass(), cce);
 		} catch (JMSException jmse) {
 			String msg = "An error was encountered while reading the payload from a message";
-			log.error(msg, jmse);
+			LOGGER.error(msg, jmse);
 			throw new EJBException(msg, jmse);
 			
 		}

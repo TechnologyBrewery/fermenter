@@ -4,11 +4,11 @@ import java.util.Collection;
 
 public interface Message {
 
-	public static final String DEFAULT_LOCALE = "DEFAULT";
+	static final String DEFAULT_LOCALE = "DEFAULT";
 	
 	String getKey();
 	
-	Collection getLocales();
+	Collection<String> getLocales();
 	
 	MessageText getSummary(String locale);
 	

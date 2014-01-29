@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE entity PUBLIC "-//FERMENTER//DTD ENTITY//EN" "https://bitbucket.org/askllc/fermenter/downloads/entity.dtd">
+
+<entity>
+	<name>ValidationReferencedObject</name>
+	<table>VALIDATION_REF_OBJECT</table>
+  	<id>
+  		<field>
+       		<name>id</name>
+      		<type>string</type>
+       		<column>VALIDATION_REF_OBJECT_ID</column>
+       		<required>true</required>
+       		<generator>uuid.hex</generator>
+       		<label>validation reference object id</label>
+		</field>
+	</id>
+	<fields>
+   		<field>
+       		<name>someDataField</name>
+       		<type>string</type>
+       		<column>SOME_DATA_FIELD</column>
+       		<label>some data field</label>
+   		</field>
+	</fields>
+</entity>

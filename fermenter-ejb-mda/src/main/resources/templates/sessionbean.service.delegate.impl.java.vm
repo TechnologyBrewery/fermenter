@@ -28,17 +28,17 @@ import org.tigris.atlas.messages.Messages;
 import org.tigris.atlas.messages.MessageFactory;
 import org.tigris.atlas.messages.Severity;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Service delegate for the ${service.name} service
+ * Service delegate for the ${service.name} service.
  *
  * Generated Code - DO NOT MODIFY
  */
 public class ${service.name}ServiceDelegateImpl implements ${service.name}ServiceDelegate {
 
-	private static Log log = LogFactory.getLog(${service.name}ServiceDelegateImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(${service.name}ServiceDelegateImpl.class);
 
 	/**
 	 * Create a new delegate.
@@ -126,24 +126,24 @@ public class ${service.name}ServiceDelegateImpl implements ${service.name}Servic
 			${service.name}ServiceHome home = (${service.name}ServiceHome)o;
 			remote = home.create();
 		} catch (ClassCastException cce) {
-			if (log.isErrorEnabled()) {				
-				log.error("A class cast exception occurred looking up service \"${service.name}Service\"'s remote stub." +
+			if (LOGGER.isErrorEnabled()) {				
+				LOGGER.error("A class cast exception occurred looking up service \"${service.name}Service\"'s remote stub." +
 					" Expected \"${service.name}Service\", but returned \"" + o.getClass() + "\"", cce);		
 			}
 			
 		} catch (RemoteException re) {
-			if (log.isErrorEnabled()) {
-				log.error("A remote exception occurred looking up service \"${service.name}Service\"'s remote stub", re);			
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error("A remote exception occurred looking up service \"${service.name}Service\"'s remote stub", re);			
 			}
 			
 		} catch (NamingException ne) {
-			if (log.isErrorEnabled()) {
-				log.error("A naming exception occurred looking up service \"${service.name}Service\"'s remote stub", ne);			
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error("A naming exception occurred looking up service \"${service.name}Service\"'s remote stub", ne);			
 			}
 			
 		} catch (CreateException ce) {
-			if (log.isErrorEnabled()) {
-				log.error("A creation exception occurred looking up service \"${service.name}Service\"'s remote stub", ce);			
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error("A creation exception occurred looking up service \"${service.name}Service\"'s remote stub", ce);			
 			}
 			
 		} finally {
@@ -155,8 +155,8 @@ public class ${service.name}ServiceDelegateImpl implements ${service.name}Servic
 	}
 	
 	private ServiceResponse handleRemoteException(String methodName, RemoteException re, ServiceResponse response) {
-		if (log.isErrorEnabled()) {
-			log.error("Exception occurred during " + methodName, re);
+		if (LOGGER.isErrorEnabled()) {
+			LOGGER.error("Exception occurred during " + methodName, re);
 			
 		}
 		
@@ -168,8 +168,8 @@ public class ${service.name}ServiceDelegateImpl implements ${service.name}Servic
 	}
 	
 	private ServiceResponse serverUnavailable(ServiceResponse response) {
-		if (log.isErrorEnabled()) {
-			log.error("EntityMaintenanceServiceRemote could not be found!");
+		if (LOGGER.isErrorEnabled()) {
+			LOGGER.error("EntityMaintenanceServiceRemote could not be found!");
 			
 		}
 		

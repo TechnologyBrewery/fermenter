@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE profiles PUBLIC "-//FERMENTER//DTD PROFILES//EN" "https://bitbucket.org/askllc/fermenter/downloads/profiles.dtd">
+
+<profiles>
+
+	<profile name="example-domain" extends="java-base">
+		<include name="java-hibernate"/>
+	</profile>
+	
+	<profile name="example-ejb">
+		<include name="java-service-session-beans"/>
+		<include name="java-entity-maintenance-session-beans"/>
+	</profile>
+
+</profiles>

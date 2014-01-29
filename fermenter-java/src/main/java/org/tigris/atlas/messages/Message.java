@@ -15,8 +15,8 @@ import java.util.Collection;
  */
 public interface Message extends Serializable {
 
-	/** Unique string used to create <code>Message</code> instances. */
-	public static final String BEAN_NAME = "Message";
+	/** Unique string used to create {@link Message} instances. */
+	static final String BEAN_NAME = "Message";
 
 	/**
 	 * Get the key for this message.
@@ -41,7 +41,7 @@ public interface Message extends Serializable {
 	 *         properties associated with this messages.  Might contain 0..n
 	 *         properties
 	 */
-	Collection getProperties();
+	Collection<String> getProperties();
 
 	/**
 	 * Get the inserts for this message.
@@ -50,7 +50,7 @@ public interface Message extends Serializable {
 	 *         the inserts to be used in association with the message key when
 	 *         constructing the full message text
 	 */
-	Collection getInserts();
+	Collection<Object> getInserts();
 
 	/**
 	 * Update the value of the message's key.

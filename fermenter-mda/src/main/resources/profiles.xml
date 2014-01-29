@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE profiles PUBLIC "-//ATLAS//DTD PROFILES//EN" "http://atlas.tigris.org/svn/atlas/trunk/atlas-mda/src/main/resources/profiles.dtd">
+<!DOCTYPE profiles PUBLIC "-//FERMENTER//DTD PROFILES//EN" "https://bitbucket.org/askllc/fermenter/downloads/profiles.dtd">
 
 <profiles>
 	<profile name="html-docs">

@@ -23,11 +23,11 @@ import ${basePackage}.service.ejb.EntityMaintenanceServiceRemote;
 import org.tigris.atlas.service.ServiceResponse;
 import org.tigris.atlas.service.ejb.EjbUtil;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Service delegate for the EntityMaintenance service
+ * Service delegate for the EntityMaintenance service.
  *
  * Generated Code - DO NOT MODIFY
  */
@@ -36,7 +36,7 @@ public class EntityMaintenanceServiceDelegateImpl implements EntityMaintenanceSe
 	/** Name which uniquely identifies the ${serviceName} service. */
 	public static final String SERVICE_NAME = "${basePackage}.${serviceName}Service";
 
-	private static Log log = LogFactory.getLog(EntityMaintenanceServiceDelegate.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(EntityMaintenanceServiceDelegate.class);
 
 	/**
 	 * Create a new delegate.
@@ -136,24 +136,24 @@ public class EntityMaintenanceServiceDelegateImpl implements EntityMaintenanceSe
 			EntityMaintenanceServiceHome home = (EntityMaintenanceServiceHome)o;
 			remote = home.create();
 		} catch (ClassCastException cce) {
-			if (log.isErrorEnabled()) {				
-				log.error("A class cast exception occurred looking up service \"EntityMaintenanceService\"'s remote stub." +
+			if (LOGGER.isErrorEnabled()) {				
+				LOGGER.error("A class cast exception occurred looking up service \"EntityMaintenanceService\"'s remote stub." +
 					" Expected \"EntityMaintenanceService\", but returned \"" + o.getClass() + "\"", cce);		
 			}
 			
 		} catch (RemoteException re) {
-			if (log.isErrorEnabled()) {
-				log.error("A remote exception occurred looking up service \"EntityMaintenanceService\"'s remote stub", re);			
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error("A remote exception occurred looking up service \"EntityMaintenanceService\"'s remote stub", re);			
 			}
 			
 		} catch (NamingException ne) {
-			if (log.isErrorEnabled()) {
-				log.error("A naming exception occurred looking up service \"EntityMaintenanceService\"'s remote stub", ne);			
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error("A naming exception occurred looking up service \"EntityMaintenanceService\"'s remote stub", ne);			
 			}
 			
 		} catch (CreateException ce) {
-			if (log.isErrorEnabled()) {
-				log.error("A creation exception occurred looking up service \"EntityMaintenanceService\"'s remote stub", ce);			
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error("A creation exception occurred looking up service \"EntityMaintenanceService\"'s remote stub", ce);			
 			}
 			
 		} finally {
@@ -165,8 +165,8 @@ public class EntityMaintenanceServiceDelegateImpl implements EntityMaintenanceSe
 	}
 	
 	private ServiceResponse handleRemoteException(String methodName, RemoteException re, ServiceResponse response) {
-		if (log.isErrorEnabled()) {
-			log.error("Exception occurred during " + methodName, re);
+		if (LOGGER.isErrorEnabled()) {
+			LOGGER.error("Exception occurred during " + methodName, re);
 			
 		}
 		
@@ -178,7 +178,7 @@ public class EntityMaintenanceServiceDelegateImpl implements EntityMaintenanceSe
 	}
 	
 	private ServiceResponse serverUnavailable(ServiceResponse response) {
-		if (log.isErrorEnabled()) {
+		if (LOGGER.isErrorEnabled()) {
 			Context ic = null;
 			String providerUrl = null;
 			try {
@@ -192,7 +192,7 @@ public class EntityMaintenanceServiceDelegateImpl implements EntityMaintenanceSe
 				EjbUtil.closeContext(ic);
 				
 			}
-			log.error("EntityMaintenanceServiceRemote could not be found - provider url: '" + providerUrl + "'!");
+			LOGGER.error("EntityMaintenanceServiceRemote could not be found - provider url: '" + providerUrl + "'!");
 			
 		}
 		

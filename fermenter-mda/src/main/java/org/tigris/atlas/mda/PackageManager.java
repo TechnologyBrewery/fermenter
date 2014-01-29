@@ -7,9 +7,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
-import java.util.zip.ZipFile;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -19,7 +16,7 @@ public class PackageManager {
 	private static final Log LOG = LogFactory.getLog(PackageManager.class.getName());
 	
 	private static PackageManager INSTANCE;
-	private Map applicationToBasePackage = new HashMap(10);
+	private Map<String, String> applicationToBasePackage = new HashMap<String, String>(10);
 	
 	static {
 		INSTANCE = new PackageManager();

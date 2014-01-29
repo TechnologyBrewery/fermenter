@@ -1,6 +1,5 @@
 package org.tigris.atlas.persist.hibernate;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,8 +31,7 @@ public abstract class DaoImpl implements Dao {
 	private static final String DATABASE_EXCEPTION_KEY = "database.exception";
 	
 	private Session getSession() {
-		SessionFactory hibernateSessionFactory = HibernateSessionFactoryManager.getInstance()
-				.getSessionFactory();
+		SessionFactory hibernateSessionFactory = HibernateSessionFactoryManager.getInstance().getSessionFactory();
 		Session hibernateSession;
 		try {
 			hibernateSession = hibernateSessionFactory.getCurrentSession();

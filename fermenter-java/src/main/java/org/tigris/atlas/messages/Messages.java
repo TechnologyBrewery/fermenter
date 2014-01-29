@@ -50,7 +50,7 @@ public interface Messages extends Serializable {
 	 *
 	 * @return A non-modifiable, non-null collection of 'Error' messages
 	 */
-	Collection getErrorMessages();
+	Collection<Message> getErrorMessages();
 	
 	/**
 	 * Get all messages with a severity of 'Error' that are associated with a
@@ -60,7 +60,7 @@ public interface Messages extends Serializable {
 	 * @return A non-modifiable, non-null collection of all 'Error' messages
 	 *         associated with the given property
 	 */
-	Collection getErrorMessages(String property);
+	Collection<Message> getErrorMessages(String property);
 	
 	/**
 	 * Answer how many messages with a severity of 'Informational' are present.
@@ -84,7 +84,7 @@ public interface Messages extends Serializable {
 	 *
 	 * @return A non-modifiable, non-null collection of 'Informational' messages
 	 */
-	Collection getInformationalMessages();
+	Collection<Message> getInformationalMessages();
 	
 	/**
 	 * Get all messages with a severity of 'Informational' that are associated
@@ -94,7 +94,7 @@ public interface Messages extends Serializable {
 	 * @return A non-modifiable, non-null collection of all 'Informational'
 	 *         messages associated with the given property
 	 */
-	Collection getInformationalMessages(String property);
+	Collection<Message> getInformationalMessages(String property);
 	
 	/**
 	 * Answer whether any messages with a severity of 'Error' are present

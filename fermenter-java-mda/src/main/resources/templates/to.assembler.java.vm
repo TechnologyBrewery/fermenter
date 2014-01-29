@@ -35,8 +35,8 @@ import org.tigris.atlas.bizobj.TransferObjectAssembler;
 import org.tigris.atlas.messages.Messages;
 import org.tigris.atlas.messages.Message;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Transfer object assmbler for the ${entityName} application entity.  This 
@@ -51,7 +51,7 @@ import org.apache.commons.logging.LogFactory;
 
 public class ${entityName}Assembler extends TransferObjectAssembler {
 
-	private static Log log = LogFactory.getLog(${entityName}Assembler.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(${entityName}Assembler.class);
 	
 	/**
 	 * Given a list of ${entityName}BO instances, create a list of ${entityName}
@@ -290,11 +290,11 @@ public class ${entityName}Assembler extends TransferObjectAssembler {
 #end	
 
 	/**
-	 * Returns the subclasses <tt>Log</tt> instance to allow for more granular logging
-	 * @return <tt>Log</tt> 
+	 * Returns the subclasses {@link Logger} instance to allow for more granular logging.
+	 * @return {@link Logger} 
 	 */
-	protected Log getLog() {
-		return log;
+	protected Logger getLog() {
+		return LOGGER;
 	}
 	
 }

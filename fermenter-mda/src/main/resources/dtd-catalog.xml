@@ -3,15 +3,15 @@
 	even if the path to that dtd is not currently accessible
  -->
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
-	<public publicId="-//ATLAS//DTD ENTITY//EN" uri="entity.dtd"/>
-	<public publicId="-//ATLAS//DTD FORM//EN" uri="form.dtd"/>
-	<public publicId="-//ATLAS//DTD SERVICE//EN" uri="service.dtd"/>
-	<public publicId="-//ATLAS//DTD TYPES//EN" uri="types.dtd"/>
-	<public publicId="-//ATLAS//DTD ENUMERATION//EN" uri="enumeration.dtd"/>
-	<public publicId="-//ATLAS//DTD COMPOSITE//EN" uri="composite.dtd"/>
-	<public publicId="-//ATLAS//DTD VALIDATORS//EN" uri="validators.dtd"/>
-	<public publicId="-//ATLAS//DTD MESSAGES//EN" uri="messages.dtd"/>
-	<public publicId="-//ATLAS//DTD PROFILES//EN" uri="profiles.dtd"/>
-	<public publicId="-//ATLAS//DTD TARGETS//EN" uri="targets.dtd"/>
-	<public publicId="-//ATLAS//DTD FORMATS//EN" uri="formats.dtd"/>
+	<public publicId="-//FERMENTER//DTD ENTITY//EN" uri="entity.dtd"/>
+	<public publicId="-//FERMENTER//DTD FORM//EN" uri="form.dtd"/>
+	<public publicId="-//FERMENTER//DTD SERVICE//EN" uri="service.dtd"/>
+	<public publicId="-//FERMENTER//DTD TYPES//EN" uri="types.dtd"/>
+	<public publicId="-//FERMENTER//DTD ENUMERATION//EN" uri="enumeration.dtd"/>
+	<public publicId="-//FERMENTER//DTD COMPOSITE//EN" uri="composite.dtd"/>
+	<public publicId="-//FERMENTER//DTD VALIDATORS//EN" uri="validators.dtd"/>
+	<public publicId="-//FERMENTER//DTD MESSAGES//EN" uri="messages.dtd"/>
+	<public publicId="-//FERMENTER//DTD PROFILES//EN" uri="profiles.dtd"/>
+	<public publicId="-//FERMENTER//DTD TARGETS//EN" uri="targets.dtd"/>
+	<public publicId="-//FERMENTER//DTD FORMATS//EN" uri="formats.dtd"/>
 </catalog>

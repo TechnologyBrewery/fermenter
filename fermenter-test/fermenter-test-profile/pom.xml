@@ -1,0 +1,34 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<parent>
+		<groupId>com.ask.fermenter</groupId>
+		<artifactId>fermenter-test</artifactId>
+		<version>1-SNAPSHOT</version>
+	</parent>
+
+	<name>Fermenter Test Profile</name>
+
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>fermenter-test-profile</artifactId>
+	<packaging>jar</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.ask.fermenter</groupId>
+			<artifactId>fermenter-java-mda</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.ask.fermenter</groupId>
+			<artifactId>fermenter-ejb-mda</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.ask.fermenter</groupId>
+			<artifactId>fermenter-hibernate-mda</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+
+</project>

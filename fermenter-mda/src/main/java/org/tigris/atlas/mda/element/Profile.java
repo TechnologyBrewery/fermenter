@@ -3,7 +3,6 @@ package org.tigris.atlas.mda.element;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -14,8 +13,8 @@ public final class Profile {
 
 	private String name;
 	private String extendsProfileName;
-	private Map targets;
-	private Map includes;
+	private Map<String, Target> targets;
+	private Map<String, Profile> includes;
 	private boolean isDereferenced;
 	
 	private static Log log = LogFactory.getLog(Profile.class); 
@@ -23,8 +22,8 @@ public final class Profile {
 	public Profile() { 
 		super();
 		
-		targets = new HashMap();
-		includes = new HashMap();
+		targets = new HashMap<String, Target>();
+		includes = new HashMap<String, Profile>();
 	}
 	
 	public String getName() {
@@ -53,7 +52,7 @@ public final class Profile {
 		targets.put(target.getName(), target);
 	}
 	
-	public Collection getTargets() {		
+	public Collection<Target> getTargets() {		
 		return Collections.unmodifiableCollection(targets.values());
 	}
 	
@@ -61,11 +60,11 @@ public final class Profile {
 		includes.put(profile.getName(), profile);
 	}
 	
-	public Collection getIncludes() {		
+	public Collection<Profile> getIncludes() {		
 		return Collections.unmodifiableCollection(includes.values());
 	}	
 	
-	public void dereferenceProfiles(Map profiles) {
+	public void dereferenceProfiles(Map<String, Profile> profiles) {
 		if (!isDereferenced) {
 			isDereferenced =  true;
 			
@@ -74,7 +73,7 @@ public final class Profile {
 		}
 	}
 	
-	private void dereferenceExtends(Map profiles) {
+	private void dereferenceExtends(Map<String, Profile> profiles) {
 		if (StringUtils.isNotBlank(extendsProfileName)) {
 			if (extendsProfileName.equals(name)) {
 				log.warn("Profile '" + extendsProfileName + "' cannot extend itself!");
@@ -91,19 +90,16 @@ public final class Profile {
 	 * Transfer the targets from the profile with the passed name onto this profile.
 	 * @param profiles
 	 */
-	private void addFromProfile(String profileName, Map profiles) {
-		Profile extendsProfile = (profiles != null) ? (Profile)profiles.get(profileName) : null;
+	private void addFromProfile(String profileName, Map<String, Profile> profiles) {
+		Profile extendsProfile = (profiles != null) ? profiles.get(profileName) : null;
 		if (extendsProfile != null) {
 			//ensure that this profile has been dereferenced:
 			if (!extendsProfile.isDereferenced) {
 				extendsProfile.dereferenceProfiles(profiles);
 			}
 			
-			Target t;
-			Collection extendsTargets = extendsProfile.getTargets();
-			Iterator i = extendsTargets.iterator();
-			while (i.hasNext()) {
-				t = (Target)i.next();
+			Collection<Target> extendsTargets = extendsProfile.getTargets();
+			for (Target t : extendsTargets) {
 				addTarget(t);
 			}
 			
@@ -113,12 +109,10 @@ public final class Profile {
 		}
 	}
 	
-	private void dereferenceIncludes(Map profiles) {
-		Iterator i = includes.values().iterator();
+	private void dereferenceIncludes(Map<String, Profile> profiles) {
 		String profileName;
-		Profile nameOnlyProfile;
-		while (i.hasNext()) {
-			nameOnlyProfile = (Profile)i.next();
+		
+		for (Profile nameOnlyProfile : includes.values()) {
 			profileName = nameOnlyProfile.getName();
 			if (StringUtils.isNotBlank(profileName)) {
 				if (profileName.equals(name)) {

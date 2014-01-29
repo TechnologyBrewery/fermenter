@@ -24,8 +24,8 @@ public class DefaultMessage implements Message {
 	private static final long serialVersionUID = 1L;
 	private String key;
 	private Severity severity;
-	private List inserts;
-	private Set properties;
+	private List<Object> inserts;
+	private Set<String> properties;
 	
 	/**
 	 * Create a new message instance, with no key, severity, properties, or
@@ -34,8 +34,8 @@ public class DefaultMessage implements Message {
 	public DefaultMessage() {
 		super();
 		
-		inserts = new ArrayList();
-		properties = new HashSet();
+		inserts = new ArrayList<Object>();
+		properties = new HashSet<String>();
 	}
 	
 	/* (non-Javadoc)
@@ -55,14 +55,14 @@ public class DefaultMessage implements Message {
 	/* (non-Javadoc)
 	 * @see org.tigris.atlas.messages.Message#getProperties()
 	 */
-	public Collection getProperties() {
+	public Collection<String> getProperties() {
 		return Collections.unmodifiableCollection(properties);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.tigris.atlas.messages.Message#getInserts()
 	 */
-	public Collection getInserts() {
+	public Collection<Object> getInserts() {
 		return Collections.unmodifiableCollection(inserts);
 	}
 
@@ -163,8 +163,8 @@ public class DefaultMessage implements Message {
 			return false;
 		}
 		
-		Collection thisProperties = this.getProperties();
-		Collection thatProperties = that.getProperties();
+		Collection<String> thisProperties = this.getProperties();
+		Collection<String> thatProperties = that.getProperties();
 		
 		// The properties are of different sizes - return false
 		if (thisProperties.size() != thatProperties.size()) {
@@ -172,7 +172,7 @@ public class DefaultMessage implements Message {
 		}
 		
 		// Objects are equal if they contain the same properties, ignoring order
-		for (Iterator i = thisProperties.iterator(); i.hasNext();) {
+		for (Iterator<String> i = thisProperties.iterator(); i.hasNext();) {
 			if (!thatProperties.contains(i.next())) {
 				return false;
 			}
@@ -207,7 +207,7 @@ public class DefaultMessage implements Message {
 		result = (37 * result) + getKey().hashCode();
 		result = (37 * result) + getSeverity().hashCode();
 		
-		for (Iterator i = properties.iterator(); i.hasNext();) {
+		for (Iterator<String> i = properties.iterator(); i.hasNext();) {
 			result = (37 * result) + i.next().hashCode();
 		}
 		

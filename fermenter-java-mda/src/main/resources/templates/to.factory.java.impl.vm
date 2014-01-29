@@ -3,15 +3,15 @@ package ${basePackage}.transfer;
 import java.util.Map;
 import java.util.HashMap;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.tigris.atlas.transfer.TransferObject;
 import org.tigris.atlas.transfer.PrimaryKey;
 
 public class TransferObjectFactoryImpl implements TransferObjectFactoryInterface {
 	
-	private static Log log = LogFactory.getLog( TransferObjectFactoryImpl.class );
+	private static final Logger LOGGER = LoggerFactory.getLogger(TransferObjectFactoryImpl.class);
 	private static Map TRANSFER_OBJECT_TYPES = null;
 	private static Map PRIMARY_KEY_TYPES = null;
 	
@@ -36,11 +36,11 @@ public class TransferObjectFactoryImpl implements TransferObjectFactoryInterface
 			Class clazz = Class.forName( type );
 			transferObject = (TransferObject) clazz.newInstance();
 		} catch (InstantiationException e) {
-			log.error( "Unable to instantiate type: " + type );
+			LOGGER.error( "Unable to instantiate type: " + type );
 		} catch (IllegalAccessException e) {
-			log.error( "Unable to access type: " + type );
+			LOGGER.error( "Unable to access type: " + type );
 		} catch (ClassNotFoundException e) {
-			log.error( "Unable to find class: " + type );
+			LOGGER.error( "Unable to find class: " + type );
 		}
 		
 		return transferObject;
@@ -54,11 +54,11 @@ public class TransferObjectFactoryImpl implements TransferObjectFactoryInterface
 			Class clazz = Class.forName( type );
 			primaryKey = (PrimaryKey) clazz.newInstance();
 		} catch (InstantiationException e) {
-			log.error( "Unable to instantiate type: " + type );
+			LOGGER.error( "Unable to instantiate type: " + type );
 		} catch (IllegalAccessException e) {
-			log.error( "Unable to access type: " + type );
+			LOGGER.error( "Unable to access type: " + type );
 		} catch (ClassNotFoundException e) {
-			log.error( "Unable to find class: " + type );
+			LOGGER.error( "Unable to find class: " + type );
 		}
 		
 		return primaryKey;

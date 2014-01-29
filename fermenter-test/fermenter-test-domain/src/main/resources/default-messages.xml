@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE messages PUBLIC "-//FERMENTER//DTD MESSAGES//EN" "https://bitbucket.org/askllc/fermenter/downloads/messages.dtd">
+
+<messages>
+
+	<message key="hello">
+		<summary>Hello!</summary>
+		<detail>Hello, how are you?</detail>
+	</message>
+
+	<message key="hello.i18n">
+		<summary>Hello!</summary>
+		<summary locale="es">Hola!</summary>
+		<detail>Hello, how are you?</detail>
+		<detail locale="es">Hola, como esta?</detail>
+	</message>
+
+	<message key="hello.world">
+		<summary>Hello, world!</summary>
+	</message>
+
+</messages>

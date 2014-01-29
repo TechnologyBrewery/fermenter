@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE types PUBLIC "-//ATLAS//DTD TYPES//EN" "http://atlas.tigris.org/svn/atlas/trunk/atlas-mda/src/main/resources/types.dtd">
+<!DOCTYPE types PUBLIC "-//FERMENTER//DTD TYPES//EN" "https://bitbucket.org/askllc/fermenter/downloads/types.dtd">
 
 <types>
 	<type>

@@ -1,0 +1,74 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<parent>
+		<groupId>com.ask.fermenter</groupId>
+		<artifactId>fermenter-test</artifactId>
+		<version>1-SNAPSHOT</version>
+	</parent>
+
+	<name>Fermenter Test Domain</name>
+
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>fermenter-test-domain</artifactId>
+	<packaging>jar</packaging>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.ask.fermenter</groupId>
+				<artifactId>fermenter-mda</artifactId>
+				<version>${project.version}</version>
+				<configuration>
+					<basePackage>com.ask.test.domain</basePackage>
+					<profile>example-domain</profile>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>com.ask.fermenter</groupId>
+						<artifactId>fermenter-test-profile</artifactId>
+						<version>${project.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+			<resource>
+				<directory>src/generated/resources</directory>
+			</resource>
+		</resources>
+	</build>
+	
+	<dependencies>
+		<dependency>
+			<groupId>com.ask.fermenter</groupId>
+			<artifactId>fermenter-java</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.ask.fermenter</groupId>
+			<artifactId>fermenter-ejb</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.ask.fermenter</groupId>
+			<artifactId>fermenter-hibernate</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<scope>test</scope>
+		</dependency>	
+  	</dependencies>
+
+</project>

@@ -14,6 +14,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.digester.Digester;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.LogFactory;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.AbstractMojo;
@@ -46,12 +47,12 @@ public class GenerateSourcesMojo extends AbstractMojo {
 	private static final String PROFILE_TARGET = "profiles/profile/target";
 	private static final String TARGET = "targets/target";
 	private static final String [] TARGET_PROPERTIES = new String [] {"name", "generator", "templateName", "outputFile", "overwritable", "append"};
-	private static final Map PROFILES;
-	private static final Map TARGETS;
+	private static final Map<String, Profile> PROFILES;
+	private static final Map<String, Target> TARGETS;
 
 	static {
-		PROFILES = new HashMap();
-		TARGETS = new HashMap();
+		PROFILES = new HashMap<String, Profile>();
+		TARGETS = new HashMap<String, Target>();
 	}
 
 	/**
@@ -70,7 +71,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
 	/**
 	 * @parameter
 	 */
-	private List metadataDependencies;
+	private List<String> metadataDependencies;
 
 	/**
 	 * @parameter
@@ -84,13 +85,6 @@ public class GenerateSourcesMojo extends AbstractMojo {
 	 * @readonly
 	 */
 	private String generatedCompileSourceRoot;
-
-	/**
-	 * @parameter expression="${project.basedir}/src/xmlbeans/java"
-	 * @required
-	 * @readonly
-	 */
-	private String xmlBeansSourceRoot;
 
 	/**
 	 * @parameter expression="${project.basedir}/src/main"
@@ -121,14 +115,13 @@ public class GenerateSourcesMojo extends AbstractMojo {
 
 	private void setup() throws Exception {
 		if (metadataDependencies == null) {
-			metadataDependencies = new ArrayList();
+			metadataDependencies = new ArrayList<String>();
 		}
 
 		loadTargets();
 		loadProfiles();
 
 		project.addCompileSourceRoot(generatedCompileSourceRoot);
-		project.addCompileSourceRoot(xmlBeansSourceRoot);
 
 		try {
 			initializeMetadata();
@@ -151,7 +144,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
 		InputStream stream = null;
 
 		URL resource = null;
-		Enumeration targetEnumeration = null;
+		Enumeration<URL> targetEnumeration = null;
 		try {
 			targetEnumeration = getClass().getClassLoader().getResources("targets.xml");
 		} catch (IOException ioe) {
@@ -175,7 +168,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
 			} catch (Exception ex) {
 				throw new MojoExecutionException("Unable to parse target: " + ((resource != null) ? resource.toString() : null), ex);
 			} finally {
-				closeStream(stream);
+				IOUtils.closeQuietly(stream);
 			}
 		}
 	}
@@ -184,7 +177,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
 		InputStream stream = null;
 
 		URL resource = null;
-		Enumeration targetEnumeration = null;
+		Enumeration<URL> targetEnumeration = null;
 		try {
 			targetEnumeration = getClass().getClassLoader().getResources("profiles.xml");
 		} catch (IOException ioe) {
@@ -215,14 +208,11 @@ public class GenerateSourcesMojo extends AbstractMojo {
 			} catch (Exception ex) {
 				throw new MojoExecutionException("Unable to parse profiles", ex);
 			} finally {
-				closeStream(stream);
+				IOUtils.closeQuietly(stream);
 			}
 		}
 
-		Profile p;
-		Iterator i = PROFILES.values().iterator();
-		while (i.hasNext()) {
-			p = (Profile)i.next();
+		for (Profile p : PROFILES.values()) {
 			p.dereferenceProfiles(PROFILES);
 		}
 	}
@@ -232,14 +222,14 @@ public class GenerateSourcesMojo extends AbstractMojo {
 		props.setProperty("application.name", project.getArtifactId());
 		props.setProperty("metadata.loader", StaticURLResolver.class.getName());
 
-		String projectUrl = new File(mainSourceRoot, "resources").toURL().toString();
+		String projectUrl = new File(mainSourceRoot, "resources").toURI().toURL().toString();
 		props.setProperty("metadata." + project.getArtifactId(), projectUrl);
 		PackageManager.addMapping(project.getArtifactId(), basePackage);
 
 		if (metadataDependencies != null) {
 			metadataDependencies.add(project.getArtifactId());
 			StringBuffer buff = new StringBuffer();
-			for (Iterator i = metadataDependencies.iterator(); i.hasNext();) {
+			for (Iterator<String> i = metadataDependencies.iterator(); i.hasNext();) {
 				buff.append(i.next());
 				if (i.hasNext()) {
 					buff.append(";");
@@ -247,11 +237,11 @@ public class GenerateSourcesMojo extends AbstractMojo {
 			}
 			props.setProperty("metadata.locations", buff.toString());
 
-			Set artifacts = project.getArtifacts();
-			for (Iterator i = artifacts.iterator(); i.hasNext();) {
-				Artifact a = (Artifact) i.next();
+			@SuppressWarnings("unchecked")
+			Set<Artifact> artifacts = (Set<Artifact>)project.getArtifacts();
+			for (Artifact a : artifacts) {
 				if (metadataDependencies.contains(a.getArtifactId())) {
-					URL url = a.getFile().toURL();
+					URL url = a.getFile().toURI().toURL();
 					props.setProperty("metadata." + a.getArtifactId(), url.toString());
 					PackageManager.addMapping(a.getArtifactId(), url);
 				}
@@ -271,10 +261,8 @@ public class GenerateSourcesMojo extends AbstractMojo {
 	}
 
 	public void addProfile(Profile profile) {
-		Iterator targets = profile.getTargets().iterator();
-		while (targets.hasNext()) {
-			Target profileTarget = (Target) targets.next();
-			Target target = (Target) TARGETS.get(profileTarget.getName());
+		for (Target profileTarget : profile.getTargets()) {
+			Target target = TARGETS.get(profileTarget.getName());
 			if (target == null) {
 				throw new IllegalArgumentException("No target found for profile '" + profile.getName() + "', target '" + profileTarget.getName() + "'");
 			}
@@ -287,26 +275,14 @@ public class GenerateSourcesMojo extends AbstractMojo {
 		PROFILES.put(profile.getName(), profile);
 	}
 
-	private void closeStream(InputStream stream) throws MojoExecutionException {
-		if (stream != null) {
-			try {
-				stream.close();
-			} catch (IOException ex) {
-				throw new MojoExecutionException("Unable to close a stream", ex);
-			}
-		}
-	}
-
 	private void generateSources() throws MojoExecutionException {
 		long start = System.currentTimeMillis();
 		Profile p = (Profile) PROFILES.get(profile);
 
 		if (p == null) {
 			StringBuffer sb = new StringBuffer(150);
-			Iterator i = PROFILES.values().iterator();
-			while (i.hasNext()) {
-				p = (Profile)i.next();
-				sb.append("\t- ").append(p.getName()).append("\n");
+			for (Profile profileValue : PROFILES.values()) {
+				sb.append("\t- ").append(profileValue.getName()).append("\n");
 			}
 			getLog().error(
 			"<plugin>\n" +
@@ -326,9 +302,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
 		}
 
 		// For each target, instantiate a generator and call generate
-		for (Iterator i = p.getTargets().iterator(); i.hasNext();) {
-			Target t = (Target) i.next();
-
+		for (Target t : p.getTargets()) {
 			getLog().info("\tExecuting target '" + t.getName() + "'");
 
 			GenerationContext context = new GenerationContext(t);
@@ -343,7 +317,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
 			context.setVersion(project.getVersion());
 
 			try {
-				Class clazz = Class.forName(t.getGenerator());
+				Class<?> clazz = Class.forName(t.getGenerator());
 				Generator generator = (Generator) clazz.newInstance();
 				generator.generate(context);
 			} catch (Exception ex) {

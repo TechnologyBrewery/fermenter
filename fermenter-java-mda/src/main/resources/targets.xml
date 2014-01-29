@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE targets PUBLIC "-//ATLAS//DTD TARGETS//EN" "http://atlas.tigris.org/svn/atlas/trunk/atlas-mda/src/main/resources/targets.dtd">
+<!DOCTYPE targets PUBLIC "-//FERMENTER//DTD TARGETS//EN" "https://bitbucket.org/askllc/fermenter/downloads/targets.dtd">
 
 <targets>
 	
@@ -235,12 +235,6 @@
 		    generator="org.tigris.atlas.mda.generator.factory.FactoryJavaGenerator"
 		    templateName="templates/service.delegate.factory.interface.java.vm"
 		    outputFile="${basePackage}/service/delegate/ServiceDelegateFactoryInterface.java"
-		    overwritable="true"/>
-	
-	<target name="countLocAntXml"
-		    generator="org.tigris.atlas.mda.generator.html.ServiceHtmlGenerator"
-		    templateName="templates/count.loc.ant.xml.vm"
-		    outputFile="ant/count-loce.xml"
 		    overwritable="true"/>
 	
 	<target name="factoryPropertiesPojo"

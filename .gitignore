@@ -28,3 +28,12 @@ fermenter-mda/target
 .project
 .settings/org.eclipse.m2e.core.prefs
 fermenter-hibernate/target/
+fermenter-test/.settings/
+fermenter-test/fermenter-test-domain/.settings/org.eclipse.core.resources.prefs
+fermenter-test/fermenter-test-domain/.settings/
+fermenter-test/fermenter-test-domain/.classpath
+fermenter-test/fermenter-test-domain/src/generated/
+fermenter-test/fermenter-test-domain/target/
+fermenter-test/fermenter-test-profile/.classpath
+fermenter-test/fermenter-test-profile/.settings/
+fermenter-test/fermenter-test-profile/target/

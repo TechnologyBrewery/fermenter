@@ -17,6 +17,8 @@ public final class HibernateSessionFactoryManager {
 
 	private static HibernateSessionFactoryManager instance = new HibernateSessionFactoryManager();
 	
+	private static final String CONFIG = "hibernate.cfg.xml";
+	
 	private ServiceRegistry serviceRegistry;
 	private SessionFactory sessionFactory;
 	
@@ -39,6 +41,7 @@ public final class HibernateSessionFactoryManager {
 		Properties hibernateProperties = krausening.getProperties("hibernate.properties");
 		
 		Configuration hibernateConfiguration = new Configuration();
+		hibernateConfiguration.configure(CONFIG);
 		hibernateConfiguration.addProperties(hibernateProperties);
 		
 		StandardServiceRegistryBuilder registryBuilder = new StandardServiceRegistryBuilder();

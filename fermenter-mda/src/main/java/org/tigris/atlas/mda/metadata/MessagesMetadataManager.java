@@ -13,6 +13,7 @@ import java.util.Set;
 
 import org.apache.commons.digester.Digester;
 import org.apache.commons.digester.RuleSetBase;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.xml.resolver.CatalogManager;
@@ -35,14 +36,14 @@ public final class MessagesMetadataManager {
 		INSTANCE = new MessagesMetadataManager();
 	}
 	
-	private Map messages;
-	private Set locales;
+	private Map<String, Message> messages;
+	private Set<String> locales;
 	
 	private MessagesMetadataManager() {
 		super();
 		
-		messages = new HashMap();
-		locales = new HashSet();
+		messages = new HashMap<String, Message>();
+		locales = new HashSet<String>();
 		locales.add(Message.DEFAULT_LOCALE);
 	}
 
@@ -50,11 +51,11 @@ public final class MessagesMetadataManager {
 		return INSTANCE;
 	}
 	
-	public Collection getAllMessages() {
+	public Collection<Message> getAllMessages() {
 		return Collections.unmodifiableCollection(messages.values());
 	}
 	
-	public Collection getAllLocales() {
+	public Collection<String> getAllLocales() {
 		return Collections.unmodifiableCollection(locales);		
 	}
 	
@@ -85,6 +86,7 @@ public final class MessagesMetadataManager {
 
 			// Now load messages for the current app
 			loadApplicationMessages(resolver, url, handler);
+			
 		} catch (Exception ex) {
 			LOG.error("Unable to load messages metadata", ex);
 			throw new RuntimeException("Unable to load messages metadata", ex);
@@ -104,7 +106,7 @@ public final class MessagesMetadataManager {
 			return;
 		}
 		
-		URL resource = (file==null) ? null : file.toURL();
+		URL resource = (file==null) ? null : file.toURI().toURL();
 		if (resource != null) {
 			LOG.info("Loading messages from: " + path);
 			Digester digester = configureDigester(resolver, handler);
@@ -120,7 +122,21 @@ public final class MessagesMetadataManager {
 	private void loadDefaultMessages(EntityResolver resolver, TrackErrorsErrorHandler handler) throws Exception {
 		LOG.info("Loading messages from: " + DEFAULT_MESSAGES);
 		Digester digester = configureDigester(resolver, handler);
-		digester.parse(MessagesMetadataManager.class.getResourceAsStream(DEFAULT_MESSAGES));
+		InputStream is = null;
+		try {
+			is = MessagesMetadataManager.class.getResourceAsStream(DEFAULT_MESSAGES);
+			if (is != null) {
+				digester.parse(is);
+				
+			} else {
+				LOG.warn("Default messages were not found at " + DEFAULT_MESSAGES + " and will not be available!");
+				
+			}
+			
+		} finally {
+			IOUtils.closeQuietly(is);
+			
+		}
 	}
 
 	void loadMetadata(String url) {

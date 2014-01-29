@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE validators PUBLIC "-//ATLAS//DTD VALIDATORS//EN" "http://atlas.tigris.org/svn/atlas/trunk/atlas-mda/src/main/resources/validators.dtd">
+<!DOCTYPE validators PUBLIC "-//FERMENTER//DTD VALIDATORS//EN" "https://bitbucket.org/askllc/fermenter/downloads/validators.dtd">
 
 <validators>
 	<validator name="emailValidator" class="org.tigris.atlas.validate.EmailValidator"/>

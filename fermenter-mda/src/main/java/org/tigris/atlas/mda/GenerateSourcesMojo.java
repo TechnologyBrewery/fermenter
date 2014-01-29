@@ -254,8 +254,8 @@ public class GenerateSourcesMojo extends AbstractMojo {
 
 	public void addTarget(Target target) {
 		Log log = getLog();
-		if (log.isInfoEnabled()) {
-			log.info("Adding target: " + target.getName());
+		if (log.isDebugEnabled()) {
+			log.debug("\t    + " + target.getName());
 		}
 		TARGETS.put(target.getName(), target);
 	}
@@ -303,7 +303,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
 
 		// For each target, instantiate a generator and call generate
 		for (Target t : p.getTargets()) {
-			getLog().info("\tExecuting target '" + t.getName() + "'");
+			getLog().debug("\tExecuting target '" + t.getName() + "'");
 
 			GenerationContext context = new GenerationContext(t);
 			context.setBasePackage(basePackage);

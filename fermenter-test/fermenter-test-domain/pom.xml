@@ -51,11 +51,6 @@
 		</dependency>
 		<dependency>
 			<groupId>com.ask.fermenter</groupId>
-			<artifactId>fermenter-ejb</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.ask.fermenter</groupId>
 			<artifactId>fermenter-hibernate</artifactId>
 			<version>${project.version}</version>
 		</dependency>

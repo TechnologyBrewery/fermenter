@@ -3,18 +3,6 @@
 
 <profiles>
 
-	<profile name="java-application-descriptor">
-		<target name="applicationXml"/>
-	</profile>
-
-	<profile name="java-application-descriptor-1.4">
-		<target name="application14Xml"/>
-	</profile>
-
-	<profile name="java-ejb-jar-descriptor">
-		<target name="ejbJarXml"/>
-	</profile>
-
 	<profile name="java-service-session-beans">
 		<target name="serviceSessionBeanRemoteInterfaces"/>
 		<target name="serviceSessionBeanLocalInterfaces"/>

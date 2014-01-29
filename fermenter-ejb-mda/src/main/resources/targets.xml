@@ -33,18 +33,6 @@
 		    outputFile="${basePackage}/service/ejb/${serviceName}ServiceBean.java"
 		    overwritable="true"/>
 
-	<target name="ejbJarXml"
-		    generator="org.tigris.atlas.ejb.mda.generator.DeploymentDescriptorGenerator"
-		    templateName="templates/ejb.jar.xml.vm"
-		    outputFile="ejb-jar/META-INF/ejb-jar.xml"
-		    overwritable="true"/>
-
-	<target name="applicationXml"
-		    generator="org.tigris.atlas.ejb.mda.generator.DeploymentDescriptorGenerator"
-		    templateName="templates/application.xml.vm"
-		    outputFile="/ear/META-INF/application.xml"
-		    overwritable="true"/>
-
 	<target name="entityMaintenanceServiceHome"
 		    generator="org.tigris.atlas.mda.generator.service.EntityMaintenanceServiceJavaGenerator"
 		    templateName="templates/entity.maint.service.sessionbean.home.java.vm"
@@ -85,12 +73,6 @@
 		    generator="org.tigris.atlas.mda.generator.service.EntityMaintenanceServiceJavaGenerator"
 		    templateName="templates/sessionbean.entity.maint.service.delegate.impl.java.vm"
 		    outputFile="${basePackage}/service/delegate/EntityMaintenanceServiceDelegateImpl.java"
-		    overwritable="true"/>
-
-	<target name="application14Xml"
-		    generator="org.tigris.atlas.ejb.mda.generator.DeploymentDescriptorGenerator"
-		    templateName="templates/application.1.4.xml.vm"
-		    outputFile="/ear/META-INF/application.xml"
 		    overwritable="true"/>
 
 </targets>

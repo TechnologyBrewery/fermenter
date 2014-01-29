@@ -19,7 +19,7 @@
 		<module>fermenter-test-profile</module>
 		<module>fermenter-test-domain</module>
 		<!-- Ideally we will eventually test the domain in a pojo deployment as well -->
-		<module>fermenter-test-ejb</module>
+		<!-- Not compiling yet... lots of changes needed <module>fermenter-test-ejb</module>-->
 	</modules>
 
 	<build>

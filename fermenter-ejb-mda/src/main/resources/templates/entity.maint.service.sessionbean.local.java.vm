@@ -1,12 +1,52 @@
 package ${basePackage}.service.ejb;
 
+import org.tigris.atlas.service.Service;
+
 import ${basePackage}.service.EntityMaintenanceService;
-import javax.ejb.EJBLocalObject;
+
+import ${basePackage}.transfer.${entity.name};
+import ${basePackage}.transfer.${entity.name}PK;
+import ${basePackage}.service.${entity.name}ServiceResponse;
+
+import javax.ejb.Local;
+
+//import javax.ws.rs.GET;
+//import javax.ws.rs.POST;
+//import javax.ws.rs.Path;
+//import javax.ws.rs.PathParam;
+//import javax.ws.rs.Produces;
+//import javax.ws.rs.QueryParam;
 
 /**
- * Local interface for the EntityMaintenance service
+ * Local interface for the ${entity.name}Maintenance service.
  *
  * Generated Code - DO NOT MODIFY
  */
-public interface EntityMaintenanceServiceLocal extends EJBLocalObject, EntityMaintenanceService {
+@Local
+//@Path("/")
+public interface ${entityName}MaintenanceService extends Service {
+
+	/**
+	 * Save or update the passed instance.
+	 * @param entity The ${entity.name} instance to save
+	 * @return a service response containing the save entity and/or any encountered messages
+	 */
+	${entity.name}ServiceResponse saveOrUpdate(${entity.name} entity);
+	 
+	/**
+	 * Delete the ${entity.name}.
+	 *
+	 * @param entity ${entity.name} to delete
+	 * @return ${entity.name}ServiceResponse The deleted ${entity.name} container
+	 */
+	public ${entity.name}ServiceResponse delete(${entity.name}PK pk);
+
+	/**
+	 * Find the ${entity.name} by primary key fields.
+	 *
+	 * @param pk The primary key for the ${entity.name}
+	 * @return ${entity.name}ServiceResponse The retrieved ${entity.name} container
+	 */
+	public ${entity.name}ServiceResponse findByPrimaryKey(${entity.name}PK pk);
+
 }

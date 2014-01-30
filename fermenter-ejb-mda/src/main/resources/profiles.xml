@@ -12,13 +12,13 @@
 		<target name="sessionBeanServiceDelegateObjects"/>
 	</profile>
 
-	<profile name="java-entity-maintenance-session-beans">
-		<target name="entityMaintenanceServiceHome"/>
-		<target name="entityMaintenanceServiceLocalHome"/>
-		<target name="entityMaintenanceServiceRemote"/>
+	<profile name="java-entity-maintenance-session-beans" extends="java-entity-maintenance-session-beans-service-only">
+		<target name="sessionBeanEntityMaintenanceServiceDelegateImpl"/>
+	</profile>
+	
+	<profile name="java-entity-maintenance-session-beans-service-only">
 		<target name="entityMaintenanceServiceLocal"/>
 		<target name="entityMaintenanceServiceBean"/>
-		<target name="sessionBeanEntityMaintenanceServiceDelegateImpl"/>
 	</profile>
 
 </profiles>

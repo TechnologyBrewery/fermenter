@@ -4,99 +4,118 @@ package ${basePackage}.service.ejb;
 import $import;
 #end
 
-#foreach($entity.name in $entities)
 import ${basePackage}.transfer.${entity.name};
 import ${basePackage}.transfer.${entity.name}PK;
+import ${basePackage}.bizobj.BusinessObjectFactory;
+import ${basePackage}.bizobj.${entity.name}Assembler;
+import ${basePackage}.bizobj.${entity.name}BO;
 import ${basePackage}.service.${entity.name}ServiceResponse;
-#end
 
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.ejb.SessionBean;
+import javax.annotation.Resource;
+
+import javax.ejb.Local;
 import javax.ejb.SessionContext;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ${basePackage}.service.ServiceFactory;
-import ${basePackage}.service.EntityMaintenanceService;
+import ${basePackage}.service.ejb.${entity.name}MaintenanceService;
 
 /**
- * Service session bean for the EntityMaintenance service
+ * Implementation of an EJB for create, retrieve, update, and delete (CRUD) for ${entity.name}
  *
  * Generated Code - DO NOT MODIFY
  */
-public class EntityMaintenanceServiceBean implements SessionBean {
-
-	protected SessionContext sessionContext = null;
-
+ @Local(${entity.name}MaintenanceService.class)
+ @Stateless
+public class ${entity.name}MaintenanceServiceBean implements ${entity.name}MaintenanceService {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(${entity.name}MaintenanceServiceBean.class);
+	
+	private ${entity.name}Assembler assembler = new ${entity.name}Assembler();
+	
+	@Resource
+	private SessionContext sessionContext;
+	
 	/**
-	 * Get a service instance
-	 */ 
-	private EntityMaintenanceService getEntityMaintenanceService() {
-		
-		return ServiceFactory.createEntityMaintenanceService();
-	}	
-
-#foreach( $entity in $entities )
-
-	/**
-	 * Save the ${entity.name}
-	 *
-	 * @param entity ${entity.name} to save
-	 * @return ${entity.name}ServiceResponse The saved ${entity.name} container
+	 *{@inheritDoc}
 	 */
-	public ${entity.name}ServiceResponse save(${entity.name} entity) {
-		return getEntityMaintenanceService().save(entity);
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public ${entity.name}ServiceResponse saveOrUpdate(${entity.name} entity) {
+		LOGGER.debug("Executing ${entity.name}.saveOrUpdate");
+		${entity.name}ServiceResponse response = null;
+		
+		if (entity != null) {
+			${entity.name}PK pk = entity.get${entity.name}PK();
+			${entity.name}BO businessObjectToSave = null;
+			${entity.name}BO retrievedBusinessObject = ${entity.name}BO.findByPrimaryKey(pk);
+			
+			if (retrievedBusinessObject != null) {
+				businessObjectToSave = retrievedBusinessObject;
+				assembler.update${entity.name}BO(entity, businessObjectToSave);
+				
+			} else {
+				businessObjectToSave = BusinessObjectFactory.create${entity.name}BO();
+				
+			}
+			
+			businessObjectToSave.save();
+			
+			//TODO: handle error messages
+			
+			${entity.name} updateEntity = assembler.create${entity.name}(businessObjectToSave);
+			
+			response = new ${entity.name}ServiceResponse();
+			response.set${entity.name}(updateEntity);
+			
+		}
+		
+		return response;
 	}
 	 
 	/**
-	 * Delete the ${entity.name}
+	 * Delete the ${entity.name}.
 	 *
 	 * @param entity ${entity.name} to delete
 	 * @return ${entity.name}ServiceResponse The deleted ${entity.name} container
 	 */
 	public ${entity.name}ServiceResponse delete(${entity.name}PK pk) {
-		return getEntityMaintenanceService().delete(pk);
+		LOGGER.debug("Executing ${entity.name}.delete");
+		${entity.name}BO businessObjectToDelete = BusinessObjectFactory.create${entity.name}BO();
+		businessObjectToDelete.setKey(pk);
+		businessObjectToDelete.delete();
+		
+		//TODO: handle messages
+		
+		return new ${entity.name}ServiceResponse();
 	}
 
 	/**
-	 * Find the ${entity.name} by primary key fields
+	 * Find the ${entity.name} by primary key fields.
 	 *
 	 * @param pk The primary key for the ${entity.name}
 	 * @return ${entity.name}ServiceResponse The retrieved ${entity.name} container
 	 */
 	public ${entity.name}ServiceResponse findByPrimaryKey(${entity.name}PK pk) {
-		return getEntityMaintenanceService().findByPrimaryKey(pk);
-	}
-	
-#end 
-	public void ejbCreate() throws CreateException {
-	}
-
-	/**
-	 * @see javax.ejb.SessionBean#ejbActivate()
-	 */
-	public void ejbActivate() throws EJBException {
-	}
-
-
-	/**
-	 * @see javax.ejb.SessionBean#ejbPassivate()
-	 */
-	public void ejbPassivate() throws EJBException {
-	}
-
-
-	/**
-	 * @see javax.ejb.SessionBean#ejbRemove()
-	 */
-	public void ejbRemove() throws EJBException {		
-	}
-
-
-	/**
-	 * @see javax.ejb.SessionBean#setSessionContext(javax.ejb.SessionContext)
-	 */
-	public void setSessionContext(SessionContext ctx) throws EJBException {
-		sessionContext = ctx;			
+		LOGGER.debug("Executing ${entity.name}.findByPrimaryKey");
+		${entity.name} retrieveEntity = null;
+		
+		${entity.name}BO retrievedBusinessObject = ${entity.name}BO.findByPrimaryKey(pk);
+		if (retrievedBusinessObject != null) {
+			retrieveEntity = assembler.create${entity.name}(retrievedBusinessObject);
+			
+		}
+		
+		//TODO: handle messages
+		
+		${entity.name}ServiceResponse response = new ${entity.name}ServiceResponse();
+		response.set${entity.name}(retrieveEntity);
+		
+		return response;
 	}
 
 }

@@ -51,6 +51,11 @@
 		</dependency>
 		<dependency>
 			<groupId>com.ask.fermenter</groupId>
+			<artifactId>fermenter-ejb</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.ask.fermenter</groupId>
 			<artifactId>fermenter-hibernate</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -63,7 +68,14 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<scope>test</scope>
-		</dependency>	
+		</dependency>
+		
+		<!-- Provided JEE Dependencies -->
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
   	</dependencies>
 
 </project>

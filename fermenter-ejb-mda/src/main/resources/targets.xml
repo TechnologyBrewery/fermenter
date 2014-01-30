@@ -33,34 +33,16 @@
 		    outputFile="${basePackage}/service/ejb/${serviceName}ServiceBean.java"
 		    overwritable="true"/>
 
-	<target name="entityMaintenanceServiceHome"
-		    generator="org.tigris.atlas.mda.generator.service.EntityMaintenanceServiceJavaGenerator"
-		    templateName="templates/entity.maint.service.sessionbean.home.java.vm"
-		    outputFile="${basePackage}/service/ejb/EntityMaintenanceServiceHome.java"
-		    overwritable="true"/>
-
-	<target name="entityMaintenanceServiceLocalHome"
-		    generator="org.tigris.atlas.mda.generator.service.EntityMaintenanceServiceJavaGenerator"
-		    templateName="templates/entity.maint.service.sessionbean.local.home.java.vm"
-		    outputFile="${basePackage}/service/ejb/EntityMaintenanceServiceLocalHome.java"
-		    overwritable="true"/>
-
-	<target name="entityMaintenanceServiceRemote"
-		    generator="org.tigris.atlas.mda.generator.service.EntityMaintenanceServiceJavaGenerator"
-		    templateName="templates/entity.maint.service.sessionbean.remote.java.vm"
-		    outputFile="${basePackage}/service/ejb/EntityMaintenanceServiceRemote.java"
-		    overwritable="true"/>
-
 	<target name="entityMaintenanceServiceLocal"
-		    generator="org.tigris.atlas.mda.generator.service.EntityMaintenanceServiceJavaGenerator"
+		    generator="org.tigris.atlas.mda.generator.entity.EntityJavaGenerator"
 		    templateName="templates/entity.maint.service.sessionbean.local.java.vm"
-		    outputFile="${basePackage}/service/ejb/EntityMaintenanceServiceLocal.java"
+		    outputFile="${basePackage}/service/ejb/${entityName}MaintenanceService.java"
 		    overwritable="true"/>
 
 	<target name="entityMaintenanceServiceBean"
-		    generator="org.tigris.atlas.mda.generator.service.EntityMaintenanceServiceJavaGenerator"
+		    generator="org.tigris.atlas.mda.generator.entity.EntityJavaGenerator"
 		    templateName="templates/entity.maint.service.sessionbean.bean.java.vm"
-		    outputFile="${basePackage}/service/ejb/EntityMaintenanceServiceBean.java"
+		    outputFile="${basePackage}/service/ejb/${entityName}MaintenanceServiceBean.java"
 		    overwritable="true"/>
 
 	<target name="sessionBeanServiceDelegateObjects"

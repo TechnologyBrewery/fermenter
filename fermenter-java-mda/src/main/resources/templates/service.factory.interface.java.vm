@@ -1,19 +1,26 @@
 package ${basePackage}.service;
 
-import org.tigris.atlas.service.AbstractServiceFactoryInterface;
+#foreach( $entity in $entities )
+import ${basePackage}.service.ejb.${entity.name}MaintenanceService;
+#end
 
-public interface ServiceFactoryInterface extends AbstractServiceFactoryInterface {
-	
-	/**
-	 * Create an EntityMaintenanceService instance 
-	 */
-	public EntityMaintenanceService createEntityMaintenanceService();
+import org.tigris.atlas.factory.Factory;
+
+public interface ServiceFactoryInterface extends Factory {
 	
 #foreach( $service in $serviceNames )
 	/**
-	 * Create a(n) ${service}Service instance
+	 * Create a(n) ${service}Service instance.
 	 */
-	public ${service}Service create${service}Service();
+	${service}Service create${service}Service();
+	
+#end
+
+#foreach( $entity in $entities )
+	/**
+	 * Create a(n) ${entity.name}MaintenanceService instance.
+	 */
+	${entity.name}MaintenanceService create${entity.name}MaintenanceService();
 	
 #end
 

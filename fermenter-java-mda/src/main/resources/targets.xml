@@ -128,24 +128,6 @@
 		    templateName="templates/service.impl.java.vm"
 		    outputFile="${basePackage}/service/impl/${serviceName}ServiceImpl.java"
 		    overwritable="false"/>
-
-	<target name="serviceResponseIteratorObjects"
-		    generator="org.tigris.atlas.mda.generator.service.PerEntityServiceResponseJavaGenerator"
-		    templateName="templates/service.response.iterator.java.vm"
-		    outputFile="${basePackage}/service/${entityName}Iterator.java"
-		    overwritable="true"/>
-	
-	<target name="entityServiceResponseObjects"
-		    generator="org.tigris.atlas.mda.generator.service.PerEntityServiceResponseJavaGenerator"
-		    templateName="templates/service.response.entity.java.vm"
-		    outputFile="${basePackage}/service/${entityName}ServiceResponse.java"
-		    overwritable="true"/>
-	
-	<target name="entityCollectionServiceResponseObjects"
-		    generator="org.tigris.atlas.mda.generator.service.PerEntityServiceResponseJavaGenerator"
-		    templateName="templates/service.response.entityCollection.java.vm"
-		    outputFile="${basePackage}/service/${entityName}CollectionServiceResponse.java"
-		    overwritable="true"/>
 	
 	<target name="packageProperties"
 		    generator="org.tigris.atlas.mda.generator.properties.PackagePropertiesGenerator"
@@ -199,12 +181,6 @@
 		    generator="org.tigris.atlas.mda.generator.service.EntityMaintenanceServiceJavaGenerator"
 		    templateName="templates/entity.maint.service.impl.java.vm"
 		    outputFile="${basePackage}/service/impl/EntityMaintenanceServiceImpl.java"
-		    overwritable="true"/>
-	
-	<target name="serviceFactory"
-		    generator="org.tigris.atlas.mda.generator.factory.FactoryJavaGenerator"
-		    templateName="templates/service.factory.java.vm"
-		    outputFile="${basePackage}/service/ServiceFactory.java"
 		    overwritable="true"/>
 	
 	<target name="serviceFactoryJava"

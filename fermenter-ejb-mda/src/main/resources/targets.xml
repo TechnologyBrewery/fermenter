@@ -56,5 +56,11 @@
 		    templateName="templates/sessionbean.entity.maint.service.delegate.impl.java.vm"
 		    outputFile="${basePackage}/service/delegate/EntityMaintenanceServiceDelegateImpl.java"
 		    overwritable="true"/>
+		    
+	<target name="ejbServiceFactory"
+		    generator="org.tigris.atlas.mda.generator.factory.FactoryJavaGenerator"
+		    templateName="templates/ejb.service.factory.java.vm"
+		    outputFile="${basePackage}/service/ejb/ServiceFactoryImpl.java"
+		    overwritable="true"/>		    
 
 </targets>

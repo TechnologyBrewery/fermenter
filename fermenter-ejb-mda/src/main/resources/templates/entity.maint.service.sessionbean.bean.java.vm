@@ -9,7 +9,6 @@ import ${basePackage}.transfer.${entity.name}PK;
 import ${basePackage}.bizobj.BusinessObjectFactory;
 import ${basePackage}.bizobj.${entity.name}Assembler;
 import ${basePackage}.bizobj.${entity.name}BO;
-import ${basePackage}.service.${entity.name}ServiceResponse;
 
 import javax.annotation.Resource;
 
@@ -19,10 +18,11 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
+import org.tigris.atlas.service.ValueServiceResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ${basePackage}.service.ServiceFactory;
 import ${basePackage}.service.ejb.${entity.name}MaintenanceService;
 
 /**
@@ -45,9 +45,9 @@ public class ${entity.name}MaintenanceServiceBean implements ${entity.name}Maint
 	 *{@inheritDoc}
 	 */
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public ${entity.name}ServiceResponse saveOrUpdate(${entity.name} entity) {
+	public ValueServiceResponse<${entity.name}> saveOrUpdate(${entity.name} entity) {
 		LOGGER.debug("Executing ${entity.name}.saveOrUpdate");
-		${entity.name}ServiceResponse response = null;
+		ValueServiceResponse<${entity.name}> response = null;
 		
 		if (entity != null) {
 			${entity.name}PK pk = entity.get${entity.name}PK();
@@ -69,8 +69,8 @@ public class ${entity.name}MaintenanceServiceBean implements ${entity.name}Maint
 			
 			${entity.name} updateEntity = assembler.create${entity.name}(businessObjectToSave);
 			
-			response = new ${entity.name}ServiceResponse();
-			response.set${entity.name}(updateEntity);
+			response = new ValueServiceResponse<${entity.name}>();
+			response.setValue(updateEntity);
 			
 		}
 		
@@ -83,7 +83,7 @@ public class ${entity.name}MaintenanceServiceBean implements ${entity.name}Maint
 	 * @param entity ${entity.name} to delete
 	 * @return ${entity.name}ServiceResponse The deleted ${entity.name} container
 	 */
-	public ${entity.name}ServiceResponse delete(${entity.name}PK pk) {
+	public ValueServiceResponse<${entity.name}> delete(${entity.name}PK pk) {
 		LOGGER.debug("Executing ${entity.name}.delete");
 		${entity.name}BO businessObjectToDelete = BusinessObjectFactory.create${entity.name}BO();
 		businessObjectToDelete.setKey(pk);
@@ -91,7 +91,7 @@ public class ${entity.name}MaintenanceServiceBean implements ${entity.name}Maint
 		
 		//TODO: handle messages
 		
-		return new ${entity.name}ServiceResponse();
+		return new ValueServiceResponse<${entity.name}>();
 	}
 
 	/**
@@ -100,7 +100,7 @@ public class ${entity.name}MaintenanceServiceBean implements ${entity.name}Maint
 	 * @param pk The primary key for the ${entity.name}
 	 * @return ${entity.name}ServiceResponse The retrieved ${entity.name} container
 	 */
-	public ${entity.name}ServiceResponse findByPrimaryKey(${entity.name}PK pk) {
+	public ValueServiceResponse<${entity.name}> findByPrimaryKey(${entity.name}PK pk) {
 		LOGGER.debug("Executing ${entity.name}.findByPrimaryKey");
 		${entity.name} retrieveEntity = null;
 		
@@ -112,8 +112,8 @@ public class ${entity.name}MaintenanceServiceBean implements ${entity.name}Maint
 		
 		//TODO: handle messages
 		
-		${entity.name}ServiceResponse response = new ${entity.name}ServiceResponse();
-		response.set${entity.name}(retrieveEntity);
+		ValueServiceResponse<${entity.name}> response = new ValueServiceResponse<${entity.name}>();
+		response.setValue(retrieveEntity);
 		
 		return response;
 	}

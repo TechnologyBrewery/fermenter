@@ -1,55 +1,17 @@
 package com.ask.test.pojo.validation;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 
 import java.util.Collection;
 
-import org.junit.After;
-import org.junit.Before;
 import org.tigris.atlas.messages.Message;
 import org.tigris.atlas.messages.Messages;
 
 import com.ask.test.domain.bizobj.BusinessObjectFactory;
 import com.ask.test.domain.bizobj.ValidationReferenceExampleBO;
 import com.ask.test.domain.bizobj.ValidationReferencedObjectBO;
-import com.ask.test.domain.service.delegate.EntityMaintenanceServiceDelegate;
-import com.ask.test.domain.service.delegate.ServiceDelegateFactory;
-import com.ask.test.domain.transfer.TransferObjectFactory;
-import com.ask.test.domain.transfer.ValidationReferenceExample;
-import com.ask.test.domain.transfer.ValidationReferencedObject;
 
 public class TestReferenceValidation extends AbstractValidationTest {
-
-	EntityMaintenanceServiceDelegate delegate;
-	
-	@Before
-	protected void setUp() throws Exception {
-		delegate = ServiceDelegateFactory.createEntityMaintenanceServiceDelegate();
-	}
-
-	@After
-	protected void tearDown() throws Exception {
-		delegate = null;
-	}	
-
-	public void testWithRequiredReference() {
-		ValidationReferencedObject vro = TransferObjectFactory.createValidationReferencedObject();
-		vro.setSomeDataField("importantRefData");
-		
-		//save the reference first:
-		vro = delegate.save(vro).getValidationReferencedObject();
-		
-		//create a new object with this reference:
-		ValidationReferenceExample vre = TransferObjectFactory.createValidationReferenceExample();
-		vre.setSomeDataField("exampleWithValidReference");
-		vre.setRequiredReference(vro);
-		
-		//save the parent object:
-		vre = delegate.save(vre).getValidationReferenceExample();	
-
-		assertFalse(vre.getMessages().hasErrorMessages());
-	}
 
 	public void testWithNullReference() {		
 		//create a new object without a reference:

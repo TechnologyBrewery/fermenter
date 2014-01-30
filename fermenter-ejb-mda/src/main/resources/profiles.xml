@@ -3,7 +3,11 @@
 
 <profiles>
 
-	<profile name="java-service-session-beans">
+	<profile name="ejbFactories">
+		<target name="ejbServiceFactory"/>
+	</profile>
+
+	<profile name="java-service-session-beans" extends="ejbFactories">
 		<target name="serviceSessionBeanRemoteInterfaces"/>
 		<target name="serviceSessionBeanLocalInterfaces"/>
 		<target name="serviceSessionBeanHomeInterfaces"/>
@@ -12,13 +16,13 @@
 		<target name="sessionBeanServiceDelegateObjects"/>
 	</profile>
 
-	<profile name="java-entity-maintenance-session-beans" extends="java-entity-maintenance-session-beans-service-only">
-		<target name="sessionBeanEntityMaintenanceServiceDelegateImpl"/>
-	</profile>
-	
-	<profile name="java-entity-maintenance-session-beans-service-only">
+	<profile name="java-entity-maintenance-session-beans-service-only" extends="ejbFactories">
 		<target name="entityMaintenanceServiceLocal"/>
 		<target name="entityMaintenanceServiceBean"/>
+	</profile>
+
+	<profile name="java-entity-maintenance-session-beans" extends="java-entity-maintenance-session-beans-service-only">
+		<target name="sessionBeanEntityMaintenanceServiceDelegateImpl"/>
 	</profile>
 
 </profiles>

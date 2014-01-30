@@ -6,14 +6,10 @@
 	<profile name="java-interfaces">
 		<target name="transferObjectFactoryInterface"/>
 		<target name="businessObjectFactoryInterface"/>
-		<target name="serviceDelegateInterfaces"/>
 		<target name="serviceInterfaces"/>
 		<target name="serviceFactoryInterface"/>
-		<target name="serviceDelegateFactoryInterface"/>
 		<target name="dataAccessObjectFactoryInterface"/>
 		<target name="dataAccessObjects"/>
-		<target name="entityMaintenanceService"/>
-		<target name="entityMaintenanceServiceDelegateInterface"/>
 	</profile>
 	
 	<profile name="java-base" extends="java-interfaces">
@@ -27,29 +23,26 @@
 		<target name="transferObjectFactory"/>
 		<target name="transferObjectFactoryJava"/>
 		<target name="transferObjectAssemblers"/>
-		<target name="serviceResponseIteratorObjects"/>
-		<target name="entityServiceResponseObjects"/>
-		<target name="entityCollectionServiceResponseObjects"/>
 		<target name="transferObjectComposites"/>				
 		<target name="baseBusinessObjectComposites"/>					
 		<target name="businessObjectComposites"/>
 		<target name="dataAccessObjectFactory"/>
 		<target name="serviceImplObjects"/>
-		<target name="serviceBaseImplObjects"/>
-		<target name="serviceFactory"/>	
-		<target name="serviceFactoryJava"/>				
-		<target name="serviceDelegateFactory"/>	
-		<target name="serviceDelegateFactoryJava"/>								
+		<target name="serviceBaseImplObjects"/>						
 		<target name="packageProperties"/>
 		<target name="messageProperties"/>
-		<target name="entityMaintenanceServiceImpl"/>
 		<target name="factoryPropertiesPojo"/>
 	</profile>
 	
 	<profile name="java-pojo-services" extends="java-base">		
 		<target name="pojoServiceDelegateObjects"/>
 		<target name="pojoEntityMaintenanceServiceDelegate"/>
-		<target name="serviceDelegateFactoryJava"/>
+		<target name="entityMaintenanceServiceImpl"/>
+		<target name="serviceFactoryJava"/>	
+		<target name="serviceDelegateFactory"/>	
+		<target name="serviceDelegateInterfaces"/>
+		<target name="serviceDelegateFactoryInterface"/>
+		<target name="serviceDelegateFactoryJava"/>	
 	</profile>
 	
 </profiles>

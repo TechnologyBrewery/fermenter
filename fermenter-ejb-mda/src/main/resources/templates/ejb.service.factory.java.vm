@@ -1,0 +1,37 @@
+package ${basePackage}.service.ejb;
+
+import ${basePackage}.service.ServiceFactoryInterface;
+#foreach( $entity in $entities )
+import ${basePackage}.service.ejb.${entity.name}MaintenanceService;
+#end
+
+import org.tigris.atlas.service.ejb.AbstractEjbServiceFactory;
+
+/**
+ * Implementation of the service factory for ejbs.
+ */
+public class ServiceFactoryImpl extends AbstractEjbServiceFactory implements ServiceFactoryInterface {
+	
+#foreach( $service in $serviceNames )
+	/**
+	 * Create a(n) ${service}Service instance.
+	 */
+	public ${service}Service create${service}Service() {
+		//TODO: need to implement
+		return null;
+	}
+	
+#end
+
+#foreach( $entity in $entities )
+	/**
+	 * Create a(n) ${entity.name}MaintenanceService instance.
+	 * @return A service to manage CRUD for {@link ${entity.name}}
+	 */
+	public ${entity.name}MaintenanceService create${entity.name}MaintenanceService() {
+		return (${entity.name}MaintenanceService)performJndiLookup("java:module/${entity.name}MaintenanceService");
+	}
+	
+#end
+
+}

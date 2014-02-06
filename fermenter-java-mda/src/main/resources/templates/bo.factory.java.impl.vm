@@ -12,12 +12,12 @@ import ${basePackage}.transfer.*;
 public class BusinessObjectFactoryImpl implements BusinessObjectFactoryInterface {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(BusinessObjectFactoryImpl.class);
-	private static Map BUSINESS_OBJECT_TYPES = null;
+	private static Map<String, String> BUSINESS_OBJECT_TYPES = null;
 	
 	private static final String PREFIX = "${basePackage}.bizobj.";
 	
 	static {
-		BUSINESS_OBJECT_TYPES = new HashMap( ${entities.size()} );
+		BUSINESS_OBJECT_TYPES = new HashMap<String, String>();
 #foreach( $entity in $entities )
 		BUSINESS_OBJECT_TYPES.put( ${entity.name}.ENTITY, PREFIX + "${entity.name}BO" );
 #end
@@ -28,7 +28,7 @@ public class BusinessObjectFactoryImpl implements BusinessObjectFactoryInterface
 		String type = (String) BUSINESS_OBJECT_TYPES.get( entityName );
 		
 		try {
-			Class clazz = Class.forName( type );
+			Class<?> clazz = Class.forName( type );
 			businessObject = (BusinessObject) clazz.newInstance();
 		} catch (InstantiationException e) {
 			LOGGER.error( "Unable to instantiate type: " + type );

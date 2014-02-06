@@ -387,22 +387,5 @@ public class ${entityName} extends ${extends}TO {
 		// be not null and the same instance for the life of the object.
 		return (getKey().getValue() == null) ? getMessages().hashCode() : getKey().getValue().hashCode();
 	}
-	
-	/**
-	 * Takes the current obejct and transforms it to XML schema
-	 * @return A <tt>String</tt> containing XML schema
-	 */
-	/*public String marshall() {		
-		return assembler.createSchema(this);
-	}*/
-	
-	/**
-	 * Takes a schema-compliant <tt>String</tt> and transforms it
-	 * into an object
-	 * @param schema The schema repsenting the an object instance 
-	 */
-	/*public void unmarshall(String schema) {
-		assembler.create${entityName}(schema, this);
-	}*/
 
 }

@@ -39,9 +39,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Transfer object assmbler for the ${entityName} application entity.  This 
- * class is used create new instances of ${entityName} from an instance of 
- * a/an ${entityName}BO.  It is also used to update and instance of a/an
+ * Transfer object assembler for the ${entityName} application entity.  This 
+ * class is used create new instances of {@link ${entityName}} from an instance of 
+ * a/an {@link ${entityName}BO}.  It is also used to update and instance of a/an
  * ${entityName}BO with the values of a ${entityName} instance.  In addition,
  * it provides a static method useful for converting lists of ${entityName}BOs
  * into a list of ${entityName} instances.
@@ -59,15 +59,14 @@ public class ${entityName}Assembler extends TransferObjectAssembler {
 	 * create a(n) ${entityName} instance from the ${entityName}BO instance, and
 	 * add the new ${entityName} instance to a list of ${entityName} instances.
 	 */	 
-	public static Collection get${entityName}Collection(Collection bos) {
+	public static Collection<${entityName}> get${entityName}Collection(Collection<${entityName}BO> bos) {
 		if (bos == null) {
 			return null;
 		}
 		
-		Collection tos = new ArrayList(bos.size());
+		Collection<${entityName}> tos = new ArrayList<${entityName}>(bos.size());
 		${entityName}Assembler assembler = new ${entityName}Assembler();
-		for (Iterator i = bos.iterator(); i.hasNext();) {
-			${entityName}BO bo = (${entityName}BO) i.next();
+		for (${entityName}BO bo : bos) {
 			tos.add(assembler.create${entityName}(bo));
 		}
 		
@@ -135,18 +134,16 @@ public class ${entityName}Assembler extends TransferObjectAssembler {
 
 			//finally, get any messages:
 			Messages messages = bo.getMessages();
-			Collection errors = messages.getErrorMessages();
+			Collection<Message> errors = messages.getErrorMessages();
 			if (errors.size() > 0) {
-				for (Iterator i = errors.iterator(); i.hasNext();) {
-					Message message = (Message) i.next();
+				for (Message message : errors) {
 					to.getMessages().addMessage(message);
 				}
 			}
 			
-			Collection infos = messages.getInformationalMessages();
+			Collection<Message> infos = messages.getInformationalMessages();
 			if (infos.size() > 0) {
-				for (Iterator i = infos.iterator(); i.hasNext();) {
-					Message message = (Message) i.next();
+				for (Message message : infos) {
 					to.getMessages().addMessage(message);
 				}
 			}

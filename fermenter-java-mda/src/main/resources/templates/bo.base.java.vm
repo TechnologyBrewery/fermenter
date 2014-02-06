@@ -58,7 +58,6 @@ import ${validator.import};
  *
  * Generated Code - DO NOT MODIFY
  */
- 
 public abstract class ${entityName}BaseBO extends ${extends}BO {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(${entityName}BO.class);
@@ -774,10 +773,10 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	 */	 
 #set( $numCriteria = $query.criteria.size() ) 
 #set( $currentNum  = 0 )
-	public static List ${query.lowercaseName}(#foreach( $criterion in $query.criteria )${criterion.javaType} ${criterion.name} #set($currentNum = $currentNum+1)#if($currentNum<$numCriteria), #end#end) {
+	public static List<${entityName}> ${query.lowercaseName}(#foreach( $criterion in $query.criteria )${criterion.javaType} ${criterion.name} #set($currentNum = $currentNum+1)#if($currentNum<$numCriteria), #end#end) {
 #set( $numCriteria = $query.criteria.size() ) 
 #set( $currentNum  = 0 )
-		List bos = DaoFactory.create${entityName}Dao().${query.lowercaseName}(#foreach( $criterion in $query.criteria )${criterion.name} #set($currentNum = $currentNum+1)#if($currentNum<$numCriteria), #end#end);
+		List<${entityName}> bos = DaoFactory.create${entityName}Dao().${query.lowercaseName}(#foreach( $criterion in $query.criteria )${criterion.name} #set($currentNum = $currentNum+1)#if($currentNum<$numCriteria), #end#end);
 		return bos;
 	}
 #end

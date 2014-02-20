@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 import ${basePackage}.service.ejb.${entity.name}MaintenanceService;
 
 /**
- * Implementation of an EJB for create, retrieve, update, and delete (CRUD) for ${entity.name}
+ * Implementation of an EJB for create, retrieve, update, and delete (CRUD) for ${entity.name}.
  *
  * Generated Code - DO NOT MODIFY
  */
@@ -60,13 +60,14 @@ public class ${entity.name}MaintenanceServiceBean implements ${entity.name}Maint
 			${entity.name}BO retrievedBusinessObject = ${entity.name}BO.findByPrimaryKey(pk);
 			
 			if (retrievedBusinessObject != null) {
-				businessObjectToSave = retrievedBusinessObject;
-				assembler.update${entity.name}BO(entity, businessObjectToSave);
+				businessObjectToSave = retrievedBusinessObject;				
 				
 			} else {
 				businessObjectToSave = BusinessObjectFactory.create${entity.name}BO();
 				
 			}
+			
+			assembler.update${entity.name}BO(entity, businessObjectToSave);
 			
 			businessObjectToSave.save();
 			

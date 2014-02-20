@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNull;
 
 import java.io.File;
 import java.util.Date;
+import java.util.Set;
 
 import javax.ejb.EJB;
 import javax.inject.Inject;
@@ -25,12 +26,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.tigris.atlas.messages.Messages;
 import org.tigris.atlas.service.ValueServiceResponse;
+import org.tigris.atlas.transfer.TransferObject;
 
 import com.ask.test.domain.persist.SimpleDomainDao;
 import com.ask.test.domain.service.ejb.SimpleDomainMaintenanceService;
+import com.ask.test.domain.service.ejb.ValidationExampleMaintenanceService;
 import com.ask.test.domain.transfer.SimpleDomain;
 import com.ask.test.domain.transfer.SimpleDomainPK;
 import com.ask.test.domain.transfer.TransferObjectFactory;
+import com.ask.test.domain.transfer.ValidationExample;
+import com.ask.test.domain.transfer.ValidationExampleChild;
+import com.ask.test.domain.transfer.ValidationExamplePK;
 
 @RunWith(Arquillian.class)
 public class IntegrationTestMaintenanceServices {
@@ -43,6 +49,9 @@ public class IntegrationTestMaintenanceServices {
 	
 	@EJB
 	private SimpleDomainMaintenanceService simpleDomainMaintenaceService;
+	
+	@EJB
+	private ValidationExampleMaintenanceService validationExampleMaintenanceService;
 
 	@Deployment
 	public static Archive<?> createDeployment() {
@@ -131,6 +140,82 @@ public class IntegrationTestMaintenanceServices {
 		
 	}
 	
+	@Test
+	public void testDomainMaintenanceCreateWith1MChildren() {
+		ValidationExample parent = createRandomValidationExample();
+		ValidationExampleChild child1 = createRandomValidationExampleChild();
+		ValidationExampleChild child2 = createRandomValidationExampleChild();
+		parent.addValidationExampleChild(child1);
+		parent.addValidationExampleChild(child2);
+		
+		int numberOfChildren = 2;
+		
+		ValueServiceResponse<ValidationExample> response = validationExampleMaintenanceService.saveOrUpdate(parent);
+		validateExpectedResponse(numberOfChildren, response);
+		
+	}
+	
+	@Test
+	public void testDomainMaintenanceRetrieveWith1MChildren() {
+		ValidationExample parent = createRandomValidationExample();
+		ValidationExampleChild child1 = createRandomValidationExampleChild();
+		ValidationExampleChild child2 = createRandomValidationExampleChild();
+		parent.addValidationExampleChild(child1);
+		parent.addValidationExampleChild(child2);
+		
+		ValueServiceResponse<ValidationExample> response = validationExampleMaintenanceService.saveOrUpdate(parent);
+		
+		ValueServiceResponse<ValidationExample> findResponse = 
+				validationExampleMaintenanceService.findByPrimaryKey(response.getValue().getValidationExamplePK());
+		validateExpectedResponse(2, findResponse);
+		
+	}	
+	
+	@Test
+	public void testDomainMaintenanceUpdateWith1MChildren() {
+		ValidationExample parent = createRandomValidationExample();
+		ValidationExampleChild child = createRandomValidationExampleChild();
+		parent.addValidationExampleChild(child);
+		
+		ValueServiceResponse<ValidationExample> response = validationExampleMaintenanceService.saveOrUpdate(parent);
+		
+		ValidationExample responseParent = response.getValue();
+		ValidationExampleChild responseChild = responseParent.getValidationExampleChilds().iterator().next();
+		final String updatedValue = "THIS IS AN UPDATE";
+		responseChild.setRequiredField(updatedValue);
+		
+		ValueServiceResponse<ValidationExample> updateResponse = validationExampleMaintenanceService.saveOrUpdate(responseParent);
+		assertNoErrorMessages(updateResponse);
+		
+		ValueServiceResponse<ValidationExample> findResponse = 
+				validationExampleMaintenanceService.findByPrimaryKey(responseParent.getValidationExamplePK());
+		assertNoErrorMessages(findResponse);
+		
+		ValidationExampleChild responseChildPostUpdate = responseParent.getValidationExampleChilds().iterator().next();
+		assertEquals(updatedValue, responseChildPostUpdate.getRequiredField());
+		
+	}	
+	
+	@Test
+	public void testDomainMaintenanceDeleteWith1MChildren() {
+		ValidationExample parent = createRandomValidationExample();
+		ValidationExampleChild child1 = createRandomValidationExampleChild();
+		ValidationExampleChild child2 = createRandomValidationExampleChild();
+		parent.addValidationExampleChild(child1);
+		parent.addValidationExampleChild(child2);
+		
+		ValueServiceResponse<ValidationExample> response = validationExampleMaintenanceService.saveOrUpdate(parent);
+		ValidationExamplePK responseParentPk = response.getValue().getValidationExamplePK();
+		
+		ValueServiceResponse<ValidationExample> deleteResponse = validationExampleMaintenanceService.delete(responseParentPk);
+		assertNoErrorMessages(deleteResponse);
+		
+		ValueServiceResponse<ValidationExample> findResponse 
+			= validationExampleMaintenanceService.findByPrimaryKey(responseParentPk);
+		assertNull(findResponse.getValue());
+		
+	}	
+	
 	protected SimpleDomain createRandomSimpleDomain() {
 		SimpleDomain domain = TransferObjectFactory.createSimpleDomain();
 		domain.setName(RandomStringUtils.randomAlphanumeric(25));
@@ -140,13 +225,46 @@ public class IntegrationTestMaintenanceServices {
 		return domain;
 	}
 	
-	protected void assertNoErrorMessages(ValueServiceResponse<SimpleDomain> response) {
+	protected ValidationExample createRandomValidationExample() {
+		ValidationExample domain = TransferObjectFactory.createValidationExample();
+		domain.setRequiredField(RandomStringUtils.randomAlphabetic(20));
+		return domain;
+	}
+	
+	protected ValidationExampleChild createRandomValidationExampleChild() {
+		ValidationExampleChild domain = TransferObjectFactory.createValidationExampleChild();
+		domain.setRequiredField(RandomStringUtils.randomAlphabetic(20));
+		return domain;
+	}
+	
+	protected void assertNoErrorMessages(ValueServiceResponse<? extends TransferObject> response) {
 		if (response != null) {
 			Messages messages = response.getMessages();
 			assertFalse(messages.hasErrorMessages());
 			
+			TransferObject to = response.getValue();
+			if (to != null) {
+				Messages toMessages = to.getMessages();
+				assertFalse(toMessages.hasErrorMessages());
+			}
+			
 		}
 		
+	}
+	
+	protected void validateExpectedResponse(int numberOfChildren, ValueServiceResponse<ValidationExample> response) {
+		assertNotNull(response);
+		assertNoErrorMessages(response);
+		ValidationExample responseDomain = response.getValue(); 
+		assertNotNull(responseDomain);
+		assertNotNull(responseDomain.getKey().getValue());
+		
+		Set<ValidationExampleChild> children = responseDomain.getValidationExampleChilds();
+		assertNotNull(children);
+		assertEquals(numberOfChildren, children.size());
+		for (ValidationExampleChild child : children) {
+			assertNotNull(child.getKey().getValue());
+		}
 	}
 	
 	

@@ -49,7 +49,7 @@ public class ${entityName} extends ${extends}TO {
 	private ${field.javaType}		${field.name};
 #end
 #foreach ($relation in $relations)
-	private Set		${relation.label}s;
+	private Set<${relation.type}> ${relation.label}s;
 #end
 #foreach ($inverseRelation in $inverseRelations)
 	private ${inverseRelation.name} parent${inverseRelation.name};
@@ -184,12 +184,12 @@ public class ${entityName} extends ${extends}TO {
 #if ($relation.documentation)
 	 * Sets: ${relation.documentation}
 #else
-	 * Set the ${relation.label} relation
+	 * Set the ${relation.label} relation.
 #end
 	 * 
 	 * @param Set - The ${relation.label}s
 	 */
-	public void set${relation.type}s(Set ${relation.label}s) {
+	public void set${relation.type}s(Set<${relation.type}> ${relation.label}s) {
 		this.${relation.label}s = ${relation.label}s;
 	} 
 
@@ -197,12 +197,12 @@ public class ${entityName} extends ${extends}TO {
 #if ($relation.documentation)
 	 * Gets: ${relation.documentation}
 #else
-	 * Get the ${relation.label} relation
+	 * Get the ${relation.label} relation.
 #end
 	 * 
 	 * @return Set - The ${relation.label}s
 	 */
-	public Set get${relation.type}s() {
+	public Set<${relation.type}> get${relation.type}s() {
 		if( ${relation.label}s == null ) {
 			${relation.label}s = new HashSet();
 		}
@@ -214,7 +214,7 @@ public class ${entityName} extends ${extends}TO {
 #if ($relation.documentation)
 	 * Adds: ${relation.documentation}
 #else
-	 * Add a ${relation.label}
+	 * Add a ${relation.label}.
 #end
 	 *
 	 * @param The ${relation.label} to add
@@ -232,7 +232,7 @@ public class ${entityName} extends ${extends}TO {
 #if ($relation.documentation)
 	 * Removes: ${relation.documentation}
 #else
-	 * Remove a ${relation.label}
+	 * Remove a ${relation.label}.
 #end
 	 *
 	 * @param The ${relation.label} to remove

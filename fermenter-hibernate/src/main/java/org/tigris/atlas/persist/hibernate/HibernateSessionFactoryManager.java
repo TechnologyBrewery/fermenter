@@ -1,10 +1,12 @@
 package org.tigris.atlas.persist.hibernate;
 
+import java.net.URL;
 import java.util.Properties;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.internal.util.ConfigHelper;
 import org.hibernate.service.ServiceRegistry;
 
 import com.ask.krausening.Krausening;
@@ -40,8 +42,9 @@ public final class HibernateSessionFactoryManager {
 		Krausening krausening = Krausening.getInstance();
 		Properties hibernateProperties = krausening.getProperties("hibernate.properties");
 		
+		URL configUrl = ConfigHelper.locateConfig(CONFIG);
 		Configuration hibernateConfiguration = new Configuration();
-		hibernateConfiguration.configure(CONFIG);
+		hibernateConfiguration.configure(configUrl);
 		hibernateConfiguration.addProperties(hibernateProperties);
 		
 		StandardServiceRegistryBuilder registryBuilder = new StandardServiceRegistryBuilder();

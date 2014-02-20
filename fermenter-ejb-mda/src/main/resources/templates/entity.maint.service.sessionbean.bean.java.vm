@@ -18,6 +18,8 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
+import javax.inject.Inject;
+
 import org.tigris.atlas.service.ValueServiceResponse;
 
 import org.slf4j.Logger;
@@ -37,6 +39,9 @@ public class ${entity.name}MaintenanceServiceBean implements ${entity.name}Maint
 	private static final Logger LOGGER = LoggerFactory.getLogger(${entity.name}MaintenanceServiceBean.class);
 	
 	private ${entity.name}Assembler assembler = new ${entity.name}Assembler();
+	
+	@Inject
+	private ${entity.name}BO seed${entity.name}BO;
 	
 	@Resource
 	private SessionContext sessionContext;

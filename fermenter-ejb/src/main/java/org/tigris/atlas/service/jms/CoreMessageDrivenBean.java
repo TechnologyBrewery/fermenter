@@ -17,7 +17,7 @@ import javax.jms.ObjectMessage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tigris.atlas.factory.FactoryFactory;
+import org.tigris.atlas.factory.FactoryManager;
 import org.tigris.atlas.service.AbstractServiceFactoryInterface;
 import org.tigris.atlas.service.Service;
 import org.tigris.atlas.service.AsynchronousServiceDescriptor;
@@ -43,7 +43,7 @@ public class CoreMessageDrivenBean implements MessageDrivenBean, MessageListener
 		List parameterList = serviceDescriptor.getParameterList();
 		List classList = serviceDescriptor.getClassList();
 		
-		AbstractServiceFactoryInterface factory = (AbstractServiceFactoryInterface) FactoryFactory.createFactory(FactoryFactory.SERVICE, serviceName);
+		AbstractServiceFactoryInterface factory = (AbstractServiceFactoryInterface) FactoryManager.createFactory(FactoryManager.SERVICE, serviceName);
 		Service service = factory.createService(serviceName);
 		Class serviceClass = service.getClass();
 		

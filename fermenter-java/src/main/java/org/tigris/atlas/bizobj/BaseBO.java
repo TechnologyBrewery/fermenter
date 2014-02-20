@@ -2,12 +2,8 @@ package org.tigris.atlas.bizobj;
 
 import org.tigris.atlas.messages.Messages;
 
-
-
 /**
  * Base class for all parent business objects.
- * 
- * @author sandrews
  */
 public abstract class BaseBO extends ComplexType implements BusinessObject {
 	
@@ -27,7 +23,7 @@ public abstract class BaseBO extends ComplexType implements BusinessObject {
 	 * 
 	 * Subclasses must provide complex validation logic.
 	 */
-	public final void validate() {
+	public void validate() {
 		fieldValidation();
 		compositeValidation();
 	    referenceValidation();

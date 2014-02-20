@@ -44,6 +44,7 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.commons.lang.StringUtils;
 
+import javax.inject.Inject;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 #foreach ($validator in $entity.validators)
@@ -63,6 +64,8 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	private static final Logger LOGGER = LoggerFactory.getLogger(${entityName}BO.class);
 
 	private static ${entityName}Assembler assembler = new ${entityName}Assembler();
+	
+	private static ${entityName}Dao dao = DaoFactory.create${entityName}Dao();
 
 #foreach ( $field in $fields )
 #if( ${field.isSimpleType()} )
@@ -585,8 +588,6 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 		
 		if( ! getAllMessages().hasErrorMessages() ) {
 			normalize();
-		
-			${entityName}Dao dao = DaoFactory.create${entityName}Dao();
 			
 			Validated validValues = new Validated() {
 			
@@ -605,7 +606,6 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	 *
 	 */
 	public void delete() {
-		${entityName}Dao dao = DaoFactory.create${entityName}Dao();
 		dao.delete( getKey() );
 	}
 #end
@@ -743,14 +743,13 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	}
 	
 	/**
-	 * Find the ${entityName} by primary key fields
+	 * Find the ${entityName} by primary key fields.
 	 *
 	 * @param pk The primary key for the ${entityName}
 	 * @return ${entityName} The retrieved ${entityName}
 	 */
 	public static ${entityName}BO findByPrimaryKey(${entityName}PK pk) {
-		${entityName}Dao dao = DaoFactory.create${entityName}Dao();
-		return dao.findByPrimaryKey( pk );
+		return dao.findByPrimaryKey(pk);
 	}	
 		
 #foreach( $query in $queries )	
@@ -776,7 +775,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	public static List<${entityName}> ${query.lowercaseName}(#foreach( $criterion in $query.criteria )${criterion.javaType} ${criterion.name} #set($currentNum = $currentNum+1)#if($currentNum<$numCriteria), #end#end) {
 #set( $numCriteria = $query.criteria.size() ) 
 #set( $currentNum  = 0 )
-		List<${entityName}> bos = DaoFactory.create${entityName}Dao().${query.lowercaseName}(#foreach( $criterion in $query.criteria )${criterion.name} #set($currentNum = $currentNum+1)#if($currentNum<$numCriteria), #end#end);
+		List<${entityName}> bos = dao.${query.lowercaseName}(#foreach( $criterion in $query.criteria )${criterion.name} #set($currentNum = $currentNum+1)#if($currentNum<$numCriteria), #end#end);
 		return bos;
 	}
 #end

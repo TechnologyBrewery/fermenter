@@ -1,11 +1,11 @@
 package org.tigris.atlas.bizobj;
 
-import org.tigris.atlas.factory.FactoryFactory;
+import org.tigris.atlas.factory.FactoryManager;
 
 public abstract class AbstractBusinessObjectFactory {
 	
 	protected static AbstractBusinessObjectFactoryInterface getAbstractBusinessObjectFactory(Class clazz) {
-		return (AbstractBusinessObjectFactoryInterface) FactoryFactory.createFactory( FactoryFactory.BUSINESS_OBJECT, clazz );
+		return (AbstractBusinessObjectFactoryInterface) FactoryManager.createFactory( FactoryManager.BUSINESS_OBJECT, clazz );
 	}
 
 }

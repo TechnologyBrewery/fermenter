@@ -217,6 +217,7 @@
 		    generator="org.tigris.atlas.mda.generator.factory.FactoryResourceGenerator"
 		    templateName="templates/factory.properties.pojo.vm"
 		    outputFile="${basePackage}/factory.properties"
-		    overwritable="true"/>
+		    overwritable="true"
+		    append="true"/>
 		    
 </targets>

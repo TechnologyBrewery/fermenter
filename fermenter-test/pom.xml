@@ -18,6 +18,7 @@
 	<modules>
 		<module>fermenter-test-profile</module>
 		<module>fermenter-test-domain</module>
+		<module>fermenter-test-domain-integration-test</module>
 	</modules>
 
 	<build>

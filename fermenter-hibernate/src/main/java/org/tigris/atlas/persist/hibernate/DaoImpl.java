@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tigris.atlas.bizobj.AbstractBusinessObjectFactoryInterface;
 import org.tigris.atlas.bizobj.BusinessObject;
-import org.tigris.atlas.factory.FactoryFactory;
+import org.tigris.atlas.factory.FactoryManager;
 import org.tigris.atlas.messages.Message;
 import org.tigris.atlas.messages.MessageFactory;
 import org.tigris.atlas.messages.Severity;
@@ -88,23 +88,25 @@ public abstract class DaoImpl implements Dao {
 	public BusinessObject findByPrimaryKey(PrimaryKey pk) {
 		BusinessObject rto = null;
 
-		try {
-			AbstractBusinessObjectFactoryInterface factory =
-					(AbstractBusinessObjectFactoryInterface) FactoryFactory.createFactory(FactoryFactory.BUSINESS_OBJECT, pk.getClass());
-			Class clazz = factory.createBusinessObject( pk.getEntityName() ).getClass();
-			rto = (BusinessObject) getSession().load( clazz, pk.getValue() );
-			// [Allan/Steve] Leave this out for now, but re-visit when testing child saves, etc.
-			//getHibernateTemplate().evict( rto );
-
-			// [Allan] The catch statements below need to remain.
-			//         Some Hibernate id types throw the specific exceptions,
-			//         while others throw only DAE.
-		} catch (ObjectNotFoundException ex) {
-			return null;
-		} catch (ObjectDeletedException ex) {
-			return null;
-		} catch(HibernateException dae) {
-			rto = handleDataAccessException( pk, dae );
+		if ((pk != null) && (pk.getValue() != null)) {
+			try {
+				AbstractBusinessObjectFactoryInterface factory =
+						(AbstractBusinessObjectFactoryInterface) FactoryManager.createFactory(FactoryManager.BUSINESS_OBJECT, pk.getClass());
+				Class<?> clazz = factory.createBusinessObject( pk.getEntityName() ).getClass();
+				rto = (BusinessObject) getSession().load( clazz, pk.getValue() );
+				// [Allan/Steve] Leave this out for now, but re-visit when testing child saves, etc.
+				//getHibernateTemplate().evict( rto );
+	
+				// [Allan] The catch statements below need to remain.
+				//         Some Hibernate id types throw the specific exceptions,
+				//         while others throw only DAE.
+			} catch (ObjectNotFoundException ex) {
+				return null;
+			} catch (ObjectDeletedException ex) {
+				return null;
+			} catch(HibernateException dae) {
+				rto = handleDataAccessException( pk, dae );
+			}
 		}
 
 		return rto;
@@ -167,7 +169,7 @@ public abstract class DaoImpl implements Dao {
 
 
 		AbstractBusinessObjectFactoryInterface factory =
-				(AbstractBusinessObjectFactoryInterface) FactoryFactory.createFactory(FactoryFactory.BUSINESS_OBJECT, pk.getClass());
+				(AbstractBusinessObjectFactoryInterface) FactoryManager.createFactory(FactoryManager.BUSINESS_OBJECT, pk.getClass());
 		BusinessObject bo = factory.createBusinessObject( pk.getEntityName() );
 		bo.setKey( pk );
 		return handleDataAccessException( bo, dae );
@@ -180,7 +182,7 @@ public abstract class DaoImpl implements Dao {
 	 */
 	protected BusinessObject handleDataAccessException(HibernateException dae) {
 		AbstractBusinessObjectFactoryInterface factory =
-				(AbstractBusinessObjectFactoryInterface) FactoryFactory.createFactory(FactoryFactory.BUSINESS_OBJECT, getClass());
+				(AbstractBusinessObjectFactoryInterface) FactoryManager.createFactory(FactoryManager.BUSINESS_OBJECT, getClass());
 		BusinessObject bo = factory.createBusinessObject( getEntityName() );
 		return handleDataAccessException( bo, dae );
 	}

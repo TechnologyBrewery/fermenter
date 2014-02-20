@@ -6,6 +6,7 @@
 	<profile name="core-ejb">
 		<target name="ejbServiceFactory"/>
 		<target name="transferObjectJacksonMixIns"/>
+		<target name="objectMapperManager"/>
 	</profile>
 
 	<profile name="java-service-session-beans" extends="core-ejb">

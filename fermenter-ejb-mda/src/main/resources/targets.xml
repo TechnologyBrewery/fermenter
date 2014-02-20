@@ -67,6 +67,12 @@
 		    generator="org.tigris.atlas.mda.generator.entity.EntityJavaGenerator"
 		    templateName="templates/to.jackson.mixin.java.vm"
 		    outputFile="${basePackage}/transfer/json/${entityName}MixIn.java"
-		    overwritable="true"/>		   	    
+		    overwritable="true"/>
+		    
+	<target name="objectMapperManager"
+		    generator="org.tigris.atlas.mda.generator.factory.FactoryJavaGenerator"
+		    templateName="templates/jackson.object.mapper.manager.java.vm"
+		    outputFile="${basePackage}/transfer/json/ObjectMapperManager.java"
+		    overwritable="true"/>
 
 </targets>

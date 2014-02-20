@@ -36,17 +36,18 @@ import org.apache.commons.lang.StringUtils;
  */
 public class ${entityName} extends ${extends}TO {
 
-	public static final String ENTITY = "${prefix}.${entityName}";
-	//private static ${entityName}SchemaAssembler assembler = new ${entityName}SchemaAssembler();	
+	private static final long serialVersionUID = ${uid}L;
+
+	public static final String ENTITY = "${prefix}.${entityName}";	
 
 #foreach ( $idField in $idFields )
-	private ${idField.javaType}		${idField.name};
+	private ${idField.javaType} ${idField.name};
 #end
 #if ($useOptimisticLocking)	 
 	private Integer oplock;
 #end
 #foreach ( $field in $fields )
-	private ${field.javaType}		${field.name};
+	private ${field.javaType} ${field.name};
 #end
 #foreach ($relation in $relations)
 	private Set<${relation.type}> ${relation.label}s;
@@ -55,7 +56,7 @@ public class ${entityName} extends ${extends}TO {
 	private ${inverseRelation.name} parent${inverseRelation.name};
 #end
 #foreach ($reference in $references)
-	private ${reference.type}		${reference.name};
+	private ${reference.type} ${reference.name};
 #end
 #foreach ($composite in $composites)
 	private ${composite.type}Composite ${composite.name}Composite;

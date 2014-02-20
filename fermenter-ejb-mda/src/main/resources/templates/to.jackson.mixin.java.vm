@@ -64,10 +64,12 @@ public abstract class ${entityName}MixIn {
 #end
 
 	@JsonIgnore
+	private Messages messages;
+
+	@JsonIgnore
 	public abstract String getEntityName();
 
 #if ( $idFields.size() > 0 )
-
 	@JsonIgnore
 	public abstract PrimaryKey getKey();
 	
@@ -90,5 +92,13 @@ public abstract class ${entityName}MixIn {
 
 	@JsonIgnore
 	public abstract Messages getAllMessages();
+	
+#foreach ($inverseRelation in $inverseRelations)
+	@JsonIgnore
+	public abstract ${inverseRelation.name} get${inverseRelation.name}();
+	
+	@JsonIgnore
+	public abstract void set${inverseRelation.name}(${inverseRelation.name} parent);	
+#end	
 
 }

@@ -1,6 +1,7 @@
-package com.ask.test.domain.transfer.json;
+package ${prefix}.transfer.json;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.inject.Produces;
 import javax.inject.Singleton;
 
 import org.codehaus.jackson.Version;
@@ -9,7 +10,7 @@ import org.codehaus.jackson.map.module.SimpleModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ask.test.domain.transfer.SimpleDomain;
+import ${prefix}.transfer.*;
 
 /**
  * Manages and customizes the Jackson {@link ObjectMapper} instance for this project.
@@ -31,10 +32,11 @@ public class ObjectMapperManager {
 	 * Adds in any custom modules desired for this project's {@link ObjectMapper}.
 	 */
 	private void configureObjectMapper() {
-		SimpleModule module = new SimpleModule("project-name", new Version(1, 9, 2, ""));
-		module.setMixInAnnotation(SimpleDomain.class, SimpleDomainMixIn.class);
-		LOGGER.debug("Configurd Jackson to use the following Class/MixIn combination: SimpleDomain=SimpleDomainMixIn");
-		//... repeat for each domain
+		SimpleModule module = new SimpleModule("${groupId}:${artifactId}:${version}", new Version(1, 9, 2, ""));
+#foreach( $entity in $entities )		
+		module.setMixInAnnotation(${entity.name}.class, ${entity.name}MixIn.class);
+		LOGGER.debug("Configurd Jackson to use the following Class/MixIn combination: ${entity.name}=${entity.name}MixIn");
+#end
 		
 		objectMapper.registerModule(module);
 		
@@ -44,6 +46,7 @@ public class ObjectMapperManager {
 	 * Returns the thread-safe, singleton instance of {@link ObjectMapper} for this project.
 	 * @return object mapper
 	 */
+	@Produces
 	public ObjectMapper getObjectMapper() {
 		return objectMapper;
 	}

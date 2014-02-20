@@ -3,20 +3,21 @@
 
 <profiles>
 
-	<profile name="ejbFactories">
+	<profile name="core-ejb">
 		<target name="ejbServiceFactory"/>
+		<target name="transferObjectJacksonMixIns"/>
 	</profile>
 
-	<profile name="java-service-session-beans" extends="ejbFactories">
+	<profile name="java-service-session-beans" extends="core-ejb">
 		<target name="serviceSessionBeanRemoteInterfaces"/>
 		<target name="serviceSessionBeanLocalInterfaces"/>
 		<target name="serviceSessionBeanHomeInterfaces"/>
 		<target name="serviceSessionBeanLocalHomeInterfaces"/>
 		<target name="serviceSessionBeanObjects"/>
-		<target name="sessionBeanServiceDelegateObjects"/>
+		<target name="sessionBeanServiceDelegateObjects"/>		
 	</profile>
 
-	<profile name="java-entity-maintenance-session-beans-service-only" extends="ejbFactories">
+	<profile name="java-entity-maintenance-session-beans-service-only" extends="core-ejb">
 		<target name="entityMaintenanceServiceLocal"/>
 		<target name="entityMaintenanceServiceBean"/>
 	</profile>

@@ -9,7 +9,18 @@ public class VoidServiceResponse extends ServiceResponse {
 
 	private static final long serialVersionUID = -9121329446101695536L;
 	
-	protected VoidServiceResponse(Messages messages) {
+	/**
+	 * Instance without messages.
+	 */
+	public VoidServiceResponse() {
+		super();
+	}
+	
+	/**
+	 * Instance with messages.
+	 * @param messages
+	 */
+	public VoidServiceResponse(Messages messages) {
 		super(messages);
 	}
 

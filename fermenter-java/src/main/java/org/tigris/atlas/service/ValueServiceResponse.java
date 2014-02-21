@@ -6,7 +6,7 @@ import org.tigris.atlas.messages.Messages;
  * Wraps a value with {@link ServiceResponse} envelope information (e.g., first class support for messages).
  * @param <T> The value to wrap
  */
-public class ValueServiceResponse<T>extends ServiceResponse {
+public class ValueServiceResponse<T> extends ServiceResponse {
 
 	private static final long serialVersionUID = -6728447224313998458L;
 	

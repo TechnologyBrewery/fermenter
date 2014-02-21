@@ -8,10 +8,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.jboss.weld.environment.se.Weld;
-import org.jboss.weld.environment.se.WeldContainer;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.ask.test.domain.transfer.SimpleDomain;
@@ -19,22 +15,8 @@ import com.ask.test.domain.transfer.TransferObjectFactory;
 import com.ask.test.domain.transfer.ValidationExample;
 import com.ask.test.domain.transfer.ValidationExampleChild;
 
-public class TestJsonDomainTransformations {
+public class TestJsonDomainTransformations extends AbstractTestTransformations {
 
-	private static ObjectMapper objectMapper;
-	
-	@BeforeClass
-	public static void init() {
-		Weld weld = new Weld();
-		WeldContainer container = weld.initialize();
-		objectMapper = container.instance().select(ObjectMapper.class).get();
-	}
-	
-	@Test
-	public void testObjectMapperExists() {
-		assertNotNull(objectMapper);
-	}
-	
 	@Test
 	public void testTransformationOfIdField() throws Exception {
 		SimpleDomain domain = TransferObjectFactory.createSimpleDomain();

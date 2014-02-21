@@ -10,6 +10,12 @@ import org.codehaus.jackson.map.module.SimpleModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.tigris.atlas.messages.DefaultMessage;
+import org.tigris.atlas.messages.DefaultMessages;
+import org.tigris.atlas.messages.Message;
+import org.tigris.atlas.messages.Messages;
+import org.tigris.atlas.messages.json.MessagesMixIn;
+
 import ${prefix}.transfer.*;
 
 /**
@@ -35,8 +41,15 @@ public class ObjectMapperManager {
 		SimpleModule module = new SimpleModule("${groupId}:${artifactId}:${version}", new Version(1, 9, 2, ""));
 #foreach( $entity in $entities )		
 		module.setMixInAnnotation(${entity.name}.class, ${entity.name}MixIn.class);
-		LOGGER.debug("Configurd Jackson to use the following Class/MixIn combination: ${entity.name}=${entity.name}MixIn");
+		LOGGER.debug("Configured Jackson of Class/MixIn combination: ${entity.name}=${entity.name}MixIn");
 #end
+		
+		module.addAbstractTypeMapping(Message.class, DefaultMessage.class);
+		LOGGER.debug("Configured Jackson of Interface/Concrete class mapping: Message->DefaultMessage");
+		module.addAbstractTypeMapping(Messages.class, DefaultMessages.class);
+		LOGGER.debug("Configured Jackson of Interface/Concrete class mapping: Messages->DefaultMessages");
+		module.setMixInAnnotation(Messages.class, MessagesMixIn.class);
+		LOGGER.debug("Configured Jackson of Class/MixIn combination: Messages=MessagesMixIn");
 		
 		objectMapper.registerModule(module);
 		

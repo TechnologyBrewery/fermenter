@@ -12,16 +12,12 @@ import java.util.Set;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 
 /**
- * Default implementation of the <code>Message</code> interface.
- * 
- * @see org.tigris.atlas.messages.Message
+ * Default implementation of the {@link Message} interface.
  */
 public class DefaultMessage implements Message {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -8763173306121355462L;
+	
 	private String key;
 	private Severity severity;
 	private List<Object> inserts;
@@ -38,57 +34,57 @@ public class DefaultMessage implements Message {
 		properties = new HashSet<String>();
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.tigris.atlas.messages.Message#getKey()
+	/**
+	 * {@inheritDoc}
 	 */
 	public String getKey() {
 		return key;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.tigris.atlas.messages.Message#getSeverity()
+	/**
+	 * {@inheritDoc}
 	 */
 	public Severity getSeverity() {
 		return severity;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.tigris.atlas.messages.Message#getProperties()
+	/**
+	 * {@inheritDoc}
 	 */
 	public Collection<String> getProperties() {
 		return Collections.unmodifiableCollection(properties);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.tigris.atlas.messages.Message#getInserts()
+	/**
+	 * {@inheritDoc}
 	 */
 	public Collection<Object> getInserts() {
 		return Collections.unmodifiableCollection(inserts);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.tigris.atlas.messages.Message#setKey(java.lang.String)
+	/**
+	 * {@inheritDoc}
 	 */
 	public void setKey(String key) {
 		this.key = key;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.tigris.atlas.messages.Message#setSeverity(org.tigris.atlas.messages.Severity)
+	/**
+	 * {@inheritDoc}
 	 */
 	public void setSeverity(Severity severity) {
 		this.severity = severity;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.tigris.atlas.messages.Message#addProperty(java.lang.String)
+	/**
+	 * {@inheritDoc}
 	 */
 	public void addProperty(String property) {
 		properties.add(property);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.tigris.atlas.messages.Message#addInsert(java.lang.Object)
+	/**
+	 * {@inheritDoc}
 	 */
 	public void addInsert(Object insert) {
 		inserts.add(insert);

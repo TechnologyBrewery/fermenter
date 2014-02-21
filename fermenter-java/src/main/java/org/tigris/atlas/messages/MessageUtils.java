@@ -44,7 +44,7 @@ public final class MessageUtils {
 			                                 String [] properties,
 			                                 Object [] inserts) {
 		
-		return createMessage(key, Severity.getSeverity(Severity.ERROR), properties, inserts);
+		return createMessage(key, Severity.ERROR, properties, inserts);
 	}
 
 	/**
@@ -63,7 +63,7 @@ public final class MessageUtils {
 			                                         String [] properties,
 			                                         Object [] inserts) {
 
-		return createMessage(key, Severity.getSeverity(Severity.INFORMATIONAL), properties, inserts);
+		return createMessage(key, Severity.INFO, properties, inserts);
 	}
 	
 	/**
@@ -104,23 +104,23 @@ public final class MessageUtils {
 		return message;
 	}
 
-	public static String getSummaryMessage(String key, Collection inserts, Class clazz) {
+	public static String getSummaryMessage(String key, Collection<Object> inserts, Class<?> clazz) {
 		return getSummaryMessage(key, inserts, clazz, Locale.getDefault());
 	}
 	
-	public static String getSummaryMessage(String key, Collection inserts, Class clazz, Locale locale) {
+	public static String getSummaryMessage(String key, Collection<Object> inserts, Class<?> clazz, Locale locale) {
 		return formatMessage(key + SUMMARY_SUFFIX, inserts, clazz, locale);
 	}
 
-	public static String getDetailMessage(String key, Collection inserts, Class clazz) {
+	public static String getDetailMessage(String key, Collection<Object> inserts, Class<?> clazz) {
 		return getDetailMessage(key, inserts, clazz, Locale.getDefault());
 	}
 	
-	public static String getDetailMessage(String key, Collection inserts, Class clazz, Locale locale) {
+	public static String getDetailMessage(String key, Collection<Object> inserts, Class<?> clazz, Locale locale) {
 		return formatMessage(key + DETAIL_SUFFIX, inserts, clazz, locale);
 	}
 
-	private static String formatMessage(String key, Collection inserts, Class clazz, Locale locale) {
+	private static String formatMessage(String key, Collection<Object> inserts, Class<?> clazz, Locale locale) {
 		ResourceBundle bundle = RESOLVER.getResourceBundle(clazz, locale);
 		String message = bundle.getString(key);
 		Object [] values = inserts == null ? new Object [] {} : inserts.toArray();

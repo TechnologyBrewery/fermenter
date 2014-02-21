@@ -8,9 +8,6 @@ import junit.framework.TestCase;
 
 public abstract class AbstractMessagesTestCase extends TestCase {
 
-	protected static final Severity ERROR = Severity.getSeverity(Severity.ERROR);
-	protected static final Severity INFO = Severity.getSeverity(Severity.INFORMATIONAL);
-
 	protected String key1 = "foo";
 	protected String key2 = "bar";
 	

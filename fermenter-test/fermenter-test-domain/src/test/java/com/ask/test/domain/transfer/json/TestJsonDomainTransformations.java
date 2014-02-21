@@ -19,7 +19,7 @@ import com.ask.test.domain.transfer.TransferObjectFactory;
 import com.ask.test.domain.transfer.ValidationExample;
 import com.ask.test.domain.transfer.ValidationExampleChild;
 
-public class TestJsonTransformations {
+public class TestJsonDomainTransformations {
 
 	private static ObjectMapper objectMapper;
 	

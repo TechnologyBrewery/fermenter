@@ -31,7 +31,7 @@ public class AnsynchronousServiceDelegateImpl implements AsynchronousServiceDele
 		if (serviceDescriptor == null) {
 			Message m = MessageFactory.createMessage();
 			m.setKey("unknown.exception");
-			m.setSeverity(Severity.getSeverity(Severity.ERROR));				
+			m.setSeverity(Severity.ERROR);				
 			response.getMessages().addMessage( m );
 			LOGGER.error("Cannot invoke an asynchronous service with a null AsynchronousServiceDescriptor!");
 			
@@ -53,7 +53,7 @@ public class AnsynchronousServiceDelegateImpl implements AsynchronousServiceDele
 				} else {
 					Message m = MessageFactory.createMessage();
 					m.setKey("unknown.exception");
-					m.setSeverity(Severity.getSeverity(Severity.ERROR));				
+					m.setSeverity(Severity.ERROR);				
 					response.getMessages().addMessage( m );
 					LOGGER.error("Could not connect to JMS resources to perform asynchronous action!");
 					
@@ -80,7 +80,7 @@ public class AnsynchronousServiceDelegateImpl implements AsynchronousServiceDele
 		
 		Message m = MessageFactory.createMessage();
 		m.setKey("unknown.exception");
-		m.setSeverity(Severity.getSeverity(Severity.ERROR));
+		m.setSeverity(Severity.ERROR);
 		response.getMessages().addMessage( m );
 		return response;
 	}
@@ -93,7 +93,7 @@ public class AnsynchronousServiceDelegateImpl implements AsynchronousServiceDele
 		
 		Message m = MessageFactory.createMessage();
 		m.setKey("server.unavailable");
-		m.setSeverity(Severity.getSeverity(Severity.ERROR));
+		m.setSeverity(Severity.ERROR);
 		response.getMessages().addMessage( m );
 		return response;
 	}	

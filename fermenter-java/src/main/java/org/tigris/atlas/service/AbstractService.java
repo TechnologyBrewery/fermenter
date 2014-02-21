@@ -69,10 +69,10 @@ public abstract class AbstractService implements Service {
 		}
 	}
 
-	protected final void addMessage(ServiceResponse response, String severity, String msgKey, Object[] inserts) {
+	protected final void addMessage(ServiceResponse response, Severity severity, String msgKey, Object[] inserts) {
 		Message m = MessageFactory.createMessage();
 		m.setKey(msgKey);
-		m.setSeverity(Severity.getSeverity(severity));
+		m.setSeverity(severity);
 		for( int i=0; inserts != null && i<inserts.length; i++ ) {
 			m.addInsert( inserts[ i ] );
 		}
@@ -85,7 +85,7 @@ public abstract class AbstractService implements Service {
 	}
 
 	protected final void addInfo(ServiceResponse response, String msgKey, Object[] inserts) {
-		addMessage( response, Severity.INFORMATIONAL, msgKey, inserts );
+		addMessage( response, Severity.INFO, msgKey, inserts );
 	}
 
 	protected final void addError(ServiceResponse response, String msgKey) {

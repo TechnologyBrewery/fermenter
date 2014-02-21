@@ -4,13 +4,11 @@ import java.io.Serializable;
 import java.util.Collection;
 
 /**
- * Container for messages.  Any object needing to hold on to <code>Message
- * </code> instances can use a <code>Messages</code> object to manage messages.
- * A <code>Messages</code> instance can provide messages based on their 
- * severities, or by the properties with which they are associated.  In 
- * addition, convenience methods are provided to answer whether the <code>
- * Messages</code> contains certain messages, and/or how many of such messages
- * there are.
+ * Container for messages.  Any object needing to hold on to {@link Message} instances can use a 
+ * {@link Messages} object to manage messages. A {@link Messages} instance can provide messages 
+ * based on their severities, or by the properties with which they are associated.  In  addition, 
+ * convenience methods are provided to answer whether the {@link Messages} contains certain messages, 
+ * and/or how many of such messages there are.
  * 
  * @see org.tigris.atlas.messages.DefaultMessages
  * @see org.tigris.atlas.messages.Severity
@@ -21,17 +19,19 @@ public interface Messages extends Serializable {
 	public static final String REQ_ATTR_INFO_MSGS = "InfoMessages";
 	
 	/**
+	 * Get all messages, regardless of severity.
+	 * @return A non-null collection of 'Informational' messages
+	 */
+	Collection<Message> getAllMessages();
+	
+	/**
 	 * Add a message to this collection of messages.
-	 * 
 	 * @param message The message to add
-	 * @throw IllegalArgumentException If the messages does not contain a key
-	 *                                 and a severity
 	 */
 	void addMessage(Message message);
 	
 	/**
 	 * Answer how many messages with a severity of 'Error' are present.
-	 *
 	 * @return The number of 'Error' messages
 	 */
 	int getErrorMessageCount();
@@ -39,7 +39,6 @@ public interface Messages extends Serializable {
 	/**
 	 * Answer how many messages with a severity of 'Error' are present that
 	 * are associated with a given property name.
-	 *
 	 * @param property The name of the property
 	 * @return The number of 'Error' messages associated with the given property
 	 */
@@ -47,15 +46,13 @@ public interface Messages extends Serializable {
 	
 	/**
 	 * Get all messages with a severity of 'Error' that are present
-	 *
 	 * @return A non-modifiable, non-null collection of 'Error' messages
 	 */
 	Collection<Message> getErrorMessages();
 	
 	/**
 	 * Get all messages with a severity of 'Error' that are associated with a
-	 * given property
-	 *
+	 * given property.
 	 * @param property The name of the property
 	 * @return A non-modifiable, non-null collection of all 'Error' messages
 	 *         associated with the given property
@@ -64,7 +61,6 @@ public interface Messages extends Serializable {
 	
 	/**
 	 * Answer how many messages with a severity of 'Informational' are present.
-	 *
 	 * @return The number of 'Informational' messages
 	 */
 	int getInformationalMessageCount();
@@ -72,7 +68,6 @@ public interface Messages extends Serializable {
 	/**
 	 * Answer how many messages with a severity of 'Informational' are present
 	 * that are associated with a given property name.
-	 *
 	 * @param property The name of the property
 	 * @return The number of 'Informational' messages associated with the given
 	 *         property
@@ -80,16 +75,14 @@ public interface Messages extends Serializable {
 	int getInformationalMessageCount(String property);
 	
 	/**
-	 * Get all messages with a severity of 'Informational' that are present
-	 *
+	 * Get all messages with a severity of 'Informational' that are present.
 	 * @return A non-modifiable, non-null collection of 'Informational' messages
 	 */
 	Collection<Message> getInformationalMessages();
 	
 	/**
 	 * Get all messages with a severity of 'Informational' that are associated
-	 * with a given property
-	 *
+	 * with a given property.
 	 * @param property The name of the property
 	 * @return A non-modifiable, non-null collection of all 'Informational'
 	 *         messages associated with the given property
@@ -97,8 +90,7 @@ public interface Messages extends Serializable {
 	Collection<Message> getInformationalMessages(String property);
 	
 	/**
-	 * Answer whether any messages with a severity of 'Error' are present
-	 * 
+	 * Answer whether any messages with a severity of 'Error' are present.
 	 * @return True if any 'Error' messages are present, false otherwise
 	 */
 	boolean hasErrorMessages();
@@ -106,7 +98,6 @@ public interface Messages extends Serializable {
 	/** 
 	 * Answer whether any messages with a severity of 'Error' are present for a
 	 * given property.
-	 *
 	 * @param property The property name
 	 * @return True if any 'Error' messages are present for the given property,
 	 *         false otherwise
@@ -114,8 +105,7 @@ public interface Messages extends Serializable {
 	boolean hasErrorMessages(String property);
 	
 	/**
-	 * Answer whether any messages with a severity of 'Error' are present
-	 * 
+	 * Answer whether any messages with a severity of 'Error' are present.
 	 * @return True if any 'Informational' messages are present, false otherwise
 	 */
 	boolean hasInformationalMessages();
@@ -123,7 +113,6 @@ public interface Messages extends Serializable {
 	/** 
 	 * Answer whether any messages with a severity of 'Error' are present for a
 	 * given property.
-	 *
 	 * @param property The property name
 	 * @return True if any 'Informational' messages are present for the given
 	 *         property, false otherwise
@@ -131,7 +120,7 @@ public interface Messages extends Serializable {
 	boolean hasInformationalMessages(String property);
 	
 	/**
-	 * Add an entire list of messages to this message list 
+	 * Add an entire list of messages to this message list .
 	 * @param messages
 	 */
 	void addMessages(Messages messages);

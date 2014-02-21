@@ -19,19 +19,19 @@ public class TestDefaultMessages extends AbstractMessagesTestCase {
 		Message msg1 = new DefaultMessage();
 		msg1.setKey(key1);
 		msg1.addProperty("foo");
-		msg1.setSeverity(Severity.getSeverity(Severity.ERROR));
+		msg1.setSeverity(Severity.ERROR);
 		Message msg2 = new DefaultMessage();
 		msg2.addProperty("bar");
-		msg2.setSeverity(Severity.getSeverity(Severity.ERROR));
+		msg2.setSeverity(Severity.ERROR);
 		msg2.setKey(key1);
 		Message msg3 = new DefaultMessage();
 		msg3.addProperty("foo");
 		msg3.addProperty("bar");
 		msg3.addProperty("foobar");
-		msg3.setSeverity(Severity.getSeverity(Severity.ERROR));
+		msg3.setSeverity(Severity.ERROR);
 		msg3.setKey(key1);
 		Message msg4 = new DefaultMessage();
-		msg4.setSeverity(Severity.getSeverity(Severity.ERROR));
+		msg4.setSeverity(Severity.ERROR);
 		msg4.setKey(key1);
 		
 		messagesWithErrors1 = new DefaultMessages();
@@ -43,15 +43,15 @@ public class TestDefaultMessages extends AbstractMessagesTestCase {
 		Message msg5 = new DefaultMessage();
 		msg5.setKey(key1);
 		msg5.addProperty("foo");
-		msg5.setSeverity(Severity.getSeverity(Severity.INFORMATIONAL));
+		msg5.setSeverity(Severity.INFO);
 		Message msg6 = new DefaultMessage();
 		msg6.setKey(key1);
 		msg6.addProperty("foo");
 		msg6.addProperty("bar");
-		msg6.setSeverity(Severity.getSeverity(Severity.INFORMATIONAL));
+		msg6.setSeverity(Severity.INFO);
 		Message msg7 = new DefaultMessage();
 		msg7.setKey(key1);
-		msg7.setSeverity(Severity.getSeverity(Severity.INFORMATIONAL));
+		msg7.setSeverity(Severity.INFO);
 		
 		messagesWithInfos1 = new DefaultMessages();
 		messagesWithInfos1.addMessage(msg5);
@@ -86,7 +86,7 @@ public class TestDefaultMessages extends AbstractMessagesTestCase {
 		assertFalse(messages.hasErrorMessages("foo"));
 		Message message = new DefaultMessage();
 		message.setKey(key1);
-		message.setSeverity(Severity.getSeverity(Severity.ERROR));
+		message.setSeverity(Severity.ERROR);
 		messages.addMessage(message);
 		assertTrue(messages.hasErrorMessages());
 		assertFalse(messages.hasErrorMessages("foo"));
@@ -110,7 +110,7 @@ public class TestDefaultMessages extends AbstractMessagesTestCase {
 		assertFalse(messages.hasInformationalMessages("foo"));
 		Message message = new DefaultMessage();
 		message.setKey(key1);
-		message.setSeverity(Severity.getSeverity(Severity.INFORMATIONAL));
+		message.setSeverity(Severity.INFO);
 		messages.addMessage(message);
 		assertTrue(messages.hasInformationalMessages());
 		assertFalse(messages.hasInformationalMessages("foo"));
@@ -157,7 +157,7 @@ public class TestDefaultMessages extends AbstractMessagesTestCase {
 	}
 	
 	public void testContainsMessage1() {
-		Message message = createMessage(INFO, key1, new String [] {});
+		Message message = createMessage(Severity.INFO, key1, new String [] {});
 		Messages messages = new DefaultMessages();
 		
 		assertFalse(messages.getErrorMessages().contains(message));
@@ -173,7 +173,7 @@ public class TestDefaultMessages extends AbstractMessagesTestCase {
 	}
 	
 	public void testContainsMessage2() {
-		Message message = createMessage(ERROR, key1, new String [] {property1});
+		Message message = createMessage(Severity.ERROR, key1, new String [] {property1});
 		Messages messages = new DefaultMessages();
 		
 		assertFalse(messages.getErrorMessages().contains(message));
@@ -192,7 +192,7 @@ public class TestDefaultMessages extends AbstractMessagesTestCase {
 	}
 	
 	public void testContainsMessage3() {
-		Message message = createMessage(ERROR, key1, new String [] {property1, property2});
+		Message message = createMessage(Severity.ERROR, key1, new String [] {property1, property2});
 		Messages messages = new DefaultMessages();
 		
 		assertFalse(messages.getErrorMessages().contains(message));
@@ -212,12 +212,12 @@ public class TestDefaultMessages extends AbstractMessagesTestCase {
 		assertFalse(messages.getErrorMessages(property3).contains(message));
 		assertFalse(messages.getInformationalMessages(property3).contains(message));
 		
-		Message sameMsg = createMessage(ERROR, key1, new String [] {property2, property1});
+		Message sameMsg = createMessage(Severity.ERROR, key1, new String [] {property2, property1});
 		
 		assertTrue(messages.getErrorMessages(property2).contains(sameMsg));
 		assertFalse(messages.getInformationalMessages(property2).contains(sameMsg));
 		
-		Message diffMsg = createMessage(ERROR, key1, new String [] {property2, property1, property3});
+		Message diffMsg = createMessage(Severity.ERROR, key1, new String [] {property2, property1, property3});
 		
 		assertFalse(messages.getErrorMessages(property2).contains(diffMsg));
 		assertFalse(messages.getInformationalMessages(property2).contains(diffMsg));

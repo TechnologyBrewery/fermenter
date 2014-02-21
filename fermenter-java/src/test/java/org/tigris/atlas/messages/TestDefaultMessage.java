@@ -17,10 +17,10 @@ public class TestDefaultMessage extends TestCase {
 	public void testGetSetSeverity() {
 		DefaultMessage message = new DefaultMessage();
 		assertNull(message.getSeverity());
-		message.setSeverity(Severity.getSeverity(Severity.ERROR));
-		assertEquals(Severity.getSeverity(Severity.ERROR), message.getSeverity());
-		message.setSeverity(Severity.getSeverity(Severity.INFORMATIONAL));
-		assertEquals(Severity.getSeverity(Severity.INFORMATIONAL), message.getSeverity());
+		message.setSeverity(Severity.ERROR);
+		assertEquals(Severity.ERROR, message.getSeverity());
+		message.setSeverity(Severity.INFO);
+		assertEquals(Severity.INFO, message.getSeverity());
 	}
 	
 	public void testAddInsert() {

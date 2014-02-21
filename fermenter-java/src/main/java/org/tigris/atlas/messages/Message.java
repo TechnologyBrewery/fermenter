@@ -6,7 +6,7 @@ import java.util.Collection;
 /**
  * Message interface definition.  A message is an object that consists of
  * a key (used to somehow identify the message's text) and a severity 
- * (e.g. 'Error', 'Informational').  Optionally, messages be associated with
+ * (e.g. 'Error', 'Info').  Optionally, messages be associated with
  * one or more properties, and may contain insert values used to dynamically
  * populate the message text identified by the message's key.
  * 

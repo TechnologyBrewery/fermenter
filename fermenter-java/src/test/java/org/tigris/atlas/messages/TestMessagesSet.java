@@ -20,21 +20,21 @@ public class TestMessagesSet extends AbstractMessagesTestCase {
 		set = new MessagesSet();
 		
 		Messages messages1 = new DefaultMessages();
-		messages1.addMessage(createMessage(ERROR, key1, new String []{}));
-		messages1.addMessage(createMessage(ERROR, key1, new String []{"foo"}));
-		messages1.addMessage(createMessage(ERROR, key1, new String []{"bar", "foo"}));
-		messages1.addMessage(createMessage(ERROR, key2, new String []{}));
+		messages1.addMessage(createMessage(Severity.ERROR, key1, new String []{}));
+		messages1.addMessage(createMessage(Severity.ERROR, key1, new String []{"foo"}));
+		messages1.addMessage(createMessage(Severity.ERROR, key1, new String []{"bar", "foo"}));
+		messages1.addMessage(createMessage(Severity.ERROR, key2, new String []{}));
 		Messages messages2 = new DefaultMessages();
-		messages1.addMessage(createMessage(ERROR, key3, new String []{}));
-		messages1.addMessage(createMessage(ERROR, key1, new String []{"bar", "foobar"}));
-		messages1.addMessage(createMessage(INFO, key4, new String []{}));
-		messages1.addMessage(createMessage(INFO, key2, new String []{"foo"}));
-		messages1.addMessage(createMessage(INFO, key3, new String []{"foo"}));
+		messages1.addMessage(createMessage(Severity.ERROR, key3, new String []{}));
+		messages1.addMessage(createMessage(Severity.ERROR, key1, new String []{"bar", "foobar"}));
+		messages1.addMessage(createMessage(Severity.INFO, key4, new String []{}));
+		messages1.addMessage(createMessage(Severity.INFO, key2, new String []{"foo"}));
+		messages1.addMessage(createMessage(Severity.INFO, key3, new String []{"foo"}));
 		Messages messages3 = new DefaultMessages();
-		messages1.addMessage(createMessage(INFO, key5, new String []{}));
-		messages1.addMessage(createMessage(INFO, key1, new String []{"barfoo", "foo"}));
-		messages1.addMessage(createMessage(INFO, key1, new String []{"bar"}));
-		messages1.addMessage(createMessage(INFO, key6, new String []{}));
+		messages1.addMessage(createMessage(Severity.INFO, key5, new String []{}));
+		messages1.addMessage(createMessage(Severity.INFO, key1, new String []{"barfoo", "foo"}));
+		messages1.addMessage(createMessage(Severity.INFO, key1, new String []{"bar"}));
+		messages1.addMessage(createMessage(Severity.INFO, key6, new String []{}));
 		
 		set.addMessages(messages1);
 		set.addMessages(messages2);

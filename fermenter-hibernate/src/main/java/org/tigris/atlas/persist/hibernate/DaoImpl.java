@@ -200,7 +200,7 @@ public abstract class DaoImpl implements Dao {
 		Message message = MessageFactory.createMessage();
 		message.setKey(DATABASE_EXCEPTION_KEY);
 		message.addInsert(dae.getMessage());
-		message.setSeverity(Severity.getSeverity(Severity.ERROR));
+		message.setSeverity(Severity.ERROR);
 		if (bo != null) {
 			bo.getMessages().addMessage(message);
 

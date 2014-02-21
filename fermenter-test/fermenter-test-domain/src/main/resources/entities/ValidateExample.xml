@@ -73,10 +73,6 @@
 			<type>ValidationExampleChild</type>
 			<multiplicity>1-M</multiplicity>
 		</relation>
-		<relation>
-			<type>SimpleDomain</type>
-			<multiplicity>M-M</multiplicity>
-		</relation>
 	</associations>
 
 </entity>

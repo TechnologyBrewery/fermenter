@@ -6,6 +6,7 @@ import $import;
 
 import ${basePackage}.transfer.${entity.name};
 import ${basePackage}.transfer.${entity.name}PK;
+import com.ask.test.domain.transfer.TransferObjectFactory;
 import ${basePackage}.bizobj.BusinessObjectFactory;
 import ${basePackage}.bizobj.${entity.name}Assembler;
 import ${basePackage}.bizobj.${entity.name}BO;
@@ -99,6 +100,18 @@ public class ${entity.name}MaintenanceServiceBean implements ${entity.name}Maint
 		
 		return new ValueServiceResponse<${entity.name}>();
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public ValueServiceResponse<${entity.name}> findByPrimaryKey(#foreach($id in $entity.idFields)${id.javaType} ${id.name}#end) {
+		${entity.name}PK pk = TransferObjectFactory.create${entity.name}PK();
+#foreach($id in $entity.idFields)
+		pk.set${id.capitalizedName}(${id.name});
+#end
+		return findByPrimaryKey(pk);
+		
+	}	
 
 	/**
 	 * Find the ${entity.name} by primary key fields.

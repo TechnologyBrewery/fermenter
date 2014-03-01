@@ -22,9 +22,13 @@ import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.jboss.shrinkwrap.resolver.api.maven.MavenResolverSystem;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.tigris.atlas.messages.Messages;
+import org.tigris.atlas.persist.hibernate.HibernateSessionFactoryManager;
 import org.tigris.atlas.service.ValueServiceResponse;
 import org.tigris.atlas.transfer.TransferObject;
 
@@ -41,6 +45,8 @@ import com.ask.test.domain.transfer.ValidationExamplePK;
 @RunWith(Arquillian.class)
 public class IntegrationTestMaintenanceServices {
 	
+	private static final Logger LOGGER = LoggerFactory.getLogger(IntegrationTestMaintenanceServices.class);
+	
 	//TODO: figure out how to make this use the current project version instead of a hardcoded value:
 	private static final String DOMAIN_GROUPID_ARTIFACTID_VERSION = "com.ask.fermenter:fermenter-test-domain:1-SNAPSHOT";
 	
@@ -52,6 +58,9 @@ public class IntegrationTestMaintenanceServices {
 	
 	@EJB
 	private ValidationExampleMaintenanceService validationExampleMaintenanceService;
+	
+	//@ArquillianResource - NOT WORKING, SEE ARQ-1443
+	//private URL base;
 
 	@Deployment
 	public static Archive<?> createDeployment() {
@@ -62,8 +71,16 @@ public class IntegrationTestMaintenanceServices {
 		war.addAsLibraries(mavenDependencies);
 		war.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
 		war.addAsWebInfResource(new File("./src/test/resources/web.xml"));
+		war.addAsWebInfResource(new File("./src/test/resources/jboss-deployment-structure.xml"));
 		
 		return war;
+	}
+	
+	@Before
+	public void prepDatabase() {
+		//trigger schema update before we are in a CMT transaction so that it doesn't
+		//blow up due to its use of autocommit:
+		HibernateSessionFactoryManager.getInstance();
 	}
 	
 	@Test
@@ -85,7 +102,10 @@ public class IntegrationTestMaintenanceServices {
 		assertNoErrorMessages(responseDomainWrapper);
 		SimpleDomain responseDomain = responseDomainWrapper.getValue(); 
 		assertNotNull(responseDomain);
-		assertNotNull(responseDomain.getKey().getValue());
+		String pk = responseDomain.getSimpleDomainPK().getId();
+		assertNotNull(pk);
+		
+		LOGGER.debug(pk);
 		
 	}
 	
@@ -214,7 +234,7 @@ public class IntegrationTestMaintenanceServices {
 			= validationExampleMaintenanceService.findByPrimaryKey(responseParentPk);
 		assertNull(findResponse.getValue());
 		
-	}	
+	}
 	
 	protected SimpleDomain createRandomSimpleDomain() {
 		SimpleDomain domain = TransferObjectFactory.createSimpleDomain();

@@ -74,5 +74,17 @@
 		    templateName="templates/jackson.object.mapper.manager.java.vm"
 		    outputFile="${basePackage}/transfer/json/ObjectMapperManager.java"
 		    overwritable="true"/>
+		    
+	<target name="jacksonObjectMapperResteasyProvider"
+		    generator="org.tigris.atlas.mda.generator.factory.FactoryJavaGenerator"
+		    templateName="templates/jackson.object.mapper.resteasy.provider.java.vm"
+		    outputFile="${basePackage}/service/rest/JacksonObjectMapperResteasyProvider.java"
+		    overwritable="true"/>
+		    
+	<target name="jaxRsActivator"
+		    generator="org.tigris.atlas.mda.generator.factory.FactoryJavaGenerator"
+		    templateName="templates/jax.rs.activator.java.vm"
+		    outputFile="${basePackage}/service/rest/JaxRsActivator.java"
+		    overwritable="true"/>
 
 </targets>

@@ -8,12 +8,12 @@ import ${basePackage}.transfer.${entity.name}PK;
 
 import javax.ejb.Local;
 
-//import javax.ws.rs.GET;
-//import javax.ws.rs.POST;
-//import javax.ws.rs.Path;
-//import javax.ws.rs.PathParam;
-//import javax.ws.rs.Produces;
-//import javax.ws.rs.QueryParam;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 
 /**
  * Local interface for the ${entity.name}Maintenance service.
@@ -21,7 +21,7 @@ import javax.ejb.Local;
  * Generated Code - DO NOT MODIFY
  */
 @Local
-//@Path("/")
+@Path("/")
 public interface ${entityName}MaintenanceService extends Service {
 
 	/**
@@ -38,6 +38,19 @@ public interface ${entityName}MaintenanceService extends Service {
 	 * @return ${entity.name}ServiceResponse The deleted ${entity.name} container
 	 */
 	public ValueServiceResponse<${entity.name}> delete(${entity.name}PK pk);
+	
+	/**
+	 * Find the ${entity.name} by primary key fields.
+	 *
+#foreach ($id in $entity.idFields)	 
+	 * @param ${id.name} The primary key value ${id.name} for the ${entity.name}
+#end	 
+	 * @return ${entity.name}ServiceResponse The retrieved ${entity.name} container
+	 */
+	@GET
+	@Path("/${entity.name}/#foreach($id in $entity.idFields){${id.name}}#end")
+	@Produces("text/json")
+	public ValueServiceResponse<${entity.name}> findByPrimaryKey(#foreach($id in $entity.idFields)@PathParam("${id.name}") ${id.javaType} ${id.name}#end);	
 
 	/**
 	 * Find the ${entity.name} by primary key fields.

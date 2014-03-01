@@ -8,6 +8,12 @@
 		<target name="transferObjectJacksonMixIns"/>
 		<target name="objectMapperManager"/>
 	</profile>
+	
+	<!-- must be manually included as some application servers bomb if more than one activator is present -->
+	<profile name="jax-rs-activator">
+		<target name="jaxRsActivator"/>
+		<target name="jacksonObjectMapperResteasyProvider"/>
+	</profile>
 
 	<profile name="java-service-session-beans" extends="core-ejb">
 		<target name="serviceSessionBeanRemoteInterfaces"/>

@@ -19,6 +19,7 @@
 		<module>fermenter-test-profile</module>
 		<module>fermenter-test-domain</module>
 		<module>fermenter-test-domain-integration-test</module>
+		<module>fermenter-test-domain-webapp</module>
 	</modules>
 
 	<build>

@@ -41,3 +41,6 @@ fermenter-test/fermenter-test-ejb/src/generated/java/com/ask/test/service/delega
 fermenter-test/fermenter-test-domain-integration-test/.settings/
 fermenter-test/fermenter-test-domain-integration-test/.classpath
 fermenter-test/fermenter-test-domain-integration-test/target/
+fermenter-test/fermenter-test-domain-webapp/.classpath
+fermenter-test/fermenter-test-domain-webapp/.settings/
+fermenter-test/fermenter-test-domain-webapp/target/

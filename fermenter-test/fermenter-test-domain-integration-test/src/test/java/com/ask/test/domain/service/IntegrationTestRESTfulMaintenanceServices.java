@@ -1,21 +1,18 @@
 package com.ask.test.domain.service;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Date;
 
-import javax.inject.Inject;
-
-import org.codehaus.jackson.map.ObjectMapper;
+import org.apache.commons.lang.math.RandomUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.extension.rest.client.ArquillianResteasyResource;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
-import org.jboss.resteasy.client.ClientRequest;
-import org.jboss.resteasy.client.ClientResponse;
 import org.jboss.resteasy.plugins.providers.RegisterBuiltin;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import org.jboss.shrinkwrap.api.Archive;
@@ -25,7 +22,6 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.jboss.shrinkwrap.resolver.api.maven.MavenResolverSystem;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.tigris.atlas.service.ValueServiceResponse;
@@ -33,6 +29,7 @@ import org.tigris.atlas.service.ValueServiceResponse;
 import com.ask.test.domain.service.ejb.SimpleDomainMaintenanceRestService;
 import com.ask.test.domain.service.rest.JacksonObjectMapperResteasyProvider;
 import com.ask.test.domain.transfer.SimpleDomain;
+import com.ask.test.domain.transfer.TransferObjectFactory;
 
 @RunWith(Arquillian.class)
 public class IntegrationTestRESTfulMaintenanceServices {
@@ -67,17 +64,7 @@ public class IntegrationTestRESTfulMaintenanceServices {
 			RegisterBuiltin.register(factory);
 		}
 		
-    }	
-	
-//	@Test
-//	public void testDomainMaintenanceGet() throws Exception {	
-//		URL custom = new URL("http","localhost", 8080, "/maintenance-service-integration-test");
-//		ClientRequest request = new ClientRequest(new URL(custom, "/rest/SimpleDomain/" + "4028818c446ca29d01446ca2a0c10005").toExternalForm());
-//		ClientResponse<String> response = request.get(String.class);
-//		int responseCode = response.getStatus();
-//		assertEquals(200, responseCode);
-//		
-//	}
+    }
 	
 	@Test
 	public void testDomainMaintenanceGet(@ArquillianResteasyResource SimpleDomainMaintenanceRestService simpleDomainService) {
@@ -85,5 +72,26 @@ public class IntegrationTestRESTfulMaintenanceServices {
 		assertNotNull(result);
 		assertNull(result.getValue());
 	}
+	
+	@Test
+	public void testDomainMaintenanceCreate(@ArquillianResteasyResource SimpleDomainMaintenanceRestService simpleDomainService) {
+		SimpleDomain domain = TransferObjectFactory.createSimpleDomain();
+		domain.setName(RandomStringUtils.randomAlphanumeric(20));
+		domain.setTheDate1(new Date());
+		domain.setTheLong1(RandomUtils.nextLong());
+		domain.setType(RandomStringUtils.randomAlphabetic(5));
+		
+		ValueServiceResponse<SimpleDomain> result = simpleDomainService.saveOrUpdate(domain);
+		assertNotNull(result);
+		SimpleDomain savedDomain = result.getValue();
+		assertNotNull(savedDomain);
+		String id = savedDomain.getId();
+		assertNotNull(id);
+		
+		ValueServiceResponse<SimpleDomain> foundResult = simpleDomainService.findByPrimaryKey(id);
+		assertNotNull(foundResult);
+		assertNotNull(foundResult.getValue());
+		
+	}	
 	
 }

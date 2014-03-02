@@ -49,6 +49,9 @@ public final class ObjectMapperManager {
 		module.setMixInAnnotation(Messages.class, MessagesMixIn.class);
 		LOGGER.debug("Configured Jackson of Class/MixIn combination: Messages=MessagesMixIn");
 		
+		module.setMixInAnnotation(Messages.class, MessagesMixIn.class);
+		LOGGER.debug("Configured Jackson of Class/MixIn combination: Messages=MessagesMixIn");
+		
 		objectMapper.registerModule(module);
 		
 	}

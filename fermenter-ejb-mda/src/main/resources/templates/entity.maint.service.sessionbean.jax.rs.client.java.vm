@@ -4,11 +4,11 @@ import org.tigris.atlas.service.Service;
 import org.tigris.atlas.service.ValueServiceResponse;
 
 import ${basePackage}.transfer.${entity.name};
-import ${basePackage}.transfer.${entity.name}PK;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -39,6 +39,17 @@ public interface ${entityName}MaintenanceRestService extends Service {
 	@Produces("text/json")
 	@Consumes("text/json")
 	ValueServiceResponse<${entity.name}> saveOrUpdate(#foreach($id in $entity.idFields)@PathParam("${id.name}") ${id.javaType} ${id.name}#end, ${entity.name} entity);
+	 
+	/**
+	 * Create the passed instance.
+	 * @param entity The ${entity.name} instance to save
+	 * @return a service response containing the save entity and/or any encountered messages
+	 */
+	@POST
+	@Path("/${entity.name}")
+	@Produces("text/json")
+	@Consumes("text/json")
+	ValueServiceResponse<${entity.name}> saveOrUpdate(${entity.name} entity);	 
 	 
 	/**
 	 * Delete the ${entity.name}.

@@ -3,6 +3,8 @@
     <deployment>
         <dependencies>
             <module name="org.jboss.resteasy.resteasy-jackson-provider" export="true"/>
+            <module name="org.jboss.resteasy.resteasy-cdi" export="true"/>
+            <module name="org.codehaus.jackson.jackson-jaxrs" export="true"/>
             <module name="org.codehaus.jackson.jackson-mapper-asl" export="true"/>
         </dependencies>
     </deployment>

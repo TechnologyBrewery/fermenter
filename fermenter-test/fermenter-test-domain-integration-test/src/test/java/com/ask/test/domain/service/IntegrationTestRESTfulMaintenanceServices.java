@@ -1,11 +1,14 @@
 package com.ask.test.domain.service;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.io.File;
 import java.net.URL;
 
 import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.extension.rest.client.ArquillianResteasyResource;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.resteasy.client.ClientRequest;
@@ -18,6 +21,10 @@ import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.jboss.shrinkwrap.resolver.api.maven.MavenResolverSystem;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.tigris.atlas.service.ValueServiceResponse;
+
+import com.ask.test.domain.service.ejb.SimpleDomainMaintenanceService;
+import com.ask.test.domain.transfer.SimpleDomain;
 
 @RunWith(Arquillian.class)
 public class IntegrationTestRESTfulMaintenanceServices {
@@ -42,14 +49,21 @@ public class IntegrationTestRESTfulMaintenanceServices {
 		return war;
 	}
 	
+//	@Test
+//	public void testDomainMaintenanceGet() throws Exception {	
+//		URL custom = new URL("http","localhost", 8080, "/maintenance-service-integration-test");
+//		ClientRequest request = new ClientRequest(new URL(custom, "/rest/SimpleDomain/" + "4028818c446ca29d01446ca2a0c10005").toExternalForm());
+//		ClientResponse<String> response = request.get(String.class);
+//		int responseCode = response.getStatus();
+//		assertEquals(200, responseCode);
+//		
+//	}
+	
 	@Test
-	public void testDomainMaintenanceGet() throws Exception {	
-		URL custom = new URL("http","localhost", 8080, "/maintenance-service-integration-test");
-		ClientRequest request = new ClientRequest(new URL(custom, "/rest/SimpleDomain/" + "4028818c446ca29d01446ca2a0c10005").toExternalForm());
-		ClientResponse<String> response = request.get(String.class);
-		int responseCode = response.getStatus();
-		assertEquals(200, responseCode);
-		
+	public void testDomainMaintenanceGet(@ArquillianResteasyResource SimpleDomainMaintenanceService simpleDomainService) {
+		ValueServiceResponse<SimpleDomain> result = simpleDomainService.findByPrimaryKey("BAD_PK");
+		assertNotNull(result);
+		assertNull(result.getValue());
 	}
 	
 }

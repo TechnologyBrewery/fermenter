@@ -48,6 +48,21 @@ public class ${entity.name}MaintenanceServiceBean implements ${entity.name}Maint
 	private SessionContext sessionContext;
 	
 	/**
+	 * {@inheritDoc}
+	 */
+	public ValueServiceResponse<${entity.name}> saveOrUpdate(#foreach($id in $entity.idFields)${id.javaType} ${id.name}#end, ${entity.name} entity) {
+		if ((#foreach($id in $entity.idFields)${id.name}#end != null) && (entity != null)) {
+			//make sure whatever is being saved is has the passed pk value:
+			${entity.name}PK pk = entity.get${entity.name}PK();
+			pk.set#foreach($id in $entity.idFields)${id.capitalizedName}#end(#foreach($id in $entity.idFields)${id.name}#end);
+			entity.setKey(pk);
+		}
+		
+		return saveOrUpdate(entity);
+		
+	}
+	
+	/**
 	 *{@inheritDoc}
 	 */
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)

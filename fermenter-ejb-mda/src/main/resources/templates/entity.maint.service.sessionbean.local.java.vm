@@ -8,21 +8,35 @@ import ${basePackage}.transfer.${entity.name}PK;
 
 import javax.ejb.Local;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 
 /**
- * Local interface for the ${entity.name}Maintenance service.
+ * Local interface for the ${entity.name}Maintenance service.  This interface defines a the contract needed to 
+ * create, retrieve, update, and delete a {@link ${entity.name}} instance remotely (e.g., http, RMI).
  *
  * Generated Code - DO NOT MODIFY
  */
 @Local
 @Path("/")
 public interface ${entityName}MaintenanceService extends Service {
+
+	/**
+	 * Save or update the passed instance.
+#foreach ($id in $entity.idFields)	 
+	 * @param ${id.name} The primary key value ${id.name} for the ${entity.name}
+#end	
+	 * @param entity The ${entity.name} instance to save
+	 * @return a service response containing the save entity and/or any encountered messages
+	 */
+	@PUT
+	@Path("/${entity.name}/#foreach($id in $entity.idFields){${id.name}}#end")
+	@Produces("text/json")
+	ValueServiceResponse<${entity.name}> saveOrUpdate(#foreach($id in $entity.idFields)@PathParam("${id.name}") ${id.javaType} ${id.name}#end, ${entity.name} entity);
 
 	/**
 	 * Save or update the passed instance.

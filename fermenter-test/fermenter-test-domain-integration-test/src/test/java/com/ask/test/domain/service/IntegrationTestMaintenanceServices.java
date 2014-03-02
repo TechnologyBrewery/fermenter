@@ -58,9 +58,6 @@ public class IntegrationTestMaintenanceServices {
 	
 	@EJB
 	private ValidationExampleMaintenanceService validationExampleMaintenanceService;
-	
-	//@ArquillianResource - NOT WORKING, SEE ARQ-1443
-	//private URL base;
 
 	@Deployment
 	public static Archive<?> createDeployment() {

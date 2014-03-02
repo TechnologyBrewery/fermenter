@@ -1,0 +1,65 @@
+package ${basePackage}.service.ejb;
+
+import org.tigris.atlas.service.Service;
+import org.tigris.atlas.service.ValueServiceResponse;
+
+import ${basePackage}.transfer.${entity.name};
+import ${basePackage}.transfer.${entity.name}PK;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+
+/**
+ * Interface for the ${entity.name}Maintenance service.  This interface defines a the contract needed to 
+ * access create, retrieve, update, and delete a {@link ${entity.name}} instance FROM THE CLIENT PERSPECTIVE.
+ * This interface may or may not differ from the one used on the server side, but is useful for creating 
+ * automatic proxies of jax-rs endpoints that won't be polluted by other methods we may not be exposing via
+ * jax-rs.
+ *
+ * Generated Code - DO NOT MODIFY
+ */
+@Path("/")
+public interface ${entityName}MaintenanceRestService extends Service {
+
+	/**
+	 * Save or update the passed instance.
+#foreach ($id in $entity.idFields)	 
+	 * @param ${id.name} The primary key value ${id.name} for the ${entity.name}
+#end	
+	 * @param entity The ${entity.name} instance to save
+	 * @return a service response containing the save entity and/or any encountered messages
+	 */
+	@PUT
+	@Path("/${entity.name}/#foreach($id in $entity.idFields){${id.name}}#end")
+	@Produces("text/json")
+	@Consumes("text/json")
+	ValueServiceResponse<${entity.name}> saveOrUpdate(#foreach($id in $entity.idFields)@PathParam("${id.name}") ${id.javaType} ${id.name}#end, ${entity.name} entity);
+	 
+	/**
+	 * Delete the ${entity.name}.
+	 *
+	 * @param entity ${entity.name} to delete
+	 * @return ${entity.name}ServiceResponse The deleted ${entity.name} container
+	 */
+	//@DELETE
+	//public ValueServiceResponse<${entity.name}> delete(${entity.name}PK pk);
+	
+	/**
+	 * Find the ${entity.name} by primary key fields.
+	 *
+#foreach ($id in $entity.idFields)	 
+	 * @param ${id.name} The primary key value ${id.name} for the ${entity.name}
+#end	 
+	 * @return ${entity.name}ServiceResponse The retrieved ${entity.name} container
+	 */
+	@GET
+	@Path("/${entity.name}/#foreach($id in $entity.idFields){${id.name}}#end")
+	@Produces("text/json")
+	public ValueServiceResponse<${entity.name}> findByPrimaryKey(#foreach($id in $entity.idFields)@PathParam("${id.name}") ${id.javaType} ${id.name}#end);	
+
+}

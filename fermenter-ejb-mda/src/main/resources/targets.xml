@@ -38,6 +38,12 @@
 		    templateName="templates/entity.maint.service.sessionbean.local.java.vm"
 		    outputFile="${basePackage}/service/ejb/${entityName}MaintenanceService.java"
 		    overwritable="true"/>
+		    
+	<target name="entityMaintenanceServiceJaxRs"
+		    generator="org.tigris.atlas.mda.generator.entity.EntityJavaGenerator"
+		    templateName="templates/entity.maint.service.sessionbean.jax.rs.client.java.vm"
+		    outputFile="${basePackage}/service/ejb/${entityName}MaintenanceRestService.java"
+		    overwritable="true"/>
 
 	<target name="entityMaintenanceServiceBean"
 		    generator="org.tigris.atlas.mda.generator.entity.EntityJavaGenerator"

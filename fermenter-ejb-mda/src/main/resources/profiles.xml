@@ -26,6 +26,7 @@
 
 	<profile name="java-entity-maintenance-session-beans-service-only" extends="core-ejb">
 		<target name="entityMaintenanceServiceLocal"/>
+		<target name="entityMaintenanceServiceJaxRs"/>
 		<target name="entityMaintenanceServiceBean"/>
 	</profile>
 

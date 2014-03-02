@@ -16,7 +16,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 /**
- * Local interface for the ${entity.name}Maintenance service.  This interface defines a the contract needed to 
+ * Interface for the ${entity.name}Maintenance service.  This interface defines a the contract needed to 
  * create, retrieve, update, and delete a {@link ${entity.name}} instance remotely (e.g., http, RMI).
  *
  * Generated Code - DO NOT MODIFY

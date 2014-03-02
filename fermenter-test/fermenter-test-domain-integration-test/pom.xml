@@ -84,6 +84,12 @@
 			<version>${resteasy.version}</version>
 			<scope>test</scope>
 		</dependency>	
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jackson-provider</artifactId>
+			<version>${resteasy.version}</version>
+			<scope>test</scope>
+		</dependency>		
   	</dependencies>
 
 </project>

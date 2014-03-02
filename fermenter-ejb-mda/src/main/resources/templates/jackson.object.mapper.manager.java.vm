@@ -1,9 +1,5 @@
 package ${prefix}.transfer.json;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.inject.Produces;
-import javax.inject.Singleton;
-
 import org.codehaus.jackson.Version;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.module.SimpleModule;
@@ -21,23 +17,25 @@ import ${prefix}.transfer.*;
 /**
  * Manages and customizes the Jackson {@link ObjectMapper} instance for this project.
  */
-@Singleton
-public class ObjectMapperManager {
+public final class ObjectMapperManager {
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(ObjectMapperManager.class);
 	
-	private ObjectMapper objectMapper;
+	private static ObjectMapper objectMapper;
 	
-	@PostConstruct
-	private void init() {
+	static {
 		objectMapper = new ObjectMapper();
 		configureObjectMapper();
+	}
+	
+	private ObjectMapperManager() {
+		//prevent instantiation
 	}
 	
 	/**
 	 * Adds in any custom modules desired for this project's {@link ObjectMapper}.
 	 */
-	private void configureObjectMapper() {
+	private static void configureObjectMapper() {
 		SimpleModule module = new SimpleModule("${groupId}:${artifactId}:${version}", new Version(1, 9, 2, ""));
 #foreach( $entity in $entities )		
 		module.setMixInAnnotation(${entity.name}.class, ${entity.name}MixIn.class);
@@ -59,8 +57,7 @@ public class ObjectMapperManager {
 	 * Returns the thread-safe, singleton instance of {@link ObjectMapper} for this project.
 	 * @return object mapper
 	 */
-	@Produces
-	public ObjectMapper getObjectMapper() {
+	public static ObjectMapper getObjectMapper() {
 		return objectMapper;
 	}
 	

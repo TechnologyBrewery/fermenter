@@ -41,6 +41,11 @@
 			<type>long</type>
 			<column>LONG1</column>
 		</field>
+		<field>
+			<name>anEnumeratedValue</name>
+			<type>SimpleDomainEnumeration</type>
+			<column>SIMPLE_DOMAIN_ENUM</column>
+		</field>
 	</fields>
 
 	<queries>

@@ -2,12 +2,6 @@
 <!DOCTYPE targets PUBLIC "-//FERMENTER//DTD TARGETS//EN" "https://bitbucket.org/askllc/fermenter/downloads/targets.dtd">
 
 <targets>
-	
-	<target name="enumerationHibernateUserTypeObjects"
-			generator="org.tigris.atlas.mda.generator.enumeration.EnumerationJavaGenerator"
-			templateName="templates/enumeration.hibernate.java.vm"
-			outputFile="${basePackage}/persist/hibernate/${enumerationName}UserType.java"
-			overwritable="true"/>
 		
 	<target name="dataAccessObjectHibernateImpls"
 			generator="org.tigris.atlas.mda.generator.entity.EntityJavaGenerator"

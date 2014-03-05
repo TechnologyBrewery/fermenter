@@ -1,13 +1,14 @@
 package com.ask.test.domain.service;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import static com.ask.test.domain.service.TestUtils.assertNoErrorMessages;
+
 import java.io.File;
 import java.net.URL;
-import java.util.Date;
 
-import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.extension.rest.client.ArquillianResteasyResource;
@@ -29,24 +30,21 @@ import org.tigris.atlas.service.ValueServiceResponse;
 import com.ask.test.domain.service.ejb.SimpleDomainMaintenanceRestService;
 import com.ask.test.domain.service.rest.JacksonObjectMapperResteasyProvider;
 import com.ask.test.domain.transfer.SimpleDomain;
-import com.ask.test.domain.transfer.TransferObjectFactory;
 
 @RunWith(Arquillian.class)
 public class IntegrationTestRESTfulMaintenanceServices {
 	
-	//TODO: figure out how to make this use the current project version instead of a hardcoded value:
-	private static final String DOMAIN_GROUPID_ARTIFACTID_VERSION = "com.ask.fermenter:fermenter-test-domain:1-SNAPSHOT";
-	
 	@ArquillianResource
 	private URL base;
 	
-	@Deployment (testable = false)
-	public static Archive<?> createDeployment() {
+	@Deployment(testable=false)
+	protected static Archive<?> createDeployment() {
 		MavenResolverSystem mavenResolver = Maven.resolver();
-		File[] mavenDependencies = mavenResolver.resolve(DOMAIN_GROUPID_ARTIFACTID_VERSION).withTransitivity().asFile();
+		File[] mavenDependencies = mavenResolver.resolve(TestUtils.DOMAIN_GROUPID_ARTIFACTID_VERSION).withTransitivity().asFile();		
 		
 		WebArchive war = ShrinkWrap.create(WebArchive.class, "maintenance-service-integration-test.war");
 		war.addAsLibraries(mavenDependencies);
+		war.addClass(TestUtils.class);
 		war.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
 		war.addAsWebInfResource(new File("./src/test/resources/web.xml"));
 		war.addAsWebInfResource(new File("./src/test/resources/jboss-deployment-structure.xml"));
@@ -75,22 +73,60 @@ public class IntegrationTestRESTfulMaintenanceServices {
 	
 	@Test
 	public void testDomainMaintenanceCreate(@ArquillianResteasyResource SimpleDomainMaintenanceRestService simpleDomainService) {
-		SimpleDomain domain = TransferObjectFactory.createSimpleDomain();
-		domain.setName(RandomStringUtils.randomAlphanumeric(20));
-		domain.setTheDate1(new Date());
-		domain.setTheLong1(RandomUtils.nextLong());
-		domain.setType(RandomStringUtils.randomAlphabetic(5));
+		SimpleDomain domain = TestUtils.createRandomSimpleDomain();
 		
 		ValueServiceResponse<SimpleDomain> result = simpleDomainService.saveOrUpdate(domain);
-		assertNotNull(result);
+		assertNoErrorMessages(result);
 		SimpleDomain savedDomain = result.getValue();
 		assertNotNull(savedDomain);
 		String id = savedDomain.getId();
 		assertNotNull(id);
 		
 		ValueServiceResponse<SimpleDomain> foundResult = simpleDomainService.findByPrimaryKey(id);
-		assertNotNull(foundResult);
+		assertNoErrorMessages(foundResult);
 		assertNotNull(foundResult.getValue());
+		
+	}
+	
+	@Test
+	public void testDomainMaintenanceUpdate(@ArquillianResteasyResource SimpleDomainMaintenanceRestService simpleDomainService) {
+		SimpleDomain domain = TestUtils.createRandomSimpleDomain();
+		
+		ValueServiceResponse<SimpleDomain> result = simpleDomainService.saveOrUpdate(domain);
+		assertNotNull(result);
+		SimpleDomain savedDomain = result.getValue();
+		assertNotNull(savedDomain);
+		String id = savedDomain.getId();
+		String originalName = savedDomain.getName();
+		savedDomain.setName(RandomStringUtils.randomAlphabetic(3));	
+		
+		ValueServiceResponse<SimpleDomain> updateResult = simpleDomainService.saveOrUpdate(id, savedDomain);
+		assertNoErrorMessages(updateResult);
+		
+		ValueServiceResponse<SimpleDomain> foundResult = simpleDomainService.findByPrimaryKey(id);
+		assertNotNull(foundResult);
+		SimpleDomain refetchedUpdatedDomain = foundResult.getValue();
+		assertNotNull(refetchedUpdatedDomain);
+		assertFalse(originalName.equals(refetchedUpdatedDomain.getName()));
+		
+	}
+	
+	@Test
+	public void testDomainMaintenanceDelete(@ArquillianResteasyResource SimpleDomainMaintenanceRestService simpleDomainService) {
+		SimpleDomain domain = TestUtils.createRandomSimpleDomain();
+		
+		ValueServiceResponse<SimpleDomain> result = simpleDomainService.saveOrUpdate(domain);
+		assertNotNull(result);
+		SimpleDomain savedDomain = result.getValue();
+		assertNotNull(savedDomain);
+		String id = savedDomain.getId();
+		
+		ValueServiceResponse<SimpleDomain> deleteResult = simpleDomainService.delete(id);
+		assertNoErrorMessages(deleteResult);
+		
+		ValueServiceResponse<SimpleDomain> foundResult = simpleDomainService.findByPrimaryKey(id);
+		assertNotNull(foundResult);
+		assertNull(foundResult.getValue());
 		
 	}	
 	

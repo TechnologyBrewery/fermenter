@@ -1,18 +1,17 @@
 package com.ask.test.domain.service;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import static com.ask.test.domain.service.TestUtils.assertNoErrorMessages;
+
 import java.io.File;
-import java.util.Date;
 import java.util.Set;
 
 import javax.ejb.EJB;
 import javax.inject.Inject;
 
-import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -27,17 +26,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tigris.atlas.messages.Messages;
 import org.tigris.atlas.persist.hibernate.HibernateSessionFactoryManager;
 import org.tigris.atlas.service.ValueServiceResponse;
-import org.tigris.atlas.transfer.TransferObject;
 
 import com.ask.test.domain.persist.SimpleDomainDao;
 import com.ask.test.domain.service.ejb.SimpleDomainMaintenanceService;
 import com.ask.test.domain.service.ejb.ValidationExampleMaintenanceService;
 import com.ask.test.domain.transfer.SimpleDomain;
 import com.ask.test.domain.transfer.SimpleDomainPK;
-import com.ask.test.domain.transfer.TransferObjectFactory;
 import com.ask.test.domain.transfer.ValidationExample;
 import com.ask.test.domain.transfer.ValidationExampleChild;
 import com.ask.test.domain.transfer.ValidationExamplePK;
@@ -46,9 +42,6 @@ import com.ask.test.domain.transfer.ValidationExamplePK;
 public class IntegrationTestMaintenanceServices {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(IntegrationTestMaintenanceServices.class);
-	
-	//TODO: figure out how to make this use the current project version instead of a hardcoded value:
-	private static final String DOMAIN_GROUPID_ARTIFACTID_VERSION = "com.ask.fermenter:fermenter-test-domain:1-SNAPSHOT";
 	
 	@Inject
 	private SimpleDomainDao simpleDomainDao;
@@ -60,12 +53,13 @@ public class IntegrationTestMaintenanceServices {
 	private ValidationExampleMaintenanceService validationExampleMaintenanceService;
 
 	@Deployment
-	public static Archive<?> createDeployment() {
+	protected static Archive<?> createDeployment() {
 		MavenResolverSystem mavenResolver = Maven.resolver();
-		File[] mavenDependencies = mavenResolver.resolve(DOMAIN_GROUPID_ARTIFACTID_VERSION).withTransitivity().asFile();
+		File[] mavenDependencies = mavenResolver.resolve(TestUtils.DOMAIN_GROUPID_ARTIFACTID_VERSION).withTransitivity().asFile();
 		
 		WebArchive war = ShrinkWrap.create(WebArchive.class, "maintenance-service-integration-test.war");
 		war.addAsLibraries(mavenDependencies);
+		war.addClass(TestUtils.class);
 		war.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
 		war.addAsWebInfResource(new File("./src/test/resources/web.xml"));
 		war.addAsWebInfResource(new File("./src/test/resources/jboss-deployment-structure.xml"));
@@ -92,7 +86,7 @@ public class IntegrationTestMaintenanceServices {
 	
 	@Test
 	public void testDomainMaintenanceCreateWithoutChildren() {
-		SimpleDomain domain = createRandomSimpleDomain();
+		SimpleDomain domain = TestUtils.createRandomSimpleDomain();
 		
 		ValueServiceResponse<SimpleDomain> responseDomainWrapper = simpleDomainMaintenaceService.saveOrUpdate(domain);
 		assertNotNull(responseDomainWrapper);
@@ -108,7 +102,7 @@ public class IntegrationTestMaintenanceServices {
 	
 	@Test
 	public void testDomainMaintenanceRetrieveWithoutChildren() {
-		SimpleDomain domain = createRandomSimpleDomain();
+		SimpleDomain domain = TestUtils.createRandomSimpleDomain();
 		
 		ValueServiceResponse<SimpleDomain> responseDomainWrapper = simpleDomainMaintenaceService.saveOrUpdate(domain);
 		
@@ -122,7 +116,7 @@ public class IntegrationTestMaintenanceServices {
 	
 	@Test
 	public void testDomainMaintenanceUpateWithoutChildren() {
-		SimpleDomain domain = createRandomSimpleDomain();
+		SimpleDomain domain = TestUtils.createRandomSimpleDomain();
 		
 		ValueServiceResponse<SimpleDomain> responseDomainWrapper = simpleDomainMaintenaceService.saveOrUpdate(domain);
 		
@@ -145,7 +139,7 @@ public class IntegrationTestMaintenanceServices {
 	
 	@Test
 	public void testDomainMaintenanceDeleteWithoutChildren() {
-		SimpleDomain domain = createRandomSimpleDomain();
+		SimpleDomain domain = TestUtils.createRandomSimpleDomain();
 		
 		ValueServiceResponse<SimpleDomain> responseDomainWrapper = simpleDomainMaintenaceService.saveOrUpdate(domain);
 		
@@ -159,9 +153,9 @@ public class IntegrationTestMaintenanceServices {
 	
 	@Test
 	public void testDomainMaintenanceCreateWith1MChildren() {
-		ValidationExample parent = createRandomValidationExample();
-		ValidationExampleChild child1 = createRandomValidationExampleChild();
-		ValidationExampleChild child2 = createRandomValidationExampleChild();
+		ValidationExample parent = TestUtils.createRandomValidationExample();
+		ValidationExampleChild child1 = TestUtils.createRandomValidationExampleChild();
+		ValidationExampleChild child2 = TestUtils.createRandomValidationExampleChild();
 		parent.addValidationExampleChild(child1);
 		parent.addValidationExampleChild(child2);
 		
@@ -174,9 +168,9 @@ public class IntegrationTestMaintenanceServices {
 	
 	@Test
 	public void testDomainMaintenanceRetrieveWith1MChildren() {
-		ValidationExample parent = createRandomValidationExample();
-		ValidationExampleChild child1 = createRandomValidationExampleChild();
-		ValidationExampleChild child2 = createRandomValidationExampleChild();
+		ValidationExample parent = TestUtils.createRandomValidationExample();
+		ValidationExampleChild child1 = TestUtils.createRandomValidationExampleChild();
+		ValidationExampleChild child2 = TestUtils.createRandomValidationExampleChild();
 		parent.addValidationExampleChild(child1);
 		parent.addValidationExampleChild(child2);
 		
@@ -190,8 +184,8 @@ public class IntegrationTestMaintenanceServices {
 	
 	@Test
 	public void testDomainMaintenanceUpdateWith1MChildren() {
-		ValidationExample parent = createRandomValidationExample();
-		ValidationExampleChild child = createRandomValidationExampleChild();
+		ValidationExample parent = TestUtils.createRandomValidationExample();
+		ValidationExampleChild child = TestUtils.createRandomValidationExampleChild();
 		parent.addValidationExampleChild(child);
 		
 		ValueServiceResponse<ValidationExample> response = validationExampleMaintenanceService.saveOrUpdate(parent);
@@ -215,9 +209,9 @@ public class IntegrationTestMaintenanceServices {
 	
 	@Test
 	public void testDomainMaintenanceDeleteWith1MChildren() {
-		ValidationExample parent = createRandomValidationExample();
-		ValidationExampleChild child1 = createRandomValidationExampleChild();
-		ValidationExampleChild child2 = createRandomValidationExampleChild();
+		ValidationExample parent = TestUtils.createRandomValidationExample();
+		ValidationExampleChild child1 = TestUtils.createRandomValidationExampleChild();
+		ValidationExampleChild child2 = TestUtils.createRandomValidationExampleChild();
 		parent.addValidationExampleChild(child1);
 		parent.addValidationExampleChild(child2);
 		
@@ -230,42 +224,6 @@ public class IntegrationTestMaintenanceServices {
 		ValueServiceResponse<ValidationExample> findResponse 
 			= validationExampleMaintenanceService.findByPrimaryKey(responseParentPk);
 		assertNull(findResponse.getValue());
-		
-	}
-	
-	protected SimpleDomain createRandomSimpleDomain() {
-		SimpleDomain domain = TransferObjectFactory.createSimpleDomain();
-		domain.setName(RandomStringUtils.randomAlphanumeric(25));
-		domain.setTheDate1(new Date(RandomUtils.nextLong()));
-		domain.setTheLong1(RandomUtils.nextLong());
-		domain.setType(RandomStringUtils.random(5));
-		return domain;
-	}
-	
-	protected ValidationExample createRandomValidationExample() {
-		ValidationExample domain = TransferObjectFactory.createValidationExample();
-		domain.setRequiredField(RandomStringUtils.randomAlphabetic(20));
-		return domain;
-	}
-	
-	protected ValidationExampleChild createRandomValidationExampleChild() {
-		ValidationExampleChild domain = TransferObjectFactory.createValidationExampleChild();
-		domain.setRequiredField(RandomStringUtils.randomAlphabetic(20));
-		return domain;
-	}
-	
-	protected void assertNoErrorMessages(ValueServiceResponse<? extends TransferObject> response) {
-		if (response != null) {
-			Messages messages = response.getMessages();
-			assertFalse(messages.hasErrorMessages());
-			
-			TransferObject to = response.getValue();
-			if (to != null) {
-				Messages toMessages = to.getMessages();
-				assertFalse(toMessages.hasErrorMessages());
-			}
-			
-		}
 		
 	}
 	

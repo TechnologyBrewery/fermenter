@@ -98,12 +98,21 @@ public class ${entity.name}MaintenanceServiceBean implements ${entity.name}Maint
 		
 		return response;
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public ValueServiceResponse<${entity.name}> delete(#foreach($id in $entity.idFields)${id.javaType} ${id.name}#end) {
+		${entity.name}PK pk = TransferObjectFactory.create${entity.name}PK();
+#foreach($id in $entity.idFields)
+		pk.set${id.capitalizedName}(${id.name});
+#end
+		return delete(pk);
+		
+	}	
 	 
 	/**
-	 * Delete the ${entity.name}.
-	 *
-	 * @param entity ${entity.name} to delete
-	 * @return ${entity.name}ServiceResponse The deleted ${entity.name} container
+	 * {@inheritDoc}
 	 */
 	public ValueServiceResponse<${entity.name}> delete(${entity.name}PK pk) {
 		LOGGER.debug("Executing ${entity.name}.delete");

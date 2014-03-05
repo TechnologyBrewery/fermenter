@@ -53,12 +53,16 @@ public interface ${entityName}MaintenanceRestService extends Service {
 	 
 	/**
 	 * Delete the ${entity.name}.
-	 *
-	 * @param entity ${entity.name} to delete
+	 *  
+#foreach ($id in $entity.idFields)	 
+	 * @param ${id.name} The primary key value ${id.name} for the ${entity.name}
+#end
 	 * @return ${entity.name}ServiceResponse The deleted ${entity.name} container
 	 */
-	//@DELETE
-	//public ValueServiceResponse<${entity.name}> delete(${entity.name}PK pk);
+	@DELETE
+	@Path("/${entity.name}/#foreach($id in $entity.idFields){${id.name}}#end")	
+	@Produces("text/json")
+	public ValueServiceResponse<${entity.name}> delete(#foreach($id in $entity.idFields)@PathParam("${id.name}") ${id.javaType} ${id.name}#end);
 	
 	/**
 	 * Find the ${entity.name} by primary key fields.

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE enumeration PUBLIC "-//FERMENTER//DTD ENUMERATION//EN" "https://bitbucket.org/askllc/fermenter/downloads/enumeration.dtd">
+
+<enumeration>
+	<name>SimpleDomainEnumeration</name>
+	<type>named</type>
+	<enums>
+		<enum>
+			<name>FIRST</name>
+		</enum>
+		<enum>
+			<name>SECOND</name>
+		</enum>
+		<enum>
+			<name>THIRD</name>
+		</enum>
+		<enum>
+			<name>FOURTH</name>
+		</enum>
+	</enums>
+</enumeration>

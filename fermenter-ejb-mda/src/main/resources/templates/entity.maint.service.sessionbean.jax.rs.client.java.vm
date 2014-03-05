@@ -15,7 +15,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 /**
- * Interface for the ${entity.name}Maintenance service.  This interface defines a the contract needed to 
+ * Interface for the ${entity.name}Maintenance service.  This interface defines the contract needed to 
  * access create, retrieve, update, and delete a {@link ${entity.name}} instance FROM THE CLIENT PERSPECTIVE.
  * This interface may or may not differ from the one used on the server side, but is useful for creating 
  * automatic proxies of jax-rs endpoints that won't be polluted by other methods we may not be exposing via

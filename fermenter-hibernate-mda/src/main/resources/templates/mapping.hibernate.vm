@@ -39,15 +39,14 @@
 #if ($useOptimisticLocking)	 
 		<version column="OPLOCK" name="oplock"/>	
 #end
-#foreach( $field in $fields )	
-
-#if ($field.isEnumerationType() && $field.isExternal())
-		<property	name="${field.name}"
-					access="field"
-#else
-		<property 	name="${field.name}"
-#end
-#if ($field.isSimpleType())
+#foreach( $field in $fields )
+		<property 	name="${field.name}"	
+#if ($field.isEnumerationType())
+		            column="${field.column}">
+			<type name="org.hibernate.type.EnumType">
+      			<param name="enumClass">${prefix}.enumeration.${field.type}</param>
+    		</type>
+#elseif ($field.isSimpleType())
 #if (${field.javaType} == 'Date')
 					type="date"
 #elseif (${field.javaType} == 'Timestamp')
@@ -55,44 +54,29 @@
 #else
 					type="${field.type}"
 #end
-#elseif ($field.isEnumerationType())
-#if ($field.isExternal())
-#if (${field.enumeration.type} == 'named')
-					type="string"
-#else
-					type="integer"
-#end
-#else
-					type="${prefix}.persist.hibernate.${field.type}UserType"
-#end
-#end									
 #if (${field.isRequired()})
 					not-null="true"
 #end					
 #if(${field.hasMaxLength()})
 					length="${field.maxLength}"
 #end
-					column="${field.column}"/>
+					column="${field.column}">
+#end
+		</property>
 #end
 #foreach( $composite in $composites )
 
 		<component access="field" name="${composite.name}Composite" class="${composite.type}BOComposite">
 #foreach( $field in $composite.fields )
 			<property 	name="${field.name}" 
-						column="${field.column}" 
-#if ($field.isSimpleType())		
-						type="${field.type}"/>
-#elseif ($field.isEnumerationType())
-#if ($field.isExternal())
-#if (${field.enumeration.type} == 'named')
-						type="string"/>
-#else
-						type="integer"/>
+						column="${field.column}"#if ($field.isEnumerationType()) >
+				<type name="org.hibernate.type.EnumType">
+      				<param name="enumClass">${prefix}.enumeration.${field.type}</param>
+    			</type>
+#elseif ($field.isSimpleType())		
+						type="${field.type}">
 #end
-#else
-						type="${prefix}.persist.hibernate.${field.type}UserType"/>
-#end
-#end
+			</property>
 #end
 		</component>	
 #end

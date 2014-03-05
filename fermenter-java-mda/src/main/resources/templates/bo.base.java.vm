@@ -304,11 +304,6 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 #if (${field.hasFormat()})
 		Validations.validateFormat(value, ${field.uppercasedName}_VALID_PATTERNS, "${field.name}", "${field.label}", getMessages());
 #end
-#elseif( ${field.isEnumerationType()} )
-		
-		//validate a valid enumeration value:
-		String enumName = value.getName();
-		Validations.validateEnumeration(value, ${field.javaType}.getEnum(enumName), "${field.name}", "${field.label}", getMessages());
 #end
 	}	
 	

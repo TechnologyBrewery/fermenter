@@ -6,7 +6,7 @@ import $import;
 
 import ${basePackage}.transfer.${entity.name};
 import ${basePackage}.transfer.${entity.name}PK;
-import com.ask.test.domain.transfer.TransferObjectFactory;
+import ${basePackage}.transfer.TransferObjectFactory;
 import ${basePackage}.bizobj.BusinessObjectFactory;
 import ${basePackage}.bizobj.${entity.name}Assembler;
 import ${basePackage}.bizobj.${entity.name}BO;

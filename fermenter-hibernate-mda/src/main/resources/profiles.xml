@@ -3,7 +3,6 @@
 
 <profiles>
 	<profile name="java-hibernate">
-		<target name="enumerationHibernateUserTypeObjects"/>
 		<target name="dataAccessObjectHibernateImpls"/>
 		<target name="ddlAntTaskGenerator"/>
 		<target name="hibernateMappings"/>

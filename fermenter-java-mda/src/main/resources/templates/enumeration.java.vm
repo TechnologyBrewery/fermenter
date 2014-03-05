@@ -1,112 +1,47 @@
 package ${basePackage}.enumeration;
 
-#foreach ($import in $imports )
-import ${import};
-#end
-
-import java.util.*;
-#if ($enumeration.isNamed())
-import org.apache.commons.lang.enums.Enum;
-#else 
-import org.apache.commons.lang.enums.ValuedEnum;
-#end
+import org.apache.commons.lang.StringUtils;
 
 /**
- * Enumeration ${enumeration.name} 
- *
-#if ($enumeration.isNamed())
- * These instances are NOT safe for a switch statement.  Use a valued enumeration if you 
- * desire this behavior
-#else 
- * These instances ARE safe for use in a switch statement.
-#end
+ * Enumeration ${enumeration.name}.
  * 
  * Generated Code - DO NOT MODIFY
- * 		- Group Id: ${groupId}
- * 		- Artifact Id: ${artifactId}
- * 		- Version: ${version}
- * 		- Enumeration file name: ${enumeration.name}
- */
-public class ${enumeration.name} 
-#if ($enumeration.isNamed()) 
-	extends Enum {
-#else 
-	extends ValuedEnum { 
-#end
+ *
+ */ 
+public enum ${enumeration.name} {
 
 #foreach ($enum in $enumeration.enumList)
-	public static final String ${enum.uppercasedName} = "${enum.name}";
+	#if($enumeration.isNamed() == false)		
+	${enum.uppercasedName}() {
+		@Override public int getValue() { 
+			return ${enum.value};
+		}
+	}#if ($foreach.isLast());#else,#end
+	#else
+	${enum.uppercasedName}#if ($foreach.isLast());#else,#end
+	#end 
 #end
 
-#if ($enumeration.isNamed())
-#foreach ($enum in $enumeration.enumList)	
-	private static final ${enumeration.name} ${enum.uppercasedName}_INSTANCE = new ${enumeration.name}(${enum.uppercasedName});
-#end
-#else
-#foreach ($enum in $enumeration.enumList)
-	private static final int ${enum.uppercasedName}_VALUE = ${enum.value};
-#end
-#foreach ($enum in $enumeration.enumList)
-	private static final ${enumeration.name} ${enum.uppercasedName}_INSTANCE = new ${enumeration.name}(${enum.uppercasedName}, ${enum.uppercasedName}_VALUE);
-#end
-#end	
-#if ($enumeration.isNamed())
-
-	private ${enumeration.name}(String enumValue) {
-		super(enumValue);
-	}	
-#else
-
-	private ${enumeration.name}(String enumValue, int value) {
-		super(enumValue, value);
-	}	
-#end
-	
-   	/**
-   	 * Gets the enumeration instance for the given name
-   	 * @param name The name of the enumeration to retrieve
-   	 * @return An <tt>${enumeration.name}</tt> instance for the passed name
-   	 * or null if that name is not known to this enumeration
-   	 */
-   	public static ${enumeration.name} getEnum(String name) {
-     	return (${enumeration.name}) getEnum(${enumeration.name}.class, name);
-   	}
- 
 #if ($enumeration.isNamed() == false)  
    	/**
-   	 * Gets the enumeration instance for the given value
-   	 * @param value The value of the enumeration to retrieve
-   	 * @return An <tt>${enumeration.name}</tt> instance for the passed value
-   	 * or null if that value is not known to this enumeration
+   	 * Gets the underlying value associated with this ${enumeration.name} enum instance.
+   	 * @return underlying value associated with this ${enumeration.name} enum instance.
    	 */
-   	public static ${enumeration.name} getEnum(int value) {
-     	return (${enumeration.name}) getEnum(${enumeration.name}.class, value);
-   	}
+   	public abstract int getValue();
+   	
 #end
+
+    /**
+     * Provides a case-insensitive version of valueOf(), which can be helpful when the 
+     * enumeration value is a string coming from another technology (e.g., json transported
+     * from a non-Java user interface).
+     * @param value The value that should represent an enumerated value
+     * @return The enumerated value that matches the value
+     */
+    public static ${enumeration.name} valueOfIgnoresCase(String value) {
+    	String upperCaseValue = (StringUtils.isNotBlank(value)) ? value.toUpperCase().replace(" ", "_") : null;
+    	return (upperCaseValue != null) ? ${enumeration.name}.valueOf(upperCaseValue) : null;
+    	
+    }
 	
-	/**
-	 * Gets a <tt>Map</tt> of the enumeration instances of this class
-	 * @return A <tt>Map</tt> keyed by name with <tt>${enumeration.name}</tt>
-	 * instances as the value
-	 */
-   	public static Map getEnumMap() {
-     	return getEnumMap(${enumeration.name}.class);
-   	}
- 
- 	/**
-	 * Gets a <tt>List</tt> of the enumeration instances of this class
-	 * @return A <tt>List</tt> of <tt>${enumeration.name}</tt> instances
-	 */
-   	public static List getEnumList() {
-     	return getEnumList(${enumeration.name}.class);
-   	}
- 	
- 	/**
-	 * Gets a <tt>Iterator</tt> of the enumeration instances of this class
-	 * @return A <tt>Iterator</tt> of <tt>${enumeration.name}</tt> instances
-	 */
-   	public static Iterator iterator() {
-     	return iterator(${enumeration.name}.class);
-   	}
-		 
 }

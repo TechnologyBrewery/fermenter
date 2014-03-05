@@ -7,9 +7,11 @@ import static org.junit.Assert.assertTrue;
 import java.util.Set;
 import java.util.UUID;
 
+import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 
+import com.ask.test.domain.enumeration.SimpleDomainEnumeration;
 import com.ask.test.domain.transfer.SimpleDomain;
 import com.ask.test.domain.transfer.TransferObjectFactory;
 import com.ask.test.domain.transfer.ValidationExample;
@@ -47,6 +49,22 @@ public class TestJsonDomainTransformations extends AbstractTestTransformations {
 		assertNotNull(rehydratedDomain);
 		assertEquals(name, rehydratedDomain.getName());
 	}
+	
+	@Test
+	public void testTransformationOfEnumerationField() throws Exception {
+		SimpleDomain domain = TransferObjectFactory.createSimpleDomain();
+		final SimpleDomainEnumeration enumValue = SimpleDomainEnumeration.values()[RandomUtils.nextInt(SimpleDomainEnumeration
+				.values().length)];
+		domain.setAnEnumeratedValue(enumValue);
+		
+		String json = objectMapper.writeValueAsString(domain);
+		assertNotNull(json);
+		assertTrue(json.contains(enumValue.toString()));
+		
+		SimpleDomain rehydratedDomain = objectMapper.readValue(json, SimpleDomain.class);
+		assertNotNull(rehydratedDomain);
+		assertEquals(enumValue, rehydratedDomain.getAnEnumeratedValue());
+	}	
 	
 	@Test
 	public void testTransformationOfChildren() throws Exception {

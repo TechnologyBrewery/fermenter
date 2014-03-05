@@ -10,6 +10,7 @@ import org.tigris.atlas.messages.Messages;
 import org.tigris.atlas.service.ValueServiceResponse;
 import org.tigris.atlas.transfer.TransferObject;
 
+import com.ask.test.domain.enumeration.SimpleDomainEnumeration;
 import com.ask.test.domain.transfer.SimpleDomain;
 import com.ask.test.domain.transfer.TransferObjectFactory;
 import com.ask.test.domain.transfer.ValidationExample;
@@ -32,6 +33,8 @@ public final class TestUtils {
 		domain.setTheDate1(new Date());
 		domain.setTheLong1(RandomUtils.nextLong());
 		domain.setType(RandomStringUtils.random(5));
+		domain.setAnEnumeratedValue(SimpleDomainEnumeration.values()[RandomUtils.nextInt(SimpleDomainEnumeration
+				.values().length)]);
 		return domain;
 	}
 

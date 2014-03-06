@@ -1,54 +1,22 @@
 package ${basePackage}.persist.hibernate;
 
-import java.util.Map;
-import java.util.HashMap;
+import ${basePackage}.persist.DaoFactoryInterface;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.tigris.atlas.persist.Dao;
-
-import ${basePackage}.persist.*;
-import ${basePackage}.transfer.*;
+#foreach( $entity in $entities )
+import ${basePackage}.persist.${entity.name}Dao;
+#end
+#foreach( $entity in $entities )
+import ${basePackage}.persist.hibernate.${entity.name}DaoImpl;
+#end
 
 public class DaoFactoryImpl implements DaoFactoryInterface {
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger( DaoFactoryImpl.class );
-	private static Map DAO_TYPES = null;
-	
-	private static final String PREFIX = "${basePackage}.persist.hibernate.";
-	
-	static {
-		DAO_TYPES = new HashMap( ${entities.size()} );
-#foreach( $entity in $entities )
-		DAO_TYPES.put( ${entity.name}.ENTITY, PREFIX + "${entity.name}DaoImpl" );
-#end
-	}
-	
-	public Dao createDao(String entityName) { 
-		Dao dao = null;
-		String type = (String) DAO_TYPES.get( entityName );
-		
-		try {
-			Class clazz = Class.forName( type );
-			dao = (Dao) clazz.newInstance();
-		} catch (InstantiationException e) {
-			LOGGER.error( "Unable to instantiate type: " + type );
-		} catch (IllegalAccessException e) {
-			LOGGER.error( "Unable to access type: " + type );
-		} catch (ClassNotFoundException e) {
-			LOGGER.error( "Unable to find class: " + type );
-		}
-		
-		return dao;
-	}
 	
 #foreach( $entity in $entities )
 	/**
 	 * Create a(n) ${entity.name} data access object instance.
 	 */
 	public ${entity.name}Dao create${entity.name}Dao() {
-		return (${entity.name}Dao) createDao( ${entity.name}.ENTITY );
+		return new ${entity.name}DaoImpl();
 	}
 
 #end

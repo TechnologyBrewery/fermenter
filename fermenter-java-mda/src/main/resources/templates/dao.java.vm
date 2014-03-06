@@ -10,10 +10,9 @@ import ${criteria.import};
 #end
 
 import org.tigris.atlas.persist.Dao;
-import org.tigris.atlas.validate.Validated;
 
-import ${prefix}.bizobj.${entityName}BO;
-import ${prefix}.transfer.${entityName}PK;
+import ${prefix}.bizobj.${entity.name}BO;
+import ${prefix}.transfer.${entity.name}PK;
 
 #foreach ($import in $imports )
 import ${import};
@@ -25,35 +24,12 @@ import ${import};
  * Generated Code - DO NOT MODIFY
  */
  
-public interface ${entityName}Dao extends Dao {
+public interface ${entity.name}Dao extends Dao<${entity.name}BO, ${entity.name}PK> {
 
 #foreach( $query in $queries )
 	public static final String ${query.name} = "${query.name}";
 #end
 
-	/**
-	 * Save the ${entityName}
-	 *
-	 * @param entity ${entityName} to save
-	 * @return ${entityName} The saved ${entityName}
-	 */
-	public ${entityName}BO save${entityName}(Validated validValues);
-	
-	/**
-	 * Delete the ${entityName}
-	 *
-	 * @param entity ${entityName} to delete
-	 * @return ${entityName} The deleted ${entityName}
-	 */
-	public ${entityName}BO delete(${entityName}PK pk);
-	
-	/**
-	 * Find the ${entityName} by primary key fields
-	 *
-	 * @param pk The primary key for the ${entityName}
-	 * @return ${entityName} The retrieved ${entityName}
-	 */
-	public ${entityName}BO findByPrimaryKey(${entityName}PK pk);
 #foreach( $query in $queries )	
 
 	/**
@@ -62,10 +38,10 @@ public interface ${entityName}Dao extends Dao {
 #foreach( $criterion in $query.criteria )
 	 * @param ${criterion.name} The ${criterion.name}
 #end
-	 * @return List of ${entityName}s
+	 * @return List of {@link ${entity.name}BO}s
 	 */	 
 #set( $numCriteria = $query.criteria.size() ) 
 #set( $currentNum  = 0 )
-	public List ${query.lowercaseName}(#foreach( $criterion in $query.criteria )${criterion.javaType} ${criterion.name} #set($currentNum = $currentNum+1)#if($currentNum<$numCriteria), #end#end);
+	public List<${entity.name}BO> ${query.lowercaseName}(#foreach( $criterion in $query.criteria )${criterion.javaType} ${criterion.name} #set($currentNum = $currentNum+1)#if($currentNum<$numCriteria), #end#end);
 #end
 }

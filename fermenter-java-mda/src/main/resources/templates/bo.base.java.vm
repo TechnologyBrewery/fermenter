@@ -9,7 +9,6 @@ import org.tigris.atlas.bizobj.*;
 #if( $references.size() > 0 )
 import org.tigris.atlas.persist.*;
 #end
-import org.tigris.atlas.validate.Validated;
 import org.tigris.atlas.validate.Validations;
 import org.tigris.atlas.messages.Messages;
 import org.tigris.atlas.messages.MessagesSet;
@@ -64,7 +63,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 
 	private static ${entityName}Assembler assembler = new ${entityName}Assembler();
 	
-	private static ${entityName}Dao dao = DaoFactory.create${entityName}Dao();
+	private static final ${entityName}Dao DAO = DaoFactory.create${entityName}Dao();
 
 #foreach ( $field in $fields )
 #if( ${field.isSimpleType()} )
@@ -130,18 +129,10 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
      * Returns the log instance for this class.
      * @return A {@link Logger} instance for {@link ${entityName}BO}
      */
-    protected Logger getLog() {
+    @Override 
+    protected Logger getLogger() {
     	return LOGGER;
     }
-
-	/**
-	 * Answer the logical entity name
-	 *
-	 * @return String - The logical entity name
-	 */
-	public String getEntityName() {
-		return ${entityName}.ENTITY;
-	}
 	
 	/**
 	 * Get the values for this ${entityName} entity
@@ -164,7 +155,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	 *
 	 * @return The ${idField.label}
 	 */
-	public ${idField.javaType} get${idField.capitalizedName}() {
+	protected ${idField.javaType} get${idField.capitalizedName}() {
 		return ${idField.name};
 	}
 	
@@ -173,7 +164,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	 *
 	 * @param The ${idField.label}
 	 */
-	public void set${idField.capitalizedName}(${idField.javaType} ${idField.name}) {
+	protected void set${idField.capitalizedName}(${idField.javaType} ${idField.name}) {
 #if ($idField.getJavaType().equals("String"))
 		${idField.name} = StringUtils.trimToNull(${idField.name});
 #end	
@@ -407,7 +398,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 			${relation.label}.set${entityName}(null);
 			
 		} else {
-			getLog().error("Could not remove ${relation.label} instance with key " + ${relation.label}.getKey());
+			getLogger().error("Could not remove ${relation.label} instance with key " + ${relation.label}.getKey());
 			
 		}
 	    
@@ -571,38 +562,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	}	
 #end
 #end
-#if( $parent == "null" )
 
-	/**
-	 * Save the state of the ${entityName}
-	 *
-	 */
-	public void save() {
-		validate();
-		
-		if( ! getAllMessages().hasErrorMessages() ) {
-			normalize();
-			
-			Validated validValues = new Validated() {
-			
-				public BusinessObject getValidValues() {
-					return ${entityName}BaseBO.this;
-				}
-			
-			};
-			
-			dao.save${entityName}(validValues);			
-		}
-	}
-	
-	/**
-	 * Delete the state of the ${entityName}
-	 *
-	 */
-	public void delete() {
-		dao.delete( getKey() );
-	}
-#end
 
 #if ( $idFields.size() > 0 )
 
@@ -737,13 +697,25 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	}
 	
 	/**
+     * {@inheritDoc}
+     */
+    @Override
+    protected ${entity.name}Dao getDao() {
+    	return ${entity.name}BO.getDefaultDao();
+    }
+     
+	protected static ${entity.name}Dao getDefaultDao() {
+		return DAO;
+	}
+	
+	/**
 	 * Find the ${entityName} by primary key fields.
 	 *
 	 * @param pk The primary key for the ${entityName}
 	 * @return ${entityName} The retrieved ${entityName}
 	 */
 	public static ${entityName}BO findByPrimaryKey(${entityName}PK pk) {
-		return dao.findByPrimaryKey(pk);
+		return ${entity.name}BO.getDefaultDao().findByPrimaryKey(pk);
 	}	
 		
 #foreach( $query in $queries )	
@@ -766,10 +738,10 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	 */	 
 #set( $numCriteria = $query.criteria.size() ) 
 #set( $currentNum  = 0 )
-	public static List<${entityName}> ${query.lowercaseName}(#foreach( $criterion in $query.criteria )${criterion.javaType} ${criterion.name} #set($currentNum = $currentNum+1)#if($currentNum<$numCriteria), #end#end) {
+	public static List<${entityName}BO> ${query.lowercaseName}(#foreach( $criterion in $query.criteria )${criterion.javaType} ${criterion.name} #set($currentNum = $currentNum+1)#if($currentNum<$numCriteria), #end#end) {
 #set( $numCriteria = $query.criteria.size() ) 
 #set( $currentNum  = 0 )
-		List<${entityName}> bos = dao.${query.lowercaseName}(#foreach( $criterion in $query.criteria )${criterion.name} #set($currentNum = $currentNum+1)#if($currentNum<$numCriteria), #end#end);
+		List<${entityName}BO> bos = ${entity.name}BO.getDefaultDao().${query.lowercaseName}(#foreach( $criterion in $query.criteria )${criterion.name} #set($currentNum = $currentNum+1)#if($currentNum<$numCriteria), #end#end);
 		return bos;
 	}
 #end

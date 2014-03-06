@@ -4,7 +4,7 @@
           "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 			
 <hibernate-mapping package="${prefix}.bizobj">
-	<class name="${entityName}BO" table="${table}" lazy="false" 
+	<class name="${entityName}BO" table="${table}" lazy="true" 
 	 	 
 #if ($useOptimisticLocking)	 	
 	 	optimistic-lock="version" select-before-update="true"
@@ -95,7 +95,7 @@
 
 		<many-to-one name	= "${reference.name}"
 					 class	= "${reference.type}BO"
-					 lazy="false">
+					 lazy="no-proxy">
 #foreach( $fk in $reference.foreignKeyFields )
 			<column	name = "${fk.column}"/>
 #end
@@ -122,7 +122,7 @@
 		<set name="${inverseRelation.label}s"
 			 cascade="all-delete-orphan"	
 			 inverse="true"
-			 lazy="false">			 	
+			 lazy="true">			 	
 #foreach( $idField in $inverseRelation.idFields )
 				<!-- with a self relation, someone has to be the parent -->
 				<key column="${idField.column}" not-null="false"/>
@@ -137,7 +137,7 @@
 		<set name="${relation.label}s"
 			 cascade="all-delete-orphan"	
 			 inverse="true"
-			 lazy="false">			 	
+			 lazy="true">			 	
 #foreach( $idField in $idFields )
 				<key column="${idField.column}" not-null="true"/>
 #end

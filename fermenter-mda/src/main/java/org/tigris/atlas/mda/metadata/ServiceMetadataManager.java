@@ -13,22 +13,14 @@ import org.tigris.atlas.mda.metadata.element.ServiceMetadata;
 
 /**
  * Responsible for maintaining the list of service metadata in the system.
- * 
- * @author sandrews
- *
  */
 class ServiceMetadataManager extends MetadataManager {
 	
-
-    private static ServiceMetadataManager INSTANCE = null;
+    private static ServiceMetadataManager INSTANCE = new ServiceMetadataManager();
 	
 	private static Log log = LogFactory.getLog( ServiceMetadataManager.class );
 	
 	public static ServiceMetadataManager getInstance() {
-		if ( INSTANCE == null ) {
-			INSTANCE = new ServiceMetadataManager();
-		}
-		
 		return INSTANCE;
 	}
 	
@@ -36,14 +28,12 @@ class ServiceMetadataManager extends MetadataManager {
 		return "services";
 	}
 
-
-
 	private ServiceMetadataManager() {
 		super();				
 	}
 	
 	/**
-	 * Answer the metadata for a specified service
+	 * Answer the metadata for a specified service.
 	 * 
 	 * @param serviceName
 	 * @return
@@ -53,13 +43,13 @@ class ServiceMetadataManager extends MetadataManager {
 	}
 	
 	/**
-	 * Returns the metadata element by name from any application that is loaded
+	 * Returns the metadata element by name from any application that is loaded.
 	 * @param name The name by which to retrieve
 	 * @return The <tt>Service</tt> instance for <tt>name</tt> or null
 	 */
 	public static Service getServiceMetadata(String name) {
-		Map map = getInstance().getCompleteMetadataMap();
-		return (map != null) ? (Service)map.get(name) : null;
+		Map<String, Service> map = getInstance().getCompleteMetadataMap();
+		return (map != null) ? map.get(name) : null;
 	}
 	
 	/**
@@ -67,7 +57,7 @@ class ServiceMetadataManager extends MetadataManager {
 	 * 
 	 * @return
 	 */
-	public static Map getServices(String applicationName) {
+	public static Map<String, Service> getServices(String applicationName) {
 		return getInstance().getMetadataMap( applicationName );
 	}
 	
@@ -77,7 +67,7 @@ class ServiceMetadataManager extends MetadataManager {
 	}
 
 	/**
-	 * Set up the parsing rules for the disgester
+	 * Set up the parsing rules for the disgester.
 	 * 
 	 * @param digester Used to parse the metadata file into metadata elements
 	 */

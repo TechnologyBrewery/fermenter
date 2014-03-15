@@ -15,14 +15,11 @@ import org.xml.sax.EntityResolver;
 import org.xml.sax.SAXException;
 
 /**
- * Responsible for maintaining mappings from logical type names to Java types
- * 
- * @author sandrews
- *
+ * Responsible for maintaining mappings from logical type names to Java types.
  */
 public class JavaTypeManager {
 
-	private Map  typeMap = new HashMap();
+	private Map<String, String>  typeMap = new HashMap<String, String>();
 	private EntityResolver resolver;
 
 	private static Log log = LogFactory.getLog( JavaTypeManager.class );
@@ -30,17 +27,9 @@ public class JavaTypeManager {
 	private static final String ENTITY_RESOLVER_PROPERTIES = "entityResolver.properties";
 
 	private static final String TYPES = "/types.xml";
-    private static JavaTypeManager INSTANCE = null;
-    
-    static {
-    	INSTANCE = new JavaTypeManager();
-    }
+    private static JavaTypeManager INSTANCE = new JavaTypeManager();
     	
-	public static JavaTypeManager getInstance() {
-		if ( INSTANCE == null ) {
-			throw new RuntimeException("Type Metadata has not been configured!");
-		}
-		
+	public static JavaTypeManager getInstance() {	
 		return INSTANCE;
 	}
 	
@@ -89,7 +78,7 @@ public class JavaTypeManager {
 		return digester;
 	}
 
-	protected Map getTypeMap() {
+	protected Map<String, String> getTypeMap() {
 		return typeMap;
 	}	
 	

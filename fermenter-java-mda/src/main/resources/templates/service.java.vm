@@ -1,6 +1,8 @@
 package ${basePackage}.service;
 
 import org.tigris.atlas.service.Service;
+import org.tigris.atlas.service.ValueServiceResponse;
+import org.tigris.atlas.service.VoidServiceResponse;
 #foreach( $import in $service.imports )
 import ${import};
 #end
@@ -9,7 +11,7 @@ import ${import};
 #if ($service.documentation)
  * ${service.documentation}
 #else
- * Application service interface for the ${service.name} service
+ * Application service interface for the ${service.name} service.
 #end
  *
  * Generated Code - DO NOT MODIFY
@@ -21,24 +23,34 @@ public interface ${service.name}Service extends Service {
 
 #foreach( $operation in $service.operations )
 	/**
-#if ($operation.documentation)
+	#if ($operation.documentation)
 	 * ${operation.documentation}
-#else
-	 * Execute the ${operation.name} operation
-#end
+	#else
+	 * Execute the ${operation.name} operation.
+	#end
 	 *
-#if( $operation.parameters.size() > 0 )
-#foreach( $parameter in $operation.parameters )
-#if( $parameter.documentation )
+	#if( $operation.parameters.size() > 0 )
+		#foreach( $parameter in $operation.parameters )
+			#if( $parameter.documentation )
 	 * @param ${parameter.name} ${parameter.documentation}
-#else
+			#else
 	 * @param ${parameter.name}  
-#end								
-#end								
-#end
-	 * @return ${operation.responseType}
+			#end
+		#end
+	#end
+	#if($operation.isReturnTypeCollection())	 
+	 * @return A {@link Collection>} of {@link ${operation.returnManyType}}
+	#elseif($operation.isReturnTypeEntity())	 
+	 * @return A instance of {@link ${operation.returnManyType}}
+	#end
 	 */
-	public ${operation.responseType} ${operation.lowercaseName}(${operation.signature});
+	#if($operation.isReturnTypeCollection())	 
+	ValueServiceResponse<Collection<${operation.returnManyType}>> ${operation.lowercaseName}(${operation.signature});
+	#elseif($operation.isReturnTypeEntity())	 
+	ValueServiceResponse<${operation.returnType}> ${operation.lowercaseName}(${operation.signature});
+	#else 
+	VoidServiceResponse ${operation.lowercaseName}(${operation.signature});
+	#end
 
 #end
 }

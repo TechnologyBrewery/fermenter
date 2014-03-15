@@ -8,6 +8,7 @@
 	<profile name="example-domain" extends="java-base">
 		<include name="java-hibernate"/>
 		<include name="java-entity-maintenance-session-beans-service-only"/>
+		<include name="java-service-session-beans"/>
 		<include name="jax-rs-activator"/>
 	</profile>
 	

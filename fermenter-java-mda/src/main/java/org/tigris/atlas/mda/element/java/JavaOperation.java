@@ -11,38 +11,27 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.tigris.atlas.mda.PackageManager;
 import org.tigris.atlas.mda.metadata.MetadataRepository;
 import org.tigris.atlas.mda.metadata.element.Entity;
 import org.tigris.atlas.mda.metadata.element.Operation;
 import org.tigris.atlas.mda.metadata.element.Parameter;
-import org.tigris.atlas.service.ServiceResponse;
 
 public class JavaOperation implements Operation {
 
-	public static final String PROPAGATION_REQUIRED = "PROPAGATION_REQUIRED";
-	public static final String PROPAGATION_REQUIRES_NEW = "PROPAGATION_REQUIRES_NEW";
-	public static final String PROPAGATION_MANDATORY = "PROPAGATION_MANDATORY";
-	public static final String PROPAGATION_NOT_SUPPORTED = "PROPAGATION_NOT_SUPPORTED";
-	public static final String PROPAGATION_SUPPORTS = "PROPAGATION_SUPPORTS";
-	public static final String PROPAGATION_NEVER= "PROPAGATION_NEVER";
+	public static final String PROPAGATION_REQUIRED = "REQUIRED";
+	public static final String PROPAGATION_REQUIRES_NEW = "REQUIRES_NEW";
+	public static final String PROPAGATION_MANDATORY = "MANDATORY";
+	public static final String PROPAGATION_NOT_SUPPORTED = "NOT_SUPPORTED";
+	public static final String PROPAGATION_SUPPORTS = "SUPPORTS";
+	public static final String PROPAGATION_NEVER= "NEVER";
 
 	private Operation operation;
-	private List decoratedParameterList;
-
-	private String responseType;
-	private String shortResponseType;
-	private String uncapitalizedResponseType;
-	private String responseImportType;
-	private String responseTypeBasePackage;
+	private List<Parameter> decoratedParameterList;
+	
 	private String signature;
 	private String parameterNames;
 	private Boolean isResponseTypeVoid;
 	private String uncapitalizedReturnType;
-
-	private static final String SERVICE_RESPONSE = "ServiceResponse";
-	private static final String COLLECTION_SERVICE_RESPONSE = "CollectionServiceResponse";
-	private static final String COLLECTION_SERVICE_RESPONSE_SHORT = "CSR";
 
 	private static Log log = LogFactory.getLog(JavaOperation.class);
 
@@ -54,14 +43,23 @@ public class JavaOperation implements Operation {
 		operation = operationToDecorate;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public String getName() {
 		return operation.getName();
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	public String getDocumentation() {
 		return operation.getDocumentation();
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
 	public String getReturnType() {
 		return operation.getReturnType();
 	}
@@ -78,22 +76,25 @@ public class JavaOperation implements Operation {
 		return uncapitalizedReturnType;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public String getLowercaseName() {
 		return operation.getLowercaseName();
 	}
 
-	public List getParameters() {
+	/**
+	 * {@inheritDoc}
+	 */
+	public List<Parameter> getParameters() {
 		if (decoratedParameterList == null) {
-			List operationParameterList = operation.getParameters();
+			List<Parameter> operationParameterList = operation.getParameters();
 			if ((operationParameterList == null) || (operationParameterList.size() == 0)) {
-				decoratedParameterList = Collections.EMPTY_LIST;
+				decoratedParameterList = Collections.emptyList();
 
 			} else {
-				Parameter p;
-				decoratedParameterList = new ArrayList((int)(operationParameterList.size()));
-				Iterator i = operationParameterList.iterator();
-				while (i.hasNext()) {
-					p = (Parameter)i.next();
+				decoratedParameterList = new ArrayList<Parameter>((int)(operationParameterList.size()));
+				for (Parameter p : operationParameterList) {
 					decoratedParameterList.add(new JavaParameter(p));
 
 				}
@@ -106,17 +107,16 @@ public class JavaOperation implements Operation {
 	
 	/**
 	 * Returns a list where the names of parameters have been modified
-	 * to have commas at the end to seperate them from the next parameter,
+	 * to have commas at the end to separate them from the next parameter,
 	 * as needed.  This functionality is aimed at allowing easy support for
 	 * constructs such as parameter-level annotations.
 	 * @return
 	 */
-	public List getParametersWithCommas() {
-		List parameterList = getParameters();
-		Iterator i = parameterList.iterator();
+	public List<Parameter> getParametersWithCommas() {
+		List<Parameter> parameterList = getParameters();
+		Iterator<Parameter> i = parameterList.iterator();
 		while (i.hasNext()) {
 			JavaParameter p = (JavaParameter)i.next();
-			String name = p.getName();
 			if (i.hasNext()) {
 				p.setSignatureSuffix(",");
 			}							
@@ -125,54 +125,11 @@ public class JavaOperation implements Operation {
 		return parameterList;
 	}
 
-
+	/**
+	 * {@inheritDoc}
+	 */
 	public String getReturnManyType() {
 		return operation.getReturnManyType();
-	}
-
-	//Java generation specific methods:
-
-	/**
-	 * @deprecated Use getResponseImportType() instead
-	 */
-	public String getJavaImportType() {
-		return getResponseImportType();
-	}
-
-	/**
-	 * @deprecated Use getResponseType() instead
-	 */
-	public String getJavaType() {
-		return getResponseType();
-	}
-
-	public String getResponseType() {
-		if (responseType == null) {
-			responseType = JavaElementUtils.getJavaType(MetadataRepository.getInstance().getApplicationName(), getResponseImportType());
-		}
-
-		return responseType;
-	}
-	
-	/**
-	 * This method is used to return an abbreviated class name in the event that class names become too long.  This 
-	 * case has been hit with XMLBeans, for example.
-	 * @return
-	 */
-	public String getShortResponseType() {
-		if (shortResponseType == null) {
-			if (isReturnTypeCollection()) {
-				StringBuffer sb = new StringBuffer(150);
-				sb.append(StringUtils.capitalize(getReturnManyType())).append(COLLECTION_SERVICE_RESPONSE_SHORT);
-				shortResponseType = sb.toString();
-				
-			} else {
-				shortResponseType = getResponseType();
-				
-			}
-		}
-		
-		return shortResponseType;
 	}
 	
 	public Boolean isResponseTypeVoid() {
@@ -183,49 +140,6 @@ public class JavaOperation implements Operation {
 
 		return isResponseTypeVoid;
 	}	
-	
-	public String getUncapitalizedResponseType() {
-		if (uncapitalizedResponseType == null) {
-			String rt = getResponseType();
-			uncapitalizedResponseType = (rt != null) ? StringUtils.uncapitalize(rt) : null;
-		}
-		return uncapitalizedResponseType;
-	}		
-
-	public String getResponseImportType() {
-		if (responseImportType == null) {
-			StringBuffer sb = new StringBuffer(150);
-			if (isReturnTypeCollection()) {
-				sb.append(StringUtils.capitalize(getReturnManyType())).append(COLLECTION_SERVICE_RESPONSE);
-				responseImportType = JavaElementUtils.createFullyQualifiedName(sb.toString(), ".service.");	
-			} else if (!isReturnTypeEntity()) {
-				sb.append(ServiceResponse.class.getPackage().getName());
-				sb.append(".");
-				String javaType = JavaElementUtils.getJavaType(MetadataRepository.getInstance().getApplicationName(), getReturnType());
-				sb.append(StringUtils.capitalize(javaType));
-				sb.append(SERVICE_RESPONSE);
-				responseImportType = sb.toString();
-			} else {
-				sb.append(StringUtils.capitalize(getReturnType())).append(SERVICE_RESPONSE);
-				responseImportType = JavaElementUtils.createFullyQualifiedName(sb.toString(), ".service.");
-			}
-		}
-		return responseImportType;
-	}
-	
-	public String getResponseTypeBasePackage() {
-		if (responseTypeBasePackage == null) {
-			String applicationName;
-			if (isResponseTypeCrossProject().booleanValue()) {
-				applicationName = ((Entity)MetadataRepository.getInstance().getAllEntities().get(getReturnType())).getApplicationName();
-			} else {
-				applicationName = MetadataRepository.getInstance().getApplicationName();
-			}			
-			String packageName = PackageManager.getBasePackage(applicationName);
-			responseTypeBasePackage = packageName;
-		}
-		return responseTypeBasePackage;
-	}
 
 	public String getSignature() {
 		if (signature == null) {
@@ -238,8 +152,8 @@ public class JavaOperation implements Operation {
 	public String getParameterNames() {
 		if (parameterNames == null) {
 			StringBuffer buff = new StringBuffer(100);
-			for (Iterator i = getParameters().iterator(); i.hasNext();) {
-				Parameter param = (Parameter) i.next();
+			for (Iterator<Parameter> i = getParameters().iterator(); i.hasNext();) {
+				Parameter param = i.next();
 				buff.append(param.getName());
 				if (i.hasNext()) {
 					buff.append(", ");
@@ -251,28 +165,25 @@ public class JavaOperation implements Operation {
 		return parameterNames;
 	}
 
-	public Set getParameterImports() {
-		Set importSet = new HashSet();
+	public Set<String> getParameterImports() {
+		Set<String> imports = new HashSet<String>();
 
 		JavaParameter parameter;
-		Collection parameterCollection = getParameters();
-		Iterator parameterIterator = parameterCollection.iterator();
-		while (parameterIterator.hasNext()) {
-			parameter = (JavaParameter)parameterIterator.next();
+		Collection<Parameter> parameterCollection = getParameters();
+		for (Parameter p : parameterCollection) {
+			parameter = (JavaParameter)p;
 			if (parameter.isMany()) {
-				importSet.add(Collection.class.getName());
+				imports.add(Collection.class.getName());
 			}
-			importSet.add(parameter.getImport());
+			imports.add(parameter.getImport());
 		}
 
-		return importSet;
+		return imports;
 	}
 
-	public Set getImports() {
-		Set importSet = new HashSet();
-
+	public Set<String> getImports() {
+		Set<String> importSet = new HashSet<String>();
 		importSet.addAll( getParameterImports() );
-		importSet.add(getResponseImportType());
 
 		return importSet;
 	}
@@ -298,6 +209,9 @@ public class JavaOperation implements Operation {
 		return !StringUtils.isBlank(getReturnManyType());
 	} 
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public String getViewType() {
 		return operation.getViewType();
 	}
@@ -320,6 +234,9 @@ public class JavaOperation implements Operation {
 		return new Boolean((Operation.VIEW_TYPE_BOTH.equals(viewType) || Operation.VIEW_TYPE_LOCAL.equals(viewType)));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public String getTransmissionMethod() {
 		return operation.getTransmissionMethod();
 	}
@@ -346,6 +263,9 @@ public class JavaOperation implements Operation {
 		return StringUtils.uncapitalize(getName());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public String getTransactionAttribute() {
 		String returnValue = null;
 		String txAttr = operation.getTransactionAttribute();

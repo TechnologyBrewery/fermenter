@@ -30,12 +30,12 @@ public abstract class AbstractFactoryGenerator extends AbstractGenerator {
 		vc.put("serviceNames", serviceNames);
 		
 		Collection<Service> services = MetadataRepository.getInstance().getAllServices(currentApplication).values();
-		Collection<Service> springServices = new HashSet<Service>();
+		Collection<Service> javaServices = new HashSet<Service>();
 		for (Iterator<Service> i = services.iterator(); i.hasNext();) {
 			Service service = (Service) i.next();
-			springServices.add(new JavaService(service));
+			javaServices.add(new JavaService(service));
 		}
-		vc.put("services", springServices);
+		vc.put("services", javaServices);
 		vc.put("baseJndiName", JavaElementUtils.getBaseJndiName(context.getBasePackage()));
 		
 		vc.put("pathPrefix", context.getBasePackageAsPath());

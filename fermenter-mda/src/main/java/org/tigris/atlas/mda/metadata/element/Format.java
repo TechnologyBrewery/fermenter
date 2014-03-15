@@ -6,6 +6,6 @@ public interface Format {
 
 	String getName();
 
-	Collection getPatterns();
+	Collection<Pattern> getPatterns();
 	
 }

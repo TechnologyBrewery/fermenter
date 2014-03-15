@@ -1,5 +1,8 @@
 package ${basePackage}.service;
 
+#foreach( $service in $services )
+import ${basePackage}.service.ejb.${service.name}Service;
+#end
 #foreach( $entity in $entities )
 import ${basePackage}.service.ejb.${entity.name}MaintenanceService;
 #end
@@ -8,17 +11,19 @@ import org.tigris.atlas.factory.Factory;
 
 public interface ServiceFactoryInterface extends Factory {
 	
-#foreach( $service in $serviceNames )
+#foreach( $service in $services )
 	/**
-	 * Create a(n) ${service}Service instance.
+	 * Create a(n) ${service.name}Service instance.
+	 * @return A service to perform operations on ${service.name}	 
 	 */
-	${service}Service create${service}Service();
+	${service.name}Service create${service.name}Service();
 	
 #end
 
 #foreach( $entity in $entities )
 	/**
 	 * Create a(n) ${entity.name}MaintenanceService instance.
+	 * @return A service to manage CRUD for {@link ${entity.name}}	 
 	 */
 	${entity.name}MaintenanceService create${entity.name}MaintenanceService();
 	

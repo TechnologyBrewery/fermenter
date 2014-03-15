@@ -4,75 +4,63 @@ package ${basePackage}.service.ejb;
 import $import;
 #end
 
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.ejb.SessionBean;
-import javax.ejb.SessionContext;
+import javax.annotation.Resource;
 
-import ${basePackage}.service.ServiceFactory;
-import ${basePackage}.service.${service.name}Service;
+import javax.ejb.Local;
+import javax.ejb.SessionContext;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
+
+import org.tigris.atlas.service.ValueServiceResponse;
+import org.tigris.atlas.service.VoidServiceResponse;
 
 /**
- * Service session bean for the ${service.name} service
+ * Service session bean for the ${service.name} service.
  *
  * Generated Code - DO NOT MODIFY
  */
-public class ${service.name}ServiceBean implements SessionBean {
+ @Local(${service.name}Service.class)
+ @Stateless 
+public abstract class ${service.name}BaseService implements ${service.name}Service {
 
-	protected SessionContext sessionContext = null;
-
-
-	/**
-	 * Get a service instance
-	 */ 
-	private ${service.name}Service get${service.name}Service() {
-		
-		return ServiceFactory.create${service.name}Service();
-	}	
+	@Resource
+	protected SessionContext sessionContext;	
 
 #foreach( $operation in $service.operations )
-
 	/**
-	 * Execute the ${operation.name} service
-	 *
-	 * @return ${operation.responseType}
+	 * {@inheritDoc}
 	 */
-	public ${operation.responseType} ${operation.lowercaseName}(${operation.signature}) {
-		${service.name}Service service = get${service.name}Service();
-		return service.${operation.lowercaseName}(${operation.parameterNames});
+	@TransactionAttribute(TransactionAttributeType.${operation.transactionAttribute})
+	#if($operation.isReturnTypeCollection())	 
+	public final ValueServiceResponse<Collection<${operation.returnManyType}>> ${operation.lowercaseName}(${operation.signature}) {
+	#elseif($operation.isReturnTypeEntity())	 
+	public final ValueServiceResponse<${operation.returnType}> ${operation.lowercaseName}(${operation.signature}) {
+	#else 
+	public final VoidServiceResponse ${operation.lowercaseName}(${operation.signature}) {
+	#end
+	#if($operation.isReturnTypeCollection())
+		ValueServiceResponse<Collection<${operation.returnManyType}>> response = new ValueServiceResponse<Collection<${operation.returnManyType}>>();		
+	#elseif($operation.isReturnTypeEntity())	
+		ValueServiceResponse<${operation.returnType}> response = new ValueServiceResponse<${operation.returnType}>();
+	#else 
+		VoidServiceResponse response = new VoidServiceResponse();
+	#end
+		
+		//TODO: handle messages
+		
+		//TODO: transform TOs to BOs
+		
+		//TODO: call underlying method 
+		
+		//TODO: transform BOs to TOs
+		
+		//TODO: check if transaction needs to be rolled back
+
+		return response;
+
 	}
  
 #end
-
-	public void ejbCreate() throws CreateException {
-	}
-
-	/**
-	 * @see javax.ejb.SessionBean#ejbActivate()
-	 */
-	public void ejbActivate() throws EJBException {
-	}
-
-
-	/**
-	 * @see javax.ejb.SessionBean#ejbPassivate()
-	 */
-	public void ejbPassivate() throws EJBException {
-	}
-
-
-	/**
-	 * @see javax.ejb.SessionBean#ejbRemove()
-	 */
-	public void ejbRemove() throws EJBException {		
-	}
-
-
-	/**
-	 * @see javax.ejb.SessionBean#setSessionContext(javax.ejb.SessionContext)
-	 */
-	public void setSessionContext(SessionContext ctx) throws EJBException {
-		sessionContext = ctx;			
-	}
 
 }

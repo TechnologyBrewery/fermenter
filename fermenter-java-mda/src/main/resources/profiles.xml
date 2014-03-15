@@ -6,7 +6,6 @@
 	<profile name="java-interfaces">
 		<target name="transferObjectFactoryInterface"/>
 		<target name="businessObjectFactoryInterface"/>
-		<target name="serviceInterfaces"/>
 		<target name="serviceFactoryInterface"/>
 		<target name="dataAccessObjectFactoryInterface"/>
 		<target name="dataAccessObjects"/>
@@ -24,11 +23,9 @@
 		<target name="transferObjectFactoryJava"/>
 		<target name="transferObjectAssemblers"/>
 		<target name="transferObjectComposites"/>				
-		<target name="baseBusinessObjectComposites"/>					
+		<target name="baseBusinessObjectComposites"/>				
 		<target name="businessObjectComposites"/>
-		<target name="dataAccessObjectFactory"/>
-		<target name="serviceImplObjects"/>
-		<target name="serviceBaseImplObjects"/>						
+		<target name="dataAccessObjectFactory"/>					
 		<target name="packageProperties"/>
 		<target name="messageProperties"/>
 		<target name="factoryPropertiesPojo"/>

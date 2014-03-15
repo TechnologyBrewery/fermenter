@@ -1,6 +1,5 @@
 package org.tigris.atlas.mda.element.java;
 
-import java.util.Collection;
 import java.util.Iterator;
 
 import org.apache.commons.lang.StringEscapeUtils;
@@ -18,9 +17,9 @@ public class JavaField implements Field {
 	private String importName;
 	
 	/**
-	 * Create a new instance of <tt>Field</tt> with the correct functionality set 
-	 * to generate Java code
-	 * @param fieldToDecorate The <tt>Field</tt> to decorate
+	 * Create a new instance of {@link Field} with the correct functionality set 
+	 * to generate Java code.
+	 * @param fieldToDecorate The {@link Field} to decorate
 	 */
 	public JavaField(Field fieldToDecorate) {
 		if (fieldToDecorate == null) {
@@ -29,26 +28,44 @@ public class JavaField implements Field {
 		field = fieldToDecorate;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public String getColumn() {
 		return field.getColumn();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public String getGenerator() {
 		return field.getGenerator();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public String getLabel() {
 		return field.getLabel();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public String getName() {
 		return field.getName();
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	public String getDocumentation() {
 		return field.getDocumentation();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public String getType() {
 		return field.getType();
 	}
@@ -65,47 +82,80 @@ public class JavaField implements Field {
 		return field.getType().toUpperCase();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Boolean isSimpleType() {
 		return field.isSimpleType();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Boolean isEnumerationType() {
 		return field.isEnumerationType();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Enumeration getEnumeration() {
 		Enumeration e = field.getEnumeration();
 		return (e != null) ? new JavaEnumeration(e) : null;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public String getMaxLength() {
 		return field.getMaxLength();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean hasMaxLength() {
 		return field.hasMaxLength();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public String getMinLength() {
 		return field.getMinLength();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean hasMinLength() {
 		return field.hasMinLength();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public String getMaxValue() {
 		return field.getMaxValue();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean hasMaxValue() {
 		return field.hasMaxValue();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public String getMinValue() {
 		return field.getMinValue();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean hasMinValue() {
 		return field.hasMinValue();
 	}
@@ -114,10 +164,16 @@ public class JavaField implements Field {
 		return field.getRequired();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean isRequired() {
 		return field.isRequired();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public String getSourceName() {
 		return field.getSourceName();
 	}
@@ -143,27 +199,45 @@ public class JavaField implements Field {
 	Field getFieldObject() {
 		return field;
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
 	public String getScale() {
 		return field.getScale();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean hasScale() {
 		return field.hasScale();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public String getProject() {
 		return field.getProject();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean isExternal() {
 		return field.isExternal();
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	public String getFormat() {
 		return field.getFormat();
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean hasFormat() {
 		return field.hasFormat();
 	}
@@ -171,20 +245,20 @@ public class JavaField implements Field {
 	public String getPatterns() {
 		Format format = FormatMetadataManager.getInstance().getFormat(getFormat());
 		
-		StringBuffer buff = new StringBuffer(100);
-		for (Iterator i = format.getPatterns().iterator(); i.hasNext();) {
+		StringBuilder sb = new StringBuilder(100);
+		for (Iterator<Pattern> i = format.getPatterns().iterator(); i.hasNext();) {
 			Pattern pattern = (Pattern) i.next();
 			
-			buff.append("\"");
-			buff.append(StringEscapeUtils.escapeJava(pattern.getText()));
-			buff.append("\"");
+			sb.append("\"");
+			sb.append(StringEscapeUtils.escapeJava(pattern.getText()));
+			sb.append("\"");
 			
 			if (i.hasNext()) {
-				buff.append(", ");
+				sb.append(", ");
 			}
 		}
 		
-		return buff.toString();
+		return sb.toString();
 	}
 
 }

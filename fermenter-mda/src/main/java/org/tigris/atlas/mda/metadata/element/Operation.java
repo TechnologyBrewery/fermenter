@@ -43,36 +43,35 @@ public interface Operation {
 	 */
 	public static final String TRANSMISSION_METHOD_ASYNC = "asynchronous";
 	
-	public String getName();
+	String getName();
 	
-	public String getDocumentation();
+	String getDocumentation();
 
-	public String getReturnType();
+	String getReturnType();
 
-	public String getLowercaseName();
+	String getLowercaseName();
 
-	public List getParameters();
+	List<Parameter> getParameters();
 
-	public String getReturnManyType();
+	String getReturnManyType();
 
 	/**
 	 * @return Returns the transactionAttribute.
 	 */
-	public String getTransactionAttribute();
+	String getTransactionAttribute();
 	
 	/**
 	 * Returns where this operation can be viewed - typically, 'remote', 'local' or 'both'.
 	 * By default, this wil return 'both'
 	 * @return
 	 */
-	public String getViewType();
+	String getViewType();
 	
 	/**
 	 * Returns the transmission method of this operation - either synchronous or asynchronous.
 	 * If no value is specified, <tt>TRANSMISSION_METHOD_SYNC</tt> will be returned.
 	 * @return <tt>TRANSMISSION_METHOD_SYNC</tt> or <tt>TRANSMISSION_METHOD_ASYNC</tt>
 	 */	
-	public String getTransmissionMethod();
-	
+	String getTransmissionMethod();
 
 }

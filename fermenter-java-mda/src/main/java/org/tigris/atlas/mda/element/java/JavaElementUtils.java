@@ -8,13 +8,16 @@ import org.tigris.atlas.mda.java.JavaTypeManager;
 import org.tigris.atlas.mda.metadata.MetadataRepository;
 import org.tigris.atlas.mda.metadata.element.Entity;
 import org.tigris.atlas.mda.metadata.element.Enumeration;
+import org.tigris.atlas.mda.metadata.element.Parameter;
 
 public class JavaElementUtils {
 	
+	private static final String VOID = "void";
+
 	static String getJavaImportType(String appName, String type) {
 		String javaImportType = null;
-		if( "void".equals(type) ) {
-			javaImportType = "void";
+		if( VOID.equals(type) ) {
+			javaImportType = VOID;
 			
 		} else {
 			// Attempt to resolve primitive type
@@ -46,7 +49,7 @@ public class JavaElementUtils {
 	}
 	
 	static String createFullyQualifiedName(String type, String nestedPackage, String applicationName) {
-		StringBuffer sb = new StringBuffer(100);
+		StringBuilder sb = new StringBuilder(100);
 		sb.append(PackageManager.getBasePackage(applicationName));
 		sb.append(nestedPackage).append(type);
 		return sb.toString();
@@ -62,13 +65,13 @@ public class JavaElementUtils {
 		}
 	}	
 	
-	static String createSignatureParameters(List parameterList) {
-		StringBuffer params = new StringBuffer(100);
+	static String createSignatureParameters(List<Parameter> parameterList) {
+		StringBuilder params = new StringBuilder(100);
 		if (parameterList != null) {
-			for (Iterator i = parameterList.iterator(); i.hasNext();) {
-				JavaParameter param = (JavaParameter) i.next();
+			for (Iterator<Parameter> i = parameterList.iterator(); i.hasNext();) {
+				JavaParameter param = (JavaParameter)i.next();
 				if (param.isMany()) {
-					params.append("Collection");
+					params.append("Collection<").append(param.getJavaType()).append(">");
 				} else {
 					params.append(param.getJavaType());	
 				}
@@ -88,7 +91,7 @@ public class JavaElementUtils {
 	 * @return A String like: String foo, Integer bar, Obejct blah
 	 */
 	static String createSignatureFields(List fieldList) {
-		StringBuffer fields = new StringBuffer(100);
+		StringBuilder fields = new StringBuilder(100);
 		if (fieldList != null) {
 			for (Iterator i = fieldList.iterator(); i.hasNext();) {
 				JavaField field = (JavaField) i.next();
@@ -109,7 +112,7 @@ public class JavaElementUtils {
 	 * @return A String like: foo, bar, blah.
 	 */
 	static String createSignatureFieldParams(List fieldList) {
-		StringBuffer fields = new StringBuffer(100);
+		StringBuilder fields = new StringBuilder(100);
 		if (fieldList != null) {
 			for (Iterator i = fieldList.iterator(); i.hasNext();) {
 				JavaField field = (JavaField) i.next();

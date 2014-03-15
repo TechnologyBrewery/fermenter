@@ -49,10 +49,10 @@ public final class ${entityName}Assembler extends TransferObjectAssembler {
 	}
 	
 	/**
-	 * Given a list of ${entityName}BO instances, create a list of ${entityName}
-	 * instances.  This will iterate over the list of ${entityName}BO instances,
-	 * create a(n) ${entityName} instance from the ${entityName}BO instance, and
-	 * add the new ${entityName} instance to a list of ${entityName} instances.
+	 * Given a list of {@link ${entityName}BO} instances, create a list of {@link ${entityName}}
+	 * instances.  This will iterate over the list of {@link ${entityName}BO} instances,
+	 * create a(n) {@link ${entityName}} instance from the {@link ${entityName}BO} instance, and
+	 * add the new {@link ${entityName}} instance to the result list.
 	 */	 
 	public static Collection<${entityName}> get${entityName}Collection(Collection<${entityName}BO> bos) {
 		if (bos == null) {
@@ -60,13 +60,31 @@ public final class ${entityName}Assembler extends TransferObjectAssembler {
 		}
 		
 		Collection<${entityName}> tos = new ArrayList<${entityName}>(bos.size());
-		${entityName}Assembler assembler = new ${entityName}Assembler();
 		for (${entityName}BO bo : bos) {
-			tos.add(assembler.create${entityName}(bo));
+			tos.add(create${entityName}(bo));
 		}
 		
 		return tos;
 	}
+	
+	/**
+	 * Given a list of {@link ${entityName}} instances, create a list of {@link ${entityName}BO}
+	 * instances.  This will iterate over the list of {@link ${entityName}} instances,
+	 * create a(n) {@link ${entityName}BO} instance from the {@link ${entityName}} instance, and
+	 * add the new {@link ${entityName}BO} instance to the result list.
+	 */	 
+	public static Collection<${entityName}BO> get${entityName}BOCollection(Collection<${entityName}> tos) {
+		if (tos == null) {
+			return null;
+		}
+		
+		Collection<${entityName}BO> bos = new ArrayList<${entityName}BO>(tos.size());
+		for (${entityName} to : tos) {
+			bos.add(merge${entityName}BO(to, null));
+		}
+		
+		return bos;
+	}	
 	
 	/**
 	 * Creates a new transfer object based on the passed business object.

@@ -83,7 +83,7 @@ public class ${entity.name}MaintenanceServiceBean implements ${entity.name}Maint
 				
 			}
 			
-			assembler.update${entity.name}BO(entity, businessObjectToSave);
+			assembler.merge${entity.name}BO(entity, businessObjectToSave);
 			
 			businessObjectToSave.save();
 			

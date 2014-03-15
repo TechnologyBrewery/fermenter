@@ -39,16 +39,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Transfer object assembler for the ${entityName} application entity.  This 
- * class is used create new instances of {@link ${entityName}} from an instance of 
- * a/an {@link ${entityName}BO}.  It is also used to update and instance of a/an
- * ${entityName}BO with the values of a ${entityName} instance.  In addition,
- * it provides a static method useful for converting lists of ${entityName}BOs
- * into a list of ${entityName} instances.
+ * Transfer object assembler for the ${entityName} application entity.  This class is used create new instances of 
+ * {@link ${entityName}} from an instance of a/an {@link ${entityName}BO} or the inverse.  It is also used to merge
+ * an instance of a/an ${entityName}BO with the values of a ${entityName} instance.
  *
  * Generated Code - DO NOT MODIFY
  */
-
 public class ${entityName}Assembler extends TransferObjectAssembler {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(${entityName}Assembler.class);
@@ -74,9 +70,9 @@ public class ${entityName}Assembler extends TransferObjectAssembler {
 	}
 	
 	/**
-	 * Creates a new transfer object based on the passed business object
-	 * @param bo The <tt>${entityName}BO</tt> that should be made transportable
-	 * @returm The transportable version of the passed business object
+	 * Creates a new transfer object based on the passed business object.
+	 * @param bo The {@link ${entity.name}BO} that should be made transportable
+	 * @return The transportable version of the passed business object
 	 */
 	public ${entityName} create${entityName}(${entityName}BO bo) {
 		${entityName} to = new ${entityName}();		
@@ -155,15 +151,19 @@ public class ${entityName}Assembler extends TransferObjectAssembler {
 	}
 	
 	/**
-	 * Updates the passed business object with the the values of the passed transfer object
-	 * @param to The <tt>${entityName}</tt> that has more up-to-date values that should be 
-	 * propogated onto the passed business object
-	 * @param bo The <tt>${entityName}BO</tt> that should be updated with the values of the 
-	 * passed transfer object
-	 * @return The updated buniness object
+	 * Merges the values of the passed transfer object into the passed business obejct.  If the passed business
+	 * object is null, it creates a new one.
+	 * @param to The {@link ${entity.name}} that has more up-to-date values that should be 
+	 * propagated onto the passed business object
+	 * @param bo The {@link ${entity.name}BO} that should be updated with the values of the 
+	 * passed transfer object (or null if no version of the business object currently exists
+	 * @return The updated business object
 	 */
-	public ${entityName}BO update${entityName}BO(${entityName} to, ${entityName}BO bo) {
-	
+	public ${entityName}BO merge${entityName}BO(${entityName} to, ${entityName}BO bo) {
+		if (bo == null) {
+			bo = BusinessObjectFactory.create${entityName}BO();
+		}		
+		
 		if ((to != null) && (bo != null)) {			
 #foreach ( $idField in $idFields )
 			bo.set${idField.capitalizedName}(to.get${idField.capitalizedName}());
@@ -218,10 +218,10 @@ public class ${entityName}Assembler extends TransferObjectAssembler {
 #foreach ($relation in $relations)
 	/**
 	 * Uses set comparison to transfer a collection of children onto the business object 
-	 * instance
-	 * @param to The <tt>${entityName}</tt> that has more up-to-date values that should be 
+	 * instance.
+	 * @param to The {@link ${entity.name}} that has more up-to-date values that should be 
 	 * propogated onto the passed business object
-	 * @param bo The <tt>${entityName}BO</tt> that should be updated with the values of the 
+	 * @param bo The {@link ${entity.name}BO} that should be updated with the values of the 
 	 * passed transfer object
 	 */
 	protected void assemble${relation.type}(${entityName} to, ${entityName}BO bo) {
@@ -287,7 +287,7 @@ public class ${entityName}Assembler extends TransferObjectAssembler {
 #end	
 
 	/**
-	 * Returns the subclasses {@link Logger} instance to allow for more granular logging.
+	 * Returns the subclasses {@link Logger} instance to allow for more detailed logging.
 	 * @return {@link Logger} 
 	 */
 	protected Logger getLog() {

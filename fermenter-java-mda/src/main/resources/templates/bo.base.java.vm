@@ -126,10 +126,8 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 #end
 
     /**
-     * Returns the log instance for this class.
-     * @return A {@link Logger} instance for {@link ${entityName}BO}
+     * {@inheritDoc}
      */
-    @Override 
     protected Logger getLogger() {
     	return LOGGER;
     }
@@ -145,7 +143,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	 * Set the values for this ${entityName} entity
 	 */
 	public void set${entityName}Values(${entityName} entity) {
-		assembler.update${entityName}BO(entity, (${entityName}BO)this);
+		assembler.merge${entityName}BO(entity, (${entityName}BO)this);
 	}
 
 #foreach ( $idField in $idFields )

@@ -60,8 +60,6 @@ import ${validator.import};
 public abstract class ${entityName}BaseBO extends ${extends}BO {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(${entityName}BO.class);
-
-	private static ${entityName}Assembler assembler = new ${entityName}Assembler();
 	
 	private static final ${entityName}Dao DAO = DaoFactory.create${entityName}Dao();
 
@@ -136,14 +134,14 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	 * Get the values for this ${entityName} entity
 	 */
 	public ${entityName} get${entityName}Values() {		
-		return assembler.create${entityName}((${entityName}BO)this);
+		return ${entityName}Assembler.create${entityName}((${entityName}BO)this);
 	}
 	
 	/**
 	 * Set the values for this ${entityName} entity
 	 */
 	public void set${entityName}Values(${entityName} entity) {
-		assembler.merge${entityName}BO(entity, (${entityName}BO)this);
+		${entityName}Assembler.merge${entityName}BO(entity, (${entityName}BO)this);
 	}
 
 #foreach ( $idField in $idFields )

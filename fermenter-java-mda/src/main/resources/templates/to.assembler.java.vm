@@ -40,9 +40,13 @@ import org.slf4j.LoggerFactory;
  *
  * Generated Code - DO NOT MODIFY
  */
-public class ${entityName}Assembler extends TransferObjectAssembler {
+public final class ${entityName}Assembler extends TransferObjectAssembler {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(${entityName}Assembler.class);
+	
+	private ${entityName}Assembler() {
+		//prevent instantiation
+	}
 	
 	/**
 	 * Given a list of ${entityName}BO instances, create a list of ${entityName}
@@ -69,7 +73,7 @@ public class ${entityName}Assembler extends TransferObjectAssembler {
 	 * @param bo The {@link ${entity.name}BO} that should be made transportable
 	 * @return The transportable version of the passed business object
 	 */
-	public ${entityName} create${entityName}(${entityName}BO bo) {
+	public static ${entityName} create${entityName}(${entityName}BO bo) {
 		${entityName} to = new ${entityName}();		
 		
 		if (bo != null) {
@@ -154,7 +158,7 @@ public class ${entityName}Assembler extends TransferObjectAssembler {
 	 * passed transfer object (or null if no version of the business object currently exists
 	 * @return The updated business object
 	 */
-	public ${entityName}BO merge${entityName}BO(${entityName} to, ${entityName}BO bo) {
+	public static ${entityName}BO merge${entityName}BO(${entityName} to, ${entityName}BO bo) {
 		if (bo == null) {
 			bo = BusinessObjectFactory.create${entityName}BO();
 		}		
@@ -219,7 +223,7 @@ public class ${entityName}Assembler extends TransferObjectAssembler {
 	 * @param bo The {@link ${entity.name}BO} that should be updated with the values of the 
 	 * passed transfer object
 	 */
-	protected void assemble${relation.type}(${entityName} to, ${entityName}BO bo) {
+	protected static void assemble${relation.type}(${entityName} to, ${entityName}BO bo) {
 		//get the set of to relations (transient view):		
 		Set	${relation.label}ToSet = to.get${relation.type}s();
 		
@@ -279,14 +283,6 @@ public class ${entityName}Assembler extends TransferObjectAssembler {
 		
 	}
 	
-#end	
-
-	/**
-	 * Returns the subclasses {@link Logger} instance to allow for more detailed logging.
-	 * @return {@link Logger} 
-	 */
-	protected Logger getLog() {
-		return LOGGER;
-	}
+#end
 	
 }

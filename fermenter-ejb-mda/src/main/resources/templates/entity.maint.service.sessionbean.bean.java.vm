@@ -39,8 +39,6 @@ public class ${entity.name}MaintenanceServiceBean implements ${entity.name}Maint
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(${entity.name}MaintenanceServiceBean.class);
 	
-	private ${entity.name}Assembler assembler = new ${entity.name}Assembler();
-	
 	@Inject
 	private ${entity.name}BO seed${entity.name}BO;
 	
@@ -83,13 +81,13 @@ public class ${entity.name}MaintenanceServiceBean implements ${entity.name}Maint
 				
 			}
 			
-			assembler.merge${entity.name}BO(entity, businessObjectToSave);
+			${entityName}Assembler.merge${entity.name}BO(entity, businessObjectToSave);
 			
 			businessObjectToSave.save();
 			
 			//TODO: handle error messages
 			
-			${entity.name} updateEntity = assembler.create${entity.name}(businessObjectToSave);
+			${entity.name} updateEntity = ${entityName}Assembler.create${entity.name}(businessObjectToSave);
 			
 			response = new ValueServiceResponse<${entity.name}>();
 			response.setValue(updateEntity);
@@ -149,7 +147,7 @@ public class ${entity.name}MaintenanceServiceBean implements ${entity.name}Maint
 		
 		${entity.name}BO retrievedBusinessObject = ${entity.name}BO.findByPrimaryKey(pk);
 		if (retrievedBusinessObject != null) {
-			retrieveEntity = assembler.create${entity.name}(retrievedBusinessObject);
+			retrieveEntity = ${entityName}Assembler.create${entity.name}(retrievedBusinessObject);
 			
 		}
 		

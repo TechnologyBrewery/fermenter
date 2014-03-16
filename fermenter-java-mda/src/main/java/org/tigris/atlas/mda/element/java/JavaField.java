@@ -184,6 +184,10 @@ public class JavaField implements Field {
 		return JavaElementUtils.getJavaType(MetadataRepository.getInstance().getApplicationName(), getType());
 	}
 	
+	public boolean isEntity() {
+		return MetadataRepository.getInstance().getEntity(getProject(), getType() ) != null;
+	}
+	
 	public String getImport() {
 		if (importName == null ) {
 			if (isExternal()) {

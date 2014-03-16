@@ -1,5 +1,6 @@
 package ${basePackage}.service.ejb.impl;
 
+import ${basePackage}.bizobj.*;
 import ${basePackage}.service.ejb.${service.name}BaseService;
 
 #foreach( $import in $service.imports )
@@ -16,28 +17,14 @@ public class ${service.name}ServiceImpl extends ${service.name}BaseService {
 #foreach( $operation in $service.operations )
 
 	/**
-	 * Performs the business function for $[operation.name}.
-	#if( $operation.parameters.size() > 0 )
-		#foreach( $parameter in $operation.parameters )
-			#if( $parameter.documentation )
-	 * @param ${parameter.name} ${parameter.documentation}
-			#else
-	 * @param ${parameter.name}  
-			#end
-		#end
-	#end
-	#if($operation.isReturnTypeCollection())	 
-	 * @return A {@link Collection>} of {@link ${operation.returnManyType}}
-	#elseif($operation.isReturnTypeEntity())	 
-	 * @return A instance of {@link ${operation.returnManyType}}
-	#end
+	 * {@inheritDoc}
 	 */
 	#if($operation.isReturnTypeCollection())	 
-	Collection<${operation.returnManyType}> ${operation.lowercaseName}Impl(${operation.signature}) {
+	protected Collection<${operation.returnManyTypeAsBO}> ${operation.lowercaseName}Impl(${operation.signatureWithBO}) {
 	#elseif($operation.isReturnTypeEntity())	 
-	${operation.returnType} ${operation.lowercaseName}Impl(${operation.signature}) {
+	protected ${operation.returnTypeAsBO} ${operation.lowercaseName}Impl(${operation.signatureWithBO}) {
 	#else 
-	void ${operation.lowercaseName}Impl(${operation.signature}) {
+	protected void ${operation.lowercaseName}Impl(${operation.signatureWithBO}) {
 	#end
 	//TODO: Add Business Logic Here
 	

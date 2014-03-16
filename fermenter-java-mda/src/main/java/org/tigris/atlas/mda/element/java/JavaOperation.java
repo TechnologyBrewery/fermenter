@@ -18,6 +18,7 @@ import org.tigris.atlas.mda.metadata.element.Parameter;
 
 public class JavaOperation implements Operation {
 
+	private static final String BUSINESS_OBJECT = "BO";
 	public static final String PROPAGATION_REQUIRED = "REQUIRED";
 	public static final String PROPAGATION_REQUIRES_NEW = "REQUIRES_NEW";
 	public static final String PROPAGATION_MANDATORY = "MANDATORY";
@@ -29,6 +30,7 @@ public class JavaOperation implements Operation {
 	private List<Parameter> decoratedParameterList;
 	
 	private String signature;
+	private String signatureWithBO;
 	private String parameterNames;
 	private Boolean isResponseTypeVoid;
 	private String uncapitalizedReturnType;
@@ -134,7 +136,7 @@ public class JavaOperation implements Operation {
 	
 	public Boolean isResponseTypeVoid() {
 		if (isResponseTypeVoid == null) {			
-			isResponseTypeVoid = ("void".equalsIgnoreCase(getReturnType())) ? Boolean.TRUE : Boolean.FALSE;
+			isResponseTypeVoid = (JavaElementUtils.VOID.equalsIgnoreCase(getReturnType())) ? Boolean.TRUE : Boolean.FALSE;
 			
 		}
 
@@ -204,6 +206,11 @@ public class JavaOperation implements Operation {
 	public boolean isReturnTypeEntity() {
 		return MetadataRepository.getInstance().getEntity( getReturnType() ) != null;
 	}
+	
+	public boolean isReturnManyTypeEntity() {
+		return MetadataRepository.getInstance().getEntity( getReturnManyType() ) != null;
+	}
+	
 	
 	public boolean isReturnTypeCollection() {
 		return !StringUtils.isBlank(getReturnManyType());
@@ -302,6 +309,44 @@ public class JavaOperation implements Operation {
 		}
 		
 		return new Boolean(isResponseTypeCrossProject);
+	}
+	
+	/**
+	 * Adds a "BO" to the end of the return type if it is an entity.
+	 * @return return type string, possibly modified
+	 */
+	public String getReturnTypeAsBO() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(operation.getReturnType());
+		if (isReturnTypeEntity()) {
+			sb.append(BUSINESS_OBJECT);
+		}
+		return sb.toString();
+	}
+	
+	/**
+	 * Adds a "BO" to the end of the return many type if it is an entity.
+	 * @return return type string, possibly modified
+	 */
+	public String getReturnManyTypeAsBO() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(operation.getReturnManyType());
+		if (isReturnManyTypeEntity()) {
+			sb.append(BUSINESS_OBJECT);
+		}
+		return sb.toString();
+	}
+	
+	/**
+	 * Returns the operation signature with any entity parameters as Business Object java types.
+	 * @return signature with BO information
+	 */
+	public String getSignatureWithBO() {
+		if (signatureWithBO == null) {
+			signatureWithBO = JavaElementUtils.createSignatureParameters(getParameters(), BUSINESS_OBJECT, BUSINESS_OBJECT);
+		}
+
+		return signatureWithBO;
 	}
 	
 }

@@ -69,7 +69,7 @@
 					<many>true</many>
 				</parameter>
 			</parameters>
-		</operation>
+		</operation>	
 	</operations>
 
 </service>

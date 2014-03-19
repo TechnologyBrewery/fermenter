@@ -8,9 +8,7 @@ import ${basePackage}.bizobj.*;
 
 import javax.annotation.Resource;
 
-import javax.ejb.Local;
 import javax.ejb.SessionContext;
-import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
@@ -22,8 +20,6 @@ import org.tigris.atlas.service.VoidServiceResponse;
  *
  * Generated Code - DO NOT MODIFY
  */
- @Local(${service.name}Service.class)
- @Stateless 
 public abstract class ${service.name}BaseService implements ${service.name}Service {
 
 	@Resource
@@ -36,17 +32,21 @@ public abstract class ${service.name}BaseService implements ${service.name}Servi
 	@TransactionAttribute(TransactionAttributeType.${operation.transactionAttribute})
 	#if($operation.isReturnTypeCollection())	 
 	public ValueServiceResponse<Collection<${operation.returnManyType}>> ${operation.lowercaseName}(${operation.signature}) {
+	#elseif($operation.isResponseTypeVoid())
+	public VoidServiceResponse ${operation.lowercaseName}(${operation.signature}) {
 	#elseif($operation.isReturnTypeEntity())	 
 	public ValueServiceResponse<${operation.returnType}> ${operation.lowercaseName}(${operation.signature}) {
 	#else 
-	public VoidServiceResponse ${operation.lowercaseName}(${operation.signature}) {
+	public ValueServiceResponse<${operation.wrappedReturnType}> ${operation.lowercaseName}(${operation.signature}) {
 	#end
 	#if($operation.isReturnTypeCollection())
-		ValueServiceResponse<Collection<${operation.returnManyType}>> response = new ValueServiceResponse<Collection<${operation.returnManyType}>>();		
+		ValueServiceResponse<Collection<${operation.returnManyType}>> response = new ValueServiceResponse<Collection<${operation.returnManyType}>>();
+	#elseif($operation.isResponseTypeVoid())		
+		VoidServiceResponse response = new VoidServiceResponse();
 	#elseif($operation.isReturnTypeEntity())	
 		ValueServiceResponse<${operation.returnType}> response = new ValueServiceResponse<${operation.returnType}>();
 	#else 
-		VoidServiceResponse response = new VoidServiceResponse();
+		ValueServiceResponse<${operation.wrappedReturnType}> response = new ValueServiceResponse<${operation.wrappedReturnType}>();
 	#end
 		
 		//TODO: handle messages
@@ -62,51 +62,37 @@ public abstract class ${service.name}BaseService implements ${service.name}Servi
 	#end	
 		
 	#if( $operation.isReturnTypeCollection() )
-		Collection<${operation.returnManyTypeAsBO}> implResult = ${operation.lowercaseName}Impl(
-		#foreach( $parameter in $operation.parameters )			
-			#if( $parameter.isEntity() && $parameter.isMany() )
-				${parameter.name}BOCollection
-			#elseif ( $parameter.isEntity() && !$parameter.isMany() )
-				${parameter.name}BO
-			#else
-				${parameter.name}
-			#end
-			#if( $foreach.hasNext ),#end
-		#end
-		);
-		
-		//TODO: transform BOs to TOs
+		Collection<${operation.returnManyTypeAsBO}> implResult = 
 	#elseif( $operation.isReturnTypeEntity() )
-		${operation.returnTypeAsBO} implResult = ${operation.lowercaseName}Impl(
-		#foreach( $parameter in $operation.parameters )			
-			#if( $parameter.isEntity() && $parameter.isMany() )
-				${parameter.name}BOCollection
-			#elseif ( $parameter.isEntity() && !$parameter.isMany() )
-				${parameter.name}BO
-			#else
-				${parameter.name}
-			#end
-			#if( $foreach.hasNext ),#end
-		#end
-		);
-		
-		//TODO: transform BOs to TOs
-	
+		${operation.returnTypeAsBO} implResult =
+	#elseif( $operation.isResponseTypeVoid() )
 	#else
+		${operation.wrappedReturnType} implResult =
+	#end
 		${operation.lowercaseName}Impl(
-		#foreach( $parameter in $operation.parameters )			
-			#if( $parameter.isEntity() && $parameter.isMany() )
+	#foreach( $parameter in $operation.parameters )			
+		#if( $parameter.isEntity() && $parameter.isMany() )
 				${parameter.name}BOCollection
-			#elseif ( $parameter.isEntity() && !$parameter.isMany() )
+		#elseif ( $parameter.isEntity() && !$parameter.isMany() )
 				${parameter.name}BO
-			#else
+		#else
 				${parameter.name}
-			#end
-			#if( $foreach.hasNext ),#end
 		#end
+		#if( $foreach.hasNext ),#end
+	#end
 		);
 		
-	#end		
+	#if($operation.isReturnTypeCollection())
+		Collection<${operation.returnManyType}> result = ${operation.returnManyType}Assembler.get${operation.returnManyType}Collection(implResult);
+		response.setValue(result);	
+	#elseif($operation.isReturnTypeEntity())	
+		${operation.returnType} result = ${operation.returnType}Assembler.create${operation.returnType}(implResult);
+		response.setValue(result);
+	#elseif( $operation.isResponseTypeVoid() )
+	#else
+		response.setValue(implResult);
+	#end
+			
 		
 		//TODO: check if transaction needs to be rolled back
 
@@ -127,16 +113,18 @@ public abstract class ${service.name}BaseService implements ${service.name}Servi
 	#end
 	#if($operation.isReturnTypeCollection())	 
 	 * @return A {@link Collection} of {@link ${operation.returnManyTypeAsBO}}
-	#else	 
+	#elseif($operation.isResponseTypeVoid()) 	 
 	 * @return A instance of {@link ${operation.returnManyTypeAsBO}}
 	#end
 	 */
 	#if($operation.isReturnTypeCollection())	 
 	protected abstract Collection<${operation.returnManyTypeAsBO}> ${operation.lowercaseName}Impl(${operation.signatureWithBO});
-	#elseif($operation.isReturnTypeEntity())	 
-	protected abstract ${operation.returnTypeAsBO} ${operation.lowercaseName}Impl(${operation.signatureWithBO});
-	#else 
+	#elseif($operation.isResponseTypeVoid())
 	protected abstract void ${operation.lowercaseName}Impl(${operation.signatureWithBO});
+	#elseif($operation.isReturnTypeEntity())
+	protected abstract ${operation.returnTypeAsBO} ${operation.lowercaseName}Impl(${operation.signatureWithBO});
+	#else
+	protected abstract ${operation.wrappedReturnType} ${operation.lowercaseName}Impl(${operation.signatureWithBO});
 	#end
  
 #end

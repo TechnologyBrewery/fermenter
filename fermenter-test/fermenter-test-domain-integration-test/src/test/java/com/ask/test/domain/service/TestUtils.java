@@ -2,10 +2,12 @@ package com.ask.test.domain.service;
 
 import static org.junit.Assert.assertFalse;
 
+import java.util.Collection;
 import java.util.Date;
 
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.tigris.atlas.messages.Message;
 import org.tigris.atlas.messages.Messages;
 import org.tigris.atlas.service.ValueServiceResponse;
 import org.tigris.atlas.transfer.TransferObject;
@@ -53,16 +55,24 @@ public final class TestUtils {
 	public static void assertNoErrorMessages(ValueServiceResponse<? extends TransferObject> response) {
 		if (response != null) {
 			Messages messages = response.getMessages();
-			assertFalse(messages.hasErrorMessages());
+			assertNoErrorMessages(messages.getErrorMessages());
 			
 			TransferObject to = response.getValue();
 			if (to != null) {
 				Messages toMessages = to.getMessages();
-				assertFalse(toMessages.hasErrorMessages());
+				assertNoErrorMessages(toMessages.getErrorMessages());
 			}
 			
 		}
 		
 	}
+	
+	public static void assertNoErrorMessages(Collection<Message> messages) {
+		if (messages != null) {
+			assertFalse(messages.size() > 0);
+				
+		}
+		
+	}	
 
 }

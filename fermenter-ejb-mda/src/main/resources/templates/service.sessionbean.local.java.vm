@@ -45,18 +45,20 @@ public interface ${service.name}Service {
 	#end
 	#if($operation.isReturnTypeCollection())	 
 	 * @return A service response-wrapped {@link Collection>} of {@link ${operation.returnManyType}}
-	#elseif($operation.isReturnTypeEntity())	 
-	 * @return A service response-wrapped instance of {@link ${operation.returnManyType}}
+	#elseif(!$operation.isResponseTypeVoid())	 
+	 * @return A service response-wrapped instance of {@link ${operation.returnType}}
 	#else
 	 * @return An empty service response
 	#end
 	 */
 	#if($operation.isReturnTypeCollection())	 
 	ValueServiceResponse<Collection<${operation.returnManyType}>> ${operation.lowercaseName}(${operation.signature});
+	#elseif($operation.isResponseTypeVoid())
+	public VoidServiceResponse ${operation.lowercaseName}(${operation.signature});
 	#elseif($operation.isReturnTypeEntity())	 
 	ValueServiceResponse<${operation.returnType}> ${operation.lowercaseName}(${operation.signature});
 	#else 
-	VoidServiceResponse ${operation.lowercaseName}(${operation.signature});
+	ValueServiceResponse<${operation.wrappedReturnType}> ${operation.lowercaseName}(${operation.signature});
 	#end
 
 #end

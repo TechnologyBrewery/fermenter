@@ -56,7 +56,13 @@ public class JavaOperation implements Operation {
 	 * {@inheritDoc}
 	 */
 	public String getDocumentation() {
-		return operation.getDocumentation();
+		//make sure the is a trailing period for proper javadoc formatting:
+		String documentation = operation.getDocumentation();
+		if ((StringUtils.isNotBlank(documentation)) && (documentation.endsWith("."))) {
+			 documentation += ".";
+		}
+		
+		return documentation;
 	}
 	
 	/**

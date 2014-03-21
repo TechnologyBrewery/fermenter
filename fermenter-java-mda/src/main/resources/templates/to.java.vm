@@ -1,6 +1,6 @@
 package ${prefix}.transfer;
 
-//import ${prefix}.transfer.schema.${entityName}SchemaAssembler;
+import com.ask.test.domain.transfer.json.ObjectMapperManager;
 #foreach ($import in $imports )
 import ${import};
 #end
@@ -387,6 +387,22 @@ public class ${entityName} extends ${extends}TO {
 		// The messages field is the only field on this object that is guaranteed to
 		// be not null and the same instance for the life of the object.
 		return (getKey().getValue() == null) ? getMessages().hashCode() : getKey().getValue().hashCode();
+	}
+	
+	/**
+	 * Supports JAX-RS {@link QueryParam} use in REST RPC calls for business methods.  This ideally wouldn't be 
+	 * coupled in here, but for now it will have to do.
+	 * @param value The json value of this transfer object
+	 * @return The corresponding instance for the json value or null if no value exists or it cannot be translated
+	 */
+	public static ${entity.name} valueOf(String value) {
+		try {
+			return ObjectMapperManager.getObjectMapper().readValue(value, ${entity.name}.class);
+			
+		} catch (Exception e) {			
+			return null;
+			
+		}
 	}
 
 }

@@ -15,6 +15,9 @@ import org.tigris.atlas.mda.metadata.element.Parameter;
 public class JavaElementUtils {
 	
 	static final String VOID = "void";
+	
+	/** Needs to be a {@link List} and not {@link Collection} due to JAX-RS parameter requirements. */
+	static final String PARAM_COLLECTION_TYPE = "List";
 
 	static String getJavaImportType(String appName, String type) {
 		String javaImportType = null;
@@ -80,7 +83,7 @@ public class JavaElementUtils {
 			for (Iterator<Parameter> i = parameterList.iterator(); i.hasNext();) {
 				JavaParameter param = (JavaParameter)i.next();
 				if (param.isMany()) {
-					params.append("Collection<").append(param.getJavaType());
+					params.append(PARAM_COLLECTION_TYPE + "<").append(param.getJavaType());
 					if ((hasFieldTypeSuffix) && (param.isEntity())) {
 						params.append(fieldTypeSuffix);
 					}
@@ -103,6 +106,39 @@ public class JavaElementUtils {
 		}
 		return params.toString();
 	}
+	
+	static String createJaxRSSignatureParameters(List<Parameter> parameterList, String fieldNameSuffix, String fieldTypeSuffix) {
+		StringBuilder params = new StringBuilder();
+		if (parameterList != null) {
+			boolean hasFieldTypeSuffix = StringUtils.isNotBlank(fieldTypeSuffix);
+			boolean hasFieldNameSuffix = StringUtils.isNotBlank(fieldNameSuffix);
+			
+			for (Iterator<Parameter> i = parameterList.iterator(); i.hasNext();) {
+				JavaParameter param = (JavaParameter)i.next();
+				if (param.isMany()) {
+					params.append(PARAM_COLLECTION_TYPE + "<").append(param.getJavaType());
+					if ((hasFieldTypeSuffix) && (param.isEntity())) {
+						params.append(fieldTypeSuffix);
+					}
+					params.append(">");
+				} else {
+					params.append(param.getJavaType());	
+					if ((hasFieldTypeSuffix) && (param.isEntity())) {
+						params.append(fieldTypeSuffix);
+					}
+				}
+				params.append(" ");
+				params.append(param.getName());
+				if ((hasFieldNameSuffix) && (param.isEntity())) {
+					params.append(fieldNameSuffix);
+				}
+				if (i.hasNext()) {
+					params.append(", ");
+				}
+			}
+		}
+		return params.toString();
+	}	
 	
 	/**
 	 * Returns the fields for a signature definition of a method.

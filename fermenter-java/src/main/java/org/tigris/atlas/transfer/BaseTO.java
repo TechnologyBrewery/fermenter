@@ -4,16 +4,19 @@ package org.tigris.atlas.transfer;
 /**
  * Base class for all parent transfer objects.
  */
-public abstract class BaseTO extends AbstractTransferComponent implements TransferObject {
-	
+public abstract class BaseTO<T> extends AbstractTransferComponent implements TransferObject {
+
+	private static final long serialVersionUID = -7655573120930710176L;
+
+	/**
+	 * Default constructor.
+	 */
 	public BaseTO() {
 		super();
 	}
 	
 	/**
-	 * Test for equality
-	 *
-	 * @return boolean - Equal or not
+	 * {@inheritDoc}
 	 */
 	public boolean equals(Object o) {
 		try {
@@ -25,8 +28,7 @@ public abstract class BaseTO extends AbstractTransferComponent implements Transf
 	}
 	
 	/**
-	 * Generate a unique hash
-	 *
+	 * {@inheritDoc}
 	 */
 	public int hashCode() {
 		return getKey().hashCode();

@@ -20,7 +20,7 @@ import org.tigris.atlas.service.VoidServiceResponse;
  *
  * Generated Code - DO NOT MODIFY
  */
-public abstract class ${service.name}BaseService implements ${service.name}Service {
+public abstract class ${service.name}BaseService {
 
 	@Resource
 	protected SessionContext sessionContext;	
@@ -54,7 +54,7 @@ public abstract class ${service.name}BaseService implements ${service.name}Servi
 	#if( $operation.parameters.size() > 0 )
 		#foreach( $parameter in $operation.parameters )
 			#if( $parameter.isEntity() && $parameter.isMany() )
-				Collection<${parameter.type}BO> ${parameter.name}BOCollection = ${parameter.type}Assembler.get${parameter.type}BOCollection(${parameter.name});
+				List<${parameter.type}BO> ${parameter.name}BOs = ${parameter.type}Assembler.get${parameter.type}BOList(${parameter.name});
 			#elseif ( $parameter.isEntity() && !$parameter.isMany() )
 				${parameter.type}BO ${parameter.name}BO = ${parameter.type}Assembler.merge${parameter.type}BO(${parameter.name}, null);
 			#end
@@ -72,7 +72,7 @@ public abstract class ${service.name}BaseService implements ${service.name}Servi
 		${operation.lowercaseName}Impl(
 	#foreach( $parameter in $operation.parameters )			
 		#if( $parameter.isEntity() && $parameter.isMany() )
-				${parameter.name}BOCollection
+				${parameter.name}BOs
 		#elseif ( $parameter.isEntity() && !$parameter.isMany() )
 				${parameter.name}BO
 		#else
@@ -83,7 +83,7 @@ public abstract class ${service.name}BaseService implements ${service.name}Servi
 		);
 		
 	#if($operation.isReturnTypeCollection())
-		Collection<${operation.returnManyType}> result = ${operation.returnManyType}Assembler.get${operation.returnManyType}Collection(implResult);
+		Collection<${operation.returnManyType}> result = ${operation.returnManyType}Assembler.get${operation.returnManyType}List(implResult);
 		response.setValue(result);	
 	#elseif($operation.isReturnTypeEntity())	
 		${operation.returnType} result = ${operation.returnType}Assembler.create${operation.returnType}(implResult);

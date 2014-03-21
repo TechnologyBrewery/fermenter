@@ -2,8 +2,11 @@ package com.ask.test.domain.service.ejb;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
+import javax.annotation.Resource;
 import javax.ejb.Local;
+import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 
 import org.apache.commons.lang.math.RandomUtils;
@@ -23,7 +26,7 @@ import com.ask.test.domain.bizobj.SimpleDomainBO;
  */
 @Local(SimpleDomainManagerService.class)
 @Stateless
-public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseService {
+public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseService implements SimpleDomainManagerService {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(SimpleDomainManagerServiceImpl.class);
 
@@ -60,14 +63,8 @@ public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServi
 	/**
 	 * {@inheritDoc}
 	 */
-	protected Integer countImpl(Collection<SimpleDomainBO> inputBO) {
-		Integer count = 0;
-		
-		for (SimpleDomainBO bo : inputBO) {
-			count++;
-		}
-		
-		return count;
+	protected Integer countImpl(List<SimpleDomainBO> inputBOs) {		
+		return (inputBOs == null) ? 0 : inputBOs.size();
 	}
 
 	/**

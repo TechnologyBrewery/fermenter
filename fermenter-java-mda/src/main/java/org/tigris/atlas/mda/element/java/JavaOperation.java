@@ -11,12 +11,16 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.tigris.atlas.mda.metadata.MetadataRepository;
 import org.tigris.atlas.mda.metadata.element.Entity;
 import org.tigris.atlas.mda.metadata.element.Operation;
 import org.tigris.atlas.mda.metadata.element.Parameter;
 
 public class JavaOperation implements Operation {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(JavaOperation.class);
 
 	private static final String BUSINESS_OBJECT = "BO";
 	public static final String PROPAGATION_REQUIRED = "REQUIRED";
@@ -156,6 +160,51 @@ public class JavaOperation implements Operation {
 
 		return signature;
 	}
+	
+	/**
+	 * Creates the signature with needed jax-rs parameter descriptors included.
+	 * @return jax-rs compliant signature
+	 */
+	public String getSignatureParametersWithJaxRS() {
+		StringBuilder params = new StringBuilder();
+		int entityParameterCount = 0;
+		List<Parameter> parameterList = getParameters();
+		if (parameterList != null) {		
+			for (Iterator<Parameter> i = parameterList.iterator(); i.hasNext();) {
+				JavaParameter param = (JavaParameter)i.next();
+				
+				if (!param.isEntity()) {
+					params.append("@QueryParam(\"").append(param.getName()).append("\") ");
+					
+				} else {
+					entityParameterCount++;
+				}
+				
+				if (param.isMany()) {
+					params.append(JavaElementUtils.PARAM_COLLECTION_TYPE + "<").append(param.getJavaType());
+					params.append(">");
+					
+				} else {
+					params.append(param.getJavaType());	
+					
+				}
+				
+				params.append(" ");
+				params.append(param.getName());
+				
+				if (i.hasNext()) {
+					params.append(", ");
+				}
+			}
+		}
+		
+		if (entityParameterCount > 1) {
+			LOGGER.error("Cannot have a JAX-RS enabled operation with multiple entity parameters! " 
+					+ "Use a list of params or single container entity instead!");
+		}
+		
+		return params.toString();
+	}	
 
 	public String getParameterNames() {
 		if (parameterNames == null) {
@@ -181,7 +230,7 @@ public class JavaOperation implements Operation {
 		for (Parameter p : parameterCollection) {
 			parameter = (JavaParameter)p;
 			if (parameter.isMany()) {
-				imports.add(Collection.class.getName());
+				imports.add(List.class.getName());
 			}
 			imports.add(parameter.getImport());
 		}
@@ -192,6 +241,9 @@ public class JavaOperation implements Operation {
 	public Set<String> getImports() {
 		Set<String> importSet = new HashSet<String>();
 		importSet.addAll( getParameterImports() );
+		if (isReturnTypeCollection()) {
+			importSet.add(Collection.class.getName());
+		}
 
 		return importSet;
 	}
@@ -353,6 +405,34 @@ public class JavaOperation implements Operation {
 		}
 
 		return signatureWithBO;
+	}
+	
+	/**
+	 * Returns whether or not this operation has parameters associated with it.
+	 * @return true if there are parameters, false otherwise
+	 */
+	public boolean hasParameters() {
+		return ((decoratedParameterList != null) && (decoratedParameterList.size() > 0));
+	}
+	
+	/**
+	 * Returns whether or not there is at least one parameter that is an entity.
+	 * @return true if there are entity parameters, false otherwise
+	 */
+	public boolean hasEntityParameters() {
+		boolean hasEntityParameters = false;
+		
+		if (hasParameters()) {
+			for (Parameter parameter : decoratedParameterList) {
+				JavaParameter javaParameter = (JavaParameter)parameter;
+				if (javaParameter.isEntity()) {
+					hasEntityParameters = true;
+					break;
+				}
+			}
+		}
+		
+		return hasEntityParameters;
 	}
 	
 }

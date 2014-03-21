@@ -15,6 +15,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 /**
  * Interface for the ${entity.name}Maintenance service.  This interface defines a the contract needed to 
@@ -36,7 +37,7 @@ public interface ${entityName}MaintenanceService extends Service {
 	 */
 	@PUT
 	@Path("/${entity.name}/#foreach($id in $entity.idFields){${id.name}}#end")
-	@Produces("text/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	ValueServiceResponse<${entity.name}> saveOrUpdate(#foreach($id in $entity.idFields)@PathParam("${id.name}") ${id.javaType} ${id.name}#end, ${entity.name} entity);
 
 	/**
@@ -46,7 +47,7 @@ public interface ${entityName}MaintenanceService extends Service {
 	 */
 	@POST
 	@Path("/${entity.name}")
-	@Produces("text/json")	 
+	@Produces(MediaType.APPLICATION_JSON)	 
 	ValueServiceResponse<${entity.name}> saveOrUpdate(${entity.name} entity);
 	 
 	/**
@@ -60,7 +61,7 @@ public interface ${entityName}MaintenanceService extends Service {
 	 */
 	@DELETE
 	@Path("/${entity.name}/#foreach($id in $entity.idFields){${id.name}}#end")	
-	@Produces("text/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	public ValueServiceResponse<${entity.name}> delete(#foreach($id in $entity.idFields)@PathParam("${id.name}") ${id.javaType} ${id.name}#end);	 
 	 
 	/**
@@ -81,7 +82,7 @@ public interface ${entityName}MaintenanceService extends Service {
 	 */
 	@GET
 	@Path("/${entity.name}/#foreach($id in $entity.idFields){${id.name}}#end")
-	@Produces("text/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	public ValueServiceResponse<${entity.name}> findByPrimaryKey(#foreach($id in $entity.idFields)@PathParam("${id.name}") ${id.javaType} ${id.name}#end);	
 
 	/**

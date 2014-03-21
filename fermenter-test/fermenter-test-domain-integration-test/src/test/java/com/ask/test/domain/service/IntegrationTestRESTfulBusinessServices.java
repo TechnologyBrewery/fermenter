@@ -6,16 +6,24 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.extension.rest.client.ArquillianResteasyResource;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.test.api.ArquillianResource;
+import org.jboss.resteasy.plugins.providers.RegisterBuiltin;
+import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
@@ -29,16 +37,18 @@ import org.tigris.atlas.persist.hibernate.HibernateSessionFactoryManager;
 import org.tigris.atlas.service.ValueServiceResponse;
 import org.tigris.atlas.service.VoidServiceResponse;
 
+import com.ask.test.domain.service.ejb.SimpleDomainMaintenanceRestService;
 import com.ask.test.domain.service.ejb.SimpleDomainManagerService;
+import com.ask.test.domain.service.rest.JacksonObjectMapperResteasyProvider;
 import com.ask.test.domain.transfer.SimpleDomain;
 
 @RunWith(Arquillian.class)
-public class IntegrationTestBusinessServices {
-	
-	@EJB
-	private SimpleDomainManagerService simpleDomainManagerService;
+public class IntegrationTestRESTfulBusinessServices {
 
-	@Deployment
+	@ArquillianResource
+	private URL base;
+	
+	@Deployment(testable=false)
 	protected static Archive<?> createDeployment() {
 		MavenResolverSystem mavenResolver = Maven.resolver();
 		File[] mavenDependencies = mavenResolver.resolve(TestUtils.DOMAIN_GROUPID_ARTIFACTID_VERSION).withTransitivity().asFile();
@@ -54,24 +64,31 @@ public class IntegrationTestBusinessServices {
 	}
 	
 	@Before
-	public void prepDatabase() {
-		//trigger schema update before we are in a CMT transaction so that it doesn't
-		//blow up due to its use of autocommit:
-		HibernateSessionFactoryManager.getInstance();
+    public void setup() {
+		ResteasyProviderFactory factory = ResteasyProviderFactory.getInstance();		
+		JacksonObjectMapperResteasyProvider objectMapperProvider = factory.getProvider(JacksonObjectMapperResteasyProvider.class);
+		
+		if (objectMapperProvider == null) {
+			factory.registerProvider(JacksonObjectMapperResteasyProvider.class);
+			RegisterBuiltin.register(factory);
+		}
+		
+    }
+	
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Test
+	public void testEjbLookup(@ArquillianResteasyResource SimpleDomainManagerService managerService) {
+		assertNotNull(managerService);
 	}
 	
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Test
-	public void testEjbLookup() {
-		assertNotNull(simpleDomainManagerService);
-	}
-	
-	@Test
-	public void testSomeBusinessOperation() {
+	public void testSomeBusinessOperation(@ArquillianResteasyResource SimpleDomainManagerService managerService) {
 		SimpleDomain domain = TestUtils.createRandomSimpleDomain();
 		final String someImportantInfo = RandomStringUtils.randomAlphanumeric(5);
 		
 		ValueServiceResponse<SimpleDomain> responseDomainWrapper 
-			= simpleDomainManagerService.someBusinessOperation(domain, someImportantInfo);
+			= managerService.someBusinessOperation(domain, someImportantInfo);
 		
 		assertNotNull(responseDomainWrapper);
 		assertNoErrorMessages(responseDomainWrapper);
@@ -83,8 +100,8 @@ public class IntegrationTestBusinessServices {
 		
 	}
 	
-	@Test
-	public void testCountPassedCollection() {
+	@Test @Consumes(MediaType.APPLICATION_JSON) @Produces(MediaType.APPLICATION_JSON)
+	public void testCountPassedCollection(@ArquillianResteasyResource SimpleDomainManagerService managerService) {
 		int numberOfItems = RandomUtils.nextInt(10);
 		List<SimpleDomain> list = new ArrayList<SimpleDomain>();
 		for (int i = 0; i < numberOfItems; i++) {
@@ -93,7 +110,7 @@ public class IntegrationTestBusinessServices {
 			list.add(domain);
 		}
 		
-		ValueServiceResponse<Integer> response = simpleDomainManagerService.count(list);
+		ValueServiceResponse<Integer> response = managerService.count(list);
 		
 		assertNotNull(response);
 		assertNoErrorMessages(response.getMessages().getErrorMessages());
@@ -104,8 +121,8 @@ public class IntegrationTestBusinessServices {
 	}	
 	
 	@Test
-	public void testDoSomething() {
-		VoidServiceResponse response = simpleDomainManagerService.doSomething();
+	public void testDoSomething(@ArquillianResteasyResource SimpleDomainManagerService managerService) {
+		VoidServiceResponse response = managerService.doSomething();
 		
 		assertNotNull(response);
 		assertNoErrorMessages(response.getMessages().getErrorMessages());
@@ -113,8 +130,8 @@ public class IntegrationTestBusinessServices {
 	}
 	
 	@Test
-	public void testDoSomethingAndReturnACharacter() {
-		ValueServiceResponse<String> response = simpleDomainManagerService.doSomethingAndReturnACharacter();
+	public void testDoSomethingAndReturnACharacter(@ArquillianResteasyResource SimpleDomainManagerService managerService) {
+		ValueServiceResponse<String> response = managerService.doSomethingAndReturnACharacter();
 		
 		assertNotNull(response);
 		assertNoErrorMessages(response.getMessages().getErrorMessages());
@@ -122,10 +139,11 @@ public class IntegrationTestBusinessServices {
 		
 	}
 	
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Test
-	public void testEchoPlusWazzup() {
+	public void testEchoPlusWazzup(@ArquillianResteasyResource SimpleDomainManagerService managerService) {
 		final String root = RandomStringUtils.randomAlphanumeric(5);
-		ValueServiceResponse<String> response = simpleDomainManagerService.echoPlusWazzup(root);
+		ValueServiceResponse<String> response = managerService.echoPlusWazzup(root);
 		
 		assertNotNull(response);
 		assertNoErrorMessages(response.getMessages().getErrorMessages());
@@ -137,8 +155,8 @@ public class IntegrationTestBusinessServices {
 	}	
 	
 	@Test
-	public void testGetSimpleDomainCount() {
-		ValueServiceResponse<Long> response = simpleDomainManagerService.getSimpleDomainCount();
+	public void testGetSimpleDomainCount(@ArquillianResteasyResource SimpleDomainManagerService managerService) {
+		ValueServiceResponse<Long> response = managerService.getSimpleDomainCount();
 		
 		assertNotNull(response);
 		assertNoErrorMessages(response.getMessages().getErrorMessages());
@@ -149,8 +167,8 @@ public class IntegrationTestBusinessServices {
 	}
 	
 	@Test
-	public void testSelectAllSimpleDomains() {
-		ValueServiceResponse<Collection<SimpleDomain>> response = simpleDomainManagerService.selectAllSimpleDomains();
+	public void testSelectAllSimpleDomains(@ArquillianResteasyResource SimpleDomainManagerService managerService) {
+		ValueServiceResponse<Collection<SimpleDomain>> response = managerService.selectAllSimpleDomains();
 		
 		assertNotNull(response);
 		assertNoErrorMessages(response.getMessages().getErrorMessages());
@@ -161,9 +179,9 @@ public class IntegrationTestBusinessServices {
 	}
 	
 	@Test
-	public void testSelectAllSimpleDomainsByType() {
+	public void testSelectAllSimpleDomainsByType(@ArquillianResteasyResource SimpleDomainManagerService managerService) {
 		final String type = RandomStringUtils.randomAlphanumeric(5);
-		ValueServiceResponse<Collection<SimpleDomain>> response = simpleDomainManagerService.selectAllSimpleDomainsByType(type);
+		ValueServiceResponse<Collection<SimpleDomain>> response = managerService.selectAllSimpleDomainsByType(type);
 		
 		assertNotNull(response);
 		assertNoErrorMessages(response.getMessages().getErrorMessages());
@@ -173,6 +191,6 @@ public class IntegrationTestBusinessServices {
 		for (SimpleDomain domain : domains) {
 			assertEquals(type, domain.getType());
 		}
-		
-	}		
+			
+	}	
 }

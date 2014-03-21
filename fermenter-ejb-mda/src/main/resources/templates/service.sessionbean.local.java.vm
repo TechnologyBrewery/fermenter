@@ -6,13 +6,13 @@ import $import;
 
 import javax.ejb.Local;
 
-import javax.ws.rs.DELETE;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 
 import org.tigris.atlas.service.ValueServiceResponse;
 import org.tigris.atlas.service.VoidServiceResponse;
@@ -46,19 +46,29 @@ public interface ${service.name}Service {
 	#if($operation.isReturnTypeCollection())	 
 	 * @return A service response-wrapped {@link Collection>} of {@link ${operation.returnManyType}}
 	#elseif(!$operation.isResponseTypeVoid())	 
-	 * @return A service response-wrapped instance of {@link ${operation.returnType}}
+	 * @return A service response-wrapped instance of {@link ${operation.wrappedReturnType}}
 	#else
 	 * @return An empty service response
 	#end
 	 */
+	#if($operation.hasEntityParameters())
+	@POST
+	#else
+	@GET
+	#end
+	@Path("/${service.name}Service/${operation.lowercaseName}")
+	@Produces(MediaType.APPLICATION_JSON)
+	#if($operation.hasEntityParameters())
+	@Consumes(MediaType.APPLICATION_JSON)
+	#end
 	#if($operation.isReturnTypeCollection())	 
-	ValueServiceResponse<Collection<${operation.returnManyType}>> ${operation.lowercaseName}(${operation.signature});
+	ValueServiceResponse<Collection<${operation.returnManyType}>> ${operation.lowercaseName}(${operation.getSignatureParametersWithJaxRS()});
 	#elseif($operation.isResponseTypeVoid())
 	public VoidServiceResponse ${operation.lowercaseName}(${operation.signature});
 	#elseif($operation.isReturnTypeEntity())	 
-	ValueServiceResponse<${operation.returnType}> ${operation.lowercaseName}(${operation.signature});
+	ValueServiceResponse<${operation.returnType}> ${operation.lowercaseName}(${operation.getSignatureParametersWithJaxRS()});
 	#else 
-	ValueServiceResponse<${operation.wrappedReturnType}> ${operation.lowercaseName}(${operation.signature});
+	ValueServiceResponse<${operation.wrappedReturnType}> ${operation.lowercaseName}(${operation.getSignatureParametersWithJaxRS()});
 	#end
 
 #end

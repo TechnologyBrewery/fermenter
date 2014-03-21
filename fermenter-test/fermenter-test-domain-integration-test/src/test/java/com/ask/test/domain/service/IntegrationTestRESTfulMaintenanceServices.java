@@ -53,7 +53,7 @@ public class IntegrationTestRESTfulMaintenanceServices {
 	}
 	
 	@Before
-    public void setup(){
+    public void setup() {
 		ResteasyProviderFactory factory = ResteasyProviderFactory.getInstance();		
 		JacksonObjectMapperResteasyProvider objectMapperProvider = factory.getProvider(JacksonObjectMapperResteasyProvider.class);
 		

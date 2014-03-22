@@ -43,8 +43,6 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.commons.lang.StringUtils;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 #foreach ($validator in $entity.validators)
 import ${validator.import};
 #end
@@ -91,7 +89,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 #end
 
 #foreach ( $idField in $idFields )
-	private ${idField.javaType}		${idField.name};
+	private ${idField.javaType}	${idField.name};
 #end
 #if ($useOptimisticLocking)	 
 	private Integer oplock;
@@ -100,7 +98,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 #if ($field.isEnumerationType() && $field.isExternal())
 	private ${field.enumeration.columnType} ${field.name};
 #else 
-	private ${field.javaType}		${field.name};
+	private ${field.javaType} ${field.name};
 #end
 #end
 #foreach ($relation in $relations)
@@ -111,12 +109,12 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 #end
 #foreach ($reference in $references)
 #if( $reference.isExternal() )
-	private ${reference.type}		${reference.name};
+	private ${reference.type} ${reference.name};
 #foreach( $fk in $reference.foreignKeyFields )
 	private ${fk.javaType}			${reference.name}${fk.capitalizedName};
 #end
 #else
-	private ${reference.type}BO		${reference.name};
+	private ${reference.type}BO ${reference.name};
 #end
 #end
 #foreach ($composite in $composites)
@@ -750,8 +748,10 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	}
 #else
 	public Messages getAllMessages() {
-#foreach ($inverseRelation in $inverseRelations)
+		//DO NOT COMMIT - temp change for compilation purposes:
 		Messages allMessages = null;
+#foreach ($inverseRelation in $inverseRelations)
+		
 		if (parent${inverseRelation.name} != null) {
 			allMessages = parent${inverseRelation.name}.getAllMessages();
 			
@@ -762,8 +762,8 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 			
 		}
 		
-		return allMessages;
 #end
+		return allMessages;
 	}
 #end
 

@@ -334,8 +334,10 @@ public class ${entityName} extends ${extends}TO {
 	}
 #else
 	public Messages getAllMessages() {
+		//DO NOT COMMIT - temp change for compilation purposes:
+		return null;
 #foreach ($inverseRelation in $inverseRelations)
-		return parent${inverseRelation.name} != null ? parent${inverseRelation.name}.getAllMessages() : getMessages();
+		//return parent${inverseRelation.name} != null ? parent${inverseRelation.name}.getAllMessages() : getMessages();
 #end
 	}
 #end

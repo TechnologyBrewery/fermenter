@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.annotation.Resource;
 import javax.ejb.Local;
-import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 
 import org.apache.commons.lang.math.RandomUtils;
@@ -51,7 +49,7 @@ public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServi
 	 */
 	protected Collection<SimpleDomainBO> selectAllSimpleDomainsImpl() {
 		Collection<SimpleDomainBO> allInstances = new ArrayList<SimpleDomainBO>();
-		for (int i = 0; i < RandomUtils.nextInt(5); i++) {
+		for (int i = 0; i < randomPostiveInt(); i++) {
 			SimpleDomainBO bo = BusinessObjectFactory.createSimpleDomainBO();
 			bo.setName("SimpleDomain" + i);
 			allInstances.add(bo);
@@ -72,7 +70,7 @@ public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServi
 	 */
 	protected Collection<SimpleDomainBO> selectAllSimpleDomainsByTypeImpl(String type) {
 		Collection<SimpleDomainBO> allInstances = new ArrayList<SimpleDomainBO>();
-		for (int i = 0; i < RandomUtils.nextInt(5); i++) {
+		for (int i = 0; i < randomPostiveInt(); i++) {
 			SimpleDomainBO bo = BusinessObjectFactory.createSimpleDomainBO();
 			bo.setName("SimpleDomain" + i);
 			bo.setType(type);
@@ -80,6 +78,11 @@ public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServi
 		}
 
 		return allInstances;
+	}
+	
+	private int randomPostiveInt() {
+		int value = RandomUtils.nextInt(5);
+		return (value == 0) ? 1 : value;
 	}
 
 	/**

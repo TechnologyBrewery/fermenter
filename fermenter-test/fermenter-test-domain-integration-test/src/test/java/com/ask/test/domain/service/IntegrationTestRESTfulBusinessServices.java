@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -33,11 +32,9 @@ import org.jboss.shrinkwrap.resolver.api.maven.MavenResolverSystem;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.tigris.atlas.persist.hibernate.HibernateSessionFactoryManager;
 import org.tigris.atlas.service.ValueServiceResponse;
 import org.tigris.atlas.service.VoidServiceResponse;
 
-import com.ask.test.domain.service.ejb.SimpleDomainMaintenanceRestService;
 import com.ask.test.domain.service.ejb.SimpleDomainManagerService;
 import com.ask.test.domain.service.rest.JacksonObjectMapperResteasyProvider;
 import com.ask.test.domain.transfer.SimpleDomain;

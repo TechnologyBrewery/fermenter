@@ -1,6 +1,6 @@
 package org.tigris.atlas.mda.generator.service;
 
-import java.util.Iterator;
+import java.util.Map;
 
 import org.apache.velocity.VelocityContext;
 import org.tigris.atlas.mda.element.java.JavaService;
@@ -10,21 +10,26 @@ import org.tigris.atlas.mda.generator.GenerationException;
 import org.tigris.atlas.mda.metadata.MetadataRepository;
 import org.tigris.atlas.mda.metadata.element.Service;
 
+/**
+ *  Iterates throught service instances, passing {@link JavaService}s instance to the templates. 
+ *
+ */
 public class ServiceJavaGenerator extends AbstractJavaGenerator {
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void generate(GenerationContext context) throws GenerationException {
 		String applicationName = context.getArtifactId();
-		Iterator serviceIterator = MetadataRepository.getInstance().getAllServices(applicationName).values().iterator();
-		
-		Service service;
+		Map<String, Service> services = MetadataRepository.getInstance().getAllServices(applicationName);
+				
 		JavaService javaService;
 		VelocityContext vc;
 		String fileName;
 		String basefileName = context.getOutputFile();
 		basefileName = replaceBasePackage(basefileName, context.getBasePackageAsPath());
 		
-		while (serviceIterator.hasNext()) {
-			service = (Service) serviceIterator.next();
+		for (Service service : services.values()) {
 			javaService = new JavaService(service);
 			
 			vc = new VelocityContext();

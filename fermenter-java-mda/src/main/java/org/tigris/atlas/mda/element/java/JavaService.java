@@ -14,9 +14,8 @@ import org.tigris.atlas.mda.metadata.element.Service;
 
 public class JavaService implements Service {
 
-
 	private Service service;
-	private Map decoratedOperationMap;
+	private Map<String, Operation> decoratedOperationMap;
 	private Set imports;
 
 	public JavaService(Service serviceToDecorate) {
@@ -26,26 +25,30 @@ public class JavaService implements Service {
 		service = serviceToDecorate;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public String getName() {
 		return service.getName();
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	public String getDocumentation() {
 		return service.getDocumentation();
 	}
 	
 	/**
-	 * @see org.tigris.atlas.mda.metadata.element.Composite#getApplicationName()
+	 * {@inheritDoc}
 	 */
 	public String getApplicationName() {
 		return service.getApplicationName();
 	}
 	
 	public boolean hasManyParameters() {
-		for (Iterator i = getOperations().values().iterator(); i.hasNext();) {
-			Operation op = (Operation) i.next();
-			for (Iterator j = op.getParameters().iterator(); j.hasNext();) {
-				Parameter param = (Parameter) j.next();
+		for (Operation op : getOperations().values()) {
+			for (Parameter param : op.getParameters()) {
 				if (param.isMany()) {
 					return true;
 				}
@@ -54,18 +57,18 @@ public class JavaService implements Service {
 		return false;
 	}
 
-	public Map getOperations() {
+	/**
+	 * {@inheritDoc}
+	 */
+	public Map<String, Operation> getOperations() {
 		if (decoratedOperationMap == null) {
-			Map serviceOperationMap = service.getOperations();
+			Map<String, Operation> serviceOperationMap = service.getOperations();
 			if ((serviceOperationMap == null) || (serviceOperationMap.size() == 0)) {
-				decoratedOperationMap = Collections.EMPTY_MAP;
+				decoratedOperationMap = Collections.emptyMap();
 
 			} else {
-				Operation o;
-				decoratedOperationMap = new HashMap((int)(serviceOperationMap.size() * 1.25  + 1));
-				Iterator i = serviceOperationMap.values().iterator();
-				while (i.hasNext()) {
-					o = (Operation)i.next();
+				decoratedOperationMap = new HashMap<String, Operation>((int)(serviceOperationMap.size() * 1.25  + 1));
+				for (Operation o : serviceOperationMap.values()) {
 					decoratedOperationMap.put(o.getName(), new JavaOperation(o));
 
 				}
@@ -76,9 +79,12 @@ public class JavaService implements Service {
 		return decoratedOperationMap;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Operation getOperation(String name) {
-		Map decoratedMap = getOperations();
-		return (Operation)decoratedMap.get(name);
+		Map<String, Operation> decoratedMap = getOperations();
+		return decoratedMap.get(name);
 	}
 
 	public Set getOperationImports() {

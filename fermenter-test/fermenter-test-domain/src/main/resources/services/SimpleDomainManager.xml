@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<!DOCTYPE service PUBLIC "-//FERMENTER//DTD SERVICE//EN" "https://bitbucket.org/askllc/fermenter/downloads/service.dtd">
+
+<service>
+	<name>SimpleDomainManager</name>
+	<documentation>A collection of operations for the SimpleDomain</documentation>
+	<operations>
+		<operation>
+			<name>SelectAllSimpleDomains</name>
+			<return-many>SimpleDomain</return-many>
+		</operation>
+		<operation>
+			<name>SomeBusinessOperation</name>
+			<documentation>An operation that demonstrates some important business function.  Returns the altered domain.</documentation>
+			<return>SimpleDomain</return>
+			<parameters>
+				<parameter>
+					<name>someBusinessEntity</name>
+					<documentation>The entity on which we should perform some business operation</documentation>
+					<type>SimpleDomain</type>
+				</parameter>
+				<parameter>
+					<name>otherImportantData</name>
+					<documentation>Critical data to supplement the business entity</documentation>
+					<type>string</type>
+				</parameter>
+			</parameters>
+		</operation>
+		<operation>
+			<name>SelectAllSimpleDomainsByType</name>
+			<return-many>SimpleDomain</return-many>
+			<parameters>
+				<parameter>
+					<name>type</name>
+					<type>string</type>
+				</parameter>
+			</parameters>
+		</operation>
+		<operation>
+			<name>GetSimpleDomainCount</name>
+			<return>long</return>
+		</operation>
+		<operation>
+			<name>DoSomething</name>
+			<return>void</return>
+		</operation>
+		<operation>
+			<name>DoSomethingAndReturnACharacter</name>
+			<return>character</return>
+		</operation>
+		<operation>
+			<name>echoPlusWazzup</name>
+			<documentation>Returns your string concatenated with another, perhaps cooler, one</documentation>
+			<return>string</return>
+			<parameters>
+				<parameter>
+					<name>echoRoot</name>
+					<type>string</type>
+				</parameter>
+			</parameters>
+		</operation>
+		<operation>
+			<name>count</name>
+			<return>integer</return>
+			<parameters>
+				<parameter>
+					<name>input</name>
+					<type>SimpleDomain</type>
+					<many>true</many>
+				</parameter>
+			</parameters>
+		</operation>	
+	</operations>
+
+</service>

@@ -1,0 +1,44 @@
+package ${basePackage}.service.ejb;
+
+import ${basePackage}.bizobj.*;
+import ${basePackage}.service.ejb.${service.name}BaseService;
+
+import javax.ejb.Local;
+import javax.ejb.Stateless;
+
+#foreach( $import in $service.imports )
+import $import;
+#end
+
+/**
+ * Service implementation class for the ${service.name} service.
+ * @see ${basePackage}.service.${service.name}Service
+ *
+ * GENERATED STUB CODE - PLEASE *DO* MODIFY
+ */
+@Local(${service.name}Service.class)
+@Stateless 
+public class ${service.name}ServiceImpl extends ${service.name}BaseService {
+#foreach( $operation in $service.operations )
+
+	/**
+	 * {@inheritDoc}
+	 */
+	#if($operation.isReturnTypeCollection())	 
+	protected Collection<${operation.returnManyTypeAsBO}> ${operation.lowercaseName}Impl(${operation.signatureWithBO}) {
+	#elseif($operation.isResponseTypeVoid())
+	protected void ${operation.lowercaseName}Impl(${operation.signatureWithBO}) {
+	#elseif($operation.isReturnTypeEntity())
+	protected ${operation.returnTypeAsBO} ${operation.lowercaseName}Impl(${operation.signatureWithBO}) {
+	#else
+	protected ${operation.wrappedReturnType} ${operation.lowercaseName}Impl(${operation.signatureWithBO}) {
+	#end
+	//TODO: Add Business Logic Here
+	
+	#if(!$operation.isResponseTypeVoid())
+		return null;
+	#end
+	}
+
+#end
+}

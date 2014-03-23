@@ -17,6 +17,10 @@
 		<priority value="DEBUG" />
 	</category>
 	
+	<category name="org.jboss.resteasy">
+		<priority value="DEBUG" />
+	</category>
+	
 	<root>
 		<level value="WARN" />
 		<appender-ref ref="consoleAppender" />

@@ -19,15 +19,15 @@ public class OperationMetadata extends MetadataElement implements Operation {
 	private String documentation;
 	private String returnType;
 	private String returnManyType;
-	private List parameters;
+	private List<Parameter> parameters;
 	private String transactionAttribute;
 	private String viewType;
 	private String transmissionMethod;
 	
 	private static Log log = LogFactory.getLog(Operation.class);
 	
-	/*
-	 * @see org.tigris.atlas.mda.metadata.Operation#getName()
+	/**
+	 * {@inheritDoc}
 	 */
 	public String getName() {
 		return StringUtils.capitalize( name );
@@ -37,8 +37,8 @@ public class OperationMetadata extends MetadataElement implements Operation {
 		this.name = name;
 	}
 	
-	/*
-	 * @see org.tigris.atlas.mda.metadata.Operation#getDocumentation()
+	/**
+	 * {@inheritDoc}
 	 */
 	public String getDocumentation() {
 		return documentation;
@@ -48,8 +48,8 @@ public class OperationMetadata extends MetadataElement implements Operation {
 		this.documentation = documentation;
 	}
 	
-	/*
-	 * @see org.tigris.atlas.mda.metadata.Operation#getReturnType()
+	/**
+	 * {@inheritDoc}
 	 */
 	public String getReturnType() {
 		return returnType;
@@ -59,30 +59,30 @@ public class OperationMetadata extends MetadataElement implements Operation {
 		this.returnType = returnType;
 	}
 	
-	/*
-	 * @see org.tigris.atlas.mda.metadata.Operation#getLowercaseName()
+	/**
+	 * {@inheritDoc}
 	 */
 	public String getLowercaseName() {
 		return StringUtils.uncapitalize(getName());
 	}
 
-	/*
-	 * @see org.tigris.atlas.mda.metadata.Operation#getParameters()
+	/**
+	 * {@inheritDoc}
 	 */
-	public List getParameters() {
+	public List<Parameter> getParameters() {
 		if( parameters == null ) {
-			parameters = new ArrayList();
+			parameters = new ArrayList<Parameter>();
 		}
 		
 		return parameters;
 	}
 	
-	public void addParameter(org.tigris.atlas.mda.metadata.element.Parameter parameter) {
+	public void addParameter(Parameter parameter) {
 		getParameters().add(parameter);
 	}
 
-	/*
-	 * @see org.tigris.atlas.mda.metadata.Operation#getReturnManyType()
+	/**
+	 * {@inheritDoc}
 	 */
 	public String getReturnManyType() {
 		return returnManyType;
@@ -92,8 +92,8 @@ public class OperationMetadata extends MetadataElement implements Operation {
 		this.returnManyType = returnManyType;
 	}
 	
-	/*
-	 * @see org.tigris.atlas.mda.metadata.Operation#getTransactionAttribute()
+	/**
+	 * {@inheritDoc}
 	 */
 	public String getTransactionAttribute() {
 		return (transactionAttribute != null) ? transactionAttribute : TRANSACTION_REQUIRED;
@@ -123,7 +123,7 @@ public class OperationMetadata extends MetadataElement implements Operation {
 	}
 	
 	/**
-	 * @see org.tigris.atlas.mda.metadata.element.Operation#getViewType()
+	 * {@inheritDoc}
 	 */
 	public String getViewType() {
 		return (viewType != null) ? viewType : VIEW_TYPE_BOTH;
@@ -138,7 +138,7 @@ public class OperationMetadata extends MetadataElement implements Operation {
 	}
 
 	/**
-	 * @see org.tigris.atlas.mda.metadata.element.Operation#getTransmissionMethod()
+	 * {@inheritDoc}
 	 */
 	public String getTransmissionMethod() {
 		return  (transmissionMethod != null) ? transmissionMethod : TRANSMISSION_METHOD_SYNC;
@@ -152,8 +152,7 @@ public class OperationMetadata extends MetadataElement implements Operation {
 	}
 
 	/**
-	 * Executed to ensure that valid combinations of metadata have been loaded.
-	 *
+	 * {@inheritDoc}
 	 */
 	public void validate() {			
 		validateTransactionAttribute();

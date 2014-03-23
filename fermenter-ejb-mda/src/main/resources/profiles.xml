@@ -17,12 +17,9 @@
 	</profile>
 
 	<profile name="java-service-session-beans" extends="core-ejb">
-		<target name="serviceSessionBeanRemoteInterfaces"/>
 		<target name="serviceSessionBeanLocalInterfaces"/>
-		<target name="serviceSessionBeanHomeInterfaces"/>
-		<target name="serviceSessionBeanLocalHomeInterfaces"/>
 		<target name="serviceSessionBeanObjects"/>
-		<target name="sessionBeanServiceDelegateObjects"/>	
+		<target name="serviceSessionBeanImplObjects"/>
 	</profile>
 
 	<profile name="java-entity-maintenance-session-beans-service-only" extends="core-ejb">

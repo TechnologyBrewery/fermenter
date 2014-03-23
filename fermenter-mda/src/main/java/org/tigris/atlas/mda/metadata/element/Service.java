@@ -5,18 +5,18 @@ import java.util.Map;
 
 public interface Service {
 	
-	public String getName();
+	String getName();
 	
-	public String getDocumentation();
+	String getDocumentation();
 
-	public Map getOperations();
+	Map<String, Operation> getOperations();
 
-	public Operation getOperation(String name);
+	Operation getOperation(String name);
 	
 	/**
 	 * Returns the name of the application from which this element originates
 	 * @return Application name
 	 */
-	public String getApplicationName();
+	String getApplicationName();
 
 }

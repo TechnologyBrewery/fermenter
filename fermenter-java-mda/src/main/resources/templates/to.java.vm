@@ -1,6 +1,5 @@
 package ${prefix}.transfer;
 
-//import ${prefix}.transfer.schema.${entityName}SchemaAssembler;
 #foreach ($import in $imports )
 import ${import};
 #end

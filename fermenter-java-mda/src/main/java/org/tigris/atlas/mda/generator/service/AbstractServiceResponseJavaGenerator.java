@@ -10,6 +10,7 @@ import org.tigris.atlas.mda.generator.AbstractJavaGenerator;
 import org.tigris.atlas.mda.generator.GenerationContext;
 import org.tigris.atlas.mda.generator.GenerationException;
 import org.tigris.atlas.mda.metadata.MetadataRepository;
+import org.tigris.atlas.mda.metadata.element.Operation;
 import org.tigris.atlas.mda.metadata.element.Service;
 
 public abstract class AbstractServiceResponseJavaGenerator extends AbstractJavaGenerator {
@@ -22,7 +23,7 @@ public abstract class AbstractServiceResponseJavaGenerator extends AbstractJavaG
 	 */
 	public void generate(GenerationContext context) throws GenerationException {
 		String applicationName = context.getArtifactId();
-		Iterator serviceIterator = MetadataRepository.getInstance().getAllServices(applicationName).values().iterator();
+		Iterator<Service> serviceIterator = MetadataRepository.getInstance().getAllServices(applicationName).values().iterator();
 		
 		Service service;
 		JavaService javaService;
@@ -30,7 +31,7 @@ public abstract class AbstractServiceResponseJavaGenerator extends AbstractJavaG
 		VelocityContext vc;
 		String fileName;
 		String basefileName = context.getOutputFile();
-		Iterator operationIterator;
+		Iterator<Operation> operationIterator;
 		basefileName = replaceBasePackage(basefileName, context.getBasePackageAsPath());
 		
 		while (serviceIterator.hasNext()) {

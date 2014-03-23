@@ -4,75 +4,129 @@ package ${basePackage}.service.ejb;
 import $import;
 #end
 
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.ejb.SessionBean;
-import javax.ejb.SessionContext;
+import ${basePackage}.bizobj.*;
 
-import ${basePackage}.service.ServiceFactory;
-import ${basePackage}.service.${service.name}Service;
+import javax.annotation.Resource;
+
+import javax.ejb.SessionContext;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
+
+import org.tigris.atlas.service.ValueServiceResponse;
+import org.tigris.atlas.service.VoidServiceResponse;
 
 /**
- * Service session bean for the ${service.name} service
+ * Service session bean for the ${service.name} service.
  *
  * Generated Code - DO NOT MODIFY
  */
-public class ${service.name}ServiceBean implements SessionBean {
+public abstract class ${service.name}BaseService {
 
-	protected SessionContext sessionContext = null;
-
-
-	/**
-	 * Get a service instance
-	 */ 
-	private ${service.name}Service get${service.name}Service() {
-		
-		return ServiceFactory.create${service.name}Service();
-	}	
+	@Resource
+	protected SessionContext sessionContext;	
 
 #foreach( $operation in $service.operations )
-
 	/**
-	 * Execute the ${operation.name} service
-	 *
-	 * @return ${operation.responseType}
+	 * {@inheritDoc}
 	 */
-	public ${operation.responseType} ${operation.lowercaseName}(${operation.signature}) {
-		${service.name}Service service = get${service.name}Service();
-		return service.${operation.lowercaseName}(${operation.parameterNames});
+	@TransactionAttribute(TransactionAttributeType.${operation.transactionAttribute})
+	#if($operation.isReturnTypeCollection())	 
+	public ValueServiceResponse<Collection<${operation.returnManyType}>> ${operation.lowercaseName}(${operation.signature}) {
+	#elseif($operation.isResponseTypeVoid())
+	public VoidServiceResponse ${operation.lowercaseName}(${operation.signature}) {
+	#elseif($operation.isReturnTypeEntity())	 
+	public ValueServiceResponse<${operation.returnType}> ${operation.lowercaseName}(${operation.signature}) {
+	#else 
+	public ValueServiceResponse<${operation.wrappedReturnType}> ${operation.lowercaseName}(${operation.signature}) {
+	#end
+	#if($operation.isReturnTypeCollection())
+		ValueServiceResponse<Collection<${operation.returnManyType}>> response = new ValueServiceResponse<Collection<${operation.returnManyType}>>();
+	#elseif($operation.isResponseTypeVoid())		
+		VoidServiceResponse response = new VoidServiceResponse();
+	#elseif($operation.isReturnTypeEntity())	
+		ValueServiceResponse<${operation.returnType}> response = new ValueServiceResponse<${operation.returnType}>();
+	#else 
+		ValueServiceResponse<${operation.wrappedReturnType}> response = new ValueServiceResponse<${operation.wrappedReturnType}>();
+	#end
+		
+		//TODO: handle messages
+		
+	#if( $operation.parameters.size() > 0 )
+		#foreach( $parameter in $operation.parameters )
+			#if( $parameter.isEntity() && $parameter.isMany() )
+				List<${parameter.type}BO> ${parameter.name}BOs = ${parameter.type}Assembler.get${parameter.type}BOList(${parameter.name});
+			#elseif ( $parameter.isEntity() && !$parameter.isMany() )
+				${parameter.type}BO ${parameter.name}BO = ${parameter.type}Assembler.merge${parameter.type}BO(${parameter.name}, null);
+			#end
+		#end
+	#end	
+		
+	#if( $operation.isReturnTypeCollection() )
+		Collection<${operation.returnManyTypeAsBO}> implResult = 
+	#elseif( $operation.isReturnTypeEntity() )
+		${operation.returnTypeAsBO} implResult =
+	#elseif( $operation.isResponseTypeVoid() )
+	#else
+		${operation.wrappedReturnType} implResult =
+	#end
+		${operation.lowercaseName}Impl(
+	#foreach( $parameter in $operation.parameters )			
+		#if( $parameter.isEntity() && $parameter.isMany() )
+				${parameter.name}BOs
+		#elseif ( $parameter.isEntity() && !$parameter.isMany() )
+				${parameter.name}BO
+		#else
+				${parameter.name}
+		#end
+		#if( $foreach.hasNext ),#end
+	#end
+		);
+		
+	#if($operation.isReturnTypeCollection())
+		Collection<${operation.returnManyType}> result = ${operation.returnManyType}Assembler.get${operation.returnManyType}List(implResult);
+		response.setValue(result);	
+	#elseif($operation.isReturnTypeEntity())	
+		${operation.returnType} result = ${operation.returnType}Assembler.create${operation.returnType}(implResult);
+		response.setValue(result);
+	#elseif( $operation.isResponseTypeVoid() )
+	#else
+		response.setValue(implResult);
+	#end
+			
+		
+		//TODO: check if transaction needs to be rolled back
+
+		return response;
+
 	}
+	
+	/**
+	 * Performs the business function for $[operation.name}.
+	#if( $operation.parameters.size() > 0 )
+		#foreach( $parameter in $operation.parameters )
+			#if( $parameter.documentation )
+	 * @param ${parameter.name} ${parameter.documentation}
+			#else
+	 * @param ${parameter.name}  
+			#end
+		#end
+	#end
+	#if($operation.isReturnTypeCollection())	 
+	 * @return A {@link Collection} of {@link ${operation.returnManyTypeAsBO}}
+	#elseif($operation.isResponseTypeVoid()) 	 
+	 * @return A instance of {@link ${operation.returnManyTypeAsBO}}
+	#end
+	 */
+	#if($operation.isReturnTypeCollection())	 
+	protected abstract Collection<${operation.returnManyTypeAsBO}> ${operation.lowercaseName}Impl(${operation.signatureWithBO});
+	#elseif($operation.isResponseTypeVoid())
+	protected abstract void ${operation.lowercaseName}Impl(${operation.signatureWithBO});
+	#elseif($operation.isReturnTypeEntity())
+	protected abstract ${operation.returnTypeAsBO} ${operation.lowercaseName}Impl(${operation.signatureWithBO});
+	#else
+	protected abstract ${operation.wrappedReturnType} ${operation.lowercaseName}Impl(${operation.signatureWithBO});
+	#end
  
 #end
-
-	public void ejbCreate() throws CreateException {
-	}
-
-	/**
-	 * @see javax.ejb.SessionBean#ejbActivate()
-	 */
-	public void ejbActivate() throws EJBException {
-	}
-
-
-	/**
-	 * @see javax.ejb.SessionBean#ejbPassivate()
-	 */
-	public void ejbPassivate() throws EJBException {
-	}
-
-
-	/**
-	 * @see javax.ejb.SessionBean#ejbRemove()
-	 */
-	public void ejbRemove() throws EJBException {		
-	}
-
-
-	/**
-	 * @see javax.ejb.SessionBean#setSessionContext(javax.ejb.SessionContext)
-	 */
-	public void setSessionContext(SessionContext ctx) throws EJBException {
-		sessionContext = ctx;			
-	}
 
 }

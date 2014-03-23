@@ -47,8 +47,6 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.commons.lang.StringUtils;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 #foreach ($validator in $entity.validators)
 import ${validator.import};
 #end
@@ -71,9 +69,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	 * may not have a non-null {@link PrimaryKey} value.
 	 */
 	protected final UUID internalTransientID = UUID.randomUUID();
-	
-	private static ${entityName}Assembler assembler = new ${entityName}Assembler();
-	
+		
 	private static final ${entityName}Dao DAO = DaoFactory.create${entityName}Dao();
 
 #foreach ( $field in $fields )
@@ -104,7 +100,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 #end
 
 #foreach ( $idField in $idFields )
-	private ${idField.javaType}		${idField.name};
+	private ${idField.javaType}	${idField.name};
 #end
 #if ($useOptimisticLocking)	 
 	private Integer oplock;
@@ -113,7 +109,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 #if ($field.isEnumerationType() && $field.isExternal())
 	private ${field.enumeration.columnType} ${field.name};
 #else 
-	private ${field.javaType}		${field.name};
+	private ${field.javaType} ${field.name};
 #end
 #end
 #foreach ($relation in $relations)
@@ -124,12 +120,12 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 #end
 #foreach ($reference in $references)
 #if( $reference.isExternal() )
-	private ${reference.type}		${reference.name};
+	private ${reference.type} ${reference.name};
 #foreach( $fk in $reference.foreignKeyFields )
 	private ${fk.javaType}			${reference.name}${fk.capitalizedName};
 #end
 #else
-	private ${reference.type}BO		${reference.name};
+	private ${reference.type}BO ${reference.name};
 #end
 #end
 #foreach ($composite in $composites)
@@ -137,10 +133,8 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 #end
 
     /**
-     * Returns the log instance for this class.
-     * @return A {@link Logger} instance for {@link ${entityName}BO}
+     * {@inheritDoc}
      */
-    @Override 
     protected Logger getLogger() {
     	return LOGGER;
     }
@@ -149,14 +143,14 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	 * Get the values for this ${entityName} entity
 	 */
 	public ${entityName} get${entityName}Values() {		
-		return assembler.create${entityName}((${entityName}BO)this);
+		return ${entityName}Assembler.create${entityName}((${entityName}BO)this);
 	}
 	
 	/**
 	 * Set the values for this ${entityName} entity
 	 */
 	public void set${entityName}Values(${entityName} entity) {
-		assembler.update${entityName}BO(entity, (${entityName}BO)this);
+		${entityName}Assembler.merge${entityName}BO(entity, (${entityName}BO)this);
 	}
 
 #foreach ( $idField in $idFields )

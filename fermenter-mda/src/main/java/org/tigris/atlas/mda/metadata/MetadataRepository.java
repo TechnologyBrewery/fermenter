@@ -128,11 +128,11 @@ public class MetadataRepository {
 		return (Enumeration)enumMap.get(type);
 	}
 	
-	public Map getAllServices() {
+	public Map<String, Service> getAllServices() {
 		return ServiceMetadataManager.getInstance().getCompleteMetadataMap();
 	}
 	
-	public Map getAllServices(String applicationName) {
+	public Map<String, Service> getAllServices(String applicationName) {
 		return ServiceMetadataManager.getServices(applicationName);
 	}	
 	

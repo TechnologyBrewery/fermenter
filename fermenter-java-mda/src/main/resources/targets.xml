@@ -111,23 +111,11 @@
 		    outputFile="${basePackage}/service/delegate/${serviceName}ServiceDelegateImpl.java"
 		    overwritable="true"/>
 				
-	<target name="serviceImplObjects"
-		    generator="org.tigris.atlas.mda.generator.service.ServiceJavaGenerator"
-		    templateName="templates/service.impl.java.vm"
-		    outputFile="${basePackage}/service/impl/${serviceName}ServiceImpl.java"
-		    overwritable="false"/>
-				
 	<target name="serviceBaseImplObjects"
 		    generator="org.tigris.atlas.mda.generator.service.ServiceJavaGenerator"
 		    templateName="templates/service.base.impl.java.vm"
 		    outputFile="${basePackage}/service/impl/${serviceName}ServiceBaseImpl.java"
 		    overwritable="true"/>
-	
-	<target name="serviceImplObjects"
-		    generator="org.tigris.atlas.mda.generator.service.ServiceJavaGenerator"
-		    templateName="templates/service.impl.java.vm"
-		    outputFile="${basePackage}/service/impl/${serviceName}ServiceImpl.java"
-		    overwritable="false"/>
 	
 	<target name="packageProperties"
 		    generator="org.tigris.atlas.mda.generator.properties.PackagePropertiesGenerator"

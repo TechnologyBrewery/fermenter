@@ -5,6 +5,8 @@ package org.tigris.atlas.transfer;
  */
 public abstract class BaseTO implements TransferObject {
 
+    private static final long serialVersionUID = -7655573120930710176L;
+
     /**
      * Test for equality
      * 

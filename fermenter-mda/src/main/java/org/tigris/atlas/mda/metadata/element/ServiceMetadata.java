@@ -1,7 +1,6 @@
 package org.tigris.atlas.mda.metadata.element;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 public class ServiceMetadata extends MetadataElement implements Service {
@@ -9,10 +8,10 @@ public class ServiceMetadata extends MetadataElement implements Service {
 	private String name;
 	private String documentation;
 	private String applicationName;
-	private Map operations;
+	private Map<String, Operation> operations;
 	
-	/*
-	 * @see org.tigris.atlas.mda.metadata.Service#getName()
+	/**
+	 * {@inheritDoc}
 	 */
 	public String getName() {
 		return name;
@@ -22,8 +21,8 @@ public class ServiceMetadata extends MetadataElement implements Service {
 		this.name = name;
 	}
 
-	/*
-	 * @see org.tigris.atlas.mda.metadata.Service#getDocumentation()
+	/**
+	 * {@inheritDoc}
 	 */
 	public String getDocumentation() {
 		return documentation;
@@ -34,7 +33,7 @@ public class ServiceMetadata extends MetadataElement implements Service {
 	}
 
 	/**
-	 * @return Returns the applicationName.
+	 * {@inheritDoc}
 	 */
 	public String getApplicationName() {
 		return applicationName;
@@ -47,19 +46,19 @@ public class ServiceMetadata extends MetadataElement implements Service {
 		this.applicationName = applicationName;
 	}
 
-	/*
-	 * @see org.tigris.atlas.mda.metadata.Service#getOperations()
+	/**
+	 * {@inheritDoc}
 	 */
-	public Map getOperations() {
+	public Map<String, Operation> getOperations() {
 		if( operations == null ) {
-			operations = new HashMap();
+			operations = new HashMap<String, Operation>();
 		}
 		
 		return operations;
 	}
 	
-	/*
-	 * @see org.tigris.atlas.mda.metadata.Service#getOperation(java.lang.String)
+	/**
+	 * {@inheritDoc}
 	 */
 	public Operation getOperation(String name) {
 		return (Operation) getOperations().get( name );
@@ -70,12 +69,11 @@ public class ServiceMetadata extends MetadataElement implements Service {
 	}
 	
 	/**
-	 * Executed to ensure that valid combinations of metadata have been loaded.
-	 *
+	 * {@inheritDoc}
 	 */
 	public void validate() {
-		for (Iterator i = getOperations().values().iterator(); i.hasNext();) {
-			OperationMetadata op = (OperationMetadata) i.next();
+		for (Operation o : getOperations().values()) {
+			OperationMetadata op = (OperationMetadata)o;
 			op.validate();
 		}
 	}

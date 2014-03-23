@@ -9,8 +9,7 @@ import java.util.Date;
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.tigris.atlas.messages.Messages;
-import org.tigris.atlas.service.ValueServiceResponse;
-import org.tigris.atlas.transfer.TransferObject;
+import org.tigris.atlas.service.ServiceResponse;
 
 import com.ask.test.domain.enumeration.SimpleDomainEnumeration;
 import com.ask.test.domain.transfer.SimpleDomain;
@@ -52,20 +51,18 @@ public final class TestUtils {
 	return domain;
     }
 
-    public static void assertNoErrorMessages(ValueServiceResponse<? extends TransferObject> response) {
+    public static void assertNoErrorMessages(ServiceResponse response) {
 	if (response != null) {
 	    Messages messages = response.getMessages();
 	    assertFalse(messages.hasErrorMessages());
 	}
     }
 
-    public static void assertErrorMessagesInResponse(ValueServiceResponse<? extends TransferObject> response,
-	    int expectedNumErrorMessages) {
+    public static void assertErrorMessagesInResponse(ServiceResponse response, int expectedNumErrorMessages) {
 	assertNotNull("Service response wrapper was unexpectedly null", response);
 	Messages messages = response.getMessages();
 	assertNotNull("Messages object on service response wrapper was unexpected null", messages);
 	assertEquals("An unexpected number of error messages were found", expectedNumErrorMessages,
 		messages.getErrorMessageCount());
     }
-
 }

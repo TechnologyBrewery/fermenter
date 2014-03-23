@@ -1,4 +1,4 @@
-package com.ask.test.domain.service.rest;
+package ${prefix}.service.rest;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;

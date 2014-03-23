@@ -1,12 +1,76 @@
 package ${basePackage}.service.ejb;
 
-import ${basePackage}.service.${service.name}Service;
-import javax.ejb.EJBLocalObject;
+#foreach( $import in $service.imports )
+import $import;
+#end
+
+import javax.ejb.Local;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+
+import org.tigris.atlas.service.ValueServiceResponse;
+import org.tigris.atlas.service.VoidServiceResponse;
 
 /**
- * Local interface for the ${service.name} service
+ * Interface for the ${service.name} service.
  *
  * Generated Code - DO NOT MODIFY
  */
-public interface ${service.name}ServiceLocal extends EJBLocalObject, ${service.name}Service {
+@Local
+@Path("/")
+public interface ${service.name}Service {
+
+#foreach( $operation in $service.operations )
+	/**
+	#if ($operation.documentation)
+	 * ${operation.documentation}
+	#else
+	 * Execute the ${operation.name} operation.
+	#end
+	 *
+	#if( $operation.parameters.size() > 0 )
+		#foreach( $parameter in $operation.parameters )
+			#if( $parameter.documentation )
+	 * @param ${parameter.name} ${parameter.documentation}
+			#else
+	 * @param ${parameter.name}  
+			#end
+		#end
+	#end
+	#if($operation.isReturnTypeCollection())	 
+	 * @return A service response-wrapped {@link Collection>} of {@link ${operation.returnManyType}}
+	#elseif(!$operation.isResponseTypeVoid())	 
+	 * @return A service response-wrapped instance of {@link ${operation.wrappedReturnType}}
+	#else
+	 * @return An empty service response
+	#end
+	 */
+	#if($operation.hasEntityParameters())
+	@POST
+	#else
+	@GET
+	#end
+	@Path("/${service.name}Service/${operation.lowercaseName}")
+	@Produces(MediaType.APPLICATION_JSON)
+	#if($operation.hasEntityParameters())
+	@Consumes(MediaType.APPLICATION_JSON)
+	#end
+	#if($operation.isReturnTypeCollection())	 
+	ValueServiceResponse<Collection<${operation.returnManyType}>> ${operation.lowercaseName}(${operation.getSignatureParametersWithJaxRS()});
+	#elseif($operation.isResponseTypeVoid())
+	public VoidServiceResponse ${operation.lowercaseName}(${operation.signature});
+	#elseif($operation.isReturnTypeEntity())	 
+	ValueServiceResponse<${operation.returnType}> ${operation.lowercaseName}(${operation.getSignatureParametersWithJaxRS()});
+	#else 
+	ValueServiceResponse<${operation.wrappedReturnType}> ${operation.lowercaseName}(${operation.getSignatureParametersWithJaxRS()});
+	#end
+
+#end
+
 }

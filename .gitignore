@@ -45,3 +45,5 @@ fermenter-test/fermenter-test-domain-webapp/.classpath
 fermenter-test/fermenter-test-domain-webapp/.settings/
 fermenter-test/fermenter-test-domain-webapp/target/
 velocity.log.*
+build-tools/target/
+.settings/

@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	
+
 	<name>Fermenter</name>
 
 	<modelVersion>4.0.0</modelVersion>
@@ -21,7 +21,8 @@
 		<module>fermenter-hibernate-mda</module>
 		<module>fermenter-ejb</module>
 		<module>fermenter-ejb-mda</module>
-		<module>fermenter-test</module>		
+		<module>fermenter-test</module>
+		<module>build-tools</module>
 	</modules>
 
 	<properties>
@@ -43,8 +44,40 @@
 			<layout>default</layout>
 		</repository>
 	</repositories>
-	
+
 	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>com.googlecode.maven-java-formatter-plugin</groupId>
+					<artifactId>maven-java-formatter-plugin</artifactId>
+					<version>0.4</version>
+					<executions>
+						<execution>
+							<goals>
+								<goal>format</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<compilerSource>1.7</compilerSource>
+						<compilerCompliance>1.7</compilerCompliance>
+						<compilerTargetPlatform>1.7</compilerTargetPlatform>
+						<lineEnding>LF</lineEnding>
+						<configFile>eclipse-java-standards-with-tabs-formatter.xml</configFile>
+						<sourceDirectory>${project.basedir}/src/generated/java</sourceDirectory>
+						<testSourceDirectory>${project.basedir}/src/test/generated/java</testSourceDirectory>
+					</configuration>
+					<dependencies>
+						<dependency>
+							<groupId>com.ask.fermenter</groupId>
+							<artifactId>build-tools</artifactId>
+							<version>${project.version}</version>
+						</dependency>
+					</dependencies>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -118,20 +151,20 @@
 				<version>4.10</version>
 				<scope>test</scope>
 			</dependency>
-	        <dependency>
-	            <groupId>org.jboss.arquillian</groupId>
-	            <artifactId>arquillian-bom</artifactId>
-	            <version>1.1.2.Final</version>
-	            <scope>import</scope>
-	            <type>pom</type>
-	        </dependency>
+			<dependency>
+				<groupId>org.jboss.arquillian</groupId>
+				<artifactId>arquillian-bom</artifactId>
+				<version>1.1.2.Final</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
 			<dependency>
 				<groupId>org.jboss.arquillian.extension</groupId>
 				<artifactId>arquillian-rest-warp-bom</artifactId>
 				<version>1.0.0.Final-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>import</scope>
-			</dependency>	
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 

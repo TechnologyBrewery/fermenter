@@ -14,11 +14,10 @@ import ${reference.importPrefix}.transfer.${reference.type}PK;
 import ${prefix}.transfer.${composite.type}Composite;
 #end
 import org.tigris.atlas.transfer.*;
-import org.tigris.atlas.messages.Messages;
-import org.tigris.atlas.messages.MessagesSet;
 
 import java.util.Collection;
 import java.util.ArrayList;
+import java.util.UUID;
 #if( $relations.size() > 0 )  
 import java.util.HashSet;
 import java.util.Set;
@@ -38,6 +37,13 @@ public class ${entityName} extends ${extends}TO {
 
 	private static final long serialVersionUID = ${uid}L;
 
+	/**
+	 * Transient ID that is not persistent but guaranteed to be non-null during an object's lifecycle
+	 * and thereby usable in hashCode() and equals() methods as a fallback for scenarios where an entity
+	 * may not have a non-null {@link PrimaryKey} value.
+	 */
+	protected final UUID internalTransientID = UUID.randomUUID();
+	
 	public static final String ENTITY = "${prefix}.${entityName}";	
 
 #foreach ( $idField in $idFields )
@@ -327,40 +333,6 @@ public class ${entityName} extends ${extends}TO {
 	}
 #end	 
 
-#if ($inverseRelations.size() == 0)
-	public Messages getAllMessages() {
-		MessagesSet set = new MessagesSet();
-		gatherMessages(set);
-		return set;
-	}
-#else
-	public Messages getAllMessages() {
-#foreach ($inverseRelation in $inverseRelations)
-		return parent${inverseRelation.name} != null ? parent${inverseRelation.name}.getAllMessages() : getMessages();
-#end
-	}
-#end
-
-	protected void gatherMessages(MessagesSet set) {
-		set.addMessages(getMessages());
-
-#foreach ($composite in $composites)
-		set.addMessages(get${composite.capitalizedName}Composite().getAllMessages());
-#end
-		
-#foreach ($relation in $relations)
-
-		Set	${relation.label}Set = get${relation.type}s();
-		if ((${relation.label}Set != null) && (${relation.label}Set.size() > 0)) {
-			Iterator ${relation.label}SetIterator = ${relation.label}Set.iterator();
-			while (${relation.label}SetIterator.hasNext()) {
-				${relation.type} child = (${relation.type}) ${relation.label}SetIterator.next();
-				child.gatherMessages(set);
-			}
-		}
-#end
-	}
-
 	public boolean equals(Object o) {
 		boolean areEqual = false;
 		
@@ -370,7 +342,7 @@ public class ${entityName} extends ${extends}TO {
 			PrimaryKey thisPk = getKey();
 			PrimaryKey thatPk = (to == null) ? null : to.getKey();
 			if (thatPk != null && thisPk.getValue() == null && thatPk.getValue() == null) {
-				return this == o;
+				return this.internalTransientID == to.internalTransientID;
 			}
 			if (thisPk == thatPk || (thisPk.equals(thatPk))) {
 				areEqual = true;
@@ -383,10 +355,7 @@ public class ${entityName} extends ${extends}TO {
 	}
 	
 	public int hashCode() {
-		// Use the Messages as a last resort when there is no primary key value.
-		// The messages field is the only field on this object that is guaranteed to
-		// be not null and the same instance for the life of the object.
-		return (getKey().getValue() == null) ? getMessages().hashCode() : getKey().getValue().hashCode();
+		return (getKey().getValue() == null) ? internalTransientID.hashCode() : getKey().getValue().hashCode();
 	}
 
 }

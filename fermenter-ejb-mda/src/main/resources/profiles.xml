@@ -7,6 +7,7 @@
 		<target name="ejbServiceFactory"/>
 		<target name="transferObjectJacksonMixIns"/>
 		<target name="objectMapperManager"/>
+		<target name="cdiDeploymentDescriptor"/>
 	</profile>
 	
 	<!-- must be manually included as some application servers bomb if more than one activator is present -->
@@ -21,7 +22,7 @@
 		<target name="serviceSessionBeanHomeInterfaces"/>
 		<target name="serviceSessionBeanLocalHomeInterfaces"/>
 		<target name="serviceSessionBeanObjects"/>
-		<target name="sessionBeanServiceDelegateObjects"/>		
+		<target name="sessionBeanServiceDelegateObjects"/>	
 	</profile>
 
 	<profile name="java-entity-maintenance-session-beans-service-only" extends="core-ejb">

@@ -1,6 +1,5 @@
 package org.tigris.atlas.bizobj;
 
-import org.tigris.atlas.messages.Messages;
 import org.tigris.atlas.transfer.PrimaryKey;
 
 /**
@@ -43,9 +42,4 @@ public interface BusinessObject {
      * 
      */
     void validate();
-
-    Messages getMessages();
-
-    Messages getAllMessages();
-
 }

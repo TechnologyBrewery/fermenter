@@ -10,8 +10,12 @@ import org.tigris.atlas.bizobj.*;
 import org.tigris.atlas.persist.*;
 #end
 import org.tigris.atlas.validate.Validations;
+
+import org.tigris.atlas.messages.MessageManager;
 import org.tigris.atlas.messages.Messages;
-import org.tigris.atlas.messages.MessagesSet;
+import org.tigris.atlas.messages.MessageUtils;
+
+import java.util.UUID;
 
 #if( $relations.size() > 0 )
 import java.util.Set;
@@ -61,6 +65,13 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(${entityName}BO.class);
 
+	/**
+	 * Transient ID that is not persistent but guaranteed to be non-null during an object's lifecycle
+	 * and thereby usable in hashCode() and equals() methods as a fallback for scenarios where an entity
+	 * may not have a non-null {@link PrimaryKey} value.
+	 */
+	protected final UUID internalTransientID = UUID.randomUUID();
+	
 	private static ${entityName}Assembler assembler = new ${entityName}Assembler();
 	
 	private static final ${entityName}Dao DAO = DaoFactory.create${entityName}Dao();
@@ -197,9 +208,8 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 
 #end
 
+	@Override
 	protected void complexValidationOnComposites() {
-		super.complexValidationOnComposites();
-	
 #foreach ( $composite in $composites )
 		get${composite.capitalizedName}Composite().complexValidation();
 #end
@@ -259,7 +269,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 #if( ${field.isRequired()} )		
 		//check requiredness:		
 		if( value == null ) {
-			Validations.validateRequired(value, "${field.name}", "${field.label}", getMessages());
+			Validations.validateRequired(value, "${entity.name}.${field.name}", "${field.label}", MessageManager.getMessages());
 						
 			//no need to continue:
 			return;
@@ -274,26 +284,26 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 #if( ${field.isSimpleType()} )
 #if( ${field.hasMinValue()} )
 		// check min value
-		Validations.validateMinValue(value, ${field.uppercasedName}_MIN_VALUE, "${field.name}", "${field.label}", getMessages());
+		Validations.validateMinValue(value, ${field.uppercasedName}_MIN_VALUE, "${entity.name}.${field.name}", "${field.label}", MessageManager.getMessages());
 #end
 #if( ${field.hasMaxValue()} )
 		//check max value
-		Validations.validateMaxValue(value, ${field.uppercasedName}_MAX_VALUE, "${field.name}", "${field.label}", getMessages());
+		Validations.validateMaxValue(value, ${field.uppercasedName}_MAX_VALUE, "${entity.name}.${field.name}", "${field.label}", MessageManager.getMessages());
 #end
 #if( ${field.hasMinLength()} )
 		//check min length
-		Validations.validateMinLength(value, ${field.uppercasedName}_MIN_LENGTH, "${field.name}", "${field.label}", getMessages());
+		Validations.validateMinLength(value, ${field.uppercasedName}_MIN_LENGTH, "${entity.name}.${field.name}", "${field.label}", MessageManager.getMessages());
 #end
 #if( ${field.hasMaxLength()} )
 		//check max length
-		Validations.validateMaxLength(value, ${field.uppercasedName}_MAX_LENGTH, "${field.name}", "${field.label}", getMessages());
+		Validations.validateMaxLength(value, ${field.uppercasedName}_MAX_LENGTH, "${entity.name}.${field.name}", "${field.label}", MessageManager.getMessages());
 #end
 #if( ${field.hasScale()} )
 		//check scale
-		Validations.validateScale(value, ${field.uppercasedName}_SCALE, "${field.name}", "${field.label}", getMessages());
+		Validations.validateScale(value, ${field.uppercasedName}_SCALE, "${entity.name}.${field.name}", "${field.label}", MessageManager.getMessages());
 #end
 #if (${field.hasFormat()})
-		Validations.validateFormat(value, ${field.uppercasedName}_VALID_PATTERNS, "${field.name}", "${field.label}", getMessages());
+		Validations.validateFormat(value, ${field.uppercasedName}_VALID_PATTERNS, "${entity.name}.${field.name}", "${field.label}", MessageManager.getMessages());
 #end
 #end
 	}	
@@ -374,7 +384,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	 * @param The ${relation.label} to add
 	 */
 	public void add${relation.type}(${relation.type}BO ${relation.label}) {
-		Set childSet = get${relation.type}s();
+		Set<${relation.type}BO> childSet = get${relation.type}s();
 		if (childSet == null) {
 			childSet = new HashSet();
 			set${relation.type}s(childSet);
@@ -471,11 +481,9 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	 */
 	protected void validate${reference.capitalizedName}() {
 #if( ${reference.isRequired()} )
-
 		if( ${reference.fkCondition} ) {
-			addError( 	"${reference.name}", 
-						"null.not.allowed", 
-						new Object[] { "${reference.name}" } );
+			MessageManager.addMessage(MessageUtils.createErrorMessage( "null.not.allowed",
+			         	new String[] { "${reference.type}.${reference.name}" }, new Object[] { "${reference.name}" } ));
 						
 			//no need to continue:
 			return;
@@ -489,10 +497,8 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 #end
 
 		if ( get${reference.capitalizedName}() == null) {
-			addError( 	"${reference.name}", 
-						"invalid.reference", 
-						new Object[] { "${reference.name}" } );
-						
+			MessageManager.addMessage(MessageUtils.createErrorMessage( "invalid.reference",
+			         	new String[] { "${reference.type}.${reference.name}" }, new Object[] { "${reference.name}" } ));
 		}
 		
 	}
@@ -527,9 +533,8 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 #if( ${reference.isRequired()} )		
 		//check requiredness:		
 		if( ref == null ) {	
-			addError( 	"${reference.name}", 
-						"null.not.allowed", 
-						new Object[] { "${reference.name}" } );
+			MessageManager.addMessage(MessageUtils.createErrorMessage( "null.not.allowed",
+			         	new String[] { "${reference.type}.${reference.name}" }, new Object[] { "${reference.name}" } ));
 						
 			//no need to continue:
 			return;
@@ -553,9 +558,8 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 			retrievedRef = ${reference.type}BO.findByPrimaryKey(pk);
 		}
 		if (retrievedRef == null) {
-			addError( 	"${reference.name}", 
-						"invalid.reference", 
-						new Object[] { "${reference.name}" } );
+			MessageManager.addMessage(MessageUtils.createErrorMessage( "invalid.reference",
+			         	new String[] { "${reference.type}.${reference.name}" }, new Object[] { "${reference.name}" } ));
 						
 		}
 		
@@ -621,9 +625,8 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	/**
 	 * Executes all field-level validations
 	 */
+	@Override 
 	protected void fieldValidation() {
-		super.fieldValidation();
-		
 #foreach ( $field in $fields )		
 		validate${field.capitalizedName}();
 #end		
@@ -631,24 +634,19 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 #if( $relations.size() > 0 )
 		//call field validation on children:
 #foreach ($relation in $relations)
-		Set ${relation.label}Set = get${relation.type}s();
-		if ((${relation.label}Set != null) && (${relation.label}Set.size() > 0)) {
-			${relation.type}BO child;
-			Iterator ${relation.label}Iterator = ${relation.label}Set.iterator();
-			while (${relation.label}Iterator.hasNext()) {
-				child = (${relation.type}BO)${relation.label}Iterator.next();
+		Set<${relation.type}BO> ${relation.label}Set = get${relation.type}s();
+		if (${relation.label}Set != null && !${relation.label}Set.isEmpty()) {
+			for (${relation.type}BO child : ${relation.label}Set) {
 				child.fieldValidation();
 			}
-			
 		}
 
 #end		
 #end
 	}	
 	
+	@Override 
 	protected void compositeValidation() {
-		super.compositeValidation();
-
 #foreach ($composite in $composites)
 		validate${composite.capitalizedName}();
 #end
@@ -657,9 +655,8 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	/**
 	 * Executes all reference-level validations
 	 */
+	@Override 
 	protected void referenceValidation() {
-		super.referenceValidation();
-		
 #foreach ( $reference in $references )		
 		validate${reference.capitalizedName}();
 #end
@@ -672,21 +669,16 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	/**
 	 * Executes all complex validation on children
 	 */
+	@Override 
 	protected void complexValidationOnChildren() {
-		super.complexValidationOnChildren();	
-
 #if( $relations.size() > 0 )
 		//call complex validation on children:
 #foreach ($relation in $relations)
-		Set ${relation.label}Set = get${relation.type}s();
-		if ((${relation.label}Set != null) && (${relation.label}Set.size() > 0)) {
-			${relation.type}BO child;
-			Iterator ${relation.label}Iterator = ${relation.label}Set.iterator();
-			while (${relation.label}Iterator.hasNext()) {
-				child = (${relation.type}BO)${relation.label}Iterator.next();
+		Set<${relation.type}BO> ${relation.label}Set = get${relation.type}s();
+		if (${relation.label}Set != null && !${relation.label}Set.isEmpty()) {
+			for (${relation.type}BO child : ${relation.label}Set) {
 				child.complexValidation();
 			}
-			
 		}
 
 #end		
@@ -744,52 +736,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 		List<${entityName}BO> bos = ${entity.name}BO.getDefaultDao().${query.lowercaseName}(#foreach( $criterion in $query.criteria )${criterion.name} #set($currentNum = $currentNum+1)#if($currentNum<$numCriteria), #end#end);
 		return bos;
 	}
-#end
-
-#if ($inverseRelations.size() == 0)
-	public Messages getAllMessages() {
-		MessagesSet set = new MessagesSet();
-		gatherMessages(set);
-		return set;
-	}
-#else
-	public Messages getAllMessages() {
-#foreach ($inverseRelation in $inverseRelations)
-		Messages allMessages = null;
-		if (parent${inverseRelation.name} != null) {
-			allMessages = parent${inverseRelation.name}.getAllMessages();
-			
-		} else {
-			MessagesSet set = new MessagesSet();
-			gatherMessages(set);
-			allMessages = set;
-			
-		}
-		
-		return allMessages;
-#end
-	}
-#end
-
-	protected void gatherMessages(MessagesSet set) {
-		set.addMessages(getMessages());
-		
-#foreach ($composite in $composites)
-		set.addMessages(get${composite.capitalizedName}Composite().getAllMessages());
-#end
-		
-#foreach ($relation in $relations)
-
-		Set	${relation.label}Set = get${relation.type}s();
-		if ((${relation.label}Set != null) && (${relation.label}Set.size() > 0)) {
-			Iterator ${relation.label}SetIterator = ${relation.label}Set.iterator();
-			while (${relation.label}SetIterator.hasNext()) {
-				${relation.type}BO child = (${relation.type}BO) ${relation.label}SetIterator.next();
-				child.gatherMessages(set);
-			}
-		}
-#end
-	}
+#end 
 
 	public boolean equals(Object o) {
 		boolean areEqual = false;
@@ -800,7 +747,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 			PrimaryKey thisPk = getKey();
 			PrimaryKey thatPk = (bo == null) ? null : bo.getKey();
 			if (thatPk != null && thisPk.getValue() == null && thatPk.getValue() == null) {
-				return this == o;
+				return this.internalTransientID == bo.internalTransientID;
 			}
 			if (thisPk == thatPk || (thisPk.equals(thatPk))) {
 				areEqual = true;
@@ -813,10 +760,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	}
 	
 	public int hashCode() {
-		// Use the Messages as a last resort when there is no primary key value.
-		// The messages field is the only field on this object that is guaranteed to
-		// be not null and the same instance for the life of the object.
-		return (getKey().getValue() == null) ? getMessages().hashCode() : getKey().getValue().hashCode();
+		return (getKey().getValue() == null) ? internalTransientID.hashCode() : getKey().getValue().hashCode();
 	}
 
 }

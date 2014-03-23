@@ -76,4 +76,7 @@
 		<summary>A recoverable exception occurred.</summary>
 	</message>
 
+	<message key="invalid.reference">
+		<summary>A non-existent object was referenced in a M-1 relationship for field {0}.</summary>
+	</message>
 </messages>

@@ -32,8 +32,6 @@ import java.util.Iterator;
 import java.util.Collection;
 
 import org.tigris.atlas.bizobj.TransferObjectAssembler;
-import org.tigris.atlas.messages.Messages;
-import org.tigris.atlas.messages.Message;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -101,7 +99,6 @@ public class ${entityName}Assembler extends TransferObjectAssembler {
 #foreach ($field in ${composite.fields})
 			to${composite.capitalizedName}Composite.set${field.capitalizedName}(bo${composite.capitalizedName}Composite.get${field.capitalizedName}());
 #end
-			to${composite.capitalizedName}Composite.getMessages().addMessages(bo${composite.capitalizedName}Composite.getMessages());
 #end
 
 			//pull over relations:
@@ -131,22 +128,6 @@ public class ${entityName}Assembler extends TransferObjectAssembler {
 			}
 #end			
 #end
-
-			//finally, get any messages:
-			Messages messages = bo.getMessages();
-			Collection<Message> errors = messages.getErrorMessages();
-			if (errors.size() > 0) {
-				for (Message message : errors) {
-					to.getMessages().addMessage(message);
-				}
-			}
-			
-			Collection<Message> infos = messages.getInformationalMessages();
-			if (infos.size() > 0) {
-				for (Message message : infos) {
-					to.getMessages().addMessage(message);
-				}
-			}
 			
 		}
 		

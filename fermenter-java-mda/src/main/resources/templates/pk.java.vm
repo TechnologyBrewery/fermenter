@@ -14,8 +14,6 @@ import java.io.Serializable;
  
 public class ${entityName}PK implements PrimaryKey {
 
-	//private static ${entityName}PKSchemaAssembler assembler = new ${entityName}PKSchemaAssembler();
-
 #foreach( $idField in $idFields ) 
 	private ${idField.javaType}		${idField.name};
 #end

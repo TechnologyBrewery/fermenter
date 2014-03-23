@@ -12,28 +12,29 @@ import com.ask.test.domain.bizobj.ValidationExampleBO;
 
 public class TestRequiredValidation extends AbstractValidationTest {
 
-	   public void testRequiredWithValue() {    	
-	        ValidationExampleBO ve = getValidationExampleBO();
-	        ve.setRequiredField("iAmRequired");
-	        
-	        ve.validate();
+    public void testRequiredWithValue() {
+	ValidationExampleBO ve = getValidationExampleBO();
+	ve.setRequiredField("iAmRequired");
 
-	        assertFalse(ve.getMessages().hasErrorMessages());
-	    }
+	ve.validate();
 
-	    public void testRequiredWithoutValue() {
-	        ValidationExampleBO ve = getValidationExampleBO();
-	        ve.setRequiredField(null);
-	        ve.validate();
-	        
-	        String fieldIndicator = "requiredField";        
-	        Messages messages = verifyErrorList(ve);
-	        Collection<Message> fieldLevelList = verifyFieldLevelList(messages, fieldIndicator);
-	        verifyNumberOfErrors(fieldLevelList, 1);
+	Messages messages = verifyMessages();
+	assertFalse(messages.hasErrorMessages());
+    }
 
-	        Message e = (Message)ve.getMessages().getErrorMessages(fieldIndicator).iterator().next();
-	        assertEquals("null.not.allowed", e.getKey());
-	        assertEquals("required field", e.getInserts().iterator().next());
-	    }	
-	
+    public void testRequiredWithoutValue() {
+	ValidationExampleBO ve = getValidationExampleBO();
+	ve.setRequiredField(null);
+	ve.validate();
+
+	String fieldIndicator = "requiredField";
+	Messages messages = verifyMessages();
+	Collection<Message> fieldLevelList = verifyFieldLevelList(messages, fieldIndicator);
+	verifyNumberOfErrors(fieldLevelList, 1);
+
+	Message e = messages.getErrorMessages(fieldIndicator).iterator().next();
+	assertEquals("null.not.allowed", e.getKey());
+	assertEquals("required field", e.getInserts().iterator().next());
+    }
+
 }

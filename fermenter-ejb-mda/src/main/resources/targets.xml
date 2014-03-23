@@ -92,5 +92,11 @@
 		    templateName="templates/jax.rs.activator.java.vm"
 		    outputFile="${basePackage}/service/rest/JaxRsActivator.java"
 		    overwritable="true"/>
+	
+	<target name="cdiDeploymentDescriptor"
+		    generator="org.tigris.atlas.ejb.mda.generator.DeploymentDescriptorGenerator"
+		    templateName="templates/cdi.beans.xml.vm"
+		    outputFile="META-INF/beans.xml"
+		    overwritable="true"/>	
 
 </targets>

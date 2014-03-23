@@ -1,21 +1,21 @@
 package org.tigris.atlas.bizobj;
 
 import org.slf4j.Logger;
-import org.tigris.atlas.messages.Messages;
+import org.tigris.atlas.messages.MessageManager;
 import org.tigris.atlas.persist.Dao;
 import org.tigris.atlas.transfer.PrimaryKey;
 
 /**
  * Base class for all parent business objects.
  */
-public abstract class BaseBO extends ComplexType implements BusinessObject {
+public abstract class BaseBO implements BusinessObject {
 
     /**
      * {@inheritDoc}
      */
     public void save() {
 	validate();
-	if (!getAllMessages().hasErrorMessages()) {
+	if (!MessageManager.hasErrorMessages()) {
 	    normalize();
 	    Dao<BusinessObject, PrimaryKey> dao = getDao();
 	    dao.save(this);
@@ -52,12 +52,11 @@ public abstract class BaseBO extends ComplexType implements BusinessObject {
 	compositeValidation();
 	referenceValidation();
 
-	Messages allMessages = getAllMessages();
-	if (allMessages != null && !allMessages.hasErrorMessages()) {
+	if (!MessageManager.hasErrorMessages()) {
 	    complexValidation();
 	    complexValidationOnComposites();
 
-	    if (!allMessages.hasErrorMessages()) {
+	    if (!MessageManager.hasErrorMessages()) {
 		complexValidationOnChildren();
 	    }
 	}
@@ -75,5 +74,17 @@ public abstract class BaseBO extends ComplexType implements BusinessObject {
     protected abstract <D extends Dao<? extends BusinessObject, ? extends PrimaryKey>> D getDao();
 
     protected abstract Logger getLogger();
+
+    protected abstract void fieldValidation();
+
+    protected abstract void compositeValidation();
+
+    protected abstract void referenceValidation();
+
+    protected abstract void complexValidation();
+
+    protected abstract void complexValidationOnChildren();
+
+    protected abstract void complexValidationOnComposites();
 
 }

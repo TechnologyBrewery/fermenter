@@ -14,13 +14,14 @@ import ${basePackage}.bizobj.${entity.name}BO;
 import javax.annotation.Resource;
 
 import javax.ejb.Local;
-import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
 import javax.inject.Inject;
 
+import org.tigris.atlas.messages.InjectableMessages;
+import org.tigris.atlas.messages.ThreadLocalMessages;
 import org.tigris.atlas.service.ValueServiceResponse;
 
 import org.slf4j.Logger;
@@ -33,8 +34,9 @@ import ${basePackage}.service.ejb.${entity.name}MaintenanceService;
  *
  * Generated Code - DO NOT MODIFY
  */
- @Local(${entity.name}MaintenanceService.class)
- @Stateless
+@Local(${entity.name}MaintenanceService.class)
+@Stateless
+@ThreadLocalMessages
 public class ${entity.name}MaintenanceServiceBean implements ${entity.name}MaintenanceService {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(${entity.name}MaintenanceServiceBean.class);
@@ -42,14 +44,12 @@ public class ${entity.name}MaintenanceServiceBean implements ${entity.name}Maint
 	private ${entity.name}Assembler assembler = new ${entity.name}Assembler();
 	
 	@Inject
-	private ${entity.name}BO seed${entity.name}BO;
-	
-	@Resource
-	private SessionContext sessionContext;
-	
+	private InjectableMessages messages;
+		
 	/**
 	 * {@inheritDoc}
 	 */
+ 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public ValueServiceResponse<${entity.name}> saveOrUpdate(#foreach($id in $entity.idFields)${id.javaType} ${id.name}#end, ${entity.name} entity) {
 		if ((#foreach($id in $entity.idFields)${id.name}#end != null) && (entity != null)) {
 			//make sure whatever is being saved is has the passed pk value:
@@ -77,10 +77,8 @@ public class ${entity.name}MaintenanceServiceBean implements ${entity.name}Maint
 			
 			if (retrievedBusinessObject != null) {
 				businessObjectToSave = retrievedBusinessObject;				
-				
 			} else {
 				businessObjectToSave = BusinessObjectFactory.create${entity.name}BO();
-				
 			}
 			
 			assembler.update${entity.name}BO(entity, businessObjectToSave);
@@ -91,9 +89,7 @@ public class ${entity.name}MaintenanceServiceBean implements ${entity.name}Maint
 			
 			${entity.name} updateEntity = assembler.create${entity.name}(businessObjectToSave);
 			
-			response = new ValueServiceResponse<${entity.name}>();
-			response.setValue(updateEntity);
-			
+			response = new ValueServiceResponse<${entity.name}>(updateEntity, this.messages);			
 		}
 		
 		return response;
@@ -102,18 +98,19 @@ public class ${entity.name}MaintenanceServiceBean implements ${entity.name}Maint
 	/**
 	 * {@inheritDoc}
 	 */
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public ValueServiceResponse<${entity.name}> delete(#foreach($id in $entity.idFields)${id.javaType} ${id.name}#end) {
 		${entity.name}PK pk = TransferObjectFactory.create${entity.name}PK();
 #foreach($id in $entity.idFields)
 		pk.set${id.capitalizedName}(${id.name});
 #end
 		return delete(pk);
-		
 	}	
 	 
 	/**
 	 * {@inheritDoc}
 	 */
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public ValueServiceResponse<${entity.name}> delete(${entity.name}PK pk) {
 		LOGGER.debug("Executing ${entity.name}.delete");
 		${entity.name}BO businessObjectToDelete = BusinessObjectFactory.create${entity.name}BO();
@@ -122,12 +119,13 @@ public class ${entity.name}MaintenanceServiceBean implements ${entity.name}Maint
 		
 		//TODO: handle messages
 		
-		return new ValueServiceResponse<${entity.name}>();
+		return new ValueServiceResponse<${entity.name}>(null, this.messages);
 	}
 	
 	/**
 	 * {@inheritDoc}
 	 */
+	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public ValueServiceResponse<${entity.name}> findByPrimaryKey(#foreach($id in $entity.idFields)${id.javaType} ${id.name}#end) {
 		${entity.name}PK pk = TransferObjectFactory.create${entity.name}PK();
 #foreach($id in $entity.idFields)
@@ -143,6 +141,7 @@ public class ${entity.name}MaintenanceServiceBean implements ${entity.name}Maint
 	 * @param pk The primary key for the ${entity.name}
 	 * @return ${entity.name}ServiceResponse The retrieved ${entity.name} container
 	 */
+	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public ValueServiceResponse<${entity.name}> findByPrimaryKey(${entity.name}PK pk) {
 		LOGGER.debug("Executing ${entity.name}.findByPrimaryKey");
 		${entity.name} retrieveEntity = null;
@@ -155,10 +154,7 @@ public class ${entity.name}MaintenanceServiceBean implements ${entity.name}Maint
 		
 		//TODO: handle messages
 		
-		ValueServiceResponse<${entity.name}> response = new ValueServiceResponse<${entity.name}>();
-		response.setValue(retrieveEntity);
-		
-		return response;
+		return new ValueServiceResponse<${entity.name}>(retrieveEntity, this.messages);
 	}
 
 }

@@ -18,6 +18,7 @@ import org.tigris.atlas.bizobj.BusinessObject;
 import org.tigris.atlas.factory.FactoryManager;
 import org.tigris.atlas.messages.Message;
 import org.tigris.atlas.messages.MessageFactory;
+import org.tigris.atlas.messages.MessageManager;
 import org.tigris.atlas.messages.Severity;
 import org.tigris.atlas.persist.Dao;
 import org.tigris.atlas.transfer.PrimaryKey;
@@ -210,12 +211,7 @@ public abstract class DaoImpl<BO extends BusinessObject, PK extends PrimaryKey> 
 	message.setKey(DATABASE_EXCEPTION_KEY);
 	message.addInsert(dae.getMessage());
 	message.setSeverity(Severity.ERROR);
-	if (businessObject != null) {
-	    businessObject.getMessages().addMessage(message);
-
-	} else {
-	    LOG.debug("No BO on which to attach the an error message!", dae);
-	}
+	MessageManager.addMessage(message);
 
 	return businessObject;
     }

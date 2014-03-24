@@ -69,6 +69,16 @@
 					<many>true</many>
 				</parameter>
 			</parameters>
+		</operation>
+		<operation>
+			<name>CreateAndPropagateErrorMessages</name>
+			<return>void</return>
+			<parameters>
+				<parameter>
+					<name>numErrorMessagesToGenerate</name>
+					<type>integer</type>
+				</parameter>
+			</parameters>
 		</operation>	
 	</operations>
 

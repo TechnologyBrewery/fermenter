@@ -11,6 +11,8 @@ import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.tigris.atlas.messages.MessageManager;
+import org.tigris.atlas.messages.MessageUtils;
 
 import com.ask.test.domain.bizobj.BusinessObjectFactory;
 import com.ask.test.domain.bizobj.SimpleDomainBO;
@@ -20,92 +22,105 @@ import com.ask.test.domain.bizobj.SimpleDomainBO;
  * 
  * @see com.ask.test.domain.service.SimpleDomainManagerService
  * 
- * GENERATED STUB CODE - PLEASE *DO* MODIFY
+ *      GENERATED STUB CODE - PLEASE *DO* MODIFY
  */
 @Local(SimpleDomainManagerService.class)
 @Stateless
-public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseService implements SimpleDomainManagerService {
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(SimpleDomainManagerServiceImpl.class);
+public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseService implements
+	SimpleDomainManagerService {
 
-	/**
-	 * {@inheritDoc}
-	 */
-	protected Long getSimpleDomainCountImpl() {
-		return RandomUtils.nextLong();
+    private static final Logger LOGGER = LoggerFactory.getLogger(SimpleDomainManagerServiceImpl.class);
+
+    /**
+     * {@inheritDoc}
+     */
+    protected Long getSimpleDomainCountImpl() {
+	return RandomUtils.nextLong();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected String echoPlusWazzupImpl(String echoRoot) {
+	StringBuilder sb = new StringBuilder();
+	sb.append(echoRoot).append("WAZZUP");
+	return sb.toString();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected Collection<SimpleDomainBO> selectAllSimpleDomainsImpl() {
+	Collection<SimpleDomainBO> allInstances = new ArrayList<SimpleDomainBO>();
+	for (int i = 0; i < randomPostiveInt(); i++) {
+	    SimpleDomainBO bo = BusinessObjectFactory.createSimpleDomainBO();
+	    bo.setName("SimpleDomain" + i);
+	    allInstances.add(bo);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	protected String echoPlusWazzupImpl(String echoRoot) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(echoRoot).append("WAZZUP");
-		return sb.toString();
+	return allInstances;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected Integer countImpl(List<SimpleDomainBO> inputBOs) {
+	return (inputBOs == null) ? 0 : inputBOs.size();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected Collection<SimpleDomainBO> selectAllSimpleDomainsByTypeImpl(String type) {
+	Collection<SimpleDomainBO> allInstances = new ArrayList<SimpleDomainBO>();
+	for (int i = 0; i < randomPostiveInt(); i++) {
+	    SimpleDomainBO bo = BusinessObjectFactory.createSimpleDomainBO();
+	    bo.setName("SimpleDomain" + i);
+	    bo.setType(type);
+	    allInstances.add(bo);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	protected Collection<SimpleDomainBO> selectAllSimpleDomainsImpl() {
-		Collection<SimpleDomainBO> allInstances = new ArrayList<SimpleDomainBO>();
-		for (int i = 0; i < randomPostiveInt(); i++) {
-			SimpleDomainBO bo = BusinessObjectFactory.createSimpleDomainBO();
-			bo.setName("SimpleDomain" + i);
-			allInstances.add(bo);
-		}
+	return allInstances;
+    }
 
-		return allInstances;
+    private int randomPostiveInt() {
+	int value = RandomUtils.nextInt(5);
+	return (value == 0) ? 1 : value;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected void doSomethingImpl() {
+	LOGGER.info("did something!");
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected String doSomethingAndReturnACharacterImpl() {
+	return RandomStringUtils.randomAlphabetic(1);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected SimpleDomainBO someBusinessOperationImpl(SimpleDomainBO someBusinessEntityBO, String otherImportantData) {
+	someBusinessEntityBO.setName("This data is really important: " + otherImportantData);
+	return someBusinessEntityBO;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void createAndPropagateErrorMessagesImpl(Integer numErrorMessagesToGenerate) {
+	for (int iter = 0; iter < numErrorMessagesToGenerate; iter++) {
+	    MessageManager.addMessage(MessageUtils.createErrorMessage(RandomStringUtils.randomAlphabetic(5),
+		    new String[] {}, new Object[] {}));
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	protected Integer countImpl(List<SimpleDomainBO> inputBOs) {		
-		return (inputBOs == null) ? 0 : inputBOs.size();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	protected Collection<SimpleDomainBO> selectAllSimpleDomainsByTypeImpl(String type) {
-		Collection<SimpleDomainBO> allInstances = new ArrayList<SimpleDomainBO>();
-		for (int i = 0; i < randomPostiveInt(); i++) {
-			SimpleDomainBO bo = BusinessObjectFactory.createSimpleDomainBO();
-			bo.setName("SimpleDomain" + i);
-			bo.setType(type);
-			allInstances.add(bo);
-		}
-
-		return allInstances;
-	}
-	
-	private int randomPostiveInt() {
-		int value = RandomUtils.nextInt(5);
-		return (value == 0) ? 1 : value;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	protected void doSomethingImpl() {
-		LOGGER.info("did something!");
-
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	protected String doSomethingAndReturnACharacterImpl() {
-		return RandomStringUtils.randomAlphabetic(1);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	protected SimpleDomainBO someBusinessOperationImpl(SimpleDomainBO someBusinessEntityBO, String otherImportantData) {
-		someBusinessEntityBO.setName("This data is really important: " + otherImportantData);
-		return someBusinessEntityBO;
-	}
+    }
 
 }

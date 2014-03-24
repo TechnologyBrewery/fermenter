@@ -24,6 +24,7 @@ public class ${service.name}ServiceImpl extends ${service.name}BaseService {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	#if($operation.isReturnTypeCollection())	 
 	protected Collection<${operation.returnManyTypeAsBO}> ${operation.lowercaseName}Impl(${operation.signatureWithBO}) {
 	#elseif($operation.isResponseTypeVoid())

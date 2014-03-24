@@ -6,12 +6,12 @@ import $import;
 
 import ${basePackage}.bizobj.*;
 
-import javax.annotation.Resource;
-
-import javax.ejb.SessionContext;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.inject.Inject;
 
+import org.tigris.atlas.messages.InjectableMessages;
+import org.tigris.atlas.messages.ThreadLocalMessages;
 import org.tigris.atlas.service.ValueServiceResponse;
 import org.tigris.atlas.service.VoidServiceResponse;
 
@@ -22,14 +22,15 @@ import org.tigris.atlas.service.VoidServiceResponse;
  */
 public abstract class ${service.name}BaseService {
 
-	@Resource
-	protected SessionContext sessionContext;	
+	@Inject
+	private InjectableMessages messages;	
 
 #foreach( $operation in $service.operations )
 	/**
 	 * {@inheritDoc}
 	 */
 	@TransactionAttribute(TransactionAttributeType.${operation.transactionAttribute})
+	@ThreadLocalMessages
 	#if($operation.isReturnTypeCollection())	 
 	public ValueServiceResponse<Collection<${operation.returnManyType}>> ${operation.lowercaseName}(${operation.signature}) {
 	#elseif($operation.isResponseTypeVoid())
@@ -39,18 +40,7 @@ public abstract class ${service.name}BaseService {
 	#else 
 	public ValueServiceResponse<${operation.wrappedReturnType}> ${operation.lowercaseName}(${operation.signature}) {
 	#end
-	#if($operation.isReturnTypeCollection())
-		ValueServiceResponse<Collection<${operation.returnManyType}>> response = new ValueServiceResponse<Collection<${operation.returnManyType}>>();
-	#elseif($operation.isResponseTypeVoid())		
-		VoidServiceResponse response = new VoidServiceResponse();
-	#elseif($operation.isReturnTypeEntity())	
-		ValueServiceResponse<${operation.returnType}> response = new ValueServiceResponse<${operation.returnType}>();
-	#else 
-		ValueServiceResponse<${operation.wrappedReturnType}> response = new ValueServiceResponse<${operation.wrappedReturnType}>();
-	#end
-		
-		//TODO: handle messages
-		
+
 	#if( $operation.parameters.size() > 0 )
 		#foreach( $parameter in $operation.parameters )
 			#if( $parameter.isEntity() && $parameter.isMany() )
@@ -84,13 +74,14 @@ public abstract class ${service.name}BaseService {
 		
 	#if($operation.isReturnTypeCollection())
 		Collection<${operation.returnManyType}> result = ${operation.returnManyType}Assembler.get${operation.returnManyType}List(implResult);
-		response.setValue(result);	
+		ValueServiceResponse<Collection<${operation.returnManyType}>> response = new ValueServiceResponse<Collection<${operation.returnManyType}>>(result, this.messages);
 	#elseif($operation.isReturnTypeEntity())	
 		${operation.returnType} result = ${operation.returnType}Assembler.create${operation.returnType}(implResult);
-		response.setValue(result);
+		ValueServiceResponse<${operation.returnType}> response = new ValueServiceResponse<${operation.returnType}>(result, this.messages);
 	#elseif( $operation.isResponseTypeVoid() )
+		VoidServiceResponse response = new VoidServiceResponse(this.messages);
 	#else
-		response.setValue(implResult);
+		ValueServiceResponse<${operation.wrappedReturnType}> response = new ValueServiceResponse<${operation.wrappedReturnType}>(implResult, this.messages);
 	#end
 			
 		

@@ -34,14 +34,6 @@ public abstract class ServiceResponse implements Serializable {
 	}
 	
 	/**
-	 * Returns messages for this response.
-	 * @return messages
-	 */
-	protected final void setMessages(Messages messages) {
-		this.messages = messages;
-	}
-	
-	/**
 	 * Indicates whether errors exist within the messages on this response (vice information or warning messages).
 	 * @return true is has error messages
 	 */

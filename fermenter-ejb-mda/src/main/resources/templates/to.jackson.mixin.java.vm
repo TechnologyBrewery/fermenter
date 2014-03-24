@@ -17,7 +17,6 @@ import ${reference.importPrefix}.transfer.${reference.type}PK;
 import ${prefix}.transfer.${composite.type}Composite;
 #end
 import org.tigris.atlas.transfer.*;
-import org.tigris.atlas.messages.Messages;
 
 #if( $relations.size() > 0 )  
 import java.util.Set;
@@ -64,9 +63,6 @@ public abstract class ${entityName}MixIn {
 #end
 
 	@JsonIgnore
-	private Messages messages;
-
-	@JsonIgnore
 	public abstract String getEntityName();
 
 #if ( $idFields.size() > 0 )
@@ -89,9 +85,6 @@ public abstract class ${entityName}MixIn {
 	@JsonIgnore
 	public abstract void setKey(PrimaryKey key);
 #end	 
-
-	@JsonIgnore
-	public abstract Messages getAllMessages();
 	
 #foreach ($inverseRelation in $inverseRelations)
 	@JsonIgnore

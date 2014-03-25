@@ -117,6 +117,7 @@ public class IntegrationTestRESTfulBusinessServices {
 		
 	}	
 	
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Test
 	public void testDoSomething(@ArquillianResteasyResource SimpleDomainManagerService managerService) {
 		VoidServiceResponse response = managerService.doSomething();
@@ -126,6 +127,7 @@ public class IntegrationTestRESTfulBusinessServices {
 		
 	}
 	
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Test
 	public void testDoSomethingAndReturnACharacter(@ArquillianResteasyResource SimpleDomainManagerService managerService) {
 		ValueServiceResponse<String> response = managerService.doSomethingAndReturnACharacter();
@@ -151,6 +153,7 @@ public class IntegrationTestRESTfulBusinessServices {
 		
 	}	
 	
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Test
 	public void testGetSimpleDomainCount(@ArquillianResteasyResource SimpleDomainManagerService managerService) {
 		ValueServiceResponse<Long> response = managerService.getSimpleDomainCount();
@@ -163,6 +166,7 @@ public class IntegrationTestRESTfulBusinessServices {
 		
 	}
 	
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Test
 	public void testSelectAllSimpleDomains(@ArquillianResteasyResource SimpleDomainManagerService managerService) {
 		ValueServiceResponse<Collection<SimpleDomain>> response = managerService.selectAllSimpleDomains();
@@ -175,6 +179,7 @@ public class IntegrationTestRESTfulBusinessServices {
 		
 	}
 	
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Test
 	public void testSelectAllSimpleDomainsByType(@ArquillianResteasyResource SimpleDomainManagerService managerService) {
 		final String type = RandomStringUtils.randomAlphanumeric(5);

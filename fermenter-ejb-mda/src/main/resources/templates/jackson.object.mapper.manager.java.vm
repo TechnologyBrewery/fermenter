@@ -8,9 +8,11 @@ import org.slf4j.LoggerFactory;
 
 import org.tigris.atlas.messages.DefaultMessage;
 import org.tigris.atlas.messages.DefaultMessages;
+import org.tigris.atlas.messages.InjectableMessages;
 import org.tigris.atlas.messages.Message;
 import org.tigris.atlas.messages.Messages;
 import org.tigris.atlas.messages.json.MessagesMixIn;
+import org.tigris.atlas.messages.json.InjectableMessagesMixIn;
 
 import ${prefix}.transfer.*;
 
@@ -48,9 +50,8 @@ public final class ObjectMapperManager {
 		LOGGER.debug("Configured Jackson of Interface/Concrete class mapping: Messages->DefaultMessages");
 		module.setMixInAnnotation(Messages.class, MessagesMixIn.class);
 		LOGGER.debug("Configured Jackson of Class/MixIn combination: Messages=MessagesMixIn");
-		
-		module.setMixInAnnotation(Messages.class, MessagesMixIn.class);
-		LOGGER.debug("Configured Jackson of Class/MixIn combination: Messages=MessagesMixIn");
+		module.setMixInAnnotation(InjectableMessages.class, InjectableMessagesMixIn.class);
+		LOGGER.debug("Configured Jackson of Class/MixIn combination: InjectableMessages=InjectableMessagesMixIn");
 		
 		objectMapper.registerModule(module);
 		

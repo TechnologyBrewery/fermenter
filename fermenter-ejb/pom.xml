@@ -21,7 +21,12 @@
 			<artifactId>fermenter-java</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.jboss.weld.se</groupId>
+			<artifactId>weld-se</artifactId>
+			<version>${weld.version}</version>
+		</dependency>
+		
 		<!-- Provided JEE Dependencies -->
 		<dependency>
 			<groupId>javax</groupId>

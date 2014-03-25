@@ -37,6 +37,15 @@ public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServi
     protected Long getSimpleDomainCountImpl() {
 	return RandomUtils.nextLong();
     }
+    
+    
+
+    /**
+     * {@inheritDoc}
+     */
+    protected SimpleDomainBO returnSingleSimpleDomainImpl() {
+	return BusinessObjectFactory.createSimpleDomainBO();
+    }
 
     /**
      * {@inheritDoc}

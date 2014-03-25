@@ -5,6 +5,7 @@ import $import;
 #end
 
 import ${basePackage}.bizobj.*;
+import ${basePackage}.transfer.*;
 
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;

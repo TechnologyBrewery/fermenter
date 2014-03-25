@@ -10,6 +10,10 @@
 			<return-many>SimpleDomain</return-many>
 		</operation>
 		<operation>
+			<name>ReturnSingleSimpleDomain</name>
+			<return>SimpleDomain</return>
+		</operation>		
+		<operation>
 			<name>SomeBusinessOperation</name>
 			<documentation>An operation that demonstrates some important business function.  Returns the altered domain.</documentation>
 			<return>SimpleDomain</return>

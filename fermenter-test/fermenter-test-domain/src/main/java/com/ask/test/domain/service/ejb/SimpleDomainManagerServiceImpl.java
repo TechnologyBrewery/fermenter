@@ -2,6 +2,7 @@ package com.ask.test.domain.service.ejb;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Local;
@@ -16,6 +17,7 @@ import org.tigris.atlas.messages.MessageUtils;
 
 import com.ask.test.domain.bizobj.BusinessObjectFactory;
 import com.ask.test.domain.bizobj.SimpleDomainBO;
+import com.ask.test.domain.enumeration.SimpleDomainEnumeration;
 
 /**
  * Service implementation class for the SimpleDomainManager service.
@@ -37,8 +39,6 @@ public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServi
     protected Long getSimpleDomainCountImpl() {
 	return RandomUtils.nextLong();
     }
-    
-    
 
     /**
      * {@inheritDoc}
@@ -132,4 +132,22 @@ public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServi
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected SimpleDomainBO saveSimpleDomainEntityAndPropagateErrorMessagesImpl(String targetNameValue,
+	    Integer numErrorMessagesToGenerate) {
+	SimpleDomainBO simpleDomain = BusinessObjectFactory.createSimpleDomainBO();
+	simpleDomain.setName(targetNameValue);
+	simpleDomain.setType(RandomStringUtils.randomAlphabetic(10));
+	simpleDomain.setTheDate1(new Date());
+	simpleDomain.setAnEnumeratedValue(SimpleDomainEnumeration.values()[RandomUtils.nextInt(SimpleDomainEnumeration
+		.values().length)]);
+	simpleDomain.save();
+
+	createAndPropagateErrorMessagesImpl(numErrorMessagesToGenerate);
+
+	return simpleDomain;
+    }
 }

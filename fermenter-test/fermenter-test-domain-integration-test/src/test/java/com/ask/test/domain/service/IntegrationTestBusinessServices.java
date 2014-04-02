@@ -3,6 +3,7 @@ package com.ask.test.domain.service;
 import static com.ask.test.domain.service.TestUtils.assertNoErrorMessages;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -29,6 +30,7 @@ import org.tigris.atlas.persist.hibernate.HibernateSessionFactoryManager;
 import org.tigris.atlas.service.ValueServiceResponse;
 import org.tigris.atlas.service.VoidServiceResponse;
 
+import com.ask.test.domain.bizobj.SimpleDomainBO;
 import com.ask.test.domain.service.ejb.SimpleDomainManagerService;
 import com.ask.test.domain.transfer.SimpleDomain;
 
@@ -184,5 +186,22 @@ public class IntegrationTestBusinessServices {
 	VoidServiceResponse response = simpleDomainManagerService
 		.createAndPropagateErrorMessages(numErrorMessagesToGenerate);
 	TestUtils.assertErrorMessagesInResponse(response, numErrorMessagesToGenerate);
+    }
+
+    @Test
+    public void testRollbackBusinessServiceMethod() throws Exception {
+	int numErrorMessagesToGenerate = RandomUtils.nextInt(5);
+	String targetNameValue = RandomStringUtils.randomAlphabetic(20);
+	ValueServiceResponse<SimpleDomain> response = simpleDomainManagerService
+		.saveSimpleDomainEntityAndPropagateErrorMessages(targetNameValue, numErrorMessagesToGenerate);
+	TestUtils.assertErrorMessagesInResponse(response, numErrorMessagesToGenerate);
+
+	SimpleDomainBO persistedEntityWithSamePK = SimpleDomainBO.findByPrimaryKey(response.getValue()
+		.getSimpleDomainPK());
+	assertNull("SimpleDomain object that should have been rolled back was unexpected persisted",
+		persistedEntityWithSamePK);
+	List<SimpleDomainBO> persistedEntityWithSameName = SimpleDomainBO.selectAllSimpleDomainsByName(targetNameValue);
+	assertTrue("SimpleDomain object that should have been rolled back was unexpected persisted",
+		persistedEntityWithSameName == null || persistedEntityWithSameName.isEmpty());
     }
 }

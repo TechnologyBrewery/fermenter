@@ -13,6 +13,7 @@ import ${basePackage}.bizobj.${entity.name}BO;
 
 import javax.annotation.Resource;
 
+import javax.ejb.EJBContext;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -43,6 +44,9 @@ public class ${entity.name}MaintenanceServiceBean implements ${entity.name}Maint
 	
 	@Inject
 	private InjectableMessages messages;
+	
+	@Resource
+	private EJBContext ejbContext;
 		
 	/**
 	 * {@inheritDoc}
@@ -83,11 +87,14 @@ public class ${entity.name}MaintenanceServiceBean implements ${entity.name}Maint
 			
 			businessObjectToSave.save();
 			
-			//TODO: handle error messages
-			
 			${entity.name} updateEntity = ${entityName}Assembler.create${entity.name}(businessObjectToSave);
 			
-			response = new ValueServiceResponse<${entity.name}>(updateEntity, this.messages);			
+			response = new ValueServiceResponse<${entity.name}>(updateEntity, this.messages);
+			
+		}
+		
+		if (this.messages.hasErrorMessages()) {
+			this.ejbContext.setRollbackOnly();
 		}
 		
 		return response;
@@ -115,7 +122,9 @@ public class ${entity.name}MaintenanceServiceBean implements ${entity.name}Maint
 		businessObjectToDelete.setKey(pk);
 		businessObjectToDelete.delete();
 		
-		//TODO: handle messages
+		if (this.messages.hasErrorMessages()) {
+			this.ejbContext.setRollbackOnly();
+		}
 		
 		return new ValueServiceResponse<${entity.name}>(null, this.messages);
 	}
@@ -149,8 +158,6 @@ public class ${entity.name}MaintenanceServiceBean implements ${entity.name}Maint
 			retrieveEntity = ${entityName}Assembler.create${entity.name}(retrievedBusinessObject);
 			
 		}
-		
-		//TODO: handle messages
 		
 		return new ValueServiceResponse<${entity.name}>(retrieveEntity, this.messages);
 	}

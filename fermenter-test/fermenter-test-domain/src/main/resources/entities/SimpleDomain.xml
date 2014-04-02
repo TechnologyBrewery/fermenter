@@ -66,6 +66,18 @@
 			</criteria>
 			<statement><![CDATA[from SimpleDomainBO as domain where domain.type = :type]]></statement>
 		</query>
+		<query>
+			<name>SelectAllSimpleDomainsByName</name>
+			<documentation>Retrieves SimpleDomain objects with the given name</documentation>
+			<criteria>
+				<criterion>
+					<name>name</name>
+					<documentation>The desired name of the SimpleDomain objects to retrieve</documentation>
+					<type>string</type>
+				</criterion>
+			</criteria>
+			<statement><![CDATA[from SimpleDomainBO as domain where domain.name = :name]]></statement>
+		</query>
 	</queries>
 
 </entity>

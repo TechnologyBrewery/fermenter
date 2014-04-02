@@ -7,6 +7,8 @@ import $import;
 import ${basePackage}.bizobj.*;
 import ${basePackage}.transfer.*;
 
+import javax.annotation.Resource;
+import javax.ejb.EJBContext;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
@@ -26,6 +28,9 @@ public abstract class ${service.name}BaseService {
 	@Inject
 	private InjectableMessages messages;	
 
+	@Resource
+	private EJBContext ejbContext;
+	
 #foreach( $operation in $service.operations )
 	/**
 	 * {@inheritDoc}
@@ -85,11 +90,10 @@ public abstract class ${service.name}BaseService {
 		ValueServiceResponse<${operation.wrappedReturnType}> response = new ValueServiceResponse<${operation.wrappedReturnType}>(implResult, this.messages);
 	#end
 			
-		
-		//TODO: check if transaction needs to be rolled back
-
+		if (this.messages.hasErrorMessages()) {
+			this.ejbContext.setRollbackOnly();
+		}
 		return response;
-
 	}
 	
 	/**

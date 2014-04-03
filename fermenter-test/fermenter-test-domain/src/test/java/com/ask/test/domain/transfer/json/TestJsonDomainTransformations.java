@@ -16,6 +16,8 @@ import com.ask.test.domain.transfer.SimpleDomain;
 import com.ask.test.domain.transfer.TransferObjectFactory;
 import com.ask.test.domain.transfer.ValidationExample;
 import com.ask.test.domain.transfer.ValidationExampleChild;
+import com.ask.test.domain.transfer.ValidationReferenceExample;
+import com.ask.test.domain.transfer.ValidationReferencedObject;
 
 public class TestJsonDomainTransformations extends AbstractTestTransformations {
 
@@ -87,7 +89,26 @@ public class TestJsonDomainTransformations extends AbstractTestTransformations {
 		assertNotNull(rehydratedChild);
 		assertEquals(childId, rehydratedChild.getId());
 				
-	}	
+	}
 	
+	@Test
+	public void testTransformationOfReference() throws Exception {
+		ValidationReferenceExample domain = TransferObjectFactory.createValidationReferenceExample();
+		ValidationReferencedObject reference = TransferObjectFactory.createValidationReferencedObject();
+		final String field = RandomStringUtils.randomAlphanumeric(25);
+		reference.setSomeDataField(field);
+		domain.setRequiredReference(reference);
+		
+		String json = objectMapper.writeValueAsString(domain);
+		assertNotNull(json);
+		assertTrue(json.contains(field));
+		
+		ValidationReferenceExample rehydratedDomain = objectMapper.readValue(json, ValidationReferenceExample.class);
+		assertNotNull(rehydratedDomain);
+		ValidationReferencedObject rehydratedReference = rehydratedDomain.getRequiredReference();
+		assertNotNull(rehydratedReference);
+		assertEquals(field, rehydratedReference.getSomeDataField());
+		
+	}	
 	
 }

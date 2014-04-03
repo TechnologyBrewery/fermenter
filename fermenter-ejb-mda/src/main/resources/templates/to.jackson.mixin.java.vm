@@ -1,7 +1,9 @@
 package ${prefix}.transfer.json;
 
+import org.codehaus.jackson.annotate.JsonBackReference;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.annotate.JsonManagedReference;
 
 import ${prefix}.transfer.*;
 #foreach ($import in $imports )
@@ -45,13 +47,14 @@ public abstract class ${entityName}MixIn {
 	private ${field.javaType} ${field.name};
 #end
 #foreach ($relation in $relations)
-	@JsonProperty
+	@JsonManagedReference
 	private Set<${relation.type}> ${relation.label}s;
 #end
 #foreach ($inverseRelation in $inverseRelations)
-	//TODO: update this if we have multiple parents for an instance
-	@JsonIgnore
-	private ${inverseRelation.name} parent${inverseRelation.name};
+	#foreach($id in $inverseRelation.idFields)	
+	@JsonBackReference
+	private ${id.javaType} parent${inverseRelation.name};
+	#end
 #end
 #foreach ($reference in $references)
 	@JsonProperty

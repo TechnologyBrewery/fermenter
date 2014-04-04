@@ -47,13 +47,13 @@ public abstract class ${entityName}MixIn {
 	private ${field.javaType} ${field.name};
 #end
 #foreach ($relation in $relations)
-	@JsonManagedReference
+	@JsonManagedReference(value="${entity.name}-${relation.type}")
 	private Set<${relation.type}> ${relation.label}s;
 #end
 #foreach ($inverseRelation in $inverseRelations)
 	#foreach($id in $inverseRelation.idFields)	
-	@JsonBackReference
-	private ${id.javaType} parent${inverseRelation.name};
+	@JsonBackReference(value="${inverseRelation.name}-${entity.name}")
+	private ${inverseRelation.name} parent${inverseRelation.name};
 	#end
 #end
 #foreach ($reference in $references)

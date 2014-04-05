@@ -2,6 +2,10 @@ package ${prefix}.bizobj;
 
 import ${prefix}.transfer.${entityName};
 
+#foreach ($inverseRelation in $inverseRelations)
+import ${prefix}.transfer.${inverseRelation.name};
+#end
+
 #foreach ($relation in $relations)
 import ${prefix}.transfer.${relation.type};
 #end
@@ -86,11 +90,21 @@ public final class ${entityName}Assembler extends TransferObjectAssembler {
 	}	
 	
 	/**
-	 * Creates a new transfer object based on the passed business object.
+	 * Creates a new transfer object based on the passed business object, including children.
 	 * @param bo The {@link ${entity.name}BO} that should be made transportable
 	 * @return The transportable version of the passed business object
 	 */
 	public static ${entityName} create${entityName}(${entityName}BO bo) {
+		return create${entityName}(bo, true);
+	}	
+	
+	/**
+	 * Creates a new transfer object based on the passed business object.
+	 * @param bo The {@link ${entity.name}BO} that should be made transportable
+	 * @param createChildren flag to suppress child creation
+	 * @return The transportable version of the passed business object
+	 */
+	public static ${entityName} create${entityName}(${entityName}BO bo, boolean createChildren) {
 		${entityName} to = new ${entityName}();		
 		
 		if (bo != null) {
@@ -110,24 +124,36 @@ public final class ${entityName}Assembler extends TransferObjectAssembler {
 
 			${composite.type}Composite to${composite.capitalizedName}Composite = to.get${composite.capitalizedName}Composite();
 			${composite.type}BOComposite bo${composite.capitalizedName}Composite = bo.get${composite.capitalizedName}Composite();
-#foreach ($field in ${composite.fields})
+	#foreach ($field in ${composite.fields})
 			to${composite.capitalizedName}Composite.set${field.capitalizedName}(bo${composite.capitalizedName}Composite.get${field.capitalizedName}());
-#end
+	#end
 #end
 
+			//pull over parent:
+#foreach ($inverseRelation in $inverseRelations)
+	   		${inverseRelation.name} parent${inverseRelation.name} = ${inverseRelation.name}Assembler.create${inverseRelation.name}(bo.get${inverseRelation.name}(), false);
+			to.set${inverseRelation.name}(parent${inverseRelation.name});
+#end
+			
+#if ($relations.size() > 0)
 			//pull over relations:
-#foreach ($relation in $relations)
-			${relation.type}BO ${relation.label}Bo;
-			${relation.type} ${relation.label}To;
-			Set	${relation.label}Set = bo.get${relation.type}s();
-			if ((${relation.label}Set != null) && (${relation.label}Set.size() > 0)) {
-				Iterator ${relation.label}SetIterator = ${relation.label}Set.iterator();
-				while (${relation.label}SetIterator.hasNext()) {
-					${relation.label}Bo = (${relation.type}BO)${relation.label}SetIterator.next();
-					${relation.label}To = ${relation.label}Bo.get${relation.type}Values();
-					to.add${relation.type}(${relation.label}To);
+			if (createChildren)	{
+	#foreach ($relation in $relations)
+				${relation.type}BO ${relation.label}Bo;
+				${relation.type} ${relation.label}To;
+				Set	${relation.label}Set = bo.get${relation.type}s();
+				if ((${relation.label}Set != null) && (${relation.label}Set.size() > 0)) {
+					Iterator ${relation.label}SetIterator = ${relation.label}Set.iterator();
+					while (${relation.label}SetIterator.hasNext()) {
+						${relation.label}Bo = (${relation.type}BO)${relation.label}SetIterator.next();
+						${relation.label}To = ${relation.label}Bo.get${relation.type}Values();
+						to.add${relation.type}(${relation.label}To);
+					}
 				}
-			}
+	#end
+			}	
+#else
+			//no relations to assemble
 #end
 
 			//pull over references:
@@ -150,8 +176,8 @@ public final class ${entityName}Assembler extends TransferObjectAssembler {
 	}
 	
 	/**
-	 * Merges the values of the passed transfer object into the passed business obejct.  If the passed business
-	 * object is null, it creates a new one.
+	 * Merges the values of the passed transfer object into the passed business object.  If the passed business
+	 * object is null, it creates a new one.  Include merging of all children.
 	 * @param to The {@link ${entity.name}} that has more up-to-date values that should be 
 	 * propagated onto the passed business object
 	 * @param bo The {@link ${entity.name}BO} that should be updated with the values of the 
@@ -159,6 +185,20 @@ public final class ${entityName}Assembler extends TransferObjectAssembler {
 	 * @return The updated business object
 	 */
 	public static ${entityName}BO merge${entityName}BO(${entityName} to, ${entityName}BO bo) {
+		return merge${entityName}BO(to, bo, true);
+	}
+	
+	/**
+	 * Merges the values of the passed transfer object into the passed business obejct.  If the passed business
+	 * object is null, it creates a new one.
+	 * @param to The {@link ${entity.name}} that has more up-to-date values that should be 
+	 * propagated onto the passed business object
+	 * @param bo The {@link ${entity.name}BO} that should be updated with the values of the 
+	 * passed transfer object (or null if no version of the business object currently exists
+	 * @param mergeChildren whether or not to suppress the merging of children
+	 * @return The updated business object
+	 */
+	public static ${entityName}BO merge${entityName}BO(${entityName} to, ${entityName}BO bo, boolean mergeChildren) {
 		if (bo == null) {
 			bo = BusinessObjectFactory.create${entityName}BO();
 		}		
@@ -186,12 +226,19 @@ public final class ${entityName}Assembler extends TransferObjectAssembler {
 
 			//pull over parent:
 #foreach ($inverseRelation in $inverseRelations)
-			bo.set${inverseRelation.name}(bo.get${inverseRelation.name}());
+	   		${inverseRelation.name}BO parent${inverseRelation.name} = ${inverseRelation.name}Assembler.merge${inverseRelation.name}BO(to.get${inverseRelation.name}(), null, false);
+			bo.set${inverseRelation.name}(parent${inverseRelation.name});
 #end
 
+#if ($relations.size() > 0)
 			//pull over relations:
-#foreach ($relation in $relations)
-			assemble${relation.type}(to, bo);
+			if (mergeChildren) {
+	#foreach ($relation in $relations)
+				assemble${relation.type}(to, bo);			
+	#end
+			}
+#else
+			//no children to merge
 #end
 
 			//pull over references:

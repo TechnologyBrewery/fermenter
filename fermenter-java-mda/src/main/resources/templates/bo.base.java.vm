@@ -140,17 +140,24 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
     }
 	
 	/**
-	 * Get the values for this ${entityName} entity
+	 * Get the values for this ${entityName} entity.
 	 */
 	public ${entityName} get${entityName}Values() {		
 		return ${entityName}Assembler.create${entityName}((${entityName}BO)this);
 	}
 	
 	/**
-	 * Set the values for this ${entityName} entity
+	 * Set the values for this ${entityName} entity.
 	 */
 	public void set${entityName}Values(${entityName} entity) {
+#foreach ($inverseRelation in $inverseRelations)
+		//make sure to keep the parent relationship instances straight:
+		${inverseRelation.name}BO originalParent${inverseRelation.name} = parent${inverseRelation.name};
+#end
 		${entityName}Assembler.merge${entityName}BO(entity, (${entityName}BO)this);
+#foreach ($inverseRelation in $inverseRelations)		
+		parent${inverseRelation.name} = originalParent${inverseRelation.name};
+#end		
 	}
 
 #foreach ( $idField in $idFields )

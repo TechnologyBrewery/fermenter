@@ -120,7 +120,7 @@
 #foreach( $inverseRelation in $inverseRelations )
 #if($inverseRelation.isSelfRelation())
 		<set name="${inverseRelation.label}s"
-			 cascade="all-delete-orphan"	
+			 cascade="all,delete-orphan"	
 			 inverse="true"
 			 lazy="true">			 	
 #foreach( $idField in $inverseRelation.idFields )
@@ -135,7 +135,7 @@
 #foreach( $relation in $relations )
 #if( ${relation.type} != ${entityName} )
 		<set name="${relation.label}s"
-			 cascade="all-delete-orphan"	
+			 cascade="all,delete-orphan"	
 			 inverse="true"
 			 lazy="true">			 	
 #foreach( $idField in $idFields )

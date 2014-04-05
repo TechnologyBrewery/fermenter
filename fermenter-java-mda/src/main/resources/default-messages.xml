@@ -79,4 +79,8 @@
 	<message key="invalid.reference">
 		<summary>A non-existent object was referenced in a M-1 relationship for field {0}.</summary>
 	</message>
+	
+	<message key="database.exception">
+		<summary>An exception occurred while persisting.</summary>
+	</message>
 </messages>

@@ -18,14 +18,14 @@ import org.tigris.atlas.transfer.TransferObject;
 @ThreadLocalMessages
 public class ThreadLocalMessageManagementInterceptor {
 
-    @Inject
-    private InjectableMessages messages;
+	@Inject
+	private InjectableMessages messages;
 
-    @AroundInvoke
-    public Object manageMessagesInThreadLocal(InvocationContext context) throws Exception {
-	MessageManager.initialize(messages);
-	Object result = context.proceed();
-	MessageManager.cleanup();
-	return result;
-    }
+	@AroundInvoke
+	public Object manageMessagesInThreadLocal(InvocationContext context) throws Exception {
+		MessageManager.initialize(messages);
+		Object result = context.proceed();
+		MessageManager.cleanup();
+		return result;
+	}
 }

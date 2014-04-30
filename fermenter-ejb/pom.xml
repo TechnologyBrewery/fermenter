@@ -25,6 +25,7 @@
 			<groupId>org.jboss.weld.se</groupId>
 			<artifactId>weld-se</artifactId>
 			<version>${weld.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		
 		<!-- Provided JEE Dependencies -->

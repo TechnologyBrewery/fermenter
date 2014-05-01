@@ -243,16 +243,26 @@ public final class ${entityName}Assembler extends TransferObjectAssembler {
 
 			//pull over references:
 #foreach ($reference in $references)
-#if( $reference.isExternal() )
+	#if( $reference.isExternal() )
 			bo.set${reference.capitalizedName}( to.get${reference.capitalizedName}() );
-#else
+	#else
 			${reference.type} ${reference.name}ToRef = to.get${reference.capitalizedName}();
 			if (${reference.name}ToRef != null) {
 				${reference.type}PK ${reference.name}Pk = (${reference.type}PK)${reference.name}ToRef.getKey();
 				${reference.type}BO ${reference.name}Ref = ${reference.type}BO.findByPrimaryKey(${reference.name}Pk);
-				bo.set${reference.capitalizedName}(${reference.name}Ref);
-			}		
-#end
+				if (${reference.name}Ref != null) {
+					bo.set${reference.capitalizedName}(${reference.name}Ref);
+					
+				} else {
+					//just translate it over - we'll check to ensure it is valid before saving, but this
+					//gives folks a chance to do something with the inbound data before we cull it:
+					${reference.type}BO potential${reference.capitalizedName}Ref = ${reference.type}Assembler.merge${reference.type}BO(${reference.name}ToRef, null);
+					bo.set${reference.capitalizedName}(potential${reference.capitalizedName}Ref);
+					
+				}
+			}	
+			
+	#end
 #end	
 						
 		}

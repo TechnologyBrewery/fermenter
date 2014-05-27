@@ -678,7 +678,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 		Set<${relation.type}BO> ${relation.label}Set = get${relation.type}s();
 		if (${relation.label}Set != null && !${relation.label}Set.isEmpty()) {
 			for (${relation.type}BO child : ${relation.label}Set) {
-				child.complexValidation();
+				child.validate();
 			}
 		}
 

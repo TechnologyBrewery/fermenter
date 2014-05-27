@@ -83,4 +83,11 @@
 	<message key="database.exception">
 		<summary>An exception occurred while persisting.</summary>
 	</message>
+
+	<!-- As 1-1 relations are not truly supported by Fermenter yet and are instead modeled using 1-M relations, this message 
+		may be utilized during object validation to indicate that more than one child object is unexpectedly associated with the 
+		parent object -->
+	<message key="invalid.one-to-one.relation">
+		<summary>Invalid 1-1 relationship for field {0} - more than one child object exists in the relation.</summary>
+	</message>
 </messages>

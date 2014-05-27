@@ -97,7 +97,7 @@ public abstract class ${service.name}BaseService {
 	}
 	
 	/**
-	 * Performs the business function for $[operation.name}.
+	 * Performs the business function for ${operation.name}.
 	#if( $operation.parameters.size() > 0 )
 		#foreach( $parameter in $operation.parameters )
 			#if( $parameter.documentation )

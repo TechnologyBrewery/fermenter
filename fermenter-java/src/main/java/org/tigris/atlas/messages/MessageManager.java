@@ -12,33 +12,33 @@ import org.tigris.atlas.transfer.TransferObject;
  */
 public final class MessageManager {
 
-    private static final ThreadLocal<Messages> MESSAGES = new ThreadLocal<Messages>();
+	private static final ThreadLocal<Messages> MESSAGES = new ThreadLocal<Messages>();
 
-    private MessageManager() {
+	private MessageManager() {
 
-    }
+	}
 
-    static void initialize(Messages messages) {
-	MESSAGES.set(messages);
-    }
+	static void initialize(Messages messages) {
+		MESSAGES.set(messages);
+	}
 
-    static void cleanup() {
-	MESSAGES.remove();
-    }
+	static void cleanup() {
+		MESSAGES.remove();
+	}
 
-    public static Messages getMessages() {
-	return MESSAGES.get();
-    }
+	public static Messages getMessages() {
+		return MESSAGES.get();
+	}
 
-    public static boolean hasErrorMessages() {
-	return MESSAGES.get().hasErrorMessages();
-    }
+	public static boolean hasErrorMessages() {
+		return MESSAGES.get().hasErrorMessages();
+	}
 
-    public static void addMessage(Message message) {
-	MESSAGES.get().addMessage(message);
-    }
+	public static void addMessage(Message message) {
+		MESSAGES.get().addMessage(message);
+	}
 
-    public static void addMessages(Messages messages) {
-	MESSAGES.get().addMessages(messages);
-    }
+	public static void addMessages(Messages messages) {
+		MESSAGES.get().addMessages(messages);
+	}
 }

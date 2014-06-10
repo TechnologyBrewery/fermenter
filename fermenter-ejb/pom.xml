@@ -27,6 +27,12 @@
 			<version>${weld.version}</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.javassist</groupId>
+  			<artifactId>javassist</artifactId>
+			<version>3.18.1-GA</version>
+			<scope>provided</scope>
+		</dependency>
 		
 		<!-- Provided JEE Dependencies -->
 		<dependency>

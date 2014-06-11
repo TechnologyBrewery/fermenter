@@ -190,7 +190,7 @@ public class IntegrationTestBusinessServices {
 
     @Test
     public void testRollbackBusinessServiceMethod() throws Exception {
-	int numErrorMessagesToGenerate = RandomUtils.nextInt(5);
+	int numErrorMessagesToGenerate = RandomUtils.nextInt(5) + 1;
 	String targetNameValue = RandomStringUtils.randomAlphabetic(20);
 	ValueServiceResponse<SimpleDomain> response = simpleDomainManagerService
 		.saveSimpleDomainEntityAndPropagateErrorMessages(targetNameValue, numErrorMessagesToGenerate);

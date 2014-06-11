@@ -53,10 +53,10 @@ public interface ${service.name}Service {
 	 * @return An empty service response
 	#end
 	 */
-	#if($operation.hasEntityParameters())
-	@POST
+	#if($operation.transactionAttribute == "SUPPORTS")
+	@GET 
 	#else
-	@GET
+	@POST
 	#end
 	@Path("/${service.name}Service/${operation.lowercaseName}")
 	@Produces(MediaType.APPLICATION_JSON)

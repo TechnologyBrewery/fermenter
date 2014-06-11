@@ -8,10 +8,12 @@
 		<operation>
 			<name>SelectAllSimpleDomains</name>
 			<return-many>SimpleDomain</return-many>
+			<transaction-attribute>Supports</transaction-attribute>
 		</operation>
 		<operation>
 			<name>ReturnSingleSimpleDomain</name>
 			<return>SimpleDomain</return>
+			<transaction-attribute>Supports</transaction-attribute>
 		</operation>
 		<operation>
 			<name>SomeBusinessOperation</name>
@@ -39,10 +41,12 @@
 					<type>string</type>
 				</parameter>
 			</parameters>
+			<transaction-attribute>Supports</transaction-attribute>
 		</operation>
 		<operation>
 			<name>GetSimpleDomainCount</name>
 			<return>long</return>
+			<transaction-attribute>Supports</transaction-attribute>
 		</operation>
 		<operation>
 			<name>DoSomething</name>

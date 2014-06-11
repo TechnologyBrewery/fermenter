@@ -79,10 +79,10 @@ public abstract class ${service.name}BaseService {
 		);
 		
 	#if($operation.isReturnTypeCollection())
-		Collection<${operation.returnManyType}> result = ${operation.returnManyType}Assembler.get${operation.returnManyType}List(implResult);
+		Collection<${operation.returnManyType}> result = implResult != null ? ${operation.returnManyType}Assembler.get${operation.returnManyType}List(implResult) : null;
 		ValueServiceResponse<Collection<${operation.returnManyType}>> response = new ValueServiceResponse<Collection<${operation.returnManyType}>>(result, this.messages);
-	#elseif($operation.isReturnTypeEntity())	
-		${operation.returnType} result = ${operation.returnType}Assembler.create${operation.returnType}(implResult);
+	#elseif($operation.isReturnTypeEntity())
+		${operation.returnType} result = implResult != null ? ${operation.returnType}Assembler.create${operation.returnType}(implResult) : null;
 		ValueServiceResponse<${operation.returnType}> response = new ValueServiceResponse<${operation.returnType}>(result, this.messages);
 	#elseif( $operation.isResponseTypeVoid() )
 		VoidServiceResponse response = new VoidServiceResponse(this.messages);

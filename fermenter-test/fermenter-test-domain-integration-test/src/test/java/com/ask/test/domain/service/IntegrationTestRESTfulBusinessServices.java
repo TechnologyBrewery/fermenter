@@ -191,4 +191,13 @@ public class IntegrationTestRESTfulBusinessServices {
 		}
 			
 	}	
+	
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Test
+	public void testReturnNullEntityInBusinessServiceOperation(
+			@ArquillianResteasyResource SimpleDomainManagerService managerService) throws Exception {
+		ValueServiceResponse<SimpleDomain> response = managerService.returnNullEntity();
+		TestUtils.assertNoErrorMessages(response);
+		assertEquals("Unexpectedly received a non-null SimpleDomain entity", response.getValue(), null);
+	}
 }

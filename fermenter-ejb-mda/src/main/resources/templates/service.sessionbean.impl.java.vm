@@ -18,7 +18,7 @@ import $import;
  */
 @Local(${service.name}Service.class)
 @Stateless 
-public class ${service.name}ServiceImpl extends ${service.name}BaseService {
+public class ${service.name}ServiceImpl extends ${service.name}BaseService implements ${service.name}Service {
 #foreach( $operation in $service.operations )
 
 	/**

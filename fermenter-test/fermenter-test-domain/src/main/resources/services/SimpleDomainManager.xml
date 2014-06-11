@@ -102,6 +102,10 @@
 				</parameter>
 			</parameters>
 		</operation>
+		<operation>
+			<name>ReturnNullEntity</name>
+			<return>SimpleDomain</return>
+		</operation>
 	</operations>
 
 </service>

@@ -62,13 +62,9 @@ public class IntegrationTestRESTfulBusinessServices {
 	
 	@Before
     public void setup() {
-		ResteasyProviderFactory factory = ResteasyProviderFactory.getInstance();		
-		JacksonObjectMapperResteasyProvider objectMapperProvider = factory.getProvider(JacksonObjectMapperResteasyProvider.class);
-		
-		if (objectMapperProvider == null) {
-			factory.registerProvider(JacksonObjectMapperResteasyProvider.class);
-			RegisterBuiltin.register(factory);
-		}
+		ResteasyProviderFactory factory = ResteasyProviderFactory.getInstance();	
+		factory.registerProvider(JacksonObjectMapperResteasyProvider.class);
+		RegisterBuiltin.register(factory);
 		
     }
 	

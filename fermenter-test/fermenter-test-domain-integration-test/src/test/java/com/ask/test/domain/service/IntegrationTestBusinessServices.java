@@ -204,4 +204,11 @@ public class IntegrationTestBusinessServices {
 		assertTrue("SimpleDomain object that should have been rolled back was unexpected persisted",
 				persistedEntityWithSameName == null || persistedEntityWithSameName.isEmpty());
 	}
+
+	@Test
+	public void testReturnNullEntityInBusinessServiceOperation() throws Exception {
+		ValueServiceResponse<SimpleDomain> response = simpleDomainManagerService.returnNullEntity();
+		TestUtils.assertNoErrorMessages(response);
+		assertEquals("Unexpectedly received a non-null SimpleDomain entity", response.getValue(), null);
+	}
 }

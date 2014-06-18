@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE targets PUBLIC "-//FERMENTER//DTD TARGETS//EN" "https://bitbucket.org/askllc/fermenter/downloads/targets.dtd">
+
+<targets>
+
+	<target name="objectiveCDomains"
+			generator="org.tigris.atlas.mda.objectivec.generator.entity.EntityObjectiveCGenerator"
+			templateName="templates/objective.c.domain.vm"
+			outputFile="${basePackage}/${entityName}.some-xcode-extension"
+			overwritable="true"/>
+	
+</targets>

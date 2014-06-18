@@ -47,3 +47,5 @@ fermenter-test/fermenter-test-domain-webapp/target/
 velocity.log.*
 build-tools/target/
 .settings/
+fermenter-objective-c-mda/.classpath
+fermenter-objective-c-mda/target/

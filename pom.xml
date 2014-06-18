@@ -21,6 +21,7 @@
 		<module>fermenter-hibernate-mda</module>
 		<module>fermenter-ejb</module>
 		<module>fermenter-ejb-mda</module>
+		<module>fermenter-objective-c-mda</module>
 		<module>fermenter-test</module>
 		<module>build-tools</module>
 	</modules>

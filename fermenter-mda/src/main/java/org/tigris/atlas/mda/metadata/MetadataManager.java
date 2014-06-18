@@ -187,12 +187,8 @@ public abstract class MetadataManager {
 	 */
 	protected void addMetadataElement(String name, MetadataElement me) {
 		getMetadataMap( currentApplication ).put( name, me );
-		Object o = completeMetadataMap.put(name, me);
-		if (o != null) {
-			if (log.isErrorEnabled()) {
-				log.error("Metadata element '" + name + "' exists more than once - this is not currently a legal configuration!");
-			}
-		}
+		completeMetadataMap.put(name, me);
+
 	}	
 
 }

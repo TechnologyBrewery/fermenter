@@ -12,8 +12,7 @@ import org.tigris.atlas.mda.metadata.element.Entity;
 public abstract class AbstractEntityGenerator extends AbstractGenerator {
 
 	public void generate(GenerationContext context) throws GenerationException {
-		String currentApplication = context.getArtifactId();
-		Iterator entities = MetadataRepository.getInstance().getAllEntities(currentApplication).values().iterator();
+		Iterator entities = MetadataRepository.getInstance().getAllEntities().values().iterator();
 		
 		String fileName;
 		String basefileName = context.getOutputFile();		

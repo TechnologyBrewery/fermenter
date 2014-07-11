@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 
 import org.apache.commons.lang.math.RandomUtils;
@@ -25,10 +27,14 @@ import com.ask.test.domain.transfer.ValidationExampleChild;
  * Contains common integration test logic for this project.
  */
 public final class TestUtils {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger("TestUtils");
 
-	public static final String DOMAIN_GROUPID_ARTIFACTID_VERSION = "com.ask.fermenter:fermenter-test-domain:1-SNAPSHOT";
+	public static final String TEST_DOMAIN_GAV_COORDINATES = "com.ask.fermenter:fermenter-test-domain:1-SNAPSHOT";
+
+	public static final String FERMENTER_HIBERNATE_GAV_COORDINATES = "com.ask.fermenter:fermenter-hibernate:jar:tests:1-SNAPSHOT";
+
+	public static final String HSQLDB_GAV_COORDINATES = "org.hsqldb:hsqldb:2.3.2";
 
 	private TestUtils() {
 		// prevent instantiation
@@ -43,6 +49,12 @@ public final class TestUtils {
 		domain.setAnEnumeratedValue(SimpleDomainEnumeration.values()[RandomUtils.nextInt(SimpleDomainEnumeration
 				.values().length)]);
 		return domain;
+	}
+
+	public static SimpleDomain createRandomSimpleDomain(double bigDecimalAttributeValue) {
+		SimpleDomain simpleDomain = createRandomSimpleDomain();
+		simpleDomain.setBigDecimalValue(BigDecimal.valueOf(bigDecimalAttributeValue));
+		return simpleDomain;
 	}
 
 	public static ValidationExample createRandomValidationExample() {
@@ -63,7 +75,8 @@ public final class TestUtils {
 			boolean hasErrorMessages = messages.hasErrorMessages();
 			if (hasErrorMessages) {
 				for (Message message : messages.getErrorMessages()) {
-					LOGGER.error(MessageUtils.getSummaryMessage(message.getKey(), message.getInserts(), SimpleDomain.class));
+					LOGGER.error(MessageUtils.getSummaryMessage(message.getKey(), message.getInserts(),
+							SimpleDomain.class));
 				}
 			}
 			assertFalse(hasErrorMessages);
@@ -76,5 +89,17 @@ public final class TestUtils {
 		assertNotNull("Messages object on service response wrapper was unexpected null", messages);
 		assertEquals("An unexpected number of error messages were found", expectedNumErrorMessages,
 				messages.getErrorMessageCount());
+	}
+
+	/**
+	 * Rounds the given {@link BigDecimal} using the same scale utilized by the default DECIMAL/NUMERIC SQL type for
+	 * HSQLDB, which is numeric(19,2).
+	 * 
+	 * @param bigDecimal
+	 *            decimal value to round.
+	 * @return {@link BigDecimal} rounded using a scale of 2.
+	 */
+	public static BigDecimal roundToHSQLDBDefaultDecimalType(BigDecimal bigDecimal) {
+		return bigDecimal.setScale(2, RoundingMode.HALF_UP);
 	}
 }

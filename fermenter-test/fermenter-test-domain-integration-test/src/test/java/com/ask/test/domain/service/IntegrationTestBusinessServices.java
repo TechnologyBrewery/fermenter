@@ -23,10 +23,8 @@ import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.jboss.shrinkwrap.resolver.api.maven.MavenResolverSystem;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.tigris.atlas.persist.hibernate.HibernateSessionFactoryManager;
 import org.tigris.atlas.service.ValueServiceResponse;
 import org.tigris.atlas.service.VoidServiceResponse;
 
@@ -43,24 +41,20 @@ public class IntegrationTestBusinessServices {
 	@Deployment
 	protected static Archive<?> createDeployment() {
 		MavenResolverSystem mavenResolver = Maven.resolver();
-		File[] mavenDependencies = mavenResolver.resolve(TestUtils.DOMAIN_GROUPID_ARTIFACTID_VERSION)
-				.withTransitivity().asFile();
+		File[] mavenDependencies = mavenResolver.resolve(TestUtils.TEST_DOMAIN_GAV_COORDINATES).withTransitivity()
+				.asFile();
 
 		WebArchive war = ShrinkWrap.create(WebArchive.class, "business-service-integration-test.war");
 		war.addAsLibraries(mavenDependencies);
+		war.addAsLibraries(mavenResolver.resolve(TestUtils.FERMENTER_HIBERNATE_GAV_COORDINATES).withoutTransitivity()
+				.asSingleFile());
+		war.addAsLibraries(mavenResolver.resolve(TestUtils.HSQLDB_GAV_COORDINATES).withoutTransitivity().asSingleFile());
 		war.addClass(TestUtils.class);
 		war.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
 		war.addAsWebInfResource(new File("./src/test/resources/web.xml"));
 		war.addAsWebInfResource(new File("./src/test/resources/jboss-deployment-structure.xml"));
 
 		return war;
-	}
-
-	@Before
-	public void prepDatabase() {
-		// trigger schema update before we are in a CMT transaction so that it doesn't
-		// blow up due to its use of autocommit:
-		HibernateSessionFactoryManager.getInstance();
 	}
 
 	@Test

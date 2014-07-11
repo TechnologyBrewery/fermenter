@@ -1,14 +1,16 @@
 package com.ask.test.domain.service;
 
+import static com.ask.test.domain.service.TestUtils.assertNoErrorMessages;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import static com.ask.test.domain.service.TestUtils.assertNoErrorMessages;
-
 import java.io.File;
+import java.math.BigDecimal;
 import java.net.URL;
 
+import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.extension.rest.client.ArquillianResteasyResource;
@@ -33,97 +35,110 @@ import com.ask.test.domain.transfer.SimpleDomain;
 
 @RunWith(Arquillian.class)
 public class IntegrationTestRESTfulMaintenanceServices {
-	
+
 	@ArquillianResource
 	private URL base;
-	
-	@Deployment(testable=false)
+
+	@Deployment(testable = false)
 	protected static Archive<?> createDeployment() {
 		MavenResolverSystem mavenResolver = Maven.resolver();
-		File[] mavenDependencies = mavenResolver.resolve(TestUtils.DOMAIN_GROUPID_ARTIFACTID_VERSION).withTransitivity().asFile();		
-		
+		File[] mavenDependencies = mavenResolver.resolve(TestUtils.TEST_DOMAIN_GAV_COORDINATES).withTransitivity()
+				.asFile();
+
 		WebArchive war = ShrinkWrap.create(WebArchive.class, "maintenance-service-integration-test.war");
 		war.addAsLibraries(mavenDependencies);
+		war.addAsLibraries(mavenResolver.resolve(TestUtils.FERMENTER_HIBERNATE_GAV_COORDINATES).withoutTransitivity()
+				.asSingleFile());
+		war.addAsLibraries(mavenResolver.resolve(TestUtils.HSQLDB_GAV_COORDINATES).withoutTransitivity().asSingleFile());
 		war.addClass(TestUtils.class);
 		war.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
 		war.addAsWebInfResource(new File("./src/test/resources/web.xml"));
 		war.addAsWebInfResource(new File("./src/test/resources/jboss-deployment-structure.xml"));
-		
+
 		return war;
 	}
-	
+
 	@Before
-    public void setup() {
-		ResteasyProviderFactory factory = ResteasyProviderFactory.getInstance();		
+	public void setup() {
+		ResteasyProviderFactory factory = ResteasyProviderFactory.getInstance();
 		factory.registerProvider(JacksonObjectMapperResteasyProvider.class);
 		RegisterBuiltin.register(factory);
-		
-    }
-	
+
+	}
+
 	@Test
-	public void testDomainMaintenanceGet(@ArquillianResteasyResource SimpleDomainMaintenanceRestService simpleDomainService) {
+	public void testDomainMaintenanceGet(
+			@ArquillianResteasyResource SimpleDomainMaintenanceRestService simpleDomainService) {
 		ValueServiceResponse<SimpleDomain> result = simpleDomainService.findByPrimaryKey("BAD_PK");
 		assertNotNull(result);
 		assertNull(result.getValue());
 	}
-	
+
 	@Test
-	public void testDomainMaintenanceCreate(@ArquillianResteasyResource SimpleDomainMaintenanceRestService simpleDomainService) {
-		SimpleDomain domain = TestUtils.createRandomSimpleDomain();
-		
+	public void testDomainMaintenanceCreate(
+			@ArquillianResteasyResource SimpleDomainMaintenanceRestService simpleDomainService) {
+		double expectedBigDecimalAttributeValue = RandomUtils.nextDouble();
+		SimpleDomain domain = TestUtils.createRandomSimpleDomain(expectedBigDecimalAttributeValue);
+
 		ValueServiceResponse<SimpleDomain> result = simpleDomainService.saveOrUpdate(domain);
 		assertNoErrorMessages(result);
 		SimpleDomain savedDomain = result.getValue();
 		assertNotNull(savedDomain);
 		String id = savedDomain.getId();
 		assertNotNull(id);
-		
+
 		ValueServiceResponse<SimpleDomain> foundResult = simpleDomainService.findByPrimaryKey(id);
 		assertNoErrorMessages(foundResult);
-		assertNotNull(foundResult.getValue());
-		
+
+		SimpleDomain retrievedDomain = foundResult.getValue();
+		assertNotNull(retrievedDomain);
+		assertEquals("Persisted BigDecimal attribute did not match the expected value",
+				TestUtils.roundToHSQLDBDefaultDecimalType(BigDecimal.valueOf(expectedBigDecimalAttributeValue)),
+				retrievedDomain.getBigDecimalValue());
 	}
-	
+
 	@Test
-	public void testDomainMaintenanceUpdate(@ArquillianResteasyResource SimpleDomainMaintenanceRestService simpleDomainService) {
+	public void testDomainMaintenanceUpdate(
+			@ArquillianResteasyResource SimpleDomainMaintenanceRestService simpleDomainService) {
 		SimpleDomain domain = TestUtils.createRandomSimpleDomain();
-		
+
 		ValueServiceResponse<SimpleDomain> result = simpleDomainService.saveOrUpdate(domain);
 		assertNotNull(result);
 		SimpleDomain savedDomain = result.getValue();
 		assertNotNull(savedDomain);
 		String id = savedDomain.getId();
 		String originalName = savedDomain.getName();
-		savedDomain.setName(RandomStringUtils.randomAlphabetic(3));	
-		
+		savedDomain.setName(RandomStringUtils.randomAlphabetic(3));
+
 		ValueServiceResponse<SimpleDomain> updateResult = simpleDomainService.saveOrUpdate(id, savedDomain);
 		assertNoErrorMessages(updateResult);
-		
+
 		ValueServiceResponse<SimpleDomain> foundResult = simpleDomainService.findByPrimaryKey(id);
 		assertNotNull(foundResult);
 		SimpleDomain refetchedUpdatedDomain = foundResult.getValue();
 		assertNotNull(refetchedUpdatedDomain);
 		assertFalse(originalName.equals(refetchedUpdatedDomain.getName()));
-		
+
 	}
-	
+
 	@Test
-	public void testDomainMaintenanceDelete(@ArquillianResteasyResource SimpleDomainMaintenanceRestService simpleDomainService) {
+	public void testDomainMaintenanceDelete(
+			@ArquillianResteasyResource SimpleDomainMaintenanceRestService simpleDomainService) {
 		SimpleDomain domain = TestUtils.createRandomSimpleDomain();
-		
+
 		ValueServiceResponse<SimpleDomain> result = simpleDomainService.saveOrUpdate(domain);
 		assertNotNull(result);
 		SimpleDomain savedDomain = result.getValue();
 		assertNotNull(savedDomain);
 		String id = savedDomain.getId();
-		
+
 		ValueServiceResponse<SimpleDomain> deleteResult = simpleDomainService.delete(id);
 		assertNoErrorMessages(deleteResult);
-		
+
 		ValueServiceResponse<SimpleDomain> foundResult = simpleDomainService.findByPrimaryKey(id);
 		assertNotNull(foundResult);
 		assertNull(foundResult.getValue());
-		
-	}	
-	
+
+	}
+
 }

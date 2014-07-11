@@ -46,6 +46,11 @@
 			<type>SimpleDomainEnumeration</type>
 			<column>SIMPLE_DOMAIN_ENUM</column>
 		</field>
+		<field>
+			<name>bigDecimalValue</name>
+			<type>big_decimal</type>
+			<column>BIG_DECIMAL_COLUMN</column>
+		</field>
 	</fields>
 
 	<queries>

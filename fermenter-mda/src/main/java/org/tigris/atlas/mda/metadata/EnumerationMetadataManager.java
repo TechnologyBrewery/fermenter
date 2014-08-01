@@ -14,9 +14,6 @@ import org.tigris.atlas.mda.metadata.element.MetadataElement;
 
 /**
  * Responsible for maintaining the list of enumeration metadata elements in the system.
- * 
- * @author sandrews
- *
  */
 class EnumerationMetadataManager extends MetadataManager {
 
@@ -41,7 +38,7 @@ class EnumerationMetadataManager extends MetadataManager {
 	}
 
 	/**
-	 * Answer metadata for a specified enumeration
+	 * Answer metadata for a specified enumeration.
 	 * 
 	 * @param name
 	 * @return
@@ -52,7 +49,7 @@ class EnumerationMetadataManager extends MetadataManager {
 	}
 	
 	/**
-	 * Answer the full collection of enumeration metadata entries
+	 * Answer the full collection of enumeration metadata entries.
 	 * 
 	 * @return
 	 */
@@ -62,7 +59,16 @@ class EnumerationMetadataManager extends MetadataManager {
 	}
 	
 	/**
-	 * Returns the metadata element by name from any application that is loaded
+	 * Answer the full collection of enumeration metadata entries, regardless of source application.
+	 * @return
+	 */
+	public static Map getEnumerations() {
+		Map enumerationMap = getInstance().getCompleteMetadataMap();
+		return (enumerationMap != null) ? enumerationMap : Collections.EMPTY_MAP;
+	}
+	
+	/**
+	 * Returns the metadata element by name from any application that is loaded.
 	 * @param name The name by which to retrieve
 	 * @return The <tt>Enumeration</tt> instance for <tt>name</tt> or null
 	 */

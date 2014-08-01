@@ -38,6 +38,7 @@ public class ObjectiveCEntityGenerator extends AbstractObjectiveCEntityGenerator
 		vc.put("entityName", entity.getName());
 		vc.put("idFields", entity.getIdFields().values());
 		vc.put("fields", entity.getFields().values());
+		vc.put("references", entity.getReferences().values());
 		vc.put("imports", entity.getImports());
 	}
 

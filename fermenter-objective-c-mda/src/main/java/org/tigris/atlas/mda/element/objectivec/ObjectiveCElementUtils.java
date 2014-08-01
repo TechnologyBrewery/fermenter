@@ -54,9 +54,9 @@ public class ObjectiveCElementUtils {
 			if (objectiveCImportType == null) {
 				// Assume it's an application entity or enumeration at this point
 				MetadataRepository repo = MetadataRepository.getInstance();
-				Entity e = repo.getEntity(appName, type);
+				Entity e = repo.getEntity(type);
 				if (e != null) {
-					objectiveCImportType = e.getName();
+					objectiveCImportType = (new ObjectiveCEntity(e)).getName();
 				}
 				else {
 					Enumeration enumeration = repo.getEnumeration(type);

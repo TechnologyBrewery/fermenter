@@ -313,9 +313,9 @@ public class ObjectiveCEntity implements Entity {
 		Set<String> importSet = new HashSet<String>();
 
 		for (ObjectiveCReference reference : getReferences().values()) {
-			Set<String> fkSet = reference.getFkImports();
-			if (fkSet != null) {
-				importSet.addAll(fkSet);
+			String referenceImport = reference.getImport();
+			if (referenceImport != null) {
+				importSet.add(referenceImport);
 			}
 		}
 

@@ -222,7 +222,7 @@ public class ObjectiveCField implements Field {
 	}
 
 	public String getImport() {
-		if (importName == null ) {
+		if (importName == null) {
 			String appName = isExternal() ? getProject() : MetadataRepository.getInstance().getApplicationName();
 			importName = ObjectiveCElementUtils.getObjectiveCImport(appName, getType());
 		}

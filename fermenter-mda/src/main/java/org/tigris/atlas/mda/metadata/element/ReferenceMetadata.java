@@ -20,10 +20,11 @@ public class ReferenceMetadata extends MetadataElement implements Reference {
 	private String required;
 	private List   foreignKeys;
 	private Map    fkOverrides = new HashMap();
-	
+
 	/**
 	 * @see org.tigris.atlas.mda.metadata.Reference#getType()
 	 */
+	@Override
 	public String getType() {
 		return type;
 	}
@@ -33,62 +34,59 @@ public class ReferenceMetadata extends MetadataElement implements Reference {
 	public void setType(String type) {
 		this.type = type;
 	}
-	
+
 	/**
 	 * @see org.tigris.atlas.mda.metadata.Reference#getLabel()
 	 */
+	@Override
 	public String getLabel() {
 		if( label == null ) {
 			label = StringUtils.capitalize(getName());
 		}
-		
+
 		return label;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	/**
 	 * @see org.tigris.atlas.mda.metadata.Reference#getName()
 	 */
+	@Override
 	public String getName() {
 		if( name == null ) {
 			name = StringUtils.uncapitalize( type );
 		}
-		
+
 		return name;
 	}
-	
+
 	/**
 	 * @see org.tigris.atlas.mda.metadata.Reference#getDocumentation()
 	 */
+	@Override
 	public String getDocumentation() {
 		return documentation;
 	}
-	
+
 	public void setDocumentation(String documentation) {
 		this.documentation = documentation;
 	}
-	
+
 	/**
 	 * @see org.tigris.atlas.mda.metadata.Reference#getForeignKeyFields()
 	 */
+	@Override
 	public List getForeignKeyFields() {
 		if( foreignKeys == null ) {
 			foreignKeys = new ArrayList();
-			Entity ed = null;
-			if( getProject() ==  null ) {
-				ed = MetadataRepository.getInstance().getEntity( type );
-			}
-			else {
-				ed = MetadataRepository.getInstance().getEntity( getProject(), type );
-			}
-			
+			Entity ed = MetadataRepository.getInstance().getEntity(type);
 			if (ed == null) {
 				throw new NullPointerException("Reference to '" + type + "' not found!");
 			}
-			
+
 			if( fkOverrides.size() == 0 ) {
 				Iterator fks = ed.getIdFields().values().iterator();
 				Field    fk  = null;
@@ -121,10 +119,10 @@ public class ReferenceMetadata extends MetadataElement implements Reference {
 				}
 			}
 		}
-		
+
 		return foreignKeys;
 	}
-	
+
 	/**
 	 * Store a collection of foreign key override values
 	 * @param source Field name in the referenced entity
@@ -137,24 +135,26 @@ public class ReferenceMetadata extends MetadataElement implements Reference {
 		f.setColumn( column );
 		fkOverrides.put( source, f );
 	}
-	
+
 	/**
 	 * @see org.tigris.atlas.mda.metadata.Reference#getRequired()
 	 */
+	@Override
 	public String getRequired() {
 		return required;
 	}
-	
+
 	/**
 	 * @param required The required to set.
 	 */
 	public void setRequired(String required) {
 		this.required = required;
 	}
-	
+
 	/**
 	 * @see org.tigris.atlas.mda.metadata.Reference#isRequired()
 	 */
+	@Override
 	public boolean isRequired() {
 		if( required == null ) {
 			return false;
@@ -162,23 +162,25 @@ public class ReferenceMetadata extends MetadataElement implements Reference {
 		else {
 			return required.equalsIgnoreCase( Boolean.TRUE.toString() );
 		}
-	}	
-	
+	}
+
 	/**
 	 * Executed to ensure that valid combinations of metadata have been loaded.
 	 */
+	@Override
 	public void validate() {
 	}
-	
+
 	/**
 	 * @see org.tigris.atlas.mda.metadata.Reference#getProject()
 	 */
+	@Override
 	public String getProject() {
 		return (StringUtils.isNotBlank(project)) ? project : MetadataRepository.getInstance().getApplicationName();
 	}
-	
+
 	public void setProject(String project) {
 		this.project = project;
-	}	
+	}
 
 }

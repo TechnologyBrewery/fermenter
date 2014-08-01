@@ -19,5 +19,8 @@
 #foreach ($field in $fields)
 @property (${field.typeAttributes}) ${field.type} *${field.name};
 #end
+#foreach ($reference in $references)
+@property (${reference.typeAttributes}) ${reference.type} *${reference.name};
+#end
 
 @end

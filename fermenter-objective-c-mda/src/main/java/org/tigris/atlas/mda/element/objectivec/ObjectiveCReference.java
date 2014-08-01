@@ -17,6 +17,7 @@ public class ObjectiveCReference implements Reference {
 
 	private Reference reference;
 	private List decoratedFoerignKeyFieldList;
+	private String importName;
 
 	/**
 	 * Create a new instance of <tt>Reference</tt> with the correct functionality set
@@ -32,7 +33,11 @@ public class ObjectiveCReference implements Reference {
 
 	@Override
 	public String getType() {
-		return reference.getType();
+		return ObjectiveCElementUtils.getObjectiveCType(MetadataRepository.getInstance().getApplicationName(), reference.getType());
+	}
+
+	public String getTypeAttributes() {
+		return "nonatomic, strong";
 	}
 
 	@Override
@@ -99,6 +104,15 @@ public class ObjectiveCReference implements Reference {
 
 	public String getImportPrefix() {
 		return PackageManager.getBasePackage( getProject() );
+	}
+
+	public String getImport() {
+		if (importName == null) {
+			String appName = isExternal() ? getProject() : MetadataRepository.getInstance().getApplicationName();
+			importName = ObjectiveCElementUtils.getObjectiveCImport(appName, getType());
+		}
+
+		return importName;
 	}
 
 	/**

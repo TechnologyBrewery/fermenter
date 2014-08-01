@@ -1,0 +1,23 @@
+//
+//  ${entityName}.h
+//  ${projectName}
+//
+//  THIS FILE IS GENERATED -- DO NOT MODIFY
+//  Copyright (c) 2014 ASK, LLC. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+#foreach ($import in $imports)
+#import "${import}"
+#end
+
+@interface ${entityName} : NSObject
+
+#foreach ($idField in $idFields)
+@property (${idField.typeAttributes}) ${idField.type} *${idField.name};
+#end
+#foreach ($field in $fields)
+@property (${field.typeAttributes}) ${field.type} *${field.name};
+#end
+
+@end

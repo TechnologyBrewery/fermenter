@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE types PUBLIC "-//FERMENTER//DTD TYPES//EN" "https://bitbucket.org/askllc/fermenter/downloads/types.dtd">
+<types>
+	<type>
+		<name>string</name>
+		<objectivec>NSString</objectivec>
+	</type>
+	<type>
+		<name>date</name>
+		<objectivec>NSDate</objectivec>
+	</type>
+	<type>
+		<name>timestamp</name>
+		<objectivec>NSTimeInterval</objectivec>
+	</type>
+	<type>
+		<name>long</name>
+		<objectivec>long</objectivec>
+	</type>
+	<type>
+		<name>integer</name>
+		<objectivec>int</objectivec>
+	</type>
+	<type>
+		<name>boolean</name>
+		<objectivec>BOOL</objectivec>
+	</type>
+	<type>
+		<name>big_decimal</name>
+		<objectivec>NSDecimalNumber</objectivec>
+	</type>
+	<type>
+		<name>character</name>
+		<objectivec>char</objectivec>
+	</type>
+	<type>
+		<name>blob</name>
+		<objectivec>NSData</objectivec>
+	</type>
+</types>

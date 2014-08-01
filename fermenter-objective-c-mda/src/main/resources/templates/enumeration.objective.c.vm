@@ -1,0 +1,21 @@
+//
+//  ${enumeration.name}.h
+//  ${projectName}
+//
+//  THIS FILE IS GENERATED -- DO NOT MODIFY
+//  Copyright (c) 2014 ASK, LLC. All rights reserved.
+//
+
+#[[#ifndef NS_ENUM
+#define NS_ENUM(_type, _name) enum _name : _type _name; enum _name : _type
+#endif]]#
+
+typedef NS_ENUM(NSInteger, ${enumeration.name}) {
+## The odd whitespace on lines 16-21 is intentional.
+#foreach ($enum in $enumeration.enumList)
+	${enum.uppercasedName}#if (!$foreach.isLast())
+,
+#end
+#end
+
+};

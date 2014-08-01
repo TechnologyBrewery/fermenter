@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!ELEMENT java (#PCDATA)>
+<!ELEMENT objectivec (#PCDATA)>
 <!ELEMENT name (#PCDATA)>
-<!ELEMENT type (name,java)>
+<!ELEMENT type (name,java?,objectivec?)>
 <!ELEMENT types (type+)>

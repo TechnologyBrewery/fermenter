@@ -3,17 +3,17 @@ package org.tigris.atlas.mda.element.objectivec;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 
 import org.apache.commons.lang.StringUtils;
+import org.tigris.atlas.mda.metadata.MetadataRepository;
 import org.tigris.atlas.mda.metadata.element.Field;
 import org.tigris.atlas.mda.metadata.element.Relation;
 
 public class ObjectiveCRelation implements Relation {
 
 	private Relation relation;
-	private Collection decoratedChildRelationCollection;
-	private Collection decoratedKeyCollection;
+	private Collection<ObjectiveCRelation> decoratedChildRelationCollection;
+	private Collection<ObjectiveCField> decoratedKeyCollection;
 
 	/**
 	 * Create a new instance of <tt>Relation</tt> with the correct functionality set
@@ -39,7 +39,11 @@ public class ObjectiveCRelation implements Relation {
 
 	@Override
 	public String getType() {
-		return relation.getType();
+		return ObjectiveCElementUtils.getObjectiveCType(MetadataRepository.getInstance().getApplicationName(), relation.getType());
+	}
+
+	public String getTypeAttributes() {
+		return "nonatomic, copy";
 	}
 
 	@Override
@@ -53,20 +57,18 @@ public class ObjectiveCRelation implements Relation {
 	}
 
 	@Override
-	public Collection getChildRelations() {
+	public Collection<ObjectiveCRelation> getChildRelations() {
 		if (decoratedChildRelationCollection == null) {
-			Collection referenceForeignKeyFieldCollection = relation.getChildRelations();
+			@SuppressWarnings("unchecked")
+			Collection<Relation> referenceForeignKeyFieldCollection = relation.getChildRelations();
 			if ((referenceForeignKeyFieldCollection == null) || (referenceForeignKeyFieldCollection.size() == 0)) {
-				decoratedChildRelationCollection = Collections.EMPTY_LIST;
+				decoratedChildRelationCollection = Collections.<ObjectiveCRelation>emptyList();
 
-			} else {
-				Relation r;
-				decoratedChildRelationCollection = new ArrayList((referenceForeignKeyFieldCollection.size()));
-				Iterator i = referenceForeignKeyFieldCollection.iterator();
-				while (i.hasNext()) {
-					r = (Relation)i.next();
+			}
+			else {
+				decoratedChildRelationCollection = new ArrayList<ObjectiveCRelation>(referenceForeignKeyFieldCollection.size());
+				for (Relation r : referenceForeignKeyFieldCollection) {
 					decoratedChildRelationCollection.add(new ObjectiveCRelation(r));
-
 				}
 
 			}
@@ -76,22 +78,18 @@ public class ObjectiveCRelation implements Relation {
 	}
 
 	@Override
-	public Collection getKeys() {
+	public Collection<ObjectiveCField> getKeys() {
 		if (decoratedKeyCollection == null) {
-			Collection relationKeyCollection = relation.getKeys();
+			@SuppressWarnings("unchecked")
+			Collection<Field> relationKeyCollection = relation.getKeys();
 			if ((relationKeyCollection == null) || (relationKeyCollection.size() == 0)) {
-				decoratedKeyCollection = Collections.EMPTY_LIST;
-
-			} else {
-				Field f;
-				decoratedKeyCollection = new ArrayList((relationKeyCollection.size()));
-				Iterator i = relationKeyCollection.iterator();
-				while (i.hasNext()) {
-					f = (Field)i.next();
+				decoratedKeyCollection = Collections.<ObjectiveCField>emptyList();
+			}
+			else {
+				decoratedKeyCollection = new ArrayList<ObjectiveCField>(relationKeyCollection.size());
+				for (Field f : relationKeyCollection) {
 					decoratedKeyCollection.add(new ObjectiveCField(f));
-
 				}
-
 			}
 		}
 

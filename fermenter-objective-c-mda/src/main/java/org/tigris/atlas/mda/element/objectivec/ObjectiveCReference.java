@@ -16,7 +16,7 @@ import org.tigris.atlas.mda.metadata.element.Reference;
 public class ObjectiveCReference implements Reference {
 
 	private Reference reference;
-	private List decoratedFoerignKeyFieldList;
+	private List<ObjectiveCField> decoratedFoerignKeyFieldList;
 	private String importName;
 
 	/**
@@ -60,22 +60,18 @@ public class ObjectiveCReference implements Reference {
 	}
 
 	@Override
-	public List getForeignKeyFields() {
+	public List<ObjectiveCField> getForeignKeyFields() {
 		if (decoratedFoerignKeyFieldList == null) {
-			List referenceForeignKeyFieldList = reference.getForeignKeyFields();
+			@SuppressWarnings("unchecked")
+			List<Field> referenceForeignKeyFieldList = reference.getForeignKeyFields();
 			if ((referenceForeignKeyFieldList == null) || (referenceForeignKeyFieldList.size() == 0)) {
-				decoratedFoerignKeyFieldList = Collections.EMPTY_LIST;
-
-			} else {
-				Field f;
-				decoratedFoerignKeyFieldList = new ArrayList((referenceForeignKeyFieldList.size()));
-				Iterator i = referenceForeignKeyFieldList.iterator();
-				while (i.hasNext()) {
-					f = (Field)i.next();
+				decoratedFoerignKeyFieldList = Collections.<ObjectiveCField>emptyList();
+			}
+			else {
+				decoratedFoerignKeyFieldList = new ArrayList<ObjectiveCField>(referenceForeignKeyFieldList.size());
+				for (Field f : referenceForeignKeyFieldList) {
 					decoratedFoerignKeyFieldList.add(new ObjectiveCField(f));
-
 				}
-
 			}
 		}
 
@@ -121,16 +117,13 @@ public class ObjectiveCReference implements Reference {
 	 * @return
 	 */
 	public Set<String> getFkImports() {
-		Set importSet = new HashSet( );
+		Set<String> importSet = new HashSet<String>();
 
-		if( ! isExternal() ) {
+		if (!isExternal()) {
 			return importSet;
 		}
 
-		ObjectiveCField fk;
-		Iterator fks = getForeignKeyFields().iterator();
-		while (fks.hasNext()) {
-			fk = (ObjectiveCField) fks.next();
+		for (ObjectiveCField fk : getForeignKeyFields()) {
 			importSet.add(fk.getImport());
 		}
 
@@ -139,21 +132,20 @@ public class ObjectiveCReference implements Reference {
 
 
 	public String getFkCondition() {
-		if( ! isExternal() ) {
+		if (!isExternal()) {
 			return null;
 		}
 
 		StringBuffer sb = new StringBuffer(100);
-		ObjectiveCField fk;
-		Iterator fks = getForeignKeyFields().iterator();
+		Iterator<ObjectiveCField> fks = getForeignKeyFields().iterator();
 		while (fks.hasNext()) {
-			fk = (ObjectiveCField) fks.next();
-			sb.append( "get" );
-			sb.append( getCapitalizedName() );
-			sb.append( fk.getCapitalizedName() );
-			sb.append( "() == null" );
-			if( fks.hasNext() ) {
-				sb.append( "&&" );
+			ObjectiveCField fk = fks.next();
+			sb.append("get");
+			sb.append(getCapitalizedName());
+			sb.append(fk.getCapitalizedName());
+			sb.append("() == null");
+			if (fks.hasNext()) {
+				sb.append("&&");
 			}
 		}
 

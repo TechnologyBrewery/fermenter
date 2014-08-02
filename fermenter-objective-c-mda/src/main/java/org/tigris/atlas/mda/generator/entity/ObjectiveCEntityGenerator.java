@@ -12,6 +12,12 @@ import org.tigris.atlas.mda.metadata.element.Entity;
 
 /**
  * Provides entity generation fields for Objective-C purposes.
+ *
+ * This generator does not currently support:
+ *     -tables
+ *     -composites
+ *     -inverse relations
+ *     -queries
  */
 public class ObjectiveCEntityGenerator extends AbstractObjectiveCEntityGenerator {
 
@@ -36,10 +42,11 @@ public class ObjectiveCEntityGenerator extends AbstractObjectiveCEntityGenerator
 	protected void populateVelocityContext(VelocityContext vc, ObjectiveCEntity entity, GenerationContext generationContext) {
 		vc.put("projectName", OBJECTIVE_C_PROJECT_NAME);
 		vc.put("entityName", entity.getName());
+		vc.put("imports", entity.getImports());
 		vc.put("idFields", entity.getIdFields().values());
 		vc.put("fields", entity.getFields().values());
 		vc.put("references", entity.getReferences().values());
-		vc.put("imports", entity.getImports());
+		vc.put("relations", entity.getRelations().values());
 	}
 
 	@Override

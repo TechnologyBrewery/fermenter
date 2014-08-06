@@ -23,7 +23,7 @@
 @property (${reference.typeAttributes}) ${reference.type} *${reference.name};
 #end
 #foreach ($relation in $relations)
-@property (${relation.typeAttributes}) NSSet ${relation.label}s; // Elements must be of type ${relation.type}
+@property (${relation.typeAttributes}) NSSet *${relation.label}s; // Elements must be of type ${relation.type}
 #end
 
 @end

@@ -40,6 +40,7 @@ public class ObjectiveCEntityGenerator extends AbstractObjectiveCEntityGenerator
 	}
 
 	protected void populateVelocityContext(VelocityContext vc, ObjectiveCEntity entity, GenerationContext generationContext) {
+		vc.put("lineSeparator", System.getProperty("line.separator"));
 		vc.put("projectName", OBJECTIVE_C_PROJECT_NAME);
 		vc.put("entityName", entity.getName());
 		vc.put("imports", entity.getImports());

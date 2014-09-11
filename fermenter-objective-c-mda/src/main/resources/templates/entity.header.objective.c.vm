@@ -17,7 +17,7 @@
 @property (${idField.typeAttributes}) ${idField.type} *${idField.name};
 #end
 #foreach ($field in $fields)
-@property (${field.typeAttributes}) ${field.type} *${field.name};
+@property (${field.typeAttributes}) ${field.type} *${field.name};#if ($field.isEnumeration()) // Values must be ${field.enumerationType} constants${lineSeparator}#else${lineSeparator}#end
 #end
 #foreach ($reference in $references)
 @property (${reference.typeAttributes}) ${reference.type} *${reference.name};

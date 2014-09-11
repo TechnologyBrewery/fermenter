@@ -3,22 +3,28 @@
 
 <targets>
 
-	<target name="objective-c-interface"
+	<target name="objective-c-entity-header"
 			generator="org.tigris.atlas.mda.generator.entity.ObjectiveCEntityGenerator"
-			templateName="templates/interface.objective.c.vm"
+			templateName="templates/entity.header.objective.c.vm"
 			outputFile="${entityName}.h"
 			overwritable="true"/>
 
-	<target name="objective-c-implementation"
+	<target name="objective-c-entity-source"
 			generator="org.tigris.atlas.mda.generator.entity.ObjectiveCEntityGenerator"
-			templateName="templates/implementation.objective.c.vm"
+			templateName="templates/entity.source.objective.c.vm"
 			outputFile="${entityName}.m"
 			overwritable="true"/>
 
-	<target name="objective-c-enumeration"
+	<target name="objective-c-enumeration-header"
 			generator="org.tigris.atlas.mda.generator.enumeration.ObjectiveCEnumerationGenerator"
-			templateName="templates/enumeration.objective.c.vm"
+			templateName="templates/enumeration.header.objective.c.vm"
 			outputFile="${enumerationName}.h"
+			overwritable="true"/>
+
+	<target name="objective-c-enumeration-source"
+			generator="org.tigris.atlas.mda.generator.enumeration.ObjectiveCEnumerationGenerator"
+			templateName="templates/enumeration.source.objective.c.vm"
+			outputFile="${enumerationName}.m"
 			overwritable="true"/>
 
 </targets>

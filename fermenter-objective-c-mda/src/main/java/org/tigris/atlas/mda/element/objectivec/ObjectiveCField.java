@@ -76,6 +76,18 @@ public class ObjectiveCField implements Field {
 		return ObjectiveCElementUtils.getObjectiveCType(MetadataRepository.getInstance().getApplicationName(), field.getType());
 	}
 
+	public Boolean isEnumeration() {
+		MetadataRepository repo = MetadataRepository.getInstance();
+		Enumeration enumeration = repo.getEnumeration(field.getType());
+		return (enumeration != null);
+	}
+
+	public String getEnumerationType() {
+		MetadataRepository repo = MetadataRepository.getInstance();
+		ObjectiveCEnumeration enumeration = new ObjectiveCEnumeration(repo.getEnumeration(field.getType()));
+		return enumeration.getName();
+	}
+
 	public String getTypeAttributes() {
 		String returnValue = "nonatomic";
 		switch (getType()) {
@@ -93,6 +105,7 @@ public class ObjectiveCField implements Field {
 			default:
 				break;
 		}
+
 		return returnValue;
 	}
 
@@ -224,7 +237,7 @@ public class ObjectiveCField implements Field {
 	public String getImport() {
 		if (importName == null) {
 			String appName = isExternal() ? getProject() : MetadataRepository.getInstance().getApplicationName();
-			importName = ObjectiveCElementUtils.getObjectiveCImport(appName, getType());
+			importName = ObjectiveCElementUtils.getObjectiveCImport(appName, field.getType());
 		}
 
 		return importName;

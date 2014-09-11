@@ -1,0 +1,11 @@
+//
+//  ${enumeration.name}.h
+//  ${projectName}
+//
+//  THIS FILE IS GENERATED -- DO NOT MODIFY
+//  Copyright (c) 2014 ASK, LLC. All rights reserved.
+//
+
+#foreach ($enum in $enumeration.enumList)
+extern NSString* const ${enumeration.name}_${enum.name};
+#end

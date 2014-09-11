@@ -3,8 +3,9 @@
 
 <profiles>
 	<profile name="objective-c-base">
-		<target name="objective-c-interface"/>
-		<target name="objective-c-implementation"/>
-		<target name="objective-c-enumeration"/>
+		<target name="objective-c-entity-header"/>
+		<target name="objective-c-entity-source"/>
+		<target name="objective-c-enumeration-header"/>
+		<target name="objective-c-enumeration-source"/>
 	</profile>
 </profiles>

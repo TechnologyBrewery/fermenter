@@ -86,7 +86,34 @@ public class ObjectiveCElementUtils {
 	}
 
 	public static String getObjectiveCType(String appName, String type) {
-		return getObjectiveCImportType(appName, type);
+		String objectiveCType = null;
+		if (VOID.equals(type)) {
+			objectiveCType = VOID;
+		}
+		else {
+			// Attempt to resolve primitive type
+			objectiveCType = ObjectiveCTypeManager.getObjectiveCType(type);
+
+			if (objectiveCType == null) {
+				// Assume it's an application entity or enumeration at this point
+				MetadataRepository repo = MetadataRepository.getInstance();
+				Entity e = repo.getEntity(type);
+				if (e != null) {
+					objectiveCType = (new ObjectiveCEntity(e)).getName();
+				}
+				else {
+					Enumeration enumeration = repo.getEnumeration(type);
+					if (enumeration != null) {
+						objectiveCType = "NSString";
+					}
+					else {
+						objectiveCType = type;
+					}
+				}
+			}
+		}
+
+		return objectiveCType;
 	}
 
 	static String createSignatureParameters(List<Parameter> parameterList) {

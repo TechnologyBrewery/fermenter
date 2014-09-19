@@ -14,10 +14,10 @@
 @interface ${entityName} : NSObject
 
 #foreach ($idField in $idFields)
-@property (${idField.typeAttributes}) ${idField.type} *${idField.name};
+@property (${idField.typeAttributes}) ${idField.type} ${idField.typeReferenceAttribute}${idField.name};
 #end
 #foreach ($field in $fields)
-@property (${field.typeAttributes}) ${field.type} *${field.name};#if ($field.isEnumeration()) // Values must be ${field.enumerationType} constants${lineSeparator}#else${lineSeparator}#end
+@property (${field.typeAttributes}) ${field.type} ${field.typeReferenceAttribute}${field.name};#if ($field.isEnumeration()) // Values must be ${field.enumerationType} constants${lineSeparator}#else${lineSeparator}#end
 #end
 #foreach ($reference in $references)
 @property (${reference.typeAttributes}) ${reference.type} *${reference.name};

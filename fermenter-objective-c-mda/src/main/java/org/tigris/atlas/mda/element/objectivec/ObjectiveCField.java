@@ -88,6 +88,18 @@ public class ObjectiveCField implements Field {
 		return enumeration.getName();
 	}
 
+	public String getTypeReferenceAttribute() {
+		switch (getType()) {
+			case "long":
+			case "int":
+			case "char":
+			case "BOOL":
+				return "";
+			default:
+				return "*";
+		}
+	}
+
 	public String getTypeAttributes() {
 		String returnValue = "nonatomic";
 		switch (getType()) {

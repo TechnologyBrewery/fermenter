@@ -4,14 +4,16 @@ import java.util.Iterator;
 
 import org.apache.velocity.VelocityContext;
 import org.tigris.atlas.mda.element.objectivec.ObjectiveCEnumeration;
-import org.tigris.atlas.mda.generator.AbstractObjectiveCEntityGenerator;
+import org.tigris.atlas.mda.generator.AbstractObjectiveCGenerator;
 import org.tigris.atlas.mda.generator.GenerationContext;
 import org.tigris.atlas.mda.generator.GenerationException;
 import org.tigris.atlas.mda.metadata.MetadataRepository;
-import org.tigris.atlas.mda.metadata.element.Entity;
 import org.tigris.atlas.mda.metadata.element.Enumeration;
 
-public class ObjectiveCEnumerationGenerator extends AbstractObjectiveCEntityGenerator {
+/**
+ * Provides enumeration generation support for Objective-C.
+ */
+public class ObjectiveCEnumerationGenerator extends AbstractObjectiveCGenerator {
 
 	@Override
 	public void generate(GenerationContext context) throws GenerationException {
@@ -31,9 +33,5 @@ public class ObjectiveCEnumerationGenerator extends AbstractObjectiveCEntityGene
 			context.setOutputFile(fileName);
 			generateFile(context, vc);
 		}
-	}
-
-	@Override
-	protected void populateVelocityContext(VelocityContext vc, Entity entity, GenerationContext generationContext) {
 	}
 }

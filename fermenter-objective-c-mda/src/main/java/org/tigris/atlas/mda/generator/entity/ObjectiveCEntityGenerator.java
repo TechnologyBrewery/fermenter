@@ -4,14 +4,14 @@ import java.util.Iterator;
 
 import org.apache.velocity.VelocityContext;
 import org.tigris.atlas.mda.element.objectivec.ObjectiveCEntity;
-import org.tigris.atlas.mda.generator.AbstractObjectiveCEntityGenerator;
+import org.tigris.atlas.mda.generator.AbstractObjectiveCGenerator;
 import org.tigris.atlas.mda.generator.GenerationContext;
 import org.tigris.atlas.mda.generator.GenerationException;
 import org.tigris.atlas.mda.metadata.MetadataRepository;
 import org.tigris.atlas.mda.metadata.element.Entity;
 
 /**
- * Provides entity generation fields for Objective-C purposes.
+ * Provides entity generation support for Objective-C.
  *
  * This generator does not currently support:
  *     -tables
@@ -19,7 +19,7 @@ import org.tigris.atlas.mda.metadata.element.Entity;
  *     -inverse relations
  *     -queries
  */
-public class ObjectiveCEntityGenerator extends AbstractObjectiveCEntityGenerator {
+public class ObjectiveCEntityGenerator extends AbstractObjectiveCGenerator {
 
 	@Override
 	public void generate(GenerationContext context) throws GenerationException {
@@ -32,25 +32,17 @@ public class ObjectiveCEntityGenerator extends AbstractObjectiveCEntityGenerator
 		while (entities.hasNext()) {
 			ObjectiveCEntity objectiveCEntity = new ObjectiveCEntity(entities.next());
 			VelocityContext vc = new VelocityContext();
-			populateVelocityContext(vc, objectiveCEntity, context);
+			vc.put("lineSeparator", System.getProperty("line.separator"));
+			vc.put("projectName", OBJECTIVE_C_PROJECT_NAME);
+			vc.put("entityName", objectiveCEntity.getName());
+			vc.put("imports", objectiveCEntity.getImports());
+			vc.put("idFields", objectiveCEntity.getIdFields().values());
+			vc.put("fields", objectiveCEntity.getFields().values());
+			vc.put("references", objectiveCEntity.getReferences().values());
+			vc.put("relations", objectiveCEntity.getRelations().values());
 			fileName = replaceEntityName(basefileName, objectiveCEntity.getName());
 			context.setOutputFile(fileName);
 			generateFile(context, vc);
 		}
-	}
-
-	protected void populateVelocityContext(VelocityContext vc, ObjectiveCEntity entity, GenerationContext generationContext) {
-		vc.put("lineSeparator", System.getProperty("line.separator"));
-		vc.put("projectName", OBJECTIVE_C_PROJECT_NAME);
-		vc.put("entityName", entity.getName());
-		vc.put("imports", entity.getImports());
-		vc.put("idFields", entity.getIdFields().values());
-		vc.put("fields", entity.getFields().values());
-		vc.put("references", entity.getReferences().values());
-		vc.put("relations", entity.getRelations().values());
-	}
-
-	@Override
-	protected void populateVelocityContext(VelocityContext vc, Entity entity, GenerationContext generationContext) {
 	}
 }

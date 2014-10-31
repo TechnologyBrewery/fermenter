@@ -1,11 +1,9 @@
 package org.tigris.atlas.mda.generator;
 
-import org.tigris.atlas.mda.generator.entity.AbstractEntityGenerator;
-
 /**
- * Provides entity generation fields for Objective-C purposes.
+ * Abstract Objective-C generator to hold common methods and properties
  */
-public abstract class AbstractObjectiveCEntityGenerator extends AbstractEntityGenerator {
+public abstract class AbstractObjectiveCGenerator extends AbstractGenerator {
 
 	protected static final String OUTPUT_SUB_FOLDER_OBJECTIVE_C = "objectivec/";
 	protected static final String OBJECTIVE_C_PROJECT_NAME = "Wino"; // TODO: load this from metadata

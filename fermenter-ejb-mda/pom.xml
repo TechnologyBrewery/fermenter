@@ -3,15 +3,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<parent>
-		<groupId>com.ask</groupId>
-		<artifactId>fermenter</artifactId>
+		<groupId>org.bitbucket.fermenter</groupId>
+		<artifactId>root</artifactId>
 		<version>1-SNAPSHOT</version>
 	</parent>
 
 	<name>Fermenter EJB MDA</name>
 	<description>This project contains Fermenter's base EJB MDA templates</description>
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.ask.fermenter</groupId>
 	<artifactId>fermenter-ejb-mda</artifactId>
 	<packaging>jar</packaging>
 

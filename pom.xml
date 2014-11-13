@@ -4,9 +4,9 @@
 	<name>Fermenter</name>
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.ask</groupId>
+	<groupId>org.bitbucket.fermenter</groupId>
 	<version>1-SNAPSHOT</version>
-	<artifactId>fermenter</artifactId>
+	<artifactId>root</artifactId>
 	<packaging>pom</packaging>
 
 	<scm>
@@ -32,9 +32,12 @@
 		<maven.compiler.target>1.7</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<resteasy.version>3.0.8.Final</resteasy.version>
-		<sample.version>1.1</sample.version>
 		<slf4j.version>1.7.5</slf4j.version>
 		<weld.version>2.1.2.Final</weld.version>
+		<wildfly.version>8.1.0.Final</wildfly.version>
+		<arquillian.version>1.1.5.Final</arquillian.version>
+		<arquillian.rest.extension.version>1.0.0.Alpha3</arquillian.rest.extension.version>
+		<wildfly.location>${project.basedir}/../service-deployment/wildfly-8.1.0.Final</wildfly.location>
 	</properties>
 
 	<repositories>
@@ -71,11 +74,40 @@
 					</configuration>
 					<dependencies>
 						<dependency>
-							<groupId>com.ask.fermenter</groupId>
+							<groupId>${project.groupId}</groupId>
 							<artifactId>build-tools</artifactId>
 							<version>${project.version}</version>
 						</dependency>
 					</dependencies>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-failsafe-plugin</artifactId>
+					<version>2.17</version>
+					<executions>
+						<execution>
+							<goals>
+								<goal>integration-test</goal>
+								<goal>verify</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<systemPropertyVariables>
+							<java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+							<jboss.home>${wildfly.location}</jboss.home>
+							<module.path>${wildfly.location}/modules</module.path>
+							<KRAUSENING_BASE>${project.basedir}/src/test/resources/krausening/base</KRAUSENING_BASE>
+							<KRAUSENING_EXTENSIONS>${project.basedir}/src/test/resources/krausening/extensions</KRAUSENING_EXTENSIONS>
+						</systemPropertyVariables>
+						<reuseForks>false</reuseForks>
+						<argLine>-Xmx512m -XX:MaxPermSize=128m</argLine>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>2.5</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -105,11 +137,10 @@
 				<version>${slf4j.version}</version>
 				<scope>runtime</scope>
 			</dependency>
-			<!-- TODO: updated to commons-lang3 -->
 			<dependency>
-				<groupId>commons-lang</groupId>
-				<artifactId>commons-lang</artifactId>
-				<version>2.6</version>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>3.3.2</version>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
@@ -119,7 +150,7 @@
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
-				<groupId>com.ask.krausening</groupId>
+				<groupId>org.bitbucket.krausening</groupId>
 				<artifactId>krausening</artifactId>
 				<version>1</version>
 				<scope>compile</scope>
@@ -128,20 +159,50 @@
 			<dependency>
 				<groupId>javax</groupId>
 				<artifactId>javaee-api</artifactId>
-				<version>6.0</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.jboss.spec</groupId>
-				<artifactId>jboss-javaee-web-6.0</artifactId>
-				<version>2.0.0.Final</version>
-				<type>pom</type>
+				<version>7.0</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>javax.annotation</groupId>
 				<artifactId>jsr250-api</artifactId>
 				<version>1.0</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.spec</groupId>
+				<artifactId>jboss-javaee-7.0</artifactId>
+				<version>1.0.0.Final</version>
+				<type>pom</type>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.codehaus.jackson</groupId>
+				<artifactId>jackson-core-asl</artifactId>
+				<version>${jackson.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.codehaus.jackson</groupId>
+				<artifactId>jackson-mapper-asl</artifactId>
+				<version>${jackson.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.resteasy</groupId>
+				<artifactId>resteasy-jackson-provider</artifactId>
+				<version>${resteasy.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.resteasy</groupId>
+				<artifactId>resteasy-jaxrs</artifactId>
+				<version>${resteasy.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.resteasy</groupId>
+				<artifactId>resteasy-cdi</artifactId>
+				<version>${resteasy.version}</version>
 				<scope>provided</scope>
 			</dependency>
 
@@ -155,18 +216,49 @@
 			<dependency>
 				<groupId>org.jboss.arquillian</groupId>
 				<artifactId>arquillian-bom</artifactId>
-				<version>1.1.2.Final</version>
+				<version>${arquillian.version}</version>
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>
 			<dependency>
 				<groupId>org.jboss.arquillian.extension</groupId>
 				<artifactId>arquillian-rest-warp-bom</artifactId>
-				<version>1.0.0.Final-SNAPSHOT</version>
+				<version>${arquillian.rest.extension.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.wildfly</groupId>
+				<artifactId>wildfly-arquillian-container-embedded</artifactId>
+				<version>${wildfly.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.arquillian.extension</groupId>
+				<artifactId>arquillian-rest-client-api</artifactId>
+				<version>${arquillian.rest.extension.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.arquillian.extension</groupId>
+				<artifactId>arquillian-rest-client-impl-2x</artifactId>
+				<version>${arquillian.rest.extension.version}</version>
+				<scope>test</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
+	<profiles>
+		<profile>
+			<id>integration-test</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-failsafe-plugin</artifactId>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>

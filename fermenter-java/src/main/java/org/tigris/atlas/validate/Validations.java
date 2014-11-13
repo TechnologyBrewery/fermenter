@@ -6,7 +6,7 @@ import java.util.GregorianCalendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.tigris.atlas.messages.CoreMessages;
 import org.tigris.atlas.messages.Message;
 import org.tigris.atlas.messages.MessageUtils;

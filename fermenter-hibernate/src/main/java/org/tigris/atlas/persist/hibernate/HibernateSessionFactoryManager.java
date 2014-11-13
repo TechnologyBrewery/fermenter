@@ -3,13 +3,12 @@ package org.tigris.atlas.persist.hibernate;
 import java.net.URL;
 import java.util.Properties;
 
+import org.bitbucket.krausening.Krausening;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.internal.util.ConfigHelper;
 import org.hibernate.service.ServiceRegistry;
-
-import com.ask.krausening.Krausening;
 
 /**
  * This singleton class configures then contains a reference to the 

@@ -2,15 +2,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<parent>
-		<groupId>com.ask</groupId>
-		<artifactId>fermenter</artifactId>
+		<groupId>org.bitbucket.fermenter</groupId>
+		<artifactId>root</artifactId>
 		<version>1-SNAPSHOT</version>
 	</parent>
 
 	<name>Fermenter Model-Driven Architecture Code Generator</name>
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.ask.fermenter</groupId>
 	<artifactId>fermenter-mda</artifactId>
 	<packaging>maven-plugin</packaging>
 
@@ -45,8 +44,8 @@
 			<version>1.1</version>
 		</dependency>
 		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
 		</dependency>
 	</dependencies>
 

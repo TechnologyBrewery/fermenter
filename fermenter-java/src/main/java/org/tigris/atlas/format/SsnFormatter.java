@@ -1,6 +1,6 @@
 package org.tigris.atlas.format;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class SsnFormatter {
 

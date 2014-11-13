@@ -38,9 +38,6 @@ fermenter-test/fermenter-test-profile/.classpath
 fermenter-test/fermenter-test-profile/.settings/
 fermenter-test/fermenter-test-profile/target/
 fermenter-test/fermenter-test-ejb/src/generated/java/com/ask/test/service/delegate/EntityMaintenanceServiceDelegateImpl.java
-fermenter-test/fermenter-test-domain-integration-test/.settings/
-fermenter-test/fermenter-test-domain-integration-test/.classpath
-fermenter-test/fermenter-test-domain-integration-test/target/
 fermenter-test/fermenter-test-domain-webapp/.classpath
 fermenter-test/fermenter-test-domain-webapp/.settings/
 fermenter-test/fermenter-test-domain-webapp/target/
@@ -49,3 +46,5 @@ build-tools/target/
 .settings/
 fermenter-objective-c-mda/.classpath
 fermenter-objective-c-mda/target/
+fermenter-test/target/
+target/failsafe-reports/failsafe-summary.xml

@@ -2,15 +2,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<parent>
-		<groupId>com.ask</groupId>
-		<artifactId>fermenter</artifactId>
+		<groupId>org.bitbucket.fermenter</groupId>
+		<artifactId>root</artifactId>
 		<version>1-SNAPSHOT</version>
 	</parent>
 
 	<name>Fermenter Hibernate</name>
 	<description>This project contains Fermenter's Hibernate implementations</description>
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.ask.fermenter</groupId>
 	<artifactId>fermenter-hibernate</artifactId>
 	<packaging>jar</packaging>
 
@@ -26,7 +25,7 @@
 			<version>4.3.5.Final</version>
 		</dependency>
 		<dependency>
-			<groupId>com.ask.krausening</groupId>
+			<groupId>org.bitbucket.krausening</groupId>
 			<artifactId>krausening</artifactId>
 			<scope>compile</scope>
 		</dependency>

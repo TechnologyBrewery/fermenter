@@ -7,7 +7,7 @@ import org.tigris.atlas.bizobj.ComplexType;
 import org.tigris.atlas.messages.Messages;
 import org.tigris.atlas.messages.MessagesSet;
 import org.tigris.atlas.validate.Validations;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 #foreach ($validator in $composite.validators)
 import ${validator.import};
 #end

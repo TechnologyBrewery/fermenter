@@ -9,7 +9,7 @@
 		</layout>
 	</appender>
 	
-	<category name="com.ask">
+	<category name="org.bitbucket.fermenter">
 		<priority value="DEBUG" />
 	</category>
 
@@ -17,6 +17,10 @@
 		<priority value="DEBUG" />
 	</category>
 
+	<category name="org.jboss.resteasy">
+		<priority value="DEBUG" />
+	</category>
+	
 	<root>
 		<level value="WARN" />
 		<appender-ref ref="consoleAppender" />

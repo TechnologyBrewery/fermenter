@@ -6,7 +6,7 @@ import ${import};
 import org.tigris.atlas.messages.Messages;
 import org.tigris.atlas.messages.MessagesSet;
 import org.tigris.atlas.transfer.AbstractTransferComponent;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Composite transfer object class for the ${composite.type} composite

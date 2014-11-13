@@ -3,22 +3,20 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<parent>
-		<groupId>com.ask</groupId>
-		<artifactId>fermenter</artifactId>
+		<groupId>org.bitbucket.fermenter</groupId>
+		<artifactId>root</artifactId>
 		<version>1-SNAPSHOT</version>
 	</parent>
 
 	<name>Fermenter Test</name>
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.ask.fermenter</groupId>
-	<artifactId>fermenter-test</artifactId>
+	<artifactId>fermenter-test-parent</artifactId>
 	<packaging>pom</packaging>
 	
 	<modules>
 		<module>fermenter-test-profile</module>
 		<module>fermenter-test-domain</module>
-		<module>fermenter-test-domain-integration-test</module>
 		<module>fermenter-test-domain-webapp</module>
 	</modules>
 
@@ -26,7 +24,7 @@
 		<pluginManagement>
 			<plugins>
 				<plugin>
-					<groupId>com.ask.fermenter</groupId>
+					<groupId>org.bitbucket.fermenter</groupId>
 					<artifactId>fermenter-mda</artifactId>
 					<executions>
 						<execution>

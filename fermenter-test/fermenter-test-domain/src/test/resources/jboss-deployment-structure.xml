@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jboss-deployment-structure>
+	<deployment>
+		<dependencies>
+			<module name="org.jboss.resteasy.resteasy-jackson-provider" export="true" />
+			<module name="org.jboss.resteasy.resteasy-cdi" export="true" />
+			<module name="org.codehaus.jackson.jackson-jaxrs" export="true" />
+			<module name="org.codehaus.jackson.jackson-mapper-asl" export="true" />
+			<module name="org.javassist" export="true" />
+		</dependencies>
+	</deployment>
+</jboss-deployment-structure>

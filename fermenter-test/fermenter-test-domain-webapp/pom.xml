@@ -3,8 +3,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<parent>
-		<groupId>com.ask.fermenter</groupId>
-		<artifactId>fermenter-test</artifactId>
+		<groupId>org.bitbucket.fermenter</groupId>
+		<artifactId>fermenter-test-parent</artifactId>
 		<version>1-SNAPSHOT</version>
 	</parent>
 
@@ -16,7 +16,7 @@
 	
 	<dependencies>
 		<dependency>
-			<groupId>com.ask.fermenter</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>fermenter-test-domain</artifactId>
 			<version>${project.version}</version>
 		</dependency>

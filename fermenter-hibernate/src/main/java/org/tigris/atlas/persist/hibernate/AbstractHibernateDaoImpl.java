@@ -26,9 +26,9 @@ import org.tigris.atlas.transfer.PrimaryKey;
 /**
  * The base class for Hibernate persistence.
  */
-public abstract class DaoImpl<BO extends BusinessObject, PK extends PrimaryKey> implements Dao<BO, PK> {
+public abstract class AbstractHibernateDaoImpl<BO extends BusinessObject, PK extends PrimaryKey> implements Dao<BO, PK> {
 
-	private static final Logger LOG = LoggerFactory.getLogger(DaoImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(AbstractHibernateDaoImpl.class);
 	private static final String DATABASE_EXCEPTION_KEY = "database.exception";
 
 	protected Session getSession() {

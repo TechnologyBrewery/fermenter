@@ -129,12 +129,18 @@
 		    outputFile="${basePackage}/messages${locale}.properties"
 		    overwritable="true"/>
 	
+	<target name="baseDataAccessObjects"
+		    generator="org.tigris.atlas.mda.generator.entity.EntityJavaGenerator"
+		    templateName="templates/dao.base.java.vm"
+		    outputFile="${basePackage}/persist/${entityName}BaseDao.java"
+		    overwritable="true"/>
+	
 	<target name="dataAccessObjects"
 		    generator="org.tigris.atlas.mda.generator.entity.EntityJavaGenerator"
 		    templateName="templates/dao.java.vm"
 		    outputFile="${basePackage}/persist/${entityName}Dao.java"
-		    overwritable="true"/>
-	
+		    overwritable="false"/>
+		    
 	<target name="dataAccessObjectFactory"
 		    generator="org.tigris.atlas.mda.generator.factory.FactoryJavaGenerator"
 		    templateName="templates/dao.factory.java.vm"

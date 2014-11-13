@@ -8,7 +8,6 @@
 		<target name="businessObjectFactoryInterface"/>
 		<target name="serviceFactoryInterface"/>
 		<target name="dataAccessObjectFactoryInterface"/>
-		<target name="dataAccessObjects"/>
 	</profile>
 	
 	<profile name="java-base" extends="java-interfaces">
@@ -16,6 +15,8 @@
 		<target name="businessObjects"/>
 		<target name="businessObjectFactory"/>
 		<target name="businessObjectFactoryJava"/>
+		<target name="baseDataAccessObjects"/>
+		<target name="dataAccessObjects"/>
 		<target name="primaryKeys"/>
 		<target name="enumerationObjects"/>
 		<target name="transferObjects"/>

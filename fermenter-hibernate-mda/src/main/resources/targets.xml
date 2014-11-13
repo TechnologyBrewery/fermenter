@@ -3,12 +3,18 @@
 
 <targets>
 		
+	<target name="baseDataAccessObjectHibernateImpls"
+			generator="org.tigris.atlas.mda.generator.entity.EntityJavaGenerator"
+			templateName="templates/dao.hibernate.base.java.vm"
+			outputFile="${basePackage}/persist/hibernate/${entityName}BaseDaoImpl.java"
+			overwritable="true"/>
+	
 	<target name="dataAccessObjectHibernateImpls"
 			generator="org.tigris.atlas.mda.generator.entity.EntityJavaGenerator"
 			templateName="templates/dao.hibernate.java.vm"
 			outputFile="${basePackage}/persist/hibernate/${entityName}DaoImpl.java"
-			overwritable="true"/>
-	
+			overwritable="false"/>
+			
 	<target name="hibernateMappings"
 			generator="org.tigris.atlas.mda.hibernate.generator.entity.EntityHibernateGenerator"
 			templateName="templates/mapping.hibernate.vm"

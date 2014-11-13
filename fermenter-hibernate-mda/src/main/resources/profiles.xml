@@ -3,6 +3,7 @@
 
 <profiles>
 	<profile name="java-hibernate">
+		<target name="baseDataAccessObjectHibernateImpls"/>
 		<target name="dataAccessObjectHibernateImpls"/>
 		<target name="hibernateMappings"/>
 		<target name="daoFactoryHibernate"/>

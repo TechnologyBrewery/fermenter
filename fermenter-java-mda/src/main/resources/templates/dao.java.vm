@@ -1,47 +1,17 @@
 package ${prefix}.persist;
 
-#if( $queries.size() > 0 )
-import java.util.List;
-#foreach($query in $queries)
-#foreach($criteria in $query.criteria)
-import ${criteria.import};
-#end
-#end
-#end
-
-import org.tigris.atlas.persist.Dao;
-
-import ${prefix}.bizobj.${entity.name}BO;
-import ${prefix}.transfer.${entity.name}PK;
-
-#foreach ($import in $imports )
-import ${import};
-#end
-
 /**
- * Data access object for the ${entityName} application entity
+ * Data access object for the ${entity.name} application entity.
+ * 
+ * Generated Skeleton Code.
  *
- * Generated Code - DO NOT MODIFY
+ * @see ${prefix}.persist.${entityName}BaseDao
  */
  
-public interface ${entity.name}Dao extends Dao<${entity.name}BO, ${entity.name}PK> {
-
-#foreach( $query in $queries )
-	public static final String ${query.name} = "${query.name}";
-#end
-
-#foreach( $query in $queries )	
-
+public interface ${entity.name}Dao extends ${entity.name}BaseDao {
 	/**
-	 * Execute the ${query.name} query
-	 *
-#foreach( $criterion in $query.criteria )
-	 * @param ${criterion.name} The ${criterion.name}
-#end
-	 * @return List of {@link ${entity.name}BO}s
-	 */	 
-#set( $numCriteria = $query.criteria.size() ) 
-#set( $currentNum  = 0 )
-	public List<${entity.name}BO> ${query.lowercaseName}(#foreach( $criterion in $query.criteria )${criterion.javaType} ${criterion.name} #set($currentNum = $currentNum+1)#if($currentNum<$numCriteria), #end#end);
-#end
+	 * Interface methods that are implemented using data access query logic 
+	 * that cannot be easily expressed in meta-model definitions may be 
+	 * defined in this class. 
+	 */
 }

@@ -7,5 +7,7 @@
 		<target name="objective-c-entity-source"/>
 		<target name="objective-c-enumeration-header"/>
 		<target name="objective-c-enumeration-source"/>
+		<target name="objective-c-service-response-header"/>
+		<target name="objective-c-service-response-source"/>
 	</profile>
 </profiles>

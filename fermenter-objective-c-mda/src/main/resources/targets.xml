@@ -27,4 +27,15 @@
 			outputFile="${enumerationName}.m"
 			overwritable="true"/>
 
+	<target name="objective-c-service-response-header"
+			generator="org.tigris.atlas.mda.generator.service.ObjectiveCServiceResponseGenerator"
+			templateName="templates/service.response.header.objective.c.vm"
+			outputFile="${operationName}Response.h"
+			overwritable="true"/>
+
+	<target name="objective-c-service-response-source"
+			generator="org.tigris.atlas.mda.generator.service.ObjectiveCServiceResponseGenerator"
+			templateName="templates/service.response.source.objective.c.vm"
+			outputFile="${operationName}Response.m"
+			overwritable="true"/>
 </targets>

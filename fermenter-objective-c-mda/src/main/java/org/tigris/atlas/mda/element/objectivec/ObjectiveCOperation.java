@@ -17,6 +17,7 @@ import org.tigris.atlas.mda.metadata.MetadataRepository;
 import org.tigris.atlas.mda.metadata.element.Entity;
 import org.tigris.atlas.mda.metadata.element.Operation;
 import org.tigris.atlas.mda.metadata.element.Parameter;
+import org.tigris.atlas.mda.objectivec.ObjectiveCTypeManager;
 
 public class ObjectiveCOperation implements Operation {
 
@@ -54,7 +55,7 @@ public class ObjectiveCOperation implements Operation {
 	 */
 	@Override
 	public String getName() {
-		return operation.getName();
+		return ObjectiveCTypeManager.getObjectiveCClassPrefix() + operation.getName();
 	}
 
 	/**
@@ -75,7 +76,7 @@ public class ObjectiveCOperation implements Operation {
 	 */
 	@Override
 	public String getReturnType() {
-		return operation.getReturnType();
+		return ObjectiveCElementUtils.getObjectiveCType(MetadataRepository.getInstance().getApplicationName(), operation.getReturnType());
 	}
 
 	public String getUncapitalizedReturnType() {
@@ -146,7 +147,7 @@ public class ObjectiveCOperation implements Operation {
 	 */
 	@Override
 	public String getReturnManyType() {
-		return operation.getReturnManyType();
+		return ObjectiveCElementUtils.getObjectiveCType(MetadataRepository.getInstance().getApplicationName(), operation.getReturnManyType());
 	}
 
 	public Boolean isResponseTypeVoid() {

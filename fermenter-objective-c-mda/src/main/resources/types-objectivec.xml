@@ -15,11 +15,11 @@
 	</type>
 	<type>
 		<name>long</name>
-		<objectivec>long</objectivec>
+		<objectivec>NSNumber</objectivec>
 	</type>
 	<type>
 		<name>integer</name>
-		<objectivec>int</objectivec>
+		<objectivec>NSNumber</objectivec>
 	</type>
 	<type>
 		<name>boolean</name>

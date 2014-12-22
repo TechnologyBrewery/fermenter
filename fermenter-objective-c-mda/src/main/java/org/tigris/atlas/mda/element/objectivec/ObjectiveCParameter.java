@@ -3,7 +3,6 @@ package org.tigris.atlas.mda.element.objectivec;
 import org.apache.commons.lang.StringUtils;
 import org.tigris.atlas.mda.PackageManager;
 import org.tigris.atlas.mda.metadata.MetadataRepository;
-import org.tigris.atlas.mda.metadata.element.Enumeration;
 import org.tigris.atlas.mda.metadata.element.Parameter;
 
 public class ObjectiveCParameter implements Parameter {
@@ -32,7 +31,11 @@ public class ObjectiveCParameter implements Parameter {
 
 	@Override
 	public String getType() {
-		return parameter.getType();
+		return ObjectiveCElementUtils.getObjectiveCType(MetadataRepository.getInstance().getApplicationName(), parameter.getType());
+	}
+
+	public String getTypeReferenceAttribute() {
+		return ObjectiveCElementUtils.getObjectiveCTypeReferenceAttribute(getType());
 	}
 
 	@Override

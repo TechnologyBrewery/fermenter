@@ -34,4 +34,9 @@ public class ObjectiveCEnumerationGenerator extends AbstractObjectiveCGenerator 
 			generateFile(context, vc);
 		}
 	}
+
+	@Override
+	protected String getOutputSubFolder() {
+		return super.getOutputSubFolder() + "enumerations/";
+	}
 }

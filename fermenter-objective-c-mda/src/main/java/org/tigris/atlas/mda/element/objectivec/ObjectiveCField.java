@@ -89,36 +89,11 @@ public class ObjectiveCField implements Field {
 	}
 
 	public String getTypeReferenceAttribute() {
-		switch (getType()) {
-			case "long":
-			case "int":
-			case "char":
-			case "BOOL":
-				return "";
-			default:
-				return "*";
-		}
+		return ObjectiveCElementUtils.getObjectiveCTypeReferenceAttribute(getType());
 	}
 
 	public String getTypeAttributes() {
-		String returnValue = "nonatomic";
-		switch (getType()) {
-			case "NSString":
-			case "NSDate":
-			case "NSTimeInterval":
-			case "NSDecimalNumber":
-			case "NSData":
-				returnValue += ", strong";
-				break;
-			case "long":
-			case "int":
-			case "char":
-			case "BOOL":
-			default:
-				break;
-		}
-
-		return returnValue;
+		return ObjectiveCElementUtils.getObjectiveCTypeAttribute(getType());
 	}
 
 	public String getCapitalizedName() {

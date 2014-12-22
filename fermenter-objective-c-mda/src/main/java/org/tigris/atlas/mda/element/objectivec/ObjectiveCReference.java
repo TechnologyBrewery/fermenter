@@ -10,6 +10,7 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.tigris.atlas.mda.PackageManager;
 import org.tigris.atlas.mda.metadata.MetadataRepository;
+import org.tigris.atlas.mda.metadata.element.Entity;
 import org.tigris.atlas.mda.metadata.element.Field;
 import org.tigris.atlas.mda.metadata.element.Reference;
 
@@ -40,6 +41,18 @@ public class ObjectiveCReference implements Reference {
 		return "nonatomic, strong";
 	}
 
+	public String getWrappedType() {
+		return reference.getType();
+	}
+
+	public String getUncapitalizedWrappedType() {
+		return StringUtils.uncapitalize(getWrappedType());
+	}
+
+	public Entity getTypeEntity() {
+		return ObjectiveCElementUtils.getObjectiveCEntity(reference.getType());
+	}
+
 	@Override
 	public String getLabel() {
 		return reference.getLabel();
@@ -48,6 +61,10 @@ public class ObjectiveCReference implements Reference {
 	@Override
 	public String getName() {
 		return reference.getName();
+	}
+
+	public String getSerializedName() {
+		return getName();
 	}
 
 	@Override

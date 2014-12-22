@@ -1,0 +1,37 @@
+//
+//  ${service.name}Service.h
+//  ${projectName}
+//
+//  THIS FILE IS GENERATED -- DO NOT MODIFY
+//  Copyright (c) 2014 ASK, LLC. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+#foreach ($operation in $service.operations)
+#import "${operation.name}Response.h"
+#end
+
+@interface ${service.name}Service : NSObject
+
+#foreach ($operation in $service.operations)
+#if ($operation.parameters.size() == 0)
++ (void)${operation.lowercaseName}WithHandler:(void (^)(${operation.name}Response* response))handler;
+
+#elseif ($operation.parameters.size() == 1)
++ (void)${operation.lowercaseName}With${operation.parameters[0].uppercaseName}:(${operation.parameters[0].type}${operation.parameters[0].typeReferenceAttribute})${operation.parameters[0].name}
+                withHandler:(void (^)(${operation.name}Response* response))handler;
+
+#elseif ($operation.parameters.size() > 1)
++ (void)${operation.lowercaseName}With${operation.parameters[0].uppercaseName}:(${operation.parameters[0].type}${operation.parameters[0].typeReferenceAttribute})${operation.parameters[0].name}
+#foreach ($parameter in $operation.parameters)
+#if ($foreach.last)
+                with${parameter.uppercaseName}:(${parameter.type}${parameter.typeReferenceAttribute})${parameter.name}
+                withHandler:(void (^)(${operation.name}Response* response))handler;
+
+#elseif (!$foreach.first)
+                with${parameter.uppercaseName}:(${parameter.type}${parameter.typeReferenceAttribute})${parameter.name}
+#end##if last/first
+#end##foreach parameter
+#end##if parameter size
+#end##foreach operation
+@end

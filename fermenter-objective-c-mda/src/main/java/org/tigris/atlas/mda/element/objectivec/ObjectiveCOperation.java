@@ -17,6 +17,7 @@ import org.tigris.atlas.mda.metadata.MetadataRepository;
 import org.tigris.atlas.mda.metadata.element.Entity;
 import org.tigris.atlas.mda.metadata.element.Operation;
 import org.tigris.atlas.mda.metadata.element.Parameter;
+import org.tigris.atlas.mda.metadata.element.Relation;
 import org.tigris.atlas.mda.objectivec.ObjectiveCTypeManager;
 
 public class ObjectiveCOperation implements Operation {
@@ -69,6 +70,35 @@ public class ObjectiveCOperation implements Operation {
 		}
 
 		return documentation;
+	}
+
+	public boolean hasValueResponse() {
+		String type = this.getResponseType();
+		return (type != null && !type.equalsIgnoreCase(ObjectiveCElementUtils.VOID));
+	}
+
+	public String getResponseType() {
+		String type = operation.getReturnType();
+		if (type == null) {
+			type = operation.getReturnManyType();
+		}
+		return type;
+	}
+
+	public String getObjectiveCResponseType() {
+		String type = this.getReturnType();
+		if (type == null) {
+			type = this.getReturnManyType();
+		}
+		return type;
+	}
+
+	public String getUncapitalizedResponseType() {
+		return StringUtils.uncapitalize(this.getResponseType());
+	}
+
+	public Entity getResponseEntity() {
+		return hasValueResponse() ? ObjectiveCElementUtils.getObjectiveCEntity(MetadataRepository.getInstance().getApplicationName(), this.getResponseType()) : null;
 	}
 
 	/**
@@ -244,12 +274,38 @@ public class ObjectiveCOperation implements Operation {
 		return imports;
 	}
 
+	public Set<String> getResponseEntityImports() {
+		Set<String> imports = new HashSet<String>();
+
+		Entity entity = getResponseEntity();
+		if (entity != null) {
+			String appName = MetadataRepository.getInstance().getApplicationName();
+
+			imports.add(ObjectiveCElementUtils.getObjectiveCImport(appName, getObjectiveCResponseType()));
+
+			Collection<Relation> relations = new ArrayList<Relation>();
+			gatherAllRelations(relations, entity.getRelations().values());
+			for (Relation r : relations) {
+				ObjectiveCRelation objectiveCRelation = (ObjectiveCRelation)r;
+				imports.add(ObjectiveCElementUtils.getObjectiveCImport(appName, objectiveCRelation.getType()));
+			}
+		}
+
+		return imports;
+	}
+
+	private void gatherAllRelations(Collection<Relation> target, Collection<Relation> source) {
+		target.addAll(source);
+		for (Relation r : source) {
+			gatherAllRelations(target, r.getChildRelations());
+		}
+	}
+
 	public Set<String> getImports() {
 		Set<String> importSet = new HashSet<String>();
-		importSet.addAll( getParameterImports() );
-		if (isReturnTypeCollection()) {
-			importSet.add(Collection.class.getName());
-		}
+		// This causes imports of NSDecimalNumber and NSString.  Comment it out for now.
+		//importSet.addAll(getParameterImports());
+		importSet.addAll(getResponseEntityImports());
 
 		return importSet;
 	}

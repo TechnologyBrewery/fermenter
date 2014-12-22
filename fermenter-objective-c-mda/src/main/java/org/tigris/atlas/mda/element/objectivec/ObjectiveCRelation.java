@@ -6,6 +6,7 @@ import java.util.Collections;
 
 import org.apache.commons.lang.StringUtils;
 import org.tigris.atlas.mda.metadata.MetadataRepository;
+import org.tigris.atlas.mda.metadata.element.Entity;
 import org.tigris.atlas.mda.metadata.element.Field;
 import org.tigris.atlas.mda.metadata.element.Relation;
 
@@ -42,8 +43,28 @@ public class ObjectiveCRelation implements Relation {
 		return ObjectiveCElementUtils.getObjectiveCType(MetadataRepository.getInstance().getApplicationName(), relation.getType());
 	}
 
+	public String getUncapitalizedType() {
+		return StringUtils.uncapitalize(getType());
+	}
+
+	public String getWrappedType() {
+		return relation.getType();
+	}
+
+	public String getUncapitalizedWrappedType() {
+		return StringUtils.uncapitalize(getWrappedType());
+	}
+
+	public Entity getTypeEntity() {
+		return ObjectiveCElementUtils.getObjectiveCEntity(relation.getType());
+	}
+
 	public String getTypeAttributes() {
 		return "nonatomic, copy";
+	}
+
+	public String getSerializedName() {
+		return relation.getLabel() + "s";
 	}
 
 	@Override
@@ -95,9 +116,4 @@ public class ObjectiveCRelation implements Relation {
 
 		return decoratedKeyCollection;
 	}
-
-	public String getUncapitalizedType() {
-		return StringUtils.uncapitalize( getType() );
-	}
-
 }

@@ -27,6 +27,18 @@
 			outputFile="${enumerationName}.m"
 			overwritable="true"/>
 
+	<target name="objective-c-service-header"
+			generator="org.tigris.atlas.mda.generator.service.ObjectiveCServiceGenerator"
+			templateName="templates/service.header.objective.c.vm"
+			outputFile="${serviceName}Service.h"
+			overwritable="true"/>
+
+	<target name="objective-c-service-source"
+			generator="org.tigris.atlas.mda.generator.service.ObjectiveCServiceGenerator"
+			templateName="templates/service.source.objective.c.vm"
+			outputFile="${serviceName}Service.m"
+			overwritable="true"/>
+
 	<target name="objective-c-service-response-header"
 			generator="org.tigris.atlas.mda.generator.service.ObjectiveCServiceResponseGenerator"
 			templateName="templates/service.response.header.objective.c.vm"
@@ -38,4 +50,5 @@
 			templateName="templates/service.response.source.objective.c.vm"
 			outputFile="${operationName}Response.m"
 			overwritable="true"/>
+
 </targets>

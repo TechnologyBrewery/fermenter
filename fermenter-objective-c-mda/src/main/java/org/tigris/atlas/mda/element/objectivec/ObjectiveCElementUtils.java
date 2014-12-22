@@ -32,6 +32,7 @@ public class ObjectiveCElementUtils {
 			case "NSString":
 			case "NSDate":
 			case "NSTimeInterval":
+			case "NSNumber":
 			case "NSDecimalNumber":
 			case "NSData":
 				break;
@@ -85,6 +86,15 @@ public class ObjectiveCElementUtils {
 		return sb.toString();
 	}
 
+	public static Entity getObjectiveCEntity(String appName, String type) {
+		MetadataRepository repo = MetadataRepository.getInstance();
+		return new ObjectiveCEntity(repo.getEntity(type));
+	}
+
+	public static Entity getObjectiveCEntity(String type) {
+		return getObjectiveCEntity(MetadataRepository.getInstance().getApplicationName(), type);
+	}
+
 	public static String getObjectiveCType(String appName, String type) {
 		String objectiveCType = null;
 		if (VOID.equals(type)) {
@@ -114,6 +124,40 @@ public class ObjectiveCElementUtils {
 		}
 
 		return objectiveCType;
+	}
+
+	public static String getObjectiveCTypeAttribute(String type) {
+		String returnValue = "nonatomic";
+		switch (type) {
+			case "NSString":
+			case "NSDate":
+			case "NSDecimalNumber":
+			case "NSData":
+				returnValue += ", strong";
+				break;
+			case "long":
+			case "int":
+			case "char":
+			case "BOOL":
+			case "NSTimeInterval": // This type is just an alias for "double"
+			default:
+				break;
+		}
+
+		return returnValue;
+	}
+
+	public static String getObjectiveCTypeReferenceAttribute(String type) {
+		switch (type) {
+			case "long":
+			case "int":
+			case "char":
+			case "BOOL":
+			case "NSTimeInterval": // This type is just an alias for "double"
+				return "";
+			default:
+				return "*";
+		}
 	}
 
 	static String createSignatureParameters(List<Parameter> parameterList) {

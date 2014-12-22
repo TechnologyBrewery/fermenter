@@ -1,0 +1,118 @@
+//
+//  ${service.name}Service.m
+//  ${projectName}
+//
+//  THIS FILE IS GENERATED -- DO NOT MODIFY
+//  Copyright (c) 2014 ASK, LLC. All rights reserved.
+//
+#macro(generatemapping $entity $type $mappingName)
+        RKObjectMapping* ${mappingName} = [RKObjectMapping mappingForClass:[${type} class]];
+#if (!$entity.fields.isEmpty())
+        [${mappingName} addAttributeMappingsFromArray:@[
+#foreach ($field in $entity.fields)
+            @"${field.name}",
+#end##foreach field
+        ]];
+#end##if fields not empty
+#foreach ($reference in $entity.references)
+#generatemapping(${reference.typeEntity} ${reference.type} "${reference.serializedName}Mapping")
+        [${mappingName} addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"${reference.serializedName}"
+                toKeyPath:@"${reference.serializedName}"
+                withMapping:${reference.serializedName}Mapping
+        ]];
+#end##foreach reference
+#foreach ($relation in $entity.relations)
+#generatemapping(${relation.typeEntity} ${relation.type} "${relation.serializedName}Mapping")
+        [${mappingName} addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"${relation.serializedName}"
+                toKeyPath:@"${relation.serializedName}"
+                withMapping:${relation.serializedName}Mapping
+        ]];
+#end##foreach relation
+#end##macro generatemapping
+
+#import "${service.name}Service.h"
+#import "RestKit.h"
+#foreach ($import in $service.imports)
+#import "${import}"
+#end##foreach import
+
+@implementation ${service.name}Service
+
+#foreach ($operation in $service.operations)
+static BOOL ${operation.lowercaseName}Initialized = NO;
+#end##foreach operation
+
+#foreach ($operation in $service.operations)
+#if ($operation.parameters.size() == 0)
++ (void)${operation.lowercaseName}WithHandler:(void (^)(${operation.name}Response* response))handler {
+
+#elseif ($operation.parameters.size() == 1)
++ (void)${operation.lowercaseName}With${operation.parameters[0].uppercaseName}:(${operation.parameters[0].type}${operation.parameters[0].typeReferenceAttribute})${operation.parameters[0].name}
+                withHandler:(void (^)(${operation.name}Response* response))handler {
+
+#elseif ($operation.parameters.size() > 1)
++ (void)${operation.lowercaseName}With${operation.parameters[0].uppercaseName}:(${operation.parameters[0].type}${operation.parameters[0].typeReferenceAttribute})${operation.parameters[0].name}
+#foreach ($parameter in $operation.parameters)
+#if ($foreach.last)
+                with${parameter.uppercaseName}:(${parameter.type}${parameter.typeReferenceAttribute})${parameter.name}
+                withHandler:(void (^)(${operation.name}Response* response))handler {
+
+#elseif (!$foreach.first)
+                with${parameter.uppercaseName}:(${parameter.type}${parameter.typeReferenceAttribute})${parameter.name}
+#end##if last/first
+#end##foreach parameter
+#end##if parameter size
+    NSLog(@"${service.name}Service.${operation.lowercaseName} called");
+
+    NSString *serviceOperationUrl = @"/core-webapp/rest/${service.wrappedName}Service/${operation.lowercaseName}";
+
+    if (!${operation.lowercaseName}Initialized) {
+        RKObjectMapping* responseMapping = [RKObjectMapping mappingForClass:[${operation.name}Response class]];
+
+        RKObjectMapping* messagesMapping = [RKObjectMapping mappingForClass:[WinoMessages class]];
+        RKObjectMapping* messageMapping = [RKObjectMapping mappingForClass:[WinoMessage class]];
+
+        [messagesMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"messages"
+                                                                                        toKeyPath:@"messages"
+                                                                                      withMapping:messageMapping]];
+
+        [responseMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"messages"
+                                                                                       toKeyPath:@"messages"
+                                                                                     withMapping:messagesMapping]];
+
+#if ($operation.hasValueResponse())
+#generatemapping(${operation.responseEntity} ${operation.objectiveCResponseType} "${operation.uncapitalizedResponseType}Mapping")
+        [responseMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"value"
+                                                                                        toKeyPath:@"value"
+                                                                                      withMapping:${operation.uncapitalizedResponseType}Mapping]];
+#end##if operation has a value in the response
+        RKResponseDescriptor* responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:responseMapping
+                                                                                                method:RKRequestMethodGET
+                                                                                           pathPattern:serviceOperationUrl
+                                                                                               keyPath:nil
+                                                                                           statusCodes:[NSIndexSet indexSetWithIndex:200]];
+
+        [[RKObjectManager sharedManager] addResponseDescriptor:responseDescriptor];
+
+        NSLog(@"${service.name}Service.${operation.lowercaseName} initialized");
+        ${operation.lowercaseName}Initialized = YES;
+    }
+
+    [[RKObjectManager sharedManager] getObjectsAtPath:serviceOperationUrl
+                                           parameters:@{
+#foreach ($parameter in $operation.parameters)
+                                                          @"${parameter.name}": ${parameter.name},
+#end##foreach parameter
+                                                      }
+                                              success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                                                  handler(mappingResult.firstObject);
+                                              }
+                                              failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                                                  NSLog(@"Error calling '%@': %@", serviceOperationUrl, error);
+                                                  handler(nil);
+                                              }];
+    return;
+}
+
+#end##foreach operation
+@end

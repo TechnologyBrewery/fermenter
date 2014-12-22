@@ -11,6 +11,7 @@ import java.util.TreeSet;
 import org.tigris.atlas.mda.metadata.element.Operation;
 import org.tigris.atlas.mda.metadata.element.Parameter;
 import org.tigris.atlas.mda.metadata.element.Service;
+import org.tigris.atlas.mda.objectivec.ObjectiveCTypeManager;
 
 public class ObjectiveCService implements Service {
 
@@ -30,6 +31,10 @@ public class ObjectiveCService implements Service {
 	 */
 	@Override
 	public String getName() {
+		return ObjectiveCTypeManager.getObjectiveCClassPrefix() + service.getName();
+	}
+
+	public String getWrappedName() {
 		return service.getName();
 	}
 

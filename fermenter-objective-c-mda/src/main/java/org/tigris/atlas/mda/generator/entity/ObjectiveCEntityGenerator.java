@@ -45,4 +45,9 @@ public class ObjectiveCEntityGenerator extends AbstractObjectiveCGenerator {
 			generateFile(context, vc);
 		}
 	}
+
+	@Override
+	protected String getOutputSubFolder() {
+		return super.getOutputSubFolder() + "entities/";
+	}
 }

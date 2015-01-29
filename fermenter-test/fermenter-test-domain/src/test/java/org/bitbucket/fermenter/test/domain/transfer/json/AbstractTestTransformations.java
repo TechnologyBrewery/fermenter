@@ -17,14 +17,22 @@ public class AbstractTestTransformations {
 
 	protected static ObjectMapper objectMapper = ObjectMapperManager.getObjectMapper();
 
+	protected static final String[] VALID_MESSAGE_KEYS = new String[] { "hello.world", "valid.message",
+			"unrecoverable.exception.occurred", "unknown.exception.occurred", "recoverable.exception.occurred",
+			"oplock.error" };
+
 	@Test
 	public void testObjectMapperExists() {
 		assertNotNull(objectMapper);
 	}
 
+	protected String getRandomValidMessageKey() {
+		return VALID_MESSAGE_KEYS[RandomUtils.nextInt(0, VALID_MESSAGE_KEYS.length)];
+	}
+
 	protected Message createRandomMessage(Severity severity) {
 		Message message = new DefaultMessage();
-		message.setKey(RandomStringUtils.randomAlphabetic(10));
+		message.setKey(getRandomValidMessageKey());
 		message.setSeverity(severity);
 
 		for (int i = 0; i < RandomUtils.nextInt(0, 3); i++) {

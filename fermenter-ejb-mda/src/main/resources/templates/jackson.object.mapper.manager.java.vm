@@ -11,6 +11,8 @@ import org.tigris.atlas.messages.DefaultMessages;
 import org.tigris.atlas.messages.InjectableMessages;
 import org.tigris.atlas.messages.Message;
 import org.tigris.atlas.messages.Messages;
+import org.tigris.atlas.messages.json.MessageDeserializer;
+import org.tigris.atlas.messages.json.MessageSerializer;
 import org.tigris.atlas.messages.json.MessagesMixIn;
 import org.tigris.atlas.messages.json.InjectableMessagesMixIn;
 
@@ -44,17 +46,18 @@ public final class ObjectMapperManager {
 		LOGGER.debug("Configured Jackson of Class/MixIn combination: ${entity.name}=${entity.name}MixIn");
 #end
 		
-		module.addAbstractTypeMapping(Message.class, DefaultMessage.class);
-		LOGGER.debug("Configured Jackson of Interface/Concrete class mapping: Message->DefaultMessage");
 		module.addAbstractTypeMapping(Messages.class, DefaultMessages.class);
 		LOGGER.debug("Configured Jackson of Interface/Concrete class mapping: Messages->DefaultMessages");
 		module.setMixInAnnotation(Messages.class, MessagesMixIn.class);
 		LOGGER.debug("Configured Jackson of Class/MixIn combination: Messages=MessagesMixIn");
 		module.setMixInAnnotation(InjectableMessages.class, InjectableMessagesMixIn.class);
 		LOGGER.debug("Configured Jackson of Class/MixIn combination: InjectableMessages=InjectableMessagesMixIn");
+		module.addSerializer(Message.class, new MessageSerializer(ObjectMapperManager.class));
+		LOGGER.debug("Configured Jackson custom serializer: Message->MessageSerializer");
+		module.addDeserializer(Message.class, new MessageDeserializer());
+		LOGGER.debug("Configured Jackson custom deserializer: Message->MessageDeserializer");
 		
 		objectMapper.registerModule(module);
-		
 	}
 	
 	/**

@@ -23,44 +23,45 @@ public class TestServiceResponseTransformations extends AbstractTestTransformati
 		Messages messages = new DefaultMessages();
 		Message info = createRandomMessage(Severity.INFO);
 		messages.addMessage(info);
-		
+
 		VoidServiceResponse response = new VoidServiceResponse(messages);
-		
+
 		String json = objectMapper.writeValueAsString(response);
 		assertNotNull(json);
-		
+
 		VoidServiceResponse rehydratedResponse = objectMapper.readValue(json, VoidServiceResponse.class);
 		assertNotNull(rehydratedResponse);
 		assertEquals(1, rehydratedResponse.getMessages().getAllMessages().size());
 		assertEquals(info, rehydratedResponse.getMessages().getAllMessages().iterator().next());
-		
+
 	}
-	
+
 	@Test
 	public void testValueServiceResponse() throws Exception {
 		Messages messages = new DefaultMessages();
 		Message info = createRandomMessage(Severity.INFO);
 		messages.addMessage(info);
-		
+
 		SimpleDomain domain = TransferObjectFactory.createSimpleDomain();
 		final String id = UUID.randomUUID().toString();
 		domain.setId(id);
-		
+
 		ValueServiceResponse<SimpleDomain> response = new ValueServiceResponse<SimpleDomain>(domain, messages);
-		
+
 		String json = objectMapper.writeValueAsString(response);
 		assertNotNull(json);
-		
-		TypeReference<ValueServiceResponse<SimpleDomain>> simpleDomainWrapper = new TypeReference<ValueServiceResponse<SimpleDomain>>() {};
+
+		TypeReference<ValueServiceResponse<SimpleDomain>> simpleDomainWrapper = new TypeReference<ValueServiceResponse<SimpleDomain>>() {
+		};
 		ValueServiceResponse<SimpleDomain> rehydratedResponse = objectMapper.readValue(json, simpleDomainWrapper);
 		assertNotNull(rehydratedResponse);
 		assertEquals(1, rehydratedResponse.getMessages().getAllMessages().size());
 		assertEquals(info, rehydratedResponse.getMessages().getAllMessages().iterator().next());
-		
+
 		SimpleDomain rehydratedDomain = rehydratedResponse.getValue();
 		assertNotNull(rehydratedDomain);
 		assertEquals(domain, rehydratedDomain);
-		
-	}	
-	
+
+	}
+
 }

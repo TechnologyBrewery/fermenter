@@ -27,6 +27,7 @@
 	</modules>
 
 	<properties>
+		<krausening.version>3-SNAPSHOT</krausening.version>
 		<jackson.version>1.9.13</jackson.version>
 		<maven.compiler.source>1.7</maven.compiler.source>
 		<maven.compiler.target>1.7</maven.compiler.target>
@@ -152,7 +153,7 @@
 			<dependency>
 				<groupId>org.bitbucket.krausening</groupId>
 				<artifactId>krausening</artifactId>
-				<version>1</version>
+				<version>${krausening.version}</version>
 				<scope>compile</scope>
 			</dependency>
 

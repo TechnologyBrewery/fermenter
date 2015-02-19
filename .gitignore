@@ -41,8 +41,9 @@ fermenter-test/fermenter-test-ejb/src/generated/java/com/ask/test/service/delega
 fermenter-test/fermenter-test-domain-webapp/.classpath
 fermenter-test/fermenter-test-domain-webapp/.settings/
 fermenter-test/fermenter-test-domain-webapp/target/
-velocity.log.*
+velocity.log*
 build-tools/target/
+build-tools/bin/
 .settings/
 fermenter-objective-c-mda/.classpath
 fermenter-objective-c-mda/target/

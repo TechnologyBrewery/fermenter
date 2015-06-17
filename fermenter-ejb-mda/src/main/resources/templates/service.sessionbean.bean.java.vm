@@ -89,10 +89,12 @@ public abstract class ${service.name}BaseService {
 	#else
 		ValueServiceResponse<${operation.wrappedReturnType}> response = new ValueServiceResponse<${operation.wrappedReturnType}>(implResult, this.messages);
 	#end
-			
+	
+	#if($operation.isTransactionNeeded())		
 		if (this.messages.hasErrorMessages()) {
 			this.ejbContext.setRollbackOnly();
 		}
+	#end
 		return response;
 	}
 	

@@ -357,6 +357,18 @@ public class JavaOperation implements Operation {
 
 	}
 	
+	/**
+	 * Returns whether or not the operation requires the presence of an existing or new transaction.
+	 * 
+	 * @return
+	 */
+	public boolean isTransactionNeeded() {
+		String transactionAttribute = getTransactionAttribute();
+		return PROPAGATION_REQUIRED.equals(transactionAttribute)
+				|| PROPAGATION_REQUIRES_NEW.equals(transactionAttribute)
+				|| PROPAGATION_MANDATORY.equals(transactionAttribute);
+	}
+	
 	public Boolean isResponseTypeCrossProject() {
 		boolean isResponseTypeCrossProject = false;
 		if (isReturnTypeEntity()) {

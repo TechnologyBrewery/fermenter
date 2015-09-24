@@ -102,7 +102,7 @@
 							<KRAUSENING_EXTENSIONS>${project.basedir}/src/test/resources/krausening/extensions</KRAUSENING_EXTENSIONS>
 						</systemPropertyVariables>
 						<reuseForks>false</reuseForks>
-						<argLine>-Xmx512m -XX:MaxPermSize=128m</argLine>
+						<argLine>-Djboss.socket.binding.port-offset=10000 -Xmx512m -XX:MaxPermSize=128m</argLine>
 					</configuration>
 				</plugin>
 				<plugin>

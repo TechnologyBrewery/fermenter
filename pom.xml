@@ -35,10 +35,10 @@
 		<resteasy.version>3.0.8.Final</resteasy.version>
 		<slf4j.version>1.7.5</slf4j.version>
 		<weld.version>2.1.2.Final</weld.version>
-		<wildfly.version>8.1.0.Final</wildfly.version>
+		<wildfly.version>8.2.1.Final</wildfly.version>
 		<arquillian.version>1.1.5.Final</arquillian.version>
 		<arquillian.rest.extension.version>1.0.0.Alpha3</arquillian.rest.extension.version>
-		<wildfly.location>${project.basedir}/../service-deployment/wildfly-8.1.0.Final</wildfly.location>
+		<wildfly.location>${project.basedir}/target/wildfly-${wildfly.version}</wildfly.location>
 	</properties>
 
 	<repositories>

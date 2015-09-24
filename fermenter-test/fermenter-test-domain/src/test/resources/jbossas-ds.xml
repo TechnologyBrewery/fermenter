@@ -10,10 +10,11 @@
         pool-name="ArquillianEmbeddedHSQLPool"
         use-java-context="true"
         use-ccm="true">
-        <connection-url>jdbc:hsqldb:mem:arquillian;shutdown=true</connection-url>
-        <driver>hsqldb</driver>
+        <connection-url>jdbc:h2:mem:arquillian</connection-url>
+        <driver>h2</driver>
         <security>
             <user-name>sa</user-name>
+            <password>sa</password>
         </security>
     </datasource>
 </datasources>

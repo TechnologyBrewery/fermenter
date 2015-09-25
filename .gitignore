@@ -49,3 +49,4 @@ fermenter-objective-c-mda/.classpath
 fermenter-objective-c-mda/target/
 fermenter-test/target/
 target/failsafe-reports/failsafe-summary.xml
+target

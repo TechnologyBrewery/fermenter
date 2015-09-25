@@ -39,6 +39,10 @@
 		<arquillian.version>1.1.5.Final</arquillian.version>
 		<arquillian.rest.extension.version>1.0.0.Alpha3</arquillian.rest.extension.version>
 		<wildfly.location>${project.basedir}/target/wildfly-${wildfly.version}</wildfly.location>
+		<sonar.sources>./src</sonar.sources>
+		<!-- The following sonar properties need to be defined in your settings.xml 
+			file for sonar to run properly: sonar.host.url, sonar.login, sonar.password, 
+			sonar.jdbc.url, sonar.jdbc.username, sonar.jdbc.password -->
 	</properties>
 
 	<repositories>
@@ -102,12 +106,18 @@
 							<KRAUSENING_EXTENSIONS>${project.basedir}/src/test/resources/krausening/extensions</KRAUSENING_EXTENSIONS>
 						</systemPropertyVariables>
 						<reuseForks>false</reuseForks>
-						<argLine>-Djboss.socket.binding.port-offset=10000 -Xmx512m -XX:MaxPermSize=128m</argLine>
+						<argLine>-Djboss.socket.binding.port-offset=10000 -Xmx512m
+							-XX:MaxPermSize=128m</argLine>
 					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-jar-plugin</artifactId>
+					<version>2.5</version>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>sonar-maven-plugin</artifactId>
 					<version>2.5</version>
 				</plugin>
 			</plugins>
@@ -120,6 +130,10 @@
 					<source>${maven.compiler.source}</source>
 					<target>${maven.compiler.target}</target>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>

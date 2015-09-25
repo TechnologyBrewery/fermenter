@@ -8,7 +8,9 @@ import org.jboss.shrinkwrap.api.GenericArchive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.importer.ExplodedImporter;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.jboss.shrinkwrap.resolver.api.maven.ConfigurableMavenResolverSystem;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
+import org.jboss.shrinkwrap.resolver.api.maven.PomEquippedResolveStage;
 
 public final class ArquillianITUtil {
 
@@ -16,9 +18,19 @@ public final class ArquillianITUtil {
 	}
 
 	public static Archive<?> createFermenterTestDomainDeployment() {
-		File[] mavenDependencies = Maven.configureResolver().workOffline()
-				.loadPomFromFile("./pom.xml", "integration-test").importRuntimeAndTestDependencies().resolve()
-				.withTransitivity().asFile();
+		File[] mavenDependencies  = null;
+		try {
+			ConfigurableMavenResolverSystem resolver = Maven.configureResolver();
+			resolver = resolver.workOffline();
+			PomEquippedResolveStage stage = resolver.loadPomFromFile("./pom.xml", "integration-test");
+			mavenDependencies = stage.importRuntimeAndTestDependencies().resolve()
+					.withTransitivity().asFile();
+			
+		} catch (Exception e) {
+			throw new RuntimeException("Problem resolving from Arquillian Maven!", e);
+			
+		}
+		
 		WebArchive war = ShrinkWrap.create(WebArchive.class, "maintenance-service-integration-test.war");
 		war.addAsLibraries(mavenDependencies);
 		war.addClass(TestUtils.class);

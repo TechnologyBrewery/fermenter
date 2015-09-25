@@ -21,7 +21,7 @@ public final class ArquillianITUtil {
 		File[] mavenDependencies  = null;
 		try {
 			ConfigurableMavenResolverSystem resolver = Maven.configureResolver();
-			resolver = resolver.workOffline();
+			//resolver = resolver.workOffline();
 			PomEquippedResolveStage stage = resolver.loadPomFromFile("./pom.xml", "integration-test");
 			mavenDependencies = stage.importRuntimeAndTestDependencies().resolve()
 					.withTransitivity().asFile();

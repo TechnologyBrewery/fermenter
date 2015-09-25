@@ -12,114 +12,117 @@ import org.tigris.atlas.messages.Message;
 import org.tigris.atlas.messages.MessageUtils;
 import org.tigris.atlas.messages.Messages;
 
+/**
+ * Convenience methods for performing validations
+ */
 public final class Validations {
 
     private Validations() {
     }
 
     public static void validateRequired(Object value, String property, String label, Messages messages) {
-	if (value == null) {
-	    Message msg = MessageUtils.createErrorMessage(CoreMessages.NULL_NOT_ALLOWED, new String[] { property },
-		    new Object[] { label });
-	    messages.addMessage(msg);
-	}
+        if (value == null) {
+            Message msg = MessageUtils.createErrorMessage(CoreMessages.NULL_NOT_ALLOWED, new String[] { property },
+                    new Object[] { label });
+            messages.addMessage(msg);
+        }
     }
 
     public static void validateRequired(String value, String property, String label, Messages messages) {
-	if (StringUtils.isBlank(value)) {
-	    Message msg = MessageUtils.createErrorMessage(CoreMessages.NULL_NOT_ALLOWED, new String[] { property },
-		    new Object[] { label });
-	    messages.addMessage(msg);
-	}
+        if (StringUtils.isBlank(value)) {
+            Message msg = MessageUtils.createErrorMessage(CoreMessages.NULL_NOT_ALLOWED, new String[] { property },
+                    new Object[] { label });
+            messages.addMessage(msg);
+        }
     }
 
     public static void validateRequired(String month, String day, String year, String property, String label,
-	    Messages messages) {
-	if (StringUtils.isBlank(day) && StringUtils.isBlank(month) && StringUtils.isBlank(year)) {
-	    Message msg = MessageUtils.createErrorMessage(CoreMessages.NULL_NOT_ALLOWED, new String[] { property },
-		    new Object[] { label });
-	    messages.addMessage(msg);
-	}
+            Messages messages) {
+        if (StringUtils.isBlank(day) && StringUtils.isBlank(month) && StringUtils.isBlank(year)) {
+            Message msg = MessageUtils.createErrorMessage(CoreMessages.NULL_NOT_ALLOWED, new String[] { property },
+                    new Object[] { label });
+            messages.addMessage(msg);
+        }
     }
 
     public static void validateMinValue(String value, BigDecimal minValue, String property, String label,
-	    Messages messages) {
-	if (isValidNumber(value)) {
-	    validateMinValue(new BigDecimal(value), minValue, property, label, messages);
-	}
+            Messages messages) {
+        if (isValidNumber(value)) {
+            validateMinValue(new BigDecimal(value), minValue, property, label, messages);
+        }
     }
 
     public static void validateMinValue(Comparable value, Comparable minValue, String property, String label,
-	    Messages messages) {
-	if (value != null && value.compareTo(minValue) < 0) {
-	    Message msg = MessageUtils.createErrorMessage(CoreMessages.MIN_VALUE_NOT_MET, new String[] { property },
-		    new Object[] { label, value, minValue });
-	    messages.addMessage(msg);
-	}
+            Messages messages) {
+        if (value != null && value.compareTo(minValue) < 0) {
+            Message msg = MessageUtils.createErrorMessage(CoreMessages.MIN_VALUE_NOT_MET, new String[] { property },
+                    new Object[] { label, value, minValue });
+            messages.addMessage(msg);
+        }
     }
 
     public static void validateMaxValue(String value, BigDecimal maxValue, String property, String label,
-	    Messages messages) {
-	if (isValidNumber(value)) {
-	    validateMaxValue(new BigDecimal(value), maxValue, property, label, messages);
-	}
+            Messages messages) {
+        if (isValidNumber(value)) {
+            validateMaxValue(new BigDecimal(value), maxValue, property, label, messages);
+        }
     }
 
     public static void validateMaxValue(Comparable value, Comparable maxValue, String property, String label,
-	    Messages messages) {
-	if (value != null && value.compareTo(maxValue) > 0) {
-	    Message msg = MessageUtils.createErrorMessage(CoreMessages.MAX_VALUE_EXCEEDED, new String[] { property },
-		    new Object[] { label, value, maxValue });
-	    messages.addMessage(msg);
-	}
+            Messages messages) {
+        if (value != null && value.compareTo(maxValue) > 0) {
+            Message msg = MessageUtils.createErrorMessage(CoreMessages.MAX_VALUE_EXCEEDED, new String[] { property },
+                    new Object[] { label, value, maxValue });
+            messages.addMessage(msg);
+        }
     }
 
     public static void validateMinLength(String value, int minLength, String property, String label, Messages messages) {
-	if (!StringUtils.isBlank(value) && value.trim().length() < minLength) {
-	    Message msg = MessageUtils.createErrorMessage(CoreMessages.MIN_LENGTH_NOT_MET, new String[] { property },
-		    new Object[] { label, value, new Integer(minLength) });
-	    messages.addMessage(msg);
-	}
+        if (!StringUtils.isBlank(value) && value.trim().length() < minLength) {
+            Message msg = MessageUtils.createErrorMessage(CoreMessages.MIN_LENGTH_NOT_MET, new String[] { property },
+                    new Object[] { label, value, Integer.valueOf(minLength) });
+            messages.addMessage(msg);
+        }
     }
 
     public static void validateMaxLength(String value, int maxLength, String property, String label, Messages messages) {
-	if (!StringUtils.isBlank(value) && value.trim().length() > maxLength) {
-	    Message msg = MessageUtils.createErrorMessage(CoreMessages.MAX_LENGTH_EXCEEDED, new String[] { property },
-		    new Object[] { label, value, new Integer(maxLength) });
-	    messages.addMessage(msg);
-	}
+        if (!StringUtils.isBlank(value) && value.trim().length() > maxLength) {
+            Message msg = MessageUtils.createErrorMessage(CoreMessages.MAX_LENGTH_EXCEEDED, new String[] { property },
+                    new Object[] { label, value, Integer.valueOf(maxLength) });
+            messages.addMessage(msg);
+        }
     }
 
     public static void validateScale(String value, int scale, String property, String label, Messages messages) {
-	if (isValidNumber(value)) {
-	    validateScale(new BigDecimal(value), scale, property, label, messages);
-	}
+        if (isValidNumber(value)) {
+            validateScale(new BigDecimal(value), scale, property, label, messages);
+        }
     }
 
     public static void validateScale(BigDecimal value, int scale, String property, String label, Messages messages) {
-	if (value != null && value.scale() > scale) {
-	    Message msg = MessageUtils.createErrorMessage(CoreMessages.INVALID_SCALE, new String[] { property },
-		    new Object[] { label, new Integer(scale) });
-	    messages.addMessage(msg);
-	}
+        if (value != null && value.scale() > scale) {
+            Message msg = MessageUtils.createErrorMessage(CoreMessages.INVALID_SCALE, new String[] { property },
+                    new Object[] { label, Integer.valueOf(scale) });
+            messages.addMessage(msg);
+        }
     }
 
     public static <T extends Enum<T>> void validateEnumeration(Class<T> enumerationClazz, String enumeratedValueName,
-	    String property, String label, Messages messages) {
-	if (!isEnumerationMember(enumerationClazz, enumeratedValueName)) {
-	    Message msg = MessageUtils.createErrorMessage(CoreMessages.INVALID_ENUM_INSTANCE,
-		    new String[] { property }, new Object[] { label, enumerationClazz, enumeratedValueName });
-	    messages.addMessage(msg);
-	}
+            String property, String label, Messages messages) {
+        if (!isEnumerationMember(enumerationClazz, enumeratedValueName)) {
+            Message msg = MessageUtils.createErrorMessage(CoreMessages.INVALID_ENUM_INSTANCE,
+                    new String[] { property }, new Object[] { label, enumerationClazz, enumeratedValueName });
+            messages.addMessage(msg);
+        }
     }
 
     private static <T extends Enum<T>> boolean isEnumerationMember(Class<T> enumerationClazz, String enumeratedValueName) {
-	for (Enum<T> constant : enumerationClazz.getEnumConstants()) {
-	    if (constant.toString().equals(enumeratedValueName)) {
-		return true;
-	    }
-	}
-	return false;
+        for (Enum<T> constant : enumerationClazz.getEnumConstants()) {
+            if (constant.toString().equals(enumeratedValueName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -129,10 +132,10 @@ public final class Validations {
      * @param key
      */
     public static void validateInteger(String value, String property, String label, Messages messages) {
-	if (!StringUtils.isBlank(value) && !Validations.isValidInteger(value)) {
-	    messages.addMessage(MessageUtils.createErrorMessage(CoreMessages.INVALID_NUMBER, new String[] { property },
-		    new Object[] { value }));
-	}
+        if (!StringUtils.isBlank(value) && !Validations.isValidInteger(value)) {
+            messages.addMessage(MessageUtils.createErrorMessage(CoreMessages.INVALID_NUMBER, new String[] { property },
+                    new Object[] { value }));
+        }
     }
 
     /**
@@ -142,15 +145,15 @@ public final class Validations {
      * @param key
      */
     public static void validateLong(String value, String property, String label, Messages messages) {
-	if (!StringUtils.isBlank(value) && !Validations.isValidLong(value)) {
-	    messages.addMessage(MessageUtils.createErrorMessage(CoreMessages.INVALID_NUMBER, new String[] { property },
-		    new Object[] { value }));
-	}
+        if (!StringUtils.isBlank(value) && !Validations.isValidLong(value)) {
+            messages.addMessage(MessageUtils.createErrorMessage(CoreMessages.INVALID_NUMBER, new String[] { property },
+                    new Object[] { value }));
+        }
     }
 
     public final static void validateBoolean(String value, String property, String label, Messages messages) {
-	// TODO Implement this. For now, can leave blank, as unknown strings
-	// will become false Booleans, which is fine
+        // TODO Implement this. For now, can leave blank, as unknown strings
+        // will become false Booleans, which is fine
     }
 
     /**
@@ -160,54 +163,54 @@ public final class Validations {
      * @param key
      */
     public static void validateBigDecimal(String value, String property, String label, Messages messages) {
-	if (!StringUtils.isBlank(value) && !Validations.isValidDecimal(value)) {
-	    messages.addMessage(MessageUtils.createErrorMessage(CoreMessages.INVALID_NUMBER, new String[] { property },
-		    new Object[] { value }));
-	}
+        if (!StringUtils.isBlank(value) && !Validations.isValidDecimal(value)) {
+            messages.addMessage(MessageUtils.createErrorMessage(CoreMessages.INVALID_NUMBER, new String[] { property },
+                    new Object[] { value }));
+        }
     }
 
     public static void validateDate(String month, String day, String year, String property, String label,
-	    boolean dayRequired, Messages messages) {
-	if (!Validations.isValidDate(month, day, year, dayRequired)) {
-	    messages.addMessage(MessageUtils.createErrorMessage(CoreMessages.INVALID_DATE, new String[] { property },
-		    new Object[] {}));
-	}
+            boolean dayRequired, Messages messages) {
+        if (!Validations.isValidDate(month, day, year, dayRequired)) {
+            messages.addMessage(MessageUtils.createErrorMessage(CoreMessages.INVALID_DATE, new String[] { property },
+                    new Object[] {}));
+        }
     }
 
     public static void validateTimestamp(String month, String day, String year, String hours, String minutes,
-	    String property, String label, boolean dayRequired, Messages messages) {
-	if (!Validations.isValidTimestamp(month, day, year, hours, minutes, dayRequired)) {
-	    messages.addMessage(MessageUtils.createErrorMessage(CoreMessages.INVALID_DATE, new String[] { property },
-		    new Object[] {}));
-	}
+            String property, String label, boolean dayRequired, Messages messages) {
+        if (!Validations.isValidTimestamp(month, day, year, hours, minutes, dayRequired)) {
+            messages.addMessage(MessageUtils.createErrorMessage(CoreMessages.INVALID_DATE, new String[] { property },
+                    new Object[] {}));
+        }
     }
 
     public static void validateFormat(String value, String[] patterns, String fieldName, String fieldLabel,
-	    Messages messages) {
-	boolean valid = false;
+            Messages messages) {
+        boolean valid = false;
 
-	for (int i = 0; i < patterns.length; i++) {
-	    Pattern p = Pattern.compile(patterns[i]);
-	    Matcher m = p.matcher(value);
-	    if (m.matches()) {
-		// Matched a pattern - can return
-		return;
-	    }
-	}
+        for (int i = 0; i < patterns.length; i++) {
+            Pattern p = Pattern.compile(patterns[i]);
+            Matcher m = p.matcher(value);
+            if (m.matches()) {
+                // Matched a pattern - can return
+                return;
+            }
+        }
 
-	if (!valid) {
-	    messages.addMessage(MessageUtils.createErrorMessage(CoreMessages.INVALID_FORMAT,
-		    new String[] { fieldName }, new Object[] { fieldLabel }));
-	}
+        if (!valid) {
+            messages.addMessage(MessageUtils.createErrorMessage(CoreMessages.INVALID_FORMAT,
+                    new String[] { fieldName }, new Object[] { fieldLabel }));
+        }
     }
 
     private static boolean isValidNumber(String s) {
-	try {
-	    BigDecimal dec = new BigDecimal(s);
-	    return dec != null;
-	} catch (Exception ex) {
-	    return false;
-	}
+        try {
+            BigDecimal dec = new BigDecimal(s);
+            return dec != null;
+        } catch (Exception ex) {
+            return false;
+        }
     }
 
     /**
@@ -217,89 +220,89 @@ public final class Validations {
      * @return
      */
     private static boolean isValidInteger(String value) {
-	try {
-	    Integer.parseInt(value);
-	    return true;
-	} catch (NumberFormatException nfe) {
-	    return false;
-	}
+        try {
+            Integer.parseInt(value);
+            return true;
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
     }
 
     private static boolean isValidDate(String month, String day, String year, boolean dayRequired) {
-	// A blank date may or may not be valid - up the the BO
-	if (StringUtils.isBlank(month) && StringUtils.isBlank(day) && StringUtils.isBlank(year)) {
-	    return true;
-	}
+        // A blank date may or may not be valid - up the the BO
+        if (StringUtils.isBlank(month) && StringUtils.isBlank(day) && StringUtils.isBlank(year)) {
+            return true;
+        }
 
-	try {
-	    int iMonth = Integer.parseInt(month) - 1;
-	    int iDay;
-	    // Only default the day if it is not required AND blank.
-	    // In any other case try to parse it
-	    if (!dayRequired && StringUtils.isBlank(day)) {
-		iDay = 1;
-	    } else {
-		iDay = Integer.parseInt(day);
-	    }
-	    int iYear = Integer.parseInt(year);
+        try {
+            int iMonth = Integer.parseInt(month) - 1;
+            int iDay;
+            // Only default the day if it is not required AND blank.
+            // In any other case try to parse it
+            if (!dayRequired && StringUtils.isBlank(day)) {
+                iDay = 1;
+            } else {
+                iDay = Integer.parseInt(day);
+            }
+            int iYear = Integer.parseInt(year);
 
-	    Calendar cal = GregorianCalendar.getInstance();
-	    cal.clear();
-	    cal.setLenient(false);
-	    cal.set(Calendar.MONTH, iMonth);
-	    cal.set(Calendar.DAY_OF_MONTH, iDay);
-	    cal.set(Calendar.YEAR, iYear);
+            Calendar cal = GregorianCalendar.getInstance();
+            cal.clear();
+            cal.setLenient(false);
+            cal.set(Calendar.MONTH, iMonth);
+            cal.set(Calendar.DAY_OF_MONTH, iDay);
+            cal.set(Calendar.YEAR, iYear);
 
-	    // This will cause an exception if the day is invalid (e.g.
-	    // 2/29/2001)
-	    cal.getTime();
+            // This will cause an exception if the day is invalid (e.g.
+            // 2/29/2001)
+            cal.getTime();
 
-	    return true;
-	} catch (Exception ex) {
-	    return false;
-	}
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
     }
 
     private static boolean isValidTimestamp(String month, String day, String year, String hours, String minutes,
-	    boolean dayRequired) {
-	try {
-	    boolean validDate = isValidDate(month, day, year, dayRequired);
-	    // TODO Handle time portion
-	    return validDate;
-	} catch (Exception pe) {
-	    return false;
-	}
+            boolean dayRequired) {
+        try {
+            boolean validDate = isValidDate(month, day, year, dayRequired);
+            // TODO Handle time portion
+            return validDate;
+        } catch (Exception pe) {
+            return false;
+        }
     }
 
     /**
-     * Anserws whether a string can be converted into a long
+     * Answers whether a string can be converted into a long.
      * 
      * @param value
      * @return
      */
 
     private static boolean isValidLong(String value) {
-	try {
-	    Long.parseLong(value);
-	    return true;
-	} catch (NumberFormatException nfe) {
-	    return false;
-	}
+        try {
+            Long.parseLong(value);
+            return true;
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
     }
 
     /**
-     * Anserws whether a string can be converted into a decimal
+     * Answers whether a string can be converted into a decimal.
      * 
      * @param value
      * @return
      */
     private static boolean isValidDecimal(String value) {
-	try {
-	    new BigDecimal(value);
-	    return true;
-	} catch (NumberFormatException nfe) {
-	    return false;
-	}
+        try {
+            new BigDecimal(value);
+            return true;
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
     }
 
 }

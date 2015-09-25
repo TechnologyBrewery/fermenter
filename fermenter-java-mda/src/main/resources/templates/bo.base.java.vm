@@ -163,7 +163,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 #foreach ( $idField in $idFields )
 
 	/**
-	 * Get the ${idField.label}
+	 * Get the ${idField.label}.
 	 *
 	 * @return The ${idField.label}
 	 */
@@ -172,7 +172,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	}
 	
 	/**
-	 * Set the ${idField.label}
+	 * Set the ${idField.label}.
 	 *
 	 * @param The ${idField.label}
 	 */
@@ -186,7 +186,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 #if ($useOptimisticLocking)
 
 	/**
-	 * Get the optimistic locking value
+	 * Get the optimistic locking value.
 	 * @return The optimistic locking value 
 	 */
 	public Integer getOplock() {
@@ -194,7 +194,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	}
 	
 	/**
-	 * Set the optimistic locking value
+	 * Set the optimistic locking value.
 	 * @param The optimistic locking value
 	 */
 	void setOplock(Integer oplock) {
@@ -219,9 +219,9 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 #foreach ( $field in $fields )
 	/**
 #if ($field.documentation)
-	 * Gets: ${field.documentation}
+	 * Gets: ${field.documentation}.
 #else
-	 * Get the ${field.label}
+	 * Get the ${field.label}.
 #end
 	 *
 	 * @return The ${field.label}
@@ -240,9 +240,9 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	
 	/**
 #if ($field.documentation)
-	 * Sets: ${field.documentation}
+	 * Sets: ${field.documentation}.
 #else
-	 * Set the ${field.label}
+	 * Set the ${field.label}.
 #end
 	 *
 	 * @param The ${field.label}
@@ -255,7 +255,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 #if ($field.enumeration.isNamed())
 		this.${field.name} = ${field.name} == null ? null : ${field.name}.getName();
 #else
-		this.${field.name} = ${field.name} == null ? null : new Integer(${field.name}.getValue());
+		this.${field.name} = ${field.name} == null ? null : Integer.valueOf(${field.name}.getValue());
 #end
 #else	
 		this.${field.name} = ${field.name};
@@ -263,7 +263,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	}
 	
 	/**
-	 * Validates ${field.label}
+	 * Validates ${field.label}.
 	 */
 	protected void validate${field.capitalizedName}() {
 		${field.javaType} value = get${field.capitalizedName}();
@@ -328,7 +328,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 #foreach ($inverseRelation in $inverseRelations)
 
 	/**
-	 * Set the parent ${inverseRelation.name} onto this instance
+	 * Set the parent ${inverseRelation.name} onto this instance.
 	 * @param parent The parent instance to set
 	 */
 	public void set${inverseRelation.name}(${inverseRelation.name}BO parent) {
@@ -336,7 +336,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	}
 	
 	/**
-	 * Returns the parent of the type for this instance
+	 * Returns the parent of the type for this instance.
 	 * @return The parent instance or null if no parent of this type exists
 	 */
 	public ${inverseRelation.name}BO get${inverseRelation.name}() {
@@ -347,7 +347,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 
 	/**
 #if ($relation.documentation)
-	 * Sets: ${relation.documentation}
+	 * Sets: ${relation.documentation}.
 #else
 	 * Set the ${relation.label} relation.
 #end
@@ -360,7 +360,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 
 	/**
 #if ($relation.documentation)
-	 * Gets: ${relation.documentation}
+	 * Gets: ${relation.documentation}.
 #else
 	 * Get the ${relation.label} relation.
 #end
@@ -377,9 +377,9 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	 
 	/**
 #if ($relation.documentation)
-	 * Adds: ${relation.documentation}
+	 * Adds: ${relation.documentation}.
 #else
-	 * Add a ${relation.label}
+	 * Add a ${relation.label}.
 #end
 	 *
 	 * @param The ${relation.label} to add
@@ -397,9 +397,9 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	 
 	/**
 #if ($relation.documentation)
-	 * Removes: ${relation.documentation}
+	 * Removes: ${relation.documentation}.
 #else
-	 * Remove a ${relation.label}
+	 * Remove a ${relation.label}.
 #end
 	 *
 	 * @param The ${relation.label} to remove
@@ -421,7 +421,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 #foreach( $fk in $reference.foreignKeyFields )
 	
 	/**
-	 * Get the ${fk.name} field from the ${reference.name} external reference
+	 * Get the ${fk.name} field from the ${reference.name} external reference.
 	 *
 	 */
 	private ${fk.javaType} get${reference.capitalizedName}${fk.capitalizedName}() {
@@ -429,7 +429,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	}
 	
 	/**
-	 * Set the ${fk.name} field for the ${reference.name} external reference
+	 * Set the ${fk.name} field for the ${reference.name} external reference.
 	 *
 	 */
 	private void set${reference.capitalizedName}${fk.capitalizedName}(${fk.javaType} ${reference.name}${fk.capitalizedName}) {
@@ -439,9 +439,9 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	
 	/**
 #if ($reference.documentation)
-	 * Gets: ${reference.documentation}
+	 * Gets: ${reference.documentation}.
 #else
-	 * Get the ${reference.label} external reference
+	 * Get the ${reference.label} external reference.
 #end
 	 *
 	 * @return ${reference.type} - The ${reference.label}
@@ -463,9 +463,9 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	 
 	/**
 #if ($reference.documentation)
-	 * Sets: ${reference.documentation}
+	 * Sets: ${reference.documentation}.
 #else
-	 * Set the ${reference.label} reference
+	 * Set the ${reference.label} reference.
 #end
 	 *
 	 * @param The ${reference.label}
@@ -478,7 +478,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	}
 	
 	/**
-	 * Validates ${reference.label}
+	 * Validates ${reference.label}.
 	 */
 	protected void validate${reference.capitalizedName}() {
 #if( ${reference.isRequired()} )
@@ -508,7 +508,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 #else 
 	
 	/**
-	 * Get the ${reference.label} reference
+	 * Get the ${reference.label} reference.
 	 *
 	 * @return ${reference.type}BO - The ${reference.label}
 	 */
@@ -518,7 +518,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	}
 	 
 	/**
-	 * Set the ${reference.label} reference
+	 * Set the ${reference.label} reference.
 	 *
 	 * @param The ${reference.label}
 	 */
@@ -527,7 +527,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	}
 	
 	/**
-	 * Validates ${reference.label}
+	 * Validates ${reference.label}.
 	 */
 	protected void validate${reference.capitalizedName}() {
 		${reference.type}BO ref = get${reference.capitalizedName}();
@@ -572,7 +572,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 #if ( $idFields.size() > 0 )
 
 	/**
-	 * Get the primary key for the ${entityName}
+	 * Get the primary key for the ${entityName}.
 	 *
 	 */
 	public PrimaryKey getKey() {
@@ -580,7 +580,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	}
 	
 	/**
-	 * Get the primary key for the ${entityName}
+	 * Get the primary key for the ${entityName}.
 	 *
 	 */
 	public ${entityName}PK get${entityName}PK() {
@@ -588,7 +588,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	}
 	
 	/**
-	 * Set the key fields from the primary key
+	 * Set the key fields from the primary key.
 	 *
 	 */
 	public void setKey(PrimaryKey pk) {
@@ -596,7 +596,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	}
 	 
 	/**
-	 * Set the key fields from the primary key
+	 * Set the key fields from the primary key.
 	 *
 	 */
 	public void set${entityName}PK(${entityName}PK pk) {
@@ -608,7 +608,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 #else
 
 	/**
-	 * Get the key field for the ${entityName}
+	 * Get the key field for the ${entityName}.
 	 *
 	 */
 	public PrimaryKey getKey() {
@@ -616,7 +616,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	}
 	
 	/**
-	 * Set the key field
+	 * Set the key field.
 	 *
 	 */
 	public void setKey(PrimaryKey key) {
@@ -624,7 +624,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 #end
 	
 	/**
-	 * Executes all field-level validations
+	 * Executes all field-level validations.
 	 */
 	@Override 
 	protected void fieldValidation() {
@@ -654,7 +654,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	}
 	
 	/**
-	 * Executes all reference-level validations
+	 * Executes all reference-level validations.
 	 */
 	@Override 
 	protected void referenceValidation() {
@@ -668,7 +668,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	}	
 	
 	/**
-	 * Executes all complex validation on children
+	 * Executes all complex validation on children.
 	 */
 	@Override 
 	protected void complexValidationOnChildren() {
@@ -715,14 +715,14 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 
 	/**
 #if ($query.documentation)
-	 * ${query.documentation}
+	 * ${query.documentation}.
 #else
 	 * Execute the ${query.name} query
 #end
 	 *
 #foreach( $criterion in $query.criteria )
 #if ($criterion.documentation)
-	 * @param ${criterion.name} ${criterion.documentation}
+	 * @param ${criterion.name} ${criterion.documentation}.
 #else
 	 * @param ${criterion.name} The ${criterion.name}
 #end

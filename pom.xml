@@ -1,16 +1,50 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-	<name>Fermenter</name>
-
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.bitbucket.fermenter</groupId>
 	<version>1-SNAPSHOT</version>
 	<artifactId>root</artifactId>
 	<packaging>pom</packaging>
 
+	<name>Fermenter</name>
+	<description>
+		In brewing, a fermenter is a vessel in which unfinished ingredients become nearly finished beer. 
+		In Model Driven Architecture, Fermenter is a project that converts functional concepts into nearly finished
+		applications. This approach allows for the quick definition and assembly of applications with the focus on 
+		functional concepts rather than technical underpinnings. Fermenter is an MDA engine that allows common 
+		concepts to be modeled and spawn any number of generated source files. In turn, this allows developers
+		to focus more time on business logic, less time on technical underpinnings, and achive extremely high levels
+		of architectural conformity.  
+	</description>
+	<url>https://bitbucket.org/askllc/fermenter</url>
+
+	<licenses>
+		<license>
+			<name>MIT License</name>
+			<url>http://www.opensource.org/licenses/mit-license.php</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>Ryan Ashcraft</name>
+			<email>dryanashcraft@gmail.com</email>
+			<organization>ASK LLC</organization>
+			<organizationUrl>https://bitbucket.org/askllc/</organizationUrl>
+		</developer>
+		<developer>
+			<name>Eric Konieczny</name>
+			<email>ekoniec1@gmail.com</email>
+			<organization>ASK LLC</organization>
+			<organizationUrl>https://bitbucket.org/askllc/</organizationUrl>
+		</developer>
+	</developers>
+
 	<scm>
 		<connection>scm:git:https://bitbucket.org/askllc/Fermenter.git</connection>
+		<developerConnection>scm:git:https://bitbucket.org/askllc/Fermenter.git</developerConnection>
 	</scm>
 
 	<modules>
@@ -315,19 +349,6 @@
 									<destFile>${jacoco.it.execution.data.file}</destFile>
 								</configuration>
 							</execution>
-<!-- 							<execution>
-								<id>default-report</id>
-								<goals>
-									<goal>report</goal>
-								</goals>
-								
-							</execution>
-							<execution>
-								<id>default-report-integration</id>
-								<goals>
-									<goal>report-integration</goal>
-								</goals>
-							</execution> -->
 						</executions>
 					</plugin>
 				</plugins>

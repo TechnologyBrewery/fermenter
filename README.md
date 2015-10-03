@@ -16,7 +16,7 @@ Add our Maven plugin to your build and run your build like you normally do.
 Fermenter will generate source into *src/generated/<appropriate sub-folder>*, representing the concepts and framework you have configured.  Update business logic, typically in *src/main/<appropriate sub-folder>* and you're done!
 
 ## Fermenter Java ##
-Fermenter's default framework, called fermenter-java, leverages JEE components.  These components use object oriented concepts to stub out locations for your business logic.  Please see *fermenter-test* sub-module for examples of all the model components in action, including the our *integration-test* maven profile that will download and execute the examples in a live Wildfly container.
+Fermenter's default framework, called fermenter-java, leverages JEE components.  The resulting generated source uses object oriented concepts to stub out locations for business logic.  Please see the *fermenter-test* sub-module for examples of all the model concepts in action.  Additionally, you can use the *integration-test* Maven profile to automatically download and execute the examples in a live Wildfly container.
 
 ## Licensing
 Fermenter is available under the [MIT License](http://opensource.org/licenses/mit-license.php).

@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 import javax.ejb.MessageDrivenBean;
 import javax.ejb.MessageDrivenContext;
@@ -19,9 +18,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tigris.atlas.factory.FactoryManager;
 import org.tigris.atlas.service.AbstractServiceFactoryInterface;
-import org.tigris.atlas.service.Service;
 import org.tigris.atlas.service.AsynchronousServiceDescriptor;
+import org.tigris.atlas.service.Service;
 
+/**
+ * Base implementation of a MDB.
+ */
 public class CoreMessageDrivenBean implements MessageDrivenBean, MessageListener {
 	
 	private static final long serialVersionUID = -4880598904719510378L;
@@ -31,7 +33,7 @@ public class CoreMessageDrivenBean implements MessageDrivenBean, MessageListener
 	private MessageDrivenContext context;
 	
 	/**
-	 * @see javax.jms.MessageListener#onMessage(javax.jms.Message)
+	 * {@inheritDoc}
 	 */
 	public void onMessage(Message message) {
 		LOGGER.debug("Message received...");
@@ -66,29 +68,17 @@ public class CoreMessageDrivenBean implements MessageDrivenBean, MessageListener
 			Method method = serviceClass.getMethod(operationName, paramClasses);
 			method.invoke(service, paramInstances);		
 			
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (SecurityException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
+			LOGGER.error("Unexpected problem invoking MDB method!" , e);
 		} catch (NoSuchMethodException e) {
 			String opName = buildMethodName(operationName, classList).toString();
 			LOGGER.error("Cannot find method: " + opName, e);
-			//TODO: remove
-			System.out.println("Cannot find method: " + opName);
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}		
 		
 	}
 
-	private StringBuffer buildMethodName(String operationName, List classList) {
-		StringBuffer opName = new StringBuffer();
+	private StringBuilder buildMethodName(String operationName, List classList) {
+		StringBuilder opName = new StringBuilder();
 		opName.append(operationName).append("(");
 		Iterator classIterator = (classList != null) 
 			? classList.iterator() : Collections.EMPTY_LIST.iterator();
@@ -105,14 +95,15 @@ public class CoreMessageDrivenBean implements MessageDrivenBean, MessageListener
 	}
 
 	/**
-	 * Casts the message into a <tt>ObjectMessage</tt>
+	 * Casts the message into a {@link ObjectMessage}.
 	 * @param message The message passed into this MDB
-	 * @return The expected <tt>ObjectMessage</tt> or null if the object does not exist
+	 * @return The expected {@link ObjectMessage} or null if the object does not exist
  	 */
 	private ObjectMessage getObjectMessage(Message message) {
 		ObjectMessage objectMessage = null;
 		try {
 			objectMessage = (ObjectMessage)message;
+			
 		} catch (ClassCastException cce) {
 			LOGGER.error("CoreMessageDrivenBean only accepts ObjectMessages - the passed message was :" 
 				+ message.getClass(), cce);			
@@ -146,23 +137,17 @@ public class CoreMessageDrivenBean implements MessageDrivenBean, MessageListener
 		}
 		return serviceDescriptor;
 	}
-
-	/**
-	 * @see javax.ejb.MessageDrivenBean#ejbCreate()
-	 */
-	public void ejbCreate() throws CreateException, EJBException {
-	}
 	
 	/**
-	 * @see javax.ejb.MessageDrivenBean#ejbRemove()
+	 * {@inheritDoc}
 	 */
-	public void ejbRemove() throws EJBException {
+	public void ejbRemove() {
 	}
 
-	/**
-	 * @see javax.ejb.MessageDrivenBean#setMessageDrivenContext(javax.ejb.MessageDrivenContext)
-	 */
-	public void setMessageDrivenContext(MessageDrivenContext context) throws EJBException {
+        /**
+         * {@inheritDoc}
+         */
+	public void setMessageDrivenContext(MessageDrivenContext context) {
 		this.context = context;
 		
 	}

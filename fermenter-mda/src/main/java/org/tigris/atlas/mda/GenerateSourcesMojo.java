@@ -20,6 +20,10 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
@@ -33,13 +37,12 @@ import org.tigris.atlas.mda.xml.TrackErrorsErrorHandler;
 import org.tigris.atlas.mda.xml.XmlUtils;
 
 /**
- * @goal generate-sources
- * @phase generate-sources
- * @requiresDependencyResolution compile
+ * Executes the Fermenter MDA process.
  */
+@Mojo(name="generate-sources",defaultPhase=LifecyclePhase.GENERATE_SOURCES,requiresDependencyResolution=ResolutionScope.COMPILE)
 public class GenerateSourcesMojo extends AbstractMojo {
 
-	private static org.apache.commons.logging.Log log = LogFactory.getLog(GenerateSourcesMojo.class);
+	private static final org.apache.commons.logging.Log LOG = LogFactory.getLog(GenerateSourcesMojo.class);
 
 	private static final String PROFILE = "profiles/profile";
 	private static final String PROFILE_INCLUDE = "profiles/profile/include";
@@ -55,49 +58,25 @@ public class GenerateSourcesMojo extends AbstractMojo {
 		TARGETS = new HashMap<String, Target>();
 	}
 
-	/**
-	 * @parameter expression="${project}"
-	 * @required
-	 * @readonly
-	 */
+	@Parameter(required=true,readonly=true,defaultValue="${project}")
 	private MavenProject project;
 
-	/**
-	 * @parameter
-	 * @required
-	 */
+	@Parameter(required=true)
 	private String profile;
 
-	/**
-	 * @parameter
-	 */
+	@Parameter
 	private List<String> metadataDependencies;
 
-	/**
-	 * @parameter
-	 * @required
-	 */
+	@Parameter(required=true)
 	private String basePackage;
 
-	/**
-	 * @parameter expression="${project.basedir}/src/generated/java"
-	 * @required
-	 * @readonly
-	 */
+	@Parameter(required=true,readonly=true,defaultValue="${project.basedir}/src/generated/java")
 	private String generatedCompileSourceRoot;
 
-	/**
-	 * @parameter expression="${project.basedir}/src/main"
-	 * @required
-	 * @readonly
-	 */
+	@Parameter(required=true,readonly=true,defaultValue="${project.basedir}/src/main")
 	private File mainSourceRoot;
 
-	/**
-	 * @parameter expression="${project.basedir}/src/generated"
-	 * @required
-	 * @readonly
-	 */
+	@Parameter(required=true,readonly=true,defaultValue="${project.basedir}/src/generated")
 	private File generatedSourceRoot;
 
 	private VelocityEngine engine;
@@ -151,7 +130,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
 			throw new MojoExecutionException("Unable to find targets", ioe);
 		}
 
-		TrackErrorsErrorHandler handler = new TrackErrorsErrorHandler(log);
+		TrackErrorsErrorHandler handler = new TrackErrorsErrorHandler(LOG);
 		while (targetEnumeration.hasMoreElements()) {
 			try {
 				resource = (URL)targetEnumeration.nextElement();
@@ -184,7 +163,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
 			throw new MojoExecutionException("Unable to find profiles", ioe);
 		}
 
-		TrackErrorsErrorHandler handler = new TrackErrorsErrorHandler(log);
+		TrackErrorsErrorHandler handler = new TrackErrorsErrorHandler(LOG);
 		while (targetEnumeration.hasMoreElements()) {
 			try {
 				resource = (URL)targetEnumeration.nextElement();
@@ -325,9 +304,9 @@ public class GenerateSourcesMojo extends AbstractMojo {
 			}
 		}
 		
-		if (log.isInfoEnabled()) {
+		if (LOG.isInfoEnabled()) {
 			long stop = System.currentTimeMillis();
-			log.info("Generation completed in " + (stop - start) + "ms");
+			LOG.info("Generation completed in " + (stop - start) + "ms");
 		}
 	}
 

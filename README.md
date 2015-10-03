@@ -3,6 +3,7 @@ In brewing, a fermenter is a vessel in which unfinished ingredients become nearl
 
 ## Approach ##
 The Fermenter approach is simple - it is solely intended to generate source code based on simple, developer targeted model. This is the key difference between Fermenter and other MDA tools and approaches is that it puts a premium on developer productivity rather than architectural concepts or diagrams.
+
 ![fermenter-high-level-concept.png](https://bitbucket.org/repo/rg8odx/images/2347847741-fermenter-high-level-concept.png)
 
 ### Step 1 - Define Your Model & Select a Framework ###

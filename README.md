@@ -17,3 +17,9 @@ Fermenter will generate source into *src/generated/<appropriate sub-folder>*, re
 
 ## Fermenter Java ##
 Fermenter's default framework, called fermenter-java, leverages JEE components.  These components use object oriented concepts to stub out locations for your business logic.  Please see *fermenter-test* sub-module for examples of all the model components in action, including the our *integration-test* maven profile that will download and execute the examples in a live Wildfly container.
+
+## Licensing
+Fermenter is available under the [MIT License](http://opensource.org/licenses/mit-license.php).
+
+## Session Beer
+Fermenter would like to thank [Counterpointe Solutions](http://cpointe-inc.com/) for providing continuous integration and static code analysis services for Fermenter.

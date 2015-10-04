@@ -6,6 +6,7 @@
         <container qualifier="jbossas" default="true">
             <configuration>
                 <property name="managementPort">19990</property>
+                <property name="javaVmArguments">${wildfly.argline}</property>
             </configuration>
         </container>
     

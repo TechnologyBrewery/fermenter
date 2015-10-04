@@ -74,7 +74,7 @@ public class ObjectiveCEntity implements Entity {
 		if (decoratedFieldMap == null) {
 			@SuppressWarnings("unchecked")
 			Map<String, Field> entityFieldMap = entity.getFields();
-			if ((entityFieldMap == null) || (entityFieldMap.size() == 0)) {
+			if ((entityFieldMap == null) || (entityFieldMap.isEmpty())) {
 				decoratedFieldMap = Collections.<String, ObjectiveCField>emptyMap();
 			}
 			else {
@@ -101,7 +101,7 @@ public class ObjectiveCEntity implements Entity {
 		if (decoratedIdFieldMap == null) {
 			@SuppressWarnings("unchecked")
 			Map<String, Field> entityIdFieldMap = entity.getIdFields();
-			if ((entityIdFieldMap == null) || (entityIdFieldMap.size() == 0)) {
+			if ((entityIdFieldMap == null) || (entityIdFieldMap.isEmpty())) {
 				decoratedIdFieldMap = Collections.<String, ObjectiveCField>emptyMap();
 			}
 			else {
@@ -127,7 +127,7 @@ public class ObjectiveCEntity implements Entity {
 	public Map getComposites() {
 		if (decoratedCompositeMap == null) {
 			Map entityCompositeMap = entity.getComposites();
-			if ((entityCompositeMap == null) || (entityCompositeMap.size() == 0)) {
+			if ((entityCompositeMap == null) || (entityCompositeMap.isEmpty())) {
 				decoratedCompositeMap = Collections.EMPTY_MAP;
 
 			} else {
@@ -155,7 +155,7 @@ public class ObjectiveCEntity implements Entity {
 	public Map getRelations() {
 		if (decoratedRelationMap == null) {
 			Map entityRelationMap = entity.getRelations();
-			if ((entityRelationMap == null) || (entityRelationMap.size() == 0)) {
+			if ((entityRelationMap == null) || (entityRelationMap.isEmpty())) {
 				decoratedRelationMap = Collections.EMPTY_MAP;
 
 			} else {
@@ -183,7 +183,7 @@ public class ObjectiveCEntity implements Entity {
 	public Map getInverseRelations() {
 		if (decoratedInverseRelationMap == null) {
 			Map entityInverseRelationMap = entity.getInverseRelations();
-			if ((entityInverseRelationMap == null) || (entityInverseRelationMap.size() == 0)) {
+			if ((entityInverseRelationMap == null) || (entityInverseRelationMap.isEmpty())) {
 				decoratedInverseRelationMap = Collections.EMPTY_MAP;
 
 			}
@@ -210,7 +210,7 @@ public class ObjectiveCEntity implements Entity {
 	public Map<String, ObjectiveCReference> getReferences() {
 		if (decoratedReferenceMap == null) {
 			Map entityReferenceMap = entity.getReferences();
-			if ((entityReferenceMap == null) || (entityReferenceMap.size() == 0)) {
+			if ((entityReferenceMap == null) || (entityReferenceMap.isEmpty())) {
 				decoratedReferenceMap = Collections.EMPTY_MAP;
 			}
 			else {
@@ -248,7 +248,7 @@ public class ObjectiveCEntity implements Entity {
 	public Map getQueries() {
 		if (decoratedQueryMap == null) {
 			Map entityQueryMap = entity.getQueries();
-			if ((entityQueryMap == null) || (entityQueryMap.size() == 0)) {
+			if ((entityQueryMap == null) || (entityQueryMap.isEmpty())) {
 				decoratedQueryMap = Collections.EMPTY_MAP;
 
 			} else {

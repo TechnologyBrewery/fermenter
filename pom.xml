@@ -61,13 +61,16 @@
 	</modules>
 
 	<properties>
+		<argLine>-Xms256m -Xmx512m</argLine>
 		<krausening.version>3</krausening.version>
 		<jackson.version>1.9.13</jackson.version>
 		<jacoco.it.execution.data.file>${project.build.directory}/jacoco-it.exec</jacoco.it.execution.data.file>
 		<jacoco.test.execution.data.file>${project.build.directory}/jacoco.exec</jacoco.test.execution.data.file>
+		<jacoco.version>0.7.4.201502262128</jacoco.version>
 		<maven.compiler.source>1.7</maven.compiler.source>
 		<maven.compiler.target>1.7</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<resteasy.version>3.0.8.Final</resteasy.version>
 		<slf4j.version>1.7.5</slf4j.version>
 		<test.reports.localtion>${project.build.directory}/surefire-reports</test.reports.localtion>
@@ -75,6 +78,10 @@
 		<wildfly.version>8.2.1.Final</wildfly.version>
 		<arquillian.version>1.1.5.Final</arquillian.version>
 		<arquillian.rest.extension.version>1.0.0.Alpha3</arquillian.rest.extension.version>
+		<!-- With jacoco, all arquillian parameters need to be on the argument line: -->
+		<wildfly.argline>${argLine} -Djboss.socket.binding.port-offset=10000
+			-DKRAUSENING_BASE=${project.basedir}/src/test/resources/krausening/base
+			-DKRAUSENING_EXTENSTIONS=${project.basedir}/src/test/resources/krausening/extensions</wildfly.argline>
 		<wildfly.location>${project.basedir}/target/wildfly-${wildfly.version}</wildfly.location>
 		<sonar.sources>./src</sonar.sources>
 		<!-- The following sonar properties need to be defined in your settings.xml 
@@ -92,6 +99,19 @@
 	</repositories>
 
 	<build>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+				<filtering>false</filtering>
+			</testResource>
+			<testResource>
+				<directory>src/test/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/arquillian.xml</include>
+				</includes>
+			</testResource>
+		</testResources>
 		<pluginManagement>
 			<plugins>
 				<plugin>
@@ -125,7 +145,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-failsafe-plugin</artifactId>
-					<version>2.17</version>
+					<version>2.18.1</version>
 					<executions>
 						<execution>
 							<goals>
@@ -143,10 +163,6 @@
 							<KRAUSENING_EXTENSIONS>${project.basedir}/src/test/resources/krausening/extensions</KRAUSENING_EXTENSIONS>
 						</systemPropertyVariables>
 						<reuseForks>false</reuseForks>
-						<argLine>-Djboss.socket.binding.port-offset=10000 -Xmx512m
-							-XX:MaxPermSize=128m</argLine>
-						<!-- Needed to get results to show up in Sonarqube: -->
-						<reportsDirectory>${test.reports.localtion}</reportsDirectory>
 					</configuration>
 				</plugin>
 				<plugin>
@@ -264,7 +280,7 @@
 			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
-				<version>4.10</version>
+				<version>4.11</version>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
@@ -283,7 +299,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.wildfly</groupId>
-				<artifactId>wildfly-arquillian-container-embedded</artifactId>
+				<artifactId>wildfly-arquillian-container-managed</artifactId>
 				<version>${wildfly.version}</version>
 				<scope>test</scope>
 			</dependency>
@@ -310,14 +326,6 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-failsafe-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>default-integration-test</id>
-								<goals>
-									<goal>integration-test</goal>
-								</goals>
-							</execution>
-						</executions>
 					</plugin>
 				</plugins>
 			</build>
@@ -329,16 +337,12 @@
 					<plugin>
 						<groupId>org.jacoco</groupId>
 						<artifactId>jacoco-maven-plugin</artifactId>
-						<version>0.7.4.201502262128</version>
+						<version>${jacoco.version}</version>
 						<executions>
 							<execution>
-								<id>default-prepare-agent</id>
 								<goals>
 									<goal>prepare-agent</goal>
 								</goals>
-								<configuration>
-									<destFile>${jacoco.test.execution.data.file}</destFile>
-								</configuration>
 							</execution>
 							<execution>
 								<id>default-prepare-agent-integration</id>
@@ -353,6 +357,25 @@
 					</plugin>
 				</plugins>
 			</build>
+			<dependencies>
+				<dependency>
+					<groupId>org.jacoco</groupId>
+					<artifactId>org.jacoco.core</artifactId>
+					<version>${jacoco.version}</version>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.jboss.arquillian.junit</groupId>
+					<artifactId>arquillian-junit-container</artifactId>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.jboss.arquillian.extension</groupId>
+					<artifactId>arquillian-jacoco</artifactId>
+					<version>1.0.0.Alpha8</version>
+					<scope>test</scope>
+				</dependency>
+			</dependencies>
 		</profile>
 	</profiles>
 </project>

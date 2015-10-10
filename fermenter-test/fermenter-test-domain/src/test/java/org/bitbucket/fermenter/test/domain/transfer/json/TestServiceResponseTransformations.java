@@ -5,16 +5,16 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.UUID;
 
+import org.bitbucket.fermenter.messages.DefaultMessages;
+import org.bitbucket.fermenter.messages.Message;
+import org.bitbucket.fermenter.messages.Messages;
+import org.bitbucket.fermenter.messages.Severity;
+import org.bitbucket.fermenter.service.ValueServiceResponse;
+import org.bitbucket.fermenter.service.VoidServiceResponse;
 import org.bitbucket.fermenter.test.domain.transfer.SimpleDomain;
 import org.bitbucket.fermenter.test.domain.transfer.TransferObjectFactory;
 import org.codehaus.jackson.type.TypeReference;
 import org.junit.Test;
-import org.tigris.atlas.messages.DefaultMessages;
-import org.tigris.atlas.messages.Message;
-import org.tigris.atlas.messages.Messages;
-import org.tigris.atlas.messages.Severity;
-import org.tigris.atlas.service.ValueServiceResponse;
-import org.tigris.atlas.service.VoidServiceResponse;
 
 public class TestServiceResponseTransformations extends AbstractTestTransformations {
 

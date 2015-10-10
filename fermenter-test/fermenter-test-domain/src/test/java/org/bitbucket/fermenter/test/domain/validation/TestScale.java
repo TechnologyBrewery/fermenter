@@ -6,12 +6,12 @@ import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
 
+import org.bitbucket.fermenter.messages.Message;
+import org.bitbucket.fermenter.messages.Messages;
 import org.bitbucket.fermenter.test.domain.bizobj.BusinessObjectFactory;
 import org.bitbucket.fermenter.test.domain.bizobj.ValidationExampleBaseBO;
 import org.junit.Before;
 import org.junit.Test;
-import org.tigris.atlas.messages.Message;
-import org.tigris.atlas.messages.Messages;
 
 public class TestScale extends AbstractValidationTest {
 

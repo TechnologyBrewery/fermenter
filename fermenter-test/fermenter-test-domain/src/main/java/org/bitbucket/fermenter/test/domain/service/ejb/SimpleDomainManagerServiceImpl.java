@@ -10,13 +10,13 @@ import javax.ejb.Stateless;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
+import org.bitbucket.fermenter.messages.MessageManager;
+import org.bitbucket.fermenter.messages.MessageUtils;
 import org.bitbucket.fermenter.test.domain.bizobj.BusinessObjectFactory;
 import org.bitbucket.fermenter.test.domain.bizobj.SimpleDomainBO;
 import org.bitbucket.fermenter.test.domain.enumeration.SimpleDomainEnumeration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tigris.atlas.messages.MessageManager;
-import org.tigris.atlas.messages.MessageUtils;
 
 /**
  * Service implementation class for the SimpleDomainManager service.

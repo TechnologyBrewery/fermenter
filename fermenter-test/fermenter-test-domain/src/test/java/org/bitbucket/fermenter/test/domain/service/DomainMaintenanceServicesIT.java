@@ -13,6 +13,7 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
+import org.bitbucket.fermenter.service.ValueServiceResponse;
 import org.bitbucket.fermenter.test.domain.persist.SimpleDomainDao;
 import org.bitbucket.fermenter.test.domain.service.ejb.SimpleDomainMaintenanceService;
 import org.bitbucket.fermenter.test.domain.service.ejb.ValidationExampleMaintenanceService;
@@ -27,7 +28,6 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.Archive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.tigris.atlas.service.ValueServiceResponse;
 
 @RunWith(Arquillian.class)
 public class DomainMaintenanceServicesIT {

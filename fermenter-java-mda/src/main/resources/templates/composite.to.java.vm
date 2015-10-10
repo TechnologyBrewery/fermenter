@@ -3,9 +3,9 @@ package ${basePackage}.transfer;
 #foreach($import in ${composite.imports})
 import ${import};
 #end
-import org.tigris.atlas.messages.Messages;
-import org.tigris.atlas.messages.MessagesSet;
-import org.tigris.atlas.transfer.AbstractTransferComponent;
+import org.bitbucket.fermenter.messages.Messages;
+import org.bitbucket.fermenter.messages.MessagesSet;
+import org.bitbucket.fermenter.transfer.AbstractTransferComponent;
 import org.apache.commons.lang3.StringUtils;
 
 /**

@@ -1,7 +1,7 @@
 package ${basePackage}.service.delegate;
 
 import ${basePackage}.service.ServiceFactory;
-import org.tigris.atlas.service.Service;
+import org.bitbucket.fermenter.service.Service;
 import ${basePackage}.service.EntityMaintenanceService;
 #foreach($entity.name in $entities)
 import ${basePackage}.transfer.${entity.name};

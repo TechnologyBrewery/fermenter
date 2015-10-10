@@ -1,6 +1,6 @@
 package ${prefix}.transfer;
 
-import org.tigris.atlas.transfer.PrimaryKey;
+import org.bitbucket.fermenter.transfer.PrimaryKey;
 #foreach ($pkImport in $pkImports )
 import ${pkImport};
 #end

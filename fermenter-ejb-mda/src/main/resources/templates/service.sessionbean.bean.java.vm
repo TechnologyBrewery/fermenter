@@ -13,10 +13,10 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
-import org.tigris.atlas.messages.InjectableMessages;
-import org.tigris.atlas.messages.ThreadLocalMessages;
-import org.tigris.atlas.service.ValueServiceResponse;
-import org.tigris.atlas.service.VoidServiceResponse;
+import org.bitbucket.fermenter.messages.InjectableMessages;
+import org.bitbucket.fermenter.messages.ThreadLocalMessages;
+import org.bitbucket.fermenter.service.ValueServiceResponse;
+import org.bitbucket.fermenter.service.VoidServiceResponse;
 
 /**
  * Service session bean for the ${service.name} service.

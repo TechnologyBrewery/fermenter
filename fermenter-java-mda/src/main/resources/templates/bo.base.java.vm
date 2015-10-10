@@ -3,17 +3,17 @@ package ${prefix}.bizobj;
 import ${prefix}.persist.*;
 import ${prefix}.transfer.*;
 
-import org.tigris.atlas.transfer.PrimaryKey;
-import org.tigris.atlas.transfer.TransferObject;
-import org.tigris.atlas.bizobj.*;
+import org.bitbucket.fermenter.transfer.PrimaryKey;
+import org.bitbucket.fermenter.transfer.TransferObject;
+import org.bitbucket.fermenter.bizobj.*;
 #if( $references.size() > 0 )
-import org.tigris.atlas.persist.*;
+import org.bitbucket.fermenter.persist.*;
 #end
-import org.tigris.atlas.validate.Validations;
+import org.bitbucket.fermenter.validate.Validations;
 
-import org.tigris.atlas.messages.MessageManager;
-import org.tigris.atlas.messages.Messages;
-import org.tigris.atlas.messages.MessageUtils;
+import org.bitbucket.fermenter.messages.MessageManager;
+import org.bitbucket.fermenter.messages.Messages;
+import org.bitbucket.fermenter.messages.MessageUtils;
 
 import java.util.UUID;
 

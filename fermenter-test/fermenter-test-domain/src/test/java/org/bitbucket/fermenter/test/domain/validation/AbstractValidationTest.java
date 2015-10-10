@@ -5,15 +5,15 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.Collection;
 
+import org.bitbucket.fermenter.messages.Message;
+import org.bitbucket.fermenter.messages.MessageManager;
+import org.bitbucket.fermenter.messages.MessageManagerInitializationDelegate;
+import org.bitbucket.fermenter.messages.Messages;
 import org.bitbucket.fermenter.test.domain.bizobj.BusinessObjectFactory;
 import org.bitbucket.fermenter.test.domain.bizobj.ValidationExampleBO;
 import org.bitbucket.fermenter.test.domain.transfer.ValidationExample;
 import org.junit.After;
 import org.junit.Before;
-import org.tigris.atlas.messages.Message;
-import org.tigris.atlas.messages.MessageManager;
-import org.tigris.atlas.messages.MessageManagerInitializationDelegate;
-import org.tigris.atlas.messages.Messages;
 
 public abstract class AbstractValidationTest {
 

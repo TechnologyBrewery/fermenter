@@ -1,8 +1,8 @@
 package ${basePackage}.transfer;
 
-import org.tigris.atlas.transfer.AbstractTransferObjectFactory;
-import org.tigris.atlas.transfer.PrimaryKey;
-import org.tigris.atlas.transfer.TransferObject;
+import org.bitbucket.fermenter.transfer.AbstractTransferObjectFactory;
+import org.bitbucket.fermenter.transfer.PrimaryKey;
+import org.bitbucket.fermenter.transfer.TransferObject;
 
 public class TransferObjectFactory extends AbstractTransferObjectFactory {
 

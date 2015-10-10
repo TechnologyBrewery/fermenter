@@ -1,6 +1,6 @@
 package ${basePackage}.persist;
 
-import org.tigris.atlas.persist.AbstractDaoFactory;
+import org.bitbucket.fermenter.persist.AbstractDaoFactory;
 
 public class DaoFactory extends AbstractDaoFactory {
 

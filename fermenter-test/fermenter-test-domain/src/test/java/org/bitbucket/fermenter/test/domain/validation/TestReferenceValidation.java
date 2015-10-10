@@ -4,11 +4,11 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Collection;
 
+import org.bitbucket.fermenter.messages.Message;
+import org.bitbucket.fermenter.messages.Messages;
 import org.bitbucket.fermenter.test.domain.bizobj.BusinessObjectFactory;
 import org.bitbucket.fermenter.test.domain.bizobj.ValidationReferenceExampleBO;
 import org.bitbucket.fermenter.test.domain.bizobj.ValidationReferencedObjectBO;
-import org.tigris.atlas.messages.Message;
-import org.tigris.atlas.messages.Messages;
 
 public class TestReferenceValidation extends AbstractValidationTest {
 

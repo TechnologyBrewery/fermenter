@@ -2,8 +2,8 @@
 <!DOCTYPE validators PUBLIC "-//FERMENTER//DTD VALIDATORS//EN" "https://bitbucket.org/askllc/fermenter/downloads/validators.dtd">
 
 <validators>
-	<validator name="emailValidator" class="org.tigris.atlas.validate.EmailValidator"/>
-	<validator name="phoneNumberValidator" class="org.tigris.atlas.validate.PhoneNumberValidator"/>
-	<validator name="zipCodeValidator" class="org.tigris.atlas.validate.ZipCodeValidator"/>
-	<validator name="ssnValidator" class="org.tigris.atlas.validate.SsnValidator"/>
+	<validator name="emailValidator" class="org.bitbucket.fermenter.validate.EmailValidator"/>
+	<validator name="phoneNumberValidator" class="org.bitbucket.fermenter.validate.PhoneNumberValidator"/>
+	<validator name="zipCodeValidator" class="org.bitbucket.fermenter.validate.ZipCodeValidator"/>
+	<validator name="ssnValidator" class="org.bitbucket.fermenter.validate.SsnValidator"/>
 </validators>

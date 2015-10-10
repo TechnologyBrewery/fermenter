@@ -1,7 +1,7 @@
 package ${basePackage}.bizobj;
 
-import org.tigris.atlas.bizobj.AbstractBusinessObjectFactory;
-import org.tigris.atlas.bizobj.BusinessObject;
+import org.bitbucket.fermenter.bizobj.AbstractBusinessObjectFactory;
+import org.bitbucket.fermenter.bizobj.BusinessObject;
 
 public class BusinessObjectFactory extends AbstractBusinessObjectFactory {
 

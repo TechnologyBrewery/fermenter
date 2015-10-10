@@ -6,12 +6,12 @@ import java.sql.Date;
 
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.bitbucket.fermenter.messages.DefaultMessage;
+import org.bitbucket.fermenter.messages.Message;
+import org.bitbucket.fermenter.messages.Severity;
 import org.bitbucket.fermenter.test.domain.transfer.json.ObjectMapperManager;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
-import org.tigris.atlas.messages.DefaultMessage;
-import org.tigris.atlas.messages.Message;
-import org.tigris.atlas.messages.Severity;
 
 public class AbstractTestTransformations {
 

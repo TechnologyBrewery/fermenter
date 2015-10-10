@@ -18,7 +18,7 @@ import ${reference.importPrefix}.transfer.${reference.type}PK;
 #foreach ($composite in $composites)
 import ${prefix}.transfer.${composite.type}Composite;
 #end
-import org.tigris.atlas.transfer.*;
+import org.bitbucket.fermenter.transfer.*;
 
 #if( $relations.size() > 0 )  
 import java.util.Set;

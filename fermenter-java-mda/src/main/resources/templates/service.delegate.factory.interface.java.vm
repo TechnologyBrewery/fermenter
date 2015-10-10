@@ -1,6 +1,6 @@
 package ${basePackage}.service.delegate;
 
-import org.tigris.atlas.service.delegate.AbstractServiceDelegateFactoryInterface;
+import org.bitbucket.fermenter.service.delegate.AbstractServiceDelegateFactoryInterface;
 
 public interface ServiceDelegateFactoryInterface extends AbstractServiceDelegateFactoryInterface {
 	

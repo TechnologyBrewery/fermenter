@@ -3,10 +3,10 @@ package ${basePackage}.bizobj;
 #foreach($import in ${composite.imports})
 import ${import};
 #end
-import org.tigris.atlas.bizobj.ComplexType;
-import org.tigris.atlas.messages.Messages;
-import org.tigris.atlas.messages.MessagesSet;
-import org.tigris.atlas.validate.Validations;
+import org.bitbucket.fermenter.bizobj.ComplexType;
+import org.bitbucket.fermenter.messages.Messages;
+import org.bitbucket.fermenter.messages.MessagesSet;
+import org.bitbucket.fermenter.validate.Validations;
 import org.apache.commons.lang3.StringUtils;
 #foreach ($validator in $composite.validators)
 import ${validator.import};

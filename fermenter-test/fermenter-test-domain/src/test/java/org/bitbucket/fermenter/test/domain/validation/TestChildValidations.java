@@ -4,11 +4,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.bitbucket.fermenter.messages.Messages;
 import org.bitbucket.fermenter.test.domain.bizobj.BusinessObjectFactory;
 import org.bitbucket.fermenter.test.domain.bizobj.ValidationExampleBO;
 import org.bitbucket.fermenter.test.domain.bizobj.ValidationExampleChildBO;
 import org.junit.Test;
-import org.tigris.atlas.messages.Messages;
 
 public class TestChildValidations extends AbstractValidationTest {
 

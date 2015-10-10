@@ -1,6 +1,6 @@
 package ${basePackage}.transfer;
 
-import org.tigris.atlas.transfer.AbstractTransferObjectFactoryInterface;
+import org.bitbucket.fermenter.transfer.AbstractTransferObjectFactoryInterface;
 
 public interface TransferObjectFactoryInterface extends AbstractTransferObjectFactoryInterface {
 	

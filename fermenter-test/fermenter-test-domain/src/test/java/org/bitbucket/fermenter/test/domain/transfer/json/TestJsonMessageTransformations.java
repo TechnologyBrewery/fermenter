@@ -5,12 +5,12 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.bitbucket.fermenter.messages.DefaultMessage;
+import org.bitbucket.fermenter.messages.DefaultMessages;
+import org.bitbucket.fermenter.messages.Message;
+import org.bitbucket.fermenter.messages.Messages;
+import org.bitbucket.fermenter.messages.Severity;
 import org.junit.Test;
-import org.tigris.atlas.messages.DefaultMessage;
-import org.tigris.atlas.messages.DefaultMessages;
-import org.tigris.atlas.messages.Message;
-import org.tigris.atlas.messages.Messages;
-import org.tigris.atlas.messages.Severity;
 
 public class TestJsonMessageTransformations extends AbstractTestTransformations {
 

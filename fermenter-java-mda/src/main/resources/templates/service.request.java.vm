@@ -1,6 +1,6 @@
 package ${basePackage}.service;
 
-import org.tigris.atlas.service.ServiceRequest;
+import org.bitbucket.fermenter.service.ServiceRequest;
 
 #foreach( $import in $operation.parameterImports )
 import ${import};

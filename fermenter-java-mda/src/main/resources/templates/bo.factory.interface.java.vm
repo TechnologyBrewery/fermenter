@@ -1,6 +1,6 @@
 package ${basePackage}.bizobj;
 
-import org.tigris.atlas.bizobj.AbstractBusinessObjectFactoryInterface;
+import org.bitbucket.fermenter.bizobj.AbstractBusinessObjectFactoryInterface;
 
 public interface BusinessObjectFactoryInterface extends AbstractBusinessObjectFactoryInterface {
 	

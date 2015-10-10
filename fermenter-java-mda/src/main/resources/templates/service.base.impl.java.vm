@@ -1,6 +1,6 @@
 package ${basePackage}.service.impl;
 
-import org.tigris.atlas.service.AbstractService;
+import org.bitbucket.fermenter.service.AbstractService;
 
 #foreach( $import in $service.imports )
 import $import;

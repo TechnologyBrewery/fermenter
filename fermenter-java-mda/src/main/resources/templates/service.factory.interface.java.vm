@@ -7,7 +7,7 @@ import ${basePackage}.service.ejb.${service.name}Service;
 import ${basePackage}.service.ejb.${entity.name}MaintenanceService;
 #end
 
-import org.tigris.atlas.factory.Factory;
+import org.bitbucket.fermenter.factory.Factory;
 
 public interface ServiceFactoryInterface extends Factory {
 	

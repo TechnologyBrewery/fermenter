@@ -11,6 +11,7 @@ import java.net.URL;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
+import org.bitbucket.fermenter.service.ValueServiceResponse;
 import org.bitbucket.fermenter.test.domain.service.ejb.SimpleDomainMaintenanceRestService;
 import org.bitbucket.fermenter.test.domain.service.rest.JacksonObjectMapperResteasyProvider;
 import org.bitbucket.fermenter.test.domain.transfer.SimpleDomain;
@@ -24,7 +25,6 @@ import org.jboss.shrinkwrap.api.Archive;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.tigris.atlas.service.ValueServiceResponse;
 
 @RunWith(Arquillian.class)
 public class RESTfulDomainMaintenanceServicesIT {

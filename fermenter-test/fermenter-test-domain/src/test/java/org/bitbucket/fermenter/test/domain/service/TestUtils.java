@@ -10,6 +10,10 @@ import java.util.Date;
 
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.bitbucket.fermenter.messages.Message;
+import org.bitbucket.fermenter.messages.MessageUtils;
+import org.bitbucket.fermenter.messages.Messages;
+import org.bitbucket.fermenter.service.ServiceResponse;
 import org.bitbucket.fermenter.test.domain.enumeration.SimpleDomainEnumeration;
 import org.bitbucket.fermenter.test.domain.transfer.SimpleDomain;
 import org.bitbucket.fermenter.test.domain.transfer.TransferObjectFactory;
@@ -17,10 +21,6 @@ import org.bitbucket.fermenter.test.domain.transfer.ValidationExample;
 import org.bitbucket.fermenter.test.domain.transfer.ValidationExampleChild;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tigris.atlas.messages.Message;
-import org.tigris.atlas.messages.MessageUtils;
-import org.tigris.atlas.messages.Messages;
-import org.tigris.atlas.service.ServiceResponse;
 
 /**
  * Contains common integration test logic for this project.

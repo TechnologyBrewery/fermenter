@@ -1,6 +1,6 @@
 package ${basePackage}.persist;
 
-import org.tigris.atlas.persist.AbstractDaoFactoryInterface;
+import org.bitbucket.fermenter.persist.AbstractDaoFactoryInterface;
 
 public interface DaoFactoryInterface extends AbstractDaoFactoryInterface {
 	

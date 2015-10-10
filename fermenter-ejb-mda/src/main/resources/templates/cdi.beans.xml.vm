@@ -3,6 +3,6 @@
       http://java.sun.com/xml/ns/javaee
       http://java.sun.com/xml/ns/javaee/beans_1_0.xsd">
 	<interceptors>
-		<class>org.tigris.atlas.messages.ThreadLocalMessageManagementInterceptor</class>
+		<class>org.bitbucket.fermenter.messages.ThreadLocalMessageManagementInterceptor</class>
 	</interceptors>
 </beans>

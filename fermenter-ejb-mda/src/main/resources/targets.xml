@@ -4,85 +4,85 @@
 <targets>
 
 	<target name="serviceSessionBeanLocalInterfaces"
-		    generator="org.tigris.atlas.mda.generator.service.ServiceJavaGenerator"
+		    generator="org.bitbucket.fermenter.mda.generator.service.ServiceJavaGenerator"
 		    templateName="templates/service.sessionbean.local.java.vm"
 		    outputFile="${basePackage}/service/ejb/${serviceName}Service.java"
 		    overwritable="true"/>
 
 	<target name="serviceSessionBeanObjects"
-		    generator="org.tigris.atlas.mda.generator.service.ServiceJavaGenerator"
+		    generator="org.bitbucket.fermenter.mda.generator.service.ServiceJavaGenerator"
 		    templateName="templates/service.sessionbean.bean.java.vm"
 		    outputFile="${basePackage}/service/ejb/${serviceName}BaseService.java"
 		    overwritable="true"/>
 		    
 	<target name="serviceSessionBeanImplObjects"
-		    generator="org.tigris.atlas.mda.generator.service.ServiceJavaGenerator"
+		    generator="org.bitbucket.fermenter.mda.generator.service.ServiceJavaGenerator"
 		    templateName="templates/service.sessionbean.impl.java.vm"
 		    outputFile="${basePackage}/service/ejb/${serviceName}ServiceImpl.java"
 		    overwritable="false"/>		    
 
 	<target name="entityMaintenanceServiceLocal"
-		    generator="org.tigris.atlas.mda.generator.entity.EntityJavaGenerator"
+		    generator="org.bitbucket.fermenter.mda.generator.entity.EntityJavaGenerator"
 		    templateName="templates/entity.maint.service.sessionbean.local.java.vm"
 		    outputFile="${basePackage}/service/ejb/${entityName}MaintenanceService.java"
 		    overwritable="true"/>
 		    
 	<target name="entityMaintenanceServiceJaxRs"
-		    generator="org.tigris.atlas.mda.generator.entity.EntityJavaGenerator"
+		    generator="org.bitbucket.fermenter.mda.generator.entity.EntityJavaGenerator"
 		    templateName="templates/entity.maint.service.sessionbean.jax.rs.client.java.vm"
 		    outputFile="${basePackage}/service/ejb/${entityName}MaintenanceRestService.java"
 		    overwritable="true"/>
 
 	<target name="entityMaintenanceServiceBean"
-		    generator="org.tigris.atlas.mda.generator.entity.EntityJavaGenerator"
+		    generator="org.bitbucket.fermenter.mda.generator.entity.EntityJavaGenerator"
 		    templateName="templates/entity.maint.service.sessionbean.bean.java.vm"
 		    outputFile="${basePackage}/service/ejb/${entityName}MaintenanceServiceBean.java"
 		    overwritable="true"/>
 
 	<target name="sessionBeanServiceDelegateObjects"
-		    generator="org.tigris.atlas.mda.generator.service.ServiceJavaGenerator"
+		    generator="org.bitbucket.fermenter.mda.generator.service.ServiceJavaGenerator"
 		    templateName="templates/sessionbean.service.delegate.impl.java.vm"
 		    outputFile="${basePackage}/service/delegate/${serviceName}ServiceDelegateImpl.java"
 		    overwritable="true"/>
 
 	<target name="sessionBeanEntityMaintenanceServiceDelegateImpl"
-		    generator="org.tigris.atlas.mda.generator.service.EntityMaintenanceServiceJavaGenerator"
+		    generator="org.bitbucket.fermenter.mda.generator.service.EntityMaintenanceServiceJavaGenerator"
 		    templateName="templates/sessionbean.entity.maint.service.delegate.impl.java.vm"
 		    outputFile="${basePackage}/service/delegate/EntityMaintenanceServiceDelegateImpl.java"
 		    overwritable="true"/>
 		    
 	<target name="ejbServiceFactory"
-		    generator="org.tigris.atlas.mda.generator.factory.FactoryJavaGenerator"
+		    generator="org.bitbucket.fermenter.mda.generator.factory.FactoryJavaGenerator"
 		    templateName="templates/ejb.service.factory.java.vm"
 		    outputFile="${basePackage}/service/ejb/ServiceFactoryImpl.java"
 		    overwritable="true"/>
 		    
 	<target name="transferObjectJacksonMixIns"
-		    generator="org.tigris.atlas.mda.generator.entity.EntityJavaGenerator"
+		    generator="org.bitbucket.fermenter.mda.generator.entity.EntityJavaGenerator"
 		    templateName="templates/to.jackson.mixin.java.vm"
 		    outputFile="${basePackage}/transfer/json/${entityName}MixIn.java"
 		    overwritable="true"/>
 		    
 	<target name="objectMapperManager"
-		    generator="org.tigris.atlas.mda.generator.factory.FactoryJavaGenerator"
+		    generator="org.bitbucket.fermenter.mda.generator.factory.FactoryJavaGenerator"
 		    templateName="templates/jackson.object.mapper.manager.java.vm"
 		    outputFile="${basePackage}/transfer/json/ObjectMapperManager.java"
 		    overwritable="true"/>
 		    
 	<target name="jacksonObjectMapperResteasyProvider"
-		    generator="org.tigris.atlas.mda.generator.factory.FactoryJavaGenerator"
+		    generator="org.bitbucket.fermenter.mda.generator.factory.FactoryJavaGenerator"
 		    templateName="templates/jackson.object.mapper.resteasy.provider.java.vm"
 		    outputFile="${basePackage}/service/rest/JacksonObjectMapperResteasyProvider.java"
 		    overwritable="true"/>
 		    
 	<target name="jaxRsActivator"
-		    generator="org.tigris.atlas.mda.generator.factory.FactoryJavaGenerator"
+		    generator="org.bitbucket.fermenter.mda.generator.factory.FactoryJavaGenerator"
 		    templateName="templates/jax.rs.activator.java.vm"
 		    outputFile="${basePackage}/service/rest/JaxRsActivator.java"
 		    overwritable="true"/>
 	
 	<target name="cdiDeploymentDescriptor"
-		    generator="org.tigris.atlas.ejb.mda.generator.DeploymentDescriptorGenerator"
+		    generator="org.bitbucket.fermenter.ejb.mda.generator.DeploymentDescriptorGenerator"
 		    templateName="templates/cdi.beans.xml.vm"
 		    outputFile="META-INF/beans.xml"
 		    overwritable="true"/>	

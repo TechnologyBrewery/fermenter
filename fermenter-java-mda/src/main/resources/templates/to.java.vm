@@ -12,7 +12,7 @@ import ${reference.importPrefix}.transfer.${reference.type}PK;
 #foreach ($composite in $composites)
 import ${prefix}.transfer.${composite.type}Composite;
 #end
-import org.tigris.atlas.transfer.*;
+import org.bitbucket.fermenter.transfer.*;
 
 import java.util.Collection;
 import java.util.ArrayList;

@@ -3,9 +3,9 @@ package ${basePackage}.transfer;
 #foreach($import in ${composite.imports})
 import ${import};
 #end
-import org.bitbucket.fermenter.messages.Messages;
-import org.bitbucket.fermenter.messages.MessagesSet;
-import org.bitbucket.fermenter.transfer.AbstractTransferComponent;
+import org.bitbucket.fermenter.stout.messages.Messages;
+import org.bitbucket.fermenter.stout.messages.MessagesSet;
+import org.bitbucket.fermenter.stout.transfer.AbstractTransferComponent;
 import org.apache.commons.lang3.StringUtils;
 
 /**

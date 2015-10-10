@@ -3,17 +3,17 @@ package ${prefix}.bizobj;
 import ${prefix}.persist.*;
 import ${prefix}.transfer.*;
 
-import org.bitbucket.fermenter.transfer.PrimaryKey;
-import org.bitbucket.fermenter.transfer.TransferObject;
-import org.bitbucket.fermenter.bizobj.*;
+import org.bitbucket.fermenter.stout.transfer.PrimaryKey;
+import org.bitbucket.fermenter.stout.transfer.TransferObject;
+import org.bitbucket.fermenter.stout.bizobj.*;
 #if( $references.size() > 0 )
-import org.bitbucket.fermenter.persist.*;
+import org.bitbucket.fermenter.stout.persist.*;
 #end
-import org.bitbucket.fermenter.validate.Validations;
+import org.bitbucket.fermenter.stout.validate.Validations;
 
-import org.bitbucket.fermenter.messages.MessageManager;
-import org.bitbucket.fermenter.messages.Messages;
-import org.bitbucket.fermenter.messages.MessageUtils;
+import org.bitbucket.fermenter.stout.messages.MessageManager;
+import org.bitbucket.fermenter.stout.messages.Messages;
+import org.bitbucket.fermenter.stout.messages.MessageUtils;
 
 import java.util.UUID;
 

@@ -1,8 +1,8 @@
 package ${basePackage}.service;
 
-import org.bitbucket.fermenter.service.Service;
-import org.bitbucket.fermenter.service.ValueServiceResponse;
-import org.bitbucket.fermenter.service.VoidServiceResponse;
+import org.bitbucket.fermenter.stout.service.Service;
+import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
+import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
 #foreach( $import in $service.imports )
 import ${import};
 #end

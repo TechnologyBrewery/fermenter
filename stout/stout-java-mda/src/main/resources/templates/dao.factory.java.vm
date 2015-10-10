@@ -1,6 +1,6 @@
 package ${basePackage}.persist;
 
-import org.bitbucket.fermenter.persist.AbstractDaoFactory;
+import org.bitbucket.fermenter.stout.persist.AbstractDaoFactory;
 
 public class DaoFactory extends AbstractDaoFactory {
 

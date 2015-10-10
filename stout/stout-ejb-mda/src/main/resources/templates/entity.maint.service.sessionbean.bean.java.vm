@@ -21,9 +21,9 @@ import javax.ejb.TransactionAttributeType;
 
 import javax.inject.Inject;
 
-import org.bitbucket.fermenter.messages.InjectableMessages;
-import org.bitbucket.fermenter.messages.ThreadLocalMessages;
-import org.bitbucket.fermenter.service.ValueServiceResponse;
+import org.bitbucket.fermenter.stout.messages.InjectableMessages;
+import org.bitbucket.fermenter.stout.messages.ThreadLocalMessages;
+import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

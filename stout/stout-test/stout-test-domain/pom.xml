@@ -22,7 +22,7 @@
 				<artifactId>fermenter-mda</artifactId>
 				<version>${project.version}</version>
 				<configuration>
-					<basePackage>org.bitbucket.fermenter.test.domain</basePackage>
+					<basePackage>org.bitbucket.fermenter.stout.test.domain</basePackage>
 					<profile>example-domain</profile>
 				</configuration>
 				<dependencies>

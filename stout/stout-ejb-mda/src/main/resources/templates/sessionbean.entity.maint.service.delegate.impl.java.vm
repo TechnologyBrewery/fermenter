@@ -1,8 +1,8 @@
 package ${basePackage}.service.delegate;
 
-import org.bitbucket.fermenter.messages.Message;
-import org.bitbucket.fermenter.messages.MessageFactory;
-import org.bitbucket.fermenter.messages.Severity;
+import org.bitbucket.fermenter.stout.messages.Message;
+import org.bitbucket.fermenter.stout.messages.MessageFactory;
+import org.bitbucket.fermenter.stout.messages.Severity;
 import ${basePackage}.service.EntityMaintenanceService;
 #foreach($entity.name in $entities)
 import ${basePackage}.transfer.${entity.name};
@@ -20,8 +20,8 @@ import javax.naming.NamingException;
 import ${basePackage}.service.ejb.EntityMaintenanceServiceHome;
 import ${basePackage}.service.ejb.EntityMaintenanceServiceRemote;
 
-import org.bitbucket.fermenter.service.ServiceResponse;
-import org.bitbucket.fermenter.service.ejb.EjbUtil;
+import org.bitbucket.fermenter.stout.service.ServiceResponse;
+import org.bitbucket.fermenter.stout.service.ejb.EjbUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

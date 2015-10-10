@@ -6,12 +6,12 @@ import $import;
 
 import ${basePackage}.service.ServiceFactory;
 import ${basePackage}.service.${service.name}Service;
-import org.bitbucket.fermenter.service.delegate.pojo.AbstractServiceDelegate;
+import org.bitbucket.fermenter.stout.service.delegate.pojo.AbstractServiceDelegate;
 
-import org.bitbucket.fermenter.messages.Message;
-import org.bitbucket.fermenter.messages.Messages;
-import org.bitbucket.fermenter.messages.MessageFactory;
-import org.bitbucket.fermenter.messages.Severity;
+import org.bitbucket.fermenter.stout.messages.Message;
+import org.bitbucket.fermenter.stout.messages.Messages;
+import org.bitbucket.fermenter.stout.messages.MessageFactory;
+import org.bitbucket.fermenter.stout.messages.Severity;
 
 /**
  * Service delegate for the ${service.name} service.

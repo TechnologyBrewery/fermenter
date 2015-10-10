@@ -6,8 +6,8 @@ import java.util.HashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.bitbucket.fermenter.transfer.TransferObject;
-import org.bitbucket.fermenter.transfer.PrimaryKey;
+import org.bitbucket.fermenter.stout.transfer.TransferObject;
+import org.bitbucket.fermenter.stout.transfer.PrimaryKey;
 
 public class TransferObjectFactoryImpl implements TransferObjectFactoryInterface {
 	

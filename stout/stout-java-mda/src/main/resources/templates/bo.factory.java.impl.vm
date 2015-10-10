@@ -6,7 +6,7 @@ import java.util.HashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.bitbucket.fermenter.bizobj.BusinessObject;
+import org.bitbucket.fermenter.stout.bizobj.BusinessObject;
 import ${basePackage}.transfer.*;
 
 public class BusinessObjectFactoryImpl implements BusinessObjectFactoryInterface {

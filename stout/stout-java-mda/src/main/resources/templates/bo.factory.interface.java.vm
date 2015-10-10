@@ -1,6 +1,6 @@
 package ${basePackage}.bizobj;
 
-import org.bitbucket.fermenter.bizobj.AbstractBusinessObjectFactoryInterface;
+import org.bitbucket.fermenter.stout.bizobj.AbstractBusinessObjectFactoryInterface;
 
 public interface BusinessObjectFactoryInterface extends AbstractBusinessObjectFactoryInterface {
 	

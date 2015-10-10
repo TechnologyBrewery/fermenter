@@ -1,6 +1,6 @@
 package ${basePackage}.transfer;
 
-import org.bitbucket.fermenter.transfer.AbstractTransferObjectFactoryInterface;
+import org.bitbucket.fermenter.stout.transfer.AbstractTransferObjectFactoryInterface;
 
 public interface TransferObjectFactoryInterface extends AbstractTransferObjectFactoryInterface {
 	

@@ -16,17 +16,17 @@ import javax.rmi.PortableRemoteObject;
 import ${basePackage}.service.ejb.${service.name}ServiceHome;
 import ${basePackage}.service.ejb.${service.name}ServiceRemote;
 
-import org.bitbucket.fermenter.service.AsynchronousServiceDescriptor;
-import org.bitbucket.fermenter.service.AsynchronousServiceResponse;
-import org.bitbucket.fermenter.service.ServiceResponse;
-import org.bitbucket.fermenter.service.delegate.AnsynchronousServiceDelegateImpl;
-import org.bitbucket.fermenter.service.delegate.AsynchronousServiceDelegate;
-import org.bitbucket.fermenter.service.ejb.EjbUtil;
+import org.bitbucket.fermenter.stout.service.AsynchronousServiceDescriptor;
+import org.bitbucket.fermenter.stout.service.AsynchronousServiceResponse;
+import org.bitbucket.fermenter.stout.service.ServiceResponse;
+import org.bitbucket.fermenter.stout.service.delegate.AnsynchronousServiceDelegateImpl;
+import org.bitbucket.fermenter.stout.service.delegate.AsynchronousServiceDelegate;
+import org.bitbucket.fermenter.stout.service.ejb.EjbUtil;
 
-import org.bitbucket.fermenter.messages.Message;
-import org.bitbucket.fermenter.messages.Messages;
-import org.bitbucket.fermenter.messages.MessageFactory;
-import org.bitbucket.fermenter.messages.Severity;
+import org.bitbucket.fermenter.stout.messages.Message;
+import org.bitbucket.fermenter.stout.messages.Messages;
+import org.bitbucket.fermenter.stout.messages.MessageFactory;
+import org.bitbucket.fermenter.stout.messages.Severity;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

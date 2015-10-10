@@ -6,15 +6,15 @@ import org.codehaus.jackson.map.module.SimpleModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.bitbucket.fermenter.messages.DefaultMessage;
-import org.bitbucket.fermenter.messages.DefaultMessages;
-import org.bitbucket.fermenter.messages.InjectableMessages;
-import org.bitbucket.fermenter.messages.Message;
-import org.bitbucket.fermenter.messages.Messages;
-import org.bitbucket.fermenter.messages.json.MessageDeserializer;
-import org.bitbucket.fermenter.messages.json.MessageSerializer;
-import org.bitbucket.fermenter.messages.json.MessagesMixIn;
-import org.bitbucket.fermenter.messages.json.InjectableMessagesMixIn;
+import org.bitbucket.fermenter.stout.messages.DefaultMessage;
+import org.bitbucket.fermenter.stout.messages.DefaultMessages;
+import org.bitbucket.fermenter.stout.messages.InjectableMessages;
+import org.bitbucket.fermenter.stout.messages.Message;
+import org.bitbucket.fermenter.stout.messages.Messages;
+import org.bitbucket.fermenter.stout.messages.json.MessageDeserializer;
+import org.bitbucket.fermenter.stout.messages.json.MessageSerializer;
+import org.bitbucket.fermenter.stout.messages.json.MessagesMixIn;
+import org.bitbucket.fermenter.stout.messages.json.InjectableMessagesMixIn;
 
 import ${prefix}.transfer.*;
 

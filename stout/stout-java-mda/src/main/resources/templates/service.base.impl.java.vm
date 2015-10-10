@@ -1,6 +1,6 @@
 package ${basePackage}.service.impl;
 
-import org.bitbucket.fermenter.service.AbstractService;
+import org.bitbucket.fermenter.stout.service.AbstractService;
 
 #foreach( $import in $service.imports )
 import $import;

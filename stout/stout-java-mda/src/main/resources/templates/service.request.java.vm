@@ -1,6 +1,6 @@
 package ${basePackage}.service;
 
-import org.bitbucket.fermenter.service.ServiceRequest;
+import org.bitbucket.fermenter.stout.service.ServiceRequest;
 
 #foreach( $import in $operation.parameterImports )
 import ${import};

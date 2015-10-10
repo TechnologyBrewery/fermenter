@@ -1,6 +1,6 @@
 package ${basePackage}.service.impl;
 
-import org.bitbucket.fermenter.service.AbstractService;
+import org.bitbucket.fermenter.stout.service.AbstractService;
 
 import ${basePackage}.service.${serviceName}Service;
 import ${basePackage}.bizobj.*;

@@ -1,8 +1,8 @@
 package ${basePackage}.transfer;
 
-import org.bitbucket.fermenter.transfer.AbstractTransferObjectFactory;
-import org.bitbucket.fermenter.transfer.PrimaryKey;
-import org.bitbucket.fermenter.transfer.TransferObject;
+import org.bitbucket.fermenter.stout.transfer.AbstractTransferObjectFactory;
+import org.bitbucket.fermenter.stout.transfer.PrimaryKey;
+import org.bitbucket.fermenter.stout.transfer.TransferObject;
 
 public class TransferObjectFactory extends AbstractTransferObjectFactory {
 

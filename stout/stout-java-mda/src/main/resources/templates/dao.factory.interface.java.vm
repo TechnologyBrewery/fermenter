@@ -1,6 +1,6 @@
 package ${basePackage}.persist;
 
-import org.bitbucket.fermenter.persist.AbstractDaoFactoryInterface;
+import org.bitbucket.fermenter.stout.persist.AbstractDaoFactoryInterface;
 
 public interface DaoFactoryInterface extends AbstractDaoFactoryInterface {
 	

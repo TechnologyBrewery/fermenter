@@ -8,7 +8,7 @@ import ${basePackage}.service.ejb.${service.name}Service;
 import ${basePackage}.service.ejb.${entity.name}MaintenanceService;
 #end
 
-import org.bitbucket.fermenter.service.ejb.AbstractEjbServiceFactory;
+import org.bitbucket.fermenter.stout.service.ejb.AbstractEjbServiceFactory;
 
 /**
  * Implementation of the service factory for ejbs.

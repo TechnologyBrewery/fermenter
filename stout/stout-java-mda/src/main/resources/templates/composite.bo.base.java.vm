@@ -3,10 +3,10 @@ package ${basePackage}.bizobj;
 #foreach($import in ${composite.imports})
 import ${import};
 #end
-import org.bitbucket.fermenter.bizobj.ComplexType;
-import org.bitbucket.fermenter.messages.Messages;
-import org.bitbucket.fermenter.messages.MessagesSet;
-import org.bitbucket.fermenter.validate.Validations;
+import org.bitbucket.fermenter.stout.bizobj.ComplexType;
+import org.bitbucket.fermenter.stout.messages.Messages;
+import org.bitbucket.fermenter.stout.messages.MessagesSet;
+import org.bitbucket.fermenter.stout.validate.Validations;
 import org.apache.commons.lang3.StringUtils;
 #foreach ($validator in $composite.validators)
 import ${validator.import};

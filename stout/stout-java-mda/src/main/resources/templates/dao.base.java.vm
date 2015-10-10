@@ -9,7 +9,7 @@ import ${criteria.import};
 #end
 #end
 
-import org.bitbucket.fermenter.persist.Dao;
+import org.bitbucket.fermenter.stout.persist.Dao;
 
 import ${prefix}.bizobj.${entity.name}BO;
 import ${prefix}.transfer.${entity.name}PK;

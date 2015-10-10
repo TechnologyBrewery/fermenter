@@ -7,7 +7,7 @@ import ${basePackage}.transfer.${entity.name};
 import ${basePackage}.transfer.${entity.name}PK;
 import ${basePackage}.service.${entity.name}ServiceResponse;
 #end
-import org.bitbucket.fermenter.service.delegate.pojo.AbstractServiceDelegate;
+import org.bitbucket.fermenter.stout.service.delegate.pojo.AbstractServiceDelegate;
 
 /**
  * Service delegate for the EntityMaintenance service.

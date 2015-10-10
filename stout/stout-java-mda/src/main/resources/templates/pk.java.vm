@@ -1,6 +1,6 @@
 package ${prefix}.transfer;
 
-import org.bitbucket.fermenter.transfer.PrimaryKey;
+import org.bitbucket.fermenter.stout.transfer.PrimaryKey;
 #foreach ($pkImport in $pkImports )
 import ${pkImport};
 #end

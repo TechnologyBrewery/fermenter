@@ -10,7 +10,7 @@ import ${criteria.import};
 #end
 #end
 
-import org.bitbucket.fermenter.persist.hibernate.AbstractHibernateDaoImpl;
+import org.bitbucket.fermenter.stout.persist.hibernate.AbstractHibernateDaoImpl;
 
 import ${prefix}.bizobj.${entity.name}BO;
 import ${prefix}.transfer.TransferObjectFactory;

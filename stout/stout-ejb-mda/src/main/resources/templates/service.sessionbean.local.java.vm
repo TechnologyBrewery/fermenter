@@ -16,8 +16,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import org.bitbucket.fermenter.service.ValueServiceResponse;
-import org.bitbucket.fermenter.service.VoidServiceResponse;
+import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
+import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
 
 /**
  * Interface for the ${service.name} service.

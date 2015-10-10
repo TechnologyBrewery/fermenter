@@ -4,49 +4,49 @@
 <targets>
 
 	<target name="objective-c-entity-header"
-			generator="org.bitbucket.fermenter.mda.generator.entity.ObjectiveCEntityGenerator"
+			generator="org.bitbucket.fermenter.cider.mda.generator.entity.ObjectiveCEntityGenerator"
 			templateName="templates/entity.header.objective.c.vm"
 			outputFile="${entityName}.h"
 			overwritable="true"/>
 
 	<target name="objective-c-entity-source"
-			generator="org.bitbucket.fermenter.mda.generator.entity.ObjectiveCEntityGenerator"
+			generator="org.bitbucket.fermenter.cider.mda.generator.entity.ObjectiveCEntityGenerator"
 			templateName="templates/entity.source.objective.c.vm"
 			outputFile="${entityName}.m"
 			overwritable="true"/>
 
 	<target name="objective-c-enumeration-header"
-			generator="org.bitbucket.fermenter.mda.generator.enumeration.ObjectiveCEnumerationGenerator"
+			generator="org.bitbucket.fermenter.cider.mda.generator.enumeration.ObjectiveCEnumerationGenerator"
 			templateName="templates/enumeration.header.objective.c.vm"
 			outputFile="${enumerationName}.h"
 			overwritable="true"/>
 
 	<target name="objective-c-enumeration-source"
-			generator="org.bitbucket.fermenter.mda.generator.enumeration.ObjectiveCEnumerationGenerator"
+			generator="org.bitbucket.fermenter.cider.mda.generator.enumeration.ObjectiveCEnumerationGenerator"
 			templateName="templates/enumeration.source.objective.c.vm"
 			outputFile="${enumerationName}.m"
 			overwritable="true"/>
 
 	<target name="objective-c-service-header"
-			generator="org.bitbucket.fermenter.mda.generator.service.ObjectiveCServiceGenerator"
+			generator="org.bitbucket.fermenter.cider.mda.generator.service.ObjectiveCServiceGenerator"
 			templateName="templates/service.header.objective.c.vm"
 			outputFile="${serviceName}Service.h"
 			overwritable="true"/>
 
 	<target name="objective-c-service-source"
-			generator="org.bitbucket.fermenter.mda.generator.service.ObjectiveCServiceGenerator"
+			generator="org.bitbucket.fermenter.cider.mda.generator.service.ObjectiveCServiceGenerator"
 			templateName="templates/service.source.objective.c.vm"
 			outputFile="${serviceName}Service.m"
 			overwritable="true"/>
 
 	<target name="objective-c-service-response-header"
-			generator="org.bitbucket.fermenter.mda.generator.service.ObjectiveCServiceResponseGenerator"
+			generator="org.bitbucket.fermenter.cider.mda.generator.service.ObjectiveCServiceResponseGenerator"
 			templateName="templates/service.response.header.objective.c.vm"
 			outputFile="${operationName}Response.h"
 			overwritable="true"/>
 
 	<target name="objective-c-service-response-source"
-			generator="org.bitbucket.fermenter.mda.generator.service.ObjectiveCServiceResponseGenerator"
+			generator="org.bitbucket.fermenter.cider.mda.generator.service.ObjectiveCServiceResponseGenerator"
 			templateName="templates/service.response.source.objective.c.vm"
 			outputFile="${operationName}Response.m"
 			overwritable="true"/>

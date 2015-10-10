@@ -2,17 +2,18 @@
 	     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	
+	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
-		<groupId>org.bitbucket.fermenter</groupId>
-		<artifactId>root</artifactId>
+		<groupId>org.bitbucket.fermenter.cider</groupId>
+		<artifactId>cider</artifactId>
 		<version>1-SNAPSHOT</version>
 	</parent>
 
-	<name>Fermenter Objective-C MDA</name>
-	<description>This project contains Fermenter's base Objective-C implementations</description>
-
-	<modelVersion>4.0.0</modelVersion>
-	<artifactId>fermenter-objective-c-mda</artifactId>
+	<name>Fermenter::Cider::Objective-C MDA</name>
+	<description>This project contains Cider's base Objective-C implementations</description>
+	
+	<artifactId>cider-objective-c-mda</artifactId>
 	<packaging>jar</packaging>
 	
 	<dependencies>
@@ -21,7 +22,7 @@
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>${project.groupId}</groupId>
+			<groupId>org.bitbucket.fermenter</groupId>
 			<artifactId>fermenter-mda</artifactId>
 			<version>${project.version}</version>
 		</dependency>

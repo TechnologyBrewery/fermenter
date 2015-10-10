@@ -50,7 +50,7 @@
 	<modules>
 		<module>fermenter-mda</module>
 		<module>stout</module>
-		<module>fermenter-objective-c-mda</module>
+		<module>cider</module>
 	</modules>
 
 	<properties>

@@ -1,0 +1,64 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.bitbucket.fermenter.stout</groupId>
+		<artifactId>stout</artifactId>
+		<version>1-SNAPSHOT</version>
+	</parent>
+
+	<name>Fermenter::Stout::Test</name>
+	<description>Contains the Stout test instantiation</description>
+	
+	<artifactId>stout-test-parent</artifactId>
+	<packaging>pom</packaging>
+	
+	<modules>
+		<module>stout-test-profile</module>
+		<module>stout-test-domain</module>
+		<module>stout-test-domain-webapp</module>
+	</modules>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.bitbucket.fermenter</groupId>
+					<artifactId>fermenter-mda</artifactId>
+					<executions>
+						<execution>
+							<id>generate-sources</id>
+							<phase>generate-sources</phase>
+							<goals>
+								<goal>generate-sources</goal>
+							</goals>
+						</execution>
+						<execution>
+							<id>clean</id>
+							<phase>clean</phase>
+							<goals>
+								<goal>clean</goal>
+							</goals>
+						</execution>				
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<configuration>
+						<systemProperties>
+							<property>
+								<name>KRAUSENING_BASE</name>
+								<value>./src/test/resources/krausening</value>
+							</property>	
+						</systemProperties>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+</project>

@@ -49,15 +49,8 @@
 
 	<modules>
 		<module>fermenter-mda</module>
-		<module>fermenter-java</module>
-		<module>fermenter-java-mda</module>
-		<module>fermenter-hibernate</module>
-		<module>fermenter-hibernate-mda</module>
-		<module>fermenter-ejb</module>
-		<module>fermenter-ejb-mda</module>
+		<module>stout</module>
 		<module>fermenter-objective-c-mda</module>
-		<module>fermenter-test</module>
-		<module>build-tools</module>
 	</modules>
 
 	<properties>
@@ -137,7 +130,7 @@
 					<dependencies>
 						<dependency>
 							<groupId>${project.groupId}</groupId>
-							<artifactId>build-tools</artifactId>
+							<artifactId>stout-build-tools</artifactId>
 							<version>${project.version}</version>
 						</dependency>
 					</dependencies>

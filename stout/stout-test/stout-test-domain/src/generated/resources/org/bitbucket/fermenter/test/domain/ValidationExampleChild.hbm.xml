@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+      "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+          "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+			
+<hibernate-mapping package="org.bitbucket.fermenter.test.domain.bizobj">
+	<class name="ValidationExampleChildBO" table="VALIDATION_EXAMPLE_CHILD" lazy="true" 
+	 	 
+	 	optimistic-lock="version" select-before-update="true"
+	 	dynamic-update="true">
+
+		<id name="id" column="VALIDATION_EXAMPLE_CHILD_ID" type="string">
+			<generator class="uuid.hex"/>			
+		</id>
+		<version column="OPLOCK" name="oplock"/>	
+		<property 	name="requiredField"	
+					type="string"
+					not-null="true"
+					column="STRING_EXAMPLE">
+		</property>
+
+		<many-to-one name	= "ValidationExample"
+					 class	= "ValidationExampleBO"					
+					 column="VALIDATION_EXAMPLE_ID"					 
+					 not-null="true"/>
+
+
+	</class>
+
+	
+</hibernate-mapping>

@@ -1,10 +1,7 @@
 package org.bitbucket.fermenter.mda.metadata.element;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-
-
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -35,21 +32,22 @@ public class FieldMetadata extends MetadataElement implements Field {
 	
 	private static Log log = LogFactory.getLog(Field.class);
     
-    private static final List SIMPLE_TYPES_LIST;
+    private static final List<String> SIMPLE_TYPES_LIST;
     
     static {
-    	SIMPLE_TYPES_LIST = new ArrayList(Field.SIMPLE_TYPES.length);
+    	SIMPLE_TYPES_LIST = new ArrayList<String>(Field.SIMPLE_TYPES.length);
     	for (int i=0; i<Field.SIMPLE_TYPES.length; i++) {
     		SIMPLE_TYPES_LIST.add(Field.SIMPLE_TYPES[i]);
     	}
     }
 
 	/**
-	 * @see org.bitbucket.fermenter.mda.metadata.element.Field#getColumn()
+	 * {@inheritDoc}
 	 */
 	public String getColumn() {
 		return column;
 	}
+	
 	/**
 	 * @param column The column to set.
 	 */
@@ -57,6 +55,9 @@ public class FieldMetadata extends MetadataElement implements Field {
 		this.column = column;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public String getScale() {
 		return scale;
 	}
@@ -65,12 +66,15 @@ public class FieldMetadata extends MetadataElement implements Field {
 		this.scale = scale;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean hasScale() {
 		return !StringUtils.isBlank(scale);
 	}
 	
 	/**
-	 * @see org.bitbucket.fermenter.mda.metadata.element.Field#getGenerator()
+	 * {@inheritDoc}
 	 */
 	public String getGenerator() {
 		if( generator == null ) {
@@ -79,6 +83,7 @@ public class FieldMetadata extends MetadataElement implements Field {
 		
 		return generator;
 	}
+	
 	/**
 	 * @param generator The generator to set.
 	 */
@@ -87,7 +92,7 @@ public class FieldMetadata extends MetadataElement implements Field {
 	}
 	
 	/**
-	 * @see org.bitbucket.fermenter.mda.metadata.element.Field#getLabel()
+	 * {@inheritDoc}
 	 */
 	public String getLabel() {
 		if( label == null ) {
@@ -96,18 +101,21 @@ public class FieldMetadata extends MetadataElement implements Field {
 		
 		return label;
 	}
+	
 	/**
 	 * @param label The label to set.
 	 */
 	public void setLabel(String label) {
 		this.label = label;
 	}
+	
 	/**
-	 * @see org.bitbucket.fermenter.mda.metadata.element.Field#getName()
+	 * {@inheritDoc}
 	 */
 	public String getName() {
 		return name;
 	}
+	
 	/**
 	 * @param name The name to set.
 	 */
@@ -115,8 +123,8 @@ public class FieldMetadata extends MetadataElement implements Field {
 		this.name = name;
 	}
 	
-	/*
-	 * @see org.bitbucket.fermenter.mda.metadata.Service#getDocumentation()
+	/**
+	 * {@inheritDoc}
 	 */
 	public String getDocumentation() {
 		return documentation;
@@ -127,11 +135,12 @@ public class FieldMetadata extends MetadataElement implements Field {
 	}
 
 	/**
-	 * @see org.bitbucket.fermenter.mda.metadata.element.Field#getType()
+	 * {@inheritDoc}
 	 */
 	public String getType() {
 		return type;
 	}
+	
 	/**
 	 * @param type The type to set.
 	 */
@@ -141,7 +150,7 @@ public class FieldMetadata extends MetadataElement implements Field {
 	}
 	
 	/**
-	 * @see org.bitbucket.fermenter.mda.metadata.element.Field#isSimpleType()
+	 * {@inheritDoc}
 	 */
 	public Boolean isSimpleType() {
 		if (isSimpleType == null) {
@@ -151,17 +160,17 @@ public class FieldMetadata extends MetadataElement implements Field {
 	}
 	
 	/**
-	 * @see org.bitbucket.fermenter.mda.metadata.element.Field#isEnumerationType()
+	 * {@inheritDoc}
 	 */
 	public Boolean isEnumerationType() {
 		if (isEnumerationType == null) {
 			determineType();
 		}
 		return isEnumerationType;
-	}	
+	}
 	
 	/**
-	 * @see org.bitbucket.fermenter.mda.metadata.element.Field#getEnumeration()
+	 * {@inheritDoc}
 	 */
 	public Enumeration getEnumeration() {	
 		return (isEnumerationType().booleanValue()) ? enumeration : null;
@@ -186,7 +195,7 @@ public class FieldMetadata extends MetadataElement implements Field {
 	}
 	
 	/**
-	 * @see org.bitbucket.fermenter.mda.metadata.element.Field#getMaxLength()
+	 * {@inheritDoc}
 	 */
 	public String getMaxLength() {
 		if ((maxLength == null) && (isEnumerationType().booleanValue())) {			
@@ -212,14 +221,14 @@ public class FieldMetadata extends MetadataElement implements Field {
 	
 	
 	/**
-	 * @see org.bitbucket.fermenter.mda.metadata.element.Field#hasMaxLength()
+	 * {@inheritDoc}
 	 */
 	public boolean hasMaxLength() {
 		return (getMaxLength() != null);
 	}	
 	
 	/**
-	 * @see org.bitbucket.fermenter.mda.metadata.element.Field#getMinLength()
+	 * {@inheritDoc}
 	 */
 	public String getMinLength() {
 		return minLength;
@@ -233,14 +242,14 @@ public class FieldMetadata extends MetadataElement implements Field {
 	}
 	
 	/**
-	 * @see org.bitbucket.fermenter.mda.metadata.element.Field#hasMinLength()
+	 * {@inheritDoc}
 	 */
 	public boolean hasMinLength() {
 		return (getMinLength() != null);
 	}		
 	
 	/**
-	 * @see org.bitbucket.fermenter.mda.metadata.element.Field#getMaxValue()
+	 * {@inheritDoc}
 	 */
 	public String getMaxValue() {
 		return maxValue;
@@ -254,14 +263,14 @@ public class FieldMetadata extends MetadataElement implements Field {
 	}
 	
 	/**
-	 * @see org.bitbucket.fermenter.mda.metadata.element.Field#hasMaxValue()
+	 * {@inheritDoc}
 	 */
 	public boolean hasMaxValue() {
 		return (getMaxValue() != null);
 	}		
 	
 	/**
-	 * @see org.bitbucket.fermenter.mda.metadata.element.Field#getMinValue()
+	 * {@inheritDoc}
 	 */
 	public String getMinValue() {
 		return minValue;
@@ -275,14 +284,14 @@ public class FieldMetadata extends MetadataElement implements Field {
 	}	
 	
 	/**
-	 * @see org.bitbucket.fermenter.mda.metadata.element.Field#hasMinValue()
+	 * {@inheritDoc}
 	 */
 	public boolean hasMinValue() {
 		return (getMinValue() != null);
 	}		
 	
 	/**
-	 * @see org.bitbucket.fermenter.mda.metadata.element.Field#getRequired()
+	 * {@inheritDoc}
 	 */
 	public String getRequired() {
 		return required;
@@ -296,7 +305,7 @@ public class FieldMetadata extends MetadataElement implements Field {
 	}
 	
 	/**
-	 * @see org.bitbucket.fermenter.mda.metadata.element.Field#isRequired()
+	 * {@inheritDoc}
 	 */
 	public boolean isRequired() {
 		if( required == null ) {
@@ -308,7 +317,7 @@ public class FieldMetadata extends MetadataElement implements Field {
 	}
 	
 	/**
-	 * @see org.bitbucket.fermenter.mda.metadata.element.Field#getSourceName()
+	 * {@inheritDoc}
 	 */
 	public String getSourceName() {
 		if( sourceName == null ) {
@@ -325,6 +334,9 @@ public class FieldMetadata extends MetadataElement implements Field {
 		this.sourceName = sourceName;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	public String getFormat() {
 		return format;
 	}
@@ -333,13 +345,15 @@ public class FieldMetadata extends MetadataElement implements Field {
 		this.format = format;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean hasFormat() {
 		return !StringUtils.isBlank(getFormat());
 	}
 	
 	/**
-	 * Executed to ensure that valid combinations of metadata have been loaded.
-	 *
+	 * {@inheritDoc}
 	 */
 	public void validate() {
 		validateType();
@@ -384,19 +398,20 @@ public class FieldMetadata extends MetadataElement implements Field {
 			Enumeration e = MetadataRepository.getInstance().getEnumeration(type);
 
 			if (e == null) {
-				// TODO - This needs to throw an exception
+				// TODO - This needs to throw an exception or mark generation for failure
 				// However, throwing one now will cause a problem when loading entity metadata from
-				// a 'web' prject, as the current applicaiton name from metadata manager will
+				// a 'web' project, as the current application name from metadata manager will
 				// return the 'web' project's name, and not the name of the project declaring the
 				// field.  Need a way for fields to always know the project in which they were
-				// defined, in addtion to the current ability to have an external project
-				log.warn("Field '" + getName() + "' may have an invalid enumerated type: " + type);
+				// defined, in addition to the current ability to have an external project
+				log.warn("Field '" + getName() + "' must have a valid type!\n\tCurrent Type: " + type 
+						+ "\n\tValid Types: " + SIMPLE_TYPES_LIST);
 			}
 		}	
 	}
 	
 	/**
-	 * Checks value-to-type correlation:
+	 * Checks value-to-type correlation.
 	 */
 	private void validateValueType() {
 		String type = getType();
@@ -417,7 +432,7 @@ public class FieldMetadata extends MetadataElement implements Field {
 	}
 	
 	/**
-	 * Checks length-to-type correlation
+	 * Checks length-to-type correlation.
 	 */
 	private void validateLengthType() {
 		String type = getType();
@@ -429,6 +444,7 @@ public class FieldMetadata extends MetadataElement implements Field {
 			}
 		}
 	}
+	
 	public String getProject() {
 		return project;
 	}

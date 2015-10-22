@@ -13,6 +13,10 @@
 	
 	<artifactId>stout-test-profile</artifactId>
 	<packaging>jar</packaging>
+	
+	<properties>
+		<sonar.sources>src</sonar.sources>
+	</properties>
 
 	<dependencies>
 		<dependency>

@@ -217,8 +217,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
             }
             props.setProperty("metadata.locations", buff.toString());
 
-            @SuppressWarnings("unchecked")
-            Set<Artifact> artifacts = (Set<Artifact>) project.getArtifacts();
+            Set<Artifact> artifacts = project.getArtifacts();
             for (Artifact a : artifacts) {
                 if (metadataDependencies.contains(a.getArtifactId())) {
                     URL url = a.getFile().toURI().toURL();

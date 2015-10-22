@@ -2,13 +2,16 @@ package org.bitbucket.fermenter.mda.metadata.element;
 
 import org.apache.commons.lang.StringUtils;
 
+/**
+ * Implementation of the Enum metadata concept.
+ */
 public class EnumMetadata extends MetadataElement implements Enum {
 
 	private String name;
 	private String value;	
 	
 	/**
-	 * @return Returns the name.
+	 * {@inheritDoc}
 	 */
 	public String getName() {
 		return name;
@@ -22,7 +25,7 @@ public class EnumMetadata extends MetadataElement implements Enum {
 	}
 	
 	/**
-	 * @return Returns the value.
+	 * {@inheritDoc}
 	 */
 	public String getValue() {
 		return value;
@@ -35,13 +38,16 @@ public class EnumMetadata extends MetadataElement implements Enum {
 		this.value = value;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean hasValue() {
-		return (StringUtils.isBlank(value));
+		return (StringUtils.isNotBlank(value));
 	}
 	
 	/**
-	 * Ensures that the correct type combinations have been specified
-	 */	
+	 * {@inheritDoc}
+	 */
 	public void validate() {
 		
 	}

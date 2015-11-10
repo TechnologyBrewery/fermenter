@@ -8,6 +8,7 @@ import java.util.Map;
 import org.apache.commons.digester.Digester;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metadata.element.CompositeInstanceMetadata;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.EntityMetadata;
@@ -233,8 +234,13 @@ class EntityMetadataManager extends MetadataManager {
 				relation = (RelationMetadata)relationValueInterator.next();
 				relationType = relation.getType();
 				//TODO: check 1-M and 1-1 only:
+			
 				childEntity = (EntityMetadata)entityMap.get(relationType);
-				childEntity.addInverseRelation(entity);
+				if (childEntity !=null) {
+					childEntity.addInverseRelation(entity);
+				} else {
+					throw new GenerationException("Could not find a relation to entity: "+relationType);
+				}
 							
 			}
 			

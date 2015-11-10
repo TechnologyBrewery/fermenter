@@ -1,6 +1,6 @@
 package org.bitbucket.fermenter.mda.generator;
 
-public class GenerationException extends Exception {
+public class GenerationException extends RuntimeException {
 
 	public GenerationException() {
 		super();

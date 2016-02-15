@@ -73,7 +73,28 @@ public abstract class ${entity.name}BaseDaoImpl extends AbstractHibernateDaoImpl
     }
     	
 #foreach( $query in $queries )	
-
+#if( $query.isUpdateOrDelete() )
+	/**
+	 * Execute the ${query.name} update or delete.
+	 *
+#foreach( $criterion in $query.criteria )
+	 * @param ${criterion.name} The ${criterion.name}
+#end
+	 * @return List of {@link ${entity.name}}s
+	 */	 
+#set( $numCriteria = $query.criteria.size() ) 
+#set( $currentNum  = 0 )
+	public int ${query.lowercaseName}(#foreach( $criterion in $query.criteria )${criterion.javaType} ${criterion.name} #set($currentNum = $currentNum+1)#if($currentNum<$numCriteria), #end#end) {
+#set( $cn = 0 )
+		String[] paramNames = new String[] { #foreach( $criterion in $query.criteria )"${criterion.name}" #set($cn = $cn+1)#if($cn<$numCriteria), #end#end}; 
+#set( $cn = 0 )
+		Object[] paramValues = new Object[] { #foreach( $criterion in $query.criteria )${criterion.name} #set($cn = $cn+1)#if($cn<$numCriteria), #end#end }; 
+#set( $cn = 0 )
+		Type[] paramTypes = new Type[] { #foreach( $criterion in $query.criteria )#if($criterion.isSimpleType())${criterion.getJavaType()}Type.INSTANCE#set($cn = $cn+1)#if($cn<$numCriteria),#end#else Hibernate.custom(${criterion.type}UserType.class) #set($cn = $cn+1)#if($cn<$numCriteria), #end #end #end};
+		
+		return updateOrDelete( ${entity.name}BaseDao.${query.name}, paramNames, paramValues, paramTypes );
+	}
+#else
 	/**
 	 * Execute the ${query.name} query.
 	 *
@@ -94,6 +115,7 @@ public abstract class ${entity.name}BaseDaoImpl extends AbstractHibernateDaoImpl
 		
 		return query( ${entity.name}BaseDao.${query.name}, paramNames, paramValues, paramTypes );
 	}
+#end
 #end
 
 }

@@ -83,6 +83,11 @@
 			</criteria>
 			<statement><![CDATA[from SimpleDomainBO as domain where domain.name = :name]]></statement>
 		</query>
+		<query>
+			<name>DeleteAllSimpleDomains</name>
+			<documentation>Deletes all domains, completely unfiltered</documentation>
+			<statement><![CDATA[delete from SimpleDomainBO]]></statement>
+		</query>
 	</queries>
 
 </entity>

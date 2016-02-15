@@ -713,11 +713,38 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 		
 #foreach( $query in $queries )	
 
+#if( $query.isUpdateOrDelete() )
 	/**
 #if ($query.documentation)
 	 * ${query.documentation}.
 #else
-	 * Execute the ${query.name} query
+	 * Execute the ${query.name} update or delete.
+#end
+	 *
+#foreach( $criterion in $query.criteria )
+#if ($criterion.documentation)
+	 * @param ${criterion.name} ${criterion.documentation}.
+#else
+	 * @param ${criterion.name} The ${criterion.name}
+#end
+#end
+	 * @return List of ${entityName}s
+	 */	 
+#set( $numCriteria = $query.criteria.size() ) 
+#set( $currentNum  = 0 )
+	public static int ${query.lowercaseName}(#foreach( $criterion in $query.criteria )${criterion.javaType} ${criterion.name} #set($currentNum = $currentNum+1)#if($currentNum<$numCriteria), #end#end) {
+#set( $numCriteria = $query.criteria.size() ) 
+#set( $currentNum  = 0 )
+		return ${entity.name}BO.getDefaultDao().${query.lowercaseName}(#foreach( $criterion in $query.criteria )${criterion.name} #set($currentNum = $currentNum+1)#if($currentNum<$numCriteria), #end#end);
+	}
+
+#else
+
+	/**
+#if ($query.documentation)
+	 * ${query.documentation}.
+#else
+	 * Execute the ${query.name} query.
 #end
 	 *
 #foreach( $criterion in $query.criteria )
@@ -737,6 +764,7 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 		List<${entityName}BO> bos = ${entity.name}BO.getDefaultDao().${query.lowercaseName}(#foreach( $criterion in $query.criteria )${criterion.name} #set($currentNum = $currentNum+1)#if($currentNum<$numCriteria), #end#end);
 		return bos;
 	}
+#end
 #end 
 
 	public boolean equals(Object o) {

@@ -11,6 +11,11 @@
 			<transaction-attribute>Supports</transaction-attribute>
 		</operation>
 		<operation>
+			<name>DeleteAllSimpleDomains</name>
+			<return-many>SimpleDomain</return-many>
+			<transaction-attribute>Supports</transaction-attribute>
+		</operation>
+		<operation>
 			<name>ReturnSingleSimpleDomain</name>
 			<return>SimpleDomain</return>
 			<transaction-attribute>Supports</transaction-attribute>

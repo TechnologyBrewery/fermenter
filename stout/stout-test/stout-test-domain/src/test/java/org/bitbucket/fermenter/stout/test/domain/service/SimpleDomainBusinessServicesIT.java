@@ -135,6 +135,18 @@ public class SimpleDomainBusinessServicesIT {
 		assertTrue(domains.size() > 0);
 
 	}
+	
+	@Test
+	public void testDeleteAllSimpleDomains() {
+		ValueServiceResponse<Collection<SimpleDomain>> response = simpleDomainManagerService.deleteAllSimpleDomains();
+
+		assertNotNull(response);
+		assertNoErrorMessages(response);
+		Collection<SimpleDomain> domains = response.getValue();
+		assertNotNull(domains);
+		assertTrue(domains.size() == 0);
+
+	}	
 
 	@Test
 	public void testSelectAllSimpleDomainsByType() {

@@ -4,13 +4,13 @@ import java.util.List;
 
 /**
  * Defines a query. This concept is not implementation specific and could be a SQL, 
- * HQL, Cypher, or other tpye of statement
+ * HQL, Cypher, or other type of statement.
  */
 public interface Query {
 
 	/**
 	 * Returns the statement that represents this query.
-	 * @return
+	 * @return statement value
 	 */
 	public String getStatement();
 
@@ -21,7 +21,8 @@ public interface Query {
 	public List<Field> getCriteria();
 
 	/**
-	 * @return Returns the name.
+	 * The name of this query.
+	 * @return Returns the name
 	 */
 	public String getName();
 	

@@ -3,15 +3,18 @@ package org.bitbucket.fermenter.mda.metadata.element;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Simple implementation of the {@link Query} interface.
+ */
 public class QueryMetadata extends MetadataElement implements Query {
 
-    private String name;
-    private String documentation;
-    private List   criteria;
-    private String statement;
-    
+	private String name;
+	private String documentation;
+	private List<Field> criteria;
+	private String statement;
+
 	/**
-	 * @see org.bitbucket.fermenter.mda.metadata.element.Query#getStatement()
+	 * {@inheritDoc}
 	 */
 	public String getStatement() {
 		return statement;
@@ -22,53 +25,55 @@ public class QueryMetadata extends MetadataElement implements Query {
 	}
 
 	/**
-	 * @see org.bitbucket.fermenter.mda.metadata.element.Query#getCriteria()
+	 * {@inheritDoc}
 	 */
-    public List getCriteria() {
-        if( criteria == null ) {
-            criteria = new ArrayList();
-        }
-        return criteria;
-    }
-    
-    /**
-     * @param criteria The criteria to set.
-     */
-    public void setCriteria(List criteria) {
-        this.criteria = criteria;
-    }
-    
-    public void addCriterion(Field crit) {
-        getCriteria().add( crit );
-    }
-    
-    /**
-	 * @see org.bitbucket.fermenter.mda.metadata.element.Query#getName()
-	 */
-    public String getName() {
-        return name;
-    }
-    
-    /**
-     * @param name The name to set.
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-    
-    /**
-	 * @see org.bitbucket.fermenter.mda.metadata.element.Query#getDocumentation()
-	 */
-    public String getDocumentation() {
-    	return documentation;
-    }
-    
-    public void setDocumentation(String documentation) {
-    	this.documentation = documentation;
-    }
-    
+	public List<Field> getCriteria() {
+		if (criteria == null) {
+			criteria = new ArrayList<Field>();
+		}
+		return criteria;
+	}
+
 	/**
-	 * Executed to ensure that valid combinations of metadata have been loaded.
+	 * @param criteria
+	 *            The criteria to set.
+	 */
+	public void setCriteria(List<Field> criteria) {
+		this.criteria = criteria;
+	}
+
+	public void addCriterion(Field crit) {
+		getCriteria().add(crit);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name
+	 *            The name to set.
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getDocumentation() {
+		return documentation;
+	}
+
+	public void setDocumentation(String documentation) {
+		this.documentation = documentation;
+	}
+
+	/**
+	 * {@inheritDoc}
 	 */
 	public void validate() {
 	}

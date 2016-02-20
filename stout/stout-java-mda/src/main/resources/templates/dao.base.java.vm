@@ -19,7 +19,7 @@ import ${import};
 #end
 
 /**
- * Data access object for the ${entityName} application entity
+ * Data access object for the ${entityName} application entity.
  *
  * Generated Code - DO NOT MODIFY
  */
@@ -31,9 +31,21 @@ public interface ${entity.name}BaseDao extends Dao<${entity.name}BO, ${entity.na
 #end
 
 #foreach( $query in $queries )	
-
+#if( $query.isUpdateOrDelete() )
 	/**
-	 * Execute the ${query.name} query
+	 * Execute the ${query.name} update or delete.
+	 *
+#foreach( $criterion in $query.criteria )
+	 * @param ${criterion.name} The ${criterion.name}
+#end
+	 * @return the number of entities that were updated or deleted
+	 */	 
+#set( $numCriteria = $query.criteria.size() ) 
+#set( $currentNum  = 0 )
+	public int ${query.lowercaseName}(#foreach( $criterion in $query.criteria )${criterion.javaType} ${criterion.name} #set($currentNum = $currentNum+1)#if($currentNum<$numCriteria), #end#end);
+#else
+	/**
+	 * Execute the ${query.name} query.
 	 *
 #foreach( $criterion in $query.criteria )
 	 * @param ${criterion.name} The ${criterion.name}
@@ -43,5 +55,6 @@ public interface ${entity.name}BaseDao extends Dao<${entity.name}BO, ${entity.na
 #set( $numCriteria = $query.criteria.size() ) 
 #set( $currentNum  = 0 )
 	public List<${entity.name}BO> ${query.lowercaseName}(#foreach( $criterion in $query.criteria )${criterion.javaType} ${criterion.name} #set($currentNum = $currentNum+1)#if($currentNum<$numCriteria), #end#end);
+#end
 #end
 }

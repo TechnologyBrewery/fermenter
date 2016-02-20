@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 
@@ -15,6 +16,8 @@ import org.bitbucket.fermenter.stout.messages.MessageUtils;
 import org.bitbucket.fermenter.stout.test.domain.bizobj.BusinessObjectFactory;
 import org.bitbucket.fermenter.stout.test.domain.bizobj.SimpleDomainBO;
 import org.bitbucket.fermenter.stout.test.domain.enumeration.SimpleDomainEnumeration;
+import org.bitbucket.fermenter.stout.test.domain.transfer.SimpleDomain;
+import org.bitbucket.fermenter.stout.test.domain.transfer.TransferObjectFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,6 +33,9 @@ import org.slf4j.LoggerFactory;
 public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseService implements
 		SimpleDomainManagerService {
 
+	@EJB
+	private SimpleDomainMaintenanceService simpleDomainMaintenanceService;
+	
 	private static final Logger LOGGER = LoggerFactory.getLogger(SimpleDomainManagerServiceImpl.class);
 
 	/**
@@ -67,6 +73,29 @@ public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServi
 		}
 
 		return allInstances;
+	}
+
+	@Override
+	protected Collection<SimpleDomainBO> deleteAllSimpleDomainsImpl() {
+		// create an instance:
+		SimpleDomain simpleDomain = TransferObjectFactory.createSimpleDomain();
+		simpleDomain.setName("DELETE ME");
+		simpleDomainMaintenanceService.saveOrUpdate(simpleDomain);
+		
+		// determine how many are currently around (at least one should be):
+		List<SimpleDomainBO> allInstanceList = SimpleDomainBO.selectAllSimpleDomains();
+		int size = allInstanceList.size();
+		
+		// delete and verify that the number reported as deleted equals the number found in the prior step:
+		int numberDeleted = SimpleDomainBO.deleteAllSimpleDomains();
+		if (numberDeleted != size) {
+			if (size == 0) {
+				MessageManager.addMessage(MessageUtils.createErrorMessage("bad-number-of-deletions",
+						new String[] {}, new Object[] {}));
+			}	
+		}
+		
+		return SimpleDomainBO.selectAllSimpleDomains();
 	}
 
 	/**

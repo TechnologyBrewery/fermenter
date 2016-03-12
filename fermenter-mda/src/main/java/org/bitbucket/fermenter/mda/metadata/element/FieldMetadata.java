@@ -8,6 +8,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bitbucket.fermenter.mda.metadata.FormatMetadataManager;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 
 public class FieldMetadata extends MetadataElement implements Field {
 	
@@ -178,7 +179,9 @@ public class FieldMetadata extends MetadataElement implements Field {
 	
 	private void determineType() {
 		//determine which kind of type we are dealing with and store that info:
-		Object result = MetadataRepository.getInstance().getEnumeration(type);
+	    MetadataRepository metadataRepository = 
+                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		Object result = metadataRepository.getEnumeration(type);
 
 		if (result != null) {
 			isEnumerationType = Boolean.TRUE;
@@ -191,7 +194,9 @@ public class FieldMetadata extends MetadataElement implements Field {
 	}
 	
 	protected String getDefaultProject() {
-		return MetadataRepository.getInstance().getApplicationName();
+	    MetadataRepository metadataRepository = 
+                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		return metadataRepository.getApplicationName();
 	}
 	
 	/**
@@ -395,7 +400,9 @@ public class FieldMetadata extends MetadataElement implements Field {
 			}
 		} else {
 			//check enumeration type:
-			Enumeration e = MetadataRepository.getInstance().getEnumeration(type);
+		    MetadataRepository metadataRepository = 
+	                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+			Enumeration e = metadataRepository.getEnumeration(type);
 
 			if (e == null) {
 				// TODO - This needs to throw an exception or mark generation for failure

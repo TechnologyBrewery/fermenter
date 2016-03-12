@@ -3,6 +3,7 @@ package org.bitbucket.fermenter.mda;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -31,7 +32,8 @@ import org.bitbucket.fermenter.mda.element.Profile;
 import org.bitbucket.fermenter.mda.element.Target;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
 import org.bitbucket.fermenter.mda.generator.Generator;
-import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.AbstractMetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.StaticURLResolver;
 import org.bitbucket.fermenter.mda.xml.TrackErrorsErrorHandler;
 import org.bitbucket.fermenter.mda.xml.XmlUtils;
@@ -79,6 +81,9 @@ public class GenerateSourcesMojo extends AbstractMojo {
 
     @Parameter(required = true, readonly = true, defaultValue = "${project.basedir}/src/generated")
     private File generatedSourceRoot;
+    
+    @Parameter(required = true, readonly = true, defaultValue = "org.bitbucket.fermenter.mda.metadata.MetadataRepository")
+    private String metadataRespositoryImpl;
 
     private VelocityEngine engine;
 
@@ -227,8 +232,23 @@ public class GenerateSourcesMojo extends AbstractMojo {
             }
 
         }
-
-        MetadataRepository.initialize(props);
+        
+        long start = System.currentTimeMillis();
+        LOG.info("START: initializing metadata repository implementation: " + metadataRespositoryImpl + "...");
+        
+        Class<?> repoImplClass = Class.forName(metadataRespositoryImpl);
+        Class<?>[] constructorParamTypes = {Properties.class};
+        Constructor<?> constructor = repoImplClass.getConstructor(constructorParamTypes);
+        Object[] params = {props};
+        AbstractMetadataRepository repository = (AbstractMetadataRepository)constructor.newInstance(params);
+        
+        MetadataRepositoryManager.setRepository(repository);
+        repository.load(props);       
+        repository.validate(props);
+        
+        long stop = System.currentTimeMillis();
+        LOG.info("COMPLETE: metadata repository initialization in " + (stop - start) + "ms");
+        
     }
 
     public void addTarget(Target target) {

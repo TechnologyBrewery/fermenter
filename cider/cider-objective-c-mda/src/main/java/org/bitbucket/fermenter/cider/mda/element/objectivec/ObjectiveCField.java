@@ -6,6 +6,7 @@ import org.apache.commons.lang.StringUtils;
 import org.bitbucket.fermenter.cider.mda.objectivec.ObjectiveCStringEscapeUtils;
 import org.bitbucket.fermenter.mda.metadata.FormatMetadataManager;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Enumeration;
 import org.bitbucket.fermenter.mda.metadata.element.Field;
 import org.bitbucket.fermenter.mda.metadata.element.Format;
@@ -73,17 +74,18 @@ public class ObjectiveCField implements Field {
 	 */
 	@Override
 	public String getType() {
-		return ObjectiveCElementUtils.getObjectiveCType(MetadataRepository.getInstance().getApplicationName(), field.getType());
+		MetadataRepository repo = MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		return ObjectiveCElementUtils.getObjectiveCType(repo.getApplicationName(), field.getType());
 	}
 
 	public Boolean isEnumeration() {
-		MetadataRepository repo = MetadataRepository.getInstance();
+		MetadataRepository repo = MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
 		Enumeration enumeration = repo.getEnumeration(field.getType());
 		return (enumeration != null);
 	}
 
 	public String getEnumerationType() {
-		MetadataRepository repo = MetadataRepository.getInstance();
+		MetadataRepository repo = MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
 		ObjectiveCEnumeration enumeration = new ObjectiveCEnumeration(repo.getEnumeration(field.getType()));
 		return enumeration.getName();
 	}
@@ -218,12 +220,14 @@ public class ObjectiveCField implements Field {
 	}
 
 	public boolean isEntity() {
-		return MetadataRepository.getInstance().getEntity(getProject(), getType() ) != null;
+		MetadataRepository repo = MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		return repo.getEntity(getProject(), getType() ) != null;
 	}
 
 	public String getImport() {
 		if (importName == null) {
-			String appName = isExternal() ? getProject() : MetadataRepository.getInstance().getApplicationName();
+			MetadataRepository repo = MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+			String appName = isExternal() ? getProject() : repo.getApplicationName();
 			importName = ObjectiveCElementUtils.getObjectiveCImport(appName, field.getType());
 		}
 

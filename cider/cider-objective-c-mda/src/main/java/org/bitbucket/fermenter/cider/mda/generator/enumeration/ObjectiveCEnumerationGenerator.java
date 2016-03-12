@@ -8,6 +8,7 @@ import org.bitbucket.fermenter.cider.mda.generator.AbstractObjectiveCGenerator;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Enumeration;
 
 /**
@@ -18,7 +19,8 @@ public class ObjectiveCEnumerationGenerator extends AbstractObjectiveCGenerator 
 	@Override
 	public void generate(GenerationContext context) throws GenerationException {
 		@SuppressWarnings("unchecked")
-		Iterator<Enumeration> enumerations = MetadataRepository.getInstance().getAllEnumerations().values().iterator();
+		MetadataRepository repo = MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		Iterator<Enumeration> enumerations = repo.getAllEnumerations().values().iterator();
 
 		String fileName;
 		String basefileName = context.getOutputFile();

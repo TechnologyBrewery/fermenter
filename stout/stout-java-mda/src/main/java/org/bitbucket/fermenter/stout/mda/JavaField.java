@@ -6,6 +6,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.bitbucket.fermenter.mda.metadata.FormatMetadataManager;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Enumeration;
 import org.bitbucket.fermenter.mda.metadata.element.Field;
 import org.bitbucket.fermenter.mda.metadata.element.Format;
@@ -181,11 +182,15 @@ public class JavaField implements Field {
 	//java-specific generation methods:
 	
 	public String getJavaType() {
-		return JavaElementUtils.getJavaType(MetadataRepository.getInstance().getApplicationName(), getType());
+		MetadataRepository metadataRepository = 
+                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		return JavaElementUtils.getJavaType(metadataRepository.getApplicationName(), getType());
 	}
 	
 	public boolean isEntity() {
-		return MetadataRepository.getInstance().getEntity(getProject(), getType() ) != null;
+		MetadataRepository metadataRepository = 
+                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		return metadataRepository.getEntity(getProject(), getType() ) != null;
 	}
 	
 	public String getImport() {
@@ -193,7 +198,9 @@ public class JavaField implements Field {
 			if (isExternal()) {
 				importName = JavaElementUtils.getJavaImportType(getProject(), getType());
 			} else {
-				importName = JavaElementUtils.getJavaImportType(MetadataRepository.getInstance().getApplicationName(), getType());	
+				MetadataRepository metadataRepository = 
+		                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+				importName = JavaElementUtils.getJavaImportType(metadataRepository.getApplicationName(), getType());	
 			}
 		}
 		

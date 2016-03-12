@@ -6,6 +6,7 @@ import org.apache.velocity.VelocityContext;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Service;
 import org.bitbucket.fermenter.stout.mda.JavaService;
 import org.bitbucket.fermenter.stout.mda.generator.AbstractJavaGenerator;
@@ -21,7 +22,9 @@ public class ServiceJavaGenerator extends AbstractJavaGenerator {
 	 */
 	public void generate(GenerationContext context) throws GenerationException {
 		String applicationName = context.getArtifactId();
-		Map<String, Service> services = MetadataRepository.getInstance().getAllServices(applicationName);
+		MetadataRepository metadataRepository = 
+                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		Map<String, Service> services = metadataRepository.getAllServices(applicationName);
 				
 		JavaService javaService;
 		VelocityContext vc;

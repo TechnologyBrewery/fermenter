@@ -10,6 +10,7 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.bitbucket.fermenter.mda.PackageManager;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.Field;
 import org.bitbucket.fermenter.mda.metadata.element.Reference;
@@ -34,7 +35,8 @@ public class ObjectiveCReference implements Reference {
 
 	@Override
 	public String getType() {
-		return ObjectiveCElementUtils.getObjectiveCType(MetadataRepository.getInstance().getApplicationName(), reference.getType());
+		MetadataRepository repo = MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		return ObjectiveCElementUtils.getObjectiveCType(repo.getApplicationName(), reference.getType());
 	}
 
 	public String getTypeAttributes() {
@@ -111,7 +113,8 @@ public class ObjectiveCReference implements Reference {
 	}
 
 	public boolean isExternal() {
-		String currentProject = MetadataRepository.getInstance().getApplicationName();
+		MetadataRepository repo = MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		String currentProject = repo.getApplicationName();
 		return !StringUtils.isBlank(getProject()) && !getProject().equals(currentProject);
 	}
 
@@ -121,7 +124,8 @@ public class ObjectiveCReference implements Reference {
 
 	public String getImport() {
 		if (importName == null) {
-			String appName = isExternal() ? getProject() : MetadataRepository.getInstance().getApplicationName();
+			MetadataRepository repo = MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+			String appName = isExternal() ? getProject() : repo.getApplicationName();
 			importName = ObjectiveCElementUtils.getObjectiveCImport(appName, getType());
 		}
 

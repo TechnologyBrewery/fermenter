@@ -7,6 +7,7 @@ import org.apache.velocity.VelocityContext;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Operation;
 import org.bitbucket.fermenter.mda.metadata.element.Service;
 import org.bitbucket.fermenter.stout.mda.JavaOperation;
@@ -23,7 +24,9 @@ public abstract class AbstractServiceResponseJavaGenerator extends AbstractJavaG
 	 */
 	public void generate(GenerationContext context) throws GenerationException {
 		String applicationName = context.getArtifactId();
-		Iterator<Service> serviceIterator = MetadataRepository.getInstance().getAllServices(applicationName).values().iterator();
+		MetadataRepository metadataRepository = 
+                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		Iterator<Service> serviceIterator = metadataRepository.getAllServices(applicationName).values().iterator();
 		
 		Service service;
 		JavaService javaService;
@@ -94,7 +97,9 @@ public abstract class AbstractServiceResponseJavaGenerator extends AbstractJavaG
 	}
 
 	protected boolean isSingleEntityResponse(String currentApplication, JavaOperation operation) {
-		return (MetadataRepository.getInstance().getEntity(currentApplication, operation.getReturnType() ) != null);
+		MetadataRepository metadataRepository = 
+                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		return (metadataRepository.getEntity(currentApplication, operation.getReturnType() ) != null);
 	}
 
 }

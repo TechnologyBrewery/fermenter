@@ -9,6 +9,7 @@ import org.bitbucket.fermenter.cider.mda.generator.AbstractObjectiveCGenerator;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Service;
 
 /**
@@ -21,7 +22,8 @@ public class ObjectiveCServiceGenerator extends AbstractObjectiveCGenerator {
 	 */
 	@Override
 	public void generate(GenerationContext context) throws GenerationException {
-		Collection<Service> services = MetadataRepository.getInstance().getAllServices().values();
+		MetadataRepository repo = MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		Collection<Service> services = repo.getAllServices().values();
 
 		String originalFileName = context.getOutputFile();
 

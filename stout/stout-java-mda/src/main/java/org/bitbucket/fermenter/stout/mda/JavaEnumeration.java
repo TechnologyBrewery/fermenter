@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Enum;
 import org.bitbucket.fermenter.mda.metadata.element.Enumeration;
 
@@ -100,7 +101,9 @@ public class JavaEnumeration implements Enumeration {
 	
 	public String getImport() {
 		if (StringUtils.isBlank(getApplicationName())) {
-			return JavaElementUtils.getJavaImportType(MetadataRepository.getInstance().getApplicationName(), getName());
+			MetadataRepository metadataRepository = 
+	                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+			return JavaElementUtils.getJavaImportType(metadataRepository.getApplicationName(), getName());
 		} else {
 			return JavaElementUtils.getJavaImportType(getApplicationName(), getName());
 		}

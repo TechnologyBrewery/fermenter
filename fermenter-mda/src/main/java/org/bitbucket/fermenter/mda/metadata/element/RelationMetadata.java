@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 
 public class RelationMetadata extends MetadataElement implements Relation {
 
@@ -65,7 +66,9 @@ public class RelationMetadata extends MetadataElement implements Relation {
 	 */
 	public String getTable() {
 		if( table == null ) {
-			table = MetadataRepository.getInstance().getEntity( type ).getTable();
+		    MetadataRepository metadataRepository = 
+                    MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+			table = metadataRepository.getEntity( type ).getTable();
 		}
 		
 		return table;
@@ -75,14 +78,18 @@ public class RelationMetadata extends MetadataElement implements Relation {
 	 * @see org.bitbucket.fermenter.mda.metadata.Relation#getChildRelations()
 	 */
 	public Collection getChildRelations() {
-		return MetadataRepository.getInstance().getEntity( type ).getRelations().values();	
+	    MetadataRepository metadataRepository = 
+                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		return metadataRepository.getEntity( type ).getRelations().values();	
 	}
 	
 	/**
 	 * @see org.bitbucket.fermenter.mda.metadata.Relation#getKeys()
 	 */
 	public Collection getKeys() {
-		Entity ed = MetadataRepository.getInstance().getEntity(type);
+	    MetadataRepository metadataRepository = 
+                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		Entity ed = metadataRepository.getEntity(type);
 		Map idFieldMap = ed.getIdFields();
 		Collection keyValues = idFieldMap.values();	
 		return keyValues;

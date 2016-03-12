@@ -11,6 +11,7 @@ import java.util.Map;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 
 public class FormEntityMetadata extends MetadataElement implements FormEntity {
 
@@ -72,8 +73,10 @@ public class FormEntityMetadata extends MetadataElement implements FormEntity {
 	
 	private void validateComposite(CompositeInstanceMetadata composite) {
 		// Look up the composite and ensure that the project is set correctly
-		Entity entity = MetadataRepository.getInstance().getEntity(getProject(), getType());
-		Map compositeMap =  MetadataRepository.getInstance().getAllComposites();
+	    MetadataRepository metadataRepository = 
+                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		Entity entity = metadataRepository.getEntity(getProject(), getType());
+		Map compositeMap =  metadataRepository.getAllComposites();
 		Composite compositeDef = entity.getComposite(composite.getName());
 		CompositeInstanceMetadata instance = new CompositeInstanceMetadata();
 		copy(compositeDef, instance);

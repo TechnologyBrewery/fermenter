@@ -6,6 +6,7 @@ import java.util.Collections;
 
 import org.apache.commons.lang.StringUtils;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.Field;
 import org.bitbucket.fermenter.mda.metadata.element.Relation;
@@ -40,7 +41,8 @@ public class ObjectiveCRelation implements Relation {
 
 	@Override
 	public String getType() {
-		return ObjectiveCElementUtils.getObjectiveCType(MetadataRepository.getInstance().getApplicationName(), relation.getType());
+		MetadataRepository repo = MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		return ObjectiveCElementUtils.getObjectiveCType(repo.getApplicationName(), relation.getType());
 	}
 
 	public String getUncapitalizedType() {

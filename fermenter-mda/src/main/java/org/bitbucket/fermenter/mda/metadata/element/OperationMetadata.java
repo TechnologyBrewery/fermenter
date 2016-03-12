@@ -7,6 +7,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 
 /**
  * Representation of operation metadata.  This class contains <b>ONLY</b> data
@@ -164,7 +165,9 @@ public class OperationMetadata extends MetadataElement implements Operation {
 		// Currently return-many is not supported for primitive types
 		String returnManyType = getReturnManyType();		
 		if (!StringUtils.isBlank(returnManyType)) {
-			Entity e = MetadataRepository.getInstance().getEntity(returnManyType);
+		    MetadataRepository metadataRepository = 
+                    MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+			Entity e = metadataRepository.getEntity(returnManyType);
 			if (e == null) {
 				String msg = "'return-many' on operation '" + getName() + "' is not currently supported for the primitive (non-entity) type '" + returnManyType + "'";
 				log.error(msg);

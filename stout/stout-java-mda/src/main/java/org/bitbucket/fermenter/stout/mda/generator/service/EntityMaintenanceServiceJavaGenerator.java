@@ -8,6 +8,7 @@ import org.apache.velocity.VelocityContext;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.stout.mda.JavaElementUtils;
 import org.bitbucket.fermenter.stout.mda.JavaEntity;
@@ -19,7 +20,9 @@ public class EntityMaintenanceServiceJavaGenerator extends AbstractJavaGenerator
 
 	public void generate(GenerationContext context) throws GenerationException {
 		String applicationName = context.getArtifactId();
-		Iterator entityIterator = MetadataRepository.getInstance().getAllEntities(applicationName).values().iterator();
+		MetadataRepository metadataRepository = 
+                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		Iterator entityIterator = metadataRepository.getAllEntities(applicationName).values().iterator();
 		
 		JavaEntity javaEntity;
 		Collection javaEntities = new ArrayList();

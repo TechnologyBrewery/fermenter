@@ -3,6 +3,7 @@ package org.bitbucket.fermenter.cider.mda.element.objectivec;
 import org.apache.commons.lang.StringUtils;
 import org.bitbucket.fermenter.mda.PackageManager;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Parameter;
 
 public class ObjectiveCParameter implements Parameter {
@@ -31,7 +32,8 @@ public class ObjectiveCParameter implements Parameter {
 
 	@Override
 	public String getType() {
-		return ObjectiveCElementUtils.getObjectiveCType(MetadataRepository.getInstance().getApplicationName(), parameter.getType());
+		MetadataRepository repo = MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		return ObjectiveCElementUtils.getObjectiveCType(repo.getApplicationName(), parameter.getType());
 	}
 
 	public String getTypeReferenceAttribute() {
@@ -53,7 +55,8 @@ public class ObjectiveCParameter implements Parameter {
 
 	private String getProjectValue() {
 		String project = getProject();
-		project = (project != null) ? project : MetadataRepository.getInstance().getApplicationName();
+		MetadataRepository repo = MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		project = (project != null) ? project : repo.getApplicationName();
 		return project;
 	}
 
@@ -80,11 +83,13 @@ public class ObjectiveCParameter implements Parameter {
 	}
 
 	public boolean isEntity() {
-		return MetadataRepository.getInstance().getEntity(getProjectValue(), getType() ) != null;
+		MetadataRepository repo = MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		return repo.getEntity(getProjectValue(), getType() ) != null;
 	}
 
 	public boolean isEnumeration() {
-		return MetadataRepository.getInstance().getEnumeration(getProjectValue(), getType() ) != null;
+		MetadataRepository repo = MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		return repo.getEnumeration(getProjectValue(), getType() ) != null;
 	}
     /*
 	public Enumeration getEnumeration() {

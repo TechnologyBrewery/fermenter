@@ -4,6 +4,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.VelocityContext;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.stout.mda.JavaEntity;
 import org.bitbucket.fermenter.stout.mda.JavaOperation;
@@ -29,7 +30,9 @@ public class EntityServiceResponseJavaGenerator extends AbstractServiceResponseJ
 		 vc.put("uncapitalizedResponseName", StringUtils.uncapitalize(responseName));
 		 String entityType = javaOperation.getReturnType();
 		 vc.put("entityType", entityType);
-		 Entity entity = (Entity)MetadataRepository.getInstance().getAllEntities(applicationName).get(entityType);
+		 MetadataRepository metadataRepository = 
+	                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		 Entity entity = (Entity)metadataRepository.getAllEntities(applicationName).get(entityType);
 		 JavaEntity javaEntity = new JavaEntity(entity);
 		 vc.put("entity", javaEntity);
 		 vc.put(EntityMaintenanceServiceResponseJavaGenerator.SERVICE_RESPONSE_QUALIFIER, "");

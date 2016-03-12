@@ -11,6 +11,7 @@ import org.bitbucket.fermenter.mda.generator.AbstractResourcesGenerator;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Service;
 import org.bitbucket.fermenter.stout.mda.JavaElementUtils;
 import org.bitbucket.fermenter.stout.mda.JavaOperation;
@@ -30,8 +31,10 @@ public class DeploymentDescriptorGenerator extends AbstractResourcesGenerator {
 		Boolean asyncOperationsExist = Boolean.FALSE;
 		
 		//get the correct set of services to introspect:
-		Collection services = Collections.EMPTY_LIST; 		
-		Map allServices = MetadataRepository.getInstance().getAllServices(applicationName);
+		Collection services = Collections.EMPTY_LIST; 	
+		MetadataRepository metadataRepository = 
+                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		Map allServices = metadataRepository.getAllServices(applicationName);
 		services = (allServices != null) ? allServices.values() :  Collections.EMPTY_LIST;
 		
 		Collection javaServices = new HashSet();

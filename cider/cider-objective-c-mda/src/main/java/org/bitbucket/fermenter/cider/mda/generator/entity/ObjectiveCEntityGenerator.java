@@ -8,6 +8,7 @@ import org.bitbucket.fermenter.cider.mda.generator.AbstractObjectiveCGenerator;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 
 /**
@@ -24,7 +25,8 @@ public class ObjectiveCEntityGenerator extends AbstractObjectiveCGenerator {
 	@Override
 	public void generate(GenerationContext context) throws GenerationException {
 		@SuppressWarnings("unchecked")
-		Iterator<Entity> entities = MetadataRepository.getInstance().getAllEntities().values().iterator();
+		MetadataRepository repo = MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		Iterator<Entity> entities = repo.getAllEntities().values().iterator();
 
 		String fileName;
 		String basefileName = context.getOutputFile();

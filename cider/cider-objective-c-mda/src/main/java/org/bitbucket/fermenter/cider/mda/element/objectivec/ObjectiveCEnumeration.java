@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.bitbucket.fermenter.cider.mda.objectivec.ObjectiveCTypeManager;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Enum;
 import org.bitbucket.fermenter.mda.metadata.element.Enumeration;
 
@@ -107,7 +108,8 @@ public class ObjectiveCEnumeration implements Enumeration {
 
 	public String getImport() {
 		if (StringUtils.isBlank(getApplicationName())) {
-			return ObjectiveCElementUtils.getObjectiveCImportType(MetadataRepository.getInstance().getApplicationName(), getName());
+			MetadataRepository repo = MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+			return ObjectiveCElementUtils.getObjectiveCImportType(repo.getApplicationName(), getName());
 		} else {
 			return ObjectiveCElementUtils.getObjectiveCImportType(getApplicationName(), getName());
 		}

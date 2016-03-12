@@ -5,6 +5,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 
 
 
@@ -64,8 +65,10 @@ public class ParameterMetadata extends MetadataElement implements Parameter {
 	 *
 	 */
 	public void validate() {
-		if (project != null) {			
-			Map entityMap = MetadataRepository.getInstance().getAllEntities(project);
+		if (project != null) {
+		    MetadataRepository metadataRepository = 
+                    MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+			Map entityMap = metadataRepository.getAllEntities(project);
 			if (entityMap != null) {
 				Object crossProjectType = entityMap.get(type);
 				if (crossProjectType == null) {

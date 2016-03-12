@@ -7,6 +7,7 @@ import org.apache.velocity.VelocityContext;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Form;
 import org.bitbucket.fermenter.stout.mda.JavaForm;
 import org.bitbucket.fermenter.stout.mda.generator.AbstractJavaGenerator;
@@ -15,8 +16,9 @@ public class FormJavaGenerator extends AbstractJavaGenerator {
 
 	public void generate(GenerationContext context) throws GenerationException {
 		// Iterate over this application's forms only
-		//String applicationName = context.getArtifactId();
-		Iterator i = MetadataRepository.getInstance().getAllForms().values().iterator();
+		MetadataRepository metadataRepository = 
+                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		Iterator i = metadataRepository.getAllForms().values().iterator();
 		
 		Form metadata = null;
 		JavaForm form = null;

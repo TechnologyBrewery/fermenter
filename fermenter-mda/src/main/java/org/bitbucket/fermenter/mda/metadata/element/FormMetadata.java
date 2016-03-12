@@ -12,12 +12,10 @@ import java.util.TreeSet;
 
 import org.apache.commons.lang.StringUtils;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 
 /**
  * Java representation of system input form metadata
- *
- * @author sandrews
- *
  */
 public class FormMetadata extends MetadataElement implements Form {
 
@@ -92,8 +90,9 @@ public class FormMetadata extends MetadataElement implements Form {
 	 */
 	private void resolveTypes(FormEntityMetadata ed) {
 		Entity entityDescriptor = null;
-			
-			entityDescriptor = (Entity)MetadataRepository.getInstance().getAllEntities().get(ed.getType());
+		MetadataRepository metadataRepository = 
+                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		entityDescriptor = (Entity)metadataRepository.getAllEntities().get(ed.getType());
 			
 		if (entityDescriptor == null) {
 			throw new IllegalArgumentException("Could not find entity '" + ed.getType() + "' from project '"  + "'");

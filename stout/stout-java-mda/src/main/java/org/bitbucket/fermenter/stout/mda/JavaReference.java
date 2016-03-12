@@ -10,6 +10,7 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.bitbucket.fermenter.mda.PackageManager;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Field;
 import org.bitbucket.fermenter.mda.metadata.element.Reference;
 
@@ -85,7 +86,9 @@ public class JavaReference implements Reference {
 	}
 	
 	public boolean isExternal() {
-		String currentProject = MetadataRepository.getInstance().getApplicationName();
+		MetadataRepository metadataRepository = 
+                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		String currentProject = metadataRepository.getApplicationName();
 		return !StringUtils.isBlank(getProject()) && !getProject().equals(currentProject);
 	}
 	

@@ -13,6 +13,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bitbucket.fermenter.cider.mda.objectivec.ObjectiveCTypeManager;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.Operation;
 import org.bitbucket.fermenter.mda.metadata.element.Parameter;
@@ -98,7 +99,8 @@ public class ObjectiveCOperation implements Operation {
 	}
 
 	public Entity getResponseEntity() {
-		return hasValueResponse() ? ObjectiveCElementUtils.getObjectiveCEntity(MetadataRepository.getInstance().getApplicationName(), this.getResponseType()) : null;
+		MetadataRepository repo = MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		return hasValueResponse() ? ObjectiveCElementUtils.getObjectiveCEntity(repo.getApplicationName(), this.getResponseType()) : null;
 	}
 
 	/**
@@ -106,7 +108,8 @@ public class ObjectiveCOperation implements Operation {
 	 */
 	@Override
 	public String getReturnType() {
-		return ObjectiveCElementUtils.getObjectiveCType(MetadataRepository.getInstance().getApplicationName(), operation.getReturnType());
+		MetadataRepository repo = MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		return ObjectiveCElementUtils.getObjectiveCType(repo.getApplicationName(), operation.getReturnType());
 	}
 
 	public String getUncapitalizedReturnType() {
@@ -177,7 +180,8 @@ public class ObjectiveCOperation implements Operation {
 	 */
 	@Override
 	public String getReturnManyType() {
-		return ObjectiveCElementUtils.getObjectiveCType(MetadataRepository.getInstance().getApplicationName(), operation.getReturnManyType());
+		MetadataRepository repo = MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		return ObjectiveCElementUtils.getObjectiveCType(repo.getApplicationName(), operation.getReturnManyType());
 	}
 
 	public Boolean isResponseTypeVoid() {
@@ -279,7 +283,8 @@ public class ObjectiveCOperation implements Operation {
 
 		Entity entity = getResponseEntity();
 		if (entity != null) {
-			String appName = MetadataRepository.getInstance().getApplicationName();
+			MetadataRepository repo = MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+			String appName = repo.getApplicationName();
 
 			imports.add(ObjectiveCElementUtils.getObjectiveCImport(appName, getObjectiveCResponseType()));
 
@@ -316,7 +321,8 @@ public class ObjectiveCOperation implements Operation {
 	 * @return The Objective-C version of the wrapped return type
 	 */
 	public String getWrappedReturnType() {
-		return ObjectiveCElementUtils.getObjectiveCType(MetadataRepository.getInstance().getApplicationName(), getType());
+		MetadataRepository repo = MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		return ObjectiveCElementUtils.getObjectiveCType(repo.getApplicationName(), getType());
 	}
 
 	private String getType() {
@@ -324,11 +330,13 @@ public class ObjectiveCOperation implements Operation {
 	}
 
 	public boolean isReturnTypeEntity() {
-		return MetadataRepository.getInstance().getEntity( getReturnType() ) != null;
+		MetadataRepository repo = MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		return repo.getEntity( getReturnType() ) != null;
 	}
 
 	public boolean isReturnManyTypeEntity() {
-		return MetadataRepository.getInstance().getEntity( getReturnManyType() ) != null;
+		MetadataRepository repo = MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		return repo.getEntity( getReturnManyType() ) != null;
 	}
 
 
@@ -425,7 +433,7 @@ public class ObjectiveCOperation implements Operation {
 	public Boolean isResponseTypeCrossProject() {
 		boolean isResponseTypeCrossProject = false;
 		if (isReturnTypeEntity()) {
-			MetadataRepository repo = MetadataRepository.getInstance();
+			MetadataRepository repo = MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
 			String currentApplicationName = repo.getApplicationName();
 			String entityProject = ((Entity)repo.getAllEntities().get(getReturnType())).getApplicationName();
 			isResponseTypeCrossProject = (currentApplicationName.equals(entityProject));

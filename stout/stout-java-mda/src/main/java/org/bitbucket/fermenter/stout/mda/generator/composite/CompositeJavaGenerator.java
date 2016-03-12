@@ -6,6 +6,7 @@ import org.apache.velocity.VelocityContext;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Composite;
 import org.bitbucket.fermenter.stout.mda.JavaComposite;
 import org.bitbucket.fermenter.stout.mda.generator.AbstractJavaGenerator;
@@ -14,7 +15,9 @@ public class CompositeJavaGenerator extends AbstractJavaGenerator {
 
 	public void generate(GenerationContext context) throws GenerationException {
 		String currentApplication = context.getArtifactId();
-		Iterator i = MetadataRepository.getInstance().getAllComposites(currentApplication).values().iterator();
+		MetadataRepository metadataRepository = 
+                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		Iterator i = metadataRepository.getAllComposites(currentApplication).values().iterator();
 		
 		Composite metadata = null;
 		JavaComposite composite = null;

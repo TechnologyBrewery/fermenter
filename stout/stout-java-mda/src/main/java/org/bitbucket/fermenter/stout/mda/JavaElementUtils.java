@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bitbucket.fermenter.mda.PackageManager;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.Enumeration;
 import org.bitbucket.fermenter.mda.metadata.element.Field;
@@ -30,12 +31,13 @@ public class JavaElementUtils {
 			
 			if( javaImportType == null ) {
 				// Assume it's an application entity or enumeration at this point
-				MetadataRepository repo = MetadataRepository.getInstance();
-				Entity e = repo.getEntity(appName, type);
+				MetadataRepository metadataRepository = 
+		                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+				Entity e = metadataRepository.getEntity(appName, type);
 				if (e != null) {					
 					javaImportType = createFullyQualifiedName(type, ".transfer.", appName);
 				} else {
-					Enumeration enumeration = repo.getEnumeration(appName, type);
+					Enumeration enumeration = metadataRepository.getEnumeration(appName, type);
 					if (enumeration != null) {
 						javaImportType = createFullyQualifiedName(type, ".enumeration.", appName);
 					} else {
@@ -50,7 +52,9 @@ public class JavaElementUtils {
 	}
 
 	static String createFullyQualifiedName(String type, String nestedPackage) {
-		return createFullyQualifiedName(type, nestedPackage, MetadataRepository.getInstance().getApplicationName());
+		MetadataRepository metadataRepository = 
+                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		return createFullyQualifiedName(type, nestedPackage, metadataRepository.getApplicationName());
 	}
 	
 	static String createFullyQualifiedName(String type, String nestedPackage, String applicationName) {

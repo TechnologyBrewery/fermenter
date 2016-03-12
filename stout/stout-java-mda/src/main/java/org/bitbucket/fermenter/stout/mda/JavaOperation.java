@@ -12,6 +12,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.Operation;
 import org.bitbucket.fermenter.mda.metadata.element.Parameter;
@@ -254,7 +255,9 @@ public class JavaOperation implements Operation {
 	 * @return The Java version of the wrapped return type
 	 */
 	public String getWrappedReturnType() {
-		return JavaElementUtils.getJavaType(MetadataRepository.getInstance().getApplicationName(), getType());
+		MetadataRepository metadataRepository = 
+                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		return JavaElementUtils.getJavaType(metadataRepository.getApplicationName(), getType());
 	}
 
 	private String getType() {
@@ -262,11 +265,15 @@ public class JavaOperation implements Operation {
 	}
 
 	public boolean isReturnTypeEntity() {
-		return MetadataRepository.getInstance().getEntity( getReturnType() ) != null;
+		MetadataRepository metadataRepository = 
+                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		return metadataRepository.getEntity( getReturnType() ) != null;
 	}
 	
 	public boolean isReturnManyTypeEntity() {
-		return MetadataRepository.getInstance().getEntity( getReturnManyType() ) != null;
+		MetadataRepository metadataRepository = 
+                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		return metadataRepository.getEntity( getReturnManyType() ) != null;
 	}
 	
 	
@@ -372,9 +379,10 @@ public class JavaOperation implements Operation {
 	public Boolean isResponseTypeCrossProject() {
 		boolean isResponseTypeCrossProject = false;
 		if (isReturnTypeEntity()) {
-			MetadataRepository repo = MetadataRepository.getInstance();
-			String currentApplicationName = repo.getApplicationName();
-			String entityProject = ((Entity)repo.getAllEntities().get(getReturnType())).getApplicationName();
+			MetadataRepository metadataRepository = 
+	                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+			String currentApplicationName = metadataRepository.getApplicationName();
+			String entityProject = ((Entity)metadataRepository.getAllEntities().get(getReturnType())).getApplicationName();
 			isResponseTypeCrossProject = (currentApplicationName.equals(entityProject));
 		}
 		

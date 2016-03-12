@@ -11,6 +11,7 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.bitbucket.fermenter.mda.PackageManager;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Field;
 import org.bitbucket.fermenter.mda.metadata.element.FormEntity;
 import org.bitbucket.fermenter.mda.metadata.element.FormFieldMetadata;
@@ -57,7 +58,9 @@ public class JavaFormEntity implements FormEntity {
 		StringBuffer buff = new StringBuffer();
 		String base = null;
 		if (StringUtils.isBlank(getProject())) {
-			String prj = MetadataRepository.getInstance().getApplicationName();
+			MetadataRepository metadataRepository = 
+	                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+			String prj = metadataRepository.getApplicationName();
 			base = PackageManager.getBasePackage(prj);
 		} else {
 			base = PackageManager.getBasePackage(getProject());

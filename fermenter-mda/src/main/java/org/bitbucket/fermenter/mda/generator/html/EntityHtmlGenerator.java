@@ -7,6 +7,7 @@ import org.bitbucket.fermenter.mda.generator.AbstractResourcesGenerator;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 
 public class EntityHtmlGenerator extends AbstractResourcesGenerator {
@@ -17,7 +18,9 @@ public class EntityHtmlGenerator extends AbstractResourcesGenerator {
 
 	public void generate(GenerationContext context) throws GenerationException {
 		String applicationName = context.getArtifactId();
-		Iterator entities = MetadataRepository.getInstance().getAllEntities(applicationName).values().iterator();
+		MetadataRepository metadataRepository = 
+                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		Iterator entities = metadataRepository.getAllEntities(applicationName).values().iterator();
 		
 		String fileName;
 		String basefileName = context.getOutputFile();	

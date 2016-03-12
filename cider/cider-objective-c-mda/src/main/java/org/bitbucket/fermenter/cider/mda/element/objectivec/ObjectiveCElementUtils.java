@@ -6,6 +6,7 @@ import java.util.List;
 import org.bitbucket.fermenter.cider.mda.objectivec.ObjectiveCTypeManager;
 import org.bitbucket.fermenter.mda.PackageManager;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.Enumeration;
 import org.bitbucket.fermenter.mda.metadata.element.Field;
@@ -54,7 +55,7 @@ public class ObjectiveCElementUtils {
 
 			if (objectiveCImportType == null) {
 				// Assume it's an application entity or enumeration at this point
-				MetadataRepository repo = MetadataRepository.getInstance();
+				MetadataRepository repo = MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
 				Entity e = repo.getEntity(type);
 				if (e != null) {
 					objectiveCImportType = (new ObjectiveCEntity(e)).getName();
@@ -76,7 +77,8 @@ public class ObjectiveCElementUtils {
 	}
 
 	static String createFullyQualifiedName(String type, String nestedPackage) {
-		return createFullyQualifiedName(type, nestedPackage, MetadataRepository.getInstance().getApplicationName());
+		MetadataRepository repo = MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		return createFullyQualifiedName(type, nestedPackage, repo.getApplicationName());
 	}
 
 	static String createFullyQualifiedName(String type, String nestedPackage, String applicationName) {
@@ -87,12 +89,13 @@ public class ObjectiveCElementUtils {
 	}
 
 	public static Entity getObjectiveCEntity(String appName, String type) {
-		MetadataRepository repo = MetadataRepository.getInstance();
+		MetadataRepository repo = MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
 		return new ObjectiveCEntity(repo.getEntity(type));
 	}
 
 	public static Entity getObjectiveCEntity(String type) {
-		return getObjectiveCEntity(MetadataRepository.getInstance().getApplicationName(), type);
+		MetadataRepository repo = MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		return getObjectiveCEntity(repo.getApplicationName(), type);
 	}
 
 	public static String getObjectiveCType(String appName, String type) {
@@ -106,7 +109,7 @@ public class ObjectiveCElementUtils {
 
 			if (objectiveCType == null) {
 				// Assume it's an application entity or enumeration at this point
-				MetadataRepository repo = MetadataRepository.getInstance();
+				MetadataRepository repo = MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
 				Entity e = repo.getEntity(type);
 				if (e != null) {
 					objectiveCType = (new ObjectiveCEntity(e)).getName();

@@ -6,6 +6,7 @@ import org.apache.velocity.VelocityContext;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Enumeration;
 import org.bitbucket.fermenter.stout.mda.JavaEnumeration;
 import org.bitbucket.fermenter.stout.mda.generator.AbstractJavaGenerator;
@@ -14,7 +15,9 @@ public class EnumerationJavaGenerator extends AbstractJavaGenerator {
 
 	public void generate(GenerationContext context) throws GenerationException {
 		String applicationName = context.getArtifactId();
-		Iterator enumerationIterator = MetadataRepository.getInstance().getAllEnumerations(applicationName).values().iterator();
+		MetadataRepository metadataRepository = 
+                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		Iterator enumerationIterator = metadataRepository.getAllEnumerations(applicationName).values().iterator();
 		
 		Enumeration enumeration;
 		JavaEnumeration javaEnumeration;

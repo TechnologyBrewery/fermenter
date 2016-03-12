@@ -9,6 +9,7 @@ import org.bitbucket.fermenter.mda.generator.AbstractGenerator;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.Service;
 import org.bitbucket.fermenter.stout.mda.JavaElementUtils;
@@ -23,13 +24,15 @@ public abstract class AbstractFactoryGenerator extends AbstractGenerator {
 		vc.put("prefix", context.getBasePackage());
 		vc.put("basePackage", context.getBasePackage());
 		
-		Collection<Entity> entities = MetadataRepository.getInstance().getAllEntities(currentApplication).values();
+		MetadataRepository metadataRepository = 
+                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		Collection<Entity> entities = metadataRepository.getAllEntities(currentApplication).values();
 		vc.put("entities", entities);
 
-		Collection<String> serviceNames = MetadataRepository.getInstance().getAllServices(currentApplication).keySet();
+		Collection<String> serviceNames = metadataRepository.getAllServices(currentApplication).keySet();
 		vc.put("serviceNames", serviceNames);
 		
-		Collection<Service> services = MetadataRepository.getInstance().getAllServices(currentApplication).values();
+		Collection<Service> services = metadataRepository.getAllServices(currentApplication).values();
 		Collection<Service> javaServices = new HashSet<Service>();
 		for (Iterator<Service> i = services.iterator(); i.hasNext();) {
 			Service service = (Service) i.next();

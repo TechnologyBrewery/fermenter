@@ -4,6 +4,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.VelocityContext;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.stout.mda.JavaEntity;
 import org.bitbucket.fermenter.stout.mda.JavaOperation;
@@ -16,7 +17,9 @@ public class CollectionServiceResponseJavaGenerator extends
 		boolean shouldGenerate = false;
 		if (operation.isReturnTypeCollection()) {
 			String returnType = operation.getReturnManyType();
-			shouldGenerate = MetadataRepository.getInstance().getAllEntities(currentApplication).containsKey(returnType);
+			MetadataRepository metadataRepository = 
+	                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+			shouldGenerate = metadataRepository.getAllEntities(currentApplication).containsKey(returnType);
 		}
 		return shouldGenerate;
 	}
@@ -34,7 +37,9 @@ public class CollectionServiceResponseJavaGenerator extends
 		 vc.put("uncapitalizedResponseName", StringUtils.uncapitalize(responseName));
 		 String entityType = javaOperation.getReturnManyType();
 		 vc.put("entityType", entityType);
-		 Entity entity = (Entity)MetadataRepository.getInstance().getAllEntities().get(entityType);
+		 MetadataRepository metadataRepository = 
+	                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		 Entity entity = (Entity)metadataRepository.getAllEntities().get(entityType);
 		 JavaEntity javaEntity = new JavaEntity(entity);
 		 vc.put("entity", javaEntity);
 		 

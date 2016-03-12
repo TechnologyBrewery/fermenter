@@ -3,6 +3,7 @@ package org.bitbucket.fermenter.stout.mda;
 import org.apache.commons.lang.StringUtils;
 import org.bitbucket.fermenter.mda.PackageManager;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Enumeration;
 import org.bitbucket.fermenter.mda.metadata.element.Parameter;
 
@@ -45,7 +46,9 @@ public class JavaParameter implements Parameter {
 
 	private String getProjectValue() {
 		String project = getProject();
-		project = (project != null) ? project : MetadataRepository.getInstance().getApplicationName();
+		MetadataRepository metadataRepository = 
+                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		project = (project != null) ? project : metadataRepository.getApplicationName();
 		return project;
 	}
 
@@ -72,15 +75,21 @@ public class JavaParameter implements Parameter {
 	}
 
 	public boolean isEntity() {
-		return MetadataRepository.getInstance().getEntity(getProjectValue(), getType() ) != null;
+		MetadataRepository metadataRepository = 
+                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		return metadataRepository.getEntity(getProjectValue(), getType() ) != null;
 	}
 
 	public boolean isEnumeration() {
-		return MetadataRepository.getInstance().getEnumeration(getProjectValue(), getType() ) != null;
+		MetadataRepository metadataRepository = 
+                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		return metadataRepository.getEnumeration(getProjectValue(), getType() ) != null;
 	}
 
 	public Enumeration getEnumeration() {
-		Enumeration e = MetadataRepository.getInstance().getEnumeration(getProjectValue(), getType());
+		MetadataRepository metadataRepository = 
+                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		Enumeration e = metadataRepository.getEnumeration(getProjectValue(), getType());
 		return (e != null) ? new JavaEnumeration(e) : null;
 	}
 

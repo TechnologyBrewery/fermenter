@@ -8,49 +8,44 @@ import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metadata.element.Composite;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.Enumeration;
 import org.bitbucket.fermenter.mda.metadata.element.Form;
 import org.bitbucket.fermenter.mda.metadata.element.Service;
 
-public class MetadataRepository {
+public class MetadataRepository extends AbstractMetadataRepository {
 	
-	private static Log log = LogFactory.getLog(MetadataRepository.class);
-	private static MetadataRepository REPOSITORY;
+	private static Log LOG = LogFactory.getLog(MetadataRepository.class);
 	
-	public static void initialize(Properties props) {
-		REPOSITORY = new MetadataRepository(props);
-		CompositeMetadataManager.getInstance().validate();
-		EntityMetadataManager.getInstance().validate();
-		ServiceMetadataManager.getInstance().validate();
-		EnumerationMetadataManager.getInstance().validate();		
-		FormMetadataManager.getInstance().validate();
+	public MetadataRepository(Properties properties) {
+		super(properties);
+		
 	}
 	
-	public static MetadataRepository getInstance() {
-		if (REPOSITORY == null) {
-			throw new IllegalStateException("The metadata repository has not been initialized");
-		}
-		
-		return REPOSITORY;
-	}
-	
-	private String applicationName;
-
-	private MetadataRepository(Properties props) {
-		super();
-		
+	/**
+	 * {@inheritDoc}
+	 */
+	public void load(Properties properties) {
 		try {
-			applicationName = props.getProperty("application.name");			
-			loadAllMetadata(props);	
+            loadAllMetadata(properties);
+            
 		} catch (Exception ex) {
-			throw new RuntimeException("Unable to load metadata for application " + applicationName, ex);
-		}
+            throw new GenerationException("Unable to load metadata for application " + applicationName, ex);
+        }
+
 	}
 	
-	public String getApplicationName() {
-		return applicationName;
+	/**
+	 * {@inheritDoc}
+	 */
+	public void validate(Properties properties) {		
+		CompositeMetadataManager.getInstance().validate();
+        EntityMetadataManager.getInstance().validate();
+        ServiceMetadataManager.getInstance().validate();
+        EnumerationMetadataManager.getInstance().validate();        
+        FormMetadataManager.getInstance().validate();
 	}
 	
 	public Entity getEntity(String entityName) {
@@ -82,31 +77,35 @@ public class MetadataRepository {
 	}
 
 	private void loadAllMetadata(Properties props) throws Exception {
-		String metadataLoaderClass = props.getProperty("metadata.loader");
-		Class clazz = Class.forName(metadataLoaderClass);
-		MetadataURLResolver loader = (MetadataURLResolver) clazz.newInstance();
-		List urls = loader.getMetadataURLs(props);
-		for (Iterator i = urls.iterator(); i.hasNext();) {
-			long start = System.currentTimeMillis();
-			MetadataURL url = (MetadataURL) i.next();
-			CompositeMetadataManager.getInstance().loadMetadata(url.getApplicationName(), url.getUrl());
-			EntityMetadataManager.getInstance().loadMetadata(url.getApplicationName(), url.getUrl());
-			ServiceMetadataManager.getInstance().loadMetadata(url.getApplicationName(), url.getUrl());
-			EnumerationMetadataManager.getInstance().loadMetadata(url.getApplicationName(), url.getUrl());			
-			FormMetadataManager.getInstance().loadMetadata(url.getApplicationName(), url.getUrl());
-
-			if (applicationName.equals(url.getApplicationName())) {
-                // Messages metadata only needs to be loaded for the current project
-				MessagesMetadataManager.getInstance().loadMetadata(url.getUrl());	
-				
-				// Load format information for the current project only
-				FormatMetadataManager.getInstance().loadMetadata(url.getUrl());
-			}
-			if (log.isInfoEnabled()) {
-				long stop = System.currentTimeMillis();
-				log.info("Metadata for application '" + applicationName + "' has been loaded - " + (stop - start) + "ms");
-			}
-			
+		if (props != null) {
+    		String metadataLoaderClass = props.getProperty("metadata.loader");
+    		Class clazz = Class.forName(metadataLoaderClass);
+    		MetadataURLResolver loader = (MetadataURLResolver) clazz.newInstance();
+    		List urls = loader.getMetadataURLs(props);
+    		for (Iterator i = urls.iterator(); i.hasNext();) {
+    			long start = System.currentTimeMillis();
+    			MetadataURL url = (MetadataURL) i.next();
+    			CompositeMetadataManager.getInstance().loadMetadata(url.getApplicationName(), url.getUrl());
+    			EntityMetadataManager.getInstance().loadMetadata(url.getApplicationName(), url.getUrl());
+    			ServiceMetadataManager.getInstance().loadMetadata(url.getApplicationName(), url.getUrl());
+    			EnumerationMetadataManager.getInstance().loadMetadata(url.getApplicationName(), url.getUrl());			
+    			FormMetadataManager.getInstance().loadMetadata(url.getApplicationName(), url.getUrl());
+    
+    			if (applicationName.equals(url.getApplicationName())) {
+                    // Messages metadata only needs to be loaded for the current project
+    				MessagesMetadataManager.getInstance().loadMetadata(url.getUrl());	
+    				
+    				// Load format information for the current project only
+    				FormatMetadataManager.getInstance().loadMetadata(url.getUrl());
+    			}
+    			if (LOG.isInfoEnabled()) {
+    				long stop = System.currentTimeMillis();
+    				LOG.info("Metadata for application '" + applicationName + "' has been loaded - " + (stop - start) + "ms");
+    			}
+    			
+    		}
+		} else {
+			LOG.warn("No properties provided, unable to load any metadata!");
 		}
 	}
 

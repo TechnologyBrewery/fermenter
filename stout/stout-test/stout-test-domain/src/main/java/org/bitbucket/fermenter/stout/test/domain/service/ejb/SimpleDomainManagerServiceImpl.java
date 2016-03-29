@@ -133,6 +133,11 @@ public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServi
 
 	}
 
+	@Override
+	protected void doSomethingWithPrimitiveInputsImpl(String inputStr, Integer inputInt) {
+		LOGGER.info("did something with " + inputStr + " and " + inputInt);
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */

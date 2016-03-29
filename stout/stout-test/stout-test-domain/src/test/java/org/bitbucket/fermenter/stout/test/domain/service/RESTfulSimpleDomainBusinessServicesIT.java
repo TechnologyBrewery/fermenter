@@ -10,10 +10,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
@@ -51,13 +47,11 @@ public class RESTfulSimpleDomainBusinessServicesIT {
 
 	}
 
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Test
 	public void testEjbLookup(@ArquillianResteasyResource SimpleDomainManagerService managerService) {
 		assertNotNull(managerService);
 	}
 
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Test
 	public void testSomeBusinessOperation(@ArquillianResteasyResource SimpleDomainManagerService managerService) {
 		SimpleDomain domain = TestUtils.createRandomSimpleDomain();
@@ -77,8 +71,6 @@ public class RESTfulSimpleDomainBusinessServicesIT {
 	}
 
 	@Test
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
 	public void testCountPassedCollection(@ArquillianResteasyResource SimpleDomainManagerService managerService) {
 		int numberOfItems = RandomUtils.nextInt(0, 10);
 		List<SimpleDomain> list = new ArrayList<SimpleDomain>();
@@ -98,7 +90,6 @@ public class RESTfulSimpleDomainBusinessServicesIT {
 
 	}
 
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Test
 	public void testDoSomething(@ArquillianResteasyResource SimpleDomainManagerService managerService) {
 		VoidServiceResponse response = managerService.doSomething();
@@ -106,11 +97,15 @@ public class RESTfulSimpleDomainBusinessServicesIT {
 		assertNotNull(response);
 		assertNoErrorMessages(response);
 
+		response = managerService.doSomethingWithPrimitiveInputs(RandomStringUtils.randomAlphabetic(5),
+				RandomUtils.nextInt(0, 10));
+		assertNotNull(response);
+		assertNoErrorMessages(response);
 	}
 
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Test
-	public void testDoSomethingAndReturnACharacter(@ArquillianResteasyResource SimpleDomainManagerService managerService) {
+	public void testDoSomethingAndReturnACharacter(
+			@ArquillianResteasyResource SimpleDomainManagerService managerService) {
 		ValueServiceResponse<String> response = managerService.doSomethingAndReturnACharacter();
 
 		assertNotNull(response);
@@ -119,7 +114,6 @@ public class RESTfulSimpleDomainBusinessServicesIT {
 
 	}
 
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Test
 	public void testEchoPlusWazzup(@ArquillianResteasyResource SimpleDomainManagerService managerService) {
 		final String root = RandomStringUtils.randomAlphanumeric(5);
@@ -134,7 +128,6 @@ public class RESTfulSimpleDomainBusinessServicesIT {
 
 	}
 
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Test
 	public void testGetSimpleDomainCount(@ArquillianResteasyResource SimpleDomainManagerService managerService) {
 		ValueServiceResponse<Long> response = managerService.getSimpleDomainCount();
@@ -147,7 +140,6 @@ public class RESTfulSimpleDomainBusinessServicesIT {
 
 	}
 
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Test
 	public void testSelectAllSimpleDomains(@ArquillianResteasyResource SimpleDomainManagerService managerService) {
 		ValueServiceResponse<Collection<SimpleDomain>> response = managerService.selectAllSimpleDomains();
@@ -160,9 +152,9 @@ public class RESTfulSimpleDomainBusinessServicesIT {
 
 	}
 
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Test
-	public void testSelectAllSimpleDomainsByType(@ArquillianResteasyResource SimpleDomainManagerService managerService) {
+	public void testSelectAllSimpleDomainsByType(
+			@ArquillianResteasyResource SimpleDomainManagerService managerService) {
 		final String type = RandomStringUtils.randomAlphanumeric(5);
 		ValueServiceResponse<Collection<SimpleDomain>> response = managerService.selectAllSimpleDomainsByType(type);
 
@@ -177,7 +169,6 @@ public class RESTfulSimpleDomainBusinessServicesIT {
 
 	}
 
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Test
 	public void testReturnNullEntityInBusinessServiceOperation(
 			@ArquillianResteasyResource SimpleDomainManagerService managerService) throws Exception {

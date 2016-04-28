@@ -272,4 +272,7 @@ public class JavaField implements Field {
 		return sb.toString();
 	}
 
+	public boolean isGeospatialType() {
+		return isSimpleType() && getType().startsWith("geospatial_");
+	}
 }

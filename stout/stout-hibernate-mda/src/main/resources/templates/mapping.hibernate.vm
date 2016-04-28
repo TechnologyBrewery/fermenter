@@ -51,6 +51,8 @@
 					type="date"
 #elseif (${field.javaType} == 'Timestamp')
 					type="timestamp"
+#elseif ($field.isGeospatialType())
+					type="org.hibernate.spatial.GeometryType"
 #else
 					type="${field.type}"
 #end

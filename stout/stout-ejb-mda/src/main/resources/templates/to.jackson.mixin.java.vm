@@ -43,7 +43,11 @@ public abstract class ${entityName}MixIn {
 	private Integer oplock;
 #end
 #foreach ( $field in $fields )
+#if ($field.isGeospatialType())
+	@JsonIgnore
+#else
 	@JsonProperty
+#end	
 	private ${field.javaType} ${field.name};
 #end
 #foreach ($relation in $relations)

@@ -38,4 +38,8 @@
 		<name>blob</name>
 		<java>java.sql.Blob</java>
 	</type>
+	<type>
+		<name>geospatial_point</name>
+		<java>com.vividsolutions.jts.geom.Point</java>
+	</type>
 </types>

@@ -394,7 +394,8 @@ public class FieldMetadata extends MetadataElement implements Field {
 		|| (TYPE_BIG_DECIMAL.equals(type))
 		|| (TYPE_CHARACTER.equals(type))
 		|| (TYPE_BLOB.equals(type))
-		|| (TYPE_SHORT.equals(type))) {
+		|| (TYPE_SHORT.equals(type))
+		|| (TYPE_GEOSPATIAL_POINT.equals(type))) {
 			if (isExternal()) {
 				throw new IllegalStateException("Simple field '" + getName() + "' cannot specify an external project");
 			}
@@ -463,5 +464,4 @@ public class FieldMetadata extends MetadataElement implements Field {
 	public boolean isExternal() {
 		return !StringUtils.isBlank(getProject());
 	}
-
 }

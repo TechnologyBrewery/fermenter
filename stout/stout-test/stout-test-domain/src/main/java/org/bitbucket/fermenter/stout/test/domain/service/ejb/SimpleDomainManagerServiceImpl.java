@@ -37,6 +37,8 @@ public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServi
 	private SimpleDomainMaintenanceService simpleDomainMaintenanceService;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(SimpleDomainManagerServiceImpl.class);
+	
+	private static boolean hasInitiated;
 
 	/**
 	 * {@inheritDoc}
@@ -74,8 +76,29 @@ public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServi
 
 		return allInstances;
 	}
+	
+    /**
+     * {@inheritDoc}
+     */
+    protected Collection<SimpleDomainBO> selectAllSimpleDomainsWithPagingImpl(Integer firstResult, Integer maxResults) {
+        if (!hasInitiated) {
+            deleteAllSimpleDomains();
+            
+            for (int i = 0; i < 10; i++) {
+                SimpleDomainBO bo = BusinessObjectFactory.createSimpleDomainBO();
+                bo.setName("SimpleDomainPaging-" + i);
+                simpleDomainMaintenanceService.saveOrUpdate(bo.getSimpleDomainValues());
+            }
+            
+            hasInitiated = true;
+        }                
+        
+        return SimpleDomainBO.selectAllSimpleDomainsByPage(firstResult, maxResults);
+    }	
 
-	@Override
+    /**
+     * {@inheritDoc}
+     */
 	protected Collection<SimpleDomainBO> deleteAllSimpleDomainsImpl() {
 		// create an instance:
 		SimpleDomain simpleDomain = TransferObjectFactory.createSimpleDomain();
@@ -98,7 +121,7 @@ public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServi
 		return SimpleDomainBO.selectAllSimpleDomains();
 	}
 
-	/**
+    /**
 	 * {@inheritDoc}
 	 */
 	protected Integer countImpl(List<SimpleDomainBO> inputBOs) {

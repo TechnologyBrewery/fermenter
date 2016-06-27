@@ -111,28 +111,67 @@ public abstract class AbstractHibernateDaoImpl<BO extends BusinessObject, PK ext
 	 *            Array of query parameter values
 	 * @param types
 	 *            Array of query parameter types
-	 * @return
+	 * @return query results
 	 */
 	protected List<BO> query(String queryName, String[] paramNames, Object[] paramValues, Type[] paramTypes) {
 		List<BO> entities = null;
 
 		try {
-			Session session = getSession();
-			Query query = session.getNamedQuery(queryName);
-			if (paramNames != null) {
-				int length = paramNames.length;
-				for (int i = 0; i < length; i++) {
-					query.setParameter(paramNames[i], paramValues[i], paramTypes[i]);
-				}
-			}
-
+			Query query = buildBaseQuery(queryName, paramNames, paramValues, paramTypes);
 			entities = (List<BO>) query.list();
+			
 		} catch (HibernateException exception) {
 			return Arrays.asList(handleDataAccessException(exception));
 		}
 
 		return entities;
 	}
+
+    private Query buildBaseQuery(String queryName, String[] paramNames, Object[] paramValues, Type[] paramTypes) {
+        Session session = getSession();
+        Query query = session.getNamedQuery(queryName);
+        if (paramNames != null) {
+        	int length = paramNames.length;
+        	for (int i = 0; i < length; i++) {
+        		query.setParameter(paramNames[i], paramValues[i], paramTypes[i]);
+        	}
+        }
+        return query;
+    }
+	
+    /**
+     * Answer a list of entities that match the criteria defined by a named query with pagination.
+     * 
+     * @param queryName
+     *            Name of the query entity execute. Must be defined in a Hibernate mapping file.
+     * @param paramNames
+     *            Array of query parameter names. Must match param names in Hibernate mapping file.
+     * @param paramValues
+     *            Array of query parameter values
+     * @param types
+     *            Array of query parameter types
+     * @param firstResult
+     *            First record to return for this given page of results
+     * @param maxResults
+     *            Maximum number of results to return       
+     * @return query results
+     */
+    protected List<BO> query(String queryName, String[] paramNames, Object[] paramValues, Type[] paramTypes, 
+            int firstResult, int maxResults) {
+        List<BO> entities = null;
+
+        try {
+            Query query = buildBaseQuery(queryName, paramNames, paramValues, paramTypes);
+            query.setFirstResult(firstResult);
+            query.setMaxResults(maxResults);
+            entities = (List<BO>) query.list();
+            
+        } catch (HibernateException exception) {
+            return Arrays.asList(handleDataAccessException(exception));
+        }
+
+        return entities;
+    }	
 	
 	/**
 	 * Answer an update or delete that match the criteria defined by a named query.
@@ -152,14 +191,7 @@ public abstract class AbstractHibernateDaoImpl<BO extends BusinessObject, PK ext
 		int impactedRecords;
 		
 		try {
-			Session session = getSession();
-			Query query = session.getNamedQuery(statementName);
-			if (paramNames != null) {
-				int length = paramNames.length;
-				for (int i = 0; i < length; i++) {
-					query.setParameter(paramNames[i], paramValues[i], paramTypes[i]);
-				}
-			}
+			Query query = buildBaseQuery(statementName, paramNames, paramValues, paramTypes);
 
 			impactedRecords = query.executeUpdate();
 		} catch (HibernateException exception) {

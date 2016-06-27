@@ -8,7 +8,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.EJB;
 
@@ -136,6 +138,31 @@ public class SimpleDomainBusinessServicesIT {
 
 	}
 	
+    @Test
+    public void testSelectAllSimpleDomainsWithPaging() {
+        final int pageSize = 5;
+        Set<SimpleDomain> totalResults = new HashSet<>();
+        
+        for (int i = 0; i < 3; i++) {
+            ValueServiceResponse<Collection<SimpleDomain>> response = 
+                    simpleDomainManagerService.selectAllSimpleDomainsWithPaging(i * pageSize, pageSize);
+            assertNotNull(response);
+            assertNoErrorMessages(response);
+            
+            if (i < 2) {
+                assertEquals(pageSize, response.getValue().size());
+                totalResults.addAll(response.getValue());
+                
+            } else {
+                assertEquals(0, response.getValue().size());
+            }
+            
+        }
+        
+        assertEquals(10, totalResults.size());
+
+    }	
+	
 	@Test
 	public void testDeleteAllSimpleDomains() {
 		ValueServiceResponse<Collection<SimpleDomain>> response = simpleDomainManagerService.deleteAllSimpleDomains();
@@ -146,7 +173,8 @@ public class SimpleDomainBusinessServicesIT {
 		assertNotNull(domains);
 		assertTrue(domains.size() == 0);
 
-	}	
+	}
+	
 
 	@Test
 	public void testSelectAllSimpleDomainsByType() {

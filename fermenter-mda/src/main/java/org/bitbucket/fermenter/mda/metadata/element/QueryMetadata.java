@@ -12,6 +12,7 @@ public class QueryMetadata extends MetadataElement implements Query {
 	private String documentation;
 	private List<Field> criteria;
 	private String statement;
+	private String paginationType;
 
 	/**
 	 * {@inheritDoc}
@@ -71,6 +72,25 @@ public class QueryMetadata extends MetadataElement implements Query {
 	public void setDocumentation(String documentation) {
 		this.documentation = documentation;
 	}
+	
+	/**
+	 * Returns the specified pagination type or defaults to none.
+	 * @return pagination type
+	 */
+	public String getPagination() {
+        if (paginationType == null) {
+            paginationType = PAGINATION_NONE;
+        }
+        return paginationType;
+    }
+	
+	/**
+	 * Sets the pagination type if it matches one of the options.  If no match exists, defaults to none.
+	 * @param paginationType desited type of pagination
+	 */
+    public void setPagination(String paginationType) {
+        this.paginationType = PAGINATION_STANDARD.equalsIgnoreCase(paginationType) ? PAGINATION_STANDARD : PAGINATION_NONE;
+    }	
 
 	/**
 	 * {@inheritDoc}

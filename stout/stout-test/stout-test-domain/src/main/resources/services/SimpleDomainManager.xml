@@ -11,6 +11,23 @@
 			<transaction-attribute>Supports</transaction-attribute>
 		</operation>
 		<operation>
+			<name>SelectAllSimpleDomainsWithPaging</name>
+			<return-many>SimpleDomain</return-many>
+			<parameters>
+				<parameter>
+					<name>firstResult</name>
+					<documentation>The item number of the first result to return</documentation>
+					<type>integer</type>
+				</parameter>
+				<parameter>
+					<name>maxResults</name>
+					<documentation>Maximum number of results to return</documentation>
+					<type>integer</type>
+				</parameter>
+			</parameters>
+			<transaction-attribute>Supports</transaction-attribute>
+		</operation>
+		<operation>
 			<name>DeleteAllSimpleDomains</name>
 			<return-many>SimpleDomain</return-many>
 			<transaction-attribute>Supports</transaction-attribute>

@@ -32,10 +32,11 @@
 <!ELEMENT multiplicity (#PCDATA)>
 
 <!ELEMENT queries (query+)>
-<!ELEMENT query (name, documentation?, criteria?, statement)>
+<!ELEMENT query (name, documentation?, criteria?, pagination?, statement)>
 <!ELEMENT criteria (criterion+)>
 <!ELEMENT criterion (name, documentation?, type)>
 <!ELEMENT statement (#PCDATA)>
+<!ELEMENT pagination (#PCDATA)>
 
 <!ELEMENT composites (composite*)>
 <!ELEMENT composite (type, name?, project?, prefix?, label)>

@@ -60,6 +60,18 @@
 			<statement><![CDATA[from SimpleDomainBO]]></statement>
 		</query>
 		<query>
+			<name>SelectAllSimpleDomainsByPage</name>
+			<documentation>Retrieves all domains, completely unfiltered in pages</documentation>
+			<pagination>standard</pagination>
+			<statement><![CDATA[from SimpleDomainBO]]></statement>
+		</query>
+		<query>
+			<name>SelectAllSimpleDomainsByPageWithCriteria</name>
+			<documentation>Validates that everything generates correct w/ criteria and paging params</documentation>
+			<pagination>standard</pagination>
+			<statement><![CDATA[from SimpleDomainBO]]></statement>
+		</query>
+		<query>
 			<name>SelectAllSimpleDomainsByType</name>
 			<documentation>Retrieves domains of a given type</documentation>
 			<criteria>

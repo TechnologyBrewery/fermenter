@@ -11,7 +11,7 @@ public interface Query {
     /** No pagination. */
     public static final String PAGINATION_NONE = "none";
     
-    /** Type "google" style page-based pagination. */
+    /** Typical "google" style page-based pagination. */
     public static final String PAGINATION_STANDARD = "standard";
     
 	/**
@@ -38,7 +38,7 @@ public interface Query {
 	 */
 	public String getDocumentation();
 	
-	/**
+    /**
      * Returns the type of pagination desired for the query.
      * @return Returns type of pagination
      */

@@ -67,7 +67,7 @@
 		</query>
 		<query>
 			<name>SelectAllSimpleDomainsByPageWithCriteria</name>
-			<documentation>Validates that everything generates correct w/ criteria and paging params</documentation>
+			<documentation>Validates that everything generates correctly with criteria and paging parameters</documentation>
 			<pagination>standard</pagination>
 			<statement><![CDATA[from SimpleDomainBO]]></statement>
 		</query>

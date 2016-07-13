@@ -754,14 +754,20 @@ public abstract class ${entityName}BaseBO extends ${extends}BO {
 	 * @param ${criterion.name} The ${criterion.name}
 #end
 #end
+#if ($query.hasPagination())
+     * @param firstResult
+     *            First record to return for this given page of results
+     * @param maxResults
+     *            Maximum number of results to return  
+#end
 	 * @return List of ${entityName}s
 	 */	 
 #set( $numCriteria = $query.criteria.size() ) 
 #set( $currentNum  = 0 )
-	public static List<${entityName}BO> ${query.lowercaseName}(#foreach( $criterion in $query.criteria )${criterion.javaType} ${criterion.name} #set($currentNum = $currentNum+1)#if($currentNum<$numCriteria), #end#end) {
+	public static List<${entityName}BO> ${query.lowercaseName}(#foreach( $criterion in $query.criteria )${criterion.javaType} ${criterion.name} #set($currentNum = $currentNum+1)#if($currentNum<$numCriteria), #end#end #if ($query.hasPagination()) #if ($numCriteria != 0) , #end int firstResult, int maxResults#end) {
 #set( $numCriteria = $query.criteria.size() ) 
 #set( $currentNum  = 0 )
-		List<${entityName}BO> bos = ${entity.name}BO.getDefaultDao().${query.lowercaseName}(#foreach( $criterion in $query.criteria )${criterion.name} #set($currentNum = $currentNum+1)#if($currentNum<$numCriteria), #end#end);
+		List<${entityName}BO> bos = ${entity.name}BO.getDefaultDao().${query.lowercaseName}(#foreach( $criterion in $query.criteria )${criterion.name} #set($currentNum = $currentNum+1)#if($currentNum<$numCriteria), #end#end #if ($query.hasPagination()) #if ($numCriteria != 0) , #end firstResult, maxResults#end);
 		return bos;
 	}
 #end

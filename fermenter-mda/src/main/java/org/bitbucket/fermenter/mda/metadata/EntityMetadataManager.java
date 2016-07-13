@@ -187,16 +187,17 @@ class EntityMetadataManager extends MetadataManager {
 	}
 	
 	private void parseQueries(Digester digester) {
-        digester.addObjectCreate(	"entity/queries/query"							,	QueryMetadata.class.getName() 						);
-        digester.addCallMethod	( 	"entity/queries/query/name"						, 	"setName", 			0 									);
-        digester.addCallMethod	( 	"entity/queries/query/documentation"			, 	"setDocumentation", 0 									);
-        digester.addObjectCreate( 	"entity/queries/query/criteria/criterion"		, 	FieldMetadata.class.getName() 									);
-        digester.addCallMethod	( 	"entity/queries/query/criteria/criterion/name"	,	"setName", 			0 									);
-        digester.addCallMethod	( 	"entity/queries/query/criteria/criterion/documentation", "setDocumentation", 0 									);
-        digester.addCallMethod	( 	"entity/queries/query/criteria/criterion/type"	, 	"setType", 			0 									);
-        digester.addSetNext		( 	"entity/queries/query/criteria/criterion"		, 	"addCriterion", 	FieldMetadata.class.getName() 				);
-        digester.addCallMethod	( 	"entity/queries/query/statement"				, 	"setStatement", 	0 									);
-        digester.addSetNext		( 	"entity/queries/query"							, 	"addQuery", 		QueryMetadata.class.getName() 	);
+        digester.addObjectCreate(	"entity/queries/query"							,	QueryMetadata.class.getName() 					 );
+        digester.addCallMethod	( 	"entity/queries/query/name"						, 	"setName", 			0 							 );
+        digester.addCallMethod	( 	"entity/queries/query/documentation"			, 	"setDocumentation", 0 							 );
+        digester.addObjectCreate( 	"entity/queries/query/criteria/criterion"		, 	FieldMetadata.class.getName() 					 );
+        digester.addCallMethod	( 	"entity/queries/query/criteria/criterion/name"	,	"setName", 			0 							 );
+        digester.addCallMethod	( 	"entity/queries/query/criteria/criterion/documentation", "setDocumentation", 0 						 );
+        digester.addCallMethod	( 	"entity/queries/query/criteria/criterion/type"	, 	"setType", 			0 							 );
+        digester.addSetNext		( 	"entity/queries/query/criteria/criterion"		, 	"addCriterion", 	FieldMetadata.class.getName());
+        digester.addCallMethod  (   "entity/queries/query/pagination"               ,   "setPagination",    0                            );
+        digester.addCallMethod	( 	"entity/queries/query/statement"				, 	"setStatement", 	0 						     );
+        digester.addSetNext		( 	"entity/queries/query"							, 	"addQuery", 		QueryMetadata.class.getName());
 	}
 	
 	

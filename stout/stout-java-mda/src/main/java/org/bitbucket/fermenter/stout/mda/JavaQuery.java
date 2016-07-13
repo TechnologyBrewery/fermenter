@@ -94,4 +94,19 @@ public class JavaQuery implements Query {
 		return StringUtils.uncapitalize(query.getName());
 	}
 
+    /**
+     * {@inheritDoc}
+     */
+    public String getPagination() {
+        return query.getPagination();
+    }
+    
+    /**
+     * Determines if the query has pagination.
+     * @return pagination exists
+     */
+    public boolean hasPagination() {
+        return !query.getPagination().equals(PAGINATION_NONE);
+    }
+
 }

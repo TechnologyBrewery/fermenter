@@ -7,7 +7,13 @@ import java.util.List;
  * HQL, Cypher, or other type of statement.
  */
 public interface Query {
-
+    
+    /** No pagination. */
+    public static final String PAGINATION_NONE = "none";
+    
+    /** Typical "google" style page-based pagination. */
+    public static final String PAGINATION_STANDARD = "standard";
+    
 	/**
 	 * Returns the statement that represents this query.
 	 * @return statement value
@@ -31,5 +37,11 @@ public interface Query {
 	 * @return documentation
 	 */
 	public String getDocumentation();
+	
+    /**
+     * Returns the type of pagination desired for the query.
+     * @return Returns type of pagination
+     */
+    public String getPagination();	
 
 }

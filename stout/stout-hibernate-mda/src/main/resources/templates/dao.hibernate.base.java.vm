@@ -101,11 +101,17 @@ public abstract class ${entity.name}BaseDaoImpl extends AbstractHibernateDaoImpl
 #foreach( $criterion in $query.criteria )
 	 * @param ${criterion.name} The ${criterion.name}
 #end
+#if ($query.hasPagination())
+     * @param firstResult
+     *            First record to return for this given page of results
+     * @param maxResults
+     *            Maximum number of results to return  
+#end
 	 * @return List of {@link ${entity.name}}s
 	 */	 
 #set( $numCriteria = $query.criteria.size() ) 
 #set( $currentNum  = 0 )
-	public List<${entity.name}BO> ${query.lowercaseName}(#foreach( $criterion in $query.criteria )${criterion.javaType} ${criterion.name} #set($currentNum = $currentNum+1)#if($currentNum<$numCriteria), #end#end) {
+	public List<${entity.name}BO> ${query.lowercaseName}(#foreach( $criterion in $query.criteria )${criterion.javaType} ${criterion.name} #set($currentNum = $currentNum+1)#if($currentNum<$numCriteria), #end#end#if ($query.hasPagination()) #if ($numCriteria != 0) , #end int firstResult, int maxResults#end) {
 #set( $cn = 0 )
 		String[] paramNames = new String[] { #foreach( $criterion in $query.criteria )"${criterion.name}" #set($cn = $cn+1)#if($cn<$numCriteria), #end#end}; 
 #set( $cn = 0 )
@@ -113,7 +119,7 @@ public abstract class ${entity.name}BaseDaoImpl extends AbstractHibernateDaoImpl
 #set( $cn = 0 )
 		Type[] paramTypes = new Type[] { #foreach( $criterion in $query.criteria )#if($criterion.isSimpleType())${criterion.getJavaType()}Type.INSTANCE#set($cn = $cn+1)#if($cn<$numCriteria),#end#else Hibernate.custom(${criterion.type}UserType.class) #set($cn = $cn+1)#if($cn<$numCriteria), #end #end #end};
 		
-		return query( ${entity.name}BaseDao.${query.name}, paramNames, paramValues, paramTypes );
+		return query( ${entity.name}BaseDao.${query.name}, paramNames, paramValues, paramTypes#if ($query.hasPagination()), firstResult, maxResults#end );
 	}
 #end
 #end

@@ -59,7 +59,7 @@ public interface ${service.name}Service {
 	@POST
 	#end
 	@Path("/${service.name}Service/${operation.lowercaseName}")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces("application/json;charset=${operation.responseEncoding}")
 	#if($operation.hasEntityParameters())
 	@Consumes(MediaType.APPLICATION_JSON)
 	#end

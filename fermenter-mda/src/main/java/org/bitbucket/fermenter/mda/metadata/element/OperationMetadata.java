@@ -24,6 +24,7 @@ public class OperationMetadata extends MetadataElement implements Operation {
 	private String transactionAttribute;
 	private String viewType;
 	private String transmissionMethod;
+	private String responseEncoding;
 	
 	private static Log log = LogFactory.getLog(Operation.class);
 	
@@ -152,6 +153,17 @@ public class OperationMetadata extends MetadataElement implements Operation {
 		this.transmissionMethod = transmissionMethod;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getResponseEncoding() {
+		return responseEncoding != null ? responseEncoding : "UTF-8";
+	}
+	
+	public void setResponseEncoding(String responseEncoding) {
+		this.responseEncoding = responseEncoding;
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */

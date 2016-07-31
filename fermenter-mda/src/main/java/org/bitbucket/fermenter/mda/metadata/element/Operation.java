@@ -74,4 +74,10 @@ public interface Operation {
 	 */	
 	String getTransmissionMethod();
 
+	/**
+	 * Returns the encoding of the response produced by this operation.
+	 * 
+	 * @return encoding of the response produced by this operation (i.e. UTF-8, ISO-8859, etc.)
+	 */
+	String getResponseEncoding();
 }

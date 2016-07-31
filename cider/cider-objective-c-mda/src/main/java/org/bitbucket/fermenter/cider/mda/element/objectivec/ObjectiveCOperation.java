@@ -396,6 +396,11 @@ public class ObjectiveCOperation implements Operation {
 		return new Boolean((Operation.TRANSMISSION_METHOD_ASYNC.equals(transmissionMethod)));
 	}
 
+	@Override
+	public String getResponseEncoding() {
+		return operation.getResponseEncoding();
+	}
+	
 	public String getUncapitalizedName() {
 		return StringUtils.uncapitalize(getName());
 	}

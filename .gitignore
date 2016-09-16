@@ -10,3 +10,4 @@ build-tools/bin/
 target
 .classpath
 stout/stout-test/stout-test-domain/src/generated
+**/bin/

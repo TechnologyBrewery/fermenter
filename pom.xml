@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.bitbucket.fermenter</groupId>
+	<groupId>org.bitbucket.askllc.fermenter</groupId>
 	<version>1-SNAPSHOT</version>
 	<artifactId>root</artifactId>
 	<packaging>pom</packaging>
@@ -13,7 +13,7 @@
 		applications. This approach allows for the quick definition and assembly of applications with the focus on 
 		functional concepts rather than technical underpinnings. Fermenter is an MDA engine that allows common 
 		concepts to be modeled and spawn any number of generated source files. In turn, this allows developers
-		to focus more time on business logic, less time on technical underpinnings, and achive extremely high levels
+		to focus more time on business logic, less time on technical underpinnings, and achieve extremely high levels
 		of architectural conformity.  
 	</description>
 	<url>https://bitbucket.org/askllc/fermenter</url>
@@ -29,23 +29,34 @@
 	<developers>
 		<developer>
 			<name>Ryan Ashcraft</name>
-			<email>dryanashcraft@gmail.com</email>
-			<organization>ASK LLC</organization>
-			<organizationUrl>https://bitbucket.org/askllc/</organizationUrl>
+			<email>ryan@cpointe-inc.com</email>
+			<organization>Counterpointe Solutions Inc.</organization>
+			<organizationUrl>http://www.cpointe-inc.com</organizationUrl>
 		</developer>
 		<developer>
 			<name>Eric Konieczny</name>
-			<email>ekoniec1@gmail.com</email>
-			<organization>ASK LLC</organization>
-			<organizationUrl>https://bitbucket.org/askllc/</organizationUrl>
+			<email>ekonieczny@cpointe-inc.com</email>
+			<organization>Counterpointe Solutions Inc.</organization>
+			<organizationUrl>http://www.cpointe-inc.com</organizationUrl>
 		</developer>
 	</developers>
 
 	<scm>
 		<connection>scm:git:ssh://git@bitbucket.org/askllc/Fermenter.git</connection>
 		<developerConnection>scm:git:ssh://git@bitbucket.org/askllc/Fermenter.git</developerConnection>
-	    <tag>version-1-candidate-release-1</tag>
+		<url>https://bitbucket.org/askllc/fermenter/</url>
     </scm>
+
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</distributionManagement>
 
 	<modules>
 		<module>fermenter-mda</module>
@@ -377,6 +388,76 @@
 					<scope>test</scope>
 				</dependency>
 			</dependencies>
+		</profile>
+		<profile>
+			<id>ossrh-deploy</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<version>3.0.1</version>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<goals>
+									<goal>jar-no-fork</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<version>2.10.4</version>
+						<executions>
+							<execution>
+								<id>attach-javadocs</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.6</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>disable-java8-doclint</id>
+			<activation>
+				<jdk>[1.8,)</jdk>
+			</activation>
+			<build>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<configuration>
+							<!-- NB JDK 8 Javadoc linter is very strict, so deactivate it if we're using Java 8 -->
+							<additionalparam>-Xdoclint:none</additionalparam>
+						</configuration>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+			</build>
+			<properties>
+				<additionalparam>-Xdoclint:none</additionalparam>
+			</properties>
 		</profile>
 	</profiles>
 </project>

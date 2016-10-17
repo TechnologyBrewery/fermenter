@@ -81,15 +81,23 @@ public class MetadataRepository extends AbstractMetadataRepository {
     		String metadataLoaderClass = props.getProperty("metadata.loader");
     		Class clazz = Class.forName(metadataLoaderClass);
     		MetadataURLResolver loader = (MetadataURLResolver) clazz.newInstance();
+    		CompositeMetadataManager compositeManager = CompositeMetadataManager.getInstance();
+    		compositeManager.reset();
+    		EntityMetadataManager entityManager =  EntityMetadataManager.getInstance();
+            entityManager.reset();
+            ServiceMetadataManager serviceManager =  ServiceMetadataManager.getInstance();
+            serviceManager.reset();
+            EnumerationMetadataManager enumerationManager = EnumerationMetadataManager.getInstance();
+            enumerationManager.reset();
     		List urls = loader.getMetadataURLs(props);
     		for (Iterator i = urls.iterator(); i.hasNext();) {
     			long start = System.currentTimeMillis();
     			MetadataURL url = (MetadataURL) i.next();
-    			CompositeMetadataManager.getInstance().loadMetadata(url.getApplicationName(), url.getUrl());
-    			EntityMetadataManager.getInstance().loadMetadata(url.getApplicationName(), url.getUrl());
-    			ServiceMetadataManager.getInstance().loadMetadata(url.getApplicationName(), url.getUrl());
-    			EnumerationMetadataManager.getInstance().loadMetadata(url.getApplicationName(), url.getUrl());			
-    			FormMetadataManager.getInstance().loadMetadata(url.getApplicationName(), url.getUrl());
+    			compositeManager.loadMetadata(url.getApplicationName(), url.getUrl());    			
+    			entityManager.loadMetadata(url.getApplicationName(), url.getUrl());
+    			serviceManager.loadMetadata(url.getApplicationName(), url.getUrl());
+    			enumerationManager.loadMetadata(url.getApplicationName(), url.getUrl());			
+    			//FormMetadataManager.getInstance().loadMetadata(url.getApplicationName(), url.getUrl());
     
     			if (applicationName.equals(url.getApplicationName())) {
                     // Messages metadata only needs to be loaded for the current project

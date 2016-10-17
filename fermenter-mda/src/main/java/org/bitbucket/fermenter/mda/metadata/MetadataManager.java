@@ -53,6 +53,14 @@ public abstract class MetadataManager {
 	protected abstract void initialize(Digester digester);
 	
 	/**
+	 * Resets the MetadataManger to ensure a clean set of metadata is available.
+	 */
+	public void reset() {
+	    applicationMap = new HashMap();
+	    completeMetadataMap = new HashMap();
+	}
+	
+	/**
 	 * Validation occurs after the loading of all Metadata to ensure that we can 
 	 * access all metadata in a safe fashion, without having to worry to about 
 	 * what is already laoded and what needs to be loaded.

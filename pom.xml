@@ -2,7 +2,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.bitbucket.askllc.fermenter</groupId>
-	<version>1.0.0</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<artifactId>root</artifactId>
 	<packaging>pom</packaging>
 

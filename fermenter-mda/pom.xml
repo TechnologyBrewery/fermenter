@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>org.bitbucket.askllc.fermenter</groupId>
 		<artifactId>root</artifactId>
-		<version>1.0.0</version>
+		<version>1.0.1-SNAPSHOT</version>
 	</parent>
 
 	<name>Fermenter Model-Driven Architecture Code Generator</name>

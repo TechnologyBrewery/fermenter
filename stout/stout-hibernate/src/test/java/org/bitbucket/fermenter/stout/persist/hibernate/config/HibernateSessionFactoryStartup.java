@@ -24,7 +24,7 @@ public class HibernateSessionFactoryStartup {
 	@TransactionAttribute(TransactionAttributeType.NEVER)
 	public void configureHibernateSessionFactory() {
 		LOGGER.debug("Starting Hibernate configuration...");
-		HibernateSessionFactoryManager.getInstance();
+		HibernateSessionFactoryManager.getInstance().init();
 		LOGGER.debug("Completed Hibernate configuration.");
 	}
 

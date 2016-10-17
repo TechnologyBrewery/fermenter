@@ -3,6 +3,7 @@ package org.bitbucket.fermenter.stout.persist.hibernate;
 import java.net.URL;
 import java.util.Properties;
 
+import org.apache.commons.lang3.StringUtils;
 import org.bitbucket.krausening.Krausening;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -28,7 +29,6 @@ public final class HibernateSessionFactoryManager {
 	private SessionFactory sessionFactory;
 	
 	private HibernateSessionFactoryManager() {
-		init();
 		
 	}
 	
@@ -40,14 +40,25 @@ public final class HibernateSessionFactoryManager {
 		return instance;
 		
 	}
-	
-	private void init() {
+
+	public void init() {
+	    init("");
+	}
+	    
+	public void init(String prefix) {  
 		Krausening krausening = Krausening.getInstance();
-		Properties hibernateProperties = krausening.getProperties("hibernate.properties");
+		String propertiesName;
+		if (StringUtils.isNotBlank(prefix)) {
+		    propertiesName = prefix + (!prefix.endsWith(".") ? "." : "") + "hibernate.properties";
+		    LOGGER.info("Using a customized Hibernate properties name of: " + propertiesName);
+		} else {
+		    propertiesName = "hibernate.properties";
+		}
+		Properties hibernateProperties = krausening.getProperties(propertiesName);
 		if (hibernateProperties == null) {
-			LOGGER.warn("A hibernate.properties file was not found in Krausening!");
+			LOGGER.warn("A " + propertiesName + " file was not found in Krausening!");
 		} else if (hibernateProperties.isEmpty()) {
-			LOGGER.warn("No properties are defined within the hibernate.properties file in Krausening!");
+			LOGGER.warn("No properties are defined within the " + propertiesName + " file in Krausening!");
 		}
 		
 		URL configUrl = ConfigHelper.locateConfig(CONFIG);

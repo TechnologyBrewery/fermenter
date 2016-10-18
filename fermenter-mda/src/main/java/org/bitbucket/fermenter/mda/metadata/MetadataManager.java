@@ -56,6 +56,7 @@ public abstract class MetadataManager {
 	 * Resets the MetadataManger to ensure a clean set of metadata is available.
 	 */
 	public void reset() {
+	    // TODO: see issue #16 and #17 to eliminate the need for this in the next version: 
 	    applicationMap = new HashMap();
 	    completeMetadataMap = new HashMap();
 	}

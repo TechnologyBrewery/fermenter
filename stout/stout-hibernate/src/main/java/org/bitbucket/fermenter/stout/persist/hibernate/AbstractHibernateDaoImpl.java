@@ -32,12 +32,12 @@ public abstract class AbstractHibernateDaoImpl<BO extends BusinessObject, PK ext
     private static final String DATABASE_EXCEPTION_KEY = "database.exception";
 
     protected Session getSession() {
-        SessionFactory hibernateSessionFactory = HibernateSessionFactoryManager.getInstance().getSessionFactory();
+        HibernateSessionFactoryManager manager = HibernateSessionFactoryManager.getInstance();
+        SessionFactory hibernateSessionFactory = manager.getSessionFactory();
 
-        if (hibernateSessionFactory == null) {
-            LOG.warn("Your " + HibernateSessionFactoryManager.class.getSimpleName()
-                    + " has not been initialized. Calling init() on your behalf!");
-            HibernateSessionFactoryManager.getInstance().init();
+        if (hibernateSessionFactory == null) {          
+                LOG.error("Your " + HibernateSessionFactoryManager.class.getSimpleName()
+                        + " has not been initialized. Call init() or init(\"app qualifier\") to resolve!");            
         }
 
         Session hibernateSession;

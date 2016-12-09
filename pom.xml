@@ -2,7 +2,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.bitbucket.askllc.fermenter</groupId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.1</version>
 	<artifactId>root</artifactId>
 	<packaging>pom</packaging>
 
@@ -45,7 +45,7 @@
 		<connection>scm:git:ssh://git@bitbucket.org/askllc/Fermenter.git</connection>
 		<developerConnection>scm:git:ssh://git@bitbucket.org/askllc/Fermenter.git</developerConnection>
 		<url>https://bitbucket.org/askllc/fermenter/</url>
-	  <tag>1.0.0</tag>
+	  <tag>root-1.0.1</tag>
   </scm>
 
 	<distributionManagement>

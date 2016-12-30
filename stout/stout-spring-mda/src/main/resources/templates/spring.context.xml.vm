@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:jpa="http://www.springframework.org/schema/data/jpa" xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+    
+    <context:annotation-config/>
+    
+    <!-- Allows Spring to wire up and instantiate business services marked with @Service -->
+	<context:component-scan base-package="${basePackage}.service">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+    </context:component-scan>
+    
+    <jpa:repositories entity-manager-factory-ref="emf" base-package="${basePackage}.persist"/>
+    
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="emf"/>
+	</bean>
+	
+	<bean id="emf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="krauseningDataSource"/>
+		<property name="packagesToScan" value="${basePackage}.bizobj"/>
+		<property name="jpaVendorAdapter">
+			<bean id="hibernateJpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+		</property>
+		<property name="jpaProperties" ref="krauseningJpaProperties"/>
+		<property name="validationMode" value="NONE"/>
+	</bean>
+	
+	<!-- Spring beans that are instantiated in KrauseningBasedSpringConfig may be referred to and utilized
+		 in this application context. For example, the entity manager factory relies on krauseningDataSource
+		 and krauseningJpaProperties, which are Spring beans created via this class.
+	  -->  
+	<bean id="krauseningProps" class="org.bitbucket.fermenter.stout.util.KrauseningBasedSpringConfig"/>
+	
+	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+	
+	<bean id="contextHolder" class="org.bitbucket.fermenter.stout.util.SpringApplicationContextHolder"/>
+	
+	<!-- Enables business services to be injected with an instance of DefaultMessages that is instantiated 
+		 per web request. Request scoped Spring beans require the configuration of a 
+		 org.springframework.web.context.request.RequestContextListener in the application's web.xml or if
+		 operating in a unit test, the test class should be marked with 
+		 a @org.springframework.test.context.web.WebAppConfiguration annotation
+	  -->
+	<bean id="requestScopedMessages" class="org.bitbucket.fermenter.stout.messages.DefaultMessages" scope="request">
+		<aop:scoped-proxy/>
+    </bean>
+
+</beans>

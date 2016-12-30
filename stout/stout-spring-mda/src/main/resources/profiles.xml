@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE profiles PUBLIC "-//FERMENTER//DTD PROFILES//EN" "https://bitbucket.org/askllc/fermenter/downloads/profiles.dtd">
+
+<profiles>
+	<profile name="business-objects-and-services">
+		<target name="baseBusinessObjects"/>
+		<target name="businessObjects"/>
+		<target name="dataAccessRepositories"/>
+		<target name="enumerations"/>
+		<target name="baseTransferObjectJacksonMixIns"/>
+		<target name="transferObjectJacksonMixIns"/>
+		<target name="objectMapperManager"/>
+		<target name="jacksonObjectMapperResteasyProvider"/>
+		
+		<target name="baseRestServiceInterfaces"/>
+		<target name="restServiceInterfaces"/>
+		<target name="baseServiceImpl"/>
+		<target name="serviceImpl"/>
+		
+		<target name="messageProperties"/>
+		<target name="springContext"/>
+		<target name="jpaProperties"/>	
+		<target name="dataSourceProperties"/>			
+	</profile>
+	<profile name="entity-maintenance-services">
+		<target name="entityMaintenanceServices"/>
+	</profile>	    
+</profiles>

@@ -1,0 +1,44 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.bitbucket.askllc.fermenter.stout</groupId>
+		<artifactId>stout</artifactId>
+		<version>2.0.0-SNAPSHOT</version>
+	</parent>
+
+	<name>Fermenter::Stout::Web Container MDA Resources</name>
+	<description>
+		Contains resources for generating application code that instantiates Stout-compliant
+        architectures deployed to a servlet container
+	</description>
+
+	<artifactId>stout-web-container-mda</artifactId>
+	<packaging>jar</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.bitbucket.askllc.fermenter</groupId>
+			<artifactId>fermenter-mda</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>stout-spring-mda</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jaxrs</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+	</dependencies>
+
+</project>

@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<!DOCTYPE validators PUBLIC "-//FERMENTER//DTD VALIDATORS//EN" "https://bitbucket.org/askllc/fermenter/downloads/validators.dtd">
-
-<validators>
-	<validator name="emailValidator" class="org.bitbucket.fermenter.stout.validate.EmailValidator"/>
-	<validator name="phoneNumberValidator" class="org.bitbucket.fermenter.stout.validate.PhoneNumberValidator"/>
-	<validator name="zipCodeValidator" class="org.bitbucket.fermenter.stout.validate.ZipCodeValidator"/>
-	<validator name="ssnValidator" class="org.bitbucket.fermenter.stout.validate.SsnValidator"/>
-</validators>

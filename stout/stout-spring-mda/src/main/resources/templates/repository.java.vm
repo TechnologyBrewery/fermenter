@@ -1,0 +1,24 @@
+package ${basePackage}.persist;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import ${basePackage}.bizobj.${entity.name}BO;
+
+/**
+ * Data access repository for the ${entity.name} business object.
+ * 
+ * GENERATED STUB CODE - PLEASE *DO* MODIFY
+ */ 
+#if ( !$entity.idFields.isEmpty() )
+  #set ($idFieldJavaType = ${entity.idFields.values().iterator().next().javaType})
+#else
+  #set ($idFieldJavaType = 'String')
+#end  
+public interface ${entity.name}Repository extends JpaRepository<${entity.name}BO, ${idFieldJavaType}> {
+	
+	/**
+	 * Developers should leverage this interface to define any query logic
+	 * that cannot be realized through {@link JpaRepository}'s built-in
+	 * functionality.  
+	 */
+
+}

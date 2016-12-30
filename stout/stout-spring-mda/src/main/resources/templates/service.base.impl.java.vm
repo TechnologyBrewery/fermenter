@@ -1,0 +1,104 @@
+package ${basePackage}.service.impl;
+
+#foreach( $import in $service.imports )
+import $import;
+#end
+
+import javax.inject.Inject;
+
+import org.bitbucket.fermenter.stout.messages.AbstractMsgMgrAwareService;
+import org.bitbucket.fermenter.stout.messages.DefaultMessages;
+
+import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
+import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
+
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import ${basePackage}.service.rest.${service.name}Service;
+
+/**
+ * Service implementation class for the ${service.name} service
+ * @see ${basePackage}.service.rest.${service.name}Service
+ */ 
+public abstract class ${service.name}BaseServiceImpl extends AbstractMsgMgrAwareService implements ${service.name}Service {
+
+	@Inject
+	protected DefaultMessages messages;
+	
+#foreach( $operation in $service.operations )
+	/**
+	 * {@inheritDoc}
+	 */
+	@Transactional(propagation=Propagation.${operation.transactionAttribute})
+	@Override
+	#if($operation.isReturnTypeCollection())	 
+	public ValueServiceResponse<Collection<${operation.returnManyTypeAsBO}>> ${operation.lowercaseName}(${operation.signature}) {
+	#elseif($operation.isResponseTypeVoid())
+	public VoidServiceResponse ${operation.lowercaseName}(${operation.signature}) {
+	#elseif($operation.isReturnTypeEntity())	 
+	public ValueServiceResponse<${operation.returnTypeAsBO}> ${operation.lowercaseName}(${operation.signature}) {
+	#else 
+	public ValueServiceResponse<${operation.wrappedReturnType}> ${operation.lowercaseName}(${operation.signature}) {
+	#end
+		initMsgMgr(messages);
+	
+		
+	#if( $operation.isReturnTypeCollection() )
+		Collection<${operation.returnManyTypeAsBO}> result = 
+	#elseif( $operation.isReturnTypeEntity() )
+		${operation.returnTypeAsBO} result =
+	#elseif( $operation.isResponseTypeVoid() )
+	#else
+		${operation.wrappedReturnType} result =
+	#end
+		${operation.lowercaseName}Impl(
+	#foreach( $parameter in $operation.parameters )			
+		${parameter.name} #if( $foreach.hasNext ),#end
+	#end
+		);
+		
+	#if($operation.isReturnTypeCollection())
+		ValueServiceResponse<Collection<${operation.returnManyTypeAsBO}>> response = new ValueServiceResponse<Collection<${operation.returnManyTypeAsBO}>>(result);
+	#elseif($operation.isReturnTypeEntity())
+		ValueServiceResponse<${operation.returnTypeAsBO}> response = new ValueServiceResponse<${operation.returnTypeAsBO}>(result);
+	#elseif( $operation.isResponseTypeVoid() )
+		VoidServiceResponse response = new VoidServiceResponse();
+	#else
+		ValueServiceResponse<${operation.wrappedReturnType}> response = new ValueServiceResponse<${operation.wrappedReturnType}>(result);
+	#end
+	
+		addAllMsgMgrToResponse(response);
+		return response;
+	}
+	
+	/**
+	 * Performs the business function for ${operation.name}.
+	#if( $operation.parameters.size() > 0 )
+		#foreach( $parameter in $operation.parameters )
+			#if( $parameter.documentation )
+	 * @param ${parameter.name} ${parameter.documentation}
+			#else
+	 * @param ${parameter.name}  
+			#end
+		#end
+	#end
+	#if($operation.isReturnTypeCollection())	 
+	 * @return A {@link Collection} of {@link ${operation.returnManyTypeAsBO}}
+	#elseif($operation.isResponseTypeVoid()) 	 
+	 * @return A instance of {@link ${operation.returnManyTypeAsBO}}
+	#end
+	 */
+	#if($operation.isReturnTypeCollection())	 
+	protected abstract Collection<${operation.returnManyTypeAsBO}> ${operation.lowercaseName}Impl(${operation.signature});
+	#elseif($operation.isResponseTypeVoid())
+	protected abstract void ${operation.lowercaseName}Impl(${operation.signature});
+	#elseif($operation.isReturnTypeEntity())
+	protected abstract ${operation.returnTypeAsBO} ${operation.lowercaseName}Impl(${operation.signature});
+	#else
+	protected abstract ${operation.wrappedReturnType} ${operation.lowercaseName}Impl(${operation.signature});
+	#end
+ 
+#end
+
+}

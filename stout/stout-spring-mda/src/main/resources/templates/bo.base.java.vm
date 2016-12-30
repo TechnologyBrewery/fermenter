@@ -1,0 +1,344 @@
+package ${basePackage}.bizobj;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.inject.Inject;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
+
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+import org.bitbucket.fermenter.stout.bizobj.BaseSpringBO;
+import org.bitbucket.fermenter.stout.bizobj.BusinessObject;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import ${basePackage}.persist.${entity.name}Repository;
+
+#foreach ($import in $entity.imports )
+import ${import};
+#end
+
+#if ( !$entity.idFields.isEmpty() )
+  #set ($idFieldJavaType = ${entity.idFields.values().iterator().next().javaType})
+#else
+  #set ($idFieldJavaType = 'String')
+#end  
+/**
+ * Business object for the ${entity.name} application entity.
+#if ($entity.documentation)
+ * ${entity.documentation}
+#end
+ *
+ * Generated Code - DO NOT MODIFY
+ */
+@MappedSuperclass
+public abstract class ${entity.name}BaseBO extends BaseSpringBO<${idFieldJavaType}, ${entity.name}BO, ${entity.name}Repository> implements BusinessObject<${idFieldJavaType}, ${entity.name}BO> {
+
+	@Inject
+	@Transient
+	private ${entity.name}Repository repository;
+
+#foreach ( $idField in $entity.idFields.values() )
+	@Id
+	@Column(name="${idField.column}")
+	private ${idField.javaType}	${idField.name};
+#end
+
+#foreach ( $field in $entity.fields.values() )
+  #set ( $isRequired = $field.isRequired() )
+	@Column(name="${field.column}" #if($isRequired), nullable=false#end)
+  #if ( $field.isRequired() )
+	@NotNull
+  #end
+  #if ( $field.hasMinLength() || $field.hasMaxLength() && !$field.isEnumerationType())
+  	@Size(#if($field.hasMinLength())min=${field.minLength}#if($field.hasMaxLength()),#end#end #if($field.hasMaxLength())max=${field.maxLength}#end)
+  #end
+  #if ( $field.hasMaxValue() )
+  	#if ($field.javaType == 'BigDecimal')
+  	@DecimalMax("${field.maxValue}")
+  	#else
+  	@Max(${field.maxValue})
+  	#end
+  #end
+  #if ( $field.hasMinValue() )
+  	#if ($field.javaType == 'BigDecimal')
+  	@DecimalMin("${field.minValue}")
+  	#else
+  	@Min(${field.minValue})
+  	#end
+  #end
+  #if ( $field.hasFormat() )
+    @Pattern(regexp="${field.patterns}")
+  #end
+	private ${field.javaType} ${field.name};
+
+#end
+
+#if ( !$entity.idFields.isEmpty() )
+  #set ($idField = ${entity.idFields.values().iterator().next()})
+  	
+  	protected ${entity.name}BaseBO() {
+  	#if ($idField.generator == 'uuid')
+  		set${idField.capitalizedName}(java.util.UUID.randomUUID().toString());
+  	#end
+	}
+	
+	@Override
+	public ${idField.javaType} getKey() {
+		return ${idField.name}; 
+	}
+	
+	@Override
+	public void setKey(${idField.javaType} ${idField.name}) {
+		set${idField.capitalizedName}(${idField.name});
+	}
+#end
+	
+	public static ${entity.name}BO findByPrimaryKey(${idFieldJavaType} key) {
+		return getDefaultRepository().findOne(key);
+	}
+	
+	@Override
+	protected ${entity.name}Repository getRepository() {
+		return repository;
+	}
+	
+	protected static ${entity.name}Repository getDefaultRepository() {
+		${entity.name}BO unusedBizObj = new ${entity.name}BO();
+		return unusedBizObj.getRepository();
+	}
+
+#foreach ($relation in $entity.relations.values())
+	@OneToMany(mappedBy="parent${entity.name}", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	private Set<${relation.type}BO> ${relation.label}s;
+#end
+#foreach ($inverseRelation in $entity.inverseRelations.values())
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="#if(!$inverseRelation.idFields.isEmpty())${inverseRelation.idFields.values().iterator().next().column}#else${inverseRelation.Name}_ID#end", nullable=false)
+	private ${inverseRelation.name}BO parent${inverseRelation.name};
+#end
+#foreach ($reference in $entity.references.values())
+	@ManyToOne(fetch=FetchType.LAZY #if($reference.isRequired()), optional=false#end)
+	@JoinColumn(name="${reference.foreignKeyFields.iterator().next().column}")
+  #if ( $reference.isRequired() )
+	@NotNull
+  #end
+	private ${reference.type}BO ${reference.name};
+#end
+
+#foreach ( $idField in $entity.idFields.values() )
+
+	/**
+	 * Get the ${idField.label}.
+	 *
+	 * @return The ${idField.label}
+	 */
+	protected ${idField.javaType} get${idField.capitalizedName}() {
+		return ${idField.name};
+	}
+	
+	/**
+	 * Set the ${idField.label}.
+	 *
+	 * @param The ${idField.label}
+	 */
+	protected void set${idField.capitalizedName}(${idField.javaType} ${idField.name}) {
+		this.${idField.name} = ${idField.name};
+	}
+#end
+
+#foreach ( $field in $entity.fields.values() )
+	/**
+  #if ($field.documentation)
+	 * Gets: ${field.documentation}.
+  #else
+	 * Get the ${field.label}.
+  #end
+	 *
+	 * @return The ${field.label}
+	 */
+	public ${field.javaType} get${field.capitalizedName}() {
+		return ${field.name};
+	}
+	
+	/**
+  #if ($field.documentation)
+	 * Sets: ${field.documentation}.
+  #else
+	 * Set the ${field.label}.
+  #end
+	 *
+	 * @param The ${field.label}
+	 */
+	public void set${field.capitalizedName}(${field.javaType} ${field.name}) {
+		this.${field.name} = ${field.name};
+	}
+#end
+
+#foreach ($inverseRelation in $entity.inverseRelations.values())
+
+	/**
+	 * Set the parent ${inverseRelation.name} onto this instance.
+	 * @param parent The parent instance to set
+	 */
+	public void set${inverseRelation.name}(${inverseRelation.name}BO parent) {
+		parent${inverseRelation.name} = parent;
+	}
+	
+	/**
+	 * Returns the parent of the type for this instance.
+	 * @return The parent instance or null if no parent of this type exists
+	 */
+	public ${inverseRelation.name}BO get${inverseRelation.name}() {
+		return parent${inverseRelation.name};
+	}	
+#end
+
+#foreach ($relation in $entity.relations.values()) 
+
+	/**
+  #if ($relation.documentation)
+	 * Sets: ${relation.documentation}.
+  #else
+	 * Set the ${relation.label} relation.
+  #end
+	 * 
+	 * @param Set - The ${relation.label}s
+	 */
+	public void set${relation.type}s(Set<${relation.type}BO> ${relation.label}s) {
+		this.${relation.label}s = ${relation.label}s;
+	} 
+
+	/**
+  #if ($relation.documentation)
+	 * Gets: ${relation.documentation}.
+  #else
+	 * Get the ${relation.label} relation.
+  #end
+	 * 
+	 * @return Set - The ${relation.label}s
+	 */
+	public Set<${relation.type}BO> get${relation.type}s() {
+		if( ${relation.label}s == null ) {
+			${relation.label}s = new HashSet<${relation.type}BO>();
+		}
+		
+		return ${relation.label}s;
+	}
+	 
+	/**
+  #if ($relation.documentation)
+	 * Adds: ${relation.documentation}.
+  #else
+	 * Add a ${relation.label}.
+  #end
+	 *
+	 * @param The ${relation.label} to add
+	 */
+	public void add${relation.type}(${relation.type}BO ${relation.label}) {
+		Set<${relation.type}BO> childSet = get${relation.type}s();
+		if (childSet == null) {
+			childSet = new HashSet<${relation.type}BO>();
+			set${relation.type}s(childSet);
+		}
+		
+		${relation.label}.set${entity.name}( (${entity.name}BO) this );
+		childSet.add( ${relation.label} );
+	}
+	 
+	/**
+  #if ($relation.documentation)
+	 * Removes: ${relation.documentation}.
+  #else
+	 * Remove a ${relation.label}.
+  #end
+	 *
+	 * @param The ${relation.label} to remove
+	 */
+	public ${relation.type}BO remove${relation.type}(${relation.type}BO ${relation.label}) {
+		if( get${relation.type}s().remove( ${relation.label} ) ) {
+			${relation.label}.set${entity.name}(null);
+			
+		} else {
+			getLogger().error("Could not remove ${relation.label} instance with key " + ${relation.label}.getKey());
+			
+		}
+	    
+		return ${relation.label};
+	}
+#end
+#foreach ($reference in $entity.references.values())
+
+	/**
+	 * Get the ${reference.label} reference.
+	 *
+	 * @return ${reference.type}BO - The ${reference.label}
+	 */
+	public ${reference.type}BO get${reference.capitalizedName}() {
+		return ${reference.name};
+	}
+	 
+	/**
+	 * Set the ${reference.label} reference.
+	 *
+	 * @param The ${reference.label}
+	 */
+	public void set${reference.capitalizedName}(${reference.type}BO ${reference.name}) {
+		this.${reference.name} = ${reference.name};
+	}			
+#end
+	
+	/**
+	 * Executes field-level validations on all child relations.
+	 */
+	@Override 
+	protected void validateRelations() {		
+#if( !$entity.relations.isEmpty() )
+		//call field validation on children:
+  #foreach ($relation in $entity.relations.values())
+		Set<${relation.type}BO> ${relation.label}Set = get${relation.type}s();
+		if (${relation.label}Set != null && !${relation.label}Set.isEmpty()) {
+			for (${relation.type}BO child : ${relation.label}Set) {
+				child.validateFields();
+			}
+		}
+
+  #end		
+#end
+	}	
+		
+	/**
+	 * Executes all complex validation on child relations.
+	 */
+	@Override 
+	protected void complexValidationOnRelations() {
+#if( !$entity.relations.isEmpty() )
+		//call complex validation on children:
+  #foreach ($relation in $entity.relations.values())
+		Set<${relation.type}BO> ${relation.label}Set = get${relation.type}s();
+		if (${relation.label}Set != null && !${relation.label}Set.isEmpty()) {
+			for (${relation.type}BO child : ${relation.label}Set) {
+				child.complexValidation();
+			}
+		}
+
+  #end		
+#end
+	}	
+
+}

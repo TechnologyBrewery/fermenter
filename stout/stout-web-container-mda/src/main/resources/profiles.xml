@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE profiles PUBLIC "-//FERMENTER//DTD PROFILES//EN" "https://bitbucket.org/askllc/fermenter/downloads/profiles.dtd">
+
+<profiles>
+	<profile name="web-container">
+		<target name="webXml"/>
+	</profile>
+</profiles>

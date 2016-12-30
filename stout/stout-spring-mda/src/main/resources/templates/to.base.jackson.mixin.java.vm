@@ -1,0 +1,73 @@
+package ${basePackage}.transfer.json;
+
+import org.slf4j.Logger;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import ${basePackage}.bizobj.*;
+import ${basePackage}.persist.${entity.name}Repository;
+
+#if( !$relations.isEmpty() )  
+import java.util.Set;
+#end
+
+#foreach ($import in $entity.imports )
+import ${import};
+#end
+
+/**
+ * Transfer object JSON contract for the ${entity.name} application entity.
+#if ($entity.documentation)
+ * ${entity.documentation}
+#end
+ *
+ * Generated Code - DO NOT MODIFY
+ */
+public abstract class ${entity.name}BaseMixIn {
+
+	@JsonIgnore
+	protected abstract Logger getLogger();
+	
+	@JsonIgnore
+	private ${entity.name}Repository repository;
+	
+#foreach ( $idField in $entity.idFields.values() )
+	@JsonProperty
+	private ${idField.javaType} ${idField.name};
+#end
+#foreach ( $field in $entity.fields.values() )
+	@JsonProperty	
+	private ${field.javaType} ${field.name};
+#end
+#foreach ($relation in $entity.relations.values())
+	@JsonManagedReference(value="${entity.name}-${relation.type}")
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
+	private Set<${relation.type}BO> ${relation.label}s;
+#end
+#foreach ($inverseRelation in $entity.inverseRelations.values())
+	@JsonBackReference(value="${inverseRelation.name}-${entity.name}")
+	private ${inverseRelation.name}BO parent${inverseRelation.name};
+	
+	@JsonIgnore
+	public abstract ${inverseRelation.name}BO get${inverseRelation.name}();
+	
+	@JsonIgnore
+	public abstract void set${inverseRelation.name}(${inverseRelation.name}BO parent);	
+#end
+
+#foreach ($reference in $entity.references.values())
+	@JsonProperty
+	private ${reference.type}BO ${reference.name};
+#end
+
+#if ( !$entity.idFields.isEmpty() )
+  #set ($idField = ${entity.idFields.values().iterator().next()})
+	@JsonIgnore
+	public abstract ${idField.javaType} getKey();
+#end
+	
+}

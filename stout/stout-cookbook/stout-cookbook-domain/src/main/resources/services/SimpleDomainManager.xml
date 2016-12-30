@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+<!DOCTYPE service PUBLIC "-//FERMENTER//DTD SERVICE//EN" "https://bitbucket.org/askllc/fermenter/downloads/service.dtd">
+
+<service>
+	<name>SimpleDomainManager</name>
+	<documentation>A collection of operations for the SimpleDomain</documentation>
+	<operations>
+		<operation>
+			<name>SelectAllSimpleDomains</name>
+			<return-many>SimpleDomain</return-many>
+			<transaction-attribute>Supports</transaction-attribute>
+		</operation>
+		<operation>
+			<name>SelectAllSimpleDomainsWithPaging</name>
+			<return-many>SimpleDomain</return-many>
+			<parameters>
+				<parameter>
+					<name>startPage</name>
+					<documentation>0-based start page</documentation>
+					<type>integer</type>
+				</parameter>
+				<parameter>
+					<name>pageSize</name>
+					<documentation>Maximum number of results to return</documentation>
+					<type>integer</type>
+				</parameter>
+			</parameters>
+			<transaction-attribute>Supports</transaction-attribute>
+		</operation>
+		<operation>
+			<name>DeleteAllSimpleDomains</name>
+			<return>void</return>
+		</operation>
+		<operation>
+			<name>SomeBusinessOperation</name>
+			<documentation>An operation that demonstrates some important business function. Returns the altered domain.</documentation>
+			<return>SimpleDomain</return>
+			<parameters>
+				<parameter>
+					<name>someBusinessEntity</name>
+					<documentation>The entity on which we should perform some business operation</documentation>
+					<type>SimpleDomain</type>
+				</parameter>
+				<parameter>
+					<name>otherImportantData</name>
+					<documentation>Critical data to supplement the business entity</documentation>
+					<type>string</type>
+				</parameter>
+			</parameters>
+		</operation>
+		<operation>
+			<name>SelectAllSimpleDomainsByType</name>
+			<return-many>SimpleDomain</return-many>
+			<parameters>
+				<parameter>
+					<name>type</name>
+					<type>string</type>
+				</parameter>
+			</parameters>
+			<transaction-attribute>Supports</transaction-attribute>
+		</operation>
+		<operation>
+			<name>GetSimpleDomainCount</name>
+			<documentation>Returns the number of persistent SimpleDomains that exist</documentation>
+			<return>integer</return>
+			<transaction-attribute>Supports</transaction-attribute>
+		</operation>
+		<operation>
+			<name>echoPlusWazzup</name>
+			<documentation>Returns your string concatenated with another, perhaps cooler, one</documentation>
+			<return>string</return>
+			<parameters>
+				<parameter>
+					<name>echoRoot</name>
+					<type>string</type>
+				</parameter>
+			</parameters>
+		</operation>
+		<operation>
+			<name>countNumInputs</name>
+			<documentation>Returns the number of provided SimpleDomain entities</documentation>
+			<return>integer</return>
+			<parameters>
+				<parameter>
+					<name>input</name>
+					<type>SimpleDomain</type>
+					<many>true</many>
+				</parameter>
+			</parameters>
+		</operation>
+		<operation>
+			<name>CreateAndPropagateErrorMessages</name>
+			<return>void</return>
+			<parameters>
+				<parameter>
+					<name>numErrorMessagesToGenerate</name>
+					<type>integer</type>
+				</parameter>
+			</parameters>
+		</operation>
+		<operation>
+			<name>SaveSimpleDomainEntityAndPropagateErrorMessages</name>
+			<return>SimpleDomain</return>
+			<parameters>
+				<parameter>
+					<name>targetNameValue</name>
+					<type>string</type>
+				</parameter>
+				<parameter>
+					<name>numErrorMessagesToGenerate</name>
+					<type>integer</type>
+				</parameter>
+			</parameters>
+		</operation>
+		<operation>
+			<name>ReturnNullEntity</name>
+			<return>SimpleDomain</return>
+		</operation>
+	</operations>
+
+</service>

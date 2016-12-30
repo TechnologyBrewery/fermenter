@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE entity PUBLIC "-//FERMENTER//DTD ENTITY//EN" "https://bitbucket.org/askllc/fermenter/downloads/entity.dtd">
+
+<entity>
+	<name>ValidationExample</name>
+	<table>VALIDATION_EXAMPLE</table>
+  	<id>
+  		<field>
+       		<name>id</name>
+      		<type>string</type>
+       		<column>VALIDATION_EXAMPLE_ID</column>
+       		<required>true</required>
+       		<generator>uuid</generator>
+       		<label>validation example id</label>
+		</field>
+	</id>
+	<fields>
+   		<field>
+       		<name>requiredField</name>
+       		<type>string</type>
+       		<column>REQUIRED_FIELD</column>
+       		<required>true</required>
+			<label>required field</label>
+   		</field>
+   		<field>
+       		<name>stringExample</name>
+       		<type>string</type>
+       		<column>STRING_EXAMPLE</column>
+       		<maxLength>20</maxLength>
+       		<minLength>2</minLength>
+   		</field>
+   		<field>
+       		<name>longExample</name>
+       		<type>long</type>
+       		<column>LONG_EXAMPLE</column>
+       		<maxValue>123456789</maxValue>
+       		<minValue>-123456789</minValue>
+   		</field>
+   		<field>
+       		<name>integerExample</name>
+       		<type>integer</type>
+       		<column>INTEGER_EXAMPLE</column>
+       		<maxValue>12345</maxValue>
+       		<minValue>-12345</minValue>
+   		</field>
+   		<field>
+       		<name>bigDecimalExample</name>
+       		<type>big_decimal</type>
+       		<column>BIG_DECIMAL_EXAMPLE</column>
+       		<maxValue>123456789.123456789</maxValue>
+       		<minValue>-123456789.123456789</minValue>
+   		</field>
+   		<field>
+       		<name>bigDecimalExampleWithScale</name>
+       		<type>big_decimal</type>
+       		<column>BIG_DECIMAL_SCALE</column>
+			<scale>3</scale>
+   		</field>
+   		<field>
+       		<name>dateExample</name>
+       		<type>date</type>
+       		<column>DATE_EXAMPLE</column>
+   		</field>
+   		<field>
+       		<name>characterExample</name>
+       		<type>character</type>
+       		<column>CHAR_EXAMPLE</column>
+   		</field>
+	</fields>
+
+	<associations>
+		<relation>
+			<type>ValidationExampleChild</type>
+			<multiplicity>1-M</multiplicity>
+		</relation>
+	</associations>
+
+</entity>

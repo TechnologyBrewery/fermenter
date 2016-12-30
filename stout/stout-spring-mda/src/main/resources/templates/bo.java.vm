@@ -1,0 +1,37 @@
+package ${basePackage}.bizobj;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+import org.bitbucket.fermenter.stout.util.SpringAutowiringUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ * Business object for the ${entity.name} entity.
+ * @see ${basePackage}.bizobj.${entity.name}BaseBO
+ *
+ * GENERATED STUB CODE - PLEASE *DO* MODIFY
+ */
+@Entity
+@Table(name="${entity.table}")
+public class ${entity.name}BO extends ${entity.name}BaseBO {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(${entity.name}BO.class);
+
+	public ${entity.name}BO() {
+		super();
+		SpringAutowiringUtil.autowireBizObj(this);
+	}
+
+	@Override
+	protected Logger getLogger() {
+		return LOGGER;
+	}
+
+	@Override
+	protected void complexValidation() {
+
+	}
+	
+}

@@ -1,1 +1,0 @@
-hibernate.resource=org.bitbucket.fermenter.stout.persist.hibernate.HibernateResource

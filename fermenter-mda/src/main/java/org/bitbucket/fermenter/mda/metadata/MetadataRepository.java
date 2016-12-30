@@ -12,7 +12,6 @@ import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metadata.element.Composite;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.Enumeration;
-import org.bitbucket.fermenter.mda.metadata.element.Form;
 import org.bitbucket.fermenter.mda.metadata.element.Service;
 
 public class MetadataRepository extends AbstractMetadataRepository {
@@ -45,7 +44,6 @@ public class MetadataRepository extends AbstractMetadataRepository {
         EntityMetadataManager.getInstance().validate();
         ServiceMetadataManager.getInstance().validate();
         EnumerationMetadataManager.getInstance().validate();        
-        FormMetadataManager.getInstance().validate();
 	}
 	
 	public Entity getEntity(String entityName) {
@@ -89,7 +87,6 @@ public class MetadataRepository extends AbstractMetadataRepository {
     			EntityMetadataManager.getInstance().loadMetadata(url.getApplicationName(), url.getUrl());
     			ServiceMetadataManager.getInstance().loadMetadata(url.getApplicationName(), url.getUrl());
     			EnumerationMetadataManager.getInstance().loadMetadata(url.getApplicationName(), url.getUrl());			
-    			FormMetadataManager.getInstance().loadMetadata(url.getApplicationName(), url.getUrl());
     
     			if (applicationName.equals(url.getApplicationName())) {
                     // Messages metadata only needs to be loaded for the current project
@@ -152,23 +149,5 @@ public class MetadataRepository extends AbstractMetadataRepository {
 		Map composites = getAllComposites();
 		return (Composite) composites.get(compositeType);
 	}	
-	
-	public Map getAllForms() {
-		return FormMetadataManager.getInstance().getCompleteMetadataMap();
-	}
-	
-	public Map getAllForms(String applicationName) {
-		return FormMetadataManager.getForms(applicationName);
-	}
-	
-	public Form getForm(String applicationName, String formName) {
-		Map forms = getAllForms(applicationName);
-		return (Form) forms.get(formName);
-	}
-	
-	public Form getForm(String formName) {
-		Map forms = getAllForms();
-		return (Form) forms.get(formName);
-	}
-	
+
 }

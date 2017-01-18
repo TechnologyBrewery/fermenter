@@ -74,12 +74,19 @@
 		    outputFile="${basePackage}/service/impl/${serviceName}ServiceImpl.java"
 		    overwritable="false"/>
 	
-	<target name="entityMaintenanceServices"
+	<target name="restEntityMaintenanceServiceInterfaces"
 		    generator="org.bitbucket.fermenter.stout.mda.generator.entity.EntityJavaGenerator"
-		    templateName="templates/entity.maintenance.service.java.vm"
-		    outputFile="${basePackage}/service/impl/${entityName}MaintenanceService.java"
+		    templateName="templates/entity.maintenance.service.rest.interface.java.vm"
+		    outputFile="${basePackage}/service/rest/${entityName}MaintenanceService.java"
+		    overwritable="true"/>
+	
+	<target name="entityMaintenanceServiceImpls"
+		    generator="org.bitbucket.fermenter.stout.mda.generator.entity.EntityJavaGenerator"
+		    templateName="templates/entity.maintenance.service.impl.java.vm"
+		    outputFile="${basePackage}/service/impl/${entityName}MaintenanceServiceImpl.java"
 		    overwritable="true"/>
 		    
+		    		    
 	<target name="messageProperties"
 		    generator="org.bitbucket.fermenter.stout.mda.generator.properties.MessageResourceGenerator"
 		    templateName="templates/messages.properties.vm"

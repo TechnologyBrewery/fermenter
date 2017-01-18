@@ -5,19 +5,11 @@ import $import;
 #end
 
 import ${basePackage}.bizobj.${entity.name}BO;
+import ${basePackage}.service.rest.${entity.name}MaintenanceService;
 
 import javax.inject.Inject;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,12 +20,13 @@ import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
 
 /**
- * Provides create, retrieve, update, and delete (CRUD) functionality for ${entity.name} business objects.
+ * Concrete implementation for create, retrieve, update, and delete (CRUD) functionality 
+ * for ${entity.name} business objects.
  *
  * Generated Code - DO NOT MODIFY
  */
-@Path("${entity.name}")
-public class ${entity.name}MaintenanceService extends AbstractMsgMgrAwareService {
+@Service 
+public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareService implements ${entity.name}MaintenanceService {
 
 #if ( !$entity.idFields.isEmpty() )
   #set ($idFieldJavaType = ${entity.idFields.values().iterator().next().javaType})
@@ -47,32 +40,20 @@ public class ${entity.name}MaintenanceService extends AbstractMsgMgrAwareService
 	private DefaultMessages messages;
 		
 	/**
-	 * Save or update the provided instance.
-	 *
-	 * @param ${idFieldName} The primary key value ${idFieldName} for the ${entity.name}	
-	 * @param entity The ${entity.name} instance to save
-	 * @return a service response containing the saved entity and/or any collected messages
+	 * {@inheritDoc}
 	 */
-	@PUT
-	@Path("{${idFieldName}}")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional(propagation=Propagation.REQUIRED)
-	public ValueServiceResponse<${entity.name}BO> saveOrUpdate(@PathParam("${idFieldName}") ${idFieldJavaType} ${idFieldName}, ${entity.name}BO entity) {
+	@Override
+	public ValueServiceResponse<${entity.name}BO> saveOrUpdate(${idFieldJavaType} ${idFieldName}, ${entity.name}BO entity) {
 		entity.setKey($idFieldName);
 		return saveOrUpdate(entity);
 	}
 	
 	/**
-	 * Create the provided instance.
-	 *
-	 * @param entity The ${entity.name} instance to save
-	 * @return a service response containing the saved entity and/or any collected messages
+	 * {@inheritDoc}
 	 */
-	@POST
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional(propagation=Propagation.REQUIRED)
+	@Override
 	public ValueServiceResponse<${entity.name}BO> saveOrUpdate(${entity.name}BO entity) {
 		initMsgMgr(messages);
 		${entity.name}BO persistedEntity = entity.save();
@@ -82,15 +63,11 @@ public class ${entity.name}MaintenanceService extends AbstractMsgMgrAwareService
 	}
 	
 	/**
-	 * Deletes the ${entity.name} entity with the provided primary key value.
-	 *
-	 * @param ${idFieldName} The primary key value ${idFieldName} for the ${entity.name} to delete
-	 * @return response wrapper containing any collected messages
+	 * {@inheritDoc}
 	 */
-	@DELETE
-	@Path("{${idFieldName}}")
 	@Transactional(propagation=Propagation.REQUIRED)
-	public VoidServiceResponse delete(@PathParam("${idFieldName}") ${idFieldJavaType} ${idFieldName}) {
+	@Override
+	public VoidServiceResponse delete(${idFieldJavaType} ${idFieldName}) {
 		initMsgMgr(messages);
 		${entity.name}BO entityToDelete = ${entity.name}BO.findByPrimaryKey(${idFieldName});
 		if (entityToDelete != null) {
@@ -102,15 +79,11 @@ public class ${entity.name}MaintenanceService extends AbstractMsgMgrAwareService
 	}	
 	 	
 	/**
-	 * Find the ${entity.name} by primary key
-	 *
-	 * @param ${id.name} The primary key value ${id.name} for the ${entity.name} to retrieve
-	 * @return a service response containing the retrieved entity and/or any collected messages
+	 * {@inheritDoc}
 	 */
-	@GET
-	@Path("{${idFieldName}}")
 	@Transactional(propagation=Propagation.SUPPORTS)
-	public ValueServiceResponse<${entity.name}BO> findByPrimaryKey(@PathParam("${idFieldName}") ${idFieldJavaType} ${idFieldName}) {
+	@Override
+	public ValueServiceResponse<${entity.name}BO> findByPrimaryKey(${idFieldJavaType} ${idFieldName}) {
 		initMsgMgr(messages);
 		${entity.name}BO retrievedEntity = ${entity.name}BO.findByPrimaryKey(${idFieldName});
 		ValueServiceResponse<${entity.name}BO> response = new ValueServiceResponse<${entity.name}BO>(retrievedEntity);

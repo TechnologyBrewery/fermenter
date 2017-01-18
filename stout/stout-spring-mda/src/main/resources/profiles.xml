@@ -23,6 +23,7 @@
 		<target name="dataSourceProperties"/>			
 	</profile>
 	<profile name="entity-maintenance-services">
-		<target name="entityMaintenanceServices"/>
+		<target name="entityMaintenanceServiceImpls"/>
+		<target name="restEntityMaintenanceServiceInterfaces"/>
 	</profile>	    
 </profiles>

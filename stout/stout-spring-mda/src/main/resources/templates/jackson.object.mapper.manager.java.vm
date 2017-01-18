@@ -43,17 +43,13 @@ public final class ObjectMapperManager {
 		SimpleModule module = new SimpleModule();
 #foreach( $entity in $entities )		
 		module.setMixInAnnotation(${entity.name}BO.class, ${entity.name}MixIn.class);
-		LOGGER.debug("Configured Jackson of Class/MixIn combination: ${entity.name}BO=${entity.name}MixIn");
 #end
 		
 		module.addAbstractTypeMapping(Messages.class, DefaultMessages.class);
-		LOGGER.debug("Configured Jackson of Interface/Concrete class mapping: Messages->DefaultMessages");
 		module.setMixInAnnotation(Messages.class, MessagesMixIn.class);
-		LOGGER.debug("Configured Jackson of Class/MixIn combination: Messages=MessagesMixIn");
+		module.setMixInAnnotation(DefaultMessages.class, MessagesMixIn.class);
 		module.addSerializer(Message.class, new MessageSerializer(ObjectMapperManager.class));
-		LOGGER.debug("Configured Jackson custom serializer: Message->MessageSerializer");
 		module.addDeserializer(Message.class, new MessageDeserializer());
-		LOGGER.debug("Configured Jackson custom deserializer: Message->MessageDeserializer");
 		
 		objectMapper.registerModule(module);
 		objectMapper.registerModule(new Hibernate5Module());

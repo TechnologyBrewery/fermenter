@@ -4,6 +4,8 @@ package ${basePackage}.service.impl;
 import $import;
 #end
 
+import ${basePackage}.bizobj.*;
+
 import javax.inject.Inject;
 
 import org.bitbucket.fermenter.stout.messages.AbstractMsgMgrAwareService;

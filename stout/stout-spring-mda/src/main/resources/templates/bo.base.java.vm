@@ -83,7 +83,7 @@ public abstract class ${entity.name}BaseBO extends BaseSpringBO<${idFieldJavaTyp
   	#end
   #end
   #if ( $field.hasFormat() )
-    @Pattern(regexp="${field.patterns}")
+    @Pattern(regexp=${field.patterns})
   #end
 	private ${field.javaType} ${field.name};
 

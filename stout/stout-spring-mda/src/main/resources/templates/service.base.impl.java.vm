@@ -12,6 +12,7 @@ import org.bitbucket.fermenter.stout.messages.DefaultMessages;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
 
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +21,8 @@ import ${basePackage}.service.rest.${service.name}Service;
 /**
  * Service implementation class for the ${service.name} service
  * @see ${basePackage}.service.rest.${service.name}Service
- */ 
+ */
+@Service
 public abstract class ${service.name}BaseServiceImpl extends AbstractMsgMgrAwareService implements ${service.name}Service {
 
 	@Inject

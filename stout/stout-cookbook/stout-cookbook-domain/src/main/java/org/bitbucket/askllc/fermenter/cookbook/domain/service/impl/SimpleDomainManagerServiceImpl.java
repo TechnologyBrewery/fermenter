@@ -18,6 +18,8 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.enumeration.SimpleDomainEnumeration;
+import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.SimpleDomainManagerBaseService;
+import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.SimpleDomainManagerService;
 import org.bitbucket.fermenter.stout.messages.MessageManager;
 import org.bitbucket.fermenter.stout.messages.MessageUtils;
 import org.springframework.stereotype.Service;
@@ -32,7 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
  *      GENERATED STUB CODE - PLEASE *DO* MODIFY
  */
 @Service
-public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServiceImpl {
+public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServiceImpl implements SimpleDomainManagerService {
 
 	/**
 	 * Demonstrates how a one-off service operation that requires elements not yet supported natively by Fermenter can

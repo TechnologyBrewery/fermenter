@@ -1,7 +1,5 @@
 package ${basePackage}.service.rest;
 
-import javax.ws.rs.Path;
-
 /**
  * Interface for the ${service.name} service that may be modified by 
  * developers to encapsulate any service operations that are not supported
@@ -11,7 +9,6 @@ import javax.ws.rs.Path;
  * 
  * GENERATED STUB CODE - PLEASE *DO* MODIFY
  */
-@Path("/")
 public interface ${service.name}Service extends ${service.name}BaseService {
 	
 	// Developers should add any service operations here that cannot be defined via the PIM

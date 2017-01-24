@@ -15,7 +15,6 @@ import javax.ws.rs.core.Response;
  * 
  *      GENERATED STUB CODE - PLEASE *DO* MODIFY
  */
-@Path("/")
 public interface SimpleDomainManagerService extends SimpleDomainManagerBaseService {
 
 	// Developers should add any service operations here that cannot be defined via the PIM

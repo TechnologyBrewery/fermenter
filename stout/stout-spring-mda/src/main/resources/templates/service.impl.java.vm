@@ -13,7 +13,7 @@ import $import;
  * GENERATED STUB CODE - PLEASE *DO* MODIFY
  */
 @Service
-public class ${service.name}ServiceImpl extends ${service.name}BaseServiceImpl {
+public class ${service.name}ServiceImpl extends ${service.name}BaseServiceImpl implements ${service.name}Service {
 #foreach( $operation in $service.operations )
 
 	/**

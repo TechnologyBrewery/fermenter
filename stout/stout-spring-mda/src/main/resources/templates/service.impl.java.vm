@@ -2,6 +2,8 @@ package ${basePackage}.service.impl;
 
 import org.springframework.stereotype.Service;
 
+import ${basePackage}.service.rest.${service.name}Service;
+
 #foreach( $import in $service.imports )
 import $import;
 #end

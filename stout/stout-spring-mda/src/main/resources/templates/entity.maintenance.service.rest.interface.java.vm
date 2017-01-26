@@ -69,6 +69,7 @@ public interface ${entity.name}MaintenanceService {
 	 */
 	@DELETE
 	@Path("{${idFieldName}}")
+	@Produces(MediaType.APPLICATION_JSON)
 	VoidServiceResponse delete(@PathParam("${idFieldName}") ${idFieldJavaType} ${idFieldName});
 	 	
 	/**

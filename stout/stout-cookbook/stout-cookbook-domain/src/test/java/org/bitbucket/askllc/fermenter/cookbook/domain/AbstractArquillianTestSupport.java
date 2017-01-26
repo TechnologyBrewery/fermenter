@@ -7,6 +7,7 @@ import javax.ws.rs.client.WebTarget;
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.JacksonObjectMapperResteasyProvider;
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
 import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.extension.rest.client.ArquillianResteasyResource;
 import org.jboss.shrinkwrap.api.Filters;
 import org.jboss.shrinkwrap.api.GenericArchive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;

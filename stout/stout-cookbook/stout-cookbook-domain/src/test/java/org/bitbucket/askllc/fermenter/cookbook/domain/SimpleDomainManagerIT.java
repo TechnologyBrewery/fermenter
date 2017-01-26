@@ -3,8 +3,10 @@ package org.bitbucket.askllc.fermenter.cookbook.domain;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.SimpleDomainMaintenanceService;
+import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.SimpleDomainManagerService;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.extension.rest.client.ArquillianResteasyResource;
@@ -18,7 +20,7 @@ public class SimpleDomainManagerIT extends AbstractArquillianTestSupport {
 
 	@Test
 	@RunAsClient
-	public void saveNewSimpleDomain(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
+	public void testSaveNewSimpleDomain(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
 		webTarget = initWebTarget(webTarget);
 		SimpleDomainMaintenanceService simpleDomainService = webTarget.proxy(SimpleDomainMaintenanceService.class);
 
@@ -31,4 +33,14 @@ public class SimpleDomainManagerIT extends AbstractArquillianTestSupport {
 		assertNotNull(retrievedSimpleDomain.getUpdatedAt());
 	}
 
+	@Test
+	@RunAsClient
+	public void testEcho(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
+		webTarget = initWebTarget(webTarget);
+		SimpleDomainManagerService simpleDomainMgr = webTarget.proxy(SimpleDomainManagerService.class);
+		ValueServiceResponse<String> response = simpleDomainMgr.echoPlusWazzup(RandomStringUtils.randomAlphabetic(10));
+
+		TestUtils.assertNoErrorMessages(response);
+		assertNotNull(response.getValue());
+	}
 }

@@ -22,7 +22,6 @@ import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
  *
  * Generated Code - DO NOT MODIFY
  */
-@Path("${service.name}Service")
 public interface ${service.name}BaseService {
 
 #foreach( $operation in $service.operations )

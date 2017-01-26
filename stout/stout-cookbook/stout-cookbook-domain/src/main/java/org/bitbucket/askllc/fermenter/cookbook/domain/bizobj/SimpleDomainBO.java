@@ -11,6 +11,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.json.SimpleDomainMixIn;
 import org.bitbucket.fermenter.stout.util.SpringAutowiringUtil;
 import org.slf4j.Logger;
@@ -90,6 +91,7 @@ public class SimpleDomainBO extends SimpleDomainBaseBO {
 	@Override
 	protected void preValidate() {
 		setUpdatedAt(new Date());
+		setLargeString(RandomStringUtils.randomAlphanumeric(50));
 	}
 
 	protected void setUpdatedAt(Date updatedAt) {

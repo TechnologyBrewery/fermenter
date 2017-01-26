@@ -8,7 +8,6 @@ import static org.junit.Assert.assertNull;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.SimpleDomainMaintenanceService;
-import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.SimpleDomainManagerService;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
 import org.jboss.arquillian.container.test.api.RunAsClient;
@@ -19,11 +18,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(Arquillian.class)
-public class SimpleDomainManagerIT extends AbstractArquillianTestSupport {
+public class SimpleDomainMaintenanceIT extends AbstractArquillianTestSupport {
 
     @Test
     @RunAsClient
-    public void testDomainMaintenanceGet(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
+    public void testGetExistingSimpleDomain(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
         SimpleDomainMaintenanceService simpleDomainService = getMaintenanceService(webTarget);
         ValueServiceResponse<SimpleDomainBO> result = simpleDomainService.findByPrimaryKey("BAD_PK");
         assertNotNull(result);
@@ -46,7 +45,7 @@ public class SimpleDomainManagerIT extends AbstractArquillianTestSupport {
 	
     @Test
     @RunAsClient
-    public void testDomainMaintenanceUpdate(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
+    public void testUpdateExistingSimpleDomain(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
         SimpleDomainMaintenanceService simpleDomainService = getMaintenanceService(webTarget);
         SimpleDomainBO domain = TestUtils.createRandomSimpleDomain();
 
@@ -71,7 +70,7 @@ public class SimpleDomainManagerIT extends AbstractArquillianTestSupport {
 
     @Test
     @RunAsClient
-    public void testDomainMaintenanceDelete(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
+    public void testDeleteExistingSimpleDomain(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
         SimpleDomainMaintenanceService simpleDomainService = getMaintenanceService(webTarget);
         SimpleDomainBO domain = TestUtils.createRandomSimpleDomain();
 
@@ -88,22 +87,12 @@ public class SimpleDomainManagerIT extends AbstractArquillianTestSupport {
         assertNotNull(foundResult);
         assertNull(foundResult.getValue());
 
-    }	
-
+    }
+    
     private SimpleDomainMaintenanceService getMaintenanceService(ResteasyWebTarget webTarget) {
         webTarget = initWebTarget(webTarget);
-		SimpleDomainMaintenanceService simpleDomainService = webTarget.proxy(SimpleDomainMaintenanceService.class);
+        SimpleDomainMaintenanceService simpleDomainService = webTarget.proxy(SimpleDomainMaintenanceService.class);
         return simpleDomainService;
-    }
+    }    
 
-	@Test
-	@RunAsClient
-	public void testEcho(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
-		webTarget = initWebTarget(webTarget);
-		SimpleDomainManagerService simpleDomainMgr = webTarget.proxy(SimpleDomainManagerService.class);
-		ValueServiceResponse<String> response = simpleDomainMgr.echoPlusWazzup(RandomStringUtils.randomAlphabetic(10));
-
-		TestUtils.assertNoErrorMessages(response);
-		assertNotNull(response.getValue());
-	}
 }

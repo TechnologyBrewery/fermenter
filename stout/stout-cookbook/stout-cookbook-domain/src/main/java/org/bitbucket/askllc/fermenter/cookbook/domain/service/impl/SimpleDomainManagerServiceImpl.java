@@ -21,6 +21,8 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.enumeration.SimpleDomainEn
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.SimpleDomainManagerService;
 import org.bitbucket.fermenter.stout.messages.MessageManager;
 import org.bitbucket.fermenter.stout.messages.MessageUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +36,8 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServiceImpl implements SimpleDomainManagerService {
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(SimpleDomainManagerServiceImpl.class);
 
 	/**
 	 * Demonstrates how a one-off service operation that requires elements not yet supported natively by Fermenter can
@@ -137,9 +141,8 @@ public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServi
 	 */
 	@Override
 	protected SimpleDomainBO someBusinessOperationImpl(SimpleDomainBO someBusinessEntity, String otherImportantData) {
-		// TODO: Add Business Logic Here
-
-		return null;
+	    someBusinessEntity.setName("This data is really important: " + otherImportantData);
+        return someBusinessEntity;
 	}
 
 	/**
@@ -158,9 +161,37 @@ public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServi
 		return SimpleDomainBO.findByType(type);
 	}
 
+	/**
+     * {@inheritDoc}
+     */
 	@Override
 	protected Integer countNumInputsImpl(List<SimpleDomainBO> input) {
 		return input != null ? input.size() : 0;
 	}
+	
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void returnVoidImpl() {
+        LOGGER.info("did something, returning void");        
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void doSomethingWithPrimitiveInputsImpl(String inputStr, Integer inputInt) {
+        LOGGER.info("did something with " + inputStr + " and " + inputInt);
+        
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String doSomethingAndReturnAPrimitiveImpl() {
+        return RandomStringUtils.randomAlphabetic(1);
+    }
 
 }

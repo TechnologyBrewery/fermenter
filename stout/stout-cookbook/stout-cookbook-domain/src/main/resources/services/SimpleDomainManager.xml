@@ -116,6 +116,28 @@
 			<name>ReturnNullEntity</name>
 			<return>SimpleDomain</return>
 		</operation>
+		<operation>
+			<name>ReturnVoid</name>
+			<return>void</return>
+		</operation>
+		<operation>
+			<name>DoSomethingWithPrimitiveInputs</name>
+			<return>void</return>
+			<parameters>
+				<parameter>
+					<name>inputStr</name>
+					<type>string</type>
+				</parameter>
+				<parameter>
+					<name>inputInt</name>
+					<type>integer</type>
+				</parameter>
+			</parameters>
+		</operation>
+		<operation>
+			<name>DoSomethingAndReturnAPrimitive</name>
+			<return>character</return>
+		</operation>
 	</operations>
 
 </service>

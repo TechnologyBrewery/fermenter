@@ -68,6 +68,9 @@ public abstract class ${entity.name}BaseMixIn {
   #set ($idField = ${entity.idFields.values().iterator().next()})
 	@JsonIgnore
 	public abstract ${idField.javaType} getKey();
+	
+	@JsonIgnore
+	public abstract void setKey(${idField.javaType} ${idField.name});
 #end
 	
 }

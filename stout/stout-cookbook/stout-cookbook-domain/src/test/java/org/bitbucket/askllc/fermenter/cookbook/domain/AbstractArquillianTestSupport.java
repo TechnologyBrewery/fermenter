@@ -45,7 +45,7 @@ public abstract class AbstractArquillianTestSupport {
 	 * @param webTarget
 	 * @return
 	 */
-	protected WebTarget initWebTarget(WebTarget webTarget) {
-		return webTarget.register(JacksonObjectMapperResteasyProvider.class);
+	protected <T extends WebTarget> T initWebTarget(T webTarget) {
+		return (T) webTarget.register(JacksonObjectMapperResteasyProvider.class);
 	}
 }

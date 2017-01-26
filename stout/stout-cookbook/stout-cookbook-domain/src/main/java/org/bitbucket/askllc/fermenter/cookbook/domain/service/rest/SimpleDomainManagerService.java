@@ -20,7 +20,7 @@ public interface SimpleDomainManagerService extends SimpleDomainManagerBaseServi
 	// Developers should add any service operations here that cannot be defined via the PIM
 
 	@GET
-	@Path("/SimpleDomainManagerService/getLargeString")
+	@Path("getLargeString")
 	@Produces(MediaType.TEXT_PLAIN)
 	Response getLargeString(@QueryParam("simpleDomainId") String simpleDomainId);
 }

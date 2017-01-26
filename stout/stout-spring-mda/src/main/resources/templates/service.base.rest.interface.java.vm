@@ -22,7 +22,7 @@ import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
  *
  * Generated Code - DO NOT MODIFY
  */
-@Path("/")
+@Path("${service.name}Service")
 public interface ${service.name}BaseService {
 
 #foreach( $operation in $service.operations )
@@ -55,7 +55,7 @@ public interface ${service.name}BaseService {
 	#else
 	@POST
 	#end
-	@Path("/${service.name}Service/${operation.lowercaseName}")
+	@Path("${operation.lowercaseName}")
 	@Produces("application/json;charset=${operation.responseEncoding}")
 	#if($operation.hasEntityParameters())
 	@Consumes(MediaType.APPLICATION_JSON)

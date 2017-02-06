@@ -13,6 +13,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import org.jboss.resteasy.annotations.cache.NoCache;
 
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
@@ -51,6 +52,7 @@ public interface ${service.name}BaseService {
 	 */
 	#if($operation.transactionAttribute == "SUPPORTS")
 	@GET 
+	@NoCache
 	#else
 	@POST
 	#end

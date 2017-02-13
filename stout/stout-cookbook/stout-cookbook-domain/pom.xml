@@ -16,6 +16,14 @@
 	<packaging>jar</packaging>
 
 	<build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>src/generated/resources</directory>
+            </resource>
+        </resources>
 		<plugins>
 			<plugin>
 				<groupId>org.bitbucket.askllc.fermenter</groupId>

@@ -33,12 +33,14 @@
 		</operation>
 		<operation>
 			<name>SomeBusinessOperation</name>
-			<documentation>An operation that demonstrates some important business function. Returns the altered domain.</documentation>
+			<documentation>An operation that demonstrates some important business
+				function. Returns the altered domain.</documentation>
 			<return>SimpleDomain</return>
 			<parameters>
 				<parameter>
 					<name>someBusinessEntity</name>
-					<documentation>The entity on which we should perform some business operation</documentation>
+					<documentation>The entity on which we should perform some business
+						operation</documentation>
 					<type>SimpleDomain</type>
 				</parameter>
 				<parameter>
@@ -61,13 +63,15 @@
 		</operation>
 		<operation>
 			<name>GetSimpleDomainCount</name>
-			<documentation>Returns the number of persistent SimpleDomains that exist</documentation>
+			<documentation>Returns the number of persistent SimpleDomains that
+				exist</documentation>
 			<return>integer</return>
 			<transaction-attribute>Supports</transaction-attribute>
 		</operation>
 		<operation>
 			<name>echoPlusWazzup</name>
-			<documentation>Returns your string concatenated with another, perhaps cooler, one</documentation>
+			<documentation>Returns your string concatenated with another, perhaps
+				cooler, one</documentation>
 			<return>string</return>
 			<parameters>
 				<parameter>
@@ -137,6 +141,19 @@
 		<operation>
 			<name>DoSomethingAndReturnAPrimitive</name>
 			<return>character</return>
+		</operation>
+		<operation>
+			<name>methodWithSingleEntityAsParam</name>
+			<documentation>When AeroGear deals with an object that has an id, it wants to use PUT vice POST</documentation>
+			<return>SimpleDomain</return>
+			<parameters>
+				<parameter>
+					<name>simpleDomain</name>
+					<documentation>An object that is a parameter</documentation>
+					<type>SimpleDomain</type>
+				</parameter>
+			</parameters>
+			<transaction-attribute>Required</transaction-attribute>
 		</operation>
 	</operations>
 

@@ -9,6 +9,7 @@ import ${basePackage}.bizobj.*;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -69,6 +70,24 @@ public interface ${service.name}BaseService {
 	ValueServiceResponse<${operation.returnTypeAsBO}> ${operation.lowercaseName}(${operation.getSignatureParametersWithJaxRS()});
 	#else 
 	ValueServiceResponse<${operation.wrappedReturnType}> ${operation.lowercaseName}(${operation.getSignatureParametersWithJaxRS()});
+	#end
+	
+	#if($operation.transactionAttribute != "SUPPORTS")
+	@PUT
+	@Path("${operation.lowercaseName}")
+	@Produces("application/json;charset=${operation.responseEncoding}")
+	#if($operation.hasEntityParameters())
+	@Consumes(MediaType.APPLICATION_JSON)
+	#end
+	#if($operation.isReturnTypeCollection())	 
+	ValueServiceResponse<Collection<${operation.returnManyTypeAsBO}>> ${operation.lowercaseName}ViaPut(${operation.getSignatureParametersWithJaxRS()});
+	#elseif($operation.isResponseTypeVoid())
+	public VoidServiceResponse ${operation.lowercaseName}ViaPut(${operation.getSignatureParametersWithJaxRS()});
+	#elseif($operation.isReturnTypeEntity())	 
+	ValueServiceResponse<${operation.returnTypeAsBO}> ${operation.lowercaseName}ViaPut(${operation.getSignatureParametersWithJaxRS()});
+	#else 
+	ValueServiceResponse<${operation.wrappedReturnType}> ${operation.lowercaseName}ViaPut(${operation.getSignatureParametersWithJaxRS()});;
+	#end
 	#end
 
 #end

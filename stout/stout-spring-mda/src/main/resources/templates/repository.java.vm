@@ -1,6 +1,7 @@
 package ${basePackage}.persist;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import ${basePackage}.bizobj.${entity.name}BO;
 
 /**
@@ -13,7 +14,7 @@ import ${basePackage}.bizobj.${entity.name}BO;
 #else
   #set ($idFieldJavaType = 'String')
 #end  
-public interface ${entity.name}Repository extends JpaRepository<${entity.name}BO, ${idFieldJavaType}> {
+public interface ${entity.name}Repository extends JpaRepository<${entity.name}BO, ${idFieldJavaType}>, JpaSpecificationExecutor<${entity.name}BO> {
 	
 	/**
 	 * Developers should leverage this interface to define any query logic

@@ -2,14 +2,14 @@ package org.bitbucket.askllc.fermenter.cookbook.domain.persist;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationExampleChildBO;
+import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainChildBO;
 
 /**
- * Data access repository for the ValidationExampleChild business object.
+ * Data access repository for the SimpleDomainChild business object.
  * 
  * GENERATED STUB CODE - PLEASE *DO* MODIFY
  */ 
-public interface ValidationExampleChildRepository extends JpaRepository<ValidationExampleChildBO, String>, JpaSpecificationExecutor<ValidationExampleChildBO> {
+public interface SimpleDomainChildRepository extends JpaRepository<SimpleDomainChildBO, String>, JpaSpecificationExecutor<SimpleDomainChildBO> {
 	
 	/**
 	 * Developers should leverage this interface to define any query logic

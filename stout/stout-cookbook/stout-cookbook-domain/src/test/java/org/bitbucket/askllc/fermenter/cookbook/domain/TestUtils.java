@@ -12,6 +12,7 @@ import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainBO;
+import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainChildBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationExampleBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationExampleChildBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.enumeration.SimpleDomainEnumeration;
@@ -56,6 +57,16 @@ public final class TestUtils {
 		SimpleDomainBO simpleDomain = createRandomSimpleDomain();
 		simpleDomain.setBigDecimalValue(BigDecimal.valueOf(bigDecimalAttributeValue));
 		return simpleDomain;
+	}
+
+	public static SimpleDomainBO createRandomSimpleDomain(int numChildEntities) {
+		SimpleDomainBO domain = createRandomSimpleDomain();
+		for (int iter = 0; iter < numChildEntities; iter++) {
+			SimpleDomainChildBO child = new SimpleDomainChildBO();
+			child.setName(RandomStringUtils.randomAlphabetic(10));
+			domain.addSimpleDomainChild(child);
+		}
+		return domain;
 	}
 
 	public static ValidationExampleBO createRandomValidationExample() {

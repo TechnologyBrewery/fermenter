@@ -14,6 +14,12 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.PluralAttribute;
 
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
@@ -25,6 +31,9 @@ import javax.validation.constraints.Size;
 
 import org.bitbucket.fermenter.stout.bizobj.BaseSpringBO;
 import org.bitbucket.fermenter.stout.bizobj.BusinessObject;
+
+import org.springframework.data.jpa.domain.Specification;
+import static org.springframework.data.jpa.domain.Specifications.where;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import ${basePackage}.persist.${entity.name}Repository;
@@ -109,10 +118,21 @@ public abstract class ${entity.name}BaseBO extends BaseSpringBO<${idFieldJavaTyp
 	}
 #end
 	
+#if (!$entity.relations.isEmpty())
+  #set ($idField = ${entity.idFields.values().iterator().next()})
+	public static ${entity.name}BO findByPrimaryKey(${idFieldJavaType} key) {
+		return ${entity.name}BO.findByPrimaryKey(key, false);
+	}
+	
+	public static ${entity.name}BO findByPrimaryKey(${idFieldJavaType} key, boolean eagerFetchRelations) {
+		return eagerFetchRelations ? getDefaultRepository().findOne(where(keyEquals(key)).and(eagerFetchRelations())) : getDefaultRepository().findOne(key);
+	}
+#else
 	public static ${entity.name}BO findByPrimaryKey(${idFieldJavaType} key) {
 		return getDefaultRepository().findOne(key);
 	}
-	
+#end
+
 	@Override
 	protected ${entity.name}Repository getRepository() {
 		return repository;
@@ -280,6 +300,41 @@ public abstract class ${entity.name}BaseBO extends BaseSpringBO<${idFieldJavaTyp
 		}
 	    
 		return ${relation.label};
+	}
+#end
+#if (!$entity.relations.isEmpty())
+	/**
+	 * Creates a {@link Specification} that eagerly fetches all 1-M relations that are 
+	 * present in {@link ${entity.name}BO}. 
+	 */
+	protected static Specification<${entity.name}BO> eagerFetchRelations() {
+		return new Specification<${entity.name}BO>() {
+
+			@Override
+			public Predicate toPredicate(Root<${entity.name}BO> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				for (PluralAttribute<? super ${entity.name}BO, ?, ?> fetch : root.getModel().getPluralAttributes()) {
+					root.fetch(fetch, JoinType.LEFT);
+				}
+				query.distinct(true);
+				return null;
+			}
+
+		};
+	}
+	
+	/**
+	 * Creates a {@link Specification} that filters {@link ${entity.name}BO}s that have an ${idField.name} that 
+	 * matches the given key. 
+	 */
+	protected static Specification<${entity.name}BO> keyEquals(final ${idFieldJavaType} key) {
+		return new Specification<${entity.name}BO>() {
+
+			@Override
+			public Predicate toPredicate(Root<${entity.name}BO> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return cb.equal(root.get("${idField.name}"), key);
+			}
+
+		};
 	}
 #end
 #foreach ($reference in $entity.references.values())

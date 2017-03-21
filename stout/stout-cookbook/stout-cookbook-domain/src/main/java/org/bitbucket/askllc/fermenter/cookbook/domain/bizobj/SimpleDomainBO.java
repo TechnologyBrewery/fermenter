@@ -26,7 +26,7 @@ import org.springframework.data.domain.PageRequest;
  *      GENERATED STUB CODE - PLEASE *DO* MODIFY
  */
 @Entity
-@Table(name = "SIMPLE")
+@Table(name = "SIMPLE_DOMAIN")
 public class SimpleDomainBO extends SimpleDomainBaseBO {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SimpleDomainBO.class);
@@ -61,11 +61,11 @@ public class SimpleDomainBO extends SimpleDomainBaseBO {
 	}
 
 	public static List<SimpleDomainBO> findAll() {
-		return getDefaultRepository().findAll();
+		return getDefaultRepository().findAll(eagerFetchRelations());
 	}
 
 	public static List<SimpleDomainBO> findAll(int startPage, int pageSize) {
-		return getDefaultRepository().findAll(new PageRequest(startPage, pageSize)).getContent();
+		return getDefaultRepository().findAllEagerFetchRelations(new PageRequest(startPage, pageSize)).getContent();
 	}
 
 	public static void deleteAll() {

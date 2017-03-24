@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.SimpleDomainMaintenanceService;
@@ -22,12 +23,29 @@ public class SimpleDomainMaintenanceIT extends AbstractArquillianTestSupport {
 
     @Test
     @RunAsClient
-    public void testGetExistingSimpleDomain(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
+    public void testGetNonExistentSimpleDomain(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
         SimpleDomainMaintenanceService simpleDomainService = getMaintenanceService(webTarget);
         ValueServiceResponse<SimpleDomainBO> result = simpleDomainService.findByPrimaryKey("BAD_PK");
         assertNotNull(result);
         assertNull(result.getValue());
     }
+    
+	@Test
+	@RunAsClient
+	public void testGetSimpleDomain(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
+		SimpleDomainMaintenanceService simpleDomainService = getMaintenanceService(webTarget);
+		int numChildEntities = RandomUtils.nextInt(5) + 2;
+		SimpleDomainBO simpleDomain = TestUtils.createRandomSimpleDomain(numChildEntities);
+		ValueServiceResponse<SimpleDomainBO> response = simpleDomainService.saveOrUpdate(simpleDomain);
+		TestUtils.assertNoErrorMessages(response);
+
+		ValueServiceResponse<SimpleDomainBO> resultWrapper = simpleDomainService
+				.findByPrimaryKey(simpleDomain.getKey());
+		assertNotNull(resultWrapper);
+		SimpleDomainBO result = resultWrapper.getValue();
+		assertNotNull(result);
+		assertEquals(numChildEntities, result.getSimpleDomainChilds().size());
+	}
     
 	@Test
 	@RunAsClient

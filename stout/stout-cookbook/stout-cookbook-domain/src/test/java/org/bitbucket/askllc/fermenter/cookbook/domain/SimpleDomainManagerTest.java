@@ -8,13 +8,12 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.SimpleDomainManagerService;
+import org.bitbucket.fermenter.stout.messages.AbstractMsgMgrAwareTestSupport;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
 import org.junit.Test;
@@ -37,7 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Additionally, this test classes demonstrates how spring-test may be leveraged to perform unit testing against an
  * embedded database.
  */
-public class SimpleDomainManagerTest {
+public class SimpleDomainManagerTest extends AbstractMsgMgrAwareTestSupport {
 
 	@Inject
 	private SimpleDomainManagerService simpleDomainMgr;

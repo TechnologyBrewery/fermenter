@@ -3,14 +3,14 @@
 
 <entity>
 	<name>SimpleDomain</name>
-	<documentation>A simple domain with one (generated) id field, fields of different types, and two sample queries.</documentation>
-	<table>SIMPLE</table>
+	<documentation>A simple domain entity with a generated id field, fields of different types, and a 1-M relation</documentation>
+	<table>SIMPLE_DOMAIN</table>
 
 	<id>
 		<field>
 			<name>id</name>
 			<type>string</type>
-			<column>ID</column>
+			<column>SIMPLE_DOMAIN_ID</column>
 			<required>true</required>
 			<generator>uuid</generator>
 		</field>
@@ -53,53 +53,11 @@
 		</field>
 	</fields>
 
-	<queries>
-		<query>
-			<name>SelectAllSimpleDomains</name>
-			<documentation>Retrieves all domains, completely unfiltered</documentation>
-			<statement><![CDATA[from SimpleDomainBO]]></statement>
-		</query>
-		<query>
-			<name>SelectAllSimpleDomainsByPage</name>
-			<documentation>Retrieves all domains, completely unfiltered in pages</documentation>
-			<pagination>standard</pagination>
-			<statement><![CDATA[from SimpleDomainBO]]></statement>
-		</query>
-		<query>
-			<name>SelectAllSimpleDomainsByPageWithCriteria</name>
-			<documentation>Validates that everything generates correctly with criteria and paging parameters</documentation>
-			<pagination>standard</pagination>
-			<statement><![CDATA[from SimpleDomainBO]]></statement>
-		</query>
-		<query>
-			<name>SelectAllSimpleDomainsByType</name>
-			<documentation>Retrieves domains of a given type</documentation>
-			<criteria>
-				<criterion>
-					<name>type</name>
-					<documentation>The class of domains to retrieve</documentation>
-					<type>string</type>
-				</criterion>
-			</criteria>
-			<statement><![CDATA[from SimpleDomainBO as domain where domain.type = :type]]></statement>
-		</query>
-		<query>
-			<name>SelectAllSimpleDomainsByName</name>
-			<documentation>Retrieves SimpleDomain objects with the given name</documentation>
-			<criteria>
-				<criterion>
-					<name>name</name>
-					<documentation>The desired name of the SimpleDomain objects to retrieve</documentation>
-					<type>string</type>
-				</criterion>
-			</criteria>
-			<statement><![CDATA[from SimpleDomainBO as domain where domain.name = :name]]></statement>
-		</query>
-		<query>
-			<name>DeleteAllSimpleDomains</name>
-			<documentation>Deletes all domains, completely unfiltered</documentation>
-			<statement><![CDATA[delete from SimpleDomainBO]]></statement>
-		</query>
-	</queries>
+	<associations>
+		<relation>
+			<type>SimpleDomainChild</type>
+			<multiplicity>1-M</multiplicity>
+		</relation>
+	</associations>
 
 </entity>

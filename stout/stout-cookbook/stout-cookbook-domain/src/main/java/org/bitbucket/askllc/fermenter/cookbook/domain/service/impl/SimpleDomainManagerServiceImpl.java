@@ -194,4 +194,13 @@ public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServi
         return RandomStringUtils.randomAlphabetic(1);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+	@Override
+	protected SimpleDomainBO methodWithSingleEntityAsParamImpl(SimpleDomainBO simpleDomain) {
+		simpleDomain.setName(simpleDomain.getName() + " updated");
+		return simpleDomain;
+	}
+
 }

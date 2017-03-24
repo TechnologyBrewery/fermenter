@@ -8,6 +8,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
@@ -32,7 +33,7 @@ public class SimpleDomainBusinessServicesIT extends AbstractArquillianTestSuppor
 
 	@ArquillianResource
 	private URL deploymentURL;
-	
+
 	@Before
 	public void deleteSimpleDomains() throws Exception {
 		ResteasyClient client = new ResteasyClientBuilder().build();
@@ -138,6 +139,87 @@ public class SimpleDomainBusinessServicesIT extends AbstractArquillianTestSuppor
 
 	@Test
 	@RunAsClient
+	public void testSomeBusinessOperationWithEntityParam(@ArquillianResteasyResource ResteasyWebTarget webTarget) {
+		SimpleDomainManagerService managerService = getService(webTarget);
+		SimpleDomainBO domain = TestUtils.createRandomSimpleDomain();
+		domain.setKey(UUID.randomUUID().toString());
+		final String someImportantInfo = RandomStringUtils.randomAlphanumeric(5);
+		domain.setName(someImportantInfo);
+
+		ValueServiceResponse<SimpleDomainBO> responseDomainWrapper = managerService
+				.methodWithSingleEntityAsParam(domain);
+		assertNotNull(responseDomainWrapper);
+		TestUtils.assertNoErrorMessages(responseDomainWrapper);
+		SimpleDomainBO responseDomain = responseDomainWrapper.getValue();
+		assertNotNull(responseDomain);
+		String name = responseDomain.getName();
+		assertNotNull(name);
+		assertTrue(name.startsWith(someImportantInfo));
+		assertTrue(name.endsWith("updated"));
+
+	}
+
+	@Test
+	@RunAsClient
+	public void testSomeBusinessOperationWithEntityParamViaPut(
+			@ArquillianResteasyResource ResteasyWebTarget webTarget) {
+		SimpleDomainManagerService managerService = getService(webTarget);
+		SimpleDomainBO domain = TestUtils.createRandomSimpleDomain();
+		domain.setKey(UUID.randomUUID().toString());
+		final String someImportantInfo = RandomStringUtils.randomAlphanumeric(5);
+		domain.setName(someImportantInfo);
+
+		ValueServiceResponse<SimpleDomainBO> responseDomainWrapper = managerService
+				.methodWithSingleEntityAsParamViaPut(domain);
+
+		assertNotNull(responseDomainWrapper);
+		TestUtils.assertNoErrorMessages(responseDomainWrapper);
+		SimpleDomainBO responseDomain = responseDomainWrapper.getValue();
+		assertNotNull(responseDomain);
+		String name = responseDomain.getName();
+		assertNotNull(name);
+		assertTrue(name.startsWith(someImportantInfo));
+		assertTrue(name.endsWith("updated"));
+
+	}
+
+	@Test
+	@RunAsClient
+	public void testSomeBusinessOperatonWithSimpleParamViaPut(@ArquillianResteasyResource ResteasyWebTarget webTarget) {
+		SimpleDomainManagerService managerService = getService(webTarget);
+		final String root = RandomStringUtils.randomAlphanumeric(5);
+		ValueServiceResponse<String> response = managerService.echoPlusWazzupViaPut(root);
+
+		assertNotNull(response);
+		TestUtils.assertNoErrorMessages(response);
+		String echoResponse = response.getValue();
+		assertNotNull(echoResponse);
+		assertTrue(echoResponse.startsWith(root));
+		assertTrue(echoResponse.endsWith("Wazzup"));
+
+	}
+
+	@Test
+	@RunAsClient
+	public void testSomeBusinessOperatonWithMixedParamViaPut(@ArquillianResteasyResource ResteasyWebTarget webTarget) {
+		SimpleDomainManagerService managerService = getService(webTarget);
+		SimpleDomainBO domain = TestUtils.createRandomSimpleDomain();
+		final String someImportantInfo = RandomStringUtils.randomAlphanumeric(5);
+
+		ValueServiceResponse<SimpleDomainBO> responseDomainWrapper = managerService.someBusinessOperationViaPut(domain,
+				someImportantInfo);
+
+		assertNotNull(responseDomainWrapper);
+		TestUtils.assertNoErrorMessages(responseDomainWrapper);
+		SimpleDomainBO responseDomain = responseDomainWrapper.getValue();
+		assertNotNull(responseDomain);
+		String name = responseDomain.getName();
+		assertNotNull(name);
+		assertTrue(name.endsWith(someImportantInfo));
+	}
+
+	@Test
+	@RunAsClient
 	public void testSelectAllSimpleDomains(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
 		SimpleDomainMaintenanceService maintenanceService = getMaintenanceService(webTarget);
 		int numSimpleDomains = RandomUtils.nextInt(5, 10);
@@ -154,7 +236,7 @@ public class SimpleDomainBusinessServicesIT extends AbstractArquillianTestSuppor
 
 		Collection<SimpleDomainBO> allSimpleDomains = allSimpleDomainsResponse.getValue();
 		assertEquals(numSimpleDomains, allSimpleDomains.size());
-		
+
 		assertEquals(numSimpleDomainChildren, allSimpleDomains.iterator().next().getSimpleDomainChilds().size());
 	}
 

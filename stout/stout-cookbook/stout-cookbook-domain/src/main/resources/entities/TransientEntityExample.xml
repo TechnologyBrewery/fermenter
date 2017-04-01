@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE entity PUBLIC "-//FERMENTER//DTD ENTITY//EN" "https://bitbucket.org/askllc/fermenter/downloads/fermenter-2-entity.dtd">
+
+<entity transient="true">
+	<name>TransientEntityExample</name>
+	<documentation>A non-persistent entity</documentation>
+
+	<fields>
+		<field>
+			<name>name</name>
+			<documentation>The friendly domain moniker</documentation>
+			<type>string</type>
+		</field>
+	</fields>		
+
+	<associations>
+		<reference>
+			<name>requiredReference</name>
+			<type>ValidationReferencedObject</type>
+			<fk>
+				<name>id</name>
+				<source>id</source>				
+			</fk>
+			<required>true</required>
+		</reference>
+	</associations>
+
+</entity>

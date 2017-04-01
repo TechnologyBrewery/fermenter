@@ -60,8 +60,8 @@ class EntityMetadataManager extends MetadataManager {
 	 * 
 	 * @return
 	 */
-	public static Map getEntities(String applicationName) {
-		Map entityMap = getInstance().getMetadataMap( applicationName );		
+	public static Map<String, Entity> getEntities(String applicationName) {
+		Map<String, Entity> entityMap = getInstance().getMetadataMap( applicationName );		
 		return (entityMap != null) ? entityMap : Collections.EMPTY_MAP;
 	}
 	
@@ -83,7 +83,9 @@ class EntityMetadataManager extends MetadataManager {
 	 * Configure the digester to parse the entity metadata
 	 */
 	protected void initialize(Digester digester) {
-	// Root entity metadata
+	    final String[] ENTITY_PROPERTIES = new String[] {"transient"};
+	    
+	    // Root entity metadata
 		digester.addObjectCreate( 	"entity", 				EntityMetadata.class.getName() );
 		digester.addCallMethod( 	"entity/name", 			"setName"			, 0 );
 		digester.addCallMethod( 	"entity/documentation", "setDocumentation"	, 0 );
@@ -91,6 +93,7 @@ class EntityMetadataManager extends MetadataManager {
         digester.addCallMethod( 	"entity/parent", 		"setParent"			, 0 );
 		digester.addCallMethod( 	"entity/table", 		"setTable"			, 0 );
 		digester.addCallMethod( 	"entity/lockStrategy", 	"setLockStrategy"	, 0 );
+		digester.addSetProperties(  "entity", ENTITY_PROPERTIES, ENTITY_PROPERTIES);
 		
 	// Non-identifying field metadata
 		parseFields( digester );

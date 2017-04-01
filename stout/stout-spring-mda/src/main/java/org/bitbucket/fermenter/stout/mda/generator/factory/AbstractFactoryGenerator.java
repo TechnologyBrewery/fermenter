@@ -26,10 +26,21 @@ public abstract class AbstractFactoryGenerator extends AbstractGenerator {
 		
 		MetadataRepository metadataRepository = 
                 MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
-		Collection<Entity> entities = metadataRepository.getAllEntities(currentApplication).values();
+		
+		Collection<Entity> entities;
+		if (forCurrentApplicationOnly()) {
+		    entities = metadataRepository.getAllEntities(currentApplication).values();
+		} else {
+		    entities = metadataRepository.getAllEntities().values();
+		}
 		vc.put("entities", entities);
 
-		Collection<String> serviceNames = metadataRepository.getAllServices(currentApplication).keySet();
+		Collection<String> serviceNames;
+		if (forCurrentApplicationOnly()) {
+		    serviceNames = metadataRepository.getAllServices(currentApplication).keySet();
+		} else {
+		    serviceNames = metadataRepository.getAllServices().keySet();
+		}
 		vc.put("serviceNames", serviceNames);
 		
 		Collection<Service> services = metadataRepository.getAllServices(currentApplication).values();
@@ -49,6 +60,10 @@ public abstract class AbstractFactoryGenerator extends AbstractGenerator {
 		context.setOutputFile(fileName);
 		
 		generateFile(context, vc);
+	}
+	
+	protected boolean forCurrentApplicationOnly() {
+	    return true;
 	}
 
 }

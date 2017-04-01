@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE enumeration PUBLIC "-//FERMENTER//DTD ENUMERATION//EN" "https://bitbucket.org/askllc/fermenter/downloads/enumeration.dtd">
+<!DOCTYPE enumeration PUBLIC "-//FERMENTER//DTD ENUMERATION//EN" "https://bitbucket.org/askllc/fermenter/downloads/fermenter-2-enumeration.dtd">
 
 <enumeration>
 	<name>SimpleDomainEnumeration</name>

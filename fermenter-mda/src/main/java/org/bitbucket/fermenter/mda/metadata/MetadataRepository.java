@@ -56,11 +56,11 @@ public class MetadataRepository extends AbstractMetadataRepository {
 		return (Entity)entityMap.get(entityName);
 	}
 	
-	public Map getAllEntities() {
+	public Map<String, Entity> getAllEntities() {
 		return EntityMetadataManager.getInstance().getCompleteMetadataMap();
 	}
 	
-	public Map getAllEntities(String applicationName) {
+	public Map<String, Entity> getAllEntities(String applicationName) {
 		return EntityMetadataManager.getEntities(applicationName);
 	}
 	

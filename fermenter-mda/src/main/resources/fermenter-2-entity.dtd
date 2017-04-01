@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!ELEMENT entity (name, documentation?, table, lockStrategy?, id, fields?, composites?, associations?, queries?)>
+<!ELEMENT entity (name, documentation?, table?, lockStrategy?, id?, fields?, composites?, associations?, queries?)>
 <!ELEMENT name (#PCDATA)>
 <!ELEMENT documentation (#PCDATA)>
 <!ELEMENT table (#PCDATA)>
 <!ELEMENT lockStrategy (#PCDATA)>
+<!ATTLIST entity transient CDATA "false">
 
 <!ELEMENT id (field)>
 
 <!ELEMENT fields (field+)>
-<!ELEMENT field (name, documentation?, type, project?, column, required?, generator?, maxLength?, minLength?, maxValue?, minValue?, scale?, label?, format?)>
+<!ELEMENT field (name, documentation?, type, project?, column?, required?, generator?, maxLength?, minLength?, maxValue?, minValue?, scale?, label?, format?)>
 <!ELEMENT type (#PCDATA)>
 <!ELEMENT column (#PCDATA)>
 <!ELEMENT required (#PCDATA)>
@@ -25,10 +26,10 @@
 <!ELEMENT associations (reference*,relation*)>
 <!ELEMENT reference (name?, documentation?, type,project?, fk?,required?)>
 <!ELEMENT project (#PCDATA)>
-<!ELEMENT fk (name,source,column)>
+<!ELEMENT fk (name,source,column?)>
 <!ELEMENT source (#PCDATA)>
 
-<!ELEMENT relation (documentation?, type,multiplicity)>
+<!ELEMENT relation (documentation?, type, multiplicity)>
 <!ELEMENT multiplicity (#PCDATA)>
 
 <!ELEMENT queries (query+)>

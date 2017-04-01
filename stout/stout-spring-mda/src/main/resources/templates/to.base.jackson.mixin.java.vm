@@ -9,7 +9,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import ${basePackage}.bizobj.*;
+#if (!$entity.isTransient())
 import ${basePackage}.persist.${entity.name}Repository;
+#end
 
 #if( !$relations.isEmpty() )  
 import java.util.Set;
@@ -31,9 +33,11 @@ public abstract class ${entity.name}BaseMixIn {
 
 	@JsonIgnore
 	protected abstract Logger getLogger();
-	
+
+#if (!$entity.isTransient())
 	@JsonIgnore
 	private ${entity.name}Repository repository;
+#end
 	
 #foreach ( $idField in $entity.idFields.values() )
 	@JsonProperty

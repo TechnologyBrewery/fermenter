@@ -15,7 +15,7 @@ public abstract class AbstractEntityGenerator extends AbstractGenerator {
 	public void generate(GenerationContext context) throws GenerationException {
 	    MetadataRepository metadataRepository = 
 	            MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
-		Iterator entities = metadataRepository.getAllEntities().values().iterator();
+		Iterator<Entity> entities = metadataRepository.getAllEntities().values().iterator();
 		
 		String fileName;
 		String basefileName = context.getOutputFile();		
@@ -23,14 +23,17 @@ public abstract class AbstractEntityGenerator extends AbstractGenerator {
 		while (entities.hasNext()) {
 			Entity entity = (Entity) entities.next();
 			
-			VelocityContext vc = new VelocityContext();
-			populateVelocityContext(vc, entity, context);
-			
-			
-			fileName = replaceEntityName(basefileName, entity.getName());
-			context.setOutputFile(fileName);
-			
-			generateFile(context, vc);
+			if (!generatePersistentEntitiesOnly() || (generatePersistentEntitiesOnly() && !entity.isTransient())) {
+    			VelocityContext vc = new VelocityContext();
+    			populateVelocityContext(vc, entity, context);
+    			
+    			
+    			fileName = replaceEntityName(basefileName, entity.getName());
+    			context.setOutputFile(fileName);
+    			
+    			generateFile(context, vc);
+    			
+			}
 		}
 	}
 	
@@ -41,5 +44,13 @@ public abstract class AbstractEntityGenerator extends AbstractGenerator {
 	 * @param generationContext The <tt>GenerationContext</tt> of this <tt>Generator</tt>
 	 */
 	protected abstract void populateVelocityContext(VelocityContext vc, Entity entity, GenerationContext generationContext);
+	
+	/**
+	 * If true, will trigger generation of persistent entities only.
+	 * @return true to generate only peristent entities, false to generate persistent and transient entities
+	 */
+	protected boolean generatePersistentEntitiesOnly() {
+	    return false;
+	}
 
 }

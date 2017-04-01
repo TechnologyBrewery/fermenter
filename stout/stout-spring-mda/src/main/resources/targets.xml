@@ -15,7 +15,7 @@
 		    overwritable="false"/>
 		    
 	<target name="dataAccessRepositories"
-		    generator="org.bitbucket.fermenter.stout.mda.generator.entity.EntityJavaGenerator"
+		    generator="org.bitbucket.fermenter.stout.mda.generator.entity.PersistentEntityJavaGenerator"
 		    templateName="templates/repository.java.vm"
 		    outputFile="${basePackage}/persist/${entityName}Repository.java"
 		    overwritable="false"/>
@@ -75,13 +75,13 @@
 		    overwritable="false"/>
 	
 	<target name="restEntityMaintenanceServiceInterfaces"
-		    generator="org.bitbucket.fermenter.stout.mda.generator.entity.EntityJavaGenerator"
+		    generator="org.bitbucket.fermenter.stout.mda.generator.entity.PersistentEntityJavaGenerator"
 		    templateName="templates/entity.maintenance.service.rest.interface.java.vm"
 		    outputFile="${basePackage}/service/rest/${entityName}MaintenanceService.java"
 		    overwritable="true"/>
 	
 	<target name="entityMaintenanceServiceImpls"
-		    generator="org.bitbucket.fermenter.stout.mda.generator.entity.EntityJavaGenerator"
+		    generator="org.bitbucket.fermenter.stout.mda.generator.entity.PersistentEntityJavaGenerator"
 		    templateName="templates/entity.maintenance.service.impl.java.vm"
 		    outputFile="${basePackage}/service/impl/${entityName}MaintenanceServiceImpl.java"
 		    overwritable="true"/>

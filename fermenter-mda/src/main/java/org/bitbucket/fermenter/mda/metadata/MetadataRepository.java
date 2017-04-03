@@ -224,10 +224,10 @@ public class MetadataRepository extends AbstractMetadataRepository {
 
     protected boolean useLocalMetadataOnly(String metadataContext) {
         boolean useLocalMetadataOnly = true;
-        if (StringUtils.isBlank(metadataContext) || LOCAL_METADATA_CONTEXT.equals(metadataContext)) {
+        if (StringUtils.isBlank(metadataContext) || LOCAL_METADATA_CONTEXT.equalsIgnoreCase(metadataContext)) {
             useLocalMetadataOnly = true;
 
-        } else if (ALL_METADATA_CONTEXT.equals(metadataContext)) {
+        } else if (ALL_METADATA_CONTEXT.equalsIgnoreCase(metadataContext)) {
             useLocalMetadataOnly = false;
 
         } else {

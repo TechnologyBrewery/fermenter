@@ -5,9 +5,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.bitbucket.fermenter.mda.metadata.MetadataManager;
 
 public class EntityMetadata extends MetadataElement implements Entity {
+    
+    private static Log LOG = LogFactory.getLog(EntityMetadata.class);
 
 	private String name;
 	private String documentation;
@@ -22,13 +27,15 @@ public class EntityMetadata extends MetadataElement implements Entity {
 	 */
     private String parent;
     private String lockStrategy;
-	private Map    fields;
-	private Map	   idFields;
+    private boolean transientEntity; 
+    
+	private Map<String, Field> fields;
+	private Map<String, Field> idFields;
 	private Map	   composites;
 	private Map    relations;
 	private Map    inverseRelations;
 	private Map    references;
-    private Map    queries;    
+    private Map    queries;
 
 	/**
 	 * @see org.bitbucket.fermenter.mda.metadata.element.Entity#getName()
@@ -83,11 +90,11 @@ public class EntityMetadata extends MetadataElement implements Entity {
 	}
 	
 	/**
-	 * @see org.bitbucket.fermenter.mda.metadata.element.Entity#getFields()
+	 * {@inheritDoc}
 	 */
-	public Map getFields() {
+	public Map<String, Field> getFields() {
 		if( fields == null ) {
-			fields = new HashMap();
+			fields = new HashMap<>();
 		}
 		
 		return fields;
@@ -97,7 +104,7 @@ public class EntityMetadata extends MetadataElement implements Entity {
 	 * @see org.bitbucket.fermenter.mda.metadata.element.Entity#getField(java.lang.String)
 	 */
 	public Field getField(String name) {
-		return (Field) getFields().get( name );
+		return getFields().get( name );
 	}
 	
 	public void addField(Field field) {
@@ -105,11 +112,11 @@ public class EntityMetadata extends MetadataElement implements Entity {
 	}
 	
 	/**
-	 * @see org.bitbucket.fermenter.mda.metadata.element.Entity#getIdFields()
+	 * {@inheritDoc}
 	 */
-	public Map getIdFields() {
+	public Map<String, Field> getIdFields() {
 		if( idFields == null ) {
-			idFields = new HashMap();
+			idFields = new HashMap<>();
 		}
 		
 		return idFields;
@@ -119,7 +126,7 @@ public class EntityMetadata extends MetadataElement implements Entity {
 	 * @see org.bitbucket.fermenter.mda.metadata.element.Entity#getIdField(java.lang.String)
 	 */
 	public Field getIdField(String name) {
-		return (Field) getIdFields().get( name );
+		return getIdFields().get( name );
 	}
 	
 	public void addIdField(Field field) {
@@ -264,6 +271,7 @@ public class EntityMetadata extends MetadataElement implements Entity {
     
     /**
 	 * @see org.bitbucket.fermenter.mda.metadata.element.Entity#getQueries()
+	 * @deprecated
 	 */
     public Map getQueries() {
         if( queries == null ) {
@@ -275,12 +283,17 @@ public class EntityMetadata extends MetadataElement implements Entity {
     
     /**
 	 * @see org.bitbucket.fermenter.mda.metadata.element.Entity#getQuery(java.lang.String)
+	 * @deprecated
 	 */
     public Query getQuery(String name) {
         return (Query) getQueries().get( name );
     }
     
-    public void addQuery(Query query) {
+    /**
+     * @param query
+     * @deprecated
+     */
+    public void addQuery(Query query) {       
         getQueries().put( query.getName(), query );
     }
 
@@ -305,8 +318,22 @@ public class EntityMetadata extends MetadataElement implements Entity {
 		return LOCK_STATEGY_OPTIMISTIC.equals(getLockStrategy()); 
 	}
 	
+    /**
+     * {@inheritDoc}
+     */
+    public void setTransient(boolean transientEntity) {
+        this.transientEntity = transientEntity;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isTransient() {
+        return transientEntity;
+    }	
+	
 	/**
-	 * Performs validation on this instance and its children
+	 * Performs validation on this instance and its children.
 	 */
 	public void validate() {
 		//id fields:
@@ -318,6 +345,8 @@ public class EntityMetadata extends MetadataElement implements Entity {
 				throw new IllegalArgumentException("id fields cannot have an enumerated type");
 			}
 		}
+		
+		checkForPesistentAndTransientViolations();
 		
 		//fields:
 		MetadataManager.validateElements(getFields().values());
@@ -335,4 +364,70 @@ public class EntityMetadata extends MetadataElement implements Entity {
 		MetadataManager.validateElements(getQueries().values());		
 		
 	}
+
+    public void checkForPesistentAndTransientViolations() {
+        if (!isTransient()) {
+		    boolean transientIssuesFound = false;
+		    
+		    // is there a table?
+		    if (StringUtils.isBlank(getTable())) {
+		        transientIssuesFound = true;
+		        LOG.error("persistent entity '" + getName() + "' requires a table to be specified!");
+		    }
+
+		    if (getIdFields().size() == 0) {
+		        transientIssuesFound = true;
+                LOG.error("persistent entity '" + getName() + "' requires an id field to be specified!");
+		    }
+		    
+            for (Field f : getIdFields().values()) {
+                if (checkPersistentFieldForColumn(f)) {
+                    transientIssuesFound = true;
+                }
+            }
+		    
+		    for (Field f : getFields().values()) {
+		        if (checkPersistentFieldForColumn(f)) {
+                    transientIssuesFound = true;
+		        }
+		    }
+		    
+		    if (transientIssuesFound) {
+		        throw new IllegalArgumentException("Persistent information missing from entity '" + getName() + "'!");
+		    }
+		    
+		} else if (isTransient()) {
+		    if (StringUtils.isNotBlank(getTable())) {
+		        LOG.warn("transient entity '" + getName() + "' specifies a table value which will be ignored");
+		    }
+		    
+		    if (getIdFields().size() > 0) {
+                LOG.error("transient entity '" + getName() + "' should not specify an id field");
+            }
+		    
+		    for (Field f : getIdFields().values()) {
+		        checkTransientFieldForColumn(f);
+            }
+            
+            for (Field f : getFields().values()) {
+                checkTransientFieldForColumn(f);
+            }
+		    
+		}
+    }
+
+    protected boolean checkPersistentFieldForColumn(Field f) {
+        boolean transientIssuesFound = false;
+        if (StringUtils.isBlank(f.getColumn())) {
+            transientIssuesFound = true;
+            LOG.error("transient entity '" + getName() + "." + f.getName()+ "' requires a column to be specified!");
+        }
+        return transientIssuesFound;
+    }
+    
+    protected void checkTransientFieldForColumn(Field f) {
+        if (StringUtils.isBlank(f.getColumn())) {
+            LOG.error("transient entity '" + getName() + "." + f.getName()+ "' specifies a column which will be ignored");
+        }
+    }    
 }

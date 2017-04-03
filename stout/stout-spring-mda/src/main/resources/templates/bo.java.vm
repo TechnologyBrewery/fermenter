@@ -1,7 +1,9 @@
 package ${basePackage}.bizobj;
 
+#if ( !$entity.isTransient() )
 import javax.persistence.Entity;
 import javax.persistence.Table;
+#end
 
 import org.bitbucket.fermenter.stout.util.SpringAutowiringUtil;
 import org.slf4j.Logger;
@@ -13,8 +15,10 @@ import org.slf4j.LoggerFactory;
  *
  * GENERATED STUB CODE - PLEASE *DO* MODIFY
  */
+#if ( !$entity.isTransient() )
 @Entity
 @Table(name="${entity.table}")
+#end
 public class ${entity.name}BO extends ${entity.name}BaseBO {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(${entity.name}BO.class);

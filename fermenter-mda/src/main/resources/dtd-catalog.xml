@@ -3,15 +3,15 @@
 	even if the path to that dtd is not currently accessible
  -->
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
-	<public publicId="-//FERMENTER//DTD ENTITY//EN" uri="entity.dtd"/>
-	<public publicId="-//FERMENTER//DTD FORM//EN" uri="form.dtd"/>
-	<public publicId="-//FERMENTER//DTD SERVICE//EN" uri="service.dtd"/>
-	<public publicId="-//FERMENTER//DTD TYPES//EN" uri="types.dtd"/>
-	<public publicId="-//FERMENTER//DTD ENUMERATION//EN" uri="enumeration.dtd"/>
-	<public publicId="-//FERMENTER//DTD COMPOSITE//EN" uri="composite.dtd"/>
-	<public publicId="-//FERMENTER//DTD VALIDATORS//EN" uri="validators.dtd"/>
-	<public publicId="-//FERMENTER//DTD MESSAGES//EN" uri="messages.dtd"/>
-	<public publicId="-//FERMENTER//DTD PROFILES//EN" uri="profiles.dtd"/>
-	<public publicId="-//FERMENTER//DTD TARGETS//EN" uri="targets.dtd"/>
-	<public publicId="-//FERMENTER//DTD FORMATS//EN" uri="formats.dtd"/>
+	<public publicId="-//FERMENTER//DTD ENTITY//EN" uri="fermenter-2-entity.dtd"/>
+	<public publicId="-//FERMENTER//DTD FORM//EN" uri="fermenter-2-form.dtd"/>
+	<public publicId="-//FERMENTER//DTD SERVICE//EN" uri="fermenter-2-service.dtd"/>
+	<public publicId="-//FERMENTER//DTD TYPES//EN" uri="fermenter-2-types.dtd"/>
+	<public publicId="-//FERMENTER//DTD ENUMERATION//EN" uri="fermenter-2-enumeration.dtd"/>
+	<public publicId="-//FERMENTER//DTD COMPOSITE//EN" uri="fermenter-2-composite.dtd"/>
+	<public publicId="-//FERMENTER//DTD VALIDATORS//EN" uri="fermenter-2-validators.dtd"/>
+	<public publicId="-//FERMENTER//DTD MESSAGES//EN" uri="fermenter-2-messages.dtd"/>
+	<public publicId="-//FERMENTER//DTD PROFILES//EN" uri="fermenter-2-profiles.dtd"/>
+	<public publicId="-//FERMENTER//DTD TARGETS//EN" uri="fermenter-2-targets.dtd"/>
+	<public publicId="-//FERMENTER//DTD FORMATS//EN" uri="fermenter-2-formats.dtd"/>
 </catalog>

@@ -432,4 +432,20 @@ public class JavaEntity implements Entity {
         return prefixes;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setTransient(boolean transientEntity) {
+        entity.setTransient(transientEntity);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isTransient() {
+        return entity.isTransient();
+    }
+
 }

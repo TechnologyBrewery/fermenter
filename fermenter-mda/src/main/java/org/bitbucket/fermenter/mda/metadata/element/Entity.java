@@ -20,11 +20,11 @@ public interface Entity {
 	 */
 	public String getTable();
 
-	public Map getFields();
+	public Map<String, Field> getFields();
 
 	public Field getField(String name);
 
-	public Map getIdFields();
+	public Map<String, Field> getIdFields();
 
 	public Field getIdField(String name);
 
@@ -61,6 +61,18 @@ public interface Entity {
 	public String getLockStrategy();
 
 	public boolean useOptimisticLocking();
+	
+    /**
+     * Sets whether or not the entity should persist.
+     * @param transientEntity setting
+     */
+    public void setTransient(boolean transientEntity);
+    
+    /**
+     * Returns whether or not the entity should persist.
+     * @return setting
+     */
+    boolean isTransient();
 	
 	/**
 	 * Returns the name of the application from which this element originates

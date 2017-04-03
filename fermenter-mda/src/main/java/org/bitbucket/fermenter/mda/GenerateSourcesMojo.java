@@ -206,7 +206,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
         Properties props = new Properties();
         props.setProperty("application.name", project.getArtifactId());
         props.setProperty("metadata.loader", StaticURLResolver.class.getName());
-
+        
         String projectUrl = new File(mainSourceRoot, "resources").toURI().toURL().toString();
         props.setProperty("metadata." + project.getArtifactId(), projectUrl);
         PackageManager.addMapping(project.getArtifactId(), basePackage);
@@ -222,12 +222,14 @@ public class GenerateSourcesMojo extends AbstractMojo {
             }
             props.setProperty("metadata.locations", buff.toString());
 
+            @SuppressWarnings("unchecked")
             Set<Artifact> artifacts = project.getArtifacts();
             for (Artifact a : artifacts) {
                 if (metadataDependencies.contains(a.getArtifactId())) {
                     URL url = a.getFile().toURI().toURL();
                     props.setProperty("metadata." + a.getArtifactId(), url.toString());
                     PackageManager.addMapping(a.getArtifactId(), url);
+                    LOG.info("Adding metadataDependency to current set of metadata: " + a.getArtifactId());
                 }
             }
 
@@ -285,7 +287,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
                 sb.append("\t- ").append(profileValue.getName()).append("\n");
             }
             getLog().error(
-                    "<plugin>\n" + "\t<groupId>org.bitbucket.fermenter</groupId>\n"
+                    "<plugin>\n" + "\t<groupId>org.bitbucket.askllc.fermenter</groupId>\n"
                             + "\t<artifactId>fermenter-mda</artifactId>\n" + "\t...\n" + "\t<configuration>\n"
                             + "\t\t<profile>" + profile + "</profile>   <-----------  INVALID PROFILE!\n" + "\t\t...\n"
                             + "Profile '" + profile

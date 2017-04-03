@@ -5,6 +5,21 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+#if ( $entity.isTransient() )
+import org.bitbucket.fermenter.stout.bizobj.BaseSpringBO;
+import org.bitbucket.fermenter.stout.bizobj.BusinessObject;
+#else
+import org.bitbucket.fermenter.stout.bizobj.BasePersistentSpringBO;
+import org.bitbucket.fermenter.stout.bizobj.PersistentBusinessObject;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.FetchType;
@@ -21,22 +36,12 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.PluralAttribute;
 
-import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-
-import org.bitbucket.fermenter.stout.bizobj.BaseSpringBO;
-import org.bitbucket.fermenter.stout.bizobj.BusinessObject;
-
 import org.springframework.data.jpa.domain.Specification;
 import static org.springframework.data.jpa.domain.Specifications.where;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import ${basePackage}.persist.${entity.name}Repository;
+#end
 
 #foreach ($import in $entity.imports )
 import ${import};
@@ -55,22 +60,30 @@ import ${import};
  *
  * Generated Code - DO NOT MODIFY
  */
+#if ( $entity.isTransient() )
+public abstract class ${entity.name}BaseBO extends BaseSpringBO<${entity.name}BO> implements BusinessObject<${entity.name}BO> {
+#else 
 @MappedSuperclass
-public abstract class ${entity.name}BaseBO extends BaseSpringBO<${idFieldJavaType}, ${entity.name}BO, ${entity.name}Repository> implements BusinessObject<${idFieldJavaType}, ${entity.name}BO> {
+public abstract class ${entity.name}BaseBO extends BasePersistentSpringBO<${idFieldJavaType}, ${entity.name}BO, ${entity.name}Repository> implements PersistentBusinessObject<${idFieldJavaType}, ${entity.name}BO> {
 
 	@Inject
 	@Transient
 	private ${entity.name}Repository repository;
+#end
 
 #foreach ( $idField in $entity.idFields.values() )
+	#if ( !$entity.isTransient() )
 	@Id
 	@Column(name="${idField.column}")
+	#end
 	private ${idField.javaType}	${idField.name};
 #end
 
 #foreach ( $field in $entity.fields.values() )
+  #if ( !$entity.isTransient() )
   #set ( $isRequired = $field.isRequired() )
 	@Column(name="${field.column}" #if($isRequired), nullable=false#end)
+  #end
   #if ( $field.isRequired() )
 	@NotNull
   #end
@@ -107,6 +120,7 @@ public abstract class ${entity.name}BaseBO extends BaseSpringBO<${idFieldJavaTyp
   	#end
 	}
 	
+	#if ( !$entity.isTransient() )
 	@Override
 	public ${idField.javaType} getKey() {
 		return ${idField.name}; 
@@ -116,10 +130,12 @@ public abstract class ${entity.name}BaseBO extends BaseSpringBO<${idFieldJavaTyp
 	public void setKey(${idField.javaType} ${idField.name}) {
 		set${idField.capitalizedName}(${idField.name});
 	}
+	#end
 #end
 	
-#if (!$entity.relations.isEmpty())
-  #set ($idField = ${entity.idFields.values().iterator().next()})
+#if ( !$entity.isTransient() )
+	#if (!$entity.relations.isEmpty())
+  		#set ($idField = ${entity.idFields.values().iterator().next()})
 	public static ${entity.name}BO findByPrimaryKey(${idFieldJavaType} key) {
 		return ${entity.name}BO.findByPrimaryKey(key, false);
 	}
@@ -127,12 +143,14 @@ public abstract class ${entity.name}BaseBO extends BaseSpringBO<${idFieldJavaTyp
 	public static ${entity.name}BO findByPrimaryKey(${idFieldJavaType} key, boolean eagerFetchRelations) {
 		return eagerFetchRelations ? getDefaultRepository().findOne(where(keyEquals(key)).and(eagerFetchRelations())) : getDefaultRepository().findOne(key);
 	}
-#else
+	#else
 	public static ${entity.name}BO findByPrimaryKey(${idFieldJavaType} key) {
 		return getDefaultRepository().findOne(key);
 	}
+	#end
 #end
 
+#if ( !$entity.isTransient() )	
 	@Override
 	protected ${entity.name}Repository getRepository() {
 		return repository;
@@ -142,19 +160,26 @@ public abstract class ${entity.name}BaseBO extends BaseSpringBO<${idFieldJavaTyp
 		${entity.name}BO unusedBizObj = new ${entity.name}BO();
 		return unusedBizObj.getRepository();
 	}
+#end
 
 #foreach ($relation in $entity.relations.values())
+#if ( !$entity.isTransient() )
 	@OneToMany(mappedBy="parent${entity.name}", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+#end
 	private Set<${relation.type}BO> ${relation.label}s;
 #end
 #foreach ($inverseRelation in $entity.inverseRelations.values())
+	#if ( !$entity.isTransient() )
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="#if(!$inverseRelation.idFields.isEmpty())${inverseRelation.idFields.values().iterator().next().column}#else${inverseRelation.Name}_ID#end", nullable=false)
+	#end
 	private ${inverseRelation.name}BO parent${inverseRelation.name};
 #end
 #foreach ($reference in $entity.references.values())
+	#if ( !$entity.isTransient() )
 	@ManyToOne(fetch=FetchType.LAZY #if($reference.isRequired()), optional=false#end)
 	@JoinColumn(name="${reference.foreignKeyFields.iterator().next().column}")
+	#end	
   #if ( $reference.isRequired() )
 	@NotNull
   #end
@@ -302,7 +327,7 @@ public abstract class ${entity.name}BaseBO extends BaseSpringBO<${idFieldJavaTyp
 		return ${relation.label};
 	}
 #end
-#if (!$entity.relations.isEmpty())
+#if (!$entity.relations.isEmpty() && !$entity.isTransient())
 	/**
 	 * Creates a {@link Specification} that eagerly fetches all 1-M relations that are 
 	 * present in {@link ${entity.name}BO}. 

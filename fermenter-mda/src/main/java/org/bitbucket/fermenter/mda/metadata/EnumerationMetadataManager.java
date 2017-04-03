@@ -53,9 +53,9 @@ class EnumerationMetadataManager extends MetadataManager {
      * 
      * @return
      */
-    public static Map getEnumerations(String applicationName) {
+    public static Map<String, Enumeration> getEnumerations(String applicationName) {
         Map enumerationMap = getInstance().getMetadataMap(applicationName);
-        return (enumerationMap != null) ? enumerationMap : Collections.EMPTY_MAP;
+        return (enumerationMap != null) ? enumerationMap : Collections.emptyMap();
     }
 
     /**
@@ -64,9 +64,9 @@ class EnumerationMetadataManager extends MetadataManager {
      * 
      * @return
      */
-    public static Map getEnumerations() {
+    public static Map<String, Enumeration> getEnumerations() {
         Map enumerationMap = getInstance().getCompleteMetadataMap();
-        return (enumerationMap != null) ? enumerationMap : Collections.EMPTY_MAP;
+        return (enumerationMap != null) ? enumerationMap : Collections.emptyMap();
     }
 
     /**

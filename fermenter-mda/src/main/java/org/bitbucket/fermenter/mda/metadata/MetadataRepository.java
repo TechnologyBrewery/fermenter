@@ -1,11 +1,13 @@
 package org.bitbucket.fermenter.mda.metadata;
 
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
@@ -56,6 +58,17 @@ public class MetadataRepository extends AbstractMetadataRepository {
 		return (Entity)entityMap.get(entityName);
 	}
 	
+	public Map<String, Entity> getEntitiesByMetadataContext(String context, String currentApplication) {    
+	    Map<String, Entity> entityMap;
+        if (useLocalMetadataOnly(context)) {
+            entityMap = getAllEntities(currentApplication);
+        } else {
+            entityMap = getAllEntities();
+        }
+        
+        return entityMap;
+	}
+	
 	public Map<String, Entity> getAllEntities() {
 		return EntityMetadataManager.getInstance().getCompleteMetadataMap();
 	}
@@ -77,7 +90,7 @@ public class MetadataRepository extends AbstractMetadataRepository {
 	private void loadAllMetadata(Properties props) throws Exception {
 		if (props != null) {
     		String metadataLoaderClass = props.getProperty("metadata.loader");
-    		Class clazz = Class.forName(metadataLoaderClass);
+    		Class<?> clazz = Class.forName(metadataLoaderClass);
     		MetadataURLResolver loader = (MetadataURLResolver) clazz.newInstance();
             CompositeMetadataManager compositeManager = CompositeMetadataManager.getInstance();
             compositeManager.reset();
@@ -138,7 +151,18 @@ public class MetadataRepository extends AbstractMetadataRepository {
 	
 	public Map<String, Service> getAllServices(String applicationName) {
 		return ServiceMetadataManager.getServices(applicationName);
-	}	
+	}
+	
+    public Map<String, Service> getServicesByMetadataContext(String context, String currentApplication) {    
+        Map<String, Service> serviceMap;
+        if (useLocalMetadataOnly(context)) {
+            serviceMap = getAllServices(currentApplication);
+        } else {
+            serviceMap = getAllServices();
+        }
+        
+        return serviceMap;
+    }
 	
 	public Map getAllComposites() {
 		return CompositeMetadataManager.getInstance().getCompleteMetadataMap();
@@ -157,5 +181,22 @@ public class MetadataRepository extends AbstractMetadataRepository {
 		Map composites = getAllComposites();
 		return (Composite) composites.get(compositeType);
 	}	
+	
+    protected boolean useLocalMetadataOnly(String metadataContext) {
+        boolean useLocalMetadataOnly = true;
+        if (StringUtils.isBlank(metadataContext) || LOCAL_METADATA_CONTEXT.equals(metadataContext)) {
+            useLocalMetadataOnly = true;
+
+        } else if (ALL_METADATA_CONTEXT.equals(metadataContext)) {
+            useLocalMetadataOnly = false;
+
+        } else {
+            useLocalMetadataOnly = true;
+            LOG.warn("An invalid metadata context of '" + metadataContext 
+                    + "; has been specified.  Using 'local' instead!");
+        }
+
+        return useLocalMetadataOnly;
+    }
 
 }

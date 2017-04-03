@@ -6,6 +6,7 @@ public class Target {
 	private String templateName;
 	private String outputFile;
 	private String generator;
+	private String metadataContext;
 	private boolean overwritable;
 	private boolean append;
 	
@@ -25,7 +26,15 @@ public class Target {
 		this.generator = generator;
 	}
 	
-	public String getName() {
+	public String getMetadataContext() {
+        return metadataContext;
+    }
+
+    public void setMetadataContext(String metadataContext) {
+        this.metadataContext = metadataContext;
+    }
+
+    public String getName() {
 		return name;
 	}
 	

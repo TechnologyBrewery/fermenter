@@ -1,6 +1,7 @@
 package org.bitbucket.fermenter.stout.mda.generator.service;
 
 import java.util.Iterator;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.VelocityContext;
@@ -23,10 +24,13 @@ public abstract class AbstractServiceResponseJavaGenerator extends AbstractJavaG
 	 * @see org.bitbucket.fermenter.stout.mda.codegen.generator.Generator#generate(org.bitbucket.fermenter.stout.mda.codegen.generator.GenerationContext)
 	 */
 	public void generate(GenerationContext context) throws GenerationException {
-		String applicationName = context.getArtifactId();
+		String currentApplication = context.getArtifactId();
 		MetadataRepository metadataRepository = 
                 MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
-		Iterator<Service> serviceIterator = metadataRepository.getAllServices(applicationName).values().iterator();
+		
+		Map<String, Service> serviceMap = metadataRepository.getServicesByMetadataContext(metadataContext,
+                currentApplication);
+		Iterator<Service> serviceIterator = serviceMap.values().iterator();
 		
 		Service service;
 		JavaService javaService;
@@ -46,7 +50,7 @@ public abstract class AbstractServiceResponseJavaGenerator extends AbstractJavaG
 			while(operationIterator.hasNext()) {
 				javaOperation = (JavaOperation)operationIterator.next();
 				
-				if (shouldGenerate(applicationName, javaOperation)) {
+				if (shouldGenerate(currentApplication, javaOperation)) {
 					vc = setupContext(context, javaService, javaOperation);
 					
 					if (StringUtils.contains(basefileName, TAG_OPERATION_NAME)) {

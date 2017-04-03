@@ -24,7 +24,7 @@
 <!ELEMENT format (#PCDATA)>
 
 <!ELEMENT associations (reference*,relation*)>
-<!ELEMENT reference (name?, documentation?, type,project?, fk?,required?)>
+<!ELEMENT reference (name?, documentation?, type, project?, fk?,required?)>
 <!ELEMENT project (#PCDATA)>
 <!ELEMENT fk (name,source,column?)>
 <!ELEMENT source (#PCDATA)>

@@ -6,6 +6,12 @@ import java.util.Properties;
  * Provides common methods needed for a metadata repository.
  */
 public abstract class AbstractMetadataRepository {
+    
+    /** Indicates that all metadata should be used. */
+    static final String ALL_METADATA_CONTEXT = "all";
+    
+    /** Indicates that only local metadata should be used (e.g., current application.name). */
+    static final String LOCAL_METADATA_CONTEXT = "local";
 
 	protected String applicationName;
 

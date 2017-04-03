@@ -137,18 +137,36 @@ public abstract class ${entity.name}BaseBO extends BasePersistentSpringBO<${idFi
 	#if (!$entity.relations.isEmpty())
   		#set ($idField = ${entity.idFields.values().iterator().next()})
 	public static ${entity.name}BO findByPrimaryKey(${idFieldJavaType} key) {
-		return ${entity.name}BO.findByPrimaryKey(key, false);
+		${entity.name}BO foundBO = ${entity.name}BO.findByPrimaryKey(key, false);
+		if (foundBO != null) {
+			foundBO.postFindByPrimaryKey();
+		}
+		return foundBO;
 	}
 	
 	public static ${entity.name}BO findByPrimaryKey(${idFieldJavaType} key, boolean eagerFetchRelations) {
-		return eagerFetchRelations ? getDefaultRepository().findOne(where(keyEquals(key)).and(eagerFetchRelations())) : getDefaultRepository().findOne(key);
+		${entity.name}BO foundBO = eagerFetchRelations ? getDefaultRepository().findOne(where(keyEquals(key)).and(eagerFetchRelations())) : getDefaultRepository().findOne(key);
+		if (foundBO != null) {
+			foundBO.postFindByPrimaryKey();
+		}
+		return foundBO;
 	}
 	#else
 	public static ${entity.name}BO findByPrimaryKey(${idFieldJavaType} key) {
-		return getDefaultRepository().findOne(key);
+		${entity.name}BO foundBO = getDefaultRepository().findOne(key);
+		if (foundBO != null) {
+			foundBO.postFindByPrimaryKey();
+		}
+		return foundBO;
 	}
 	#end
 #end
+
+	/**
+	 * Provide an opportunity to interact with the object after it is found, but before it is returned by findByPrimaryLey(...).
+	 */
+	protected void postFindByPrimaryKey() {
+	}
 
 #if ( !$entity.isTransient() )	
 	@Override
@@ -177,7 +195,7 @@ public abstract class ${entity.name}BaseBO extends BasePersistentSpringBO<${idFi
 #end
 #foreach ($reference in $entity.references.values())
 	#if ( !$entity.isTransient() )
-	@ManyToOne(fetch=FetchType.LAZY #if($reference.isRequired()), optional=false#end)
+	@ManyToOne(fetch=FetchType.EAGER #if($reference.isRequired()), optional=false#end)
 	@JoinColumn(name="${reference.foreignKeyFields.iterator().next().column}")
 	#end	
   #if ( $reference.isRequired() )

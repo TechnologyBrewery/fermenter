@@ -1,7 +1,6 @@
 package org.bitbucket.fermenter.stout.mda.generator.properties;
 
 import java.util.Collection;
-import java.util.Iterator;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -19,10 +18,9 @@ public class MessageResourceGenerator extends AbstractResourcesGenerator {
 	
 	public void generate(GenerationContext context) throws GenerationException {
 		
-		Collection locales = MessagesMetadataManager.getInstance().getAllLocales();
+		Collection<String> locales = MessagesMetadataManager.getInstance().getAllLocales();
 		String baseFileName = context.getOutputFile();
-		for (Iterator i = locales.iterator(); i.hasNext();) {
-			String locale = (String) i.next();
+		for (String locale : locales) {
 			String fileName = null;
 			if (locale.equals(Message.DEFAULT_LOCALE)) {
 				fileName = StringUtils.replace(baseFileName, "${locale}", "");

@@ -51,7 +51,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
     private static final String[] PROFILE_PROPERTIES = new String[] { "name", "extends" };
     private static final String PROFILE_TARGET = "profiles/profile/target";
     private static final String TARGET = "targets/target";
-    private static final String[] TARGET_PROPERTIES = new String[] { "name", "generator", "templateName", "outputFile",
+    private static final String[] TARGET_PROPERTIES = new String[] { "name", "generator", "metadataContext", "templateName", "outputFile",
             "overwritable", "append" };
     private static final Map<String, Profile> PROFILES;
     private static final Map<String, Target> TARGETS;
@@ -279,7 +279,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
 
     private void generateSources() throws MojoExecutionException {
         long start = System.currentTimeMillis();
-        Profile p = (Profile) PROFILES.get(profile);
+        Profile p = PROFILES.get(profile);
 
         if (p == null) {
             StringBuffer sb = new StringBuffer(150);
@@ -317,6 +317,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
             try {
                 Class<?> clazz = Class.forName(t.getGenerator());
                 Generator generator = (Generator) clazz.newInstance();
+                generator.setMetadataContext(t.getMetadataContext());
                 generator.generate(context);
             } catch (Exception ex) {
                 throw new MojoExecutionException("Error while generating", ex);

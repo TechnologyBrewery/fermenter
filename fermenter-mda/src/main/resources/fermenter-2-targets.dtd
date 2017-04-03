@@ -5,6 +5,7 @@
 <!ELEMENT target EMPTY>
 <!ATTLIST target name CDATA #REQUIRED>
 <!ATTLIST target generator CDATA #REQUIRED>
+<!ATTLIST target metadataContext CDATA #IMPLIED>
 <!ATTLIST target templateName CDATA #REQUIRED>
 <!ATTLIST target outputFile CDATA #REQUIRED>
 <!ATTLIST target overwritable CDATA #REQUIRED>

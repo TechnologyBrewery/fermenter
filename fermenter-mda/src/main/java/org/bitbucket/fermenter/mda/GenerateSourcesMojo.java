@@ -12,7 +12,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
 import org.apache.commons.digester.Digester;
 import org.apache.commons.io.IOUtils;
@@ -20,6 +19,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.descriptor.PluginDescriptor;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -63,6 +63,9 @@ public class GenerateSourcesMojo extends AbstractMojo {
 
     @Parameter(required = true, readonly = true, defaultValue = "${project}")
     private MavenProject project;
+    
+    @Parameter( defaultValue = "${plugin}", readonly = true )
+    private PluginDescriptor plugin;    
 
     @Parameter(required = true)
     private String profile;
@@ -222,8 +225,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
             }
             props.setProperty("metadata.locations", buff.toString());
 
-            @SuppressWarnings("unchecked")
-            Set<Artifact> artifacts = project.getArtifacts();
+            List<Artifact> artifacts = plugin.getArtifacts();
             for (Artifact a : artifacts) {
                 if (metadataDependencies.contains(a.getArtifactId())) {
                     URL url = a.getFile().toURI().toURL();

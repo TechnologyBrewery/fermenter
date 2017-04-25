@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.inject.Inject;
-
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Max;
@@ -94,6 +94,13 @@ public abstract class ${entity.name}BaseBO extends BasePersistentSpringBO<${idFi
   	#if ($field.javaType == 'BigDecimal')
   	@DecimalMax("${field.maxValue}")
   	#else
+  	@Max(${field.maxValue})
+  	#end
+  #end
+	#if ( $field.hasScale() )
+  	#if ($field.javaType == 'BigDecimal')
+    @Digits(integer= #if($field.hasMaxValue()) $field.maxValue #else Integer.MAX_VALUE #end, fraction=$field.scale)
+	#else
   	@Max(${field.maxValue})
   	#end
   #end

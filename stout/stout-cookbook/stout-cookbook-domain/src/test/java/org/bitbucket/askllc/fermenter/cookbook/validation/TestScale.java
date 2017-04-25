@@ -1,19 +1,20 @@
 package org.bitbucket.askllc.fermenter.cookbook.validation;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.math.BigDecimal;
-
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationExampleBO;
 import org.bitbucket.fermenter.stout.messages.Message;
 import org.bitbucket.fermenter.stout.messages.Messages;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-@Ignore("Temporarily ignoring until more granular validation message support is added")
+import java.math.BigDecimal;
+
+import static org.junit.Assert.*;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration({ "classpath:application-context.xml", "classpath:h2-spring-ds-context.xml" })
 public class TestScale extends AbstractValidationTest {
 
 	private ValidationExampleBO bo;
@@ -52,8 +53,8 @@ public class TestScale extends AbstractValidationTest {
 
 		Messages messages = verifyMessages();
 		assertTrue(messages.hasErrorMessages());
-		assertTrue(messages.hasErrorMessages("ValidationExample.bigDecimalExampleWithScale"));
-		assertEquals("invalid.scale", ((Message) messages.getErrorMessages().iterator().next()).getKey());
+		assertEquals("bigDecimalExampleWithScale",messages.getErrorMessages().iterator().next().getInserts().toArray()[0]);
+		assertEquals("invalid.field", ((Message) messages.getErrorMessages().iterator().next()).getKey());
 	}
 
 }

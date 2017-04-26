@@ -98,10 +98,8 @@ public abstract class ${entity.name}BaseBO extends BasePersistentSpringBO<${idFi
   	#end
   #end
 	#if ( $field.hasScale() )
-  	#if ($field.javaType == 'BigDecimal')
+  	#if ($field.javaType == 'BigDecimal' && $field.hasScale())
     @Digits(integer= #if($field.hasMaxValue()) $field.maxValue #else Integer.MAX_VALUE #end, fraction=$field.scale)
-	#else
-  	@Max(${field.maxValue})
   	#end
   #end
   #if ( $field.hasMinValue() )

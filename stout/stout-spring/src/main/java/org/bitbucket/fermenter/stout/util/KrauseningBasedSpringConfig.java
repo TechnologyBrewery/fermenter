@@ -44,7 +44,7 @@ public class KrauseningBasedSpringConfig {
 		BasicDataSource dataSource = new BasicDataSource();
 		Properties dataSourceProps = Krausening.getInstance().getProperties(this.dataSourcePropertiesFileName);
 		
-		alterPropertyAnnocationName(this.dataSourcePropertiesFileName);
+		alterPropertyAnnonationName(this.dataSourcePropertiesFileName);
 		DataSourceConfig config = KrauseningConfigFactory.create(DataSourceConfig.class, System.getProperties());
 		String interleavedUrl = config.getUrl();	
 		if (interleavedUrl != null) {
@@ -67,7 +67,7 @@ public class KrauseningBasedSpringConfig {
 		return Krausening.getInstance().getProperties(this.jpaPropertiesFileName);
 	}
 	
-	private static void alterPropertyAnnocationName(String dataSourcePropertiesFileName) {
+	private static void alterPropertyAnnonationName(String dataSourcePropertiesFileName) {
 		try {
 			ExtendedKrauseningSources updatedSources = new ExtendedKrauseningSources(dataSourcePropertiesFileName);
 			

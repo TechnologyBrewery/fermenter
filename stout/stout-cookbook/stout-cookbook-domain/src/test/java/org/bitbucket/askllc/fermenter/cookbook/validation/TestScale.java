@@ -63,7 +63,7 @@ public class TestScale extends AbstractValidationTest {
 
 	@Test
 	public void testInvalidLargeScale() throws Exception {
-		setUp();
+
 		bo.setBigDecimalExampleWithLargeScale(new BigDecimal("-1234.93463634346"));
 		bo.validate();
 
@@ -74,7 +74,7 @@ public class TestScale extends AbstractValidationTest {
 	}
 	@Test
 	public void testInvalidLargeIntegerScale() throws Exception {
-		setUp();
+
 		bo.setBigDecimalExampleWithLargeScaleInteger(new BigDecimal("11192839126.11"));
 		bo.validate();
 
@@ -85,7 +85,7 @@ public class TestScale extends AbstractValidationTest {
 	}
 	@Test
 	public void testInvalidLargeNegativeIntegerScale() throws Exception {
-		setUp();
+
 		bo.setBigDecimalExampleWithLargeScaleInteger(new BigDecimal("-11192839126.11"));
 		bo.validate();
 

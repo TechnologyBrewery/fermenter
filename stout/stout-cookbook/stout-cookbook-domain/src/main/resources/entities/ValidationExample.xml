@@ -56,6 +56,19 @@
        		<column>BIG_DECIMAL_SCALE</column>
 			<scale>3</scale>
    		</field>
+		<field>
+       		<name>bigDecimalExampleWithLargeScale</name>
+       		<type>big_decimal</type>
+       		<column>BIG_DECIMAL_SCALE_LARGE</column>
+			<scale>10</scale>
+   		</field>
+		<field>
+       		<name>bigDecimalExampleWithLargeScaleInteger</name>
+       		<type>big_decimal</type>
+       		<column>BIG_DECIMAL_SCALE_LARGE_INTEGER</column>
+			<maxValue>1192839128.2231231321</maxValue>
+			<scale>2</scale>
+   		</field>
    		<field>
        		<name>dateExample</name>
        		<type>date</type>

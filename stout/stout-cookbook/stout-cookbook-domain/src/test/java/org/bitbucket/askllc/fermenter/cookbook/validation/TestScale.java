@@ -40,6 +40,8 @@ public class TestScale extends AbstractValidationTest {
 	public void testValidScales() {
 		bo.setBigDecimalExample(new BigDecimal("23.45"));
 		bo.setBigDecimalExampleWithScale(new BigDecimal("22.345"));
+		bo.setBigDecimalExampleWithLargeScale(new BigDecimal("342424.1234567891"));
+		bo.setBigDecimalExampleWithLargeScaleInteger(new BigDecimal("192839126.12"));
 
 		bo.validate();
 
@@ -51,12 +53,45 @@ public class TestScale extends AbstractValidationTest {
 	public void testInvalidScale() {
 		bo.setBigDecimalExample(new BigDecimal("-1234.3463634346"));
 		bo.setBigDecimalExampleWithScale(new BigDecimal("-1234.3463634346"));
-
 		bo.validate();
 
 		Messages messages = verifyMessages();
 		assertTrue(messages.hasErrorMessages());
 		assertEquals("bigDecimalExampleWithScale",messages.getErrorMessages().iterator().next().getInserts().toArray()[0]);
+		assertEquals("invalid.field", ((Message) messages.getErrorMessages().iterator().next()).getKey());
+	}
+
+	@Test
+	public void testInvalidLargeScale() throws Exception {
+		setUp();
+		bo.setBigDecimalExampleWithLargeScale(new BigDecimal("-1234.93463634346"));
+		bo.validate();
+
+		Messages messages = verifyMessages();
+		assertTrue(messages.hasErrorMessages());
+		assertEquals("bigDecimalExampleWithLargeScale",messages.getErrorMessages().iterator().next().getInserts().toArray()[0]);
+		assertEquals("invalid.field", ((Message) messages.getErrorMessages().iterator().next()).getKey());
+	}
+	@Test
+	public void testInvalidLargeIntegerScale() throws Exception {
+		setUp();
+		bo.setBigDecimalExampleWithLargeScaleInteger(new BigDecimal("11192839126.11"));
+		bo.validate();
+
+		Messages messages = verifyMessages();
+		assertTrue(messages.hasErrorMessages());
+		assertEquals("bigDecimalExampleWithLargeScaleInteger",messages.getErrorMessages().iterator().next().getInserts().toArray()[0]);
+		assertEquals("invalid.field", ((Message) messages.getErrorMessages().iterator().next()).getKey());
+	}
+	@Test
+	public void testInvalidLargeNegativeIntegerScale() throws Exception {
+		setUp();
+		bo.setBigDecimalExampleWithLargeScaleInteger(new BigDecimal("-11192839126.11"));
+		bo.validate();
+
+		Messages messages = verifyMessages();
+		assertTrue(messages.hasErrorMessages());
+		assertEquals("bigDecimalExampleWithLargeScaleInteger",messages.getErrorMessages().iterator().next().getInserts().toArray()[0]);
 		assertEquals("invalid.field", ((Message) messages.getErrorMessages().iterator().next()).getKey());
 	}
 

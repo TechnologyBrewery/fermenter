@@ -2,6 +2,8 @@ package ${basePackage}.bizobj;
 
 import java.util.HashSet;
 import java.util.Set;
+import static java.lang.Math.floor;
+import static java.lang.String.valueOf;
 
 import javax.inject.Inject;
 import javax.validation.constraints.Digits;
@@ -98,9 +100,11 @@ public abstract class ${entity.name}BaseBO extends BasePersistentSpringBO<${idFi
   	#end
   #end
   	#if ($field.javaType == 'BigDecimal' && $field.hasScale())
-    @Digits(integer= #if($field.hasMaxValue()) $field.maxValue #else Integer.MAX_VALUE #end, fraction=$field.scale)
+    @Digits(integer= #if($field.hasMaxValue())
+            $field.maxValue.split('\.')[0].length()
+	#else Integer.MAX_VALUE
+	#end, fraction=$field.scale)
   	#end
-  #end
   #if ( $field.hasMinValue() )
   	#if ($field.javaType == 'BigDecimal')
   	@DecimalMin("${field.minValue}")

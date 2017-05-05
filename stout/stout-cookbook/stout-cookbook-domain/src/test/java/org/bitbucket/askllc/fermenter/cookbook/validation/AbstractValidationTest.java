@@ -17,7 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "classpath:application-context.xml", "classpath:h2-data-source-context.xml" })
+@ContextConfiguration({ "classpath:application-context.xml", "classpath:h2-spring-ds-context.xml" })
 public abstract class AbstractValidationTest {
 
 	@Before

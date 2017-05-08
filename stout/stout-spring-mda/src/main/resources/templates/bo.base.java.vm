@@ -84,7 +84,7 @@ public abstract class ${entity.name}BaseBO extends BasePersistentSpringBO<${idFi
 #foreach ( $field in $entity.fields.values() )
   #if ( !$entity.isTransient() )
   #set ( $isRequired = $field.isRequired() )
-	@Column(name="${field.column}" #if($isRequired), nullable=false#end)
+	@Column(name="${field.column}" #if($isRequired), nullable=false#end #if($field.javaType == 'BigDecimal' && $field.hasScale()), scale=${field.scale}#end)
   #end
   #if ( $field.isRequired() )
 	@NotNull

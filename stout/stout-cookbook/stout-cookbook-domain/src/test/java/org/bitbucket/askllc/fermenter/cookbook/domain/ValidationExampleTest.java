@@ -2,10 +2,12 @@ package org.bitbucket.askllc.fermenter.cookbook.domain;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationExampleBO;
 import org.bitbucket.fermenter.stout.messages.AbstractMsgMgrAwareTestSupport;
@@ -55,7 +57,26 @@ public class ValidationExampleTest extends AbstractMsgMgrAwareTestSupport {
 		assertEquals(1, MessageManager.getMessages().getErrorMessageCount());
 		Message invalidScaleErrorMsg = MessageManager.getMessages().getErrorMessages().iterator().next();
 		assertEquals(CoreMessages.INVALID_FIELD, invalidScaleErrorMsg.getKey());
-		assertEquals("bigDecimalExampleWithScale", invalidScaleErrorMsg.getInserts().iterator().next());
+		assertEquals("bigDecimalExampleWithScale", invalidScaleErrorMsg.getProperties().iterator().next());
+		assertNull(ValidationExampleBO.findByPrimaryKey(bizObj.getKey()));
+	}
+
+	@Test
+	public void testSaveMultipleInvalidFields() throws Exception {
+		ValidationExampleBO bizObj = TestUtils.createRandomValidationExample();
+		bizObj.setRequiredField(null);
+		bizObj.setStringExample(RandomStringUtils.randomAlphabetic(21));
+		bizObj.setIntegerExample(RandomUtils.nextInt(20000, 30000));
+		bizObj = bizObj.save();
+
+		assertEquals(3, MessageManager.getMessages().getErrorMessageCount());
+		for (Message message : MessageManager.getMessages().getErrorMessages()) {
+			assertEquals(CoreMessages.INVALID_FIELD, message.getKey());
+
+			String invalidPropertyName = message.getProperties().iterator().next();
+			assertTrue("requiredField".equals(invalidPropertyName) || "stringExample".equals(invalidPropertyName)
+					|| "integerExample".equals(invalidPropertyName));
+		}
 		assertNull(ValidationExampleBO.findByPrimaryKey(bizObj.getKey()));
 	}
 }

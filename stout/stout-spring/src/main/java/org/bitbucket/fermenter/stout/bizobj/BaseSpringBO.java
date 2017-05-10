@@ -1,7 +1,6 @@
 package org.bitbucket.fermenter.stout.bizobj;
 
 import java.util.Set;
-import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.validation.ConstraintViolation;
@@ -72,17 +71,18 @@ public abstract class BaseSpringBO<BO> implements BusinessObject<BO> {
         }
     }
 
-    /**
-     * Adds the given {@link ConstraintViolation} as an error message to the {@link MessageManager}.
-     * 
-     * @param violation
-     *            JSR-303 violation to record in the {@link MessageManager}.
-     */
-    protected void addConstraintViolationToMsgMgr(ConstraintViolation<BO> violation) {
-        MessageManager.addMessage(MessageUtils.createErrorMessage(CoreMessages.INVALID_FIELD, new String[] {},
-                new Object[] { violation.getPropertyPath().toString(), violation.getMessage() }));
+	/**
+	 * Adds the given {@link ConstraintViolation} as an error message to the {@link MessageManager}.
+	 *
+	 * @param violation
+	 *            JSR-303 violation to record in the {@link MessageManager}.
+	 */
+	protected void addConstraintViolationToMsgMgr(ConstraintViolation<BO> violation) {
+		String invalidPropertyName = violation.getPropertyPath().toString();
+		MessageManager.addMessage(MessageUtils.createErrorMessage(CoreMessages.INVALID_FIELD,
+				new String[] { invalidPropertyName }, new Object[] { invalidPropertyName, violation.getMessage() }));
 
-    }
+	}
 
     protected abstract void validateRelations();
 

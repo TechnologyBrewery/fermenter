@@ -9,6 +9,8 @@ import java.math.RoundingMode;
 import org.apache.commons.lang3.RandomUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationExampleBO;
 import org.bitbucket.fermenter.stout.messages.AbstractMsgMgrAwareTestSupport;
+import org.bitbucket.fermenter.stout.messages.CoreMessages;
+import org.bitbucket.fermenter.stout.messages.Message;
 import org.bitbucket.fermenter.stout.messages.MessageManager;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,6 +53,9 @@ public class ValidationExampleTest extends AbstractMsgMgrAwareTestSupport {
 		bizObj = bizObj.save();
 
 		assertEquals(1, MessageManager.getMessages().getErrorMessageCount());
+		Message invalidScaleErrorMsg = MessageManager.getMessages().getErrorMessages().iterator().next();
+		assertEquals(CoreMessages.INVALID_FIELD, invalidScaleErrorMsg.getKey());
+		assertEquals("bigDecimalExampleWithScale", invalidScaleErrorMsg.getInserts().iterator().next());
 		assertNull(ValidationExampleBO.findByPrimaryKey(bizObj.getKey()));
 	}
 }

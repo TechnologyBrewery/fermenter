@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.bitbucket.askllc.fermenter</groupId>
 		<artifactId>root</artifactId>
-		<version>2.0.0-issue-38-recreate</version>
+		<version>2.0.0-issue-39-recreate-SNAPSHOT</version>
 	</parent>
 
 	<groupId>org.bitbucket.askllc.fermenter.stout</groupId>

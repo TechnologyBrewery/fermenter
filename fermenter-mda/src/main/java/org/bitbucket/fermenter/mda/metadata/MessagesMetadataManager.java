@@ -46,6 +46,11 @@ public final class MessagesMetadataManager {
 		locales = new HashSet<String>();
 		locales.add(Message.DEFAULT_LOCALE);
 	}
+		
+	public void reset() {
+        // TODO: see issue #16 and #17 to eliminate the need for this in the next version:
+		messages = new HashMap<>();
+	}
 
 	public static MessagesMetadataManager getInstance() {
 		return INSTANCE;

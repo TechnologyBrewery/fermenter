@@ -119,10 +119,14 @@ public class MetadataRepository extends AbstractMetadataRepository {
 
                 if (applicationName.equals(url.getApplicationName())) {
                     // Messages metadata only needs to be loaded for the current project
+                	MessagesMetadataManager messagesManager = MessagesMetadataManager.getInstance();
+                	messagesManager.reset();
                     MessagesMetadataManager.getInstance().loadMetadata(url.getUrl());
 
                     // Load format information for the current project only
-                    FormatMetadataManager.getInstance().loadMetadata(url.getUrl());
+                    FormatMetadataManager formatManager = FormatMetadataManager.getInstance();
+                    formatManager.reset();
+                    formatManager.loadMetadata(url.getUrl());
                 }
                 if (LOG.isInfoEnabled()) {
                     long stop = System.currentTimeMillis();

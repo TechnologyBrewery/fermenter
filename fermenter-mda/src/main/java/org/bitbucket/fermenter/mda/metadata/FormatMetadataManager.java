@@ -28,7 +28,7 @@ public final class FormatMetadataManager {
 	private static final Log LOG = LogFactory.getLog(FormatMetadataManager.class);
 	private static final FormatMetadataManager INSTANCE;
 	
-	private Map formats;
+	private Map<String, Format> formats;
 	
 	static {
 		INSTANCE = new FormatMetadataManager();
@@ -41,11 +41,16 @@ public final class FormatMetadataManager {
 	private FormatMetadataManager() {
 		super();
 		
-		formats = new HashMap();
+		formats = new HashMap<>();
 	}
 	
 	void loadMetadata(String url) {
 		configure(url);
+	}
+	
+	public void reset() {
+        // TODO: see issue #16 and #17 to eliminate the need for this in the next version:
+		formats = new HashMap<>();
 	}
 	
 	private void configure(String url) {
@@ -78,7 +83,7 @@ public final class FormatMetadataManager {
 			return;
 		}
 		
-		URL resource = file.toURL();
+		URL resource = file.toURI().toURL();
 		LOG.info("Loading formats from: " + resource);
 		
 		if (resource != null) {
@@ -129,7 +134,7 @@ public final class FormatMetadataManager {
 		return (Format) formats.get(name);
 	}
 	
-	public Collection getAllFormats() {
+	public Collection<Format> getAllFormats() {
 		return Collections.unmodifiableCollection(formats.values());
 	}
 	

@@ -5,9 +5,13 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.util.Iterator;
+import java.util.Set;
+
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainBO;
+import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainChildBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.SimpleDomainMaintenanceService;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
@@ -106,6 +110,66 @@ public class SimpleDomainMaintenanceIT extends AbstractArquillianTestSupport {
         assertNull(foundResult.getValue());
 
     }
+    
+    @Test
+    @RunAsClient
+    public void testDeleteSimpleDomainChild(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
+        SimpleDomainMaintenanceService simpleDomainService = getMaintenanceService(webTarget);
+        int numChildEntities = RandomUtils.nextInt(5) + 5;
+        SimpleDomainBO domain = TestUtils.createRandomSimpleDomain(numChildEntities);
+        ValueServiceResponse<SimpleDomainBO> result = simpleDomainService.saveOrUpdate(domain);
+        TestUtils.assertNoErrorMessages(result);
+
+        SimpleDomainBO persistedSimpleDomain = result.getValue();
+        Iterator<SimpleDomainChildBO> childIter = persistedSimpleDomain.getSimpleDomainChilds().iterator();
+        SimpleDomainChildBO deletedChild = childIter.next();
+        childIter.remove();
+
+        result = simpleDomainService.saveOrUpdate(persistedSimpleDomain);
+        TestUtils.assertNoErrorMessages(result);
+
+        result = simpleDomainService.findByPrimaryKey(persistedSimpleDomain.getKey());
+        TestUtils.assertNoErrorMessages(result);
+
+        Set<SimpleDomainChildBO> children = result.getValue().getSimpleDomainChilds();
+        assertEquals(numChildEntities - 1, children.size());
+        assertFalse(children.stream().anyMatch(child -> child.equals(deletedChild)));
+    }
+
+    @Test
+    @RunAsClient
+    public void testUpdateSimpleDomainChildren(@ArquillianResteasyResource ResteasyWebTarget webTarget)
+            throws Exception {
+        SimpleDomainMaintenanceService simpleDomainService = getMaintenanceService(webTarget);
+        SimpleDomainBO domain = TestUtils.createRandomSimpleDomain(RandomUtils.nextInt(5) + 5);
+        ValueServiceResponse<SimpleDomainBO> result = simpleDomainService.saveOrUpdate(domain);
+        TestUtils.assertNoErrorMessages(result);
+
+        SimpleDomainBO persistedSimpleDomain = result.getValue();
+        persistedSimpleDomain.getSimpleDomainChilds().clear();
+
+        SimpleDomainChildBO child = new SimpleDomainChildBO();
+        child.setName(RandomStringUtils.randomAlphabetic(10));
+        persistedSimpleDomain.addSimpleDomainChild(child);
+
+        result = simpleDomainService.saveOrUpdate(persistedSimpleDomain);
+        TestUtils.assertNoErrorMessages(result);
+
+        result = simpleDomainService.findByPrimaryKey(persistedSimpleDomain.getKey());
+        persistedSimpleDomain = result.getValue();
+        assertEquals(1, persistedSimpleDomain.getSimpleDomainChilds().size());
+
+        String updatedChildName = RandomStringUtils.randomAlphabetic(10);
+        persistedSimpleDomain.getSimpleDomainChilds().iterator().next().setName(updatedChildName);
+        result = simpleDomainService.saveOrUpdate(persistedSimpleDomain);
+        TestUtils.assertNoErrorMessages(result);
+
+        result = simpleDomainService.findByPrimaryKey(persistedSimpleDomain.getKey());
+        Set<SimpleDomainChildBO> children = result.getValue().getSimpleDomainChilds();
+        assertEquals(1, children.size());
+        assertEquals(updatedChildName, children.iterator().next().getName());
+    }
+    
     
     private SimpleDomainMaintenanceService getMaintenanceService(ResteasyWebTarget webTarget) {
         webTarget = initWebTarget(webTarget);

@@ -171,7 +171,9 @@ public abstract class ${entity.name}BaseBO extends BasePersistentSpringBO<${idFi
 #end
 
 	/**
-	 * Provide an opportunity to interact with the object after it is found, but before it is returned by findByPrimaryLey(...).
+	 * Provide an opportunity to interact with the object after it is found, but before it is 
+	 * returned by {@link ${entity.name}BO#findByPrimaryKey(${idFieldJavaType})} and other 
+	 * primary key based retrieval methods.
 	 */
 	protected void postFindByPrimaryKey() {
 	}
@@ -190,7 +192,7 @@ public abstract class ${entity.name}BaseBO extends BasePersistentSpringBO<${idFi
 
 #foreach ($relation in $entity.relations.values())
 #if ( !$entity.isTransient() )
-	@OneToMany(mappedBy="parent${entity.name}", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	@OneToMany(mappedBy="parent${entity.name}", cascade=CascadeType.ALL, fetch=FetchType.LAZY, orphanRemoval=true)
 #end
 	private Set<${relation.type}BO> ${relation.label}s;
 #end

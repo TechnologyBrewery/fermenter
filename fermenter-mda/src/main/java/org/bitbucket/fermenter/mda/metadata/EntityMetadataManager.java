@@ -171,6 +171,10 @@ class EntityMetadataManager extends MetadataManager {
 		digester.addObjectCreate( "entity/associations/relation"				,	RelationMetadata.class.getName() 							);
 		digester.addCallMethod	( "entity/associations/relation/documentation"	,	"setDocumentation"	,	0 							);
 		digester.addCallMethod	( "entity/associations/relation/type"			,	"setType"			,	0 							);
+	    digester.addCallMethod  ( "entity/associations/relation/fk"             ,   "addFkOverride"     ,   3                           );
+	    digester.addCallParam   ( "entity/associations/relation/fk/source"     ,   0                                                   );
+	    digester.addCallParam   ( "entity/associations/relation/fk/name"       ,   1                                                   );
+	    digester.addCallParam   ( "entity/associations/relation/fk/column"     ,   2                                                   );
 		digester.addCallMethod	( "entity/associations/relation/multiplicity"	,	"setMultiplicity"	,	0 							);
 		digester.addSetNext		( "entity/associations/relation"				,	"addRelation"		, 	RelationMetadata.class.getName() 	);
 	}

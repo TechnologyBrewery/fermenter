@@ -30,6 +30,6 @@ public interface Relation {
 	 * Gets the key fields that the child class will reference for this relation
 	 * @return The key fields
 	 */
-	public Collection getKeys();
+	public Collection getKeys(String parentEntityName);
 
 }

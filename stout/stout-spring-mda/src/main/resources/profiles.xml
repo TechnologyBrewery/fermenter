@@ -18,7 +18,8 @@
 		<target name="serviceImpl"/>
 		
 		<target name="messageProperties"/>
-		<target name="springContext"/>
+		<target name="baseSpringContext"/>
+		<target name="springContextImpl"/>
 		<target name="jpaProperties"/>	
 		<target name="dataSourceProperties"/>			
 	</profile>

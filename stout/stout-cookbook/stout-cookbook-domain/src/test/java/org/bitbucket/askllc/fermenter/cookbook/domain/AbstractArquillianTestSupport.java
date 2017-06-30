@@ -18,25 +18,26 @@ import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 @ArquillianSuiteDeployment
 public abstract class AbstractArquillianTestSupport {
 
-	@Deployment()
-	public static WebArchive createDeployment() {
-		File[] mavenDependencies = Maven.configureResolver().loadPomFromFile("pom.xml", "integration-test")
-				.importRuntimeAndTestDependencies().resolve().withTransitivity().asFile();
+    @Deployment()
+    public static WebArchive createDeployment() {
+        File[] mavenDependencies = Maven.configureResolver().loadPomFromFile("pom.xml", "integration-test")
+                .importRuntimeAndTestDependencies().resolve().withTransitivity().asFile();
 
-		WebArchive war = ShrinkWrap.create(WebArchive.class, "cookbook-domain.war");
-		war.addAsLibraries(mavenDependencies);
-		war.addPackages(true, "org.bitbucket.askllc.fermenter.cookbook.domain");
-		war.addClass(TestUtils.class);
-		war.merge(
-				ShrinkWrap.create(GenericArchive.class).as(ExplodedImporter.class)
-						.importDirectory("src/generated/resources").as(GenericArchive.class),
-				"WEB-INF/classes", Filters.includeAll());
-		war.addAsWebInfResource("application-context.xml");
-		war.addAsWebInfResource("h2-tomcat-ds-context.xml", "context.xml");
-		war.addAsWebResource("log4j2.xml");
-		war.setWebXML("web.xml");
-		return war;
-	}
+        WebArchive war = ShrinkWrap.create(WebArchive.class, "cookbook-domain.war");
+        war.addAsLibraries(mavenDependencies);
+        war.addPackages(true, "org.bitbucket.askllc.fermenter.cookbook.domain");
+        war.addClass(TestUtils.class);
+        war.merge(
+                ShrinkWrap.create(GenericArchive.class).as(ExplodedImporter.class)
+                        .importDirectory("src/generated/resources").as(GenericArchive.class),
+                "WEB-INF/classes", Filters.include("^.*\\.properties$"));
+        war.addAsWebInfResource("base-application-context.xml");
+        war.addAsWebInfResource("stout-cookbook-domain-application-context.xml");
+        war.addAsWebInfResource("h2-tomcat-ds-context.xml", "context.xml");
+        war.addAsWebResource("log4j2.xml");
+        war.setWebXML("web.xml");
+        return war;
+    }
 
 	/**
 	 * Registers the given JAX-RS {@link WebTarget} (typically injected into a test via

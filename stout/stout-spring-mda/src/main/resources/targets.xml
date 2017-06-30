@@ -39,13 +39,13 @@
 		    overwritable="false"/>
 	
 	<target name="objectMapperManager"
-		    generator="org.bitbucket.fermenter.stout.mda.generator.factory.FactoryJavaGenerator"
+		    generator="org.bitbucket.fermenter.stout.mda.generator.entity.AllEntitiesAwareJavaGenerator"
 		    templateName="templates/jackson.object.mapper.manager.java.vm"
 		    outputFile="${basePackage}/transfer/json/ObjectMapperManager.java"
 		    overwritable="true"/>
 		    
 	<target name="jacksonObjectMapperResteasyProvider"
-		    generator="org.bitbucket.fermenter.stout.mda.generator.factory.FactoryJavaGenerator"
+		    generator="org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticJavaGenerator"
 		    templateName="templates/jackson.object.mapper.resteasy.provider.java.vm"
 		    outputFile="${basePackage}/service/rest/JacksonObjectMapperResteasyProvider.java"
 		    overwritable="true"/>
@@ -93,20 +93,26 @@
 		    outputFile="${basePackage}/messages${locale}.properties"
 		    overwritable="true"/>
 	
-	<target name="springContext"
-		    generator="org.bitbucket.fermenter.stout.mda.generator.factory.FactoryResourceGenerator"
-		    templateName="templates/spring.context.xml.vm"
-		    outputFile="application-context.xml"
-		    overwritable="false"/>
+	<target name="baseSpringContext"
+		    generator="org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator"
+		    templateName="templates/spring.context.base.xml.vm"
+		    outputFile="base-application-context.xml"
+		    overwritable="true"/>
 	
+	<target name="springContextImpl"
+		    generator="org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator"
+		    templateName="templates/spring.context.impl.xml.vm"
+		    outputFile="${artifactId}-application-context.xml"
+		    overwritable="false"/>
+		    
 	<target name="jpaProperties"
-		    generator="org.bitbucket.fermenter.stout.mda.generator.factory.FactoryResourceGenerator"
+		    generator="org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator"
 		    templateName="templates/jpa.properties.vm"
 		    outputFile="krausening/jpa.properties"
 		    overwritable="false"/>
 	
 	<target name="dataSourceProperties"
-		    generator="org.bitbucket.fermenter.stout.mda.generator.factory.FactoryResourceGenerator"
+		    generator="org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator"
 		    templateName="templates/data.source.properties.vm"
 		    outputFile="krausening/data-source.properties"
 		    overwritable="false"/>

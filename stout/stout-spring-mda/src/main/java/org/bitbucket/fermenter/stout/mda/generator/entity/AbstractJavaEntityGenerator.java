@@ -6,6 +6,7 @@ import org.bitbucket.fermenter.mda.generator.GenerationContext;
 import org.bitbucket.fermenter.mda.generator.entity.AbstractEntityGenerator;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.stout.mda.JavaEntity;
+import org.bitbucket.fermenter.stout.mda.java.JavaGeneratorUtil;
 
 public abstract class AbstractJavaEntityGenerator extends AbstractEntityGenerator {
 
@@ -15,5 +16,9 @@ public abstract class AbstractJavaEntityGenerator extends AbstractEntityGenerato
 		vc.put("basePackage", generationContext.getBasePackage());
 		vc.put("StringUtils", StringUtils.class);
 	}
+	
+    protected String getOutputSubFolder() {
+        return JavaGeneratorUtil.OUTPUT_SUB_FOLDER_JAVA;
+    }
 
 }

@@ -84,6 +84,11 @@
 	<associations>
 		<relation>
 			<type>ValidationExampleChild</type>
+			<fk>
+				<name>id</name>
+				<source>id</source>
+				<column>VALIDATION_EXAMPLE_SOME_OTHER_ID</column>
+			</fk>
 			<multiplicity>1-M</multiplicity>
 		</relation>
 	</associations>

@@ -69,9 +69,9 @@ public class JavaRelation implements Relation {
 		return decoratedChildRelationCollection;
 	}
 
-	public Collection getKeys() {
+	public Collection getKeys(String parentEntityName) {
 		if (decoratedKeyCollection == null) {
-			Collection relationKeyCollection = relation.getKeys();
+			Collection relationKeyCollection = relation.getKeys(parentEntityName);
 			if ((relationKeyCollection == null) || (relationKeyCollection.size() == 0)) {
 				decoratedKeyCollection = Collections.EMPTY_LIST;
 				

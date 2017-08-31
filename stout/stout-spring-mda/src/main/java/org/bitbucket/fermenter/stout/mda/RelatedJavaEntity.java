@@ -1,5 +1,6 @@
 package org.bitbucket.fermenter.stout.mda;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -8,6 +9,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.Field;
+import org.bitbucket.fermenter.mda.metadata.element.Relation;
 
 public class RelatedJavaEntity extends JavaEntity {
 	
@@ -48,7 +50,12 @@ public class RelatedJavaEntity extends JavaEntity {
 			}
 			
 		} else {
-			decoratedIdFieldMap = super.getIdFields();
+		    Relation relation = entity.getRelation(parentEntity.getName());
+		    Collection<Field> keys = relation.getKeys(entity.getName());
+			decoratedIdFieldMap = new HashMap<>();
+			for (Field key : keys) {
+			    decoratedIdFieldMap.put(key.getName(), key);
+			}
 		}
 		
 		return decoratedIdFieldMap;

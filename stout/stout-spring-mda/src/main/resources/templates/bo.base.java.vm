@@ -197,9 +197,9 @@ public abstract class ${entity.name}BaseBO extends BasePersistentSpringBO<${idFi
 	private Set<${relation.type}BO> ${relation.label}s;
 #end
 #foreach ($inverseRelation in $entity.inverseRelations.values())
-	#if ( !$entity.isTransient() )
+	#if ( !$entity.isTransient() )		
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="#if(!$inverseRelation.idFields.isEmpty())${inverseRelation.idFields.values().iterator().next().column}#else${inverseRelation.Name}_ID#end", nullable=false)
+	@JoinColumn(name=#if(!$inverseRelation.idFields.isEmpty())#set($inverseRelationKey = ${inverseRelation.idFields.values().iterator().next()}) "${inverseRelationKey.column}", referencedColumnName="${inverseRelationKey.parentColumn}#else"${inverseRelation.Name}_ID#end", nullable=false)
 	#end
 	private ${inverseRelation.name}BO parent${inverseRelation.name};
 #end

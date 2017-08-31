@@ -1,7 +1,9 @@
 package org.bitbucket.fermenter.mda.metadata.element;
 
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -14,6 +16,7 @@ public class RelationMetadata extends MetadataElement implements Relation {
 	private String type;
 	private String multiplicity;
 	private String table;
+	private Map<String, Field> fkOverrides = new HashMap<>();
 
 	/**
 	 * @see org.bitbucket.fermenter.mda.metadata.Relation#getDocumentation()
@@ -55,6 +58,19 @@ public class RelationMetadata extends MetadataElement implements Relation {
 	}
 	
 	/**
+     * Store a collection of foreign key override values
+     * @param source Field name in the referenced entity
+     * @param name Field name in the referencing entity
+     * @param column Column name in the referencing entity
+     */
+    public void addFkOverride(String source, String name, String column) {
+        FieldMetadata f = new FieldMetadata();
+        f.setName( name );
+        f.setColumn( column );
+        fkOverrides.put( source, f );
+    }
+	
+	/**
 	 * @see org.bitbucket.fermenter.mda.metadata.Relation#getLabel()
 	 */
 	public String getLabel() {
@@ -83,22 +99,36 @@ public class RelationMetadata extends MetadataElement implements Relation {
 		return metadataRepository.getEntity( type ).getRelations().values();	
 	}
 	
-	/**
-	 * @see org.bitbucket.fermenter.mda.metadata.Relation#getKeys()
-	 */
-	public Collection getKeys() {
-	    MetadataRepository metadataRepository = 
-                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
-		Entity ed = metadataRepository.getEntity(type);
-		Map idFieldMap = ed.getIdFields();
-		Collection keyValues = idFieldMap.values();	
-		return keyValues;
-	}
+    /**
+     * @see org.bitbucket.fermenter.mda.metadata.Relation#getKeys()
+     */
+    public Collection<Field> getKeys(String parentEntityName) {
+        MetadataRepository metadataRepository = MetadataRepositoryManager
+                .getMetadataRepostory(MetadataRepository.class);
+        Entity ed = metadataRepository.getEntity(parentEntityName);
+
+        // Apply overrides
+        Collection<Field> keyValues = new ArrayList<>();
+        for (Field id : ed.getIdFields().values()) {
+            ForeignKeyFieldMetadata newId = new ForeignKeyFieldMetadata();
+            Field override = (Field) fkOverrides.get(id.getName());
+            newId.setType(id.getType());
+            newId.setSourceName(StringUtils.capitalize(id.getName()));
+            newId.setName((fkOverrides.size() == 0) ? id.getName() : override.getName());
+            newId.setColumn((fkOverrides.size() == 0) ? id.getColumn() : override.getColumn());
+            newId.setParentColumn(id.getColumn());
+            newId.setMaxLength(id.getMaxLength());
+            newId.setMinLength(id.getMinLength());
+            keyValues.add(newId);
+        }
+
+        return keyValues;
+    }
 	
 	/**
 	 * Executed to ensure that valid combinations of metadata have been loaded.
 	 */
 	public void validate() {
-	}	
+	}
 	
 }

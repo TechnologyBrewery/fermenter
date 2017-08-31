@@ -29,7 +29,7 @@
 <!ELEMENT fk (name,source,column?)>
 <!ELEMENT source (#PCDATA)>
 
-<!ELEMENT relation (documentation?, type, multiplicity)>
+<!ELEMENT relation (documentation?, type, fk?, multiplicity)>
 <!ELEMENT multiplicity (#PCDATA)>
 
 <!ELEMENT queries (query+)>

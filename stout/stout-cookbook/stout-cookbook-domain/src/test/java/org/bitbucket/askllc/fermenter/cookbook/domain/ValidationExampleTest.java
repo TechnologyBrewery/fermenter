@@ -22,7 +22,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "classpath:application-context.xml", "classpath:h2-spring-ds-context.xml" })
+@ContextConfiguration({ "classpath:base-application-context.xml", "classpath:h2-spring-ds-context.xml" })
 @Transactional
 @WebAppConfiguration
 /**

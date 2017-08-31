@@ -17,7 +17,7 @@ import static org.junit.Assert.assertFalse;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({ "classpath:application-context.xml", "classpath:h2-spring-ds-context.xml" })
+@ContextConfiguration({ "classpath:base-application-context.xml", "classpath:h2-spring-ds-context.xml" })
 public class TestScale extends AbstractValidationTest {
 
 	private ValidationExampleBO bo;

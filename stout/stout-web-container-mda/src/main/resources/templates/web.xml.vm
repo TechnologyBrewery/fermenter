@@ -5,7 +5,8 @@
 	version="3.0">
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-    	<param-value>classpath:application-context.xml</param-value>
+		<!-- ***IMPORTANT*** Developers should add any project-specific Spring context configurations here -->
+    	<param-value>classpath:base-application-context.xml</param-value>
 	</context-param>
 	
 	<context-param>

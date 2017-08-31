@@ -1,22 +1,12 @@
 package org.bitbucket.fermenter.stout.mda.generator.web;
 
-import org.apache.velocity.VelocityContext;
-import org.bitbucket.fermenter.mda.generator.AbstractResourcesGenerator;
-import org.bitbucket.fermenter.mda.generator.GenerationContext;
-import org.bitbucket.fermenter.mda.generator.GenerationException;
+import org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator;
 
-public class WebappResourceGenerator extends AbstractResourcesGenerator {
+public class WebappResourceGenerator extends ModelAgnosticResourceGenerator {
 
-	@Override
-	public void generate(GenerationContext context) throws GenerationException {
-		VelocityContext vc = new VelocityContext();
-		vc.put("basePackage", context.getBasePackage());
-		generateFile(context, vc);
-	}
-
-	@Override
-	protected String getOutputSubFolder() {
-		return "webapp/";
-	}
+    @Override
+    protected String getOutputSubFolder() {
+        return "webapp/";
+    }
 
 }

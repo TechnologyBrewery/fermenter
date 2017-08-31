@@ -102,13 +102,9 @@ public abstract class AbstractGenerator implements Generator {
     }
 
     protected abstract String getOutputSubFolder();
-
+    
     protected final String replaceBasePackage(String original, String basePackage) {
         return StringUtils.replace(original, "${basePackage}", basePackage);
-    }
-
-    protected final String replaceFormName(String original, String formName) {
-        return StringUtils.replace(original, "${formName}", formName);
     }
 
     protected final String replaceEntityName(String original, String entityName) {
@@ -123,12 +119,7 @@ public abstract class AbstractGenerator implements Generator {
         return StringUtils.replace(original, "${enumerationName}", enumerationName);
     }
 
-    protected final String replaceProjectName(String original, String projectName) {
-        return StringUtils.replace(original, "${projectName}", projectName);
+    protected final String replaceArtifactId(String original, String artifactId) {
+        return StringUtils.replace(original, "${artifactId}", artifactId);
     }
-
-    protected final String replaceCompositeName(String original, String compositeName) {
-        return StringUtils.replace(original, "${compositeName}", compositeName);
-    }
-
 }

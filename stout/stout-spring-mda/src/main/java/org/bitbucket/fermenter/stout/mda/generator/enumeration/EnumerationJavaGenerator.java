@@ -3,15 +3,16 @@ package org.bitbucket.fermenter.stout.mda.generator.enumeration;
 import java.util.Map;
 
 import org.apache.velocity.VelocityContext;
+import org.bitbucket.fermenter.mda.generator.AbstractGenerator;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Enumeration;
 import org.bitbucket.fermenter.stout.mda.JavaEnumeration;
-import org.bitbucket.fermenter.stout.mda.generator.AbstractJavaGenerator;
+import org.bitbucket.fermenter.stout.mda.java.JavaGeneratorUtil;
 
-public class EnumerationJavaGenerator extends AbstractJavaGenerator {
+public class EnumerationJavaGenerator extends AbstractGenerator {
 
     public void generate(GenerationContext context) throws GenerationException {
         String currentApplication = context.getArtifactId();
@@ -38,6 +39,11 @@ public class EnumerationJavaGenerator extends AbstractJavaGenerator {
 
             generateFile(context, vc);
         }
+    }
+
+    @Override
+    protected String getOutputSubFolder() {
+        return JavaGeneratorUtil.OUTPUT_SUB_FOLDER_JAVA;
     }
 
 }

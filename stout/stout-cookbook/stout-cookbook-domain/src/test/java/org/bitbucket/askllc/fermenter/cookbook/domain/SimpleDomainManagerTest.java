@@ -145,4 +145,16 @@ public class SimpleDomainManagerTest extends AbstractMsgMgrAwareTestSupport {
 		assertNull(response.getValue());
 	}
 
+    @Test
+    public void testBusinessServiceMethodsReturnWrappedPrimitives() throws Exception {
+        ValueServiceResponse<String> singlePrimitiveResponse = simpleDomainMgr.doSomethingAndReturnAPrimitive();
+        TestUtils.assertNoErrorMessages(singlePrimitiveResponse);
+        assertNotNull(singlePrimitiveResponse.getValue());
+
+        int returnListSize = RandomUtils.nextInt(2, 5);
+        ValueServiceResponse<Collection<Integer>> primitivesCollectionResponse = simpleDomainMgr
+                .returnManyPrimitives(RandomUtils.nextInt(0, 100), returnListSize);
+        TestUtils.assertNoErrorMessages(primitivesCollectionResponse);
+        assertEquals(returnListSize, primitivesCollectionResponse.getValue().size());
+    }
 }

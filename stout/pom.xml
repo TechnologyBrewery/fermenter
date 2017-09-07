@@ -228,7 +228,12 @@
 				<version>5.2.5.Final</version>
 				<scope>compile</scope>
 			</dependency>
-
+			<dependency>
+				<groupId>org.javassist</groupId>
+				<artifactId>javassist</artifactId>
+  				<version>3.20.0-GA</version>
+  			</dependency>
+  			
 			<dependency>
 				<groupId>org.jboss.arquillian</groupId>
 				<artifactId>arquillian-bom</artifactId>
@@ -247,6 +252,24 @@
 				<artifactId>arquillian-rest-client-impl-3x</artifactId>
 				<version>${arquillian.rest.extension.version}</version>
 				<scope>test</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>javassist</groupId>
+						<artifactId>javassist</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.eu.ingwar.tools</groupId>
+				<artifactId>arquillian-suite-extension</artifactId>
+				<scope>test</scope>
+				<version>1.1.2</version>
+				<exclusions>
+					<exclusion>
+						<groupId>javassist</groupId>
+						<artifactId>javassist</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

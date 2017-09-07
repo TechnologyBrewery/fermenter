@@ -6,8 +6,6 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
-import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 
 /**
  * Representation of operation metadata.  This class contains <b>ONLY</b> data
@@ -22,8 +20,6 @@ public class OperationMetadata extends MetadataElement implements Operation {
 	private String returnManyType;
 	private List<Parameter> parameters;
 	private String transactionAttribute;
-	private String viewType;
-	private String transmissionMethod;
 	private String responseEncoding;
 	
 	private static Log log = LogFactory.getLog(Operation.class);
@@ -123,35 +119,6 @@ public class OperationMetadata extends MetadataElement implements Operation {
 			}
 		}
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	public String getViewType() {
-		return (viewType != null) ? viewType : VIEW_TYPE_BOTH;
-	}
-
-	/**
-	 * Sets the view type of this operation
-	 * @param viewType The viewType to set.
-	 */
-	public void setViewType(String viewType) {
-		this.viewType = viewType;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public String getTransmissionMethod() {
-		return  (transmissionMethod != null) ? transmissionMethod : TRANSMISSION_METHOD_SYNC;
-	}	
-	
-	/**
-	 * @param transmissionMethod The transmissionMethod to set.
-	 */
-	public void setTransmissionMethod(String transmissionMethod) {
-		this.transmissionMethod = transmissionMethod;
-	}
 
 	/**
 	 * {@inheritDoc}
@@ -169,23 +136,6 @@ public class OperationMetadata extends MetadataElement implements Operation {
 	 */
 	public void validate() {			
 		validateTransactionAttribute();
-		validateTransmissionMethod();
-		validateReturnManyType();
-	}
-	
-	private void validateReturnManyType() {
-		// Currently return-many is not supported for primitive types
-		String returnManyType = getReturnManyType();		
-		if (!StringUtils.isBlank(returnManyType)) {
-		    MetadataRepository metadataRepository = 
-                    MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
-			Entity e = metadataRepository.getEntity(returnManyType);
-			if (e == null) {
-				String msg = "'return-many' on operation '" + getName() + "' is not currently supported for the primitive (non-entity) type '" + returnManyType + "'";
-				log.error(msg);
-				throw new IllegalArgumentException(msg);
-			}
-		}
 	}
 
 	private void validateTransactionAttribute() {
@@ -200,17 +150,6 @@ public class OperationMetadata extends MetadataElement implements Operation {
 					+ TRANSACTION_REQUIRES_NEW + "', '" + TRANSACTION_MANDATORY + "', '"
 					+ TRANSACTION_NOT_SUPPORTED + "', '"+ TRANSACTION_SUPPORTS + "' or '"
 					+ TRANSACTION_NEVER + "'");
-		}
-		
-	}
-	
-	private void validateTransmissionMethod() {
-		String transmissionMethod = getTransmissionMethod();
-		if ( (!TRANSMISSION_METHOD_SYNC.equals(transmissionMethod))
-		&& (!TRANSMISSION_METHOD_ASYNC.equals(transmissionMethod))
-		) {
-			log.error("Transmission method must be '" + TRANSMISSION_METHOD_SYNC + "' or '"
-					+ TRANSMISSION_METHOD_ASYNC + "'");
 		}
 		
 	}

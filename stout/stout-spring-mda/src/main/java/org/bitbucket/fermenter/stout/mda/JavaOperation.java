@@ -38,7 +38,6 @@ public class JavaOperation implements Operation {
     private String signatureWithBO;
     private String parameterNames;
     private Boolean isResponseTypeVoid;
-    private String uncapitalizedReturnType;
 
     private static Log log = LogFactory.getLog(JavaOperation.class);
 
@@ -74,18 +73,6 @@ public class JavaOperation implements Operation {
      */
     public String getReturnType() {
         return operation.getReturnType();
-    }
-
-    public String getUncapitalizedReturnType() {
-        if (uncapitalizedReturnType == null) {
-            String returnType = getReturnType();
-            if (returnType == null) {
-                returnType = getReturnManyType();
-            }
-            uncapitalizedReturnType = StringUtils.uncapitalize(returnType);
-        }
-
-        return uncapitalizedReturnType;
     }
 
     /**
@@ -314,7 +301,7 @@ public class JavaOperation implements Operation {
         MetadataRepository metadataRepository = MetadataRepositoryManager
                 .getMetadataRepostory(MetadataRepository.class);
         return JavaElementUtils.getJavaType(metadataRepository.getApplicationName(),
-                getReturnTypeAsBO() == null ? getReturnManyTypeAsBO() : getReturnTypeAsBO());
+                getReturnType() == null ? getReturnManyType() : getReturnType());
     }
 
     public boolean isReturnTypeEntity() {
@@ -323,68 +310,8 @@ public class JavaOperation implements Operation {
         return metadataRepository.getEntity(getReturnType()) != null;
     }
 
-    public boolean isReturnManyTypeEntity() {
-        MetadataRepository metadataRepository = MetadataRepositoryManager
-                .getMetadataRepostory(MetadataRepository.class);
-        return metadataRepository.getEntity(getReturnManyType()) != null;
-    }
-
     public boolean isReturnTypeCollection() {
         return !StringUtils.isBlank(getReturnManyType());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getViewType() {
-        return operation.getViewType();
-    }
-
-    /**
-     * Returns whether or not this operation is available to remote clients
-     * 
-     * @return <tt>Boolean</tt>
-     */
-    public Boolean isRemote() {
-        String viewType = getViewType();
-        return new Boolean((Operation.VIEW_TYPE_BOTH.equals(viewType) || Operation.VIEW_TYPE_REMOTE.equals(viewType)));
-    }
-
-    /**
-     * Returns whether or not this operation is available to local clients
-     * 
-     * @return <tt>Boolean</tt>
-     */
-    public Boolean isLocal() {
-        String viewType = getViewType();
-        return new Boolean((Operation.VIEW_TYPE_BOTH.equals(viewType) || Operation.VIEW_TYPE_LOCAL.equals(viewType)));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getTransmissionMethod() {
-        return operation.getTransmissionMethod();
-    }
-
-    /**
-     * Returns whether or not this operation is synchronous
-     * 
-     * @return <tt>Boolean</tt>
-     */
-    public Boolean isSynchronous() {
-        String transmissionMethod = getTransmissionMethod();
-        return new Boolean((Operation.TRANSMISSION_METHOD_SYNC.equals(transmissionMethod)));
-    }
-
-    /**
-     * Returns whether or not this operation is asynchronous
-     * 
-     * @return <tt>Boolean</tt>
-     */
-    public Boolean isAsynchronous() {
-        String transmissionMethod = getTransmissionMethod();
-        return new Boolean((Operation.TRANSMISSION_METHOD_ASYNC.equals(transmissionMethod)));
     }
 
     @Override
@@ -449,34 +376,6 @@ public class JavaOperation implements Operation {
         }
 
         return new Boolean(isResponseTypeCrossProject);
-    }
-
-    /**
-     * Adds a "BO" to the end of the return type if it is an entity.
-     * 
-     * @return return type string, possibly modified
-     */
-    public String getReturnTypeAsBO() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(operation.getReturnType());
-        if (isReturnTypeEntity()) {
-            sb.append(BUSINESS_OBJECT);
-        }
-        return sb.toString();
-    }
-
-    /**
-     * Adds a "BO" to the end of the return many type if it is an entity.
-     * 
-     * @return return type string, possibly modified
-     */
-    public String getReturnManyTypeAsBO() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(operation.getReturnManyType());
-        if (isReturnManyTypeEntity()) {
-            sb.append(BUSINESS_OBJECT);
-        }
-        return sb.toString();
     }
 
     /**

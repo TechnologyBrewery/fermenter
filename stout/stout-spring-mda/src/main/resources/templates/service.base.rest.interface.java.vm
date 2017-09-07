@@ -64,11 +64,9 @@ public interface ${service.name}BaseService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	#end
 	#if($operation.isReturnTypeCollection())	 
-	ValueServiceResponse<Collection<${operation.returnManyTypeAsBO}>> ${operation.lowercaseName}(${operation.getSignatureParametersWithJaxRS()});
+	ValueServiceResponse<Collection<${operation.wrappedReturnType}>> ${operation.lowercaseName}(${operation.getSignatureParametersWithJaxRS()});
 	#elseif($operation.isResponseTypeVoid())
 	public VoidServiceResponse ${operation.lowercaseName}(${operation.getSignatureParametersWithJaxRS()});
-	#elseif($operation.isReturnTypeEntity())	 
-	ValueServiceResponse<${operation.returnTypeAsBO}> ${operation.lowercaseName}(${operation.getSignatureParametersWithJaxRS()});
 	#else 
 	ValueServiceResponse<${operation.wrappedReturnType}> ${operation.lowercaseName}(${operation.getSignatureParametersWithJaxRS()});
 	#end
@@ -81,11 +79,9 @@ public interface ${service.name}BaseService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	#end
 	#if($operation.isReturnTypeCollection())	 
-	ValueServiceResponse<Collection<${operation.returnManyTypeAsBO}>> ${operation.lowercaseName}ViaPut(${operation.getSignatureParametersWithJaxRS()});
+	ValueServiceResponse<Collection<${operation.wrappedReturnType}>> ${operation.lowercaseName}ViaPut(${operation.getSignatureParametersWithJaxRS()});
 	#elseif($operation.isResponseTypeVoid())
 	public VoidServiceResponse ${operation.lowercaseName}ViaPut(${operation.getSignatureParametersWithJaxRS()});
-	#elseif($operation.isReturnTypeEntity())	 
-	ValueServiceResponse<${operation.returnTypeAsBO}> ${operation.lowercaseName}ViaPut(${operation.getSignatureParametersWithJaxRS()});
 	#else 
 	ValueServiceResponse<${operation.wrappedReturnType}> ${operation.lowercaseName}ViaPut(${operation.getSignatureParametersWithJaxRS()});;
 	#end

@@ -24,11 +24,9 @@ public class ${service.name}ServiceImpl extends ${service.name}BaseServiceImpl i
 	 */
 	@Override
 	#if($operation.isReturnTypeCollection())	 
-	protected Collection<${operation.returnManyTypeAsBO}> ${operation.lowercaseName}Impl(${operation.signature}) {
+	protected Collection<${operation.wrappedReturnType}> ${operation.lowercaseName}Impl(${operation.signature}) {
 	#elseif($operation.isResponseTypeVoid())
 	protected void ${operation.lowercaseName}Impl(${operation.signature}) {
-	#elseif($operation.isReturnTypeEntity())
-	protected ${operation.returnTypeAsBO} ${operation.lowercaseName}Impl(${operation.signature}) {
 	#else
 	protected ${operation.wrappedReturnType} ${operation.lowercaseName}Impl(${operation.signature}) {
 	#end

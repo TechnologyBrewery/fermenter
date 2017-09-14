@@ -12,6 +12,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.json.SimpleDomainMixIn;
 import org.bitbucket.fermenter.stout.util.SpringAutowiringUtil;
 import org.slf4j.Logger;
@@ -86,6 +87,15 @@ public class SimpleDomainBO extends SimpleDomainBaseBO {
 
 	public Date getUpdatedAt() {
 		return this.updatedAt;
+	}
+
+	@Override
+	protected void defaultValues() {
+		super.defaultValues();
+		
+		if (StringUtils.isBlank(getType())) {
+			setType(RandomStringUtils.randomAlphabetic(3));
+		}
 	}
 
 	@Override

@@ -65,6 +65,22 @@ public class SimpleDomainMaintenanceIT extends AbstractArquillianTestSupport {
 		assertNotNull(retrievedSimpleDomain.getUpdatedAt());
 	}
 	
+	@Test
+	@RunAsClient
+	public void testDefaultSimpleDomain(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
+		SimpleDomainMaintenanceService simpleDomainService = getMaintenanceService(webTarget);
+
+		SimpleDomainBO simpleDomain = TestUtils.createRandomSimpleDomain();
+		simpleDomain.setType(null);
+		assertNull(simpleDomain.getType());
+		ValueServiceResponse<SimpleDomainBO> response = simpleDomainService.saveOrUpdate(simpleDomain);
+		TestUtils.assertNoErrorMessages(response);
+
+		SimpleDomainBO retrievedSimpleDomain = response.getValue();
+		assertEquals(simpleDomain.getKey(), retrievedSimpleDomain.getKey());
+		assertNotNull(retrievedSimpleDomain.getType());
+	}	
+	
     @Test
     @RunAsClient
     public void testUpdateExistingSimpleDomain(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {

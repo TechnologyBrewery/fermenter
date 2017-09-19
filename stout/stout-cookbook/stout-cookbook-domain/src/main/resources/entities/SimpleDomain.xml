@@ -57,6 +57,11 @@
 		<relation>
 			<type>SimpleDomainChild</type>
 			<multiplicity>1-M</multiplicity>
+			<fetchMode>lazy</fetchMode>
+		</relation>
+		<relation>
+			<type>SimpleDomainEagerChild</type>
+			<multiplicity>1-M</multiplicity>
 		</relation>
 	</associations>
 

@@ -110,6 +110,11 @@ public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServi
 		return SimpleDomainBO.findAll();
 	}
 
+	@Override
+	protected Collection<SimpleDomainBO> selectAllSimpleDomainsLazySimpleDomainChildImpl() {
+		return SimpleDomainBO.findAllLazyLoadSimpleDomainChild();
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */

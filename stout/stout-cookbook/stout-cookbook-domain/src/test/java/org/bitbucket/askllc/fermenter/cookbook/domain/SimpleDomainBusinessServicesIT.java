@@ -238,7 +238,35 @@ public class SimpleDomainBusinessServicesIT extends AbstractArquillianTestSuppor
 		assertEquals(numSimpleDomains, allSimpleDomains.size());
 
 		assertEquals(numSimpleDomainChildren, allSimpleDomains.iterator().next().getSimpleDomainChilds().size());
+		
+		managerService.deleteAllSimpleDomains();
 	}
+	
+	@Test
+	@RunAsClient
+	public void testSelectAllSimpleDomainsEagerLazyLoadChild(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
+		SimpleDomainMaintenanceService maintenanceService = getMaintenanceService(webTarget);
+		int numSimpleDomains = RandomUtils.nextInt(5, 10);
+		int numSimpleDomainChildren = RandomUtils.nextInt(2, 6);
+
+		for (int iter = 0; iter < numSimpleDomains; iter++) {
+			maintenanceService.saveOrUpdate(TestUtils.createRandomSimpleDomain(numSimpleDomainChildren));
+		}
+
+		SimpleDomainManagerService managerService = getService(webTarget);
+		ValueServiceResponse<Collection<SimpleDomainBO>> allSimpleDomainsResponse = managerService
+				.selectAllSimpleDomainsLazySimpleDomainChild();
+		TestUtils.assertNoErrorMessages(allSimpleDomainsResponse);
+
+		Collection<SimpleDomainBO> allSimpleDomains = allSimpleDomainsResponse.getValue();
+		assertEquals(numSimpleDomains, allSimpleDomains.size());
+
+		assertEquals(0, allSimpleDomains.iterator().next().getSimpleDomainChilds().size());
+		
+		assertEquals(numSimpleDomainChildren, allSimpleDomains.iterator().next().getSimpleDomainEagerChilds().size());
+		
+		managerService.deleteAllSimpleDomains();
+	}	
 
 	private SimpleDomainManagerService getService(ResteasyWebTarget webTarget) {
 		webTarget = initWebTarget(webTarget);

@@ -11,6 +11,11 @@
 			<transaction-attribute>Supports</transaction-attribute>
 		</operation>
 		<operation>
+			<name>SelectAllSimpleDomainsLazySimpleDomainChild</name>
+			<return-many>SimpleDomain</return-many>
+			<transaction-attribute>Supports</transaction-attribute>
+		</operation>
+		<operation>
 			<name>SelectAllSimpleDomainsWithPaging</name>
 			<return-many>SimpleDomain</return-many>
 			<parameters>

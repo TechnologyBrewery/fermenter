@@ -15,6 +15,7 @@ public class RelationMetadata extends MetadataElement implements Relation {
 	private String documentation;
 	private String type;
 	private String multiplicity;
+	private String fetchMode;
 	private String table;
 	private Map<String, Field> fkOverrides = new HashMap<>();
 
@@ -43,6 +44,21 @@ public class RelationMetadata extends MetadataElement implements Relation {
 		this.multiplicity = multiplicity;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getFetchMode() {
+		return fetchMode;
+	}
+
+	/**
+	 * Sets the fetch mode on the this relationship (e.g., eager, lazy).
+	 * @param fetchMode how to fetch this relationship
+	 */
+	public void setFetchMode(String fetchMode) {
+		this.fetchMode = fetchMode;
+	}
+
 	/**
 	 * @see org.bitbucket.fermenter.mda.metadata.Relation#getType()
 	 */

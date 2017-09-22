@@ -60,6 +60,10 @@ public class SimpleDomainBO extends SimpleDomainBaseBO {
 	protected void complexValidation() {
 
 	}
+	
+	public static List<SimpleDomainBO> findAllLazyLoadSimpleDomainChild() {
+		return getDefaultRepository().findAll();
+	}
 
 	public static List<SimpleDomainBO> findAll() {
 		return getDefaultRepository().findAll(eagerFetchRelations());

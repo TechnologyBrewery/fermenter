@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 
+import javax.persistence.FetchType;
+
 import org.apache.commons.lang.StringUtils;
 import org.bitbucket.fermenter.mda.metadata.element.Field;
 import org.bitbucket.fermenter.mda.metadata.element.Relation;
@@ -33,6 +35,19 @@ public class JavaRelation implements Relation {
 	
 	public String getMultiplicity() {
 		return relation.getMultiplicity();
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * Return the fetch mode, defaulting to eager unless otherwise specified.  While many would like the default to
+	 * be lazy, unless you are working with very large data sizes, this often is less convenient in practice and has
+	 * little performance impact.  
+	 */
+	@Override
+	public String getFetchMode() {
+		String fetchMode = relation.getFetchMode();
+		return (StringUtils.isNotBlank(fetchMode)) ? fetchMode : FetchType.EAGER.toString();
 	}
 
 	public String getType() {

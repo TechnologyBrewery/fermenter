@@ -29,8 +29,9 @@
 <!ELEMENT fk (name,source,column?)>
 <!ELEMENT source (#PCDATA)>
 
-<!ELEMENT relation (documentation?, type, fk?, multiplicity)>
+<!ELEMENT relation (documentation?, type, fk?, multiplicity, fetchMode?)>
 <!ELEMENT multiplicity (#PCDATA)>
+<!ELEMENT fetchMode (#PCDATA)>
 
 <!ELEMENT queries (query+)>
 <!ELEMENT query (name, documentation?, criteria?, pagination?, statement)>

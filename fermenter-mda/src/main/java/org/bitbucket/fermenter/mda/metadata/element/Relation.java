@@ -10,6 +10,11 @@ public interface Relation {
 	 * @return Returns the multiplicity.
 	 */
 	public String getMultiplicity();
+	
+	/**
+	 * @return Returns the fetch mode.
+	 */
+	public String getFetchMode();
 
 	/**
 	 * @return Returns the type.

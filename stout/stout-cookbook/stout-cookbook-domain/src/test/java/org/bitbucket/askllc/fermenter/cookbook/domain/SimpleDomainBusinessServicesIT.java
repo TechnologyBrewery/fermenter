@@ -37,8 +37,8 @@ public class SimpleDomainBusinessServicesIT extends AbstractArquillianTestSuppor
 	@Before
 	public void deleteSimpleDomains() throws Exception {
 		ResteasyClient client = new ResteasyClientBuilder().build();
-		client.target(deploymentURL.toURI()).path("SimpleDomainManagerService").path("deleteAllSimpleDomains").request()
-				.post(null);
+        client.target(deploymentURL.toURI()).path("rest").path("SimpleDomainManagerService")
+                .path("deleteAllSimpleDomains").request().post(null).close();
 	}
 
 	@Test
@@ -237,8 +237,32 @@ public class SimpleDomainBusinessServicesIT extends AbstractArquillianTestSuppor
 		Collection<SimpleDomainBO> allSimpleDomains = allSimpleDomainsResponse.getValue();
 		assertEquals(numSimpleDomains, allSimpleDomains.size());
 
-		assertEquals(numSimpleDomainChildren, allSimpleDomains.iterator().next().getSimpleDomainChilds().size());
+		assertEquals(numSimpleDomainChildren, allSimpleDomains.iterator().next().getSimpleDomainChilds().size());		
 	}
+	
+	@Test
+	@RunAsClient
+	public void testSelectAllSimpleDomainsEagerLazyLoadChild(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
+		SimpleDomainMaintenanceService maintenanceService = getMaintenanceService(webTarget);
+		int numSimpleDomains = RandomUtils.nextInt(5, 10);
+		int numSimpleDomainChildren = RandomUtils.nextInt(2, 6);
+
+		for (int iter = 0; iter < numSimpleDomains; iter++) {
+			maintenanceService.saveOrUpdate(TestUtils.createRandomSimpleDomain(numSimpleDomainChildren));
+		}
+
+		SimpleDomainManagerService managerService = getService(webTarget);
+		ValueServiceResponse<Collection<SimpleDomainBO>> allSimpleDomainsResponse = managerService
+				.selectAllSimpleDomainsLazySimpleDomainChild();
+		TestUtils.assertNoErrorMessages(allSimpleDomainsResponse);
+
+		Collection<SimpleDomainBO> allSimpleDomains = allSimpleDomainsResponse.getValue();
+		assertEquals(numSimpleDomains, allSimpleDomains.size());
+
+		assertEquals(0, allSimpleDomains.iterator().next().getSimpleDomainChilds().size());
+		
+		assertEquals(numSimpleDomainChildren, allSimpleDomains.iterator().next().getSimpleDomainEagerChilds().size());		
+	}	
 
 	private SimpleDomainManagerService getService(ResteasyWebTarget webTarget) {
 		webTarget = initWebTarget(webTarget);

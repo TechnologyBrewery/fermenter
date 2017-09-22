@@ -192,7 +192,7 @@ public abstract class ${entity.name}BaseBO extends BasePersistentSpringBO<${idFi
 
 #foreach ($relation in $entity.relations.values())
 #if ( !$entity.isTransient() )
-	@OneToMany(mappedBy="parent${entity.name}", cascade=CascadeType.ALL, fetch=FetchType.LAZY, orphanRemoval=true)
+	@OneToMany(mappedBy="parent${entity.name}", cascade=CascadeType.ALL, fetch=FetchType.${relation.fetchMode.toUpperCase()}, orphanRemoval=true)
 #end
 	private Set<${relation.type}BO> ${relation.label}s;
 #end

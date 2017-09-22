@@ -13,6 +13,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainChildBO;
+import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainEagerChildBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationExampleBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationExampleChildBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.enumeration.SimpleDomainEnumeration;
@@ -62,9 +63,13 @@ public final class TestUtils {
 	public static SimpleDomainBO createRandomSimpleDomain(int numChildEntities) {
 		SimpleDomainBO domain = createRandomSimpleDomain();
 		for (int iter = 0; iter < numChildEntities; iter++) {
-			SimpleDomainChildBO child = new SimpleDomainChildBO();
-			child.setName(RandomStringUtils.randomAlphabetic(10));
-			domain.addSimpleDomainChild(child);
+			SimpleDomainChildBO lazyChild = new SimpleDomainChildBO();
+			lazyChild.setName(RandomStringUtils.randomAlphabetic(10));
+			domain.addSimpleDomainChild(lazyChild);
+			
+			SimpleDomainEagerChildBO eagerChild = new SimpleDomainEagerChildBO();
+			lazyChild.setName(RandomStringUtils.randomAlphabetic(10));
+			domain.addSimpleDomainEagerChild(eagerChild);
 		}
 		return domain;
 	}

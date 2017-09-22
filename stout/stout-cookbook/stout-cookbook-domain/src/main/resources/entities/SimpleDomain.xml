@@ -51,6 +51,16 @@
 			<type>big_decimal</type>
 			<column>BIG_DECIMAL_COLUMN</column>
 		</field>
+		<field>
+			<name>standardBoolean</name>
+			<type>boolean</type>
+			<column>STANDARD_BOOLEAN</column>
+		</field>
+		<field>
+			<name>numericBoolean</name>
+			<type>numeric_boolean</type>
+			<column>NUMERIC_BOOLEAN</column>
+		</field>
 	</fields>
 
 	<associations>

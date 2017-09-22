@@ -27,6 +27,10 @@
 		<java>java.lang.Boolean</java>
 	</type>
 	<type>
+		<name>numeric_boolean</name>
+		<java>java.lang.Boolean</java>
+	</type>
+	<type>
 		<name>big_decimal</name>
 		<java>java.math.BigDecimal</java>
 	</type>

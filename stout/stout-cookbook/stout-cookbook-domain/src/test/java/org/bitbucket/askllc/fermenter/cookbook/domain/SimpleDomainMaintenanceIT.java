@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -79,7 +80,36 @@ public class SimpleDomainMaintenanceIT extends AbstractArquillianTestSupport {
 		SimpleDomainBO retrievedSimpleDomain = response.getValue();
 		assertEquals(simpleDomain.getKey(), retrievedSimpleDomain.getKey());
 		assertNotNull(retrievedSimpleDomain.getType());
-	}	
+	}
+	
+	@Test
+	@RunAsClient
+	public void testSaveNumericBooleanTrue(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
+		SimpleDomainMaintenanceService simpleDomainService = getMaintenanceService(webTarget);
+
+		SimpleDomainBO simpleDomain = TestUtils.createRandomSimpleDomain();
+		ValueServiceResponse<SimpleDomainBO> response = simpleDomainService.saveOrUpdate(simpleDomain);
+		TestUtils.assertNoErrorMessages(response);
+
+		SimpleDomainBO retrievedSimpleDomain = response.getValue();
+		assertEquals(simpleDomain.getKey(), retrievedSimpleDomain.getKey());
+		assertTrue(simpleDomain.getNumericBoolean());
+	}
+	
+	@Test
+	@RunAsClient
+	public void testSaveNumericBooleanFalse(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
+		SimpleDomainMaintenanceService simpleDomainService = getMaintenanceService(webTarget);
+
+		SimpleDomainBO simpleDomain = TestUtils.createRandomSimpleDomain();
+		simpleDomain.setNumericBoolean(false);
+		ValueServiceResponse<SimpleDomainBO> response = simpleDomainService.saveOrUpdate(simpleDomain);
+		TestUtils.assertNoErrorMessages(response);
+
+		SimpleDomainBO retrievedSimpleDomain = response.getValue();
+		assertEquals(simpleDomain.getKey(), retrievedSimpleDomain.getKey());
+		assertFalse(simpleDomain.getNumericBoolean());
+	}
 	
     @Test
     @RunAsClient

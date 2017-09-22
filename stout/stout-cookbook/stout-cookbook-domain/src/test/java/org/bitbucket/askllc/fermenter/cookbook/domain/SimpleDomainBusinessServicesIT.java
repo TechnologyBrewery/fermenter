@@ -37,8 +37,8 @@ public class SimpleDomainBusinessServicesIT extends AbstractArquillianTestSuppor
 	@Before
 	public void deleteSimpleDomains() throws Exception {
 		ResteasyClient client = new ResteasyClientBuilder().build();
-		client.target(deploymentURL.toURI()).path("SimpleDomainManagerService").path("deleteAllSimpleDomains").request()
-				.post(null);
+        client.target(deploymentURL.toURI()).path("rest").path("SimpleDomainManagerService")
+                .path("deleteAllSimpleDomains").request().post(null).close();
 	}
 
 	@Test
@@ -237,9 +237,7 @@ public class SimpleDomainBusinessServicesIT extends AbstractArquillianTestSuppor
 		Collection<SimpleDomainBO> allSimpleDomains = allSimpleDomainsResponse.getValue();
 		assertEquals(numSimpleDomains, allSimpleDomains.size());
 
-		assertEquals(numSimpleDomainChildren, allSimpleDomains.iterator().next().getSimpleDomainChilds().size());
-		
-		managerService.deleteAllSimpleDomains();
+		assertEquals(numSimpleDomainChildren, allSimpleDomains.iterator().next().getSimpleDomainChilds().size());		
 	}
 	
 	@Test
@@ -263,9 +261,7 @@ public class SimpleDomainBusinessServicesIT extends AbstractArquillianTestSuppor
 
 		assertEquals(0, allSimpleDomains.iterator().next().getSimpleDomainChilds().size());
 		
-		assertEquals(numSimpleDomainChildren, allSimpleDomains.iterator().next().getSimpleDomainEagerChilds().size());
-		
-		managerService.deleteAllSimpleDomains();
+		assertEquals(numSimpleDomainChildren, allSimpleDomains.iterator().next().getSimpleDomainEagerChilds().size());		
 	}	
 
 	private SimpleDomainManagerService getService(ResteasyWebTarget webTarget) {

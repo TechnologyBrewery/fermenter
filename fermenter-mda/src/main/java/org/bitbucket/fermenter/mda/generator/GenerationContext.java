@@ -39,7 +39,6 @@ public final class GenerationContext {
 		this.templateName = target.getTemplateName();
 		this.outputFile = target.getOutputFile();
 		this.overwritable = target.isOverwritable();
-		this.append = target.isAppend();
 	}
 	
 	public File getGeneratedSourceDirectory() {

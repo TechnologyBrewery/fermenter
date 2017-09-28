@@ -160,6 +160,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
             }
         }
     }
+    
 
     private void loadProfiles() throws MojoExecutionException {
         InputStream stream = null;
@@ -318,8 +319,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
 
             try {
                 Class<?> clazz = Class.forName(t.getGenerator());
-                Generator generator = (Generator) clazz.newInstance();
-                generator.setMetadataContext(t.getMetadataContext());
+                Generator generator = (Generator) clazz.newInstance();                
                 generator.generate(context);
             } catch (Exception ex) {
                 throw new MojoExecutionException("Error while generating", ex);

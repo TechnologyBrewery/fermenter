@@ -51,6 +51,8 @@ public final class TestUtils {
 		domain.setType(RandomStringUtils.random(5));
 		domain.setAnEnumeratedValue(
 				SimpleDomainEnumeration.values()[RandomUtils.nextInt(0, SimpleDomainEnumeration.values().length)]);
+		domain.setStandardBoolean(false);
+		domain.setNumericBoolean(true);
 		return domain;
 	}
 

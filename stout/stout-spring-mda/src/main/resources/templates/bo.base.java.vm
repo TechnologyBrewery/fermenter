@@ -22,6 +22,8 @@ import org.bitbucket.fermenter.stout.bizobj.BusinessObject;
 import org.bitbucket.fermenter.stout.bizobj.BasePersistentSpringBO;
 import org.bitbucket.fermenter.stout.bizobj.PersistentBusinessObject;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.FetchType;
@@ -115,6 +117,9 @@ public abstract class ${entity.name}BaseBO extends BasePersistentSpringBO<${idFi
   #if ( $field.hasFormat() )
     @Pattern(regexp=${field.patterns})
   #end
+  #if ($field.type == 'numeric_boolean')
+  	@Type(type = "org.hibernate.type.NumericBooleanType")
+  #end 
 	private ${field.javaType} ${field.name};
 
 #end

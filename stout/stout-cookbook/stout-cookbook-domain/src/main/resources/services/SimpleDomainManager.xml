@@ -160,6 +160,21 @@
 			</parameters>
 			<transaction-attribute>Required</transaction-attribute>
 		</operation>
+		<operation>
+			<name>returnManyPrimitives</name>
+			<documentation>Returns a list of the given size with each element containing the provided integer</documentation>
+			<return-many>integer</return-many>
+			<parameters>
+				<parameter>
+					<name>input</name>
+					<type>integer</type>
+				</parameter>
+				<parameter>
+					<name>returnListSize</name>
+					<type>integer</type>
+				</parameter>
+			</parameters>
+		</operation>
 	</operations>
 
 </service>

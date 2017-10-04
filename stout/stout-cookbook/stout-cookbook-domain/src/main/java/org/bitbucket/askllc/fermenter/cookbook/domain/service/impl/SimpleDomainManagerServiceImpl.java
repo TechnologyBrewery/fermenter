@@ -8,6 +8,8 @@ import java.io.Writer;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -208,4 +210,11 @@ public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServi
 		return simpleDomain;
 	}
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Collection<Integer> returnManyPrimitivesImpl(Integer input, Integer returnListSize) {
+        return IntStream.range(0, returnListSize).mapToObj(n -> input).collect(Collectors.toList());
+    }
 }

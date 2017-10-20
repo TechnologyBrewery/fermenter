@@ -42,8 +42,8 @@
 	</developers>
 
 	<scm>
-		<connection>scm:git:ssh://git@bitbucket.org/askllc/Fermenter.git</connection>
-		<developerConnection>scm:git:ssh://git@bitbucket.org/askllc/Fermenter.git</developerConnection>
+		<connection>scm:git:ssh://git@bitbucket.org/askllc/fermenter.git</connection>
+		<developerConnection>scm:git:ssh://git@bitbucket.org/askllc/fermenter.git</developerConnection>
 		<url>https://bitbucket.org/askllc/fermenter/</url>
 		<tag>HEAD</tag>
 	</scm>
@@ -53,10 +53,6 @@
 			<id>ossrh</id>
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</snapshotRepository>
-		<repository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-		</repository>
 	</distributionManagement>
 
 	<modules>
@@ -121,18 +117,6 @@
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-release-plugin</artifactId>
-					<version>2.5.3</version>
-					<dependencies>
-						<dependency>
-							<groupId>org.apache.maven.scm</groupId>
-							<artifactId>maven-scm-provider-gitexe</artifactId>
-							<version>1.9.5</version>
-						</dependency>
-					</dependencies>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-failsafe-plugin</artifactId>
 					<version>2.19.1</version>
 					<executions>
@@ -175,6 +159,28 @@
 			<plugin>
 				<groupId>org.sonarsource.scanner.maven</groupId>
 				<artifactId>sonar-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.5.3</version>
+				<configuration>
+					<autoVersionSubmodules>true</autoVersionSubmodules>
+					<useReleaseProfile>false</useReleaseProfile>
+					<releaseProfiles>ossrh-release</releaseProfiles>
+					<goals>deploy</goals>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.8</version>
+				<extensions>true</extensions>
+				<configuration>
+					<serverId>ossrh</serverId>
+					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
@@ -239,7 +245,7 @@
 			</dependencies>
 		</profile>
 		<profile>
-			<id>ossrh-deploy</id>
+			<id>ossrh-release</id>
 			<build>
 				<plugins>
 					<plugin>

@@ -1,24 +1,30 @@
 package org.bitbucket.fermenter.mda.util;
 
 import java.io.File;
-import java.lang.annotation.Target;
 import java.net.URL;
 import java.util.Enumeration;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.bitbucket.fermenter.mda.GenerateSourcesMojo;
+import org.bitbucket.fermenter.mda.element.Target;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.fge.jsonschema.core.exceptions.ProcessingException;
+import com.github.fge.jsonschema.SchemaVersion;
+import com.github.fge.jsonschema.cfg.ValidationConfiguration;
 import com.github.fge.jsonschema.core.report.ProcessingMessage;
 import com.github.fge.jsonschema.core.report.ProcessingReport;
-import com.github.fge.jsonschema.main.JsonSchema;
 import com.github.fge.jsonschema.main.JsonSchemaFactory;
+import com.github.fge.jsonschema.main.JsonValidator;
 
 /**
  * Contains json utilities for Fermenter.
  */
 public final class JsonUtils {
+    
+    private static final Log LOG = LogFactory.getLog(GenerateSourcesMojo.class);
 	
 	private static ObjectMapper objectMapper = new ObjectMapper();
 
@@ -26,10 +32,22 @@ public final class JsonUtils {
 		//prevent instantiation of final class with all static methods
 	}
 	
+	/**
+	 * Read a Json file and validate it based on the pass type.
+	 * @param jsonFile file to read
+	 * @param type type to validate against
+	 * @return instance of the type or a {@link GenerationException}
+	 */
 	public static <T> T readAndValidateJson(File jsonFile, Class<T> type) {
 		try {
-			T instance = objectMapper.readValue(jsonFile, type);
-			isValid(objectMapper.readTree(jsonFile), type);
+			T instance = objectMapper.readValue(jsonFile, type);			
+			boolean valid = isValid(objectMapper.readTree(jsonFile), type, jsonFile);
+			if (!valid) {
+			    if (LOG.isDebugEnabled()) {
+			        LOG.debug(objectMapper.writeValueAsString(instance));
+			    }
+			    throw new GenerationException(jsonFile.getName() + " contained validation errors!");			   
+			}
 			return instance;
 			
 		} catch (Exception e) {
@@ -37,18 +55,23 @@ public final class JsonUtils {
 		}
 	}
 	
-	private static <T> boolean isValid(JsonNode jsonInstance, Class<T> type) throws Exception {
-		JsonSchemaFactory factory = JsonSchemaFactory.byDefault();
-		Enumeration<URL> targetSchema = Target.class.getClassLoader().getResources("fermenter-2-target-schema.json");
-		URL targetSchemaUrl = targetSchema.nextElement();
-		JsonNode targetSchemaAsJsonNode = objectMapper.readTree(targetSchemaUrl);
+	private static <T> boolean isValid(JsonNode jsonInstance, Class<T> type, File jsonFile) throws Exception {
+        ProcessingReport report = null;
+        
+    	    final ValidationConfiguration cfg = ValidationConfiguration.newBuilder()
+    	            .setDefaultVersion(SchemaVersion.DRAFTV4).freeze();
+    	    JsonValidator validator = JsonSchemaFactory.newBuilder()
+    	            .setValidationConfiguration(cfg).freeze().getValidator();
+    		Enumeration<URL> targetSchema = Target.class.getClassLoader().getResources("fermenter-2-target-schema.json");
+    		URL targetSchemaUrl = targetSchema.nextElement();
+    		JsonNode targetSchemaAsJsonNode = objectMapper.readTree(targetSchemaUrl);
 
-		JsonSchema schema = factory.getJsonSchema(targetSchemaAsJsonNode);
-		ProcessingReport report = schema.validate(jsonInstance);
-		if (!report.isSuccess()) {
-			//TODO: harden
+        report = validator.validate(targetSchemaAsJsonNode, jsonInstance);
+        
+        if (!report.isSuccess()) {
             for (ProcessingMessage processingMessage : report) {
-                throw new ProcessingException(processingMessage);
+                LOG.error(" " + jsonFile.getName() + " contains the following error:\n" + processingMessage);
+                
             }
         }
 		

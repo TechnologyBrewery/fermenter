@@ -16,8 +16,11 @@
 		"generator": {
 			"type": "string"
 		},
+		"metadataContext": {
+			"type": ["string", "null"]
+		},
 		"overwritable": {
-			"type": "boolean"
+			"type": ["boolean", "null"]
 		}
 	},
 	"required": ["name", "templateName", "outputFile", "generator"]

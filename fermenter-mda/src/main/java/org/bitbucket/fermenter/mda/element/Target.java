@@ -22,6 +22,9 @@ public class Target {
 	@JsonProperty(required = true)
 	private String generator;
 
+	@JsonProperty(required = false, defaultValue = "all")
+    private String metadataContext;
+	
 	@JsonProperty(required = false, defaultValue = "false")
 	private boolean overwritable;
 
@@ -45,7 +48,15 @@ public class Target {
 		return outputFile;
 	}
 
-	public void setOutputFile(String outputFile) {
+	public String getMetadataContext() {
+        return metadataContext;
+    }
+
+    public void setMetadataContext(String metadataContext) {
+        this.metadataContext = metadataContext;
+    }
+
+    public void setOutputFile(String outputFile) {
 		this.outputFile = outputFile;
 	}
 

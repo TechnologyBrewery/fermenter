@@ -382,7 +382,8 @@ public class GenerateSourcesMojo extends AbstractMojo {
 
             try {
                 Class<?> clazz = Class.forName(t.getGenerator());
-                Generator generator = (Generator) clazz.newInstance();                
+                Generator generator = (Generator) clazz.newInstance();   
+                generator.setMetadataContext(t.getMetadataContext());
                 generator.generate(context);
             } catch (Exception ex) {
                 throw new MojoExecutionException("Error while generating", ex);

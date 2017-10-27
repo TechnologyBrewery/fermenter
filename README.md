@@ -1,7 +1,7 @@
+#Fermenter#
 [![Maven Central](https://img.shields.io/maven-central/v/org.bitbucket.askllc.fermenter/root.svg)](https://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.bitbucket.askllc.fermenter%22%20AND%20a%3A%22root%22)
 [![License](https://img.shields.io/github/license/mashape/apistatus.svg)](https://opensource.org/licenses/mit)
 
-#Fermenter#
 In brewing, a fermenter is a vessel in which unfinished ingredients become nearly finished beer. In Model Driven Architecture, Fermenter is a project that converts functional concepts into nearly finished applications. This approach allows for the quick definition and assembly of applications with the focus on functional concepts rather than technical underpinnings.
 
 ## Approach ##
@@ -45,7 +45,7 @@ Want Fermenter in your project? As demonstrated in the `stout-cookbook-domain` p
 					<groupId>com.your.domain.model</groupId>
 					<artifactId>your-fermenter-profile-name</artifactId>						
 					<version>${project.version}</version>
-				</dependency		
+				</dependency>		
 			</dependencies>
 		</plugin>
 	</plugins>

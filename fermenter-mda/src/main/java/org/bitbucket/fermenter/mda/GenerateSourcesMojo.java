@@ -1,8 +1,10 @@
 package org.bitbucket.fermenter.mda;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Writer;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.util.ArrayList;
@@ -38,6 +40,9 @@ import org.bitbucket.fermenter.mda.metadata.StaticURLResolver;
 import org.bitbucket.fermenter.mda.xml.TrackErrorsErrorHandler;
 import org.bitbucket.fermenter.mda.xml.XmlUtils;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 /**
  * Executes the Fermenter MDA process.
  */
@@ -54,11 +59,20 @@ public class GenerateSourcesMojo extends AbstractMojo {
     private static final String[] TARGET_PROPERTIES = new String[] { "name", "generator", "metadataContext", "templateName", "outputFile",
             "overwritable", "append" };
     private static final Map<String, Profile> PROFILES;
+    
+    private ObjectMapper objectMapper = new ObjectMapper();
+    
+    /**
+     * @deprecated - migrating to targets instead
+     */
     private static final Map<String, Target> TARGETS;
+    
+    private final Map<String, Target> targets = new HashMap<String, Target>();
 
     static {
         PROFILES = new HashMap<String, Profile>();
         TARGETS = new HashMap<String, Target>();
+        
     }
 
     @Parameter(required = true, readonly = true, defaultValue = "${project}")
@@ -105,7 +119,9 @@ public class GenerateSourcesMojo extends AbstractMojo {
         if (metadataDependencies == null) {
             metadataDependencies = new ArrayList<String>();
         }
-
+        
+        loadOldTargets();
+        
         loadTargets();
         loadProfiles();
 
@@ -126,8 +142,39 @@ public class GenerateSourcesMojo extends AbstractMojo {
             throw new MojoExecutionException(errMsg, ex);
         }
     }
-
+    
     private void loadTargets() throws MojoExecutionException {
+        InputStream stream = null;
+
+        URL resource = null;
+        Enumeration<URL> targetEnumeration = null;
+        try {
+            targetEnumeration = getClass().getClassLoader().getResources("targets.json");
+        } catch (IOException ioe) {
+            throw new MojoExecutionException("Unable to find targets", ioe);
+        }
+
+        while (targetEnumeration.hasMoreElements()) {
+            resource = (URL) targetEnumeration.nextElement();
+            getLog().info("Loading targets from: " + resource.toString());
+            try {
+                stream = resource.openStream();            
+                List<Target> loadedTargets = objectMapper.readValue(stream, new TypeReference<List<Target>>(){});
+                for (Target t : loadedTargets) {
+                    targets.put(t.getName(), t);
+                }
+                
+            } catch (IOException e) {
+                throw new MojoExecutionException("Unable to parse target: "
+                        + ((resource != null) ? resource.toString() : null), e);
+            }
+        }
+    }
+
+    /**
+     * @deprecated - migrating to loadTargets once all XML targets have been converted to json
+     */
+    private void loadOldTargets() throws MojoExecutionException {
         InputStream stream = null;
 
         URL resource = null;
@@ -157,6 +204,21 @@ public class GenerateSourcesMojo extends AbstractMojo {
                         + ((resource != null) ? resource.toString() : null), ex);
             } finally {
                 IOUtils.closeQuietly(stream);
+            }
+        }
+        
+        if (TARGETS.size() > 0) {
+            LOG.info("MIGRATION NEEDED: Creating a targets.json with all legacy formated targets");
+            try {
+                File targetsJsonDirectory = new File(mainSourceRoot, "/resources");
+                targetsJsonDirectory.mkdirs();
+                File targetsJson = new File(targetsJsonDirectory, "targets.json");            
+                LOG.warn("target location: " + targetsJson.getCanonicalPath()); 
+                Writer jsonFileWriter = new FileWriter(targetsJson);
+                objectMapper.writeValue(jsonFileWriter, TARGETS.values());
+                jsonFileWriter.close();
+            } catch (IOException e) {
+                LOG.warn("Could not transfer XML target file to json!", e);
             }
         }
     }
@@ -262,11 +324,12 @@ public class GenerateSourcesMojo extends AbstractMojo {
             log.debug("\t    + " + target.getName());
         }
         TARGETS.put(target.getName(), target);
+        targets.put(target.getName(), target);
     }
 
     public void addProfile(Profile profile) {
         for (Target profileTarget : profile.getTargets()) {
-            Target target = TARGETS.get(profileTarget.getName());
+            Target target = targets.get(profileTarget.getName());
             if (target == null) {
                 throw new IllegalArgumentException("No target found for profile '" + profile.getName() + "', target '"
                         + profileTarget.getName() + "'");

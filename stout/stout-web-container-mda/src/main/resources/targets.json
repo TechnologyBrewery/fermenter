@@ -1,0 +1,9 @@
+[
+	{
+		"name": "webXml",
+		"templateName": "templates/web.xml.vm",
+		"outputFile": "WEB-INF/web.xml",
+		"generator": "org.bitbucket.fermenter.stout.mda.generator.web.WebappResourceGenerator",
+		"overwritable": false
+	}
+]

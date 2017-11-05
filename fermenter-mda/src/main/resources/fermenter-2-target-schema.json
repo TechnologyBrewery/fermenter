@@ -1,0 +1,27 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Target",
+	"type": "object",
+	"additionalProperties": false,
+	"properties": {
+		"name": {
+			"type": "string"
+		},
+		"templateName": {
+			"type": "string"
+		},
+		"outputFile": {
+			"type": "string"
+		},
+		"generator": {
+			"type": "string"
+		},
+		"metadataContext": {
+			"type": ["string", "null"]
+		},
+		"overwritable": {
+			"type": ["boolean", "null"]
+		}
+	},
+	"required": ["name", "templateName", "outputFile", "generator"]
+}

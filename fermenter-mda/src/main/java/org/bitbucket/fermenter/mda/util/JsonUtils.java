@@ -6,7 +6,6 @@ import java.util.Enumeration;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.bitbucket.fermenter.mda.GenerateSourcesMojo;
 import org.bitbucket.fermenter.mda.element.Target;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 
@@ -24,7 +23,7 @@ import com.github.fge.jsonschema.main.JsonValidator;
  */
 public final class JsonUtils {
     
-    private static final Log LOG = LogFactory.getLog(GenerateSourcesMojo.class);
+    private static final Log LOG = LogFactory.getLog(JsonUtils.class);
 	
 	private static ObjectMapper objectMapper = new ObjectMapper();
 
@@ -62,12 +61,15 @@ public final class JsonUtils {
     	            .setDefaultVersion(SchemaVersion.DRAFTV4).freeze();
     	    JsonValidator validator = JsonSchemaFactory.newBuilder()
     	            .setValidationConfiguration(cfg).freeze().getValidator();
+    	    //TODO: will refactor as more types are added:
     		Enumeration<URL> targetSchema = Target.class.getClassLoader().getResources("fermenter-2-target-schema.json");
     		URL targetSchemaUrl = targetSchema.nextElement();
     		JsonNode targetSchemaAsJsonNode = objectMapper.readTree(targetSchemaUrl);
 
         report = validator.validate(targetSchemaAsJsonNode, jsonInstance);
         
+        //TODO: see if we can extend the framework to gain more fine-grained access to reporting information
+        //to improve the clarity of reported erros in the context of Fermenter:
         if (!report.isSuccess()) {
             for (ProcessingMessage processingMessage : report) {
                 LOG.error(" " + jsonFile.getName() + " contains the following error:\n" + processingMessage);

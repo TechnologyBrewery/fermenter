@@ -2,6 +2,7 @@ package org.bitbucket.fermenter.stout.bizobj;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.MissingResourceException;
 import java.util.UUID;
 
 import org.bitbucket.fermenter.stout.messages.Message;
@@ -41,9 +42,16 @@ public abstract class BasePersistentSpringBO<PK extends Serializable, BO, JPA ex
             if (getLogger().isDebugEnabled()) {
                 Collection<Message> messages = MessageManager.getMessages().getErrorMessages();
                 for (Message message : messages) {
+                    String summary = message.getKey();
+                    try {
+                        summary = MessageUtils.getSummaryMessage(message.getKey(), message.getInserts(), this.getClass());
+                    } catch (MissingResourceException e) {
+                        // Just swallowing this because it would just add confusion
+                        // to log errors about the error logging
+                    }
                     getLogger().debug("Encountered the following error when trying to save persistent object: "
                             + this.toString() + "\n\t"
-                            + MessageUtils.getSummaryMessage(message.getKey(), message.getInserts(), this.getClass()));
+                            + summary);
                 }
 
             }

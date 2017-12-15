@@ -42,9 +42,9 @@
 	</developers>
 
 	<scm>
-		<connection>scm:git:ssh://git@bitbucket.org/askllc/fermenter.git</connection>
-		<developerConnection>scm:git:ssh://git@bitbucket.org/askllc/fermenter.git</developerConnection>
-		<url>https://bitbucket.org/askllc/fermenter/</url>
+		<connection>scm:git:ssh://git@bitbucket.org/cpointe/fermenter.git</connection>
+		<developerConnection>scm:git:ssh://git@bitbucket.org/cpointe/fermenter.git</developerConnection>
+		<url>https://bitbucket.org/cpointe/fermenter/</url>
 		<tag>HEAD</tag>
 	</scm>
 

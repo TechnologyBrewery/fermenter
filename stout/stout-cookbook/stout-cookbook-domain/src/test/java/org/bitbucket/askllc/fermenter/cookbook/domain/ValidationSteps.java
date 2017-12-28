@@ -282,6 +282,43 @@ public class ValidationSteps {
 	}
 	
 	/*
+     * Validation steps for the regular expression (regex) Zipcode format 
+     */
+    
+    @Given("^a \"([^\"]*)\" to validate against the regEx example Zipcode example field$")
+    public void a_to_validate_against_the_regEx_example_Zipcode_example_field(String value) throws Throwable {
+        this.userStringRegex = value;
+        
+        example = new ValidationExampleBO();
+        example.setRegexZipcodeExample(userStringRegex);
+        example.setRequiredField(RandomStringUtils.randomAlphanumeric(10));
+
+    }
+    
+    @When("^field level validation is performed on that regEx Zipcode value$")
+    public void field_level_validation_is_performed_on_that_regEx_Zipcode_value() throws Throwable {
+        
+        example.validate();
+        
+    }
+    
+    @Then("^the regEx Zipcode validation returns no errors$")
+    public void the_regEx_Zipcode_validation_returns_no_errors() throws Throwable {
+        
+        MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ValidationSteps.class);
+        assertFalse("Should not have encountered messages!", MessageManager.hasErrorMessages());
+        
+    }
+    
+    @Then("^the regEx Zipcode validation returns errors$")
+    public void the_regEx_Zipcode_validation_returns_errors() throws Throwable {
+        
+        MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ValidationSteps.class);
+        assertTrue("Should have encountered messages!", MessageManager.hasErrorMessages());
+        
+    }
+	
+	/*
 	 * Validation steps for the required field String example
 	 */
 	

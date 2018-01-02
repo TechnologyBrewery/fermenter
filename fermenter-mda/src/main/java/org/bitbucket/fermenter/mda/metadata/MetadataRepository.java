@@ -1,10 +1,5 @@
 package org.bitbucket.fermenter.mda.metadata;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -13,6 +8,11 @@ import org.bitbucket.fermenter.mda.metadata.element.Composite;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.Enumeration;
 import org.bitbucket.fermenter.mda.metadata.element.Service;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 public class MetadataRepository extends AbstractMetadataRepository {
 
@@ -228,14 +228,14 @@ public class MetadataRepository extends AbstractMetadataRepository {
 
     protected boolean useLocalMetadataOnly(String metadataContext) {
         boolean useLocalMetadataOnly = true;
-        if (StringUtils.isBlank(metadataContext) || LOCAL_METADATA_CONTEXT.equalsIgnoreCase(metadataContext)) {
-            useLocalMetadataOnly = true;
-
-        } else if (ALL_METADATA_CONTEXT.equalsIgnoreCase(metadataContext)) {
+        if (StringUtils.isBlank(metadataContext) || ALL_METADATA_CONTEXT.equalsIgnoreCase(metadataContext)) {
             useLocalMetadataOnly = false;
 
-        } else {
+        } else if (LOCAL_METADATA_CONTEXT.equalsIgnoreCase(metadataContext)) {
             useLocalMetadataOnly = true;
+
+        } else {
+            useLocalMetadataOnly = false;
             LOG.warn("An invalid metadata context of '" + metadataContext
                     + "; has been specified.  Using 'local' instead!");
         }

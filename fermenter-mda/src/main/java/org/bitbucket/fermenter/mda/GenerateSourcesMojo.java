@@ -1,20 +1,7 @@
 package org.bitbucket.fermenter.mda;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Writer;
-import java.lang.reflect.Constructor;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.digester.Digester;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.LogFactory;
@@ -40,8 +27,20 @@ import org.bitbucket.fermenter.mda.metadata.StaticURLResolver;
 import org.bitbucket.fermenter.mda.xml.TrackErrorsErrorHandler;
 import org.bitbucket.fermenter.mda.xml.XmlUtils;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Writer;
+import java.lang.reflect.Constructor;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * Executes the Fermenter MDA process.
@@ -208,7 +207,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
         }
         
         if (TARGETS.size() > 0) {
-            LOG.info("MIGRATION NEEDED: Creating a targets.json with all legacy formated targets");
+            LOG.info("MIGRATION NEEDED: Creating a targets.json with all legacy formatted targets");
             try {
                 File targetsJsonDirectory = new File(mainSourceRoot, "/resources");
                 targetsJsonDirectory.mkdirs();

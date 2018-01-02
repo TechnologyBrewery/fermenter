@@ -69,10 +69,8 @@ public class MetadataRepository extends AbstractMetadataRepository {
     public Map<String, Entity> getEntitiesByMetadataContext(String context, String currentApplication) {
         Map<String, Entity> entityMap;
         if (useLocalMetadataOnly(context)) {
-            LOG.info("Using local metadata only");
             entityMap = getAllEntities(currentApplication);
         } else {
-            LOG.info("Using all metadata");
             entityMap = getAllEntities();
         }
 

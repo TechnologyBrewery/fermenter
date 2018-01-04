@@ -12,6 +12,7 @@ public class TestDefaultMessages extends AbstractMessagesTestCase {
 	private Messages messagesWithErrors1;
 	private Messages messagesWithInfos1;
 	private Messages mixedMessages;
+	private Messages messagesWithNoProperties;
 	
 	public void setUp() throws Exception {
 		super.setUp();
@@ -53,6 +54,16 @@ public class TestDefaultMessages extends AbstractMessagesTestCase {
 		msg7.setKey(key1);
 		msg7.setSeverity(Severity.INFO);
 		
+		Message msg8 = new DefaultMessage();
+		msg8.setKey("foo.bar");
+		msg8.setSeverity(Severity.INFO);
+		msg8.addInsert(new String[] {});
+		
+		
+		Message msg9 = new DefaultMessage();
+        msg9.setKey(key2);
+        msg9.setSeverity(Severity.ERROR);
+		
 		messagesWithInfos1 = new DefaultMessages();
 		messagesWithInfos1.addMessage(msg5);
 		messagesWithInfos1.addMessage(msg6);
@@ -64,11 +75,16 @@ public class TestDefaultMessages extends AbstractMessagesTestCase {
 		mixedMessages.addMessage(msg4);
 		mixedMessages.addMessage(msg6);
 		mixedMessages.addMessage(msg7);
+		
+		messagesWithNoProperties = new DefaultMessages();
+		messagesWithNoProperties.addMessage(msg8);
+		messagesWithNoProperties.addMessage(msg9);
+		
 	}
 	
 	public void testGetErrorMessageCount() {
 		assertEquals(4, messagesWithErrors1.getErrorMessageCount());
-		assertEquals(2, messagesWithErrors1.getErrorMessageCount("foo"));
+		assertEquals(4, messagesWithErrors1.getErrorMessageCount("foo"));
 		assertEquals(2, messagesWithErrors1.getErrorMessageCount("bar"));
 		assertEquals(1, messagesWithErrors1.getErrorMessageCount("foobar"));
 		assertEquals(0, messagesWithErrors1.getErrorMessageCount("barfoo"));
@@ -89,12 +105,13 @@ public class TestDefaultMessages extends AbstractMessagesTestCase {
 		message.setSeverity(Severity.ERROR);
 		messages.addMessage(message);
 		assertTrue(messages.hasErrorMessages());
-		assertFalse(messages.hasErrorMessages("foo"));
+		assertFalse(messages.hasErrorMessages("bar"));
+		assertTrue(messages.hasErrorMessages("foo"));
 	}
 	
 	public void testGetInformationalMessageCount() {
 		assertEquals(3, messagesWithInfos1.getInformationalMessageCount());
-		assertEquals(2, messagesWithInfos1.getInformationalMessageCount("foo"));
+		assertEquals(3, messagesWithInfos1.getInformationalMessageCount("foo"));
 		assertEquals(1, messagesWithInfos1.getInformationalMessageCount("bar"));
 		assertEquals(0, messagesWithInfos1.getInformationalMessageCount("foobar"));
 	}
@@ -113,7 +130,15 @@ public class TestDefaultMessages extends AbstractMessagesTestCase {
 		message.setSeverity(Severity.INFO);
 		messages.addMessage(message);
 		assertTrue(messages.hasInformationalMessages());
-		assertFalse(messages.hasInformationalMessages("foo"));
+		assertFalse(messages.hasInformationalMessages("bar"));
+		assertTrue(messages.hasInformationalMessages("foo"));
+	}
+	
+	public void testMessagesWithNoProperties() {
+	    assertTrue(messagesWithNoProperties.hasInformationalMessages("foo.bar"));
+	    assertTrue(messagesWithNoProperties.hasErrorMessages("bar"));
+	    assertEquals(messagesWithNoProperties.getErrorMessageCount(), 1);
+	    assertEquals(messagesWithNoProperties.getInformationalMessageCount(), 1);
 	}
 	
 	public void testMixedMessages() {
@@ -123,11 +148,11 @@ public class TestDefaultMessages extends AbstractMessagesTestCase {
 		assertTrue(mixedMessages.hasInformationalMessages("bar"));
 		
 		assertEquals(3, mixedMessages.getErrorMessageCount());
-		assertEquals(2, mixedMessages.getErrorMessageCount("foo"));
+		assertEquals(3, mixedMessages.getErrorMessageCount("foo"));
 		assertEquals(1, mixedMessages.getErrorMessageCount("foobar"));
 		
 		assertEquals(2, mixedMessages.getInformationalMessageCount());
-		assertEquals(1, mixedMessages.getInformationalMessageCount("foo"));
+		assertEquals(2, mixedMessages.getInformationalMessageCount("foo"));
 		assertEquals(1, mixedMessages.getInformationalMessageCount("bar"));
 		assertEquals(0, mixedMessages.getInformationalMessageCount("foobar"));
 	}
@@ -136,7 +161,7 @@ public class TestDefaultMessages extends AbstractMessagesTestCase {
 		assertFalse(messagesWithErrors1.getErrorMessages().isEmpty());
 		assertEquals(4, messagesWithErrors1.getErrorMessages().size());
 		assertFalse(messagesWithErrors1.getErrorMessages("foo").isEmpty());
-		assertEquals(2, messagesWithErrors1.getErrorMessages("foo").size());
+		assertEquals(4, messagesWithErrors1.getErrorMessages("foo").size());
 		assertFalse(messagesWithErrors1.getErrorMessages("bar").isEmpty());
 		assertEquals(2, messagesWithErrors1.getErrorMessages("bar").size());
 		assertFalse(messagesWithErrors1.getErrorMessages("foobar").isEmpty());
@@ -149,7 +174,7 @@ public class TestDefaultMessages extends AbstractMessagesTestCase {
 		assertFalse(messagesWithInfos1.getInformationalMessages().isEmpty());
 		assertEquals(3, messagesWithInfos1.getInformationalMessages().size());
 		assertFalse(messagesWithInfos1.getInformationalMessages("foo").isEmpty());
-		assertEquals(2, messagesWithInfos1.getInformationalMessages("foo").size());
+		assertEquals(3, messagesWithInfos1.getInformationalMessages("foo").size());
 		assertFalse(messagesWithInfos1.getInformationalMessages("bar").isEmpty());
 		assertEquals(1, messagesWithInfos1.getInformationalMessages("bar").size());
 		assertTrue(messagesWithInfos1.getInformationalMessages("foobar").isEmpty());

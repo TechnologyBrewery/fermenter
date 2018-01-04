@@ -105,13 +105,13 @@ public interface Messages extends Serializable {
 	boolean hasErrorMessages(String property);
 	
 	/**
-	 * Answer whether any messages with a severity of 'Error' are present.
+	 * Answer whether any messages with a severity of 'Informational' are present.
 	 * @return True if any 'Informational' messages are present, false otherwise
 	 */
 	boolean hasInformationalMessages();
 	
 	/** 
-	 * Answer whether any messages with a severity of 'Error' are present for a
+	 * Answer whether any messages with a severity of 'Informational' are present for a
 	 * given property.
 	 * @param property The property name
 	 * @return True if any 'Informational' messages are present for the given

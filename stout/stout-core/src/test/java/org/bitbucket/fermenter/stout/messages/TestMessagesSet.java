@@ -44,16 +44,16 @@ public class TestMessagesSet extends AbstractMessagesTestCase {
 	
 	public void testGetErrorMessageCount() {
 		assertEquals(6, set.getErrorMessageCount());
-		assertEquals(2, set.getErrorMessageCount("foo"));
-		assertEquals(2, set.getErrorMessageCount("bar"));
+		assertEquals(4, set.getErrorMessageCount("foo"));
+		assertEquals(3, set.getErrorMessageCount("bar"));
 		assertEquals(1, set.getErrorMessageCount("foobar"));
 		assertEquals(0, set.getErrorMessageCount("barfoo"));
 	}
 	
 	public void testGetInformationalMessageCount() {
 		assertEquals(7, set.getInformationalMessageCount());
-		assertEquals(3, set.getInformationalMessageCount("foo"));
-		assertEquals(1, set.getInformationalMessageCount("bar"));
+		assertEquals(4, set.getInformationalMessageCount("foo"));
+		assertEquals(2, set.getInformationalMessageCount("bar"));
 		assertEquals(1, set.getInformationalMessageCount("barfoo"));
 		assertEquals(0, set.getInformationalMessageCount("foobar"));
 	}
@@ -82,8 +82,8 @@ public class TestMessagesSet extends AbstractMessagesTestCase {
 		assertTrue(set.getErrorMessages("barfoo").isEmpty());
 		
 		assertEquals(6, set.getErrorMessages().size());
-		assertEquals(2, set.getErrorMessages("foo").size());
-		assertEquals(2, set.getErrorMessages("bar").size());
+		assertEquals(4, set.getErrorMessages("foo").size());
+		assertEquals(3, set.getErrorMessages("bar").size());
 		assertEquals(1, set.getErrorMessages("foobar").size());
 		assertEquals(0, set.getErrorMessages("barfoo").size());
 	}
@@ -96,8 +96,8 @@ public class TestMessagesSet extends AbstractMessagesTestCase {
 		assertTrue(set.getInformationalMessages("foobar").isEmpty());
 		
 		assertEquals(7, set.getInformationalMessages().size());
-		assertEquals(3, set.getInformationalMessages("foo").size());
-		assertEquals(1, set.getInformationalMessages("bar").size());
+		assertEquals(4, set.getInformationalMessages("foo").size());
+		assertEquals(2, set.getInformationalMessages("bar").size());
 		assertEquals(1, set.getInformationalMessages("barfoo").size());
 		assertEquals(0, set.getInformationalMessages("foobar").size());
 	}

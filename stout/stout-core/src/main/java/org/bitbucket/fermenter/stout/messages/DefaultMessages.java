@@ -134,8 +134,9 @@ public class DefaultMessages implements Messages {
 	private Collection<Message> getMessagesList(Severity s, String property) {
 		Collection<Message> msgs = messages.get(s);
 		Collection<Message> returnList = new HashSet<Message>();
-		for (Message msg : msgs) {
-			if (msg.getProperties().contains(property)) {
+		for (Message msg : msgs) { 
+		    String msgKey = msg.getKey();
+			if (msg.getProperties().contains(property) || msgKey.equals(property)) {
 				returnList.add(msg);
 			}
 		}
@@ -150,7 +151,8 @@ public class DefaultMessages implements Messages {
 		Collection<Message> msgs = messages.get(s);
 		int count = 0;
 		for (Message msg : msgs) {
-			if (msg.getProperties().contains(property)) {
+		    String msgKey = msg.getKey();
+			if (msgKey.equals(property) || msg.getProperties().contains(property)) {
 				count += 1;
 			}
 		}

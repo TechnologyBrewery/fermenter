@@ -2,6 +2,7 @@ package org.bitbucket.fermenter.mda.metadata.element;
 
 public interface Field {
 
+    //TODO: refactor this out - should be dynamic from the types listing
 	public static final String TYPE_STRING = "string";
 	public static final String TYPE_FLOAT = "float";
 	public static final String TYPE_DATE = "date";
@@ -10,6 +11,7 @@ public interface Field {
 	public static final String TYPE_DOUBLE = "double";
 	public static final String TYPE_INTEGER = "integer";
 	public static final String TYPE_SHORT = "short";
+	public static final String TYPE_NUMERIC_BOOLEAN = "numeric_boolean";
 	public static final String TYPE_BOOLEAN = "boolean";
 	public static final String TYPE_BIG_DECIMAL = "big_decimal";
 	public static final String TYPE_CHARACTER = "character";

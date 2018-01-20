@@ -384,7 +384,8 @@ public class FieldMetadata extends MetadataElement implements Field {
 		String type = getType();	
 		//check basic types:
 		if ((TYPE_STRING.equals(type))
-		|| (TYPE_BOOLEAN.equals(type))				
+		|| (TYPE_BOOLEAN.equals(type))			
+		|| (TYPE_NUMERIC_BOOLEAN.equals(type))    
 		|| (TYPE_FLOAT.equals(type))
 		|| (TYPE_DATE.equals(type))
 		|| (TYPE_TIMESTAMP.equals(type))

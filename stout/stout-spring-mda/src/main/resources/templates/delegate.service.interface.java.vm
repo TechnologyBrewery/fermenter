@@ -1,0 +1,54 @@
+package ${basePackage}.client.service;
+
+import java.util.Collection;
+import java.util.Date;
+import java.math.BigDecimal;
+import java.util.List;
+import feign.Param;
+
+import ${basePackage}.transfer.*;
+
+/**
+ * Service interface for ${service.name} entity maintenance.
+ *
+ * Generated Code - DO NOT MODIFY
+ */
+public interface ${service.name}Delegate {
+
+#foreach( $operation in $service.operations )
+	/**
+	#if ($operation.documentation)
+	 * ${operation.documentation}
+	#else
+	 * Execute the ${operation.name} operation.
+	#end
+	 *
+	#if( !$operation.parameters.isEmpty() )
+		#foreach( $parameter in $operation.parameters )
+			#if( $parameter.documentation )
+	 * @param ${parameter.name} ${parameter.documentation}
+			#else
+	 * @param ${parameter.name}
+			#end
+		#end
+	#end
+	#if($operation.isReturnTypeCollection())
+	 * @return A service response-wrapped {@link Collection>} of {@link ${operation.returnManyType}}
+	#elseif(!$operation.isResponseTypeVoid())
+	 * @return A service response-wrapped instance of {@link ${operation.wrappedReturnType}}
+	#else
+	 * @return An empty service response
+	#end
+	 */
+	#if($operation.isReturnTypeCollection())
+	Collection<${operation.wrappedReturnType}> ${operation.lowercaseName}(${operation.getSignatureParametersWithParameterAnnotations("Param")});
+	#elseif($operation.isResponseTypeVoid())
+	void ${operation.lowercaseName}(${operation.getSignatureParametersWithParameterAnnotations("Param")});
+	#elseif($operation.isReturnTypeEntity())
+	${operation.returnType} ${operation.lowercaseName}(${operation.getSignatureParametersWithParameterAnnotations("Param")});
+	#else
+	${operation.wrappedReturnType} ${operation.lowercaseName}(${operation.getSignatureParametersWithParameterAnnotations("Param")});
+	#end
+
+#end
+}

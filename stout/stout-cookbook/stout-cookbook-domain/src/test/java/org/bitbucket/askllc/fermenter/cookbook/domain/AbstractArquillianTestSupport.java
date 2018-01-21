@@ -27,10 +27,13 @@ public abstract class AbstractArquillianTestSupport {
         war.addAsLibraries(mavenDependencies);
         war.addPackages(true, "org.bitbucket.askllc.fermenter.cookbook.domain");
         war.addClass(TestUtils.class);
-        war.merge(
+        File generatedResources = new File("./src/generated/resources");
+        if (generatedResources.exists()) {
+            war.merge(
                 ShrinkWrap.create(GenericArchive.class).as(ExplodedImporter.class)
                         .importDirectory("src/generated/resources").as(GenericArchive.class),
                 "WEB-INF/classes", Filters.include("^.*\\.properties$"));
+        }
         war.addAsWebInfResource("base-application-context.xml");
         war.addAsWebInfResource("stout-cookbook-domain-application-context.xml");
         war.addAsWebInfResource("h2-tomcat-ds-context.xml", "context.xml");

@@ -1,0 +1,68 @@
+package ${basePackage}.client.service.impl;
+
+import ${basePackage}.client.resource.${entity.name}MaintenanceResource;
+import ${basePackage}.client.service.${entity.name}MaintenanceDelegate;
+import ${basePackage}.transfer.${entity.name};
+
+import org.bitbucket.fermenter.stout.messages.MessageManager;
+import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
+import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+
+/**
+ * Service implementation for ${entity.name} entity maintenance.
+ *
+ * Generated Code - DO NOT MODIFY
+ */
+@Service
+public class ${entity.name}MaintenanceDelegateImpl implements ${entity.name}MaintenanceDelegate {
+    #if ( !$entity.idFields.isEmpty() )
+        #set ($idFieldJavaType = ${entity.idFields.values().iterator().next().javaType})
+        #set ($idFieldName = ${entity.idFields.values().iterator().next().name})
+    #else
+        #set ($idFieldJavaType = 'String')
+        #set ($idFieldName = 'id')
+    #end
+
+    @Autowired
+    private ${entity.name}MaintenanceResource ${entity.name.toLowerCase()}Resource;
+
+	/**
+	 * {@inheritDoc}
+	 */
+    public ${entity.name} findByPrimaryKey(${idFieldJavaType} ${idFieldName}) {
+		ValueServiceResponse<${entity.name}> response = ${entity.name.toLowerCase()}Resource.findByPrimaryKey(${idFieldName});
+		MessageManager.addMessages(response.getMessages());
+		return response.getValue();
+    }
+
+    /**
+	 * {@inheritDoc}
+	 */
+    public ${entity.name} create(${entity.name} entity) {
+		ValueServiceResponse<${entity.name}> response = ${entity.name.toLowerCase()}Resource.create(entity);
+		MessageManager.addMessages(response.getMessages());
+		return response.getValue();
+    }
+
+	/**
+	 * {@inheritDoc}
+	 */
+    public ${entity.name} update(${idFieldJavaType} ${idFieldName}, ${entity.name} entity) {
+		ValueServiceResponse<${entity.name}> response = ${entity.name.toLowerCase()}Resource.update(${idFieldName}, entity);
+		MessageManager.addMessages(response.getMessages());
+		return response.getValue();
+    }
+
+	/**
+	 * {@inheritDoc}
+	 */
+    public void delete(${idFieldJavaType} ${idFieldName}) {
+		VoidServiceResponse response = ${entity.name.toLowerCase()}Resource.delete(${idFieldName});
+		MessageManager.addMessages(response.getMessages());
+    }
+}

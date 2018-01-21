@@ -70,29 +70,6 @@ public abstract class ${service.name}BaseServiceImpl extends AbstractMsgMgrAware
 		return response;
 	}
 	
-	#if($operation.transactionAttribute != "SUPPORTS")
-	/**
-	 * {@inheritDoc}
-	 */
-	@Transactional(propagation=Propagation.${operation.transactionAttribute})
-	@Override	 
-	#if($operation.isReturnTypeCollection())	 
-	public ValueServiceResponse<Collection<${operation.wrappedReturnType}>> ${operation.lowercaseName}ViaPut(${operation.signature}) {
-	#elseif($operation.isResponseTypeVoid())
-	public VoidServiceResponse ${operation.lowercaseName}ViaPut(${operation.signature}) {
-	#else 
-	public ValueServiceResponse<${operation.wrappedReturnType}> ${operation.lowercaseName}ViaPut(${operation.signature}) {
-	#end
-
-		return ${operation.lowercaseName}(
-	#foreach( $parameter in $operation.parameters )			
-				${parameter.name}
-		#if( $foreach.hasNext ),#end
-	#end
-		);
-	}
-	#end	
-	
 	/**
 	 * Performs the business function for ${operation.name}.
 	#if( $operation.parameters.size() > 0 )

@@ -1,0 +1,67 @@
+package ${basePackage}.client.service.impl;
+
+import java.util.Collection;
+import java.util.Date;
+import java.math.BigDecimal;
+import java.util.List;
+import ${basePackage}.client.resource.${service.name}Resource;
+import ${basePackage}.client.service.${service.name}Delegate;
+import ${basePackage}.transfer.*;
+
+import org.bitbucket.fermenter.stout.messages.MessageManager;
+import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
+import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
+
+        import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+
+/**
+ * Service implementation for ${service.name} entity maintenance.
+ *
+ * Generated Code - DO NOT MODIFY
+ */
+@Service
+public class ${service.name}DelegateImpl implements ${service.name}Delegate {
+
+    @Autowired
+    private ${service.name}Resource ${service.name.toLowerCase()}Resource;
+
+#foreach( $operation in $service.operations )
+	/**
+	 * {@inheritDoc}
+	 */
+	#if($operation.isReturnTypeCollection())
+	public Collection<${operation.wrappedReturnType}> ${operation.lowercaseName}(${operation.signature}) {
+	#elseif($operation.isResponseTypeVoid())
+	public void ${operation.lowercaseName}(${operation.signature}) {
+	#elseif($operation.isReturnTypeEntity())
+	public ${operation.returnType} ${operation.lowercaseName}(${operation.signature}) {
+	#else
+	public ${operation.wrappedReturnType} ${operation.lowercaseName}(${operation.signature}) {
+	#end
+	#if($operation.isReturnTypeCollection())
+		ValueServiceResponse<Collection<${operation.wrappedReturnType}>> response;
+	#elseif($operation.isReturnTypeEntity())
+		ValueServiceResponse<${operation.returnType}>
+	#elseif($operation.isResponseTypeVoid())
+		VoidServiceResponse
+	#else
+		ValueServiceResponse<${operation.wrappedReturnType}> response;
+	#end
+	response = ${service.name.toLowerCase()}Resource.${operation.lowercaseName}(
+	#foreach( $parameter in $operation.parameters )
+				${parameter.name}
+		#if( $foreach.hasNext ),#end
+	#end
+		);
+		
+		MessageManager.addMessages(response.getMessages());
+	#if(!$operation.isResponseTypeVoid())		
+		return response.getValue();
+	#end
+	}
+
+#end
+
+}

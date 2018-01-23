@@ -70,22 +70,6 @@ public interface ${service.name}BaseService {
 	#else 
 	ValueServiceResponse<${operation.wrappedReturnType}> ${operation.lowercaseName}(${operation.getSignatureParametersWithJaxRS()});
 	#end
-	
-	#if($operation.transactionAttribute != "SUPPORTS")
-	@PUT
-	@Path("${operation.lowercaseName}")
-	@Produces("application/json;charset=${operation.responseEncoding}")
-	#if($operation.hasEntityParameters())
-	@Consumes(MediaType.APPLICATION_JSON)
-	#end
-	#if($operation.isReturnTypeCollection())	 
-	ValueServiceResponse<Collection<${operation.wrappedReturnType}>> ${operation.lowercaseName}ViaPut(${operation.getSignatureParametersWithJaxRS()});
-	#elseif($operation.isResponseTypeVoid())
-	public VoidServiceResponse ${operation.lowercaseName}ViaPut(${operation.getSignatureParametersWithJaxRS()});
-	#else 
-	ValueServiceResponse<${operation.wrappedReturnType}> ${operation.lowercaseName}ViaPut(${operation.getSignatureParametersWithJaxRS()});;
-	#end
-	#end
 
 #end
 

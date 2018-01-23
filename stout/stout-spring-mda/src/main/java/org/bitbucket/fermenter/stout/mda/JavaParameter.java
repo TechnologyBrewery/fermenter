@@ -61,11 +61,11 @@ public class JavaParameter implements Parameter {
 	}
 
 	public String getJavaTypeAsBO() {
-		String javaType = getJavaType();
+		String localJavaType = getJavaType();
 		if (isEntity()) {
-			javaType += "BO";
+			localJavaType += "BO";
 		}
-		return javaType;
+		return localJavaType;
 	}
 	
 	public String getUncapitalizedJavaType() {
@@ -78,19 +78,19 @@ public class JavaParameter implements Parameter {
 	public boolean isEntity() {
 		MetadataRepository metadataRepository = 
                 MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
-		return metadataRepository.getEntity(getProjectValue(), getType() ) != null;
+		return metadataRepository.getEntity(getType()) != null;
 	}
 
 	public boolean isEnumeration() {
 		MetadataRepository metadataRepository = 
                 MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
-		return metadataRepository.getEnumeration(getProjectValue(), getType() ) != null;
+		return metadataRepository.getEnumeration(getType()) != null;
 	}
 
 	public Enumeration getEnumeration() {
 		MetadataRepository metadataRepository = 
                 MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
-		Enumeration e = metadataRepository.getEnumeration(getProjectValue(), getType());
+		Enumeration e = metadataRepository.getEnumeration(getType());
 		return (e != null) ? new JavaEnumeration(e) : null;
 	}
 
@@ -112,7 +112,7 @@ public class JavaParameter implements Parameter {
 	 */
 	public String getSignatureName() {
 		if (signatureName != null) {
-			StringBuffer sb = new StringBuffer(150);
+			StringBuilder sb = new StringBuilder();
 			sb.append(getName()).append(getSignatureSuffix());
 			signatureName = sb.toString();
 		}

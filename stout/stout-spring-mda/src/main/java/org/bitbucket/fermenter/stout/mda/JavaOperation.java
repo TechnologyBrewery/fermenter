@@ -159,6 +159,15 @@ public class JavaOperation implements Operation {
     }
     
     /**
+     * Creates the signature with needed feign parameter descriptors included.
+     * 
+     * @return feign compliant signature
+     */
+    public String getSignatureParametersWithFeign() {
+        return getSignatureParametersWithParameterAnnotations("Param");
+    }    
+    
+    /**
      * Creates the signature with passed parameter annotation descriptors included.
      * 
      * @param annotationParam
@@ -218,26 +227,21 @@ public class JavaOperation implements Operation {
         int entityParameterCount = 0;
         List<Parameter> parameterList = getParameters();
         if (parameterList != null) {
-            if (parameterList.size() > 0) {
+            if (!parameterList.isEmpty()) {
                 path.append("?");
             }
             
             for (Iterator<Parameter> i = parameterList.iterator(); i.hasNext();) {
                 JavaParameter param = (JavaParameter) i.next();
-                
-                path.append(param.getName()).append("=");
-                
                 if (!param.isEntity()) {
+                    path.append(param.getName()).append("=");
                     path.append("{").append(param.getName()).append("}");
-
-                } else {
                     entityParameterCount++;
-                    
-                }
-
-                if (i.hasNext()) {
-                    path.append("&");
-                    
+    
+                    if (i.hasNext()) {
+                        path.append("&");
+                        
+                    }
                 }
             }
         }

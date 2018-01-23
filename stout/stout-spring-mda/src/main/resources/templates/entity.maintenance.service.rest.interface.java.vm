@@ -1,26 +1,29 @@
 package ${basePackage}.service.rest;
 
-#foreach( $import in $service.imports )
-import $import;
-#end
+    #foreach( $import in $service.imports )
+            import $import;
+    #end
 
-import ${basePackage}.bizobj.${entity.name}BO;
+        import ${basePackage}.bizobj.${entity.name}BO;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+        import javax.ws.rs.Consumes;
+        import javax.ws.rs.DELETE;
+        import javax.ws.rs.GET;
+        import javax.ws.rs.POST;
+        import javax.ws.rs.PUT;
+        import javax.ws.rs.Path;
+        import javax.ws.rs.PathParam;
+        import javax.ws.rs.Produces;
+        import javax.ws.rs.core.MediaType;
+        import org.springframework.security.access.prepost.PreAuthorize;
+        import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
-import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
-import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
+        import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
+        import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
 
+        import java.math.BigDecimal;
 /**
- * Provides an interface for create, retrieve, update, and delete (CRUD) functionality for ${entity.name} 
+ * Provides an interface for create, retrieve, update, and delete (CRUD) functionality for ${entity.name}
  * business objects and may be utilized as a Resteasy client proxy to facilitate RESTful service
  * invocation.
  *
@@ -29,57 +32,61 @@ import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
 @Path("${entity.name}")
 public interface ${entity.name}MaintenanceService {
 
-#if ( !$entity.idFields.isEmpty() )
-  #set ($idFieldJavaType = ${entity.idFields.values().iterator().next().javaType})
-  #set ($idFieldName = ${entity.idFields.values().iterator().next().name})
-#else
-  #set ($idFieldJavaType = 'String')
-  #set ($idFieldName = 'id')
-#end  
-		
-	/**
-	 * Save or update the provided instance.
-	 *
-	 * @param ${idFieldName} The primary key value ${idFieldName} for the ${entity.name}	
-	 * @param entity The ${entity.name} instance to save
-	 * @return a service response containing the saved entity and/or any collected messages
-	 */
-	@PUT
-	@Path("{${idFieldName}}")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	ValueServiceResponse<${entity.name}BO> saveOrUpdate(@PathParam("${idFieldName}") ${idFieldJavaType} ${idFieldName}, ${entity.name}BO entity);
-	
-	/**
-	 * Create the provided instance.
-	 *
-	 * @param entity The ${entity.name} instance to save
-	 * @return a service response containing the saved entity and/or any collected messages
-	 */
-	@POST
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	ValueServiceResponse<${entity.name}BO> saveOrUpdate(${entity.name}BO entity);
-	
-	/**
-	 * Deletes the ${entity.name} entity with the provided primary key value.
-	 *
-	 * @param ${idFieldName} The primary key value ${idFieldName} for the ${entity.name} to delete
-	 * @return response wrapper containing any collected messages
-	 */
-	@DELETE
-	@Path("{${idFieldName}}")
-	@Produces(MediaType.APPLICATION_JSON)
-	VoidServiceResponse delete(@PathParam("${idFieldName}") ${idFieldJavaType} ${idFieldName});
-	 	
-	/**
-	 * Find the ${entity.name} by primary key
-	 *
-	 * @param ${id.name} The primary key value ${id.name} for the ${entity.name} to retrieve
-	 * @return a service response containing the retrieved entity and/or any collected messages
-	 */
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("{${idFieldName}}")
-	ValueServiceResponse<${entity.name}BO> findByPrimaryKey(@PathParam("${idFieldName}") ${idFieldJavaType} ${idFieldName});
+    #if ( !$entity.idFields.isEmpty() )
+        #set ($idFieldJavaType = ${entity.idFields.values().iterator().next().javaType})
+        #set ($idFieldName = ${entity.idFields.values().iterator().next().name})
+    #else
+        #set ($idFieldJavaType = 'String')
+        #set ($idFieldName = 'id')
+    #end
+
+    /**
+     * Save or update the provided instance.
+     *
+     * @param ${idFieldName} The primary key value ${idFieldName} for the ${entity.name}
+     * @param entity The ${entity.name} instance to save
+     * @return a service response containing the saved entity and/or any collected messages
+     */
+    @PreAuthorize("hasPermission(authentication, 'write')")
+    @PUT
+    @Path("{${idFieldName}}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    ValueServiceResponse<${entity.name}BO> saveOrUpdate(@PathParam("${idFieldName}") ${idFieldJavaType} ${idFieldName}, ${entity.name}BO entity);
+
+    /**
+     * Create the provided instance.
+     *
+     * @param entity The ${entity.name} instance to save
+     * @return a service response containing the saved entity and/or any collected messages
+     */
+    @PreAuthorize("hasPermission(authentication, 'write')")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    ValueServiceResponse<${entity.name}BO> saveOrUpdate(${entity.name}BO entity);
+
+    /**
+     * Deletes the ${entity.name} entity with the provided primary key value.
+     *
+     * @param ${idFieldName} The primary key value ${idFieldName} for the ${entity.name} to delete
+     * @return response wrapper containing any collected messages
+     */
+    @PreAuthorize("hasPermission(authentication, 'write')")
+    @DELETE
+    @Path("{${idFieldName}}")
+    @Produces(MediaType.APPLICATION_JSON)
+    VoidServiceResponse delete(@PathParam("${idFieldName}") ${idFieldJavaType} ${idFieldName});
+
+    /**
+     * Find the ${entity.name} by primary key
+     *
+     * @param ${id.name} The primary key value ${id.name} for the ${entity.name} to retrieve
+     * @return a service response containing the retrieved entity and/or any collected messages
+     */
+    @PreAuthorize("hasPermission(authentication, 'read')")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("{${idFieldName}}")
+    ValueServiceResponse<${entity.name}BO> findByPrimaryKey(@PathParam("${idFieldName}") ${idFieldJavaType} ${idFieldName});
 }

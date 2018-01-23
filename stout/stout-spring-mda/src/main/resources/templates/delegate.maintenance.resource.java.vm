@@ -1,0 +1,38 @@
+package ${basePackage}.client.resource;
+
+import feign.Headers;
+import feign.Param;
+import feign.RequestLine;
+import ${basePackage}.transfer.${entity.name};
+import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
+import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
+
+        import java.math.BigDecimal;
+/**
+ * Resource for ${entity.name} entity maintenance.
+ *
+ * Generated Code - DO NOT MODIFY
+ */
+public interface ${entity.name}MaintenanceResource {
+    #if ( !$entity.idFields.isEmpty() )
+        #set ($idFieldJavaType = ${entity.idFields.values().iterator().next().javaType})
+        #set ($idFieldName = ${entity.idFields.values().iterator().next().name})
+    #else
+        #set ($idFieldJavaType = 'String')
+        #set ($idFieldName = 'id')
+    #end
+
+    @RequestLine("GET /${entity.name}/{id}")
+    ValueServiceResponse<${entity.name}> findByPrimaryKey(@Param("id") ${idFieldJavaType} ${idFieldName});
+
+	@RequestLine("POST /${entity.name}")
+	@Headers({"Content-Type: application/json"})
+    ValueServiceResponse<${entity.name}> create(${entity.name} entity);
+
+	@RequestLine("PUT /${entity.name}/{id}")
+	@Headers({"Content-Type: application/json"})
+    ValueServiceResponse<${entity.name}> update(@Param("id") ${idFieldJavaType} ${idFieldName}, ${entity.name} entity);
+
+    @RequestLine("DELETE /${entity.name}/{id}")
+    VoidServiceResponse delete(@Param("id") ${idFieldJavaType} ${idFieldName});
+}

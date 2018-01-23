@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE service PUBLIC "-//FERMENTER//DTD SERVICE//EN" "https://bitbucket.org/askllc/fermenter/downloads/fermenter-2-service.dtd">
+<!DOCTYPE service PUBLIC "-//FERMENTER//DTD SERVICE//EN" "https://bitbucket.org/cpointe/fermenter/downloads/fermenter-2-service.dtd">
 
 <service>
 	<name>SimpleDomainManager</name>
@@ -119,7 +119,7 @@
 					<name>numErrorMessagesToGenerate</name>
 					<type>integer</type>
 				</parameter>
-			</parameters>
+			</parameters>			
 		</operation>
 		<operation>
 			<name>ReturnNullEntity</name>

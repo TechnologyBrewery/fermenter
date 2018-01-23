@@ -1,0 +1,122 @@
+package ${basePackage}.client.config;
+
+import feign.Feign;
+import feign.RequestInterceptor;
+import feign.RequestTemplate;
+import feign.codec.Decoder;
+import feign.codec.Encoder;
+import feign.jackson.JacksonDecoder;
+import feign.jackson.JacksonEncoder;
+#foreach( $entity in $entities )
+#if (!$entity.isTransient())
+import ${basePackage}.client.resource.${entity.name}MaintenanceResource;
+#end
+#end
+#foreach( $service in $services )
+import ${basePackage}.client.resource.${service.name}Resource;
+#end
+import ${basePackage}.transfer.json.ObjectMapperManager;
+
+import org.bitbucket.fermenter.stout.util.Slf4jLogger;
+import org.bitbucket.krausening.Krausening;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.core.context.SecurityContextHolder;
+import java.util.Properties;
+
+/**
+ * Configuration for the REST Client.
+ *
+ * Generated Code - DO NOT MODIFY
+ */
+@Configuration
+public class RestClient${configName}BaseConfig {
+
+#foreach( $entity in $entities )
+	#if (!$entity.isTransient())
+    /**
+     * Resource for retrieving ${entity.name} related data.
+     *
+     * @return The configured ${entity.name} Resource
+     */
+    @Bean
+    public ${entity.name}MaintenanceResource ${entity.name.toLowerCase()}Resource() {
+        return feignBuilder().logger(new Slf4jLogger(${entity.name}MaintenanceResource.class)).target(${entity.name}MaintenanceResource.class, getEndpoint());
+    }
+    #end
+#end
+
+#foreach( $service in $services )
+    /**
+     * Resource for invoking rest services on ${service.name}.
+     *
+     * @return The configured ${service.name} Resource
+     */
+    @Bean
+    public ${service.name}Resource ${service.name.toLowerCase()}Resource() {
+        return feignBuilder().logger(new Slf4jLogger(${service.name}Resource.class)).target(${service.name}Resource.class, getEndpoint());
+    }
+#end
+
+    /**
+     * Creates baseline resource builder which can be used to configure specific resources.
+     *
+     * @return Baseline builder
+     */
+    protected Feign.Builder feignBuilder() {
+        return Feign.builder()
+                .decoder(feignDecoder())
+                .encoder(feignEncoder())
+                .logger(new Slf4jLogger(getClass()))
+                .requestInterceptor(new HeaderInterceptorForwarder());
+    }
+
+    /**
+     * Configures the decoder with our custom ObjectMapperManager.
+     *
+     * @return A decoder
+     */
+    protected Decoder feignDecoder() {
+        return new JacksonDecoder(ObjectMapperManager.getObjectMapper());
+    }
+
+    /**
+     * Configures the encoder with our custom ObjectMapperManager.
+     *
+     * @return A decoder
+     */
+    protected Encoder feignEncoder() {
+        return new JacksonEncoder(ObjectMapperManager.getObjectMapper());
+    }
+
+    /**
+     * Constructs the URL for a given resource.
+     *
+     */
+    protected String getEndpoint() {
+        Krausening krausening = Krausening.getInstance();
+        Properties appProperties = krausening.getProperties("rest-client-endpoints.properties");
+        StringBuilder urlBuilder = new StringBuilder();
+        urlBuilder
+                .append(appProperties.getProperty("${artifactId}.endpoint.domain"))
+                .append(":")
+                .append(appProperties.getProperty("${artifactId}.endpoint.port"))
+                .append("/")
+                .append(appProperties.getProperty("${artifactId}.endpoint.context"));
+
+        return urlBuilder.toString();
+
+    }
+
+    /**
+     * Adds username header to all requests so they don't have to be configured at each endpoint
+     */
+    static class HeaderInterceptorForwarder implements RequestInterceptor {
+        @Override
+        public void apply(RequestTemplate template) {
+            if (SecurityContextHolder.getContext().getAuthentication() != null) {
+                template.header("username", SecurityContextHolder.getContext().getAuthentication().getName());
+            }
+        }
+    }
+}

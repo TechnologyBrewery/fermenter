@@ -1,0 +1,12 @@
+package ${basePackage}.transfer;
+
+
+/**
+ * Transfer object for the ${entity.name} entity.
+ * @see ${basePackage}.transfer.${entity.name}Base
+ *
+ * GENERATED STUB CODE - PLEASE *DO* MODIFY
+ */
+public class ${entity.name} extends ${entity.name}Base{
+	
+}

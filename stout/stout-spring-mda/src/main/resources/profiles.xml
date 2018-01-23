@@ -26,5 +26,17 @@
 	<profile name="entity-maintenance-services">
 		<target name="entityMaintenanceServiceImpls"/>
 		<target name="restEntityMaintenanceServiceInterfaces"/>
-	</profile>	    
+	</profile>	   
+	<profile name="rest-client">		
+		<target name="delegateMaintenanceResource"/>
+		<target name="delegateMaintenanceInterface"/>
+		<target name="delegateMaintenanceImpl"/>
+		<target name="delegateServiceResource"/>
+		<target name="delegateServiceInterface"/>
+		<target name="delegateServiceImpl"/>
+		<target name="restClientBaseConfig"/>
+		<target name="restClientAppConfig"/>
+		<target name="baseTransferObjects"/>
+		<target name="transferObjects"/>
+	</profile>
 </profiles>

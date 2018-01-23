@@ -1,0 +1,284 @@
+package ${basePackage}.transfer;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+#foreach ($import in $imports )
+import ${import};
+#end
+#foreach( $reference in $references ) 
+#if( $reference.isExternal() )
+import ${reference.importPrefix}.transfer.${reference.type};
+#end
+#end
+#foreach ($composite in $composites)
+import ${basePackage}.transfer.${composite.type}Composite;
+#end
+
+import ${basePackage}.enumeration.*;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.UUID;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
+import java.math.BigDecimal;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.bitbucket.fermenter.stout.transfer.TransferObject;
+
+/**
+ * Transfer object for the ${entity.name} application entity.
+#if ($entity.documentation)
+ * ${entity.documentation}
+#end
+ *
+ * Generated Code - DO NOT MODIFY
+ */
+public class ${entity.name}Base implements TransferObject{
+
+#foreach ( $idField in $entity.idFields )
+	private ${idField.javaType} ${idField.name};
+#end
+#if ($useOptimisticLocking)	 
+	private Integer oplock;
+#end
+#foreach ( $field in $entity.fields )
+	private ${field.javaType} ${field.name};
+#end
+#foreach ($relation in $entity.relations)
+	@JsonManagedReference(value="${entity.name}-${relation.type}")
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
+	private Set<${relation.type}> ${relation.label}s;
+#end
+#foreach ($inverseRelation in $entity.inverseRelations)
+	@JsonBackReference(value="${inverseRelation.name}-${entity.name}")
+	private ${inverseRelation.name} parent${inverseRelation.name};
+#end
+#foreach ($reference in $entity.references)
+	private ${reference.type} ${reference.name};
+#end
+#foreach ($composite in $composites)
+	private ${composite.type}Composite ${composite.name}Composite;
+#end
+
+#foreach ( $idField in $entity.idFields )
+
+	/**
+	 * Get the ${idField.label}
+	 *
+	 * @return The ${idField.label}
+	 */
+	public ${idField.javaType} get${idField.capitalizedName}() {
+		return ${idField.name};
+	}
+	
+	/**
+	 * Set the ${idField.label}
+	 *
+	 * @param ${idField.type} The ${idField.label}
+	 */
+	public void set${idField.capitalizedName}(${idField.javaType} ${idField.name}) {
+		this.${idField.name} = ${idField.name};
+	}
+	
+#end
+#if ($useOptimisticLocking)	 
+
+	/**
+	 * Get the optimistic locking value
+	 * @return The optimistic locking value 
+	 */
+	public Integer getOplock() {
+		return oplock;
+	}
+	
+	/**
+	 * Set the optimistic locking value
+	 * @param The optimistic locking value
+	 */
+	private void setOplock(Integer oplock) {
+		this.oplock = oplock;
+	}
+
+#end
+#foreach ( $field in $entity.fields )
+
+	/**
+#if ($field.documentation)
+	 * Gets: ${field.documentation}
+#else
+	 * Get the ${field.label}
+#end
+	 *
+	 * @return The ${field.label}
+	 */
+	public ${field.javaType} get${field.capitalizedName}() {
+		return ${field.name};
+	}
+	
+	/**
+#if ($field.documentation)
+	 * Sets: ${field.documentation}
+#else
+	 * Set the ${field.label}
+#end
+	 *
+	 * @param ${field.type} The ${field.label}
+	 */
+	public void set${field.capitalizedName}(${field.javaType} ${field.name}) {
+		this.${field.name} = ${field.name};
+	}
+	
+#end
+#foreach ($inverseRelation in $entity.inverseRelations)
+
+	/**
+	 * Set the parent ${inverseRelation.name} onto this instance
+	 * @param parent The parent instance to set
+	 */
+	@JsonIgnore
+	public void set${inverseRelation.name}(${inverseRelation.name} parent) {
+		parent${inverseRelation.name} = parent;
+	}
+	
+	/**
+	 * Returns the parent of the type for this instance
+	 * @return The parent instance or null if no parent of this type exists
+	 */
+	@JsonIgnore
+	public ${inverseRelation.name} get${inverseRelation.name}() {
+		return parent${inverseRelation.name};
+	}
+#end
+#foreach ($composite in $entity.composites)
+	/**
+	 * Get the ${composite.label} composite for this instance.
+	 *
+	 * @return The ${composite.label} composite
+	 */
+	public ${composite.type}Composite get${composite.capitalizedName}Composite() {
+		if (${composite.name}Composite == null) {
+			${composite.name}Composite = new ${composite.type}Composite();
+		}
+
+		return ${composite.name}Composite;
+	}
+#end
+#foreach ($relation in $entity.relations)
+
+	/**
+#if ($relation.documentation)
+	 * Sets: ${relation.documentation}
+#else
+	 * Set the ${relation.label} relation.
+#end
+	 * 
+	 * @param Set - The ${relation.label}s
+	 */
+	public void set${relation.type}s(Set<${relation.type}> ${relation.label}s) {
+		this.${relation.label}s = ${relation.label}s;
+	} 
+
+	/**
+#if ($relation.documentation)
+	 * Gets: ${relation.documentation}
+#else
+	 * Get the ${relation.label} relation.
+#end
+	 * 
+	 * @return Set - The ${relation.label}s
+	 */
+	public Set<${relation.type}> get${relation.type}s() {
+		if( ${relation.label}s == null ) {
+			${relation.label}s = new HashSet<>();
+		}
+		
+		return ${relation.label}s;
+	}
+	 
+	/**
+#if ($relation.documentation)
+	 * Adds: ${relation.documentation}
+#else
+	 * Add a ${relation.label}.
+#end
+	 *
+	 * @param The ${relation.label} to add
+	 */
+	public void add${relation.type}(${relation.type} ${relation.label}) {
+		if( get${relation.type}s().contains( ${relation.label} ) ) {
+			get${relation.type}s().remove( ${relation.label} );
+		}
+		
+		${relation.label}.set${entity.name}( (${entity.name})this );
+		get${relation.type}s().add( ${relation.label} );
+	}
+	 
+	/**
+#if ($relation.documentation)
+	 * Removes: ${relation.documentation}
+#else
+	 * Remove a ${relation.label}.
+#end
+	 *
+	 * @param The ${relation.label} to remove
+	 */
+	public ${relation.type} remove${relation.type}(${relation.type} ${relation.label}) {
+		if( get${relation.type}s().remove( ${relation.label} ) ) {
+			${relation.label}.set${entity.name}(null);
+		}
+	    
+		return ${relation.label};
+	}
+#end
+#foreach ($reference in $entity.references) 
+	
+	/**
+#if ($reference.documentation)
+	 * Gets: ${reference.documentation}
+#else
+	 * Get the ${reference.label} reference
+#end
+	 *
+	 * @return ${reference.type} - The ${reference.label}
+	 */
+	public ${reference.type} get${reference.capitalizedName}() {
+		return ${reference.name};
+	}
+	 
+	/**
+#if ($reference.documentation)
+	 * Sets: ${reference.documentation}
+#else
+	 * Set the ${reference.label} reference
+#end
+	 *
+	 * @param The ${reference.label}
+	 */
+	public void set${reference.capitalizedName}(${reference.type} ${reference.name}) {
+		this.${reference.name} = ${reference.name};
+	}
+#end
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean equals(Object o) {
+		return EqualsBuilder.reflectionEquals(this, o);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public int hashCode() {
+		return HashCodeBuilder.reflectionHashCode(this);
+	}
+
+}

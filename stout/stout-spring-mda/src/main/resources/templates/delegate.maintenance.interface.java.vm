@@ -1,0 +1,28 @@
+package ${basePackage}.client.service;
+
+import feign.Param;
+import ${basePackage}.transfer.${entity.name};
+
+        import java.math.BigDecimal;
+/**
+ * Service delegate interface for ${entity.name} entity maintenance.
+ *
+ * Generated Code - DO NOT MODIFY
+ */
+public interface ${entity.name}MaintenanceDelegate {
+    #if ( !$entity.idFields.isEmpty() )
+        #set ($idFieldJavaType = ${entity.idFields.values().iterator().next().javaType})
+        #set ($idFieldName = ${entity.idFields.values().iterator().next().name})
+    #else
+        #set ($idFieldJavaType = 'String')
+        #set ($idFieldName = 'id')
+    #end
+
+    ${entity.name} findByPrimaryKey(@Param("id") ${idFieldJavaType} ${idFieldName});
+
+    ${entity.name} create(${entity.name} entity);
+
+    ${entity.name} update(@Param("id") ${idFieldJavaType} ${idFieldName}, ${entity.name} entity);
+
+    void delete(@Param("id") ${idFieldJavaType} ${idFieldName});
+}

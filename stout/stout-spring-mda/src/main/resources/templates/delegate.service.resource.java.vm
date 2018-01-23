@@ -1,0 +1,69 @@
+package ${basePackage}.client.resource;
+
+import java.util.Collection;
+import java.util.Date;
+import java.math.BigDecimal;
+import java.util.List;
+import feign.Headers;
+import feign.Param;
+import feign.RequestLine;
+
+import javax.ws.rs.core.MediaType;
+
+import ${basePackage}.transfer.*;
+
+import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
+import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
+
+/**
+ * Resource for ${service.name} client.
+ *
+ * Generated Code - DO NOT MODIFY
+ */
+public interface ${service.name}Resource {
+#foreach( $operation in $service.operations )
+	#if($operation.transactionAttribute == "SUPPORTS")
+		#set ($restOperation = 'GET')
+	#else
+		#set ($restOperation = 'POST')
+	#end
+
+	/**
+	#if ($operation.documentation)
+	 * ${operation.documentation}
+	#else
+	 * Execute the ${operation.name} operation.
+	#end
+	 *
+	#if( !$operation.parameters.isEmpty() )
+		#foreach( $parameter in $operation.parameters )
+			#if( $parameter.documentation )
+	 * @param ${parameter.name} ${parameter.documentation}
+			#else
+	 * @param ${parameter.name}
+			#end
+		#end
+	#end
+	#if($operation.isReturnTypeCollection())
+	 * @return A service response-wrapped {@link Collection>} of {@link ${operation.returnManyType}}
+	#elseif(!$operation.isResponseTypeVoid())
+	 * @return A service response-wrapped instance of {@link ${operation.wrappedReturnType}}
+	#else
+	 * @return An empty service response
+	#end
+	 */
+	@RequestLine("${restOperation} /${service.name}Service/#if($restOperation == "POST" && ($operation.getParameters().size() == 1) && ($entities.get($operation.getParameters().get(0).type)))${operation.getLowercaseName()}#else${operation.restStylePath}#end")
+	#if($operation.hasEntityParameters() || $operation.transactionAttribute != "SUPPORTS")
+	@Headers({"Content-Type: " + MediaType.APPLICATION_JSON })
+	#end
+	#if($operation.isReturnTypeCollection())	 
+	ValueServiceResponse<Collection<${operation.wrappedReturnType}>> ${operation.lowercaseName}(${operation.getSignatureParametersWithFeign()});
+	#elseif($operation.isResponseTypeVoid())
+	public VoidServiceResponse ${operation.lowercaseName}(${operation.getSignatureParametersWithFeign()});
+	#else 
+	ValueServiceResponse<${operation.wrappedReturnType}> ${operation.lowercaseName}(${operation.getSignatureParametersWithFeign()});
+	#end
+
+#end
+
+}

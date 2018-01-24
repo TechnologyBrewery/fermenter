@@ -3,7 +3,6 @@ package org.bitbucket.fermenter.stout.exception;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.ParseException;
@@ -11,7 +10,7 @@ import java.text.ParseException;
 /**
  * The type Exception handler.
  */
-public class ExceptionHandler implements Serializable {
+public class ExceptionHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExceptionHandler.class);
 
@@ -28,7 +27,7 @@ public class ExceptionHandler implements Serializable {
      * @param fermenterException the fermenter exception
      */
     protected final void handleIllegalAccessException(IllegalAccessException fermenterException) {
-	    LOGGER.error(defaultErrorMessage + fermenterException.getClass(), fermenterException);
+	    ExceptionHandler.LOGGER.error(this.defaultErrorMessage + fermenterException.getClass(), fermenterException);
 
         throw new RecoverableException(fermenterException);
     }
@@ -39,7 +38,7 @@ public class ExceptionHandler implements Serializable {
      * @param fermenterException the fermenter exception
      */
     protected final void handleIndexOutOfBoundsException(IndexOutOfBoundsException fermenterException) {
-	    LOGGER.error(defaultErrorMessage + fermenterException.getClass(), fermenterException);
+	    ExceptionHandler.LOGGER.error(this.defaultErrorMessage + fermenterException.getClass(), fermenterException);
 
         throw new RecoverableException(fermenterException);
     }
@@ -50,7 +49,7 @@ public class ExceptionHandler implements Serializable {
      * @param fermenterException the fermenter exception
      */
     protected final void handleNumberFormatException(NumberFormatException fermenterException) {
-	    LOGGER.error(defaultErrorMessage + fermenterException.getClass(), fermenterException);
+	    ExceptionHandler.LOGGER.error(this.defaultErrorMessage + fermenterException.getClass(), fermenterException);
 
         throw new RecoverableException(fermenterException);
     }
@@ -61,7 +60,7 @@ public class ExceptionHandler implements Serializable {
      * @param fermenterException the fermenter exception
      */
     protected final void handleParseException(ParseException fermenterException) {
-	    LOGGER.error(defaultErrorMessage + fermenterException.getClass(), fermenterException);
+	    ExceptionHandler.LOGGER.error(this.defaultErrorMessage + fermenterException.getClass(), fermenterException);
 
         throw new RecoverableException(fermenterException);
     }
@@ -72,7 +71,7 @@ public class ExceptionHandler implements Serializable {
      * @param fermenterException the fermenter exception
      */
     protected final void handleStringIndexOutOfBoundsException(StringIndexOutOfBoundsException fermenterException) {
-	    LOGGER.error(defaultErrorMessage + fermenterException.getClass(), fermenterException);
+	    ExceptionHandler.LOGGER.error(this.defaultErrorMessage + fermenterException.getClass(), fermenterException);
 
         throw new RecoverableException(fermenterException);
     }
@@ -88,7 +87,7 @@ public class ExceptionHandler implements Serializable {
      * @param fermenterException the fermenter exception
      */
     protected final void handleClassCastException(ClassCastException fermenterException) {
-	    LOGGER.error(defaultErrorMessage + fermenterException.getClass(), fermenterException);
+	    ExceptionHandler.LOGGER.error(this.defaultErrorMessage + fermenterException.getClass(), fermenterException);
 
         throw new UnrecoverableException(fermenterException);
     }
@@ -99,7 +98,7 @@ public class ExceptionHandler implements Serializable {
      * @param fermenterException the fermenter exception
      */
     protected final void handleIllegalArgumentException(IllegalArgumentException fermenterException) {
-	    LOGGER.error(defaultErrorMessage + fermenterException.getClass(), fermenterException);
+	    ExceptionHandler.LOGGER.error(this.defaultErrorMessage + fermenterException.getClass(), fermenterException);
 
         throw new UnrecoverableException(fermenterException);
     }
@@ -110,7 +109,7 @@ public class ExceptionHandler implements Serializable {
      * @param fermenterException the fermenter exception
      */
     protected final void handleIllegalStateException(IllegalStateException fermenterException) {
-	    LOGGER.error(defaultErrorMessage + fermenterException.getClass(), fermenterException);
+	    ExceptionHandler.LOGGER.error(this.defaultErrorMessage + fermenterException.getClass(), fermenterException);
 
         throw new UnrecoverableException(fermenterException);
     }
@@ -121,7 +120,7 @@ public class ExceptionHandler implements Serializable {
      * @param fermenterException the fermenter exception
      */
     protected final void handleInvocationTargetException(InvocationTargetException fermenterException) {
-	    LOGGER.error(defaultErrorMessage + fermenterException.getClass(), fermenterException);
+	    ExceptionHandler.LOGGER.error(this.defaultErrorMessage + fermenterException.getClass(), fermenterException);
 
         throw new UnrecoverableException(fermenterException);
     }
@@ -132,7 +131,7 @@ public class ExceptionHandler implements Serializable {
      * @param fermenterException the fermenter exception
      */
     protected final void handleNoSuchMethodException(NoSuchMethodException fermenterException) {
-	    LOGGER.error(defaultErrorMessage + fermenterException.getClass(), fermenterException);
+	    ExceptionHandler.LOGGER.error(this.defaultErrorMessage + fermenterException.getClass(), fermenterException);
 
         throw new UnrecoverableException(fermenterException);
     }
@@ -143,7 +142,7 @@ public class ExceptionHandler implements Serializable {
      * @param fermenterException the fermenter exception
      */
     protected final void handleNullPointerException(NullPointerException fermenterException) {
-	    LOGGER.error(defaultErrorMessage + fermenterException.getClass(), fermenterException);
+	    ExceptionHandler.LOGGER.error(this.defaultErrorMessage + fermenterException.getClass(), fermenterException);
 
         throw new UnrecoverableException(fermenterException);
     }
@@ -154,7 +153,7 @@ public class ExceptionHandler implements Serializable {
      * @param fermenterException the fermenter exception
      */
     protected final void handleRuntimeException(RuntimeException fermenterException) {
-	    LOGGER.error(defaultErrorMessage + fermenterException.getClass(), fermenterException);
+	    ExceptionHandler.LOGGER.error(this.defaultErrorMessage + fermenterException.getClass(), fermenterException);
 
         throw new UnrecoverableException(fermenterException);
     }
@@ -165,7 +164,7 @@ public class ExceptionHandler implements Serializable {
      * @param fermenterException the fermenter exception
      */
     protected final void handleUnsupportedOperationException(UnsupportedOperationException fermenterException) {
-	    LOGGER.error(defaultErrorMessage + fermenterException.getClass(), fermenterException);
+	    ExceptionHandler.LOGGER.error(this.defaultErrorMessage + fermenterException.getClass(), fermenterException);
 
         throw new UnrecoverableException(fermenterException);
     }
@@ -179,12 +178,12 @@ public class ExceptionHandler implements Serializable {
      */
     public final void handleException(Exception givenException) {
 
-        Throwable fermenterException = getRootCauseOfGivenException(givenException);
+        Throwable fermenterException = this.getRootCauseOfGivenException(givenException);
 
         try {
 
             // Log exception as warning that fermenter has caught an exception
-            ExceptionHandler.LOGGER.warn("Fermenter exception handler caught exception", fermenterException);
+            LOGGER.warn("Fermenter exception handler caught exception", fermenterException);
 
             // The method that will handle the exception
             String exceptionHandlerMethodName = "handle" + fermenterException.getClass();
@@ -202,7 +201,7 @@ public class ExceptionHandler implements Serializable {
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | NullPointerException unrecognizedException) {
 
             // This should be a FATAL error, but logger does not have this level. Fermenter cannot return control flow.
-            ExceptionHandler.LOGGER.error("Fermenter exception handler cannot handle exception of type " + fermenterException.getClass(),
+            LOGGER.error("Fermenter exception handler cannot handle exception of type " + fermenterException.getClass(),
                                           unrecognizedException);
 
             /* If the handler receives an exception that we haven't written a case for, it should throw an
@@ -226,7 +225,7 @@ public class ExceptionHandler implements Serializable {
          * originally threw it
          */
         if (givenException.getCause() != null) {
-            return getRootCauseOfGivenException(givenException);
+            return this.getRootCauseOfGivenException(givenException);
         }
 
         // If the given exception does not have a cause, it is the root exception and should be returned

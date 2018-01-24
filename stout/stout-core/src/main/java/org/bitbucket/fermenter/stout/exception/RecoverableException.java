@@ -1,7 +1,7 @@
 package org.bitbucket.fermenter.stout.exception;
 
 /**
- * An exception to denote cases from which there is an ability to recover and fermenter to continue.
+ * An exception to denote cases from which there is an ability to recover and fermenter to continue logic/control flow.
  */
 public class RecoverableException extends RuntimeException {
 
@@ -11,7 +11,6 @@ public class RecoverableException extends RuntimeException {
 	 * {@inheritDoc}
 	 */
 	public RecoverableException() {
-		super();
 	}
 
 	/**

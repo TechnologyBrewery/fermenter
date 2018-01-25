@@ -2,6 +2,10 @@
 <!DOCTYPE profiles PUBLIC "-//FERMENTER//DTD PROFILES//EN" "https://bitbucket.org/askllc/fermenter/downloads/profiles.dtd">
 
 <profiles>
+    <profile name="domain">
+        <include name="business-objects-and-services" />
+        <include name="entity-maintenance-services" />
+    </profile>
 	<profile name="business-objects-and-services">
 		<target name="baseBusinessObjects"/>
 		<target name="businessObjects"/>

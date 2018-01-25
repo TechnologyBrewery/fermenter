@@ -41,15 +41,15 @@
 				<version>${project.version}</version>
 				<configuration>
 					<basePackage>org.bitbucket.askllc.fermenter.cookbook.domain</basePackage>
-					<profile>cookbook-webapp</profile>
+					<profile>web-container</profile>
 				</configuration>
-				<dependencies>
-					<dependency>
-						<groupId>${project.groupId}</groupId>
-						<artifactId>stout-cookbook-profile</artifactId>
-						<version>${project.version}</version>
-					</dependency>
-				</dependencies>
+                <dependencies>
+                    <dependency>
+                        <groupId>${project.groupId}</groupId>
+                        <artifactId>stout-web-container-mda</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                </dependencies>
 			</plugin>
 			<plugin>
 				<groupId>com.googlecode.maven-java-formatter-plugin</groupId>

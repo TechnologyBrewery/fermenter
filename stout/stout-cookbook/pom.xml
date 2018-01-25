@@ -15,12 +15,11 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>stout-cookbook-profile</module>
 		<module>stout-cookbook-domain</module>
 		<module>stout-cookbook-domain-client</module>
 		<module>stout-cookbook-domain-webapp</module>
 	</modules>
-
+    
 	<build>
 		<pluginManagement>
 			<plugins>

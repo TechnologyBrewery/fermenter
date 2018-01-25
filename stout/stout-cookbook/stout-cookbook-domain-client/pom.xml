@@ -43,14 +43,14 @@
 				<dependencies>
 					<dependency>
 						<groupId>${project.groupId}</groupId>
-						<artifactId>stout-cookbook-profile</artifactId>
-						<version>${project.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>${project.groupId}</groupId>
 						<artifactId>stout-cookbook-domain</artifactId>
 						<version>${project.version}</version>
 					</dependency>
+                    <dependency>
+                        <groupId>${project.groupId}</groupId>
+                        <artifactId>stout-spring-mda</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
 				</dependencies>
 			</plugin>
 			<plugin>

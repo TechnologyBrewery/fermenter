@@ -8,72 +8,47 @@ import java.lang.reflect.Method;
 import java.text.ParseException;
 
 /**
- * The type Exception handler.
+ * The type ExceptionHandler class will handle exceptions across the fermenter framework accordingly. For example,
+ * when some code generates an IndexOutBoundsException, it will be given to the exception handler and the handler will
+ * decide how to continue. If the exception is unrecoverable, it will throw an Unrecoverable Exception to indicate that
+ * Fermenter cannot continue. If control can be returned, a RecoverableException will be thrown and the user will need
+ * to decide how to correct Fermenter's state.
  */
 public class ExceptionHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExceptionHandler.class);
 
-    String defaultErrorMessage = "Exception Handler caught exception of type";
+	String defaultErrorMessage = "Exception Handler caught exception of type";
+
+
+    /* Internal exception handlers below should ONLY BE USED BY THIS CLASS. They are passed a root cause, which is the
+     * Exception where the error originated from. The throwing cause is where the error propagated up to and was caught.
+     * The throwing cause will be the TOP of the Exception Stack.
+     */
 
 
     /*  Recoverable Exceptions
      *  Exceptions should be added lexicographically
      */
 
-    /**
-     * Handle illegal access exception.
-     *
-     * @param fermenterException the fermenter exception
-     */
-    protected final void handleIllegalAccessException(IllegalAccessException fermenterException) {
-	    ExceptionHandler.LOGGER.error(this.defaultErrorMessage + fermenterException.getClass(), fermenterException);
-
-        throw new RecoverableException(fermenterException);
+    void handleException(IllegalAccessException rootCause, Exception throwingCause) {
+	    logAndThrowRecoverableException(rootCause, throwingCause);
     }
 
-    /**
-     * Handle index out of bounds exception.
-     *
-     * @param fermenterException the fermenter exception
-     */
-    protected final void handleIndexOutOfBoundsException(IndexOutOfBoundsException fermenterException) {
-	    ExceptionHandler.LOGGER.error(this.defaultErrorMessage + fermenterException.getClass(), fermenterException);
-
-        throw new RecoverableException(fermenterException);
+    void handleException(IndexOutOfBoundsException rootCause, Exception throwingCause) {
+	    logAndThrowRecoverableException(rootCause, throwingCause);
     }
 
-    /**
-     * Handle number format exception.
-     *
-     * @param fermenterException the fermenter exception
-     */
-    protected final void handleNumberFormatException(NumberFormatException fermenterException) {
-	    ExceptionHandler.LOGGER.error(this.defaultErrorMessage + fermenterException.getClass(), fermenterException);
-
-        throw new RecoverableException(fermenterException);
+    void handleException(NumberFormatException rootCause, Exception throwingCause) {
+	    logAndThrowRecoverableException(rootCause, throwingCause);
     }
 
-    /**
-     * Handle parse exception.
-     *
-     * @param fermenterException the fermenter exception
-     */
-    protected final void handleParseException(ParseException fermenterException) {
-	    ExceptionHandler.LOGGER.error(this.defaultErrorMessage + fermenterException.getClass(), fermenterException);
-
-        throw new RecoverableException(fermenterException);
+    void handleException(ParseException rootCause, Exception throwingCause) {
+	    logAndThrowRecoverableException(rootCause, throwingCause);
     }
 
-    /**
-     * Handle string index out of bounds exception.
-     *
-     * @param fermenterException the fermenter exception
-     */
-    protected final void handleStringIndexOutOfBoundsException(StringIndexOutOfBoundsException fermenterException) {
-	    ExceptionHandler.LOGGER.error(this.defaultErrorMessage + fermenterException.getClass(), fermenterException);
-
-        throw new RecoverableException(fermenterException);
+    void handleException(StringIndexOutOfBoundsException rootCause, Exception throwingCause) {
+	    logAndThrowRecoverableException(rootCause, throwingCause);
     }
 
 
@@ -81,92 +56,36 @@ public class ExceptionHandler {
      *  Exceptions should be added lexicographically
      */
 
-    /**
-     * Handle class cast exception.
-     *
-     * @param fermenterException the fermenter exception
-     */
-    protected final void handleClassCastException(ClassCastException fermenterException) {
-	    ExceptionHandler.LOGGER.error(this.defaultErrorMessage + fermenterException.getClass(), fermenterException);
-
-        throw new UnrecoverableException(fermenterException);
+    void handleException(ClassCastException rootCause, Exception throwingCause) {
+	    logAndThrowUnrecoverableException(rootCause, throwingCause);
     }
 
-    /**
-     * Handle illegal argument exception.
-     *
-     * @param fermenterException the fermenter exception
-     */
-    protected final void handleIllegalArgumentException(IllegalArgumentException fermenterException) {
-	    ExceptionHandler.LOGGER.error(this.defaultErrorMessage + fermenterException.getClass(), fermenterException);
-
-        throw new UnrecoverableException(fermenterException);
+    void handleException(IllegalArgumentException rootCause, Exception throwingCause) {
+	    logAndThrowUnrecoverableException(rootCause, throwingCause);
     }
 
-    /**
-     * Handle illegal state exception.
-     *
-     * @param fermenterException the fermenter exception
-     */
-    protected final void handleIllegalStateException(IllegalStateException fermenterException) {
-	    ExceptionHandler.LOGGER.error(this.defaultErrorMessage + fermenterException.getClass(), fermenterException);
-
-        throw new UnrecoverableException(fermenterException);
+    void handleException(IllegalStateException rootCause, Exception throwingCause) {
+	    logAndThrowUnrecoverableException(rootCause, throwingCause);
     }
 
-    /**
-     * Handle invocation target exception.
-     *
-     * @param fermenterException the fermenter exception
-     */
-    protected final void handleInvocationTargetException(InvocationTargetException fermenterException) {
-	    ExceptionHandler.LOGGER.error(this.defaultErrorMessage + fermenterException.getClass(), fermenterException);
-
-        throw new UnrecoverableException(fermenterException);
+    void handleException(InvocationTargetException rootCause, Exception throwingCause) {
+	    logAndThrowUnrecoverableException(rootCause, throwingCause);
     }
 
-    /**
-     * Handle no such method exception.
-     *
-     * @param fermenterException the fermenter exception
-     */
-    protected final void handleNoSuchMethodException(NoSuchMethodException fermenterException) {
-	    ExceptionHandler.LOGGER.error(this.defaultErrorMessage + fermenterException.getClass(), fermenterException);
-
-        throw new UnrecoverableException(fermenterException);
+    void handleException(NoSuchMethodException rootCause, Exception throwingCause) {
+	    logAndThrowUnrecoverableException(rootCause, throwingCause);
     }
 
-    /**
-     * Handle null pointer exception.
-     *
-     * @param fermenterException the fermenter exception
-     */
-    protected final void handleNullPointerException(NullPointerException fermenterException) {
-	    ExceptionHandler.LOGGER.error(this.defaultErrorMessage + fermenterException.getClass(), fermenterException);
-
-        throw new UnrecoverableException(fermenterException);
+    void handleException(NullPointerException rootCause, Exception throwingCause) {
+	    logAndThrowUnrecoverableException(rootCause, throwingCause);
     }
 
-    /**
-     * Handle runtime exception.
-     *
-     * @param fermenterException the fermenter exception
-     */
-    protected final void handleRuntimeException(RuntimeException fermenterException) {
-	    ExceptionHandler.LOGGER.error(this.defaultErrorMessage + fermenterException.getClass(), fermenterException);
-
-        throw new UnrecoverableException(fermenterException);
+    void handleException(RuntimeException rootCause, Exception throwingCause) {
+	    logAndThrowUnrecoverableException(rootCause, throwingCause);
     }
 
-    /**
-     * Handle unsupported operation exception.
-     *
-     * @param fermenterException the fermenter exception
-     */
-    protected final void handleUnsupportedOperationException(UnsupportedOperationException fermenterException) {
-	    ExceptionHandler.LOGGER.error(this.defaultErrorMessage + fermenterException.getClass(), fermenterException);
-
-        throw new UnrecoverableException(fermenterException);
+    void handleException(UnsupportedOperationException rootCause, Exception throwingCause) {
+	    logAndThrowUnrecoverableException(rootCause, throwingCause);
     }
 
     /**
@@ -176,33 +95,33 @@ public class ExceptionHandler {
      *
      * @param givenException the given exception
      */
-    public final void handleException(Exception givenException) {
+    public void handleException(Exception givenException) {
 
-        Throwable fermenterException = this.getRootCauseOfGivenException(givenException);
+        Throwable rootCause = this.getRootCauseOfGivenException(givenException);
 
         try {
 
             // Log exception as warning that fermenter has caught an exception
-            LOGGER.warn("Fermenter exception handler caught exception", fermenterException);
+	        LOGGER.warn("Fermenter exception handler caught exception", rootCause);
 
-            // The method that will handle the exception
-            String exceptionHandlerMethodName = "handle" + fermenterException.getClass();
 
             // Use reflection to get the correct method/exception handler
-            Method exceptionHandler = ExceptionHandler.class.getMethod(exceptionHandlerMethodName, ExceptionHandler
-                    .class);
+            Method exceptionHandler = ExceptionHandler.class.getMethod("handleException", Exception.class);
 
             // Invoke the exception handler method with the given exception passed as in as an argument
-            exceptionHandler.invoke(this, fermenterException);
+            exceptionHandler.invoke(this, rootCause, givenException);
 
-            /* The reflection will fail if there is no method to handle the exception, should be caught
-             * and handled as an unrecoverable exception.
-             */
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | NullPointerException unrecognizedException) {
+
+
+        /* The reflection will fail if there is no method to handle the exception, should be caught
+         * and handled as an unrecoverable exception. */
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | NullPointerException
+                unrecognizedException) {
+
+            String error = "Fermenter exception handler cannot handle exception of type " + givenException.getClass();
 
             // This should be a FATAL error, but logger does not have this level. Fermenter cannot return control flow.
-            LOGGER.error("Fermenter exception handler cannot handle exception of type " + fermenterException.getClass(),
-                                          unrecognizedException);
+	        LOGGER.error(error, unrecognizedException);
 
             /* If the handler receives an exception that we haven't written a case for, it should throw an
              * UnrecoverableException to cause fermenter to stop.
@@ -210,6 +129,42 @@ public class ExceptionHandler {
             throw new UnrecoverableException("Exception handler does not recognize this exception",
                                              unrecognizedException);
         }
+    }
+
+
+
+    /* Class Helper Methods */
+
+	/**
+	 * This helper method will accept a root cause (Of type exception) which is the actual problem and a throwing
+	 * cause, which is error that was last thrown (should be the top of the exception stack).
+	 * @param rootCause An Exception which is the at the root of an Exception stack - where the error originates from
+	 * @param throwingCause An Exeption which is at the top of an Exception stack - where the error bubbled up to
+     */
+	private void logAndThrowRecoverableException(Exception rootCause, Exception throwingCause){
+
+		String errorMessage = this.defaultErrorMessage + rootCause.getClass();
+
+        // Since FATAL level is not available and error is being used for unrecoverable exceptions, we'll use warn here.
+		LOGGER.warn(errorMessage, throwingCause);
+
+        throw new RecoverableException(throwingCause);
+    }
+
+	/**
+	 * This helper method will accept a root cause (Of type exception) which is the actual problem and a throwing
+	 * cause, which is error that was last thrown (should be the top of the exception stack).
+	 * @param rootCause An Exception which is the at the root of an Exception stack - where the error originates from
+	 * @param throwingCause An Exeption which is at the top of an Exception stack - where the error bubbled up to
+	 */
+    private void logAndThrowUnrecoverableException(Exception rootCause, Exception throwingCause){
+
+	    String errorMessage = this.defaultErrorMessage + rootCause.getClass();
+
+        // Should really be FATAL level setting, since that isn't available, we will use error
+	    LOGGER.error(errorMessage, throwingCause);
+
+	    throw new RecoverableException(throwingCause);
     }
 
     /**

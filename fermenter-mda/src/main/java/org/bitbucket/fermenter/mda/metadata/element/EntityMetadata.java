@@ -1,6 +1,5 @@
 package org.bitbucket.fermenter.mda.metadata.element;
 
-
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -14,6 +13,7 @@ public class EntityMetadata extends MetadataElement implements Entity {
     
     private static Log LOG = LogFactory.getLog(EntityMetadata.class);
 
+    private String namespace;
 	private String name;
 	private String documentation;
 	private String applicationName;
@@ -24,7 +24,7 @@ public class EntityMetadata extends MetadataElement implements Entity {
 	private String table;
 	/**
 	 * @deprecated don't think this is used anymore... still need to check
-	 */
+	 */ 
     private String parent;
     private String lockStrategy;
     private boolean transientEntity; 
@@ -36,8 +36,16 @@ public class EntityMetadata extends MetadataElement implements Entity {
 	private Map    inverseRelations;
 	private Map    references;
     private Map    queries;
+    
+	public String getNamespace() {
+        return namespace;
+    }
 
-	/**
+    public void setNamespace(String namespace) {
+        this.namespace = namespace;
+    }
+
+    /**
 	 * @see org.bitbucket.fermenter.mda.metadata.element.Entity#getName()
 	 */
 	public String getName() {

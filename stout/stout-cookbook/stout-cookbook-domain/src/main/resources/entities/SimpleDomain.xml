@@ -3,6 +3,7 @@
 
 <entity>
 	<name>SimpleDomain</name>
+	<namespace>org.bitbucket.askllc.fermenter.cookbook.domain</namespace>
 	<documentation>A simple domain entity with a generated id field, fields of different types, and a 1-M relation</documentation>
 	<table>SIMPLE_DOMAIN</table>
 

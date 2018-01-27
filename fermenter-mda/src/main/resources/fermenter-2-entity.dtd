@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!ELEMENT entity (name, documentation?, table?, lockStrategy?, id?, fields?, composites?, associations?, queries?)>
+<!ELEMENT entity (name, namespace?, documentation?, table?, lockStrategy?, id?, fields?, composites?, associations?, queries?)>
+<!ELEMENT namespace (#PCDATA)>
 <!ELEMENT name (#PCDATA)>
 <!ELEMENT documentation (#PCDATA)>
 <!ELEMENT table (#PCDATA)>

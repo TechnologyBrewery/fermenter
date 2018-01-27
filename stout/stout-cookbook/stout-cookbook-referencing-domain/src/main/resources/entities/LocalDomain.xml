@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE entity PUBLIC "-//FERMENTER//DTD ENTITY//EN" "https://bitbucket.org/askllc/fermenter/downloads/fermenter-2-entity.dtd">
+
+<entity>
+	<name>LocalDomain</name>
+	<documentation>A local domain</documentation>
+	<table>LOCAL_DOMAIN</table>
+
+	<id>
+		<field>
+			<name>id</name>
+			<type>string</type>
+			<column>LOCAL_DOMAIN_ID</column>
+			<required>true</required>
+			<generator>uuid</generator>
+		</field>
+	</id>
+
+	<fields>
+		<field>
+			<name>name</name>
+			<documentation>The friendly domain moniker</documentation>
+			<type>string</type>
+			<column>NAME</column>
+		</field>
+	</fields>
+
+</entity>

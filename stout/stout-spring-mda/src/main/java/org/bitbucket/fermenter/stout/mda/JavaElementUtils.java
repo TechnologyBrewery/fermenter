@@ -13,12 +13,16 @@ import org.bitbucket.fermenter.mda.metadata.element.Parameter;
 import org.bitbucket.fermenter.stout.mda.java.JavaTypeManager;
 import org.codehaus.plexus.util.StringUtils;
 
-public class JavaElementUtils {
+public final class JavaElementUtils {
 	
 	static final String VOID = "void";
 	
 	/** Needs to be a {@link List} and not {@link Collection} due to JAX-RS parameter requirements. */
 	static final String PARAM_COLLECTION_TYPE = "List";
+	
+	private JavaElementUtils() {
+	    //prevent instantiation of all static class
+	}
 
 	static String getJavaImportType(String appName, String type) {
 		String javaImportType = null;
@@ -41,7 +45,12 @@ public class JavaElementUtils {
 					if (enumeration != null) {
 						javaImportType = createFullyQualifiedName(type, ".enumeration.", appName);
 					} else {
-						javaImportType = type;
+					    e = metadataRepository.getEntity(type);
+					    if ((e != null ) && (StringUtils.isNotBlank(e.getNamespace()))) {
+					        javaImportType = e.getNamespace() + ".transfer." + type;
+					    } else {
+					        javaImportType = type;
+					    }
 					}
 						
 				} 

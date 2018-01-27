@@ -16,7 +16,7 @@ public class JavaService implements Service {
 
 	private Service service;
 	private Map<String, Operation> decoratedOperationMap;
-	private Set imports;
+	private Set<String> imports;
 
 	public JavaService(Service serviceToDecorate) {
 		if (serviceToDecorate == null) {
@@ -67,7 +67,7 @@ public class JavaService implements Service {
 				decoratedOperationMap = Collections.emptyMap();
 
 			} else {
-				decoratedOperationMap = new HashMap<String, Operation>((int)(serviceOperationMap.size() * 1.25  + 1));
+				decoratedOperationMap = new HashMap<>();
 				for (Operation o : serviceOperationMap.values()) {
 					decoratedOperationMap.put(o.getName(), new JavaOperation(o));
 
@@ -87,12 +87,12 @@ public class JavaService implements Service {
 		return decoratedMap.get(name);
 	}
 
-	public Set getOperationImports() {
-		Set importSet = new HashSet();
+	public Set<String> getOperationImports() {
+		Set<String> importSet = new HashSet<>();
 
 		JavaOperation operation;
-		Map operationCollection = getOperations();
-		Iterator operationIterator = operationCollection.values().iterator();
+		Map<String, Operation> operationCollection = getOperations();
+		Iterator<Operation> operationIterator = operationCollection.values().iterator();
 		while (operationIterator.hasNext()) {
 			operation = (JavaOperation)operationIterator.next();
 			importSet.addAll(operation.getImports());
@@ -101,9 +101,9 @@ public class JavaService implements Service {
 		return importSet;
 	}
 
-	public Set getImports() {
+	public Set<String> getImports() {
 		if (imports == null) {
-			imports = new TreeSet();
+			imports = new TreeSet<>();
 			imports.addAll(getOperationImports());
 		}
 

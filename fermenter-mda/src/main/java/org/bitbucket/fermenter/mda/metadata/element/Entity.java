@@ -1,83 +1,87 @@
 package org.bitbucket.fermenter.mda.metadata.element;
 
-
 import java.util.Map;
 
 public interface Entity {
-	
-	public static final String LOCK_STATEGY_OPTIMISTIC = "optimistic";
-	public static final String LOCK_STATEGY_NONE = "none";
 
-	/**
-	 * @return Logical entity name
-	 */
-	public String getName();
-	
-	public String getDocumentation();
+    static final String LOCK_STATEGY_OPTIMISTIC = "optimistic";
+    static final String LOCK_STATEGY_NONE = "none";
 
-	/**
-	 * @return Returns the table.
-	 */
-	public String getTable();
+    String getNamespace();
+    
+    /**
+     * @return Logical entity name
+     */
+    String getName();
 
-	public Map<String, Field> getFields();
+    String getDocumentation();
 
-	public Field getField(String name);
+    /**
+     * @return Returns the table.
+     */
+    String getTable();
 
-	public Map<String, Field> getIdFields();
+    Map<String, Field> getFields();
 
-	public Field getIdField(String name);
+    Field getField(String name);
 
-	public Map getComposites();
+    Map<String, Field> getIdFields();
 
-	public Composite getComposite(String name);
+    Field getIdField(String name);
 
-	public Map getRelations();
+    Map getComposites();
 
-	public Relation getRelation(String type);
+    Composite getComposite(String name);
 
-	public Map getInverseRelations();
+    Map getRelations();
 
-	public Relation getInverseRelation(String type);
+    Relation getRelation(String type);
 
-	public Map getReferences();
+    Map getInverseRelations();
 
-	public Reference getReference(String type);
+    Relation getInverseRelation(String type);
 
-	/**
-	 * @return Returns the superclass.
-	 */
-	public String getSuperclass();
+    Map getReferences();
 
-	/**
-	 * @return Returns the parent.
-	 */
-	public String getParent();
+    Reference getReference(String type);
 
-	public Map getQueries();
+    /**
+     * @return Returns the superclass.
+     */
+    String getSuperclass();
 
-	public Query getQuery(String name);
+    /**
+     * @return Returns the parent.
+     */
+    String getParent();
 
-	public String getLockStrategy();
+    Map getQueries();
 
-	public boolean useOptimisticLocking();
-	
+    Query getQuery(String name);
+
+    String getLockStrategy();
+
+    boolean useOptimisticLocking();
+
     /**
      * Sets whether or not the entity should persist.
-     * @param transientEntity setting
+     * 
+     * @param transientEntity
+     *            setting
      */
-    public void setTransient(boolean transientEntity);
-    
+    void setTransient(boolean transientEntity);
+
     /**
      * Returns whether or not the entity should persist.
      * @return setting
      */
-    boolean isTransient();
-	
-	/**
-	 * Returns the name of the application from which this element originates
-	 * @return Application name
-	 */
-	public String getApplicationName();
+     boolean isTransient();
+
+    /**
+     * Returns the name of the application from which this element originates
+     * 
+     * @return Application name
+     */
+    String getApplicationName();
 
 }

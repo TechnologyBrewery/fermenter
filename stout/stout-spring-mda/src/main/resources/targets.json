@@ -4,6 +4,7 @@
 		"templateName": "templates/repository.java.vm",
 		"outputFile": "${basePackage}/persist/${entityName}Repository.java",
 		"generator": "org.bitbucket.fermenter.stout.mda.generator.entity.PersistentEntityJavaGenerator",
+		"metadataContext": "local",
 		"overwritable": false
 	},
 	{
@@ -11,6 +12,7 @@
 		"templateName": "templates/jackson.object.mapper.manager.java.vm",
 		"outputFile": "${basePackage}/transfer/json/ObjectMapperManager.java",
 		"generator": "org.bitbucket.fermenter.stout.mda.generator.entity.AllEntitiesAwareJavaGenerator",
+		"metadataContext": "local",
 		"overwritable": true
 	},
 	{
@@ -18,6 +20,7 @@
 		"templateName": "templates/spring.context.base.xml.vm",
 		"outputFile": "base-application-context.xml",
 		"generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
+		"metadataContext": "local",
 		"overwritable": true
 	},
 	{
@@ -25,6 +28,7 @@
 		"templateName": "templates/enumeration.java.vm",
 		"outputFile": "${basePackage}/enumeration/${enumerationName}.java",
 		"generator": "org.bitbucket.fermenter.stout.mda.generator.enumeration.EnumerationJavaGenerator",
+		"metadataContext": "local",
 		"overwritable": true
 	},
 	{
@@ -32,6 +36,7 @@
 		"templateName": "templates/service.base.rest.interface.java.vm",
 		"outputFile": "${basePackage}/service/rest/${serviceName}BaseService.java",
 		"generator": "org.bitbucket.fermenter.stout.mda.generator.service.ServiceJavaGenerator",
+		"metadataContext": "local",
 		"overwritable": true
 	},
 	{
@@ -39,6 +44,7 @@
 		"templateName": "templates/service.base.impl.java.vm",
 		"outputFile": "${basePackage}/service/impl/${serviceName}BaseServiceImpl.java",
 		"generator": "org.bitbucket.fermenter.stout.mda.generator.service.ServiceJavaGenerator",
+		"metadataContext": "local",
 		"overwritable": true
 	},
 	{
@@ -46,6 +52,7 @@
 		"templateName": "templates/to.base.jackson.mixin.java.vm",
 		"outputFile": "${basePackage}/transfer/json/${entityName}BaseMixIn.java",
 		"generator": "org.bitbucket.fermenter.stout.mda.generator.entity.EntityJavaGenerator",
+		"metadataContext": "local",
 		"overwritable": true
 	},
 	{
@@ -53,6 +60,7 @@
 		"templateName": "templates/jpa.properties.vm",
 		"outputFile": "krausening/jpa.properties",
 		"generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
+		"metadataContext": "local",
 		"overwritable": false
 	},
 	{
@@ -60,13 +68,15 @@
 		"templateName": "templates/bo.java.vm",
 		"outputFile": "${basePackage}/bizobj/${entityName}BO.java",
 		"generator": "org.bitbucket.fermenter.stout.mda.generator.entity.EntityJavaGenerator",
+		"metadataContext": "local",
 		"overwritable": false
 	},
 	{
 		"name": "baseBusinessObjects",
 		"templateName": "templates/bo.base.java.vm",
-		"outputFile": "${basePackage}/bizobj/${entityName}BaseBO.java",
+		"outputFile": "${basePackage}/bizobj/${entityName}BaseBO.java",		
 		"generator": "org.bitbucket.fermenter.stout.mda.generator.entity.EntityJavaGenerator",
+		"metadataContext": "local",
 		"overwritable": true
 	},
 	{
@@ -74,6 +84,7 @@
 		"templateName": "templates/messages.properties.vm",
 		"outputFile": "${basePackage}/messages${locale}.properties",
 		"generator": "org.bitbucket.fermenter.stout.mda.generator.properties.MessageResourceGenerator",
+		"metadataContext": "local",
 		"overwritable": true
 	},
 	{
@@ -81,6 +92,7 @@
 		"templateName": "templates/entity.maintenance.service.impl.java.vm",
 		"outputFile": "${basePackage}/service/impl/${entityName}MaintenanceServiceImpl.java",
 		"generator": "org.bitbucket.fermenter.stout.mda.generator.entity.PersistentEntityJavaGenerator",
+		"metadataContext": "local",
 		"overwritable": true
 	},
 	{
@@ -88,6 +100,7 @@
 		"templateName": "templates/spring.context.impl.xml.vm",
 		"outputFile": "${artifactId}-application-context.xml",
 		"generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
+		"metadataContext": "local",
 		"overwritable": false
 	},
 	{
@@ -95,7 +108,7 @@
 		"templateName": "templates/entity.maintenance.service.rest.interface.java.vm",
 		"outputFile": "${basePackage}/service/rest/${entityName}MaintenanceService.java",
 		"generator": "org.bitbucket.fermenter.stout.mda.generator.entity.PersistentEntityJavaGenerator",
-		"metadataContext": "all",
+		"metadataContext": "local",
 		"overwritable": true
 	},
 	{
@@ -103,6 +116,7 @@
 		"templateName": "templates/data.source.properties.vm",
 		"outputFile": "krausening/data-source.properties",
 		"generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
+		"metadataContext": "local",
 		"overwritable": false
 	},
 	{
@@ -110,6 +124,7 @@
 		"templateName": "templates/to.jackson.mixin.java.vm",
 		"outputFile": "${basePackage}/transfer/json/${entityName}MixIn.java",
 		"generator": "org.bitbucket.fermenter.stout.mda.generator.entity.EntityJavaGenerator",
+		"metadataContext": "local",
 		"overwritable": false
 	},
 	{
@@ -117,6 +132,7 @@
 		"templateName": "templates/service.rest.interface.java.vm",
 		"outputFile": "${basePackage}/service/rest/${serviceName}Service.java",
 		"generator": "org.bitbucket.fermenter.stout.mda.generator.service.ServiceJavaGenerator",
+		"metadataContext": "local",
 		"overwritable": false
 	},
 	{
@@ -124,6 +140,7 @@
 		"templateName": "templates/jackson.object.mapper.resteasy.provider.java.vm",
 		"outputFile": "${basePackage}/service/rest/JacksonObjectMapperResteasyProvider.java",
 		"generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticJavaGenerator",
+		"metadataContext": "local",
 		"overwritable": true
 	},
 	{
@@ -131,6 +148,7 @@
 		"templateName": "templates/service.impl.java.vm",
 		"outputFile": "${basePackage}/service/impl/${serviceName}ServiceImpl.java",
 		"generator": "org.bitbucket.fermenter.stout.mda.generator.service.ServiceJavaGenerator",
+		"metadataContext": "local",
 		"overwritable": false
 	},
 	{

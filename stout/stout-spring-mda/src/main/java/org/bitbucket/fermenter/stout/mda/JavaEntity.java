@@ -59,6 +59,11 @@ public class JavaEntity implements Entity {
     public String getName() {
         return entity.getName();
     }
+    
+    @Override
+    public String getNamespace() {
+        return entity.getNamespace();
+    }
 
     /**
      * {@inheritDoc}

@@ -87,6 +87,7 @@ class EntityMetadataManager extends MetadataManager {
 	    
 	    // Root entity metadata
 		digester.addObjectCreate( 	"entity", 				EntityMetadata.class.getName() );
+		digester.addCallMethod(  "entity/namespace",     "setNamespace"       , 0 );
 		digester.addCallMethod( 	"entity/name", 			"setName"			, 0 );
 		digester.addCallMethod( 	"entity/documentation", "setDocumentation"	, 0 );
 		digester.addCallMethod( 	"entity/extends", 		"setSuperclass"		, 0 );

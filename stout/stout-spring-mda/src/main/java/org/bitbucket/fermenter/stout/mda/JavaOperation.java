@@ -13,7 +13,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
-import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.Operation;
 import org.bitbucket.fermenter.mda.metadata.element.Parameter;
 import org.slf4j.Logger;
@@ -88,11 +87,11 @@ public class JavaOperation implements Operation {
     public List<Parameter> getParameters() {
         if (decoratedParameterList == null) {
             List<Parameter> operationParameterList = operation.getParameters();
-            if ((operationParameterList == null) || (operationParameterList.size() == 0)) {
+            if ((operationParameterList == null) || (operationParameterList.isEmpty())) {
                 decoratedParameterList = Collections.emptyList();
 
             } else {
-                decoratedParameterList = new ArrayList<Parameter>((int) (operationParameterList.size()));
+                decoratedParameterList = new ArrayList<>((int) (operationParameterList.size()));
                 for (Parameter p : operationParameterList) {
                     decoratedParameterList.add(new JavaParameter(p));
 
@@ -256,7 +255,7 @@ public class JavaOperation implements Operation {
 
     public String getParameterNames() {
         if (parameterNames == null) {
-            StringBuffer buff = new StringBuffer(100);
+            StringBuilder buff = new StringBuilder(100);
             for (Iterator<Parameter> i = getParameters().iterator(); i.hasNext();) {
                 Parameter param = i.next();
                 buff.append(param.getName());
@@ -271,7 +270,7 @@ public class JavaOperation implements Operation {
     }
 
     public Set<String> getParameterImports() {
-        Set<String> imports = new HashSet<String>();
+        Set<String> imports = new HashSet<>();
 
         JavaParameter parameter;
         Collection<Parameter> parameterCollection = getParameters();
@@ -287,7 +286,7 @@ public class JavaOperation implements Operation {
     }
 
     public Set<String> getImports() {
-        Set<String> importSet = new HashSet<String>();
+        Set<String> importSet = new HashSet<>();
         importSet.addAll(getParameterImports());
         if (isReturnTypeCollection()) {
             importSet.add(Collection.class.getName());
@@ -374,12 +373,12 @@ public class JavaOperation implements Operation {
             MetadataRepository metadataRepository = MetadataRepositoryManager
                     .getMetadataRepostory(MetadataRepository.class);
             String currentApplicationName = metadataRepository.getApplicationName();
-            String entityProject = ((Entity) metadataRepository.getAllEntities().get(getReturnType()))
+            String entityProject = metadataRepository.getAllEntities().get(getReturnType())
                     .getApplicationName();
             isResponseTypeCrossProject = (currentApplicationName.equals(entityProject));
         }
 
-        return new Boolean(isResponseTypeCrossProject);
+        return isResponseTypeCrossProject;
     }
 
     /**
@@ -402,7 +401,7 @@ public class JavaOperation implements Operation {
      * @return true if there are parameters, false otherwise
      */
     public boolean hasParameters() {
-        return ((decoratedParameterList != null) && (decoratedParameterList.size() > 0));
+        return ((decoratedParameterList != null) && (decoratedParameterList.isEmpty()));
     }
 
     /**

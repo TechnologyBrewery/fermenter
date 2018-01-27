@@ -255,7 +255,7 @@ public class JavaOperation implements Operation {
 
     public String getParameterNames() {
         if (parameterNames == null) {
-            StringBuilder buff = new StringBuilder(100);
+            StringBuilder buff = new StringBuilder();
             for (Iterator<Parameter> i = getParameters().iterator(); i.hasNext();) {
                 Parameter param = i.next();
                 buff.append(param.getName());
@@ -401,7 +401,7 @@ public class JavaOperation implements Operation {
      * @return true if there are parameters, false otherwise
      */
     public boolean hasParameters() {
-        return ((decoratedParameterList != null) && (decoratedParameterList.isEmpty()));
+        return ((decoratedParameterList != null) && (!decoratedParameterList.isEmpty()));
     }
 
     /**

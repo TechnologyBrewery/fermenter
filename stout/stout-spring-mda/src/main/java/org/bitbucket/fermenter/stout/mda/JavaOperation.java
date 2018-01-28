@@ -13,6 +13,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
+import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.Operation;
 import org.bitbucket.fermenter.mda.metadata.element.Parameter;
 import org.slf4j.Logger;
@@ -29,6 +30,9 @@ public class JavaOperation implements Operation {
     public static final String PROPAGATION_NOT_SUPPORTED = "NOT_SUPPORTED";
     public static final String PROPAGATION_SUPPORTS = "SUPPORTS";
     public static final String PROPAGATION_NEVER = "NEVER";
+    
+    private MetadataRepository metadataRepository = MetadataRepositoryManager
+            .getMetadataRepostory(MetadataRepository.class);
 
     private Operation operation;
     private List<Parameter> decoratedParameterList;
@@ -292,7 +296,20 @@ public class JavaOperation implements Operation {
             importSet.add(Collection.class.getName());
         }
 
+        // how return types are handled is very messy in genernal - will cleanup when we update the metamodel
+        if (!isResponseTypeVoid()) {
+            Entity returnEntity = metadataRepository.getEntity(getReturnType());
+            String appName = (returnEntity != null) ? returnEntity.getApplicationName()
+                    : metadataRepository.getApplicationName();
+            String returnImport = JavaElementUtils.getJavaImportType(appName, getReturnTypeForLookup());
+            importSet.add(returnImport);
+        }
+
         return importSet;
+    }
+
+    private String getReturnTypeForLookup() {
+        return getReturnType() == null ? getReturnManyType() : getReturnType();
     }
 
     /**
@@ -301,15 +318,10 @@ public class JavaOperation implements Operation {
      * @return The Java version of the wrapped return type
      */
     public String getWrappedReturnType() {
-        MetadataRepository metadataRepository = MetadataRepositoryManager
-                .getMetadataRepostory(MetadataRepository.class);
-        return JavaElementUtils.getJavaType(metadataRepository.getApplicationName(),
-                getReturnType() == null ? getReturnManyType() : getReturnType());
+        return JavaElementUtils.getJavaType(metadataRepository.getApplicationName(), getReturnTypeForLookup());
     }
 
     public boolean isReturnTypeEntity() {
-        MetadataRepository metadataRepository = MetadataRepositoryManager
-                .getMetadataRepostory(MetadataRepository.class);
         return metadataRepository.getEntity(getReturnType()) != null;
     }
 
@@ -370,8 +382,6 @@ public class JavaOperation implements Operation {
     public Boolean isResponseTypeCrossProject() {
         boolean isResponseTypeCrossProject = false;
         if (isReturnTypeEntity()) {
-            MetadataRepository metadataRepository = MetadataRepositoryManager
-                    .getMetadataRepostory(MetadataRepository.class);
             String currentApplicationName = metadataRepository.getApplicationName();
             String entityProject = metadataRepository.getAllEntities().get(getReturnType())
                     .getApplicationName();

@@ -7,6 +7,7 @@ import org.bitbucket.askllc.fermenter.cookbook.referencing.domain.service.rest.C
 
 import java.util.Collection;
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.SimpleDomain;
+import org.bitbucket.askllc.fermenter.cookbook.referencing.domain.bizobj.LocalDomainBO;
 
 /**
  * Service implementation class for the CrossReferenceExample service.

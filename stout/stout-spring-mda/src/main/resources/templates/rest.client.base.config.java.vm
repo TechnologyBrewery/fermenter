@@ -15,7 +15,7 @@ import ${basePackage}.client.resource.${entity.name}MaintenanceResource;
 #foreach( $service in $services )
 import ${basePackage}.client.resource.${service.name}Resource;
 #end
-import ${basePackage}.transfer.json.ObjectMapperManager;
+import org.bitbucket.fermenter.stout.util.ObjectMapperManager;
 
 import org.bitbucket.fermenter.stout.util.Slf4jLogger;
 import org.bitbucket.krausening.Krausening;

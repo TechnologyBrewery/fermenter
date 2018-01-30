@@ -11,7 +11,7 @@ import javax.ws.rs.Path;
  * 
  * GENERATED STUB CODE - PLEASE *DO* MODIFY
  */
-@Path("${service.name}")
+@Path("${service.name}Service")
 public interface ${service.name}Service extends ${service.name}BaseService {
 	
 	// Developers should add any service operations here that cannot be defined via the PIM

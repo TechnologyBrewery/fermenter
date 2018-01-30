@@ -185,7 +185,7 @@ public class ExceptionHandler {
         // Since FATAL level is not available and error is being used for unrecoverable exceptions, we'll use warn here.
 		LOGGER.warn(errorMessage, throwingCause);
 
-        //throw new RecoverableException(errorMessage, throwingCause);
+        throw new RecoverableException(errorMessage, throwingCause);
     }
 
 	/**
@@ -201,8 +201,9 @@ public class ExceptionHandler {
         // Should really be FATAL level setting, since that isn't available, we will use error
 	    LOGGER.error(errorMessage, throwingCause);
 
-	    //throw new UnrecoverableException(errorMessage, throwingCause);
+	    throw new UnrecoverableException(errorMessage, throwingCause);
     }
+
 
     /**
      * This method will recursively get the cause of a given exception until it has found the root cause. This should be

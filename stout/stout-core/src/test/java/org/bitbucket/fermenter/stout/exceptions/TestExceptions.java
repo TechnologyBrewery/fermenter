@@ -44,13 +44,8 @@ public class TestExceptions {
     @Then("the exception handler should throw a RecoverableException")
     public void TestRecoverableException() {
 
-        try {
-            // Handle the given exception
-            fermenterExceptionHandler.handleException(exception);
-        }
-        catch(RecoverableException ex){
-
-        }
+        // Handle the given exception
+        fermenterExceptionHandler.handleException(exception);
     }
 
 
@@ -58,12 +53,7 @@ public class TestExceptions {
     @Then("the exception handler should throw an UnrecoverableException")
     public void TestUnrecoverableExceptions(){
 
-        try {
-            // Handle the given exception
-            fermenterExceptionHandler.handleException(exception);
-        }
-        catch(UnrecoverableException ex){
-
-        }
+        // Handle the given exception
+        fermenterExceptionHandler.handleException(exception);
     }
 }

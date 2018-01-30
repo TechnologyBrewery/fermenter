@@ -234,17 +234,17 @@ public class JavaOperation implements Operation {
                 path.append("?");
             }
             
+            boolean isFirst = Boolean.TRUE;
             for (Iterator<Parameter> i = parameterList.iterator(); i.hasNext();) {
                 JavaParameter param = (JavaParameter) i.next();
                 if (!param.isEntity()) {
+                    if (!isFirst) {
+                        path.append("&");
+                    }
                     path.append(param.getName()).append("=");
                     path.append("{").append(param.getName()).append("}");
                     entityParameterCount++;
-    
-                    if (i.hasNext()) {
-                        path.append("&");
-                        
-                    }
+                    isFirst = Boolean.FALSE;
                 }
             }
         }

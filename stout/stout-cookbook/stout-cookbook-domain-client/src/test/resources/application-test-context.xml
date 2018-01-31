@@ -17,7 +17,7 @@
 		<property name="scopes">
 			<map>
 				<entry key="request">
-					<bean class="org.bitbucket.fermenter.stout.util.MockRequestScope" />
+					<bean class="org.bitbucket.fermenter.stout.mock.MockRequestScope" />
 				</entry>
 			</map>
 		</property>

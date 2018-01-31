@@ -258,7 +258,7 @@ public class JavaField implements Field {
 		
 		StringBuilder sb = new StringBuilder(100);
 		for (Iterator<Pattern> i = format.getPatterns().iterator(); i.hasNext();) {
-			Pattern pattern = (Pattern) i.next();
+			Pattern pattern = i.next();
 			
 			sb.append("\"");
 			sb.append(StringEscapeUtils.escapeJava(pattern.getText()));

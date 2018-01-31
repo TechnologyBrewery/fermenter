@@ -3,6 +3,7 @@
 
 <enumeration>
 	<name>SimpleDomainEnumeration</name>
+	<namespace>org.bitbucket.askllc.fermenter.cookbook.domain</namespace>
 	<type>named</type>
 	<enums>
 		<enum>

@@ -31,7 +31,14 @@ public class JavaEnumeration implements Enumeration {
 		enumeration = enumerationToDecorate;
 	}	
 
-	/**
+	@Override
+    public String getNamespace() {
+        return enumeration.getNamespace();
+    }
+
+
+
+    /**
 	 * @see org.bitbucket.fermenter.stout.mda.element.Enumeration#getName()
 	 */
 	public String getName() {
@@ -73,18 +80,18 @@ public class JavaEnumeration implements Enumeration {
 	/**
 	 * @see org.bitbucket.fermenter.stout.mda.element.Enumeration#getEnumList()
 	 */
-	public List getEnumList() {
+	public List<Enum> getEnumList() {
 		if (decoratedEnumList == null) {
-			List enumerationEnumList = enumeration.getEnumList();
+			List<Enum> enumerationEnumList = enumeration.getEnumList();
 			if ((enumerationEnumList == null) || (enumerationEnumList.size() == 0)) {
 				decoratedEnumList = Collections.EMPTY_LIST;
 				
 			} else {
 				Enum e;
-				decoratedEnumList = new ArrayList((int)(enumerationEnumList.size()));
-				Iterator i = enumerationEnumList.iterator();
+				decoratedEnumList = new ArrayList<>((int)(enumerationEnumList.size()));
+				Iterator<Enum> i = enumerationEnumList.iterator();
 				while (i.hasNext()) {
-					e = (Enum)i.next();
+					e = i.next();
 					decoratedEnumList.add(new JavaEnum(e));
 					
 				}

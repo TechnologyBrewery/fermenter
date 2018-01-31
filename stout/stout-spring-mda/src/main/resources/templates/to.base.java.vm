@@ -5,29 +5,24 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-#foreach ($import in $imports )
+#foreach ($import in $entity.imports )
 import ${import};
 #end
-#foreach( $reference in $references ) 
+#foreach( $reference in $entity.references ) 
 #if( $reference.isExternal() )
 import ${reference.importPrefix}.transfer.${reference.type};
 #end
 #end
-#foreach ($composite in $composites)
+#foreach ($composite in $entity.composites)
 import ${basePackage}.transfer.${composite.type}Composite;
 #end
 
-import ${basePackage}.enumeration.*;
-
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.UUID;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-
-import java.math.BigDecimal;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;

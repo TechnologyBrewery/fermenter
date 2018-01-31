@@ -44,8 +44,8 @@ class EnumerationMetadataManager extends MetadataManager {
      * @return
      */
     public static Enumeration getEnumerationMetadata(String applicationName, String name) {
-        Map enumerationMap = getInstance().getMetadataMap(applicationName);
-        return (enumerationMap != null) ? (Enumeration) enumerationMap.get(name) : null;
+        Map<String, Enumeration> enumerationMap = getInstance().getMetadataMap(applicationName);
+        return (enumerationMap != null) ? enumerationMap.get(name) : null;
     }
 
     /**
@@ -54,7 +54,7 @@ class EnumerationMetadataManager extends MetadataManager {
      * @return
      */
     public static Map<String, Enumeration> getEnumerations(String applicationName) {
-        Map enumerationMap = getInstance().getMetadataMap(applicationName);
+        Map<String, Enumeration> enumerationMap = getInstance().getMetadataMap(applicationName);
         return (enumerationMap != null) ? enumerationMap : Collections.emptyMap();
     }
 
@@ -65,7 +65,7 @@ class EnumerationMetadataManager extends MetadataManager {
      * @return
      */
     public static Map<String, Enumeration> getEnumerations() {
-        Map enumerationMap = getInstance().getCompleteMetadataMap();
+        Map<String, Enumeration> enumerationMap = getInstance().getCompleteMetadataMap();
         return (enumerationMap != null) ? enumerationMap : Collections.emptyMap();
     }
 
@@ -77,8 +77,8 @@ class EnumerationMetadataManager extends MetadataManager {
      * @return The <tt>Enumeration</tt> instance for <tt>name</tt> or null
      */
     public static Enumeration getEnumerationMetadata(String name) {
-        Map map = getInstance().getCompleteMetadataMap();
-        return (map != null) ? (Enumeration) map.get(name) : null;
+        Map<String, Enumeration> map = getInstance().getCompleteMetadataMap();
+        return (map != null) ? map.get(name) : null;
     }
 
     public void addEnumeration(EnumerationMetadata e) {
@@ -96,6 +96,7 @@ class EnumerationMetadataManager extends MetadataManager {
 
         digester.addObjectCreate("enumeration", EnumerationMetadata.class.getName());
         digester.addCallMethod("enumeration/name", "setName", 0);
+        digester.addCallMethod("enumeration/namespace", "setNamespace", 0);
         digester.addCallMethod("enumeration/type", "setType", 0);
 
         digester.addObjectCreate("enumeration/enums/enum", EnumMetadata.class.getName());

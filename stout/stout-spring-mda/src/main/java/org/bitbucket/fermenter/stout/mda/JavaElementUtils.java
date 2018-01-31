@@ -41,9 +41,13 @@ public final class JavaElementUtils {
 				if (e != null) {					
 					javaImportType = createFullyQualifiedName(type + "BO", ".bizobj.", appName);
 				} else {
-					Enumeration enumeration = metadataRepository.getEnumeration(appName, type);
+					Enumeration enumeration = metadataRepository.getEnumeration(type);
 					if (enumeration != null) {
-						javaImportType = createFullyQualifiedName(type, ".enumeration.", appName);
+					    if (StringUtils.isNotBlank(enumeration.getNamespace())) {
+                            javaImportType = enumeration.getNamespace() + ".enumeration." + type;
+					    } else {
+					        javaImportType = createFullyQualifiedName(type, ".enumeration.", appName);
+					    }
 					} else {
 					    e = metadataRepository.getEntity(type);
 					    if ((e != null ) && (StringUtils.isNotBlank(e.getNamespace()))) {

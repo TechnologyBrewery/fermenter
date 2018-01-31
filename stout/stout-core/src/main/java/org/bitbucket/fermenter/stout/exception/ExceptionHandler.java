@@ -114,12 +114,12 @@ public class ExceptionHandler {
             Method exceptionHandlerMethod = ExceptionHandler.class.
                     getDeclaredMethod("handleException", parameterTypes);
 
-            // Invoke the exception handler method with the root cause exception and given exception passed as in as
-            // arguments
+            /* Invoke the exception handler method with the root cause exception and given exception passed as in as
+             * arguments */
             exceptionHandlerMethod.invoke(this, arguments);
 
-        /* The reflection will fail if there is no method to handle the exception, should be caught
-         * and handled as an unrecoverable exception. */
+        /* The reflection lookup of the proper exception handler method can fail for several reasons. The thrown
+         * exception should be caught, logged properly and handled as an unrecoverable exception. */
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException |
                  NullPointerException | SecurityException unrecognizedException) {
 
@@ -180,7 +180,7 @@ public class ExceptionHandler {
      */
 	private void logAndThrowRecoverableException(Exception rootCause, Exception throwingCause){
 
-		String errorMessage = this.defaultErrorMessage + rootCause.getClass();
+		String errorMessage = defaultErrorMessage + rootCause.getClass();
 
         // Since FATAL level is not available and error is being used for unrecoverable exceptions, we'll use warn here.
 		LOGGER.warn(errorMessage, throwingCause);
@@ -196,7 +196,7 @@ public class ExceptionHandler {
 	 */
     private void logAndThrowUnrecoverableException(Exception rootCause, Exception throwingCause){
 
-	    String errorMessage = this.defaultErrorMessage + rootCause.getClass();
+	    String errorMessage = defaultErrorMessage + rootCause.getClass();
 
         // Should really be FATAL level setting, since that isn't available, we will use error
 	    LOGGER.error(errorMessage, throwingCause);

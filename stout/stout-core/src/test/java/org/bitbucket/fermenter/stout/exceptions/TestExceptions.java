@@ -20,7 +20,7 @@ public class TestExceptions {
 
     @Test
     @When("^given an exception of type \"([^\"]*)\"$")
-    public void CreateExceptionOfType(String exceptionType){
+    public void createExceptionOfType(String exceptionType){
 
         try {
             // Get the class type from the string
@@ -35,14 +35,14 @@ public class TestExceptions {
                  IllegalAccessException | InvocationTargetException exception) {
 
             // If any of the exceptions are caught, the reflection failed
-            fail("Exception of type " + exceptionType + " not found");
+            fail("Exception Handler test failed to find exception of type: " + exceptionType);
         }
     }
 
 
     @Test(expected = RecoverableException.class)
     @Then("the exception handler should throw a RecoverableException")
-    public void TestRecoverableException() {
+    public void testRecoverableException() {
 
         // Handle the given exception
         fermenterExceptionHandler.handleException(exception);
@@ -51,7 +51,7 @@ public class TestExceptions {
 
     @Test(expected = UnrecoverableException.class)
     @Then("the exception handler should throw an UnrecoverableException")
-    public void TestUnrecoverableExceptions(){
+    public void testUnrecoverableExceptions(){
 
         // Handle the given exception
         fermenterExceptionHandler.handleException(exception);

@@ -4,35 +4,37 @@ import java.util.List;
 
 public interface Enumeration {
 		
-	public static final String TYPE_NAMED_ENUMERATION = "named";
-	public static final String TYPE_VALUED_ENUMERATION = "valued";
+	static final String TYPE_NAMED_ENUMERATION = "named";
+	static final String TYPE_VALUED_ENUMERATION = "valued";
 	
 	/**
 	 * @return Returns the name.
 	 */
-	public String getName() ;
+	String getName();
+	
+	String getNamespace();
 	
 	/**
 	 * @return Returns the type.
 	 */
-	public String getType();
+	String getType();
 	
-	public Boolean isNamed();
+	Boolean isNamed();
 	
 	/**
 	 * @return Returns the maxLength.
 	 */
-	public String getMaxLength();
+	String getMaxLength();
 		
 	/**
 	 * @return Returns the enumList.
 	 */
-	public List getEnumList();
+	List getEnumList();
 	
 	/**
 	 * Returns the name of the application from which this element originates
 	 * @return Application name
 	 */
-	public String getApplicationName();
+	String getApplicationName();
 
 }

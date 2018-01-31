@@ -1,11 +1,8 @@
 package org.bitbucket.fermenter.stout.mda;
 
-import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -96,7 +93,7 @@ public class JavaEntity implements Entity {
                 decoratedFieldMap = Collections.<String, Field> emptyMap();
 
             } else {
-                decoratedFieldMap = new HashMap<String, Field>((int) (entityFieldMap.size() * 1.25));
+                decoratedFieldMap = new HashMap<>((int) (entityFieldMap.size() * 1.25));
                 for (Field f : entityFieldMap.values()) {
                     JavaField jField = new JavaField(f);
                     decoratedFieldMap.put(f.getName(), jField);
@@ -125,7 +122,7 @@ public class JavaEntity implements Entity {
                 decoratedIdFieldMap = Collections.<String, Field> emptyMap();
 
             } else {
-                decoratedIdFieldMap = new HashMap<String, Field>((int) (entityIdFieldMap.size() * 1.25));
+                decoratedIdFieldMap = new HashMap<>((int) (entityIdFieldMap.size() * 1.25));
                 for (Field f : entityIdFieldMap.values()) {
                     decoratedIdFieldMap.put(f.getName(), new JavaField(f));
 
@@ -154,7 +151,7 @@ public class JavaEntity implements Entity {
                 decoratedCompositeMap = Collections.<String, Composite> emptyMap();
 
             } else {
-                decoratedCompositeMap = new HashMap<String, Composite>((int) (entityCompositeMap.size() * 1.25));
+                decoratedCompositeMap = new HashMap<>((int) (entityCompositeMap.size() * 1.25));
                 for (Composite c : entityCompositeMap.values()) {
                     decoratedCompositeMap.put(c.getName(), new JavaComposite(c));
 
@@ -183,7 +180,7 @@ public class JavaEntity implements Entity {
                 decoratedRelationMap = Collections.<String, Relation> emptyMap();
 
             } else {
-                decoratedRelationMap = new HashMap<String, Relation>((int) (entityRelationMap.size() * 1.25));
+                decoratedRelationMap = new HashMap<>((int) (entityRelationMap.size() * 1.25));
                 for (Relation r : entityRelationMap.values()) {
                     decoratedRelationMap.put(r.getType(), new JavaRelation(r));
 
@@ -212,7 +209,7 @@ public class JavaEntity implements Entity {
                 decoratedInverseRelationMap = Collections.<String, Entity> emptyMap();
 
             } else {
-                decoratedInverseRelationMap = new HashMap<String, Entity>(
+                decoratedInverseRelationMap = new HashMap<>(
                         (int) (entityInverseRelationMap.size() * 1.25));
                 for (Entity r : entityInverseRelationMap.values()) {
                     decoratedInverseRelationMap.put(r.getName(), new RelatedJavaEntity(r, this));
@@ -242,7 +239,7 @@ public class JavaEntity implements Entity {
                 decoratedReferenceMap = Collections.<String, Reference> emptyMap();
 
             } else {
-                decoratedReferenceMap = new HashMap<String, Reference>((int) (entityReferenceMap.size() * 1.25));
+                decoratedReferenceMap = new HashMap<>((int) (entityReferenceMap.size() * 1.25));
                 for (Reference reference : entityReferenceMap.values()) {
                     decoratedReferenceMap.put(reference.getName(), new JavaReference(reference));
 
@@ -258,7 +255,7 @@ public class JavaEntity implements Entity {
      * {@inheritDoc}
      */
     public Reference getReference(String type) {
-        return (Reference) getReferences().get(type);
+        return getReferences().get(type);
     }
 
     /**
@@ -285,7 +282,7 @@ public class JavaEntity implements Entity {
                 decoratedQueryMap = Collections.<String, Query> emptyMap();
 
             } else {
-                decoratedQueryMap = new HashMap<String, Query>((int) (entityQueryMap.size() * 1.25));
+                decoratedQueryMap = new HashMap<>((int) (entityQueryMap.size() * 1.25));
                 for (Query q : entityQueryMap.values()) {
                     decoratedQueryMap.put(q.getName(), new JavaQuery(q));
 
@@ -301,7 +298,7 @@ public class JavaEntity implements Entity {
      * {@inheritDoc}
      */
     public Query getQuery(String name) {
-        return (Query) getQueries().get(name);
+        return getQueries().get(name);
     }
 
     /**
@@ -334,7 +331,7 @@ public class JavaEntity implements Entity {
      */
     public Set<String> getImports() {
         if (imports == null) {
-            imports = new TreeSet<String>();
+            imports = new TreeSet<>();
             imports.addAll(getFieldImports());
             imports.addAll(getReferenceImports());
         }
@@ -347,16 +344,17 @@ public class JavaEntity implements Entity {
      * @return field imports
      */
     public Set<String> getFieldImports() {
-        Set<String> importSet = new HashSet<String>();
-        importSet.add(Date.class.getName());
-        importSet.add(Timestamp.class.getName());
-        importSet.add(BigDecimal.class.getName());
+        Set<String> importSet = new HashSet<>();
 
         JavaField javaField;
         Map<String, Field> operationCollection = getFields();
         for (Field field : operationCollection.values()) {
             javaField = (JavaField) field;
-            importSet.add(javaField.getImport());
+            String importValue = javaField.getImport();
+            // java.lang is imported by default, so filter them out:
+            if (!importValue.startsWith("java.lang.")) {
+                importSet.add(javaField.getImport());
+            }
         }
 
         return importSet;
@@ -368,7 +366,7 @@ public class JavaEntity implements Entity {
      * @return reference imports
      */
     public Set<String> getReferenceImports() {
-        Set<String> importSet = new HashSet<String>();
+        Set<String> importSet = new HashSet<>();
         Set<String> fkSet;
 
         JavaReference javaReference;
@@ -392,7 +390,7 @@ public class JavaEntity implements Entity {
         if (keySignature == null) {
             Map<String, Field> idFieldMap = getIdFields();
             if (idFieldMap != null) {
-                List<Field> keyList = new ArrayList<Field>(idFieldMap.values());
+                List<Field> keyList = new ArrayList<>(idFieldMap.values());
                 keySignature = JavaElementUtils.createSignatureFields(keyList);
 
             }
@@ -411,7 +409,7 @@ public class JavaEntity implements Entity {
         if (keySignatureParams == null) {
             Map<String, Field> idFieldMap = getIdFields();
             if (idFieldMap != null) {
-                List<Field> keyList = new ArrayList<Field>(idFieldMap.values());
+                List<Field> keyList = new ArrayList<>(idFieldMap.values());
                 keySignatureParams = JavaElementUtils.createSignatureFieldParams(keyList);
 
             }
@@ -427,7 +425,7 @@ public class JavaEntity implements Entity {
      * @return collection of import prefixes
      */
     public Collection<String> getImportPrefixes() {
-        Collection<String> prefixes = new TreeSet<String>();
+        Collection<String> prefixes = new TreeSet<>();
 
         for (Reference reference : getReferences().values()) {
             JavaReference ref = (JavaReference) reference;

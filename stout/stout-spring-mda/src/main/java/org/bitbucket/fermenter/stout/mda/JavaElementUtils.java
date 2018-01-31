@@ -15,7 +15,9 @@ import org.codehaus.plexus.util.StringUtils;
 
 public final class JavaElementUtils {
 	
-	static final String VOID = "void";
+	private static final String ENUMERATION = ".enumeration.";
+
+    static final String VOID = "void";
 	
 	/** Needs to be a {@link List} and not {@link Collection} due to JAX-RS parameter requirements. */
 	static final String PARAM_COLLECTION_TYPE = "List";
@@ -41,9 +43,13 @@ public final class JavaElementUtils {
 				if (e != null) {					
 					javaImportType = createFullyQualifiedName(type + "BO", ".bizobj.", appName);
 				} else {
-					Enumeration enumeration = metadataRepository.getEnumeration(appName, type);
+					Enumeration enumeration = metadataRepository.getEnumeration(type);
 					if (enumeration != null) {
-						javaImportType = createFullyQualifiedName(type, ".enumeration.", appName);
+					    if (StringUtils.isNotBlank(enumeration.getNamespace())) {
+                            javaImportType = enumeration.getNamespace() + ENUMERATION + type;
+					    } else {
+					        javaImportType = createFullyQualifiedName(type, ENUMERATION, appName);
+					    }
 					} else {
 					    e = metadataRepository.getEntity(type);
 					    if ((e != null ) && (StringUtils.isNotBlank(e.getNamespace()))) {

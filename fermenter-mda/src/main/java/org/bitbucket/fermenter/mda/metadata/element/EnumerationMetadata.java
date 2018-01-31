@@ -18,6 +18,7 @@ public class EnumerationMetadata extends MetadataElement implements Enumeration 
     private static final Log LOGGER = LogFactory.getLog(EnumerationMetadata.class);
     
     private String name;
+    private String namespace;
     private String applicationName;
     private String type;
     private String maxLength;
@@ -36,6 +37,14 @@ public class EnumerationMetadata extends MetadataElement implements Enumeration 
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getNamespace() {
+        return namespace;
+    }
+
+    public void setNamespace(String namespace) {
+        this.namespace = namespace;
     }
 
     /**
@@ -105,7 +114,7 @@ public class EnumerationMetadata extends MetadataElement implements Enumeration 
 
     public void addEnum(Enum enumInstance) {
         if (enumList == null) {
-            enumList = new ArrayList<Enum>();
+            enumList = new ArrayList<>();
         }
 
         enumList.add(enumInstance);

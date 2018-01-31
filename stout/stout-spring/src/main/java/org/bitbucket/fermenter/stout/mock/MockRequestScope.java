@@ -1,4 +1,4 @@
-package org.bitbucket.fermenter.stout.util;
+package org.bitbucket.fermenter.stout.mock;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

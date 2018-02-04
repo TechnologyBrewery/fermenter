@@ -1,0 +1,21 @@
+[
+	{
+		"name": "cookbook-domain",
+		"profileReferences": [
+			{
+				"name": "business-objects-and-services"
+			},
+			{
+				"name": "entity-maintenance-services"
+			}
+		]
+	},
+	{
+		"name": "cookbook-webapp",
+		"profileReferences": [
+			{
+				"name": "web-container"
+			}
+		]
+	}
+]

@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * additional information to control where the generated file will live, whether
  * to overwrite an existing file, etc.
  */
-public class Target {
+public class Target extends ValidatedElement {
 
 	@JsonProperty(required = true)
 	private String name;
@@ -75,4 +75,11 @@ public class Target {
 	public void setTemplateName(String templateName) {
 		this.templateName = templateName;
 	}
+	
+    /**
+     * {@inheritDoc}
+     */
+    public String getSchemaFileName() {
+        return "fermenter-2-target-schema.json";
+    }
 }

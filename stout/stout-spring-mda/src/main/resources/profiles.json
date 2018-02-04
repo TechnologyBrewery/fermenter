@@ -1,0 +1,116 @@
+[
+	{
+		"name": "domain",
+		"profileReferences": [
+			{
+				"name": "business-objects-and-services"
+			},
+			{
+				"name": "entity-maintenance-services"
+			}
+		]
+	},
+	{
+		"name": "business-objects-and-services",
+		"targetReferences": [
+			{
+				"name": "baseBusinessObjects"
+			},
+			{
+				"name": "businessObjects"
+			},
+			{
+				"name": "dataAccessRepositories"
+			},
+			{
+				"name": "enumerations"
+			},
+			{
+				"name": "baseTransferObjectJacksonMixIns"
+			},
+			{
+				"name": "transferObjectJacksonMixIns"
+			},
+			{
+				"name": "objectMapperManager"
+			},
+			{
+				"name": "jacksonObjectMapperResteasyProvider"
+			},
+			{
+				"name": "baseRestServiceInterfaces"
+			},
+			{
+				"name": "restServiceInterfaces"
+			},
+			{
+				"name": "baseServiceImpl"
+			},
+			{
+				"name": "serviceImpl"
+			},
+			{
+				"name": "messageProperties"
+			},
+			{
+				"name": "baseSpringContext"
+			},
+			{
+				"name": "springContextImpl"
+			},
+			{
+				"name": "jpaProperties"
+			},
+			{
+				"name": "dataSourceProperties"
+			}
+		]
+	},
+	{
+		"name": "entity-maintenance-services",
+		"targetReferences": [
+			{
+				"name": "entityMaintenanceServiceImpls"
+			},
+			{
+				"name": "restEntityMaintenanceServiceInterfaces"
+			}
+		]
+	},
+	{
+		"name": "rest-client",
+		"targetReferences": [
+			{
+				"name": "delegateMaintenanceResource"
+			},
+			{
+				"name": "delegateMaintenanceInterface"
+			},
+			{
+				"name": "delegateMaintenanceImpl"
+			},
+			{
+				"name": "delegateServiceResource"
+			},
+			{
+				"name": "delegateServiceInterface"
+			},
+			{
+				"name": "delegateServiceImpl"
+			},
+			{
+				"name": "restClientBaseConfig"
+			},
+			{
+				"name": "restClientAppConfig"
+			},
+			{
+				"name": "baseTransferObjects"
+			},
+			{
+				"name": "transferObjects"
+			}
+		]
+	}
+]
+

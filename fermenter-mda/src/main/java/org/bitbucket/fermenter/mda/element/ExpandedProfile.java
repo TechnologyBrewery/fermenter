@@ -8,6 +8,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.bitbucket.fermenter.mda.util.MessageTracker;
 
 import com.google.common.collect.ImmutableList;
 
@@ -17,7 +18,7 @@ import com.google.common.collect.ImmutableList;
  */
 public class ExpandedProfile {
 
-    private static Log log = LogFactory.getLog(ExpandedProfile.class);
+    private static MessageTracker messageTracker = MessageTracker.getInstance();
 
     protected Profile profile;
 
@@ -70,8 +71,8 @@ public class ExpandedProfile {
                 if (target != null) {
                     addTarget(target);
                 } else {
-                    log.warn("Could not find target '" + targetRef.getName() + "' referenced by profile '" + getName()
-                            + "'!");
+                    messageTracker.addErrorMessage("Could not find target '" + targetRef.getName()
+                            + "' referenced by profile '" + getName() + "'!");
                 }
             }
 
@@ -94,8 +95,8 @@ public class ExpandedProfile {
             }
 
         } else {
-            log.warn("Profile '" + profileName + "' does not exist and is being ignored in profile '" + getName()
-                    + "'!");
+            messageTracker
+                    .addErrorMessage("Profile '" + profileName + "' does not exist in profile '" + getName() + "'!");
 
         }
     }
@@ -105,7 +106,7 @@ public class ExpandedProfile {
             String profileName = nameOnlyProfile.getName();
             if (StringUtils.isNotBlank(profileName)) {
                 if (profileName.equals(getName())) {
-                    log.warn("Profile '" + getName() + "' cannot include itself!");
+                    messageTracker.addWarningMessage("Profile '" + getName() + "' cannot include itself!");
 
                 } else {
                     transferTargetsFromProfile(profileName, profiles, targets);

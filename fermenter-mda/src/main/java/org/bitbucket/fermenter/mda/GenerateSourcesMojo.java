@@ -31,10 +31,12 @@ import org.bitbucket.fermenter.mda.element.ExpandedProfile;
 import org.bitbucket.fermenter.mda.element.Profile;
 import org.bitbucket.fermenter.mda.element.Target;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
+import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.generator.Generator;
 import org.bitbucket.fermenter.mda.metadata.AbstractMetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.StaticURLResolver;
+import org.bitbucket.fermenter.mda.util.MessageTracker;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -81,6 +83,8 @@ public class GenerateSourcesMojo extends AbstractMojo {
     private String metadataRespositoryImpl;
 
     private VelocityEngine engine;
+    
+    private MessageTracker messageTracker = MessageTracker.getInstance();
 
     public void execute() throws MojoExecutionException {
         try {
@@ -227,7 +231,12 @@ public class GenerateSourcesMojo extends AbstractMojo {
         MetadataRepositoryManager.setRepository(repository);
         repository.load(props);
         repository.validate(props);
-
+        
+        messageTracker.emitMessages(LOG);
+        if (messageTracker.hasErrors()) {
+            throw new GenerationException("Errors encountered!");
+        }
+        
         long stop = System.currentTimeMillis();
         LOG.info("COMPLETE: metadata repository initialization in " + (stop - start) + "ms");
 

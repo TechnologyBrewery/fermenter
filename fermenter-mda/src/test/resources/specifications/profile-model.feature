@@ -1,3 +1,4 @@
+@profile
 Feature: Specify profiles to support model-driven file generation
 
   Background: 

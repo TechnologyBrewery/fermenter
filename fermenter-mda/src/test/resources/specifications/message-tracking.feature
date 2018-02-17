@@ -1,3 +1,4 @@
+@messageTracker
 Feature: Track messages during metadata load to allow bulk reporting to maximize the number of issues that are simultaneously reported
 
   Scenario Outline: collect and return errors

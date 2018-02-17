@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.bitbucket.fermenter.mda.util.MessageTracker;
 
-import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -15,11 +14,6 @@ import cucumber.api.java.en.When;
 public class MessageTrackerSteps {
 
     private MessageTracker messageTracker = MessageTracker.getInstance();
-    
-    @Before
-    public void clearMessageTracker() {
-        messageTracker.clear();
-    }
     
     @Given("^multiple error messages \"([^\"]*)\"$")
     public void multiple_error_messages(List<String> errors) throws Throwable {

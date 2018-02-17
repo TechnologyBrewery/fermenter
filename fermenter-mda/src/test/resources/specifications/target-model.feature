@@ -1,3 +1,4 @@
+@target
 Feature: Specify targets to support model-driven file generation
 
   Scenario Outline: Create a valid target file

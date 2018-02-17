@@ -31,7 +31,7 @@ public class ProfileSteps {
     private GenerationException encounteredException;
     private ExpandedProfile profile;
 
-    @After
+    @After("@profile")
     public void cleanUp() {
         targetMap.clear();
         profileMap.clear();

@@ -1,3 +1,4 @@
+@profile
 Feature: Specify profiles to support model-driven file generation
 
   Background: 
@@ -48,10 +49,11 @@ Feature: Specify profiles to support model-driven file generation
     When profiles are read
     Then a valid profile is available as "profileY" that contains 2 targets
 
-  Scenario Outline: a profile references non-existent targets, gracefully skipping them
+  Scenario Outline: a profile references non-existent targets and reports errors
     Given a profile described by "<name>", "<targetReferences>", "<profileReferences>"
     When profiles are read
     Then a valid profile is available as "<name>" that contains <expectedTargetCount> targets
+    And the tracker reports that errors were encountered
 
     Examples: 
       | name              | targetReferences                    | profileReferences | expectedTargetCount |
@@ -59,10 +61,11 @@ Feature: Specify profiles to support model-driven file generation
       | profileLittleOff2 | targetC,targetDoesNotExist          |                   |                   1 |
       | profileLittleOff3 | targetDoesNotExist,notReallyIAmFake |                   |                   0 |
 
-  Scenario Outline: a profile references non-existent profiles, gracefully skipping them
+  Scenario Outline: a profile references non-existent profiles and reports errors
     Given a profile described by "<name>", "<targetReferences>", "<profileReferences>"
     When profiles are read
     Then a valid profile is available as "<name>" that contains <expectedTargetCount> targets
+    And the tracker reports that errors were encountered
 
     Examples: 
       | name              | targetReferences | profileReferences           | expectedTargetCount |

@@ -30,13 +30,13 @@ public class ExceptionHandler {
 
         Exception rootException = this.getRootExceptionOfGivenException(givenException);
 
-        Class[] exceptionHandlerParameterTypes = new Class[]{rootException.getClass()};
+        Class[] exceptionHandlerArgumentTypes = new Class[]{rootException.getClass()};
         Object[] exceptionHandlerArguments = new Object[]{rootException};
         Method exceptionHandlerMethod;
 
         try {
             exceptionHandlerMethod =
-                    ExceptionHandler.class.getDeclaredMethod("handleException", exceptionHandlerParameterTypes);
+                    ExceptionHandler.class.getDeclaredMethod("handleException", exceptionHandlerArgumentTypes);
 
         } catch(NoSuchMethodException noSuchMethodException){
             throw noValidExceptionHandlerMethodFound(givenException, noSuchMethodException);
@@ -46,7 +46,8 @@ public class ExceptionHandler {
 
         try {
             assert exceptionHandlerMethod != null;
-            exceptionHandlerAction = (FermenterException) exceptionHandlerMethod.invoke(this, exceptionHandlerArguments);
+            exceptionHandlerAction =
+                    (FermenterException) exceptionHandlerMethod.invoke(this, exceptionHandlerArguments);
 
         } catch (IllegalAccessException | InvocationTargetException | NullPointerException |
                 SecurityException unrecognizedException) {
@@ -57,7 +58,7 @@ public class ExceptionHandler {
              * try catch block and need to be passed through. */
             if((unrecognizedException.getClass() == InvocationTargetException.class)){
 
-                LOGGER.error("Exception handler failed to handle given exception of type " +
+                exceptionMessage = "Exception handler failed to handle given exception of type " +
                         givenException.getClass(), unrecognizedException);
 
             } else if (unrecognizedException.getClass() == IllegalAccessException.class) {
@@ -78,10 +79,9 @@ public class ExceptionHandler {
 
             }
 
-            // This should be a FATAL error, but logger does not have this level. Fermenter cannot return control flow.
-            LOGGER.error(exceptionMessage, unrecognizedException);
-
-            throw new UnrecoverableException(exceptionMessage, unrecognizedException);
+            /* This should be logged as a FATAL error, but the  logger does not have this level. Fermenter cannot
+             * return control flow if one of these errors has occured. */
+            throw logAndGetUnrecoverableException(unrecognizedException, exceptionMessage);
         }
 
         if (exceptionHandlerAction != null){
@@ -102,19 +102,19 @@ public class ExceptionHandler {
      */
 
     private FermenterException handleException(java.lang.IndexOutOfBoundsException rootException) {
-	    return logAndThrowRecoverableException(rootException);
+	    return logAndGetRecoverableException(rootException);
     }
 
     private FermenterException handleException(java.lang.NumberFormatException rootException) {
-	    return logAndThrowRecoverableException(rootException);
+	    return logAndGetRecoverableException(rootException);
     }
 
     private FermenterException handleException(java.text.ParseException rootException) {
-	    return logAndThrowRecoverableException(rootException);
+	    return logAndGetRecoverableException(rootException);
     }
 
     private FermenterException handleException(java.lang.StringIndexOutOfBoundsException rootException) {
-	    return logAndThrowRecoverableException(rootException);
+	    return logAndGetRecoverableException(rootException);
     }
 
 
@@ -124,39 +124,39 @@ public class ExceptionHandler {
      */
 
     private FermenterException handleException(java.lang.ClassCastException rootException) {
-	    return logAndThrowUnrecoverableException(rootException);
+	    return logAndGetUnrecoverableException(rootException);
     }
 
     private FermenterException handleException(java.lang.IllegalAccessException rootException) {
-        return logAndThrowUnrecoverableException(rootException);
+        return logAndGetUnrecoverableException(rootException);
     }
 
     private FermenterException handleException(java.lang.IllegalArgumentException rootException) {
-	    return logAndThrowUnrecoverableException(rootException);
+	    return logAndGetUnrecoverableException(rootException);
     }
 
     private FermenterException handleException(java.lang.IllegalStateException rootException) {
-	    return logAndThrowUnrecoverableException(rootException);
+	    return logAndGetUnrecoverableException(rootException);
     }
 
     private FermenterException handleException(java.lang.reflect.InvocationTargetException rootException) {
-	    return logAndThrowUnrecoverableException(rootException);
+	    return logAndGetUnrecoverableException(rootException);
     }
 
     private FermenterException handleException(java.lang.NoSuchMethodException rootException) {
-	    return logAndThrowUnrecoverableException(rootException);
+	    return logAndGetUnrecoverableException(rootException);
     }
 
     private FermenterException handleException(java.lang.NullPointerException rootException) {
-	    return logAndThrowUnrecoverableException(rootException);
+	    return logAndGetUnrecoverableException(rootException);
     }
 
     private FermenterException handleException(java.lang.RuntimeException rootException) {
-	    return logAndThrowUnrecoverableException(rootException);
+	    return logAndGetUnrecoverableException(rootException);
     }
 
     private FermenterException handleException(java.lang.UnsupportedOperationException rootException) {
-        return logAndThrowUnrecoverableException(rootException) ;
+        return logAndGetUnrecoverableException(rootException) ;
     }
 
 
@@ -189,7 +189,7 @@ public class ExceptionHandler {
      * @param rootException
      * @return
      */
-	private RecoverableException logAndThrowRecoverableException(Exception rootException){
+	private RecoverableException logAndGetRecoverableException(Exception rootException){
 
 		String errorMessage = defaultErrorMessage + rootException.getClass();
 
@@ -201,12 +201,27 @@ public class ExceptionHandler {
 
 
     /**
+     * This will add a warning to the log for the exception handler logger and then return a RecoverableException. This
+     * method DOES NOT throw the exception; it allows the caller to decide how to proceed.
+     * @param rootException
+     * @return
+     */
+    private RecoverableException logAndGetRecoverableException(Exception rootException, String errorMessage){
+
+        // Since FATAL level is not available and error is being used for unrecoverable exception, we'll use warn here.
+        LOGGER.warn(errorMessage);
+
+        return new RecoverableException(errorMessage, rootException);
+    }
+
+
+    /**
      * This will add a warning to the log for the exception handler logger and then return an UnrecoverableException.
      * This method DOES NOT throw the exception; it allows the caller to decide how to proceed.
      * @param rootException
      * @return UnrecoverableException
      */
-    private UnrecoverableException logAndThrowUnrecoverableException(Exception rootException){
+    private UnrecoverableException logAndGetUnrecoverableException(Exception rootException){
 
 	    String errorMessage = defaultErrorMessage + rootException.getClass();
 
@@ -214,6 +229,21 @@ public class ExceptionHandler {
 	    LOGGER.error(errorMessage);
 
 	    return new UnrecoverableException(errorMessage, rootException);
+    }
+
+
+    /**
+     * This will add a warning to the log for the exception handler logger and then return an UnrecoverableException.
+     * This method DOES NOT throw the exception; it allows the caller to decide how to proceed.
+     * @param rootException
+     * @return UnrecoverableException
+     */
+    private UnrecoverableException logAndGetUnrecoverableException(Exception rootException, String errorMessage){
+
+        // Should really be FATAL level setting, since that isn't available, we will use error
+        LOGGER.error(errorMessage);
+
+        return new UnrecoverableException(errorMessage, rootException);
     }
 
 

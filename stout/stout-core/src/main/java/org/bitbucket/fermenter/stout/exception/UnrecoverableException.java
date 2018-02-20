@@ -3,7 +3,7 @@ package org.bitbucket.fermenter.stout.exception;
 /**
  * An exception to denote cases from which there is no ability to recover.
  */
-public class UnrecoverableException extends RuntimeException {
+public class UnrecoverableException extends FermenterException {
 
 	private static final long serialVersionUID = -4923273764539689604L;
 

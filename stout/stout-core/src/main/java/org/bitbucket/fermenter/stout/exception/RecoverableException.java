@@ -1,9 +1,9 @@
 package org.bitbucket.fermenter.stout.exception;
 
 /**
- * An exception to denote cases from which there is an ability to recover and fermenter to continue logic/control flow.
+ * An exception to denote cases from which there is an ability to recover and Fermenter to continue logic/control flow.
  */
-public class RecoverableException extends RuntimeException {
+public class RecoverableException extends FermenterException {
 
 	private static final long serialVersionUID = -4923273764539689604L;
 

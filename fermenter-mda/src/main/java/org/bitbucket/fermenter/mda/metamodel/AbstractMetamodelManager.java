@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.JarURLConnection;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -11,25 +12,25 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-import org.bitbucket.fermenter.mda.metadata.element.MetadataElement;
+import org.bitbucket.fermenter.mda.exception.FermenterException;
 import org.bitbucket.fermenter.mda.metamodel.element.MetamodelElement;
 import org.bitbucket.fermenter.mda.util.MessageTracker;
-import org.bitbucket.fermenter.mda.xml.TrackErrorsErrorHandler;
-import org.bitbucket.fermenter.mda.xml.XmlUtils;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public abstract class AbstractMetamodelManager<T extends MetamodelElement> {
 
-    private Map<String, Map<String, T>> metadataByArtifactIdMap = new HashMap<>();
-    private Map<String, T> completeMetadataMap = new HashMap<>();
-    protected String currentArtifactId;
+    private static final String METAMODEL_SUFFIX = ".json";
+    private Map<String, Map<String, T>> metamodelByPackageMap = new HashMap<>();
+    private Map<String, T> completeMetamodelMap = new HashMap<>();
 
     private static MessageTracker messageTracker = MessageTracker.getInstance();
 
@@ -37,8 +38,8 @@ public abstract class AbstractMetamodelManager<T extends MetamodelElement> {
      * Resets this instance to ensure a clean set of metadata is available.
      */
     public void reset() {
-        metadataByArtifactIdMap = new HashMap<>();
-        completeMetadataMap = new HashMap<>();
+        metamodelByPackageMap = new HashMap<>();
+        completeMetamodelMap = new HashMap<>();
     }
 
     /**
@@ -46,8 +47,8 @@ public abstract class AbstractMetamodelManager<T extends MetamodelElement> {
      * without having to worry to about what is already laoded and what needs to be loaded.
      */
     protected final void validate() {
-        for (String artifactId : metadataByArtifactIdMap.keySet()) {
-            Collection<T> metadataItems = getMetadataMap(artifactId).values();
+        for (String packageName : metamodelByPackageMap.keySet()) {
+            Collection<T> metadataItems = getMetamodelMap(packageName).values();
             validateElements(metadataItems);
         }
     }
@@ -66,22 +67,21 @@ public abstract class AbstractMetamodelManager<T extends MetamodelElement> {
         }
     }
 
-    protected void loadMetadata(String appName, String url) {
+    protected void loadMetamodel(String artifactId, String url) {
         if (StringUtils.isBlank(url)) {
-            messageTracker.addErrorMessage("Metadata for application '" + appName
+            messageTracker.addErrorMessage("Metamodels for application '" + artifactId
                     + "' can not be found!  Please ensure the proper jar is on your classpath.");
 
         } else {
-            currentArtifactId = appName;
-            metadataByArtifactIdMap.put(currentArtifactId, new HashMap<>());
-
-            List resources = null;
+            List<URL> resources = null;
 
             try {
-                resources = getMetadataResources(url);
+                resources = getMetamodelResources(url);
+
             } catch (IOException | URISyntaxException e) {
-                messageTracker.addWarningMessage("No " + getMetadataLocation() + " metadata found for '" + appName + "', skipping...");
-               
+                messageTracker.addWarningMessage(
+                        "No " + getMetamodelLocation() + " metamodels found for '" + artifactId + "', skipping...");
+
             }
 
             if (resources == null) {
@@ -89,93 +89,101 @@ public abstract class AbstractMetamodelManager<T extends MetamodelElement> {
             }
 
             try {
-                Iterator iterator = resources.iterator();
-                while (iterator.hasNext()) {
+                for (URL resource : resources) {
+                    InputStream is = resource.openStream();
+                    try {
+                        loadMetamodelFile(is);
 
-                    loadMetadataFile(((URL) iterator.next()).openStream());
+                    } finally {
+                        IOUtils.closeQuietly(is);
+                    }
+
                 }
             } catch (Exception ex) {
-                throw new RuntimeException("Error while loading metadata", ex);
+                throw new FermenterException("Error while loading metadata", ex);
             }
 
-            postLoadMetadata();
+            postLoadMetamodel();
         }
     }
 
-    protected List getMetadataResources(String name) throws IOException, URISyntaxException {
-        List metadataResources = new ArrayList();
+    protected List<URL> getMetamodelResources(String name) throws IOException, URISyntaxException {
+        List<URL> metamodelResources = null;
         if (name.contains(".jar")) {
-            name = "jar:" + name + "!/";
-            URL jarUrl = new URL(name);
-            JarURLConnection jarConnection = (JarURLConnection) jarUrl.openConnection();
-            JarFile file = jarConnection.getJarFile();
-            Enumeration e = file.entries();
-            while (e.hasMoreElements()) {
-                JarEntry newEntry = (JarEntry) e.nextElement();
-                if (newEntry.getName().startsWith(this.getMetadataLocation())
-                        && newEntry.getName().endsWith(METADATA_SUFFIX)) {
-                    metadataResources.add(new URL(name + newEntry.getName()));
-                }
-            }
+            metamodelResources = getMetamodelResourceFromJar(name);
         } else {
-            File metadataDir = new File(new URI(name + this.getMetadataLocation()));
-            File[] files = metadataDir.listFiles();
-            File file = null;
-            if (files != null) {
-                for (int i = 0; i < files.length; i++) {
-                    file = files[i];
-                    if (file.getName().endsWith(METADATA_SUFFIX)) {
-                        metadataResources.add(file.toURL());
-                    }
+            getMetamodelResourcesFromDirectory(name);
+        }
+        return metamodelResources;
+    }
+
+    private List<URL> getMetamodelResourceFromJar(String name) throws IOException {
+        List<URL> metamodelResources = new ArrayList<>();
+        name = "jar:" + name + "!/";
+        URL jarUrl = new URL(name);
+        JarURLConnection jarConnection = (JarURLConnection) jarUrl.openConnection();
+        JarFile file = jarConnection.getJarFile();
+        Enumeration<JarEntry> e = file.entries();
+        while (e.hasMoreElements()) {
+            JarEntry newEntry = e.nextElement();
+            String entryName = newEntry.getName();
+            if (entryName.startsWith(this.getMetamodelLocation()) && entryName.endsWith(METAMODEL_SUFFIX)) {
+                metamodelResources.add(new URL(name + newEntry.getName()));
+            }
+        }
+
+        return metamodelResources;
+    }
+
+    private List<URL> getMetamodelResourcesFromDirectory(String name) throws URISyntaxException, MalformedURLException {
+        List<URL> metamodelResources = new ArrayList<>();
+        File metamodelDir = new File(new URI(name + this.getMetamodelLocation()));
+        File[] files = metamodelDir.listFiles();
+        File file = null;
+        if (files != null) {
+            for (int i = 0; i < files.length; i++) {
+                file = files[i];
+                if (file.getName().endsWith(METAMODEL_SUFFIX)) {
+                    metamodelResources.add(file.toURI().toURL());
                 }
             }
         }
-        return metadataResources;
+
+        return metamodelResources;
     }
 
-    protected abstract String getMetadataLocation();
+    protected abstract String getMetamodelLocation();
 
-    private void loadMetadataFile(InputStream stream) throws Exception {
-        TrackErrorsErrorHandler handler = new TrackErrorsErrorHandler(log);
+    private void loadMetamodelFile(InputStream stream) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            T instance = objectMapper.readValue(stream, getMetamodelClass());
+            addMetamodelElement(instance);
 
-        Digester digester = XmlUtils.getNewDigester(handler);
-        digester.push(this);
-        initialize(digester);
-        digester.parse(stream);
+        } catch (IOException e) {
+            throw new FermenterException("Problem reading metamodel!", e);
 
-        if (handler.haveErrorsOccurred()) {
-            throw new RuntimeException("XML parsing error(s) encountered; check log for details");
         }
-    }
-
-    protected void postLoadMetadata() {
 
     }
 
-    /**
-     * Returns the metadata map for the given artifactId.
-     * 
-     * @param artifactId
-     *            the artifactId of the jar for which to return metadata
-     * @return The metadata map for a specified application
-     */
-    protected Map<String, T> getMetadataMap(String artifactId) {
-        return metadataByArtifactIdMap.get(artifactId);
+    protected abstract Class<T> getMetamodelClass();
+
+    protected void postLoadMetamodel() {
+
     }
 
-    protected Map getCompleteMetadataMap() {
-        return completeMetadataMap;
+    protected Map<String, T> getMetamodelMap(String packageName) {
+        return metamodelByPackageMap.get(packageName);
     }
 
-    /**
-     * Add a metadata element to the current application map. Can only happen during metadata loading.
-     *
-     * @param name
-     * @param me
-     */
-    protected void addMetadataElement(String name, MetadataElement me) {
-        getMetadataMap(currentArtifactId).put(name, me);
-        completeMetadataMap.put(name, me);
+    protected Map<String, T> getCompleteMetamodelMap() {
+        return completeMetamodelMap;
+    }
+
+    protected void addMetamodelElement(T element) {
+        getMetamodelMap(element.getPackage()).put(element.getName(), element);
+        completeMetamodelMap.put(element.getName(), element);
 
     }
 

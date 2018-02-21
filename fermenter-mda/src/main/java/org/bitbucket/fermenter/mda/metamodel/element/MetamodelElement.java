@@ -11,4 +11,16 @@ public interface MetamodelElement {
      */
     public abstract void validate();
     
+    /**
+     * Returns the name of the metadata element.
+     * @return name
+     */
+    public abstract String getName();
+    
+    /**
+     * Returns the package of the metadata element.
+     * @return package
+     */
+    public abstract String getPackage();
+    
 }

@@ -19,6 +19,7 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.AbstractArquillianTestSupp
 import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.SimpleDomainMaintenanceDelegate;
 import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.SimpleDomainManagerDelegate;
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.SimpleDomain;
+import org.bitbucket.fermenter.stout.test.MessageTestUtils;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.spring.integration.test.annotation.SpringClientConfiguration;
@@ -48,7 +49,7 @@ public class SimpleDomainBusinessServicesClientIT extends AbstractArquillianTest
     @After
     public void deleteSimpleDomains() throws Exception {
         delegate.deleteAllSimpleDomains();
-        TestUtils.assertNoErrorMessages();
+        MessageTestUtils.assertNoErrorMessages();
     }
 
     @Test
@@ -56,7 +57,7 @@ public class SimpleDomainBusinessServicesClientIT extends AbstractArquillianTest
     public void testEcho() throws Exception {
         String response = delegate.echoPlusWazzup(RandomStringUtils.randomAlphabetic(10));
 
-        TestUtils.assertNoErrorMessages();
+        MessageTestUtils.assertNoErrorMessages();
         assertNotNull(response);
     }
 
@@ -71,7 +72,7 @@ public class SimpleDomainBusinessServicesClientIT extends AbstractArquillianTest
 
         SimpleDomain responseDomain = delegate.someBusinessOperation(domain, someImportantInfo);
 
-        TestUtils.assertNoErrorMessages();
+        MessageTestUtils.assertNoErrorMessages();
         assertNotNull(responseDomain);
         String name = responseDomain.getName();
         assertNotNull(name);
@@ -92,7 +93,7 @@ public class SimpleDomainBusinessServicesClientIT extends AbstractArquillianTest
 
         Integer response = delegate.countNumInputs(list);
 
-        TestUtils.assertNoErrorMessages();
+        MessageTestUtils.assertNoErrorMessages();
         assertNotNull(response);
         assertEquals(numberOfItems, response);
 
@@ -102,14 +103,14 @@ public class SimpleDomainBusinessServicesClientIT extends AbstractArquillianTest
     @RunAsClient
     public void testReturnVoid() throws Exception {
         delegate.returnVoid();
-        TestUtils.assertNoErrorMessages();
+        MessageTestUtils.assertNoErrorMessages();
     }
 
     @Test
     @RunAsClient
     public void testPassingPrimitivesAsParameters() throws Exception {
         delegate.doSomethingWithPrimitiveInputs(RandomStringUtils.randomAlphabetic(5), RandomUtils.nextInt(0, 10));
-        TestUtils.assertNoErrorMessages();
+        MessageTestUtils.assertNoErrorMessages();
     }
 
     @Test
@@ -117,7 +118,7 @@ public class SimpleDomainBusinessServicesClientIT extends AbstractArquillianTest
     public void testReturningACharacter() throws Exception {
         String response = delegate.doSomethingAndReturnAPrimitive();
 
-        TestUtils.assertNoErrorMessages();
+        MessageTestUtils.assertNoErrorMessages();
         assertNotNull(response);
 
     }
@@ -126,7 +127,7 @@ public class SimpleDomainBusinessServicesClientIT extends AbstractArquillianTest
     @RunAsClient
     public void testReturnNullEntityInBusinessServiceOperation() throws Exception {
         SimpleDomain response = delegate.returnNullEntity();
-        TestUtils.assertNoErrorMessages();
+        MessageTestUtils.assertNoErrorMessages();
         assertNull("Unexpectedly received a non-null SimpleDomain entity", response);
     }
 
@@ -139,7 +140,7 @@ public class SimpleDomainBusinessServicesClientIT extends AbstractArquillianTest
         domain.setName(someImportantInfo);
 
         SimpleDomain responseDomain = delegate.methodWithSingleEntityAsParam(domain);
-        TestUtils.assertNoErrorMessages();
+        MessageTestUtils.assertNoErrorMessages();
         assertNotNull(responseDomain);
         String name = responseDomain.getName();
         assertNotNull(name);
@@ -159,7 +160,7 @@ public class SimpleDomainBusinessServicesClientIT extends AbstractArquillianTest
         }
 
         Collection<SimpleDomain> allSimpleDomains = delegate.selectAllSimpleDomains();
-        TestUtils.assertNoErrorMessages();
+        MessageTestUtils.assertNoErrorMessages();
 
         assertEquals(numSimpleDomains, allSimpleDomains.size());
 
@@ -177,7 +178,7 @@ public class SimpleDomainBusinessServicesClientIT extends AbstractArquillianTest
         }
 
         Collection<SimpleDomain> allSimpleDomains = delegate.selectAllSimpleDomainsLazySimpleDomainChild();
-        TestUtils.assertNoErrorMessages();
+        MessageTestUtils.assertNoErrorMessages();
 
         assertEquals(numSimpleDomains, allSimpleDomains.size());
         assertEquals(0, allSimpleDomains.iterator().next().getSimpleDomainChilds().size());

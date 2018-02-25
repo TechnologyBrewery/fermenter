@@ -3,6 +3,7 @@
 
 <entity>
 	<name>ValidationReferencedObject</name>
+	<namespace>org.bitbucket.askllc.fermenter.cookbook.domain</namespace>
 	<table>VALIDATION_REF_OBJECT</table>
   	<id>
   		<field>

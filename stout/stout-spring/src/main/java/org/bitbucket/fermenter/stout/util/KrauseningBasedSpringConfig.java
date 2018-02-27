@@ -14,6 +14,8 @@ import org.aeonbits.owner.KrauseningConfigFactory;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.bitbucket.krausening.Krausening;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -23,6 +25,8 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class KrauseningBasedSpringConfig {
+    
+    private static final Logger logger = LoggerFactory.getLogger(KrauseningBasedSpringConfig.class);
 
 	private String jpaPropertiesFileName;
 	private String dataSourcePropertiesFileName;
@@ -47,18 +51,26 @@ public class KrauseningBasedSpringConfig {
 		alterPropertyAnnonationName(this.dataSourcePropertiesFileName);
 		DataSourceConfig config = KrauseningConfigFactory.create(DataSourceConfig.class, System.getProperties());
 		String interleavedUrl = config.getUrl();	
+		
 		if (interleavedUrl != null) {
 			dataSourceProps.put("url", interleavedUrl);
 		}
 		
-		for (String propName : dataSourceProps.stringPropertyNames()) {
-			try {
-				BeanUtils.setProperty(dataSource, propName, dataSourceProps.getProperty(propName));
-			} catch (IllegalAccessException | InvocationTargetException e) {
-				throw new RuntimeException("Could not set data source property [" + propName + "] to value ["
-						+ dataSourceProps.getProperty(propName) + "]");
-			}
+		if (dataSourceProps != null) {
+        		for (String propName : dataSourceProps.stringPropertyNames()) {
+        			try {
+        				BeanUtils.setProperty(dataSource, propName, dataSourceProps.getProperty(propName));
+        			} catch (IllegalAccessException | InvocationTargetException e) {
+        				throw new RuntimeException("Could not set data source property [" + propName + "] to value ["
+        						+ dataSourceProps.getProperty(propName) + "]");
+        			}
+        		}
+        		
+		} else {
+		    logger.error("Could not find properties for {}!", this.dataSourcePropertiesFileName);
+		    
 		}
+	
 		return dataSource;
 	}
 

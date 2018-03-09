@@ -20,7 +20,7 @@
 	<properties>
 		<krausening.version>3</krausening.version>
 		<jackson.version>2.8.5</jackson.version>
-		<spring.version>4.3.5.RELEASE</spring.version>
+		<spring.version>4.3.12.RELEASE</spring.version>
 		<spring.security.version>4.2.2.RELEASE</spring.security.version>
 		<jacoco.it.execution.data.file>${project.build.directory}/jacoco-it.exec</jacoco.it.execution.data.file>
 		<jacoco.test.execution.data.file>${project.build.directory}/jacoco.exec</jacoco.test.execution.data.file>

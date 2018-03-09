@@ -1,7 +1,5 @@
 package org.bitbucket.askllc.fermenter.cookbook.domain.client;
 
-import static org.junit.Assert.assertFalse;
-
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -11,10 +9,6 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.enumeration.SimpleDomainEn
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.SimpleDomain;
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.SimpleDomainChild;
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.SimpleDomainEagerChild;
-import org.bitbucket.fermenter.stout.messages.Message;
-import org.bitbucket.fermenter.stout.messages.MessageManager;
-import org.bitbucket.fermenter.stout.messages.MessageUtils;
-import org.bitbucket.fermenter.stout.messages.Messages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,18 +54,6 @@ public final class TestUtils {
 			domain.addSimpleDomainEagerChild(eagerChild);
 		}
 		return domain;
-	}
-
-	public static void assertNoErrorMessages() {
-		Messages messages = MessageManager.getMessages();
-		boolean hasErrorMessages = messages.hasErrorMessages();
-		if (hasErrorMessages) {
-			for (Message message : messages.getErrorMessages()) {
-				LOGGER.error(MessageUtils.getSummaryMessage(message.getKey(), message.getInserts(),
-						org.bitbucket.askllc.fermenter.cookbook.domain.transfer.SimpleDomain.class));
-			}
-		}
-		assertFalse(hasErrorMessages);
 	}
 
 }

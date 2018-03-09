@@ -11,6 +11,7 @@ import org.apache.commons.lang.StringUtils;
 import org.bitbucket.fermenter.mda.PackageManager;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
+import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.Field;
 import org.bitbucket.fermenter.mda.metadata.element.Reference;
 
@@ -89,11 +90,18 @@ public class JavaReference implements Reference {
 		MetadataRepository metadataRepository = 
                 MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
 		String currentProject = metadataRepository.getApplicationName();
-		return !StringUtils.isBlank(getProject()) && !getProject().equals(currentProject);
+		String basePackage = PackageManager.getBasePackage(currentProject);
+		Entity referenceEntity = metadataRepository.getAllEntities().get(getType());
+		String namespace = referenceEntity.getNamespace();
+		return !StringUtils.isBlank(namespace) && !namespace.equals(basePackage);
 	}
 	
 	public String getImportPrefix() {
-		return PackageManager.getBasePackage( getProject() );
+	    MetadataRepository metadataRepository = 
+                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+	    Entity referenceEntity = metadataRepository.getAllEntities().get(getType());
+	    String namespace = referenceEntity.getNamespace();
+		return StringUtils.isBlank(namespace) ? PackageManager.getBasePackage(getProject()) : namespace;
 	}
 	
 	/**
@@ -144,5 +152,9 @@ public class JavaReference implements Reference {
 	public String getUncapitalizedType() {
 		return StringUtils.uncapitalize( getType() );
 	}	
+	
+	public String getImport() {
+	    return JavaElementUtils.getJavaImportType("", getType());
+	}
 	
 }

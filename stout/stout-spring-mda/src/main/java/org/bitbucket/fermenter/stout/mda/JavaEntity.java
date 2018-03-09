@@ -376,6 +376,10 @@ public class JavaEntity implements Entity {
             if (fkSet != null) {
                 importSet.addAll(fkSet);
             }
+            
+            if (javaReference.isExternal()) {
+                importSet.add(javaReference.getImport());
+            }
         }
 
         return importSet;

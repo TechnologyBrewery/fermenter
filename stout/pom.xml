@@ -42,6 +42,7 @@
 	<modules>
 		<module>stout-build-tools</module>
 		<module>stout-core</module>
+		<module>stout-test</module>
 		<module>stout-spring-mda</module>
 		<module>stout-spring</module>
 		<module>stout-web-container-mda</module>

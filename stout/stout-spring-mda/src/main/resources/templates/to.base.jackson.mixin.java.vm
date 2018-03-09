@@ -64,8 +64,13 @@ public abstract class ${entity.name}BaseMixIn {
 #end
 
 #foreach ($reference in $entity.references.values())
+  #if (!$reference.isExternal())
 	@JsonProperty
 	private ${reference.type}BO ${reference.name};
+  #else
+  	@JsonProperty
+  	private ${reference.foreignKeyFields.iterator().next().javaType}	${reference.name}Key;
+  #end
 #end
 
 #if ( !$entity.idFields.isEmpty() )
@@ -75,6 +80,7 @@ public abstract class ${entity.name}BaseMixIn {
 	
 	@JsonIgnore
 	public abstract void setKey(${idField.javaType} ${idField.name});
+	
 #end
 	
 }

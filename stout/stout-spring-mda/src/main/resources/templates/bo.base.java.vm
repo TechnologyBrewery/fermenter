@@ -51,6 +51,13 @@ import ${basePackage}.persist.${entity.name}Repository;
 import ${import};
 #end
 
+#foreach ($reference in $entity.references )
+  #if ($reference.isExternal() )
+import ${reference.importPrefix}.client.service.${reference.type}MaintenanceDelegate;
+  #end
+#end
+
+
 #if ( !$entity.idFields.isEmpty() )
   #set ($idFieldJavaType = ${entity.idFields.values().iterator().next().javaType})
 #else
@@ -209,14 +216,33 @@ public abstract class ${entity.name}BaseBO extends BasePersistentSpringBO<${idFi
 	private ${inverseRelation.name}BO parent${inverseRelation.name};
 #end
 #foreach ($reference in $entity.references.values())
-	#if ( !$entity.isTransient() )
+
+	#if ( !$entity.isTransient() && !$reference.isExternal())
 	@ManyToOne(fetch=FetchType.EAGER #if($reference.isRequired()), optional=false#end)
-	@JoinColumn(name="${reference.foreignKeyFields.iterator().next().column}")
-	#end	
-  #if ( $reference.isRequired() )
+	@JoinColumn(name="${reference.foreignKeyFields.iterator().next().column}")	
+    #if ( $reference.isRequired() )
 	@NotNull
-  #end
+    #end
+  #end	
+  #if (!$reference.isExternal())
 	private ${reference.type}BO ${reference.name};
+  #else
+  	@Transient
+  	private ${reference.type} ${reference.name};
+  #end
+  #if ($reference.isExternal() )
+  	#if ( !$entity.isTransient() )
+  	@Inject
+  	@Transient
+	private ${reference.type}MaintenanceDelegate ${reference.name}Delegate;
+  	
+    	@Column(name="${reference.foreignKeyFields.iterator().next().column}")
+  	#end
+  	#if ( $reference.isRequired() )
+	@NotNull
+  	#end
+  	private ${reference.foreignKeyFields.iterator().next().javaType}	${reference.name}Key;  	
+  #end
 #end
 
 #foreach ( $idField in $entity.idFields.values() )
@@ -396,6 +422,7 @@ public abstract class ${entity.name}BaseBO extends BasePersistentSpringBO<${idFi
 	}
 #end
 #foreach ($reference in $entity.references.values())
+  #if ( !$reference.isExternal() )
 
 	/**
 	 * Get the ${reference.label} reference.
@@ -413,7 +440,35 @@ public abstract class ${entity.name}BaseBO extends BasePersistentSpringBO<${idFi
 	 */
 	public void set${reference.capitalizedName}(${reference.type}BO ${reference.name}) {
 		this.${reference.name} = ${reference.name};
-	}			
+	}
+
+  #else
+	
+	/**
+	 * Get the ${reference.label} reference.
+	 *
+	 * @return ${reference.type} - The ${reference.label}
+	 */
+	public ${reference.type} get${reference.capitalizedName}() {
+		if ((${reference.name} == null) && (${reference.name}Key != null)) {
+			${reference.name} = ${reference.name}Delegate.findByPrimaryKey(${reference.name}Key);
+		    set${reference.getCapitalizedName()}(${reference.name});
+		}
+		
+		return ${reference.name};
+	}
+	 
+	/**
+	 * Set the ${reference.label} reference.
+	 *
+	 * @param The ${reference.label}
+	 */
+	public void set${reference.capitalizedName}(${reference.type} ${reference.name}) {
+		this.${reference.name} = ${reference.name};
+		this.${reference.name}Key = ${reference.name} != null ? ${reference.name}.get${reference.foreignKeyFields.iterator().next().getCapitalizedName()}() : null;
+	}
+  #end
+				
 #end
 	
 	/**

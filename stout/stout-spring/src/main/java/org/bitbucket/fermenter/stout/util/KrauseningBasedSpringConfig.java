@@ -13,7 +13,10 @@ import org.aeonbits.owner.KrauseningConfig.KrauseningSources;
 import org.aeonbits.owner.KrauseningConfigFactory;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.bitbucket.fermenter.stout.exception.UnrecoverableException;
 import org.bitbucket.krausening.Krausening;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -24,64 +27,76 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class KrauseningBasedSpringConfig {
 
-	private String jpaPropertiesFileName;
-	private String dataSourcePropertiesFileName;
+    private static final Logger logger = LoggerFactory.getLogger(KrauseningBasedSpringConfig.class);
 
-	protected static final String DEFAULT_JPA_PROPERTIES = "jpa.properties";
-	protected static final String DEFAULT_DATA_SOURCE_PROPERTIES = "data-source.properties";
+    private String jpaPropertiesFileName;
+    private String dataSourcePropertiesFileName;
 
-	public KrauseningBasedSpringConfig() {
-		this(DEFAULT_JPA_PROPERTIES, DEFAULT_DATA_SOURCE_PROPERTIES);
-	}
+    protected static final String DEFAULT_JPA_PROPERTIES = "jpa.properties";
+    protected static final String DEFAULT_DATA_SOURCE_PROPERTIES = "data-source.properties";
 
-	public KrauseningBasedSpringConfig(String jpaPropertiesFileName, String dataSourcePropertiesFileName) {
-		this.jpaPropertiesFileName = jpaPropertiesFileName;
-		this.dataSourcePropertiesFileName = dataSourcePropertiesFileName;
-	}
+    public KrauseningBasedSpringConfig() {
+        this(DEFAULT_JPA_PROPERTIES, DEFAULT_DATA_SOURCE_PROPERTIES);
+    }
 
-	@Bean
-	public DataSource krauseningDataSource() {
-		BasicDataSource dataSource = new BasicDataSource();
-		Properties dataSourceProps = Krausening.getInstance().getProperties(this.dataSourcePropertiesFileName);
-		
-		alterPropertyAnnonationName(this.dataSourcePropertiesFileName);
-		DataSourceConfig config = KrauseningConfigFactory.create(DataSourceConfig.class, System.getProperties());
-		String interleavedUrl = config.getUrl();	
-		if (interleavedUrl != null) {
-			dataSourceProps.put("url", interleavedUrl);
-		}
-		
-		for (String propName : dataSourceProps.stringPropertyNames()) {
-			try {
-				BeanUtils.setProperty(dataSource, propName, dataSourceProps.getProperty(propName));
-			} catch (IllegalAccessException | InvocationTargetException e) {
-				throw new RuntimeException("Could not set data source property [" + propName + "] to value ["
-						+ dataSourceProps.getProperty(propName) + "]");
-			}
-		}
-		return dataSource;
-	}
+    public KrauseningBasedSpringConfig(String jpaPropertiesFileName, String dataSourcePropertiesFileName) {
+        this.jpaPropertiesFileName = jpaPropertiesFileName;
+        this.dataSourcePropertiesFileName = dataSourcePropertiesFileName;
+    }
 
-	@Bean
-	public Properties krauseningJpaProperties() {
-		return Krausening.getInstance().getProperties(this.jpaPropertiesFileName);
-	}
-	
-	private static void alterPropertyAnnonationName(String dataSourcePropertiesFileName) {
-		try {
-			ExtendedKrauseningSources updatedSources = new ExtendedKrauseningSources(dataSourcePropertiesFileName);
-			
+    @Bean
+    public DataSource krauseningDataSource() {
+        BasicDataSource dataSource = new BasicDataSource();
+        Properties dataSourceProps = Krausening.getInstance().getProperties(this.dataSourcePropertiesFileName);
+        if (dataSourceProps == null) {
+            logger.error(
+                    "Could not find properties for {}!  You emf bean will not be able to load without these properties! Using defaults instead...",
+                    this.dataSourcePropertiesFileName); 
+            dataSourceProps = new Properties();
+        }
+        
+        alterPropertyAnnonationName(this.dataSourcePropertiesFileName);
+        DataSourceConfig config = KrauseningConfigFactory.create(DataSourceConfig.class, System.getProperties());
+        String interleavedUrl = config.getUrl();
+
+        if (interleavedUrl != null) {
+            dataSourceProps.put("url", interleavedUrl);
+        }
+        
+        for (String propName : dataSourceProps.stringPropertyNames()) {
+            try {
+                BeanUtils.setProperty(dataSource, propName, dataSourceProps.getProperty(propName));
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                throw new UnrecoverableException("Could not set data source property [" + propName + "] to value ["
+                        + dataSourceProps.getProperty(propName) + "]");
+            }
+        }
+
+
+        return dataSource;
+    }
+
+    @Bean
+    public Properties krauseningJpaProperties() {
+        return Krausening.getInstance().getProperties(this.jpaPropertiesFileName);
+    }
+
+    private static void alterPropertyAnnonationName(String dataSourcePropertiesFileName) {
+        try {
+            ExtendedKrauseningSources updatedSources = new ExtendedKrauseningSources(dataSourcePropertiesFileName);
+
             Method method = Class.class.getDeclaredMethod("annotationData", null);
             method.setAccessible(true);
             Object annotationData = method.invoke(DataSourceConfig.class);
             Field annotations = annotationData.getClass().getDeclaredField("annotations");
             annotations.setAccessible(true);
-            Map<Class<? extends Annotation>, Annotation> map =
-                (Map<Class<? extends Annotation>, Annotation>) annotations.get(annotationData);
+            Map<Class<? extends Annotation>, Annotation> map = (Map<Class<? extends Annotation>, Annotation>) annotations
+                    .get(annotationData);
             map.put(KrauseningSources.class, updatedSources);
         } catch (Exception e) {
-            throw new RuntimeException("Could not update " + DataSourceConfig.class.getSimpleName() + "KrauseningSources property!", e);
+            throw new UnrecoverableException(
+                    "Could not update " + DataSourceConfig.class.getSimpleName() + "KrauseningSources property!", e);
         }
-	}
-	
+    }
+
 }

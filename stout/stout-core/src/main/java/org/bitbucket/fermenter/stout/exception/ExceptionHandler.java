@@ -59,7 +59,7 @@ public class ExceptionHandler {
             if((unrecognizedException.getClass() == InvocationTargetException.class)){
 
                 exceptionMessage = "Exception handler failed to handle given exception of type " +
-                        givenException.getClass(), unrecognizedException);
+                        givenException.getClass();
 
             } else if (unrecognizedException.getClass() == IllegalAccessException.class) {
                 exceptionMessage =

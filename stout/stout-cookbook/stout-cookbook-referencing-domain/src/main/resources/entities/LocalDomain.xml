@@ -9,7 +9,7 @@
 	<id>
 		<field>
 			<name>id</name>
-			<type>string</type>
+			<type>uuid</type>
 			<column>LOCAL_DOMAIN_ID</column>
 			<required>true</required>
 			<generator>uuid</generator>

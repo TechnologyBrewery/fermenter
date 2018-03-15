@@ -7,7 +7,10 @@ import ${basePackage}.transfer.${entity.name};
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
 
-        import java.math.BigDecimal;
+#foreach( $import in $entity.idFieldImports )
+import $import;
+#end
+
 /**
  * Resource for ${entity.name} entity maintenance.
  *

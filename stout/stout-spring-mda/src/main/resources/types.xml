@@ -46,4 +46,8 @@
 		<name>geospatial_point</name>
 		<java>com.vividsolutions.jts.geom.Point</java>
 	</type>
+	<type>
+		<name>uuid</name>
+		<java>java.util.UUID</java>
+	</type>
 </types>

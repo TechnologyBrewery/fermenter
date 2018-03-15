@@ -2,6 +2,9 @@ package org.bitbucket.askllc.fermenter.cookbook.domain.persist;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+
+import java.util.UUID;
+
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationReferencedObjectBO;
 
 /**
@@ -9,7 +12,7 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationReference
  * 
  * GENERATED STUB CODE - PLEASE *DO* MODIFY
  */ 
-public interface ValidationReferencedObjectRepository extends JpaRepository<ValidationReferencedObjectBO, String>, JpaSpecificationExecutor<ValidationReferencedObjectBO> {
+public interface ValidationReferencedObjectRepository extends JpaRepository<ValidationReferencedObjectBO, UUID>, JpaSpecificationExecutor<ValidationReferencedObjectBO> {
 	
 	/**
 	 * Developers should leverage this interface to define any query logic

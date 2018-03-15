@@ -1,27 +1,32 @@
 package ${basePackage}.service.rest;
 
-    #foreach( $import in $service.imports )
-            import $import;
-    #end
+#foreach( $import in $service.imports )
+import $import;
+#end
 
-        import ${basePackage}.bizobj.${entity.name}BO;
+#foreach( $import in $entity.idFieldImports )
+import $import;
+#end
 
-        import javax.ws.rs.Consumes;
-        import javax.ws.rs.DELETE;
-        import javax.ws.rs.GET;
-        import javax.ws.rs.POST;
-        import javax.ws.rs.PUT;
-        import javax.ws.rs.Path;
-        import javax.ws.rs.PathParam;
-        import javax.ws.rs.Produces;
-        import javax.ws.rs.core.MediaType;
-        import org.springframework.security.access.prepost.PreAuthorize;
-        import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import ${basePackage}.bizobj.${entity.name}BO;
 
-        import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
-        import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
-        import java.math.BigDecimal;
+import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
+import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
+
+import java.math.BigDecimal;
+
 /**
  * Provides an interface for create, retrieve, update, and delete (CRUD) functionality for ${entity.name}
  * business objects and may be utilized as a Resteasy client proxy to facilitate RESTful service

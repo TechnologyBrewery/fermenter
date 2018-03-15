@@ -2,6 +2,9 @@ package org.bitbucket.askllc.fermenter.cookbook.domain.persist;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+
+import java.util.UUID;
+
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainChildBO;
 
 /**
@@ -9,7 +12,7 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainChildBO
  * 
  * GENERATED STUB CODE - PLEASE *DO* MODIFY
  */ 
-public interface SimpleDomainChildRepository extends JpaRepository<SimpleDomainChildBO, String>, JpaSpecificationExecutor<SimpleDomainChildBO> {
+public interface SimpleDomainChildRepository extends JpaRepository<SimpleDomainChildBO, UUID>, JpaSpecificationExecutor<SimpleDomainChildBO> {
 	
 	/**
 	 * Developers should leverage this interface to define any query logic

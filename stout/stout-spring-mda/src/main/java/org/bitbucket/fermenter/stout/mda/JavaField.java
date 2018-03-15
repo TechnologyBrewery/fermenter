@@ -42,6 +42,13 @@ public class JavaField implements Field {
 	public String getGenerator() {
 		return field.getGenerator();
 	}
+	
+    /**
+     * {@inheritDoc}
+     */
+    public String getUppercasedGenerator() {
+        return field.getGenerator().toUpperCase();
+    }	
 
 	/**
 	 * {@inheritDoc}
@@ -224,6 +231,13 @@ public class JavaField implements Field {
 	public boolean hasScale() {
 		return field.hasScale();
 	}
+	
+    /**
+     * {@inheritDoc}
+     */
+    public boolean hasGenerator() {
+        return StringUtils.isNotBlank(field.getGenerator());
+    }	
 
 	/**
 	 * {@inheritDoc}

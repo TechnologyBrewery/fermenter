@@ -344,11 +344,28 @@ public class JavaEntity implements Entity {
      * @return field imports
      */
     public Set<String> getFieldImports() {
-        Set<String> importSet = new HashSet<>();
+        return getFieldImports(true);
+    }
 
-        JavaField javaField;
-        Map<String, Field> operationCollection = getFields();
-        for (Field field : operationCollection.values()) {
+    /**
+     * Returns the full set of imports for fields.
+     * @return field imports
+     */
+    public Set<String> getIdFieldImports() {
+        return getFieldImports(false);
+    }
+    
+    protected Set<String> getFieldImports(boolean includeNonIdFields) {
+        Set<String> importSet = new HashSet<>();
+        
+        Map<String, Field> fieldCollection = new HashMap<>();
+        fieldCollection.putAll(getIdFields());
+        if (includeNonIdFields) {
+            fieldCollection.putAll(getFields());
+        }
+
+        JavaField javaField;       
+        for (Field field : fieldCollection.values()) {
             javaField = (JavaField) field;
             String importValue = javaField.getImport();
             // java.lang is imported by default, so filter them out:
@@ -358,8 +375,7 @@ public class JavaEntity implements Entity {
         }
 
         return importSet;
-    }
-
+    }    
     
     /**
      * Returns the full set of imports for references.

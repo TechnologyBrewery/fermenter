@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Iterator;
 import java.util.Set;
+import java.util.UUID;
 
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -30,7 +31,7 @@ public class SimpleDomainMaintenanceIT extends AbstractArquillianTestSupport {
     @RunAsClient
     public void testGetNonExistentSimpleDomain(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
         SimpleDomainMaintenanceService simpleDomainService = getMaintenanceService(webTarget);
-        ValueServiceResponse<SimpleDomainBO> result = simpleDomainService.findByPrimaryKey("BAD_PK");
+        ValueServiceResponse<SimpleDomainBO> result = simpleDomainService.findByPrimaryKey(UUID.randomUUID());
         assertNotNull(result);
         assertNull(result.getValue());
     }
@@ -45,7 +46,7 @@ public class SimpleDomainMaintenanceIT extends AbstractArquillianTestSupport {
 		TestUtils.assertNoErrorMessages(response);
 
 		ValueServiceResponse<SimpleDomainBO> resultWrapper = simpleDomainService
-				.findByPrimaryKey(simpleDomain.getKey());
+				.findByPrimaryKey(response.getValue().getKey());
 		assertNotNull(resultWrapper);
 		SimpleDomainBO result = resultWrapper.getValue();
 		assertNotNull(result);
@@ -62,7 +63,7 @@ public class SimpleDomainMaintenanceIT extends AbstractArquillianTestSupport {
 		TestUtils.assertNoErrorMessages(response);
 
 		SimpleDomainBO retrievedSimpleDomain = response.getValue();
-		assertEquals(simpleDomain.getKey(), retrievedSimpleDomain.getKey());
+		assertNotNull("No generated key added to the persistented object!", retrievedSimpleDomain.getKey());
 		assertNotNull(retrievedSimpleDomain.getUpdatedAt());
 	}
 	
@@ -78,7 +79,7 @@ public class SimpleDomainMaintenanceIT extends AbstractArquillianTestSupport {
 		TestUtils.assertNoErrorMessages(response);
 
 		SimpleDomainBO retrievedSimpleDomain = response.getValue();
-		assertEquals(simpleDomain.getKey(), retrievedSimpleDomain.getKey());
+		assertNotNull("No generated key added to the persistented object!", retrievedSimpleDomain.getKey());
 		assertNotNull(retrievedSimpleDomain.getType());
 	}
 	
@@ -92,7 +93,7 @@ public class SimpleDomainMaintenanceIT extends AbstractArquillianTestSupport {
 		TestUtils.assertNoErrorMessages(response);
 
 		SimpleDomainBO retrievedSimpleDomain = response.getValue();
-		assertEquals(simpleDomain.getKey(), retrievedSimpleDomain.getKey());
+		assertNotNull("No generated key added to the persistented object!", retrievedSimpleDomain.getKey());
 		assertTrue(simpleDomain.getNumericBoolean());
 	}
 	
@@ -107,7 +108,7 @@ public class SimpleDomainMaintenanceIT extends AbstractArquillianTestSupport {
 		TestUtils.assertNoErrorMessages(response);
 
 		SimpleDomainBO retrievedSimpleDomain = response.getValue();
-		assertEquals(simpleDomain.getKey(), retrievedSimpleDomain.getKey());
+		assertNotNull("No generated key added to the persistented object!", retrievedSimpleDomain.getKey());
 		assertFalse(simpleDomain.getNumericBoolean());
 	}
 	
@@ -121,7 +122,7 @@ public class SimpleDomainMaintenanceIT extends AbstractArquillianTestSupport {
         assertNotNull(result);
         SimpleDomainBO savedDomain = result.getValue();
         assertNotNull(savedDomain);
-        String id = savedDomain.getKey();
+        UUID id = savedDomain.getKey();
         String originalName = savedDomain.getName();
         savedDomain.setName(RandomStringUtils.randomAlphabetic(3));
 
@@ -146,7 +147,7 @@ public class SimpleDomainMaintenanceIT extends AbstractArquillianTestSupport {
         assertNotNull(result);
         SimpleDomainBO savedDomain = result.getValue();
         assertNotNull(savedDomain);
-        String id = savedDomain.getKey();
+        UUID id = savedDomain.getKey();
 
         VoidServiceResponse deleteResult = simpleDomainService.delete(id);
         TestUtils.assertNoErrorMessages(deleteResult);

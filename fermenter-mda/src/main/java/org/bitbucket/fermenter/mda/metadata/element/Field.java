@@ -17,8 +17,11 @@ public interface Field {
 	public static final String TYPE_CHARACTER = "character";
 	public static final String TYPE_BLOB = "blob";
 	public static final String TYPE_GEOSPATIAL_POINT = "geospatial_point";
+	public static final String TYPE_UUID = "uuid";
 	
-	public static final String [] SIMPLE_TYPES = new String [] {TYPE_STRING, TYPE_FLOAT, TYPE_DATE, TYPE_TIMESTAMP, TYPE_LONG, TYPE_DOUBLE, TYPE_INTEGER, TYPE_SHORT, TYPE_BOOLEAN, TYPE_BIG_DECIMAL, TYPE_CHARACTER, TYPE_BLOB, TYPE_GEOSPATIAL_POINT};
+    public static final String[] SIMPLE_TYPES = new String[] { TYPE_STRING, TYPE_FLOAT, TYPE_DATE, TYPE_TIMESTAMP,
+            TYPE_LONG, TYPE_DOUBLE, TYPE_INTEGER, TYPE_SHORT, TYPE_NUMERIC_BOOLEAN, TYPE_BOOLEAN, TYPE_BIG_DECIMAL,
+            TYPE_CHARACTER, TYPE_BLOB, TYPE_GEOSPATIAL_POINT, TYPE_UUID };
 	
 	public static final String ID_GENERATION_ASSIGNED = "assigned";
 

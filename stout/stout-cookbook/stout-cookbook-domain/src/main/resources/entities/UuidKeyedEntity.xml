@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE entity PUBLIC "-//FERMENTER//DTD ENTITY//EN" "https://bitbucket.org/cpointe/fermenter/downloads/fermenter-2-entity.dtd">
+
+<entity>
+	<name>UuidKeyedEntity</name>
+	<documentation>Entity that demonstrates uses a UUID as a generated value primary key</documentation>
+	<table>UUID_KEYED_ENTITY</table>
+
+	<id>
+		<field>
+			<name>id</name>
+			<type>uuid</type>
+			<column>UUID_KEYED_ENTITY_ID</column>
+			<required>true</required>
+			<generator>uuid</generator>
+		</field>
+	</id>
+
+</entity>

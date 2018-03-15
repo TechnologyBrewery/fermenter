@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE entity PUBLIC "-//FERMENTER//DTD ENTITY//EN" "https://bitbucket.org/askllc/fermenter/downloads/fermenter-2-entity.dtd">
+<!DOCTYPE entity PUBLIC "-//FERMENTER//DTD ENTITY//EN" "https://bitbucket.org/cpointe/fermenter/downloads/fermenter-2-entity.dtd">
 
 <entity transient="true">
 	<name>TransientEntityExample</name>

@@ -9,8 +9,6 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.AbstractArquillianTestSupport;
-import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.SimpleDomainMaintenanceDelegate;
-import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.SimpleDomainManagerDelegate;
 import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.ValidationReferencedObjectMaintenanceDelegate;
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.ValidationReferencedObject;
 import org.bitbucket.askllc.fermenter.cookbook.referencing.domain.bizobj.LocalDomainBO;
@@ -52,7 +50,7 @@ public class RemoteReferenceRetrievalIT extends AbstractArquillianTestSupport {
     @RunAsClient
     public void testRemoteReferenceRetrieval() throws Exception {
         ValidationReferencedObject newReference = new ValidationReferencedObject();
-        newReference.setId(UUID.randomUUID().toString());
+        newReference.setId(UUID.randomUUID());
         newReference.setSomeDataField(RandomStringUtils.randomAlphanumeric(10));
         reference = referenceMaintenanceDelegate.create(newReference);
         MessageTestUtils.assertNoErrorMessages();

@@ -135,7 +135,7 @@ public class SimpleDomainBusinessServicesClientIT extends AbstractArquillianTest
     @RunAsClient
     public void testSomeBusinessOperationWithEntityParam() throws Exception {
         SimpleDomain domain = TestUtils.createRandomSimpleDomain();
-        domain.setId(UUID.randomUUID().toString());
+        domain.setId(UUID.randomUUID());
         final String someImportantInfo = RandomStringUtils.randomAlphanumeric(5);
         domain.setName(someImportantInfo);
 

@@ -11,7 +11,9 @@ import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
+#foreach( $import in $entity.idFieldImports )
+import $import;
+#end
 
 /**
  * Service implementation for ${entity.name} entity maintenance.

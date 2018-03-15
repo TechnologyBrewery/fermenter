@@ -58,7 +58,7 @@ public class ValidationExampleTest extends AbstractMsgMgrAwareTestSupport {
 		Message invalidScaleErrorMsg = MessageManager.getMessages().getErrorMessages().iterator().next();
 		assertEquals(CoreMessages.INVALID_FIELD, invalidScaleErrorMsg.getKey());
 		assertEquals("bigDecimalExampleWithScale", invalidScaleErrorMsg.getProperties().iterator().next());
-		assertNull(ValidationExampleBO.findByPrimaryKey(bizObj.getKey()));
+		assertNull(bizObj.getKey());
 	}
 
 	@Test
@@ -77,6 +77,6 @@ public class ValidationExampleTest extends AbstractMsgMgrAwareTestSupport {
 			assertTrue("requiredField".equals(invalidPropertyName) || "stringExample".equals(invalidPropertyName)
 					|| "integerExample".equals(invalidPropertyName));
 		}
-		assertNull(ValidationExampleBO.findByPrimaryKey(bizObj.getKey()));
+		assertNull(bizObj.getKey());
 	}
 }

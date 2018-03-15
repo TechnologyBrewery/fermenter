@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE entity PUBLIC "-//FERMENTER//DTD ENTITY//EN" "https://bitbucket.org/askllc/fermenter/downloads/fermenter-2-entity.dtd">
+<!DOCTYPE entity PUBLIC "-//FERMENTER//DTD ENTITY//EN" "https://bitbucket.org/cpointe/fermenter/downloads/fermenter-2-entity.dtd">
 
 <entity>
 	<name>ValidationExample</name>
@@ -7,7 +7,7 @@
   	<id>
   		<field>
        		<name>id</name>
-      		<type>string</type>
+      		<type>uuid</type>
        		<column>VALIDATION_EXAMPLE_ID</column>
        		<required>true</required>
        		<generator>uuid</generator>

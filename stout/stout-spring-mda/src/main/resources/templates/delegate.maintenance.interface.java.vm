@@ -3,7 +3,10 @@ package ${basePackage}.client.service;
 import feign.Param;
 import ${basePackage}.transfer.${entity.name};
 
-        import java.math.BigDecimal;
+#foreach( $import in $entity.idFieldImports )
+import $import;
+#end
+
 /**
  * Service delegate interface for ${entity.name} entity maintenance.
  *

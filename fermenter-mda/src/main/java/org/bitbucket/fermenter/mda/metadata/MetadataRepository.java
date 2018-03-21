@@ -130,7 +130,7 @@ public class MetadataRepository extends AbstractMetadataRepository {
                 }
                 if (LOG.isInfoEnabled()) {
                     long stop = System.currentTimeMillis();
-                    LOG.info("Metadata for application '" + applicationName + "' has been loaded - " + (stop - start)
+                    LOG.info("Metadata for application '" + url.getApplicationName() + "' has been loaded - " + (stop - start)
                             + "ms");
                 }
 

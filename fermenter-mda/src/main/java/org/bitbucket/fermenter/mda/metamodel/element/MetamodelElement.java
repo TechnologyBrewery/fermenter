@@ -1,26 +1,82 @@
 package org.bitbucket.fermenter.mda.metamodel.element;
 
+import java.util.Objects;
+
+import org.bitbucket.fermenter.mda.util.MessageTracker;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.base.MoreObjects;
+
 /**
- * Defines the contract for a metamodel element.
+ * Defines the contract for a metamodel element that requires a name.
  */
-public interface MetamodelElement {
+public abstract class MetamodelElement {
+
+    protected static MessageTracker messageTracker = MessageTracker.getInstance();
+
+    @JsonProperty(required = true)
+    protected String name;
 
     /**
-     * Ensure that the this metamodel element is in a valid state.  For instance, if this element refers to another
+     * Ensure that the this metamodel element is in a valid state. For instance, if this element refers to another
      * element, let's ensure that element exists.
      */
     public abstract void validate();
-    
+
     /**
      * Returns the name of the metadata element.
+     * 
      * @return name
      */
-    public abstract String getName();
-    
+    public String getName() {
+        return name;
+    }
+
     /**
-     * Returns the package of the metadata element.
-     * @return package
+     * Sets the name of the metadata element. param name element name
      */
-    public abstract String getPackage();
-    
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        boolean areEqual;
+        if (obj == null) {
+            areEqual = false;
+            
+        } else if (obj == this) {
+            areEqual = true;
+            
+        } else if (obj.getClass() != getClass()) {
+            areEqual = false;
+            
+        } else {
+            MetamodelElement other = (MetamodelElement) obj;
+            areEqual = Objects.equals(this.name, other.getName());
+            
+        }
+        
+        return areEqual;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this).add("name", name).toString();
+    }
+
 }

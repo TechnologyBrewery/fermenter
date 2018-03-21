@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * additional information to control where the generated file will live, whether
  * to overwrite an existing file, etc.
  */
-public class Target extends ValidatedElement {
+public class Target implements ValidatedElement {
 
 	@JsonProperty(required = true)
 	private String name;

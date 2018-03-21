@@ -45,6 +45,11 @@
 			<artifactId>commons-io</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>4.1</version>
+		</dependency>
+		<dependency>
 			<groupId>xml-resolver</groupId>
 			<artifactId>xml-resolver</artifactId>
 			<version>1.1</version>
@@ -69,10 +74,16 @@
 			<version>2.2.8</version>
 		</dependency>
 		<dependency>
-			<!-- Keep in sync w/ Maven plugin dependencies to avoid maven-plugin-plugin errors: -->
+			<!-- Keep in sync w/ Maven plugin dependencies to avoid maven-plugin-plugin 
+				errors: -->
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>20.0</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.bitbucket.askllc.krausening</groupId>
+		    <artifactId>krausening</artifactId>
+		    <version>6</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

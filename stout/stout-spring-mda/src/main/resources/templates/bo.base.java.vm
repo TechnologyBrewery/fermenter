@@ -249,7 +249,8 @@ public abstract class ${entity.name}BaseBO extends BasePersistentSpringBO<${idFi
   	#if ( $reference.isRequired() )
 	@NotNull
   	#end
-  	private ${reference.foreignKeyFields.iterator().next().javaType}	${reference.name}Key;  	
+  	private ${reference.foreignKeyFields.iterator().next().javaType}	${reference.name}Key;
+  
   #end
 #end
 

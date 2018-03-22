@@ -2,7 +2,6 @@ package org.bitbucket.askllc.fermenter.cookbook.domain.bizobj;
 
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -97,10 +96,6 @@ public class SimpleDomainBO extends SimpleDomainBaseBO {
 	@Override
 	protected void defaultValues() {
 		super.defaultValues();
-		
-		if (StringUtils.isBlank(getId())) {
-		    setId(UUID.randomUUID().toString());
-		}
 		
 		if (StringUtils.isBlank(getType())) {
 			setType(RandomStringUtils.randomAlphabetic(3));

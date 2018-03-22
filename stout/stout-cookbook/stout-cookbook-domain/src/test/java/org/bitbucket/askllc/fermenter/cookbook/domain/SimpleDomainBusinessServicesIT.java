@@ -8,7 +8,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
@@ -142,7 +141,6 @@ public class SimpleDomainBusinessServicesIT extends AbstractArquillianTestSuppor
 	public void testSomeBusinessOperationWithEntityParam(@ArquillianResteasyResource ResteasyWebTarget webTarget) {
 		SimpleDomainManagerService managerService = getService(webTarget);
 		SimpleDomainBO domain = TestUtils.createRandomSimpleDomain();
-		domain.setKey(UUID.randomUUID().toString());
 		final String someImportantInfo = RandomStringUtils.randomAlphanumeric(5);
 		domain.setName(someImportantInfo);
 

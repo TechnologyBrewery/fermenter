@@ -8,6 +8,7 @@ import java.io.Writer;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -48,7 +49,7 @@ public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServi
 	@Transactional(propagation = Propagation.SUPPORTS)
 	@Override
 	public Response getLargeString(String simpleDomainId) {
-		final SimpleDomainBO simpleDomain = SimpleDomainBO.findByPrimaryKey(simpleDomainId);
+		final SimpleDomainBO simpleDomain = SimpleDomainBO.findByPrimaryKey(UUID.fromString(simpleDomainId));
 		if (simpleDomain == null) {
 			return Response.status(Status.NOT_FOUND).build();
 		} else {

@@ -1,15 +1,17 @@
 package org.bitbucket.askllc.fermenter.cookbook.referencing.domain.persist;
 
+import java.util.UUID;
+
+import org.bitbucket.askllc.fermenter.cookbook.referencing.domain.bizobj.LocalDomainBO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.bitbucket.askllc.fermenter.cookbook.referencing.domain.bizobj.LocalDomainBO;
 
 /**
  * Data access repository for the LocalDomain business object.
  * 
  * GENERATED STUB CODE - PLEASE *DO* MODIFY
  */ 
-public interface LocalDomainRepository extends JpaRepository<LocalDomainBO, String>, JpaSpecificationExecutor<LocalDomainBO> {
+public interface LocalDomainRepository extends JpaRepository<LocalDomainBO, UUID>, JpaSpecificationExecutor<LocalDomainBO> {
 	
 	/**
 	 * Developers should leverage this interface to define any query logic

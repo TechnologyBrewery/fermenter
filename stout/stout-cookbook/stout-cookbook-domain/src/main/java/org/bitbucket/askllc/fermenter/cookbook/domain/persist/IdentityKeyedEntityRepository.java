@@ -1,17 +1,17 @@
 package org.bitbucket.askllc.fermenter.cookbook.domain.persist;
 
-import java.util.UUID;
+import java.lang.Integer;
 
-import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationReferenceExampleBO;
+import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.IdentityKeyedEntityBO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
- * Data access repository for the ValidationReferenceExample business object.
+ * Data access repository for the IdentityKeyedEntity business object.
  * 
  * GENERATED STUB CODE - PLEASE *DO* MODIFY
  */ 
-public interface ValidationReferenceExampleRepository extends JpaRepository<ValidationReferenceExampleBO, UUID>, JpaSpecificationExecutor<ValidationReferenceExampleBO> {
+public interface IdentityKeyedEntityRepository extends JpaRepository<IdentityKeyedEntityBO, Integer>, JpaSpecificationExecutor<IdentityKeyedEntityBO> {
 	
 	/**
 	 * Developers should leverage this interface to define any query logic

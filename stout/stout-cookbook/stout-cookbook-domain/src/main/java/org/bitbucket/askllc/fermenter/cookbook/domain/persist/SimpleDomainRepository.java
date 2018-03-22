@@ -1,6 +1,7 @@
 package org.bitbucket.askllc.fermenter.cookbook.domain.persist;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainBO;
 import org.springframework.data.domain.Page;
@@ -16,7 +17,7 @@ import org.springframework.data.jpa.repository.Query;
  * GENERATED STUB CODE - PLEASE *DO* MODIFY
  */
 public interface SimpleDomainRepository
-		extends JpaRepository<SimpleDomainBO, String>, JpaSpecificationExecutor<SimpleDomainBO> {
+		extends JpaRepository<SimpleDomainBO, UUID>, JpaSpecificationExecutor<SimpleDomainBO> {
 
 	/**
 	 * Developers should leverage this interface to define any query logic that cannot be realized through

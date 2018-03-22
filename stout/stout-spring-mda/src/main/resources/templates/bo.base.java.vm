@@ -28,6 +28,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.JoinColumn;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
@@ -85,6 +87,12 @@ public abstract class ${entity.name}BaseBO extends BasePersistentSpringBO<${idFi
 #foreach ( $idField in $entity.idFields.values() )
 	#if ( !$entity.isTransient() )
 	@Id
+	#if ( !$entity.idField.hasGenerator() && $idField.generator == 'identity' )
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	#end 
+	#if ( !$entity.idField.hasGenerator() && $idField.generator != 'identity' )
+	@GeneratedValue
+	#end 
 	@Column(name="${idField.column}")
 	#end
 	private ${idField.javaType}	${idField.name};
@@ -135,9 +143,6 @@ public abstract class ${entity.name}BaseBO extends BasePersistentSpringBO<${idFi
   #set ($idField = ${entity.idFields.values().iterator().next()})
   	
   	protected ${entity.name}BaseBO() {
-  	#if ($idField.generator == 'uuid')
-  		set${idField.capitalizedName}(java.util.UUID.randomUUID().toString());
-  	#end
 	}
 	
 	#if ( !$entity.isTransient() )

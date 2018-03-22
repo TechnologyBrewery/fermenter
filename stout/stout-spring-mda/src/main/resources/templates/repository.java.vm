@@ -1,8 +1,12 @@
 package ${basePackage}.persist;
 
+#if ( !$entity.idFields.isEmpty() )
+import ${entity.idFields.values().iterator().next().import};
+#end
+
+import ${basePackage}.bizobj.${entity.name}BO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import ${basePackage}.bizobj.${entity.name}BO;
 
 /**
  * Data access repository for the ${entity.name} business object.

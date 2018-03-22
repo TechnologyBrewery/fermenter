@@ -36,10 +36,10 @@ public class FieldMetadata extends MetadataElement implements Field {
     private static final List<String> SIMPLE_TYPES_LIST;
     
     static {
-    	SIMPLE_TYPES_LIST = new ArrayList<String>(Field.SIMPLE_TYPES.length);
-    	for (int i=0; i<Field.SIMPLE_TYPES.length; i++) {
-    		SIMPLE_TYPES_LIST.add(Field.SIMPLE_TYPES[i]);
-    	}
+        SIMPLE_TYPES_LIST = new ArrayList<>(Field.SIMPLE_TYPES.length);
+        for (int i = 0; i < Field.SIMPLE_TYPES.length; i++) {
+            SIMPLE_TYPES_LIST.add(Field.SIMPLE_TYPES[i]);
+        }
     }
 
 	/**
@@ -381,22 +381,9 @@ public class FieldMetadata extends MetadataElement implements Field {
 	}
 	
 	private void validateType() {
-		String type = getType();	
+		String typeToValidate = getType();	
 		//check basic types:
-		if ((TYPE_STRING.equals(type))
-		|| (TYPE_BOOLEAN.equals(type))			
-		|| (TYPE_NUMERIC_BOOLEAN.equals(type))    
-		|| (TYPE_FLOAT.equals(type))
-		|| (TYPE_DATE.equals(type))
-		|| (TYPE_TIMESTAMP.equals(type))
-		|| (TYPE_LONG.equals(type))
-		|| (TYPE_DOUBLE.equals(type))
-		|| (TYPE_INTEGER.equals(type))
-		|| (TYPE_BIG_DECIMAL.equals(type))
-		|| (TYPE_CHARACTER.equals(type))
-		|| (TYPE_BLOB.equals(type))
-		|| (TYPE_SHORT.equals(type))
-		|| (TYPE_GEOSPATIAL_POINT.equals(type))) {
+		if (SIMPLE_TYPES_LIST.contains(typeToValidate)){
 			if (isExternal()) {
 				throw new IllegalStateException("Simple field '" + getName() + "' cannot specify an external project");
 			}
@@ -404,7 +391,7 @@ public class FieldMetadata extends MetadataElement implements Field {
 			//check enumeration type:
 		    MetadataRepository metadataRepository = 
 	                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
-			Enumeration e = metadataRepository.getEnumeration(type);
+			Enumeration e = metadataRepository.getEnumeration(typeToValidate);
 
 			if (e == null) {
 				// TODO - This needs to throw an exception or mark generation for failure
@@ -413,8 +400,8 @@ public class FieldMetadata extends MetadataElement implements Field {
 				// return the 'web' project's name, and not the name of the project declaring the
 				// field.  Need a way for fields to always know the project in which they were
 				// defined, in addition to the current ability to have an external project
-				log.warn("Field '" + getName() + "' must have a valid type!\n\tCurrent Type: " + type 
-						+ "\n\tValid Types: " + SIMPLE_TYPES_LIST);
+				log.warn("Field '" + getName() + "' must have a valid type!\n\tCurrent Type: *" + typeToValidate 
+						+ "*\n\tValid Types: " + SIMPLE_TYPES_LIST);
 			}
 		}	
 	}

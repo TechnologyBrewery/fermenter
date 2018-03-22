@@ -4,6 +4,10 @@ package ${basePackage}.service.impl;
 import $import;
 #end
 
+#foreach( $import in $entity.idFieldImports )
+import $import;
+#end
+
 import ${basePackage}.bizobj.${entity.name}BO;
 import ${basePackage}.service.rest.${entity.name}MaintenanceService;
 

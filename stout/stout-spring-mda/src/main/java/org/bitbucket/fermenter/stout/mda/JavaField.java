@@ -4,6 +4,8 @@ import java.util.Iterator;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.bitbucket.fermenter.mda.metadata.FormatMetadataManager;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
@@ -14,6 +16,8 @@ import org.bitbucket.fermenter.mda.metadata.element.Pattern;
 
 public class JavaField implements Field {
 	
+    private static Log log = LogFactory.getLog(Field.class);
+    
 	private Field field;
 	private String importName;
 	
@@ -236,6 +240,9 @@ public class JavaField implements Field {
      * {@inheritDoc}
      */
     public boolean hasGenerator() {
+        if (log.isDebugEnabled()) {
+            log.debug("Field " +  field.getName() + " has a generator value of " + field.getGenerator());
+        }
         return StringUtils.isNotBlank(field.getGenerator());
     }	
 

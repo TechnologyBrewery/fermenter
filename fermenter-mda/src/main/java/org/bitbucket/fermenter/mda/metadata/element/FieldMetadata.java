@@ -77,11 +77,7 @@ public class FieldMetadata extends MetadataElement implements Field {
 	/**
 	 * {@inheritDoc}
 	 */
-	public String getGenerator() {
-		if( generator == null ) {
-			generator = ID_GENERATION_ASSIGNED;
-		}
-		
+	public String getGenerator() {		
 		return generator;
 	}
 	

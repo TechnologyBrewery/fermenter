@@ -45,6 +45,7 @@ import javax.persistence.metamodel.PluralAttribute;
 import org.springframework.data.jpa.domain.Specification;
 import static org.springframework.data.jpa.domain.Specifications.where;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.hibernate.annotations.Type;
 
 import ${basePackage}.persist.${entity.name}Repository;
 #end
@@ -87,15 +88,17 @@ public abstract class ${entity.name}BaseBO extends BasePersistentSpringBO<${idFi
 #foreach ( $idField in $entity.idFields.values() )
 	#if ( !$entity.isTransient() )
 	@Id
-	#if ( !$entity.idField.hasGenerator() && $idField.generator == 'identity' )
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	#end 
-	#if ( !$entity.idField.hasGenerator() && $idField.generator != 'identity' )
+	#if ( $idField.hasGenerator() )
+		#if ( $idField.generator == 'identity')
+	@GeneratedValue(strategy=GenerationType.IDENTITY)	
+		#else 
 	@GeneratedValue
-	#end 
+		#end
+	#end
 	@Column(name="${idField.column}")
 	#end
 	private ${idField.javaType}	${idField.name};
+	
 #end
 
 #foreach ( $field in $entity.fields.values() )

@@ -138,7 +138,8 @@ public class EntityMetadata extends MetadataElement implements Entity {
 	}
 	
 	public void addIdField(Field field) {
-		if( field.getGenerator().equals( "assigned" ) ) {
+	    String generator = field.getGenerator();
+		if( StringUtils.isNotBlank(generator) && generator.equals( "assigned" ) ) {
 			((FieldMetadata)field).setRequired( "true" );
 		}
 		else {

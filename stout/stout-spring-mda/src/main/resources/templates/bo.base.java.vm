@@ -88,24 +88,16 @@ public abstract class ${entity.name}BaseBO extends BasePersistentSpringBO<${idFi
 #foreach ( $idField in $entity.idFields.values() )
 	#if ( !$entity.isTransient() )
 	@Id
-	#if ( !$entity.idField.hasGenerator() && $idField.generator == 'identity' )
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	//@Type(type = "org.hibernate.type.IntegerType")
-	#end 
-	#if ( !$entity.idField.hasGenerator() && $idField.generator != 'identity' )
+	#if ( $idField.hasGenerator() )
+		#if ( $idField.generator == 'identity')
+	@GeneratedValue(strategy=GenerationType.IDENTITY)	
+		#else 
 	@GeneratedValue
-	#end 
-	#if ( !$entity.idField.hasGenerator() && $idField.generator == 'identity' )
-	@Column(name="${idField.column}", updatable = false, nullable = false)
-	#else
+		#end
+	#end
 	@Column(name="${idField.column}")
 	#end
-	#end
-	#if ( !$entity.idField.hasGenerator() && $idField.generator == 'identity' && $idField.javaType == 'Integer' )
-	private int ${idField.name};
-	#else
 	private ${idField.javaType}	${idField.name};
-	#end
 	
 #end
 

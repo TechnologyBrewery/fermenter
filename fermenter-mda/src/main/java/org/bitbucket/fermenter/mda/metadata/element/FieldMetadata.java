@@ -8,7 +8,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bitbucket.fermenter.mda.metadata.FormatMetadataManager;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
-import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
+import org.bitbucket.fermenter.mda.metamodel.MetadataRepositoryManager;
 
 public class FieldMetadata extends MetadataElement implements Field {
 	

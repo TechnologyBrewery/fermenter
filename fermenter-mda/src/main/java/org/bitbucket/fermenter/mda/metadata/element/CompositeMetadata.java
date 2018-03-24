@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
-import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
+import org.bitbucket.fermenter.mda.metamodel.MetadataRepositoryManager;
 
 public class CompositeMetadata extends MetadataElement implements Composite {
 

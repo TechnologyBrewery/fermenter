@@ -3,9 +3,9 @@ package org.bitbucket.fermenter.stout.mda;
 import org.apache.commons.lang.StringUtils;
 import org.bitbucket.fermenter.mda.PackageManager;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
-import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Enumeration;
 import org.bitbucket.fermenter.mda.metadata.element.Parameter;
+import org.bitbucket.fermenter.mda.metamodel.MetadataRepositoryManager;
 
 public class JavaParameter implements Parameter {
 

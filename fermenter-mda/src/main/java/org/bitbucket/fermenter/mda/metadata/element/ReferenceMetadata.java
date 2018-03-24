@@ -8,7 +8,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
-import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
+import org.bitbucket.fermenter.mda.metamodel.MetadataRepositoryManager;
 
 public class ReferenceMetadata extends MetadataElement implements Reference {
 

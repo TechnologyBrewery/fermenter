@@ -7,8 +7,8 @@ import org.bitbucket.fermenter.mda.generator.AbstractGenerator;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
-import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Service;
+import org.bitbucket.fermenter.mda.metamodel.MetadataRepositoryManager;
 
 /**
  * Iterates through each service in the meta-model and enables the generation of a single file for each service.

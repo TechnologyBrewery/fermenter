@@ -5,11 +5,11 @@ import java.util.List;
 
 import org.bitbucket.fermenter.mda.PackageManager;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
-import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.Enumeration;
 import org.bitbucket.fermenter.mda.metadata.element.Field;
 import org.bitbucket.fermenter.mda.metadata.element.Parameter;
+import org.bitbucket.fermenter.mda.metamodel.MetadataRepositoryManager;
 import org.bitbucket.fermenter.stout.mda.java.JavaTypeManager;
 import org.codehaus.plexus.util.StringUtils;
 

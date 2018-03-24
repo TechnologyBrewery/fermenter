@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -33,9 +34,10 @@ import org.bitbucket.fermenter.mda.element.Target;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.generator.Generator;
-import org.bitbucket.fermenter.mda.metadata.AbstractMetadataRepository;
-import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.StaticURLResolver;
+import org.bitbucket.fermenter.mda.metamodel.LegacyMetadataConverter;
+import org.bitbucket.fermenter.mda.metamodel.MetadataRepository;
+import org.bitbucket.fermenter.mda.metamodel.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.util.MessageTracker;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -79,11 +81,11 @@ public class GenerateSourcesMojo extends AbstractMojo {
     @Parameter(required = true, readonly = true, defaultValue = "${project.basedir}/src/generated")
     private File generatedSourceRoot;
 
-    @Parameter(required = true, readonly = true, defaultValue = "org.bitbucket.fermenter.mda.metadata.MetadataRepository")
+    @Parameter(required = true, readonly = true, defaultValue = "org.bitbucket.fermenter.mda.metamodel.DefaultMetadataRepository")
     private String metadataRespositoryImpl;
 
     private VelocityEngine engine;
-    
+
     private MessageTracker messageTracker = MessageTracker.getInstance();
 
     public void execute() throws MojoExecutionException {
@@ -181,7 +183,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
                 IOUtils.closeQuietly(stream);
             }
         }
-        
+
         for (ExpandedProfile p : profiles.values()) {
             p.dereference(profiles, targets);
         }
@@ -219,27 +221,54 @@ public class GenerateSourcesMojo extends AbstractMojo {
 
         }
 
-        long start = System.currentTimeMillis();
-        LOG.info("START: initializing metadata repository implementation: " + metadataRespositoryImpl + "...");
+        // first load the legacy repository:
+        loadMetadataRepository(props, true);
 
-        Class<?> repoImplClass = Class.forName(metadataRespositoryImpl);
-        Class<?>[] constructorParamTypes = { Properties.class };
-        Constructor<?> constructor = repoImplClass.getConstructor(constructorParamTypes);
-        Object[] params = { props };
-        AbstractMetadataRepository repository = (AbstractMetadataRepository) constructor.newInstance(params);
+        LegacyMetadataConverter converter = new LegacyMetadataConverter();
+        converter.convert(project.getArtifactId(), basePackage, mainSourceRoot);
+
+        // then load the new repository:
+        loadMetadataRepository(props, false);
+
+    }
+
+    private void loadMetadataRepository(Properties props, boolean isLegacy) throws ClassNotFoundException,
+            NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+
+        String repositoryType = isLegacy ? "**LEGACY** " : "";
+        String repositoryImpl = isLegacy ? "org.bitbucket.fermenter.mda.metadata.MetadataRepository"
+                : metadataRespositoryImpl;
+
+        long start = System.currentTimeMillis();
+        LOG.info("START: initializing " + repositoryType + "metadata repository implementation: " + repositoryImpl
+                + "...");
+
+        MetadataRepository repository;
+        Class<?> repoImplClass = Class.forName(repositoryImpl);
+        if (isLegacy) {
+            Class<?>[] constructorParamTypes = { Properties.class };
+            Constructor<?> constructor = repoImplClass.getConstructor(constructorParamTypes);
+            Object[] params = { props };
+            repository = (MetadataRepository) constructor.newInstance(params);
+
+        } else {
+            Class<?>[] constructorParamTypes = { String.class };
+            Constructor<?> constructor = repoImplClass.getConstructor(constructorParamTypes);
+            Object[] params = { basePackage };
+            repository = (MetadataRepository) constructor.newInstance(params);
+        }
 
         MetadataRepositoryManager.setRepository(repository);
         repository.load(props);
         repository.validate(props);
-        
+
         messageTracker.emitMessages(LOG);
         if (messageTracker.hasErrors()) {
             throw new GenerationException("Errors encountered!");
         }
-        
-        long stop = System.currentTimeMillis();
-        LOG.info("COMPLETE: metadata repository initialization in " + (stop - start) + "ms");
 
+        long stop = System.currentTimeMillis();
+        LOG.info("COMPLETE: " + repositoryType + "metadata repository initialization in " + (stop - start) + "ms");
     }
 
     public void addTarget(Target target) {

@@ -22,6 +22,8 @@ import org.aeonbits.owner.KrauseningConfigFactory;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.bitbucket.fermenter.mda.exception.FermenterException;
 import org.bitbucket.fermenter.mda.metamodel.element.MetamodelElement;
 import org.bitbucket.fermenter.mda.metamodel.element.NamespacedMetamodelElement;
@@ -31,6 +33,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public abstract class AbstractMetamodelManager<T extends NamespacedMetamodelElement> {
 
+    private static final Log log = LogFactory.getLog(AbstractMetamodelManager.class);
+    
     private static final String METAMODEL_SUFFIX = ".json";
     private Map<String, Map<String, T>> metadataByPackageMap = new HashMap<>();
     private Map<String, T> completeMetadataMap = new HashMap<>();
@@ -72,20 +76,20 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodelElem
         }
     }
 
-    protected void loadMetadata(String artifactId, String url) {
-        if (StringUtils.isBlank(url)) {
-            messageTracker.addErrorMessage("Metadata for application '" + artifactId
+    protected void loadMetadata(MetadataUrl metadataUrl) {
+        if (StringUtils.isBlank(metadataUrl.getUrl())) {
+            messageTracker.addErrorMessage("Metadata for artifactId '" + metadataUrl.getArtifactId()
                     + "' can not be found!  Please ensure the proper jar is on your classpath.");
 
         } else {
             List<URL> resources = null;
 
             try {
-                resources = getMetadataResources(url);
+                resources = getMetadataResources(metadataUrl.getUrl());
 
             } catch (IOException | URISyntaxException e) {
-                messageTracker.addWarningMessage(
-                        "No " + getMetadataLocation() + " metadata found for '" + artifactId + "', skipping...");
+                messageTracker.addWarningMessage("No " + getMetadataLocation() + " metadata found for '"
+                        + metadataUrl.getArtifactId() + "', skipping...");
 
             }
 
@@ -175,7 +179,9 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodelElem
     protected abstract Class<T> getMetamodelClass();
 
     protected void postLoadMetamodel() {
-
+        if (log.isInfoEnabled()) {
+            log.info("Loaded " + completeMetadataMap.size() + " " + getMetamodelClass().getSimpleName());
+        }
     }
 
     protected Map<String, T> getMetadataMap(String packageName) {
@@ -187,8 +193,15 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodelElem
     }
 
     protected void addMetadataElement(T element) {
-        getMetadataMap(element.getPackage()).put(element.getName(), element);
-        completeMetadataMap.put(element.getName(), element);
+        String packageName = element.getPackage();
+        String name = element.getName();
+        Map<String, T> packageMap = getMetadataMap(packageName);
+        if (packageMap == null) {
+            packageMap = new HashMap<>();
+            metadataByPackageMap.put(packageName, packageMap);
+        }
+        getMetadataMap(packageName).put(name, element);
+        completeMetadataMap.put(name, element);
 
     }
 
@@ -201,13 +214,13 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodelElem
         Map<String, T> enumerationMap = getMetadataMap(applicationName);
         return (enumerationMap != null) ? enumerationMap : Collections.emptyMap();
     }
-    
+
     public T getMetadataElementByName(String name) {
         return completeMetadataMap.get(name);
     }
 
     public Map<String, T> getMetadataElementWithoutPackage() {
         return completeMetadataMap;
-    }    
+    }
 
 }

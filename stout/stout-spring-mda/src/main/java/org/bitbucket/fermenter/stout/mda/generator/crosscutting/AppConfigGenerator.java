@@ -6,9 +6,9 @@ import org.apache.velocity.VelocityContext;
 import org.bitbucket.fermenter.mda.generator.AbstractGenerator;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
-import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.Service;
+import org.bitbucket.fermenter.mda.metamodel.MetadataRepositoryManager;
 import org.bitbucket.fermenter.stout.mda.java.JavaGeneratorUtil;
 import org.codehaus.plexus.util.StringUtils;
 

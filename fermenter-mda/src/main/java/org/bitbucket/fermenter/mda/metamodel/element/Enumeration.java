@@ -6,10 +6,12 @@ import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
  * Represents a enumeration of declared constants.
  */
+@JsonPropertyOrder({"package", "name"})
 public class Enumeration extends NamespacedMetamodelElement {
 
     @JsonProperty(required = true)

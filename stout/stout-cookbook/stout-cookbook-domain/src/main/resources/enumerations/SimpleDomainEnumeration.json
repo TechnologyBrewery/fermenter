@@ -1,0 +1,13 @@
+{
+  "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "name" : "SimpleDomainEnumeration",
+  "enums" : [ {
+    "name" : "FIRST"
+  }, {
+    "name" : "SECOND"
+  }, {
+    "name" : "THIRD"
+  }, {
+    "name" : "FOURTH"
+  } ]
+}

@@ -12,10 +12,10 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
-import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.Operation;
 import org.bitbucket.fermenter.mda.metadata.element.Parameter;
+import org.bitbucket.fermenter.mda.metamodel.MetadataRepositoryManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

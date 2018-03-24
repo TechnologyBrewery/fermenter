@@ -10,10 +10,10 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.bitbucket.fermenter.mda.PackageManager;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
-import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.Field;
 import org.bitbucket.fermenter.mda.metadata.element.Reference;
+import org.bitbucket.fermenter.mda.metamodel.MetadataRepositoryManager;
 
 public class JavaReference implements Reference {
 	

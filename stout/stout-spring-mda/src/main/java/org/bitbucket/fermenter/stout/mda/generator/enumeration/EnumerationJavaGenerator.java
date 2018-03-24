@@ -7,8 +7,8 @@ import org.bitbucket.fermenter.mda.generator.AbstractGenerator;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
-import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Enumeration;
+import org.bitbucket.fermenter.mda.metamodel.MetadataRepositoryManager;
 import org.bitbucket.fermenter.stout.mda.JavaEnumeration;
 import org.bitbucket.fermenter.stout.mda.java.JavaGeneratorUtil;
 

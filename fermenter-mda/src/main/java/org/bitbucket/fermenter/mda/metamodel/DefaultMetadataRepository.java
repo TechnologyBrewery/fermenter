@@ -1,18 +1,22 @@
 package org.bitbucket.fermenter.mda.metamodel;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import org.aeonbits.owner.KrauseningConfigFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
+import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
 
 public class DefaultMetadataRepository extends AbstractMetadataRepository {
 
     private static final Log log = LogFactory.getLog(DefaultMetadataRepository.class);
 
-    protected MetamodelConfig config = KrauseningConfigFactory.create(MetamodelConfig.class);
+    private MetamodelConfig config = KrauseningConfigFactory.create(MetamodelConfig.class);
+    
+    private EnumerationMetadataManager enumerationManager = EnumerationMetadataManager.getInstance();
 
     public DefaultMetadataRepository(String basePackage) {
         super(basePackage);
@@ -22,7 +26,6 @@ public class DefaultMetadataRepository extends AbstractMetadataRepository {
     public void load(Properties properties) {
         MetadataUrlResolver loader = createMetadataResolverInstance();
 
-        EnumerationMetadataManager enumerationManager = EnumerationMetadataManager.getInstance();
         enumerationManager.reset();
 
         List<MetadataUrl> metadataUrls = loader.getMetadataURLs(properties);
@@ -55,6 +58,15 @@ public class DefaultMetadataRepository extends AbstractMetadataRepository {
             throw new GenerationException("Could not create a MetadataUrlResolver instance!", e);
         }
         return loader;
-    }    
+    }
+    
+    public Enumeration getEnumeration(String type) {        
+        return enumerationManager.getMetadataElementByName(type);
+    
+    }
+    
+    public Map<String, Enumeration> getEnumerations(String packageName) {
+        return enumerationManager.getMetadataElementByPackage(packageName);
+    }
 
 }

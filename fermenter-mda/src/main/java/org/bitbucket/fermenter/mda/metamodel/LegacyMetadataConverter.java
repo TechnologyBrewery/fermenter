@@ -6,8 +6,8 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
-import org.bitbucket.fermenter.mda.metamodel.element.Enum;
-import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
+import org.bitbucket.fermenter.mda.metamodel.element.EnumElement;
+import org.bitbucket.fermenter.mda.metamodel.element.EnumerationElement;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -43,13 +43,13 @@ public class LegacyMetadataConverter {
         Map<String, org.bitbucket.fermenter.mda.metadata.element.Enumeration> legacyEnumerations = legacyMetadataRepo
                 .getAllEnumerations(applicationName);
         for (org.bitbucket.fermenter.mda.metadata.element.Enumeration legacyEnumeration : legacyEnumerations.values()) {
-            Enumeration newEnumeration = new Enumeration();
+            EnumerationElement newEnumeration = new EnumerationElement();
             newEnumeration.setName(legacyEnumeration.getName());
             newEnumeration.setPackage(basePackage);
 
             for (Object untypedEnum : legacyEnumeration.getEnumList()) {
                 org.bitbucket.fermenter.mda.metadata.element.Enum legacyEnum = (org.bitbucket.fermenter.mda.metadata.element.Enum) untypedEnum;
-                Enum newEnum = new Enum();
+                EnumElement newEnum = new EnumElement();
                 newEnum.setName(legacyEnum.getName());
                 newEnumeration.addEnums(newEnum);
             }

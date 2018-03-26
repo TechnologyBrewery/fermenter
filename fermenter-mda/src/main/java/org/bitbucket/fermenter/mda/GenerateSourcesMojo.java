@@ -222,17 +222,26 @@ public class GenerateSourcesMojo extends AbstractMojo {
         }
 
         // first load the legacy repository:
-        loadMetadataRepository(props, true);
+        MetadataRepository legacyRepository = loadMetadataRepository(props, true);
 
         LegacyMetadataConverter converter = new LegacyMetadataConverter();
         converter.convert(project.getArtifactId(), basePackage, mainSourceRoot);
 
         // then load the new repository:
-        loadMetadataRepository(props, false);
+        MetadataRepository newRepository = loadMetadataRepository(props, false);
+        
+        long start = System.currentTimeMillis();
+        LOG.info("START: validating legacy and new metadata repository implementation...");
+        
+        legacyRepository.validate(props);
+        newRepository.validate(props);
+        
+        long stop = System.currentTimeMillis();
+        LOG.info("COMPLETE: validation of legacy and new metadata repository in " + (stop - start) + "ms");
 
     }
 
-    private void loadMetadataRepository(Properties props, boolean isLegacy) throws ClassNotFoundException,
+    private MetadataRepository loadMetadataRepository(Properties props, boolean isLegacy) throws ClassNotFoundException,
             NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
 
         String repositoryType = isLegacy ? "**LEGACY** " : "";
@@ -240,7 +249,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
                 : metadataRespositoryImpl;
 
         long start = System.currentTimeMillis();
-        LOG.info("START: initializing " + repositoryType + "metadata repository implementation: " + repositoryImpl
+        LOG.info("START: loading " + repositoryType + "metadata repository implementation: " + repositoryImpl
                 + "...");
 
         MetadataRepository repository;
@@ -260,7 +269,10 @@ public class GenerateSourcesMojo extends AbstractMojo {
 
         MetadataRepositoryManager.setRepository(repository);
         repository.load(props);
-        repository.validate(props);
+        
+        // TODO: move validation back here once the legacy repo is retired.  Until then, this can only happen once metadata across
+        // both repositories is available:
+        //repository.validate(props);
 
         messageTracker.emitMessages(LOG);
         if (messageTracker.hasErrors()) {
@@ -268,7 +280,9 @@ public class GenerateSourcesMojo extends AbstractMojo {
         }
 
         long stop = System.currentTimeMillis();
-        LOG.info("COMPLETE: " + repositoryType + "metadata repository initialization in " + (stop - start) + "ms");
+        LOG.info("COMPLETE: " + repositoryType + "metadata repository loading in " + (stop - start) + "ms");
+        
+        return repository;
     }
 
     public void addTarget(Target target) {

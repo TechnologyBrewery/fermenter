@@ -25,13 +25,15 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bitbucket.fermenter.mda.exception.FermenterException;
+import org.bitbucket.fermenter.mda.metamodel.element.Metamodel;
 import org.bitbucket.fermenter.mda.metamodel.element.MetamodelElement;
-import org.bitbucket.fermenter.mda.metamodel.element.NamespacedMetamodelElement;
+import org.bitbucket.fermenter.mda.metamodel.element.NamespacedMetamodel;
+import org.bitbucket.fermenter.mda.util.JsonUtils;
 import org.bitbucket.fermenter.mda.util.MessageTracker;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public abstract class AbstractMetamodelManager<T extends NamespacedMetamodelElement> {
+public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
 
     private static final Log log = LogFactory.getLog(AbstractMetamodelManager.class);
     
@@ -53,7 +55,7 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodelElem
 
     /**
      * Validation occurs after the loading of all metadata to ensure that we can access all metadata in a safe fashion,
-     * without having to worry to about what is already laoded and what needs to be loaded.
+     * without having to worry to about what is already loaded and what needs to be loaded.
      */
     protected final void validate() {
         for (String packageName : metadataByPackageMap.keySet()) {
@@ -68,7 +70,7 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodelElem
      * @param elements
      *            The instances to validate
      */
-    protected static <T extends MetamodelElement> void validateElements(Collection<T> elements) {
+    protected static <T extends Metamodel> void validateElements(Collection<T> elements) {
         if (!CollectionUtils.isEmpty(elements)) {
             for (T element : elements) {
                 element.validate();
@@ -121,7 +123,7 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodelElem
         if (name.contains(".jar")) {
             metadataResources = getMetadataResourceFromJar(name);
         } else {
-            getMetadataResourcesFromDirectory(name);
+            metadataResources = getMetadataResourcesFromDirectory(name);
         }
         return metadataResources;
     }
@@ -164,7 +166,7 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodelElem
     protected abstract String getMetadataLocation();
 
     private void loadMetamodelFile(InputStream stream) {
-        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = JsonUtils.getObjectMapper();
         try {
             T instance = objectMapper.readValue(stream, getMetamodelClass());
             addMetadataElement(instance);
@@ -176,7 +178,7 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodelElem
 
     }
 
-    protected abstract Class<T> getMetamodelClass();
+    protected abstract Class<? extends T> getMetamodelClass();
 
     protected void postLoadMetamodel() {
         if (log.isInfoEnabled()) {

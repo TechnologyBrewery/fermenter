@@ -10,25 +10,8 @@ import org.apache.commons.lang3.StringUtils;
  */ 
 public enum ${enumeration.name} {
 
-#foreach ($enum in $enumeration.enumList)
-	#if($enumeration.isNamed() == false)		
-	${enum.uppercasedName}() {
-		@Override public int getValue() { 
-			return ${enum.value};
-		}
-	}#if ($foreach.isLast());#else,#end
-	#else
+#foreach ($enum in $enumeration.enums)
 	${enum.uppercasedName}#if ($foreach.isLast());#else,#end
-	#end 
-#end
-
-#if ($enumeration.isNamed() == false)  
-   	/**
-   	 * Gets the underlying value associated with this ${enumeration.name} enum instance.
-   	 * @return underlying value associated with this ${enumeration.name} enum instance.
-   	 */
-   	public abstract int getValue();
-   	
 #end
 
     /**
@@ -39,8 +22,8 @@ public enum ${enumeration.name} {
      * @return The enumerated value that matches the value
      */
     public static ${enumeration.name} valueOfIgnoresCase(String value) {
-    	String upperCaseValue = (StringUtils.isNotBlank(value)) ? value.toUpperCase().replace(" ", "_") : null;
-    	return (upperCaseValue != null) ? ${enumeration.name}.valueOf(upperCaseValue) : null;
+    		String upperCaseValue = (StringUtils.isNotBlank(value)) ? value.toUpperCase().replace(" ", "_") : null;
+    		return (upperCaseValue != null) ? ${enumeration.name}.valueOf(upperCaseValue) : null;
     	
     }
 	

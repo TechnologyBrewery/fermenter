@@ -10,24 +10,23 @@ import com.google.common.base.MoreObjects;
 /**
  * Defines the contract for a metamodel element that requires a name.
  */
-public abstract class MetamodelElement {
+public abstract class MetamodelElement implements Metamodel {
 
     protected static MessageTracker messageTracker = MessageTracker.getInstance();
 
     @JsonProperty(required = true)
     protected String name;
 
-    /**
-     * Ensure that the this metamodel element is in a valid state. For instance, if this element refers to another
-     * element, let's ensure that element exists.
+    /* (non-Javadoc)
+     * @see org.bitbucket.fermenter.mda.metamodel.element.Metamodel#validate()
      */
+    @Override
     public abstract void validate();
 
-    /**
-     * Returns the name of the metadata element.
-     * 
-     * @return name
+    /* (non-Javadoc)
+     * @see org.bitbucket.fermenter.mda.metamodel.element.Metamodel#getName()
      */
+    @Override
     public String getName() {
         return name;
     }
@@ -63,7 +62,7 @@ public abstract class MetamodelElement {
             areEqual = false;
             
         } else {
-            MetamodelElement other = (MetamodelElement) obj;
+            Metamodel other = (Metamodel) obj;
             areEqual = Objects.equals(this.name, other.getName());
             
         }

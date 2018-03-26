@@ -1,16 +1,10 @@
 package org.bitbucket.fermenter.mda.metamodel.element;
 
-/**
- * Represents a constant that is defined within a specific {@link Enumeration}.
- */
-public class Enum extends MetamodelElement {
+public interface Enum {
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void validate() {
-        // nothing specific to validate that isn't handled at JSON load time already
-    }
+	/**
+	 * @return Returns the name.
+	 */
+	public String getName();
 
 }

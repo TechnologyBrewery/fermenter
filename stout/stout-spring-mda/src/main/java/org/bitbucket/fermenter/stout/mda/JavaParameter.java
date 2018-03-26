@@ -3,9 +3,10 @@ package org.bitbucket.fermenter.stout.mda;
 import org.apache.commons.lang.StringUtils;
 import org.bitbucket.fermenter.mda.PackageManager;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
-import org.bitbucket.fermenter.mda.metadata.element.Enumeration;
 import org.bitbucket.fermenter.mda.metadata.element.Parameter;
+import org.bitbucket.fermenter.mda.metamodel.DefaultMetadataRepository;
 import org.bitbucket.fermenter.mda.metamodel.MetadataRepositoryManager;
+import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
 
 public class JavaParameter implements Parameter {
 
@@ -88,8 +89,8 @@ public class JavaParameter implements Parameter {
 	}
 
 	public Enumeration getEnumeration() {
-		MetadataRepository metadataRepository = 
-                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+	    DefaultMetadataRepository metadataRepository = 
+                MetadataRepositoryManager.getMetadataRepostory(DefaultMetadataRepository.class);
 		Enumeration e = metadataRepository.getEnumeration(getType());
 		return (e != null) ? new JavaEnumeration(e) : null;
 	}

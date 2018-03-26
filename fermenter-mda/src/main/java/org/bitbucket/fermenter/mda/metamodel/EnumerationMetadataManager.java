@@ -1,6 +1,7 @@
 package org.bitbucket.fermenter.mda.metamodel;
 
 import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
+import org.bitbucket.fermenter.mda.metamodel.element.EnumerationElement;
 
 /**
  * Responsible for maintaining the list of enumeration metadata elements in the system.
@@ -23,8 +24,8 @@ class EnumerationMetadataManager extends AbstractMetamodelManager<Enumeration> {
     }
 
     @Override
-    protected Class<Enumeration> getMetamodelClass() {
-        return Enumeration.class;
+    protected Class<EnumerationElement> getMetamodelClass() {
+        return EnumerationElement.class;
     }
 
 }

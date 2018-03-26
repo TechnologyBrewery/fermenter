@@ -1,5 +1,7 @@
 package org.bitbucket.fermenter.mda.metadata.element;
 
+import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
+
 public interface Field {
 
     //TODO: refactor this out - should be dynamic from the types listing

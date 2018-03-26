@@ -12,7 +12,8 @@ import java.util.stream.Collectors;
 import org.apache.commons.io.FileUtils;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metamodel.element.Enum;
-import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
+import org.bitbucket.fermenter.mda.metamodel.element.EnumElement;
+import org.bitbucket.fermenter.mda.metamodel.element.EnumerationElement;
 import org.bitbucket.fermenter.mda.util.JsonUtils;
 import org.bitbucket.fermenter.mda.util.MessageTracker;
 
@@ -29,7 +30,7 @@ public class EnumerationSteps {
     private MessageTracker messageTracker = MessageTracker.getInstance();
     
     private File enumerationFile;
-    private Enumeration loadedEnumeration;
+    private EnumerationElement loadedEnumeration;
     protected GenerationException encounteredException;
 
     @After("@enumeration")
@@ -45,12 +46,12 @@ public class EnumerationSteps {
     @Given("^an enumeration named \"([^\"]*)\" in \"([^\"]*)\" and enum constants \"([^\"]*)\"$")
     public void an_enumeration_named_in_and_enum_constants(String name, String packageValue, List<String> constants)
             throws Throwable {
-        Enumeration enumeration = new Enumeration();
+        EnumerationElement enumeration = new EnumerationElement();
         enumeration.setName(name);
         enumeration.setPackage(packageValue);
 
         for (String constant : constants) {
-            Enum newEnumConstant = new Enum();
+            EnumElement newEnumConstant = new EnumElement();
             newEnumConstant.setName(constant);
             enumeration.addEnums(newEnumConstant);
         }
@@ -65,7 +66,7 @@ public class EnumerationSteps {
         encounteredException = null;
 
         try {
-            loadedEnumeration = JsonUtils.readAndValidateJson(enumerationFile, Enumeration.class);
+            loadedEnumeration = JsonUtils.readAndValidateJson(enumerationFile, EnumerationElement.class);
             assertNotNull("Could not read enumeration file!", loadedEnumeration);
 
         } catch (GenerationException e) {

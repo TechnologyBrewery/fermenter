@@ -10,16 +10,15 @@ import com.google.common.base.MoreObjects;
 /**
  * Defines the contract for a metamodel element that requires a package and name.
  */
-public abstract class NamespacedMetamodelElement extends MetamodelElement implements ValidatedElement {
+public abstract class NamespacedMetamodelElement extends MetamodelElement implements ValidatedElement, NamespacedMetamodel {
 
     @JsonProperty(value = "package", required = true)
     protected String packageName;
 
-    /**
-     * Returns the package of the metadata element.
-     * 
-     * @return package
+    /* (non-Javadoc)
+     * @see org.bitbucket.fermenter.mda.metamodel.element.NamespacedMetamodel#getPackage()
      */
+    @Override
     public String getPackage() {
         return packageName;
     }

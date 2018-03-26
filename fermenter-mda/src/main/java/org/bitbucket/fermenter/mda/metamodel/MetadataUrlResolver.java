@@ -4,7 +4,10 @@ import java.util.List;
 import java.util.Properties;
 
 public interface MetadataUrlResolver {
+    
+    static final String METADATA_LOCATION_PREFIX = "metadata.";
+    static final String METADATA_LOCATIONS = METADATA_LOCATION_PREFIX + "locations";    
 
-	public List<MetadataUrl> getMetadataURLs(Properties properties);
+	List<MetadataUrl> getMetadataURLs(Properties properties);
 	
 }

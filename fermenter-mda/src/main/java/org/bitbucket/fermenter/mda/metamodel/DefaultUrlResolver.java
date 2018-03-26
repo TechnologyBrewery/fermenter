@@ -9,8 +9,8 @@ import java.util.StringTokenizer;
 
 public class DefaultUrlResolver implements MetadataUrlResolver {
 
-	public List<MetadataUrl> getMetadataURLs(Properties properties) {
-		String metadataLocations = properties.getProperty("metadata.locations");
+    public List<MetadataUrl> getMetadataURLs(Properties properties) {
+		String metadataLocations = properties.getProperty(METADATA_LOCATIONS);
 		Set<String> metadataLocationsSet = new HashSet<>();
 		
 		StringTokenizer tok = new StringTokenizer(metadataLocations, ";", false);

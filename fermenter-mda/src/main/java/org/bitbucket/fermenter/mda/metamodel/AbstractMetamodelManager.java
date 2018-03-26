@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.JarURLConnection;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -19,7 +18,8 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import org.aeonbits.owner.KrauseningConfigFactory;
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -37,7 +37,7 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
 
     private static final Log log = LogFactory.getLog(AbstractMetamodelManager.class);
     
-    private static final String METAMODEL_SUFFIX = ".json";
+    private static final String METAMODEL_SUFFIX = "json";
     private Map<String, Map<String, T>> metadataByPackageMap = new HashMap<>();
     private Map<String, T> completeMetadataMap = new HashMap<>();
 
@@ -138,7 +138,7 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
         while (e.hasMoreElements()) {
             JarEntry newEntry = e.nextElement();
             String entryName = newEntry.getName();
-            if (entryName.startsWith(this.getMetadataLocation()) && entryName.endsWith(METAMODEL_SUFFIX)) {
+            if (entryName.startsWith(this.getMetadataLocation()) && entryName.endsWith("." + METAMODEL_SUFFIX)) {
                 metadataResources.add(new URL(name + newEntry.getName()));
             }
         }
@@ -146,18 +146,21 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
         return metadataResources;
     }
 
-    private List<URL> getMetadataResourcesFromDirectory(String name) throws URISyntaxException, MalformedURLException {
+    private List<URL> getMetadataResourcesFromDirectory(String name) throws URISyntaxException, IOException {
         List<URL> metadataResources = new ArrayList<>();
         File metamodelDir = new File(new URI(name + this.getMetadataLocation()));
-        File[] files = metamodelDir.listFiles();
-        File file = null;
-        if (files != null) {
-            for (int i = 0; i < files.length; i++) {
-                file = files[i];
-                if (file.getName().endsWith(METAMODEL_SUFFIX)) {
+        if (metamodelDir.isDirectory()) {
+            String[] suffixFilter = {METAMODEL_SUFFIX};
+            Collection<File> files = FileUtils.listFiles(metamodelDir, suffixFilter, true);
+            if (CollectionUtils.isNotEmpty(files)) {
+                for (File file : files) {               
                     metadataResources.add(file.toURI().toURL());
                 }
             }
+            
+        } else {
+            log.warn(metamodelDir.getCanonicalPath() + " is not a valid directory!");
+            
         }
 
         return metadataResources;

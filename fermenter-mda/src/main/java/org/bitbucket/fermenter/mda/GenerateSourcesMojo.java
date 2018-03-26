@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -38,6 +39,7 @@ import org.bitbucket.fermenter.mda.metadata.StaticURLResolver;
 import org.bitbucket.fermenter.mda.metamodel.LegacyMetadataConverter;
 import org.bitbucket.fermenter.mda.metamodel.MetadataRepository;
 import org.bitbucket.fermenter.mda.metamodel.MetadataRepositoryManager;
+import org.bitbucket.fermenter.mda.metamodel.MetadataUrlResolver;
 import org.bitbucket.fermenter.mda.util.MessageTracker;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -190,36 +192,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
     }
 
     private void initializeMetadata() throws Exception {
-        Properties props = new Properties();
-        props.setProperty("application.name", project.getArtifactId());
-        props.setProperty("metadata.loader", StaticURLResolver.class.getName());
-
-        String projectUrl = new File(mainSourceRoot, "resources").toURI().toURL().toString();
-        props.setProperty("metadata." + project.getArtifactId(), projectUrl);
-        PackageManager.addMapping(project.getArtifactId(), basePackage);
-
-        if (metadataDependencies != null) {
-            metadataDependencies.add(project.getArtifactId());
-            StringBuilder buff = new StringBuilder();
-            for (Iterator<String> i = metadataDependencies.iterator(); i.hasNext();) {
-                buff.append(i.next());
-                if (i.hasNext()) {
-                    buff.append(";");
-                }
-            }
-            props.setProperty("metadata.locations", buff.toString());
-
-            List<Artifact> artifacts = plugin.getArtifacts();
-            for (Artifact a : artifacts) {
-                if (metadataDependencies.contains(a.getArtifactId())) {
-                    URL url = a.getFile().toURI().toURL();
-                    props.setProperty("metadata." + a.getArtifactId(), url.toString());
-                    PackageManager.addMapping(a.getArtifactId(), url);
-                    LOG.info("Adding metadataDependency to current set of metadata: " + a.getArtifactId());
-                }
-            }
-
-        }
+        Properties props = createMetadataProperties();
 
         // first load the legacy repository:
         MetadataRepository legacyRepository = loadMetadataRepository(props, true);
@@ -239,6 +212,41 @@ public class GenerateSourcesMojo extends AbstractMojo {
         long stop = System.currentTimeMillis();
         LOG.info("COMPLETE: validation of legacy and new metadata repository in " + (stop - start) + "ms");
 
+    }
+
+    //TODO: when metamodel conversion is complete, update to remove messy use of properties - use a real class instead to improve clarity:
+    private Properties createMetadataProperties() throws MalformedURLException {
+        Properties props = new Properties();
+        props.setProperty("application.name", project.getArtifactId());
+        props.setProperty("metadata.loader", StaticURLResolver.class.getName());
+
+        String projectUrl = new File(mainSourceRoot, "resources").toURI().toURL().toString();
+        props.setProperty(MetadataUrlResolver.METADATA_LOCATION_PREFIX + project.getArtifactId(), projectUrl);
+        PackageManager.addMapping(project.getArtifactId(), basePackage);
+
+        if (metadataDependencies != null) {
+            metadataDependencies.add(project.getArtifactId());
+            StringBuilder buff = new StringBuilder();
+            for (Iterator<String> i = metadataDependencies.iterator(); i.hasNext();) {
+                buff.append(i.next());
+                if (i.hasNext()) {
+                    buff.append(";");
+                }
+            }
+            props.setProperty(MetadataUrlResolver.METADATA_LOCATIONS, buff.toString());
+
+            List<Artifact> artifacts = plugin.getArtifacts();
+            for (Artifact a : artifacts) {
+                if (metadataDependencies.contains(a.getArtifactId())) {
+                    URL url = a.getFile().toURI().toURL();
+                    props.setProperty(MetadataUrlResolver.METADATA_LOCATION_PREFIX + a.getArtifactId(), url.toString());
+                    PackageManager.addMapping(a.getArtifactId(), url);
+                    LOG.info("Adding metadataDependency to current set of metadata: " + a.getArtifactId());
+                }
+            }
+
+        }
+        return props;
     }
 
     private MetadataRepository loadMetadataRepository(Properties props, boolean isLegacy) throws ClassNotFoundException,

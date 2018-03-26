@@ -2,19 +2,23 @@ package org.bitbucket.fermenter.mda.element;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
-import org.apache.commons.io.FileUtils;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
+import org.bitbucket.fermenter.mda.metadata.StaticURLResolver;
+import org.bitbucket.fermenter.mda.metamodel.DefaultMetadataRepository;
+import org.bitbucket.fermenter.mda.metamodel.MetadataUrlResolver;
 import org.bitbucket.fermenter.mda.metamodel.element.Enum;
 import org.bitbucket.fermenter.mda.metamodel.element.EnumElement;
+import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
 import org.bitbucket.fermenter.mda.metamodel.element.EnumerationElement;
-import org.bitbucket.fermenter.mda.util.JsonUtils;
 import org.bitbucket.fermenter.mda.util.MessageTracker;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,10 +32,12 @@ public class EnumerationSteps {
 
     private ObjectMapper objectMapper = new ObjectMapper();
     private MessageTracker messageTracker = MessageTracker.getInstance();
+    private File enumerationsDirectory = new File("target/temp-metadata", "enumerations");
     
     private File enumerationFile;
-    private EnumerationElement loadedEnumeration;
+    private Enumeration loadedEnumeration;
     protected GenerationException encounteredException;
+    protected DefaultMetadataRepository metadataRepo;
 
     @After("@enumeration")
     public void cleanUp() {
@@ -40,7 +46,11 @@ public class EnumerationSteps {
             enumerationFile = null;
         }
         
+        loadedEnumeration = null;
+        
         messageTracker.clear();
+        
+        enumerationsDirectory.delete();
     }
 
     @Given("^an enumeration named \"([^\"]*)\" in \"([^\"]*)\" and enum constants \"([^\"]*)\"$")
@@ -55,8 +65,9 @@ public class EnumerationSteps {
             newEnumConstant.setName(constant);
             enumeration.addEnums(newEnumConstant);
         }
-
-        enumerationFile = new File(FileUtils.getTempDirectory(), name + ".json");
+        
+        enumerationsDirectory.mkdirs();
+        enumerationFile = new File(enumerationsDirectory, name + ".json");
         objectMapper.writeValue(enumerationFile, enumeration);
         assertTrue("Enumeration not written to file!", enumerationFile.exists());
     }
@@ -66,8 +77,17 @@ public class EnumerationSteps {
         encounteredException = null;
 
         try {
-            loadedEnumeration = JsonUtils.readAndValidateJson(enumerationFile, EnumerationElement.class);
-            assertNotNull("Could not read enumeration file!", loadedEnumeration);
+            //loadedEnumeration = JsonUtils.readAndValidateJson(enumerationFile, EnumerationElement.class);
+            Properties metadataProperties = new Properties();
+            metadataProperties.setProperty("application.name", "fermenter-mda");
+            metadataProperties.setProperty("metadata.loader", StaticURLResolver.class.getName());
+            metadataProperties.setProperty(MetadataUrlResolver.METADATA_LOCATIONS, 
+                    "fermenter-mda;");
+            metadataProperties.setProperty(MetadataUrlResolver.METADATA_LOCATION_PREFIX + "fermenter-mda", 
+                     enumerationsDirectory.getParentFile().toURI().toString());
+            
+            metadataRepo = new DefaultMetadataRepository("some.package.name");
+            metadataRepo.load(metadataProperties);            
 
         } catch (GenerationException e) {
             encounteredException = e;
@@ -79,8 +99,9 @@ public class EnumerationSteps {
             String packageName, List<String> constants) throws Throwable {
         if (encounteredException != null) {
             throw encounteredException;
-        }
-
+        }        
+        
+        loadedEnumeration = metadataRepo.getEnumerations(packageName).get(name);
         assertEquals("Unexpected enumeration name!", name, loadedEnumeration.getName());
         assertEquals("Unexpected enumeration package!", packageName, loadedEnumeration.getPackage());
 
@@ -91,5 +112,16 @@ public class EnumerationSteps {
             assertNotNull("Could not find enum constant " + constant + "!", loadedConstantMap.get(constant));
         }
     }
+    
+    @Then("^NO enumeration metamodel instance is returned for the name \"([^\"]*)\" in \"([^\"]*)\"$")
+    public void no_enumeration_metamodel_instance_is_returned_for_the_name_in(String name, String packageName) throws Throwable {
+        if (encounteredException != null) {
+            throw encounteredException;
+        }        
+        
+        Map<String, Enumeration> packageEnumerations = metadataRepo.getEnumerations(packageName);
+        loadedEnumeration = (packageEnumerations != null) ? packageEnumerations.get(name) : null;
+        assertNull(loadedEnumeration);
+    }    
 
 }

@@ -17,6 +17,10 @@ public interface MetamodelConfig extends KrauseningConfig {
     @DefaultValue("enumerations")
     public String getEnumerationsRelationPath();
     
+    /**
+     * Returns the metadata resolver to use to lookup metadata.
+     * @return url resolver class
+     */
     @Key("metadata.url.resolver")
     @DefaultValue("org.bitbucket.fermenter.mda.metamodel.DefaultUrlResolver")
     public String getUrlResolver();

@@ -1,5 +1,8 @@
 package org.bitbucket.fermenter.mda.metamodel.element;
 
+/**
+ * Provides the base interface of any metamodel object - it has to at least have a name and be validatable.
+ */
 public interface Metamodel {
 
     /**

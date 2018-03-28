@@ -10,17 +10,24 @@ import org.bitbucket.fermenter.mda.metamodel.element.BaseEnumertionDecorator;
 import org.bitbucket.fermenter.mda.metamodel.element.Enum;
 import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
 
-public class JavaEnumeration extends BaseEnumertionDecorator implements Enumeration, JavaNamedElement {
+/**
+ * Decorates an enumeration for easier Java rendering.
+ */
+public class JavaEnumeration extends BaseEnumertionDecorator implements Enumeration, JavaPackagedElement {
 
     private List<Enum> decoratedEnums;
 
+    /**
+     * {@inheritDoc}
+     */
     public JavaEnumeration(Enumeration enumerationToDecorate) {
         super(enumerationToDecorate);
     }
 
     /**
-     * @see org.bitbucket.fermenter.stout.mda.EnumerationElement.Enumeration#getEnumList()
+     * {@inheritDoc}
      */
+    @Override
     public List<Enum> getEnums() {
         if (decoratedEnums == null) {
             List<Enum> enums = wrapped.getEnums();

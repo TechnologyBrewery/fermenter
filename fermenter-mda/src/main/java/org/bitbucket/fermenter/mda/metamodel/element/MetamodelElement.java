@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
 
 /**
- * Defines the contract for a metamodel element that requires a name.
+ * Implements the contract for a basic metamodel element.
  */
 public abstract class MetamodelElement implements Metamodel {
 
@@ -17,14 +17,8 @@ public abstract class MetamodelElement implements Metamodel {
     @JsonProperty(required = true)
     protected String name;
 
-    /* (non-Javadoc)
-     * @see org.bitbucket.fermenter.mda.metamodel.element.Metamodel#validate()
-     */
-    @Override
-    public abstract void validate();
-
-    /* (non-Javadoc)
-     * @see org.bitbucket.fermenter.mda.metamodel.element.Metamodel#getName()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public String getName() {
@@ -32,7 +26,8 @@ public abstract class MetamodelElement implements Metamodel {
     }
 
     /**
-     * Sets the name of the metadata element. param name element name
+     * Sets the name of the metadata element. param name element name.
+     * @param name name to set
      */
     public void setName(String name) {
         this.name = name;

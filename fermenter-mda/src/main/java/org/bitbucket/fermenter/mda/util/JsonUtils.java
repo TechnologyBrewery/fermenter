@@ -81,19 +81,24 @@ public final class JsonUtils {
 
         return report.isSuccess();
     }
-    
+
+    /**
+     * Returns an {@link ObjectMapper} that has configurations for fermenter metamodel interfaces.
+     * 
+     * @return ObjectMapper singleton
+     */
     public static ObjectMapper getObjectMapper() {
         if (objectMapper == null) {
-            
+
             SimpleModule module = new SimpleModule();
             module.addAbstractTypeMapping(Enum.class, EnumElement.class);
-            
+
             ObjectMapper localMapper = new ObjectMapper();
             localMapper.registerModule(module);
-            
+
             objectMapper = localMapper;
         }
-        
+
         return objectMapper;
     }
 

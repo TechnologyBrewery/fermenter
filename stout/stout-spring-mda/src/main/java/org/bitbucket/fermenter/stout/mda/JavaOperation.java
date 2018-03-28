@@ -30,7 +30,7 @@ public class JavaOperation implements Operation {
     public static final String PROPAGATION_NOT_SUPPORTED = "NOT_SUPPORTED";
     public static final String PROPAGATION_SUPPORTS = "SUPPORTS";
     public static final String PROPAGATION_NEVER = "NEVER";
-    
+
     private MetadataRepository metadataRepository = MetadataRepositoryManager
             .getMetadataRepostory(MetadataRepository.class);
 
@@ -160,7 +160,7 @@ public class JavaOperation implements Operation {
     public String getSignatureParametersWithJaxRS() {
         return getSignatureParametersWithParameterAnnotations("QueryParam");
     }
-    
+
     /**
      * Creates the signature with needed feign parameter descriptors included.
      * 
@@ -168,8 +168,8 @@ public class JavaOperation implements Operation {
      */
     public String getSignatureParametersWithFeign() {
         return getSignatureParametersWithParameterAnnotations("Param");
-    }    
-    
+    }
+
     /**
      * Creates the signature with passed parameter annotation descriptors included.
      * 
@@ -217,7 +217,7 @@ public class JavaOperation implements Operation {
 
         return params.toString();
     }
-    
+
     /**
      * Creates the rest-style path for the operation.
      * 
@@ -225,15 +225,15 @@ public class JavaOperation implements Operation {
      */
     public String getRestStylePath() {
         StringBuilder path = new StringBuilder();
-        path.append(getLowercaseName());     
-        
+        path.append(getLowercaseName());
+
         int entityParameterCount = 0;
         List<Parameter> parameterList = getParameters();
         if (parameterList != null) {
             if (!parameterList.isEmpty()) {
                 path.append("?");
             }
-            
+
             boolean isFirst = Boolean.TRUE;
             for (Iterator<Parameter> i = parameterList.iterator(); i.hasNext();) {
                 JavaParameter param = (JavaParameter) i.next();
@@ -283,7 +283,13 @@ public class JavaOperation implements Operation {
             if (parameter.isMany()) {
                 imports.add(List.class.getName());
             }
-            imports.add(parameter.getImport());
+
+            String importValue = parameter.getImport();
+            // java.lang is imported by default, so filter them out:
+            if (!importValue.startsWith("java.lang.")) {
+                imports.add(importValue);
+            }
+
         }
 
         return imports;
@@ -383,8 +389,7 @@ public class JavaOperation implements Operation {
         boolean isResponseTypeCrossProject = false;
         if (isReturnTypeEntity()) {
             String currentApplicationName = metadataRepository.getApplicationName();
-            String entityProject = metadataRepository.getAllEntities().get(getReturnType())
-                    .getApplicationName();
+            String entityProject = metadataRepository.getAllEntities().get(getReturnType()).getApplicationName();
             isResponseTypeCrossProject = (currentApplicationName.equals(entityProject));
         }
 

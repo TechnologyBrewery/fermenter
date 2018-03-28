@@ -13,13 +13,16 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 /**
  * Represents a enumeration of declared constants.
  */
-@JsonPropertyOrder({"package", "name"})
+@JsonPropertyOrder({ "package", "name" })
 public class EnumerationElement extends NamespacedMetamodelElement implements Enumeration {
 
     @JsonProperty(required = true)
     protected List<Enum> enums = new ArrayList<>();
     protected Integer maxLength;
-    
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @JsonIgnore
     public Integer getMaxLength() {
@@ -40,9 +43,10 @@ public class EnumerationElement extends NamespacedMetamodelElement implements En
         }
         return maxLength;
     }
-    
+
     /**
      * Return the list of constants for this enumeration.
+     * 
      * @return constants
      */
     public List<Enum> getEnums() {
@@ -51,7 +55,9 @@ public class EnumerationElement extends NamespacedMetamodelElement implements En
 
     /**
      * Adds a constant to this enumeration.
-     * @param contant the constant to add
+     * 
+     * @param contant
+     *            the constant to add
      */
     public void addEnums(EnumElement contant) {
         enums.add(contant);
@@ -62,10 +68,10 @@ public class EnumerationElement extends NamespacedMetamodelElement implements En
      */
     @Override
     public void validate() {
-       if (CollectionUtils.isEmpty(enums)) {
-           messageTracker.addWarningMessage("Enumeration " + getName() + " does NOT contain any enum constants!");
-       }
-        
+        if (CollectionUtils.isEmpty(enums)) {
+            messageTracker.addWarningMessage("Enumeration " + getName() + " does NOT contain any enum constants!");
+        }
+
     }
 
     /**

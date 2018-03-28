@@ -33,10 +33,16 @@ import org.bitbucket.fermenter.mda.util.MessageTracker;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * The bulk of metamodel management in a single abstract class.  This base functionality is intended to provide 
+ * common loading and and accessibility of metadata related to a specific metamodel. 
+ *
+ * @param <T> An instance of {@link NamespacedMetamodel}
+ */
 public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
 
     private static final Log log = LogFactory.getLog(AbstractMetamodelManager.class);
-    
+
     private static final String METAMODEL_SUFFIX = "json";
     private Map<String, Map<String, T>> metadataByPackageMap = new HashMap<>();
     private Map<String, T> completeMetadataMap = new HashMap<>();
@@ -150,22 +156,27 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
         List<URL> metadataResources = new ArrayList<>();
         File metamodelDir = new File(new URI(name + this.getMetadataLocation()));
         if (metamodelDir.isDirectory()) {
-            String[] suffixFilter = {METAMODEL_SUFFIX};
+            String[] suffixFilter = { METAMODEL_SUFFIX };
             Collection<File> files = FileUtils.listFiles(metamodelDir, suffixFilter, true);
             if (CollectionUtils.isNotEmpty(files)) {
-                for (File file : files) {               
+                for (File file : files) {
                     metadataResources.add(file.toURI().toURL());
                 }
             }
-            
+
         } else {
             log.warn(metamodelDir.getCanonicalPath() + " is not a valid directory!");
-            
+
         }
 
         return metadataResources;
     }
 
+    /**
+     * Returns the location *within* the base metadata directory to search for metadata related to this
+     * specific metamodel.
+     * @return relative path (e.g., ./entities)
+     */
     protected abstract String getMetadataLocation();
 
     private void loadMetamodelFile(InputStream stream) {
@@ -181,11 +192,21 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
 
     }
 
+    /**
+     * The metamodel class into which metadata should be read.
+     * @return metamodel deserialization target
+     */
     protected abstract Class<? extends T> getMetamodelClass();
+    
+    /**
+     * The metamodel name for use in log output (e.g., Enumeration, Entity).
+     * @return metamodel string descriptor
+     */
+    protected abstract String getMetamodelDescription();    
 
     protected void postLoadMetamodel() {
         if (log.isInfoEnabled()) {
-            log.info("Loaded " + completeMetadataMap.size() + " " + getMetamodelClass().getSimpleName());
+            log.info("Loaded " + completeMetadataMap.size() + " " + getMetamodelDescription() + "(s)");
         }
     }
 
@@ -210,20 +231,31 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
 
     }
 
-    public T getMetadataElementByPackageAndName(String applicationName, String name) {
-        Map<String, T> metadataMap = getMetadataMap(applicationName);
+    /**
+     * Returns a metadata instance of this metamodel by package name and element name.
+     * @param packageName package
+     * @param name name of element
+     * @return instance of element or null if no instance exists
+     */
+    public T getMetadataElementByPackageAndName(String packageName, String name) {
+        Map<String, T> metadataMap = getMetadataMap(packageName);
         return (metadataMap != null) ? metadataMap.get(name) : null;
     }
 
-    public Map<String, T> getMetadataElementByPackage(String applicationName) {
-        Map<String, T> enumerationMap = getMetadataMap(applicationName);
+    /**
+     * Returns all metadata instances of this metamodel by package name.
+     * @param packageName package
+     * @return instance of element or an empty map is no instances exist
+     */
+    public Map<String, T> getMetadataElementByPackage(String packageName) {
+        Map<String, T> enumerationMap = getMetadataMap(packageName);
         return (enumerationMap != null) ? enumerationMap : Collections.emptyMap();
     }
 
-    public T getMetadataElementByName(String name) {
-        return completeMetadataMap.get(name);
-    }
-
+    /**
+     * Returns all metadata instances of this metamodel (regardless of package name).
+     * @return instance of element or an empty map is no instances exist
+     */
     public Map<String, T> getMetadataElementWithoutPackage() {
         return completeMetadataMap;
     }

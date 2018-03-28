@@ -1,16 +1,14 @@
 package ${basePackage}.client.resource;
 
-import java.util.Collection;
-import java.util.Date;
-import java.math.BigDecimal;
-import java.util.List;
 import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
 
 import javax.ws.rs.core.MediaType;
 
-import ${basePackage}.transfer.*;
+#foreach( $import in $delegateImports )
+import $import;
+#end
 
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;

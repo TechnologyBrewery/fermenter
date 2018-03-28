@@ -2,6 +2,9 @@ package org.bitbucket.fermenter.mda.metamodel;
 
 import java.util.Properties;
 
+/**
+ * Common interface between legacy and new metadata repositories to allow them to more easily interact.
+ */
 public interface MetadataRepository {
 
     /**
@@ -19,5 +22,5 @@ public interface MetadataRepository {
      *            any applicable properties
      */
     public abstract void validate(Properties properties);
-    
+
 }

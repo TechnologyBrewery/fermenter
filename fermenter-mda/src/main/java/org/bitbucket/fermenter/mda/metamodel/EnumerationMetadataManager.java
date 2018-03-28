@@ -10,10 +10,18 @@ class EnumerationMetadataManager extends AbstractMetamodelManager<Enumeration> {
 
     private static final EnumerationMetadataManager INSTANCE = new EnumerationMetadataManager();
 
+    /**
+     * Returns the singleton instance of this class.
+     * 
+     * @return singleton
+     */
     public static EnumerationMetadataManager getInstance() {
         return INSTANCE;
     }
 
+    /**
+     * Prevent instantiation of this singleton from outside this class.
+     */
     private EnumerationMetadataManager() {
         super();
     }
@@ -26,6 +34,11 @@ class EnumerationMetadataManager extends AbstractMetamodelManager<Enumeration> {
     @Override
     protected Class<EnumerationElement> getMetamodelClass() {
         return EnumerationElement.class;
+    }
+
+    @Override
+    protected String getMetamodelDescription() {
+        return Enumeration.class.getSimpleName();
     }
 
 }

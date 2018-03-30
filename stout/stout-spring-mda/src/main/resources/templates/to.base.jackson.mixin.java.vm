@@ -46,6 +46,9 @@ public abstract class ${entity.name}BaseMixIn {
 #foreach ( $field in $entity.fields.values() )
 	@JsonProperty	
 	private ${field.javaType} ${field.name};
+	
+	@JsonProperty("${field.name}")
+	public abstract ${field.javaType} get${field.capitalizedName}();
 #end
 #foreach ($relation in $entity.relations.values())
 	@JsonManagedReference(value="${entity.name}-${relation.type}")

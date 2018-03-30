@@ -11,6 +11,8 @@ import org.bitbucket.fermenter.mda.metadata.MetadataManager;
 
 public class EntityMetadata extends MetadataElement implements Entity {
     
+    private static final String TRANSIENT_ENTITY = "transient entity '";
+
     private static Log LOG = LogFactory.getLog(EntityMetadata.class);
 
     private String namespace;
@@ -407,11 +409,11 @@ public class EntityMetadata extends MetadataElement implements Entity {
 		    
 		} else if (isTransient()) {
 		    if (StringUtils.isNotBlank(getTable())) {
-		        LOG.warn("transient entity '" + getName() + "' specifies a table value which will be ignored");
+		        LOG.warn(TRANSIENT_ENTITY + getName() + "' specifies a table value which will be ignored");
 		    }
 		    
 		    if (getIdFields().size() > 0) {
-                LOG.error("transient entity '" + getName() + "' should not specify an id field");
+                LOG.error(TRANSIENT_ENTITY + getName() + "' should not specify an id field");
             }
 		    
 		    for (Field f : getIdFields().values()) {
@@ -429,14 +431,14 @@ public class EntityMetadata extends MetadataElement implements Entity {
         boolean transientIssuesFound = false;
         if (StringUtils.isBlank(f.getColumn())) {
             transientIssuesFound = true;
-            LOG.error("transient entity '" + getName() + "." + f.getName()+ "' requires a column to be specified!");
+            LOG.error(TRANSIENT_ENTITY + getName() + "." + f.getName()+ "' requires a column to be specified!");
         }
         return transientIssuesFound;
     }
     
     protected void checkTransientFieldForColumn(Field f) {
-        if (StringUtils.isBlank(f.getColumn())) {
-            LOG.error("transient entity '" + getName() + "." + f.getName()+ "' specifies a column which will be ignored");
+        if (!StringUtils.isBlank(f.getColumn())) {
+            LOG.error(TRANSIENT_ENTITY + getName() + "." + f.getName()+ "' specifies a column which will be ignored");
         }
     }    
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 #foreach ($import in $entity.imports )
 import ${import};
@@ -70,6 +71,7 @@ public class ${entity.name}Base implements TransferObject{
 	 *
 	 * @return The ${idField.label}
 	 */
+	@JsonProperty("${idField.name}")
 	public ${idField.javaType} get${idField.capitalizedName}() {
 		return ${idField.name};
 	}
@@ -114,6 +116,7 @@ public class ${entity.name}Base implements TransferObject{
 	 *
 	 * @return The ${field.label}
 	 */
+	@JsonProperty("${field.name}")
 	public ${field.javaType} get${field.capitalizedName}() {
 		return ${field.name};
 	}

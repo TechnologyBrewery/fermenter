@@ -302,12 +302,10 @@ public class JavaOperation implements Operation {
             importSet.add(Collection.class.getName());
         }
 
-        // how return types are handled is very messy in genernal - will cleanup when we update the metamodel
+        // how return types are handled is very messy in general - will cleanup when we update the metamodel
         if (!isResponseTypeVoid()) {
-            Entity returnEntity = metadataRepository.getEntity(getReturnType());
-            String appName = (returnEntity != null) ? returnEntity.getApplicationName()
-                    : metadataRepository.getApplicationName();
-            String returnImport = JavaElementUtils.getJavaImportType(appName, getReturnTypeForLookup());
+            String currentAppName = metadataRepository.getApplicationName();
+            String returnImport = JavaElementUtils.getJavaImportType(currentAppName, getReturnTypeForLookup());
             importSet.add(returnImport);
         }
 

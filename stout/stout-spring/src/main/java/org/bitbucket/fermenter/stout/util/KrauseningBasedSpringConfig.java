@@ -1,15 +1,10 @@
 package org.bitbucket.fermenter.stout.util;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Map;
 import java.util.Properties;
 
 import javax.sql.DataSource;
 
-import org.aeonbits.owner.KrauseningConfig.KrauseningSources;
 import org.aeonbits.owner.KrauseningConfigFactory;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.dbcp2.BasicDataSource;
@@ -55,8 +50,7 @@ public class KrauseningBasedSpringConfig {
             dataSourceProps = new Properties();
         }
         
-        alterPropertyAnnonationName(this.dataSourcePropertiesFileName);
-        DataSourceConfig config = KrauseningConfigFactory.create(DataSourceConfig.class, System.getProperties());
+        DataSourceConfig config = KrauseningConfigFactory.create(DataSourceConfig.class, dataSourcePropertiesFileName, System.getProperties());
         String interleavedUrl = config.getUrl();
 
         if (interleavedUrl != null) {
@@ -79,24 +73,6 @@ public class KrauseningBasedSpringConfig {
     @Bean
     public Properties krauseningJpaProperties() {
         return Krausening.getInstance().getProperties(this.jpaPropertiesFileName);
-    }
-
-    private static void alterPropertyAnnonationName(String dataSourcePropertiesFileName) {
-        try {
-            ExtendedKrauseningSources updatedSources = new ExtendedKrauseningSources(dataSourcePropertiesFileName);
-
-            Method method = Class.class.getDeclaredMethod("annotationData", null);
-            method.setAccessible(true);
-            Object annotationData = method.invoke(DataSourceConfig.class);
-            Field annotations = annotationData.getClass().getDeclaredField("annotations");
-            annotations.setAccessible(true);
-            Map<Class<? extends Annotation>, Annotation> map = (Map<Class<? extends Annotation>, Annotation>) annotations
-                    .get(annotationData);
-            map.put(KrauseningSources.class, updatedSources);
-        } catch (Exception e) {
-            throw new UnrecoverableException(
-                    "Could not update " + DataSourceConfig.class.getSimpleName() + "KrauseningSources property!", e);
-        }
     }
 
 }

@@ -4,8 +4,7 @@
 	version="3.0">
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:base-application-context.xml 
-			classpath:stout-cookbook-domain-application-context.xml</param-value>
+		<param-value>classpath:stout-cookbook-domain-application-context.xml</param-value>
 	</context-param>
 
 	<context-param>

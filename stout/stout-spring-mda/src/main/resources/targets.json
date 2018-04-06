@@ -18,7 +18,7 @@
 	{
 		"name": "baseSpringContext",
 		"templateName": "templates/spring.context.base.xml.vm",
-		"outputFile": "base-application-context.xml",
+		"outputFile": "base-${artifactId}-application-context.xml",
 		"generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
 		"metadataContext": "local",
 		"overwritable": true

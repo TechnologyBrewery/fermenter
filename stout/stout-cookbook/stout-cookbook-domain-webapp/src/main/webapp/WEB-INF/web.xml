@@ -6,8 +6,7 @@
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<!-- ***IMPORTANT*** Developers should add any project-specific Spring context configurations here -->
-    	<param-value>classpath:base-application-context.xml 
-    		classpath:stout-cookbook-domain-application-context.xml</param-value>
+	<param-value>classpath:stout-cookbook-domain-application-context.xml</param-value>
 	</context-param>
 	
 	<context-param>

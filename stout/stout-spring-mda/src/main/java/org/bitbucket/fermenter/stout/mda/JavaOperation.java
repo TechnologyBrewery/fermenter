@@ -16,6 +16,7 @@ import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.Operation;
 import org.bitbucket.fermenter.mda.metadata.element.Parameter;
+import org.jboss.resteasy.annotations.GZIP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -295,6 +296,9 @@ public class JavaOperation implements Operation {
         if (isReturnTypeCollection()) {
             importSet.add(Collection.class.getName());
         }
+        if(isCompressedWithGzip()) {
+            importSet.add(GZIP.class.getName());
+        }
 
         // how return types are handled is very messy in genernal - will cleanup when we update the metamodel
         if (!isResponseTypeVoid()) {
@@ -433,6 +437,14 @@ public class JavaOperation implements Operation {
         }
 
         return hasEntityParameters;
+    }
+    
+    /**
+     * @param compression true if the data will be compressed with GZIP, false otherwise
+     */
+    @Override
+    public boolean isCompressedWithGzip() {
+        return operation.isCompressedWithGzip();
     }
 
 }

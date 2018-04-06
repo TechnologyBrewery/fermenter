@@ -60,6 +60,9 @@ public interface ${service.name}BaseService {
 	#end
 	@Path("${operation.lowercaseName}")
 	@Produces("application/json;charset=${operation.responseEncoding}")
+	#if($operation.isCompressedWithGzip())
+    @GZIP
+    #end
 	#if($operation.hasEntityParameters())
 	@Consumes(MediaType.APPLICATION_JSON)
 	#end

@@ -84,6 +84,7 @@
 					<type>string</type>
 				</parameter>
 			</parameters>
+			<compressedWithGzip>false</compressedWithGzip>
 		</operation>
 		<operation>
 			<name>countNumInputs</name>

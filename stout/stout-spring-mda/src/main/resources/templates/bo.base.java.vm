@@ -88,6 +88,9 @@ public abstract class ${entity.name}BaseBO extends BasePersistentSpringBO<${idFi
 #foreach ( $idField in $entity.idFields.values() )
 	#if ( !$entity.isTransient() )
 	@Id
+	#if ($idField.type == 'uuid')
+  	@Type(type = "org.hibernate.type.UUIDCharType")
+  	#end 
 	#if ( $idField.hasGenerator() )
 		#if ( $idField.generator == 'identity')
 	@GeneratedValue(strategy=GenerationType.IDENTITY)	
@@ -138,6 +141,9 @@ public abstract class ${entity.name}BaseBO extends BasePersistentSpringBO<${idFi
   #if ($field.type == 'numeric_boolean')
   	@Type(type = "org.hibernate.type.NumericBooleanType")
   #end 
+  #if ($field.type == 'uuid')
+  	@Type(type = "org.hibernate.type.UUIDCharType")
+  #end   
 	private ${field.javaType} ${field.name};
 
 #end

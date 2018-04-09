@@ -442,7 +442,6 @@ public class JavaOperation implements Operation {
     /**
      * @param compression true if the data will be compressed with GZIP, false otherwise
      */
-    @Override
     public boolean isCompressedWithGzip() {
         return operation.isCompressedWithGzip();
     }

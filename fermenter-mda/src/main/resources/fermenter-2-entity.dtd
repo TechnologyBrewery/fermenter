@@ -11,7 +11,7 @@
 <!ELEMENT id (field)>
 
 <!ELEMENT fields (field+)>
-<!ELEMENT field (name, documentation?, type, project?, column?, required?, generator?, maxLength?, minLength?, maxValue?, minValue?, scale?, label?, format?, defaultValue?)>
+<!ELEMENT field (name, documentation?, type, project?, column?, required?, generator?, maxLength?, minLength?, maxValue?, minValue?, scale?, label?, format?)>
 <!ELEMENT type (#PCDATA)>
 <!ELEMENT column (#PCDATA)>
 <!ELEMENT required (#PCDATA)>
@@ -23,7 +23,6 @@
 <!ELEMENT scale (#PCDATA)>
 <!ELEMENT label (#PCDATA)>
 <!ELEMENT format (#PCDATA)>
-<!ELEMENT defaultValue (#PCDATA)>
 
 <!ELEMENT associations (reference*,relation*)>
 <!ELEMENT reference (name?, documentation?, type, project?, fk?,required?)>

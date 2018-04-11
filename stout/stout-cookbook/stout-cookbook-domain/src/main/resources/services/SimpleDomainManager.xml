@@ -97,6 +97,7 @@
 					<many>true</many>
 				</parameter>
 			</parameters>
+			<compressedWithGzip>true</compressedWithGzip>
 		</operation>
 		<operation>
 			<name>CreateAndPropagateErrorMessages</name>
@@ -160,6 +161,7 @@
 				</parameter>
 			</parameters>
 			<transaction-attribute>Required</transaction-attribute>
+			<compressedWithGzip>true</compressedWithGzip>
 		</operation>
 		<operation>
 			<name>returnManyPrimitives</name>

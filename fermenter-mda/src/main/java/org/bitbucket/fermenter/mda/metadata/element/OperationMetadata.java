@@ -137,7 +137,7 @@ public class OperationMetadata extends MetadataElement implements Operation {
 	 * @return Whether this data will be compressed using GZIP.
 	 */
     public boolean isCompressedWithGzip() {
-        return (this.compressWithGzip != null && "true".equalsIgnoreCase(compressWithGzip));
+        return (Boolean.valueOf(compressWithGzip));
     }
 
     /**

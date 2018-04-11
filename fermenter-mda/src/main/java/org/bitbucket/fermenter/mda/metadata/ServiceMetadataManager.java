@@ -86,7 +86,7 @@ class ServiceMetadataManager extends MetadataManager {
 		digester.addCallMethod( 	"service/operations/operation/transaction-attribute", 		"setTransactionAttribute", 	0 );
 		digester.addCallMethod( 	"service/operations/operation/transmission-method", 		"setTransmissionMethod", 	0 );
 		digester.addCallMethod( 	"service/operations/operation/responseEncoding", 			"setResponseEncoding", 	0 );
-
+		digester.addCallMethod(     "service/operations/operation/compressedWithGzip",          "setCompressedWithGzip",       0);
 		digester.addObjectCreate( 	"service/operations/operation/parameters/parameter", 		ParameterMetadata.class.getName() );
 		digester.addCallMethod( 	"service/operations/operation/parameters/parameter/name", 	"setName", 				0 );
 		digester.addCallMethod( 	"service/operations/operation/parameters/parameter/documentation", 	"setDocumentation", 				0 );

@@ -21,8 +21,9 @@ public class OperationMetadata extends MetadataElement implements Operation {
 	private List<Parameter> parameters;
 	private String transactionAttribute;
 	private String responseEncoding;
-	
-	private static Log log = LogFactory.getLog(Operation.class);
+	private String compressWithGzip;
+
+    private static Log log = LogFactory.getLog(Operation.class);
 	
 	/**
 	 * {@inheritDoc}
@@ -130,6 +131,21 @@ public class OperationMetadata extends MetadataElement implements Operation {
 	public void setResponseEncoding(String responseEncoding) {
 		this.responseEncoding = responseEncoding;
 	}
+	
+	   
+	/**
+	 * @return Whether this data will be compressed using GZIP.
+	 */
+    public boolean isCompressedWithGzip() {
+        return (Boolean.valueOf(compressWithGzip));
+    }
+
+    /**
+     * @param compression true if the data will be compressed with GZIP, false otherwise
+     */
+    public void setCompressedWithGzip(String compression) {
+        this.compressWithGzip = compression;
+    }
 	
 	/**
 	 * {@inheritDoc}

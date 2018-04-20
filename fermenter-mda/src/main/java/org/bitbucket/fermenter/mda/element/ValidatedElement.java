@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 /**
  * Defines the contract and common functionality classes that represent json and can be validated by a json schema.
  */
-public abstract class ValidatedElement {
+public interface ValidatedElement {
 
     /**
      * Returns a URL to the schema that can be used to validate json files for the implementing sub-class.
@@ -19,7 +19,7 @@ public abstract class ValidatedElement {
      * @return URL to a json schema
      */
     @JsonIgnore
-    public URL getJsonSchemaUrl() {
+    public default URL getJsonSchemaUrl() {
         Enumeration<URL> jsonSchema;
         String schemaFileName = getSchemaFileName();
         try {
@@ -39,6 +39,6 @@ public abstract class ValidatedElement {
      * @return schema name
      */
     @JsonIgnore
-    public abstract String getSchemaFileName();
+    public String getSchemaFileName();
 
 }

@@ -2,6 +2,7 @@ package org.bitbucket.fermenter.mda.metadata.element;
 
 import java.util.List;
 
+@Deprecated
 public interface Enumeration {
 		
 	static final String TYPE_NAMED_ENUMERATION = "named";

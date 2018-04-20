@@ -1,12 +1,10 @@
 package ${basePackage}.client.service;
 
-import java.util.Collection;
-import java.util.Date;
-import java.math.BigDecimal;
-import java.util.List;
 import feign.Param;
 
-import ${basePackage}.transfer.*;
+#foreach( $import in $delegateImports )
+import $import;
+#end
 
 /**
  * Service interface for ${service.name} entity maintenance.

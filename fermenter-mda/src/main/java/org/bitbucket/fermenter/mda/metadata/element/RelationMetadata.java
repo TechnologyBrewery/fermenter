@@ -8,7 +8,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
-import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
+import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 
 public class RelationMetadata extends MetadataElement implements Relation {
 
@@ -99,7 +99,7 @@ public class RelationMetadata extends MetadataElement implements Relation {
 	public String getTable() {
 		if( table == null ) {
 		    MetadataRepository metadataRepository = 
-                    MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+                    ModelInstanceRepositoryManager.getMetadataRepostory(MetadataRepository.class);
 			table = metadataRepository.getEntity( type ).getTable();
 		}
 		
@@ -111,7 +111,7 @@ public class RelationMetadata extends MetadataElement implements Relation {
 	 */
 	public Collection getChildRelations() {
 	    MetadataRepository metadataRepository = 
-                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+                ModelInstanceRepositoryManager.getMetadataRepostory(MetadataRepository.class);
 		return metadataRepository.getEntity( type ).getRelations().values();	
 	}
 	
@@ -119,7 +119,7 @@ public class RelationMetadata extends MetadataElement implements Relation {
      * @see org.bitbucket.fermenter.mda.metadata.Relation#getKeys()
      */
     public Collection<Field> getKeys(String parentEntityName) {
-        MetadataRepository metadataRepository = MetadataRepositoryManager
+        MetadataRepository metadataRepository = ModelInstanceRepositoryManager
                 .getMetadataRepostory(MetadataRepository.class);
         Entity ed = metadataRepository.getEntity(parentEntityName);
 

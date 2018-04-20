@@ -59,11 +59,11 @@ public abstract class ${service.name}BaseServiceImpl extends AbstractMsgMgrAware
 		);
 		
 	#if($operation.isReturnTypeCollection())
-		ValueServiceResponse<Collection<${operation.wrappedReturnType}>> response = new ValueServiceResponse<Collection<${operation.wrappedReturnType}>>(result);
+		ValueServiceResponse<Collection<${operation.wrappedReturnType}>> response = new ValueServiceResponse<>(result);
 	#elseif( $operation.isResponseTypeVoid() )
 		VoidServiceResponse response = new VoidServiceResponse();
 	#else
-		ValueServiceResponse<${operation.wrappedReturnType}> response = new ValueServiceResponse<${operation.wrappedReturnType}>(result);
+		ValueServiceResponse<${operation.wrappedReturnType}> response = new ValueServiceResponse<>(result);
 	#end
 	
 		addAllMsgMgrToResponse(response);

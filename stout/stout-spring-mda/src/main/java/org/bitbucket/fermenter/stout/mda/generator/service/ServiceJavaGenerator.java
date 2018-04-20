@@ -13,11 +13,14 @@ import org.bitbucket.fermenter.stout.mda.java.JavaGeneratorUtil;
  */
 public class ServiceJavaGenerator extends AbstractServiceGenerator {
 
+    private static final String BASE_PACKAGE = "basePackage";
+    protected static final String SERVICE = "service";
+
     @Override
     protected void populateVelocityContext(VelocityContext vc, Service service, GenerationContext generationContext) {
         JavaService javaService = new JavaService(service);
-        vc.put("service", javaService);
-        vc.put("basePackage", generationContext.getBasePackage());
+        vc.put(SERVICE, javaService);
+        vc.put(BASE_PACKAGE, generationContext.getBasePackage());
     }
 
     @Override

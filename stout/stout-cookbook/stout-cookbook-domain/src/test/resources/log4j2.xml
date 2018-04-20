@@ -6,7 +6,7 @@
 		</Console>
 	</Appenders>
 	<Loggers>
-		<Logger name="org.bitbucket.askllc.fermenter" level="debug">
+		<Logger name="org.bitbucket.askllc.fermenter" level="debug" additivity="false">
 			<AppenderRef ref="Console" />
 		</Logger>
 		<Root level="warn">

@@ -8,8 +8,8 @@ import org.bitbucket.fermenter.mda.generator.AbstractGenerator;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
-import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
+import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 
 public abstract class AbstractAllEntitiesAwareGenerator extends AbstractGenerator {
 
@@ -20,7 +20,7 @@ public abstract class AbstractAllEntitiesAwareGenerator extends AbstractGenerato
         vc.put("prefix", context.getBasePackage());
         vc.put("basePackage", context.getBasePackage());
 
-        MetadataRepository metadataRepository = MetadataRepositoryManager
+        MetadataRepository metadataRepository = ModelInstanceRepositoryManager
                 .getMetadataRepostory(MetadataRepository.class);
 
         Map<String, Entity> entityMap = metadataRepository.getEntitiesByMetadataContext(metadataContext,

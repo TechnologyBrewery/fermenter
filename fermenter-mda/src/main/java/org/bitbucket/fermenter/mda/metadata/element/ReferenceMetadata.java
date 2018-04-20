@@ -8,7 +8,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
-import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
+import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 
 public class ReferenceMetadata extends MetadataElement implements Reference {
 
@@ -83,7 +83,7 @@ public class ReferenceMetadata extends MetadataElement implements Reference {
 		if( foreignKeys == null ) {
 			foreignKeys = new ArrayList();
 			MetadataRepository metadataRepository = 
-                    MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+                    ModelInstanceRepositoryManager.getMetadataRepostory(MetadataRepository.class);
 			Entity ed = metadataRepository.getEntity(type);
 			if (ed == null) {
 				throw new NullPointerException("Reference to '" + type + "' not found!");
@@ -179,7 +179,7 @@ public class ReferenceMetadata extends MetadataElement implements Reference {
 	@Override
 	public String getProject() {
 	    MetadataRepository metadataRepository = 
-                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+                ModelInstanceRepositoryManager.getMetadataRepostory(MetadataRepository.class);
 		return (StringUtils.isNotBlank(project)) ? project : metadataRepository.getApplicationName();
 	}
 

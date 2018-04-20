@@ -8,11 +8,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bitbucket.fermenter.mda.metadata.FormatMetadataManager;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
-import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
-import org.bitbucket.fermenter.mda.metadata.element.Enumeration;
 import org.bitbucket.fermenter.mda.metadata.element.Field;
 import org.bitbucket.fermenter.mda.metadata.element.Format;
 import org.bitbucket.fermenter.mda.metadata.element.Pattern;
+import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
+import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
 
 public class JavaField implements Field {
 	
@@ -194,13 +194,13 @@ public class JavaField implements Field {
 	
 	public String getJavaType() {
 		MetadataRepository metadataRepository = 
-                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+                ModelInstanceRepositoryManager.getMetadataRepostory(MetadataRepository.class);
 		return JavaElementUtils.getJavaType(metadataRepository.getApplicationName(), getType());
 	}
 	
 	public boolean isEntity() {
 		MetadataRepository metadataRepository = 
-                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+                ModelInstanceRepositoryManager.getMetadataRepostory(MetadataRepository.class);
 		return metadataRepository.getEntity(getProject(), getType() ) != null;
 	}
 	
@@ -210,7 +210,7 @@ public class JavaField implements Field {
 				importName = JavaElementUtils.getJavaImportType(getProject(), getType());
 			} else {
 				MetadataRepository metadataRepository = 
-		                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+		                ModelInstanceRepositoryManager.getMetadataRepostory(MetadataRepository.class);
 				importName = JavaElementUtils.getJavaImportType(metadataRepository.getApplicationName(), getType());	
 			}
 		}

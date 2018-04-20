@@ -1,61 +1,52 @@
 package org.bitbucket.fermenter.stout.mda;
 
 import org.apache.commons.lang.StringUtils;
-import org.bitbucket.fermenter.mda.metadata.element.Enum;
+import org.bitbucket.fermenter.mda.metamodel.element.BaseEnumDecorator;
+import org.bitbucket.fermenter.mda.metamodel.element.Enum;
 
-public class JavaEnum implements Enum {
-	
-	private Enum enumInstance;
-	
-	/**
-	 * Create a new instance of <tt>Enum</tt> with the correct functionality set 
-	 * to generate Java code
-	 * @param enumInstanceToDecorate The <tt>Enum</tt> to decorate
-	 */
-	public JavaEnum(Enum enumInstanceToDecorate) {
-		if (enumInstanceToDecorate == null) {
-			throw new IllegalArgumentException("JavaEnums must be instatiated with a non-null enum!");
-		}
-		enumInstance = enumInstanceToDecorate;
-	}	
+/**
+ * Decorates an enumeration constant (enum) for easier Java rendering.
+ */
+public class JavaEnum extends BaseEnumDecorator implements Enum, JavaNamedElement {
 
-	public String getName() {
-		return enumInstance.getName();
-	}
+    private static final char SPACE = ' ';
+    private static final char BACKSLASH = '\'';
+    private static final char UNDERSCORE = '_';
+    private static final char DASH = '-';
+    private static final char RIGHT_PAREN = ')';
+    private static final char LEFT_PAREN = '(';
 
-	public String getValue() {
-		return enumInstance.getValue();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public JavaEnum(Enum enumToDecorate) {
+        super(enumToDecorate);
+    }
 
-	public boolean hasValue() {
-		return enumInstance.hasValue();
-	}
-	
-	//java specific generation methods:
-	
-	/**
-	 * @return Returns the uppercased name.
-	 */
-	public String getUppercasedName() {
-		String name = getName();
-		
-		if( StringUtils.contains( name, '(' ) ) {
-			name = StringUtils.remove( name, '(' );
-		}
-		if( StringUtils.contains( name, ')' ) ) {
-			name = StringUtils.remove( name, ')' );
-		}
-		if( StringUtils.contains( name, '-' ) ) {
-			name = name.replace( '-', '_' );
-		}
-		if( StringUtils.contains( name, '\'' ) ) {
-			name = name.replace( '\'', '_' );
-		}
-		if( StringUtils.contains( name, ' ' ) ) {
-			name = name.replace( ' ', '_' );
-		}
-		
-		return StringUtils.upperCase( name );
-	}	
+    /**
+     * Transforms the name into a Java enum-friendly, uppercased version.
+     * @return Returns the uppercased name.
+     */
+    public String getUppercasedName() {
+        String name = getName();
+
+        if (StringUtils.contains(name, LEFT_PAREN)) {
+            name = StringUtils.remove(name, LEFT_PAREN);
+        }
+        if (StringUtils.contains(name, RIGHT_PAREN)) {
+            name = StringUtils.remove(name, RIGHT_PAREN);
+        }
+        if (StringUtils.contains(name, DASH)) {
+            name = name.replace(DASH, UNDERSCORE);
+        }
+        if (StringUtils.contains(name, BACKSLASH)) {
+            name = name.replace(BACKSLASH, UNDERSCORE);
+        }
+        if (StringUtils.contains(name, SPACE)) {
+            name = name.replace(SPACE, UNDERSCORE);
+        }
+
+        return StringUtils.upperCase(name);
+    }
 
 }

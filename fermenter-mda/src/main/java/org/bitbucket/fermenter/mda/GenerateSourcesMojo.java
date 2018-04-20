@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -33,9 +35,11 @@ import org.bitbucket.fermenter.mda.element.Target;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.generator.Generator;
-import org.bitbucket.fermenter.mda.metadata.AbstractMetadataRepository;
-import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.StaticURLResolver;
+import org.bitbucket.fermenter.mda.metamodel.LegacyMetadataConverter;
+import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepository;
+import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
+import org.bitbucket.fermenter.mda.metamodel.MetadataUrlResolver;
 import org.bitbucket.fermenter.mda.util.MessageTracker;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -79,11 +83,11 @@ public class GenerateSourcesMojo extends AbstractMojo {
     @Parameter(required = true, readonly = true, defaultValue = "${project.basedir}/src/generated")
     private File generatedSourceRoot;
 
-    @Parameter(required = true, readonly = true, defaultValue = "org.bitbucket.fermenter.mda.metadata.MetadataRepository")
+    @Parameter(required = true, readonly = true, defaultValue = "org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository")
     private String metadataRespositoryImpl;
 
     private VelocityEngine engine;
-    
+
     private MessageTracker messageTracker = MessageTracker.getInstance();
 
     public void execute() throws MojoExecutionException {
@@ -181,19 +185,43 @@ public class GenerateSourcesMojo extends AbstractMojo {
                 IOUtils.closeQuietly(stream);
             }
         }
-        
+
         for (ExpandedProfile p : profiles.values()) {
             p.dereference(profiles, targets);
         }
     }
 
     private void initializeMetadata() throws Exception {
+        Properties props = createMetadataProperties();
+
+        // first load the legacy repository:
+        ModelInstanceRepository legacyRepository = loadMetadataRepository(props, true);
+
+        LegacyMetadataConverter converter = new LegacyMetadataConverter();
+        converter.convert(project.getArtifactId(), basePackage, mainSourceRoot);
+
+        // then load the new repository:
+        ModelInstanceRepository newRepository = loadMetadataRepository(props, false);
+        
+        long start = System.currentTimeMillis();
+        LOG.info("START: validating legacy and new metadata repository implementation...");
+        
+        legacyRepository.validate(props);
+        newRepository.validate(props);
+        
+        long stop = System.currentTimeMillis();
+        LOG.info("COMPLETE: validation of legacy and new metadata repository in " + (stop - start) + "ms");
+
+    }
+
+    //TODO: when metamodel conversion is complete, update to remove messy use of properties - use a real class instead to improve clarity:
+    private Properties createMetadataProperties() throws MalformedURLException {
         Properties props = new Properties();
         props.setProperty("application.name", project.getArtifactId());
         props.setProperty("metadata.loader", StaticURLResolver.class.getName());
 
         String projectUrl = new File(mainSourceRoot, "resources").toURI().toURL().toString();
-        props.setProperty("metadata." + project.getArtifactId(), projectUrl);
+        props.setProperty(MetadataUrlResolver.METADATA_LOCATION_PREFIX + project.getArtifactId(), projectUrl);
         PackageManager.addMapping(project.getArtifactId(), basePackage);
 
         if (metadataDependencies != null) {
@@ -205,41 +233,64 @@ public class GenerateSourcesMojo extends AbstractMojo {
                     buff.append(";");
                 }
             }
-            props.setProperty("metadata.locations", buff.toString());
+            props.setProperty(MetadataUrlResolver.METADATA_LOCATIONS, buff.toString());
 
             List<Artifact> artifacts = plugin.getArtifacts();
             for (Artifact a : artifacts) {
                 if (metadataDependencies.contains(a.getArtifactId())) {
                     URL url = a.getFile().toURI().toURL();
-                    props.setProperty("metadata." + a.getArtifactId(), url.toString());
+                    props.setProperty(MetadataUrlResolver.METADATA_LOCATION_PREFIX + a.getArtifactId(), url.toString());
                     PackageManager.addMapping(a.getArtifactId(), url);
                     LOG.info("Adding metadataDependency to current set of metadata: " + a.getArtifactId());
                 }
             }
 
         }
+        return props;
+    }
+
+    private ModelInstanceRepository loadMetadataRepository(Properties props, boolean isLegacy) throws ClassNotFoundException,
+            NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+
+        String repositoryType = isLegacy ? "**LEGACY** " : "";
+        String repositoryImpl = isLegacy ? "org.bitbucket.fermenter.mda.metadata.MetadataRepository"
+                : metadataRespositoryImpl;
 
         long start = System.currentTimeMillis();
-        LOG.info("START: initializing metadata repository implementation: " + metadataRespositoryImpl + "...");
+        LOG.info("START: loading " + repositoryType + "metadata repository implementation: " + repositoryImpl
+                + "...");
 
-        Class<?> repoImplClass = Class.forName(metadataRespositoryImpl);
-        Class<?>[] constructorParamTypes = { Properties.class };
-        Constructor<?> constructor = repoImplClass.getConstructor(constructorParamTypes);
-        Object[] params = { props };
-        AbstractMetadataRepository repository = (AbstractMetadataRepository) constructor.newInstance(params);
+        ModelInstanceRepository repository;
+        Class<?> repoImplClass = Class.forName(repositoryImpl);
+        if (isLegacy) {
+            Class<?>[] constructorParamTypes = { Properties.class };
+            Constructor<?> constructor = repoImplClass.getConstructor(constructorParamTypes);
+            Object[] params = { props };
+            repository = (ModelInstanceRepository) constructor.newInstance(params);
 
-        MetadataRepositoryManager.setRepository(repository);
+        } else {
+            Class<?>[] constructorParamTypes = { String.class };
+            Constructor<?> constructor = repoImplClass.getConstructor(constructorParamTypes);
+            Object[] params = { basePackage };
+            repository = (ModelInstanceRepository) constructor.newInstance(params);
+        }
+
+        ModelInstanceRepositoryManager.setRepository(repository);
         repository.load(props);
-        repository.validate(props);
         
+        // TODO: move validation back here once the legacy repo is retired.  Until then, this can only happen once metadata across
+        // both repositories is available:
+        //repository.validate(props);
+
         messageTracker.emitMessages(LOG);
         if (messageTracker.hasErrors()) {
             throw new GenerationException("Errors encountered!");
         }
-        
-        long stop = System.currentTimeMillis();
-        LOG.info("COMPLETE: metadata repository initialization in " + (stop - start) + "ms");
 
+        long stop = System.currentTimeMillis();
+        LOG.info("COMPLETE: " + repositoryType + "metadata repository loading in " + (stop - start) + "ms");
+        
+        return repository;
     }
 
     public void addTarget(Target target) {

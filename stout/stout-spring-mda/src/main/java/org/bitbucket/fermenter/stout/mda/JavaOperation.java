@@ -12,10 +12,9 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
-import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
-import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.Operation;
 import org.bitbucket.fermenter.mda.metadata.element.Parameter;
+import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 import org.jboss.resteasy.annotations.GZIP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,8 +30,8 @@ public class JavaOperation implements Operation {
     public static final String PROPAGATION_NOT_SUPPORTED = "NOT_SUPPORTED";
     public static final String PROPAGATION_SUPPORTS = "SUPPORTS";
     public static final String PROPAGATION_NEVER = "NEVER";
-    
-    private MetadataRepository metadataRepository = MetadataRepositoryManager
+
+    private MetadataRepository metadataRepository = ModelInstanceRepositoryManager
             .getMetadataRepostory(MetadataRepository.class);
 
     private Operation operation;
@@ -161,7 +160,7 @@ public class JavaOperation implements Operation {
     public String getSignatureParametersWithJaxRS() {
         return getSignatureParametersWithParameterAnnotations("QueryParam");
     }
-    
+
     /**
      * Creates the signature with needed feign parameter descriptors included.
      * 
@@ -169,8 +168,8 @@ public class JavaOperation implements Operation {
      */
     public String getSignatureParametersWithFeign() {
         return getSignatureParametersWithParameterAnnotations("Param");
-    }    
-    
+    }
+
     /**
      * Creates the signature with passed parameter annotation descriptors included.
      * 
@@ -218,7 +217,7 @@ public class JavaOperation implements Operation {
 
         return params.toString();
     }
-    
+
     /**
      * Creates the rest-style path for the operation.
      * 
@@ -226,15 +225,15 @@ public class JavaOperation implements Operation {
      */
     public String getRestStylePath() {
         StringBuilder path = new StringBuilder();
-        path.append(getLowercaseName());     
-        
+        path.append(getLowercaseName());
+
         int entityParameterCount = 0;
         List<Parameter> parameterList = getParameters();
         if (parameterList != null) {
             if (!parameterList.isEmpty()) {
                 path.append("?");
             }
-            
+
             boolean isFirst = Boolean.TRUE;
             for (Iterator<Parameter> i = parameterList.iterator(); i.hasNext();) {
                 JavaParameter param = (JavaParameter) i.next();
@@ -284,7 +283,13 @@ public class JavaOperation implements Operation {
             if (parameter.isMany()) {
                 imports.add(List.class.getName());
             }
-            imports.add(parameter.getImport());
+
+            String importValue = parameter.getImport();
+            // java.lang is imported by default, so filter them out:
+            if (!importValue.startsWith("java.lang.")) {
+                imports.add(importValue);
+            }
+
         }
 
         return imports;
@@ -300,12 +305,10 @@ public class JavaOperation implements Operation {
             importSet.add(GZIP.class.getName());
         }
 
-        // how return types are handled is very messy in genernal - will cleanup when we update the metamodel
+        // how return types are handled is very messy in general - will cleanup when we update the metamodel
         if (!isResponseTypeVoid()) {
-            Entity returnEntity = metadataRepository.getEntity(getReturnType());
-            String appName = (returnEntity != null) ? returnEntity.getApplicationName()
-                    : metadataRepository.getApplicationName();
-            String returnImport = JavaElementUtils.getJavaImportType(appName, getReturnTypeForLookup());
+            String currentAppName = metadataRepository.getApplicationName();
+            String returnImport = JavaElementUtils.getJavaImportType(currentAppName, getReturnTypeForLookup());
             importSet.add(returnImport);
         }
 
@@ -387,8 +390,7 @@ public class JavaOperation implements Operation {
         boolean isResponseTypeCrossProject = false;
         if (isReturnTypeEntity()) {
             String currentApplicationName = metadataRepository.getApplicationName();
-            String entityProject = metadataRepository.getAllEntities().get(getReturnType())
-                    .getApplicationName();
+            String entityProject = metadataRepository.getAllEntities().get(getReturnType()).getApplicationName();
             isResponseTypeCrossProject = (currentApplicationName.equals(entityProject));
         }
 

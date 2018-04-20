@@ -10,10 +10,10 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.bitbucket.fermenter.mda.PackageManager;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
-import org.bitbucket.fermenter.mda.metadata.MetadataRepositoryManager;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.Field;
 import org.bitbucket.fermenter.mda.metadata.element.Reference;
+import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 
 public class JavaReference implements Reference {
 	
@@ -88,7 +88,7 @@ public class JavaReference implements Reference {
 	
 	public boolean isExternal() {
 		MetadataRepository metadataRepository = 
-                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+                ModelInstanceRepositoryManager.getMetadataRepostory(MetadataRepository.class);
 		String currentProject = metadataRepository.getApplicationName();
 		String basePackage = PackageManager.getBasePackage(currentProject);
 		Entity referenceEntity = metadataRepository.getAllEntities().get(getType());
@@ -98,7 +98,7 @@ public class JavaReference implements Reference {
 	
 	public String getImportPrefix() {
 	    MetadataRepository metadataRepository = 
-                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+                ModelInstanceRepositoryManager.getMetadataRepostory(MetadataRepository.class);
 	    Entity referenceEntity = metadataRepository.getAllEntities().get(getType());
 	    String namespace = referenceEntity.getNamespace();
 		return StringUtils.isBlank(namespace) ? PackageManager.getBasePackage(getProject()) : namespace;

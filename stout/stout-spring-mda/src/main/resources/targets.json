@@ -211,7 +211,7 @@
 		"name": "delegateServiceResource",
 		"templateName": "templates/delegate.service.resource.java.vm",
 		"outputFile": "${basePackage}/client/resource/${serviceName}Resource.java",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.service.ServiceJavaGenerator",
+		"generator": "org.bitbucket.fermenter.stout.mda.generator.service.ServiceDelegateJavaGenerator",
 		"metadataContext": "all",
 		"overwritable": true
 	},	
@@ -219,7 +219,7 @@
 		"name": "delegateServiceInterface",
 		"templateName": "templates/delegate.service.interface.java.vm",
 		"outputFile": "${basePackage}/client/service/${serviceName}Delegate.java",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.service.ServiceJavaGenerator",
+		"generator": "org.bitbucket.fermenter.stout.mda.generator.service.ServiceDelegateJavaGenerator",
 		"metadataContext": "all",
 		"overwritable": true
 	},
@@ -227,7 +227,7 @@
 		"name": "delegateServiceImpl",
 		"templateName": "templates/delegate.service.impl.java.vm",
 		"outputFile": "${basePackage}/client/service/impl/${serviceName}DelegateImpl.java",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.service.ServiceJavaGenerator",
+		"generator": "org.bitbucket.fermenter.stout.mda.generator.service.ServiceDelegateJavaGenerator",
 		"metadataContext": "all",
 		"overwritable": true
 	}

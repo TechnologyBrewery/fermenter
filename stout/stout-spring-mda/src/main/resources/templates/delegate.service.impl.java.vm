@@ -1,18 +1,17 @@
 package ${basePackage}.client.service.impl;
 
-import java.util.Collection;
-import java.util.Date;
-import java.math.BigDecimal;
-import java.util.List;
 import ${basePackage}.client.resource.${service.name}Resource;
 import ${basePackage}.client.service.${service.name}Delegate;
-import ${basePackage}.transfer.*;
+
+#foreach( $import in $delegateImports )
+import $import;
+#end
 
 import org.bitbucket.fermenter.stout.messages.MessageManager;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
 
-        import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 

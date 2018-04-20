@@ -7,9 +7,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bitbucket.fermenter.mda.element.ValidatedElement;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
+import org.bitbucket.fermenter.mda.metamodel.element.Enum;
+import org.bitbucket.fermenter.mda.metamodel.element.EnumElement;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.github.fge.jsonschema.SchemaVersion;
 import com.github.fge.jsonschema.cfg.ValidationConfiguration;
 import com.github.fge.jsonschema.core.report.ProcessingMessage;
@@ -24,7 +27,7 @@ public final class JsonUtils {
 
     private static final Log LOG = LogFactory.getLog(JsonUtils.class);
 
-    private static ObjectMapper objectMapper = new ObjectMapper();
+    private static ObjectMapper objectMapper = getObjectMapper();
 
     private JsonUtils() {
         // prevent instantiation of final class with all static methods
@@ -77,6 +80,26 @@ public final class JsonUtils {
         }
 
         return report.isSuccess();
+    }
+
+    /**
+     * Returns an {@link ObjectMapper} that has configurations for fermenter metamodel interfaces.
+     * 
+     * @return ObjectMapper singleton
+     */
+    public static ObjectMapper getObjectMapper() {
+        if (objectMapper == null) {
+
+            SimpleModule module = new SimpleModule();
+            module.addAbstractTypeMapping(Enum.class, EnumElement.class);
+
+            ObjectMapper localMapper = new ObjectMapper();
+            localMapper.registerModule(module);
+
+            objectMapper = localMapper;
+        }
+
+        return objectMapper;
     }
 
 }

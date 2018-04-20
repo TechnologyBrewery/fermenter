@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * represents a set of targets that can be used to control generation directly
  * or be included in other profiles.
  */
-public class Profile extends ValidatedElement {
+public class Profile implements ValidatedElement {
 
     @JsonProperty(required = true)
     protected String name;

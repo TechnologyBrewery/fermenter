@@ -14,6 +14,7 @@ import org.bitbucket.fermenter.mda.metadata.element.MetadataElement;
 /**
  * Responsible for maintaining the list of enumeration metadata elements in the
  * system.
+ * @deprecated - use Enumeration support in org.bitbucket.fermenter.mda.metamodel instead
  */
 class EnumerationMetadataManager extends MetadataManager {
 

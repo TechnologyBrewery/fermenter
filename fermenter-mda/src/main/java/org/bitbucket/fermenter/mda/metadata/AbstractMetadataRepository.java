@@ -2,10 +2,13 @@ package org.bitbucket.fermenter.mda.metadata;
 
 import java.util.Properties;
 
+import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepository;
+
 /**
  * Provides common methods needed for a metadata repository.
+ * 
  */
-public abstract class AbstractMetadataRepository {
+public abstract class AbstractMetadataRepository implements ModelInstanceRepository {
     
     /** Indicates that all metadata should be used. */
     static final String ALL_METADATA_CONTEXT = "all";
@@ -27,22 +30,6 @@ public abstract class AbstractMetadataRepository {
 		}
 
 	}
-
-	/**
-	 * Loads all metadata and will be invoked immediately after instantiating this instance in the templated workflow.
-	 * 
-	 * @param properties
-	 *            any applicable properties
-	 */
-	public abstract void load(Properties properties);
-
-	/**
-	 * Validates all metadata and will be invoked immediately after loading in the templated workflow.
-	 * 
-	 * @param properties
-	 *            any applicable properties
-	 */
-	public abstract void validate(Properties properties);
 
 	/**
 	 * Returns the application name.

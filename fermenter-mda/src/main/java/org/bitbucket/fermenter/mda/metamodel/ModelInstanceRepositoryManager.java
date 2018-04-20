@@ -4,13 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Container and lookup capability for different metadata repositories.
+ * Container and lookup capability for different {@link ModelInstanceRepository} repositories.
  */
-public final class MetadataRepositoryManager {
+public final class ModelInstanceRepositoryManager {
 
     private static Map<String, Object> instanceMap = new HashMap<>();
 
-    private MetadataRepositoryManager() {
+    private ModelInstanceRepositoryManager() {
 
     }
 
@@ -18,7 +18,7 @@ public final class MetadataRepositoryManager {
      * Adds a repository.  Only one repository of each type will be kept.
      * @param respository repository to add
      */
-    public static void setRepository(MetadataRepository respository) {
+    public static void setRepository(ModelInstanceRepository respository) {
         instanceMap.put(respository.getClass().toString(), respository);
     }
 

@@ -37,8 +37,8 @@ import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.generator.Generator;
 import org.bitbucket.fermenter.mda.metadata.StaticURLResolver;
 import org.bitbucket.fermenter.mda.metamodel.LegacyMetadataConverter;
-import org.bitbucket.fermenter.mda.metamodel.MetadataRepository;
-import org.bitbucket.fermenter.mda.metamodel.MetadataRepositoryManager;
+import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepository;
+import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 import org.bitbucket.fermenter.mda.metamodel.MetadataUrlResolver;
 import org.bitbucket.fermenter.mda.util.MessageTracker;
 
@@ -83,7 +83,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
     @Parameter(required = true, readonly = true, defaultValue = "${project.basedir}/src/generated")
     private File generatedSourceRoot;
 
-    @Parameter(required = true, readonly = true, defaultValue = "org.bitbucket.fermenter.mda.metamodel.DefaultMetadataRepository")
+    @Parameter(required = true, readonly = true, defaultValue = "org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository")
     private String metadataRespositoryImpl;
 
     private VelocityEngine engine;
@@ -195,13 +195,13 @@ public class GenerateSourcesMojo extends AbstractMojo {
         Properties props = createMetadataProperties();
 
         // first load the legacy repository:
-        MetadataRepository legacyRepository = loadMetadataRepository(props, true);
+        ModelInstanceRepository legacyRepository = loadMetadataRepository(props, true);
 
         LegacyMetadataConverter converter = new LegacyMetadataConverter();
         converter.convert(project.getArtifactId(), basePackage, mainSourceRoot);
 
         // then load the new repository:
-        MetadataRepository newRepository = loadMetadataRepository(props, false);
+        ModelInstanceRepository newRepository = loadMetadataRepository(props, false);
         
         long start = System.currentTimeMillis();
         LOG.info("START: validating legacy and new metadata repository implementation...");
@@ -249,7 +249,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
         return props;
     }
 
-    private MetadataRepository loadMetadataRepository(Properties props, boolean isLegacy) throws ClassNotFoundException,
+    private ModelInstanceRepository loadMetadataRepository(Properties props, boolean isLegacy) throws ClassNotFoundException,
             NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
 
         String repositoryType = isLegacy ? "**LEGACY** " : "";
@@ -260,22 +260,22 @@ public class GenerateSourcesMojo extends AbstractMojo {
         LOG.info("START: loading " + repositoryType + "metadata repository implementation: " + repositoryImpl
                 + "...");
 
-        MetadataRepository repository;
+        ModelInstanceRepository repository;
         Class<?> repoImplClass = Class.forName(repositoryImpl);
         if (isLegacy) {
             Class<?>[] constructorParamTypes = { Properties.class };
             Constructor<?> constructor = repoImplClass.getConstructor(constructorParamTypes);
             Object[] params = { props };
-            repository = (MetadataRepository) constructor.newInstance(params);
+            repository = (ModelInstanceRepository) constructor.newInstance(params);
 
         } else {
             Class<?>[] constructorParamTypes = { String.class };
             Constructor<?> constructor = repoImplClass.getConstructor(constructorParamTypes);
             Object[] params = { basePackage };
-            repository = (MetadataRepository) constructor.newInstance(params);
+            repository = (ModelInstanceRepository) constructor.newInstance(params);
         }
 
-        MetadataRepositoryManager.setRepository(repository);
+        ModelInstanceRepositoryManager.setRepository(repository);
         repository.load(props);
         
         // TODO: move validation back here once the legacy repo is retired.  Until then, this can only happen once metadata across

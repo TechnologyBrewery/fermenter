@@ -15,7 +15,7 @@ import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.Operation;
 import org.bitbucket.fermenter.mda.metadata.element.Parameter;
-import org.bitbucket.fermenter.mda.metamodel.MetadataRepositoryManager;
+import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +31,7 @@ public class JavaOperation implements Operation {
     public static final String PROPAGATION_SUPPORTS = "SUPPORTS";
     public static final String PROPAGATION_NEVER = "NEVER";
 
-    private MetadataRepository metadataRepository = MetadataRepositoryManager
+    private MetadataRepository metadataRepository = ModelInstanceRepositoryManager
             .getMetadataRepostory(MetadataRepository.class);
 
     private Operation operation;

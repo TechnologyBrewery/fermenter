@@ -8,7 +8,7 @@ import org.bitbucket.fermenter.mda.generator.GenerationContext;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.element.Service;
-import org.bitbucket.fermenter.mda.metamodel.MetadataRepositoryManager;
+import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 
 /**
  * Iterates through each service in the meta-model and enables the generation of a single file for each service.
@@ -18,7 +18,7 @@ public abstract class AbstractServiceGenerator extends AbstractGenerator {
     @Override
     public void generate(GenerationContext context) throws GenerationException {
         String currentApplication = context.getArtifactId();
-        MetadataRepository metadataRepository = MetadataRepositoryManager
+        MetadataRepository metadataRepository = ModelInstanceRepositoryManager
                 .getMetadataRepostory(MetadataRepository.class);
 
         Map<String, Service> services = metadataRepository.getServicesByMetadataContext(metadataContext,

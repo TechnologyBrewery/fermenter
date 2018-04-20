@@ -5,8 +5,8 @@ import java.util.Map;
 import org.apache.velocity.VelocityContext;
 import org.bitbucket.fermenter.mda.generator.AbstractGenerator;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
-import org.bitbucket.fermenter.mda.metamodel.DefaultMetadataRepository;
-import org.bitbucket.fermenter.mda.metamodel.MetadataRepositoryManager;
+import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
+import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
 import org.bitbucket.fermenter.stout.mda.JavaEnumeration;
 import org.bitbucket.fermenter.stout.mda.java.JavaGeneratorUtil;
@@ -14,8 +14,8 @@ import org.bitbucket.fermenter.stout.mda.java.JavaGeneratorUtil;
 public class EnumerationJavaGenerator extends AbstractGenerator {
 
     public void generate(GenerationContext context) {
-        DefaultMetadataRepository metadataRepository = MetadataRepositoryManager
-                .getMetadataRepostory(DefaultMetadataRepository.class);
+        DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
+                .getMetadataRepostory(DefaultModelInstanceRepository.class);
         Map<String, Enumeration> enumerations = metadataRepository.getEnumerations(metadataRepository.getBasePackage());
 
         JavaEnumeration javaEnumeration;

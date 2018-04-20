@@ -116,7 +116,7 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
                     }
 
                 }
-            } catch (Exception ex) {
+            } catch (IOException ex) {
                 throw new FermenterException("Error while loading metadata", ex);
             }
 

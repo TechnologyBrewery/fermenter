@@ -8,7 +8,7 @@ import org.bitbucket.fermenter.mda.generator.GenerationContext;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.Service;
-import org.bitbucket.fermenter.mda.metamodel.MetadataRepositoryManager;
+import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 import org.bitbucket.fermenter.stout.mda.java.JavaGeneratorUtil;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -26,7 +26,7 @@ public class AppConfigGenerator extends AbstractGenerator {
      */
     public void generate(GenerationContext context) {
         String currentApplication = context.getArtifactId();
-        MetadataRepository metadataRepository = MetadataRepositoryManager
+        MetadataRepository metadataRepository = ModelInstanceRepositoryManager
                 .getMetadataRepostory(MetadataRepository.class);
 
         Map<String, Service> services = metadataRepository.getServicesByMetadataContext(metadataContext,

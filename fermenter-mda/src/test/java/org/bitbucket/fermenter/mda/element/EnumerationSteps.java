@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metadata.StaticURLResolver;
-import org.bitbucket.fermenter.mda.metamodel.DefaultMetadataRepository;
+import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
 import org.bitbucket.fermenter.mda.metamodel.MetadataUrlResolver;
 import org.bitbucket.fermenter.mda.metamodel.element.Enum;
 import org.bitbucket.fermenter.mda.metamodel.element.EnumElement;
@@ -37,7 +37,7 @@ public class EnumerationSteps {
     private File enumerationFile;
     private Enumeration loadedEnumeration;
     protected GenerationException encounteredException;
-    protected DefaultMetadataRepository metadataRepo;
+    protected DefaultModelInstanceRepository metadataRepo;
 
     @After("@enumeration")
     public void cleanUp() {
@@ -86,7 +86,7 @@ public class EnumerationSteps {
             metadataProperties.setProperty(MetadataUrlResolver.METADATA_LOCATION_PREFIX + "fermenter-mda", 
                      enumerationsDirectory.getParentFile().toURI().toString());
             
-            metadataRepo = new DefaultMetadataRepository("some.package.name");
+            metadataRepo = new DefaultModelInstanceRepository("some.package.name");
             metadataRepo.load(metadataProperties);            
 
         } catch (GenerationException e) {

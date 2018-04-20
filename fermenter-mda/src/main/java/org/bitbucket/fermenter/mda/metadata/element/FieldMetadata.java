@@ -8,8 +8,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bitbucket.fermenter.mda.metadata.FormatMetadataManager;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
-import org.bitbucket.fermenter.mda.metamodel.DefaultMetadataRepository;
-import org.bitbucket.fermenter.mda.metamodel.MetadataRepositoryManager;
+import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
+import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 
 import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
 
@@ -183,8 +183,8 @@ public class FieldMetadata extends MetadataElement implements Field {
 
     private void determineType() {
         // determine which kind of type we are dealing with and store that info:
-        DefaultMetadataRepository metadataRepository = MetadataRepositoryManager
-                .getMetadataRepostory(DefaultMetadataRepository.class);
+        DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
+                .getMetadataRepostory(DefaultModelInstanceRepository.class);
         Enumeration result = metadataRepository.getEnumeration(type);
 
         if (result != null) {
@@ -198,7 +198,7 @@ public class FieldMetadata extends MetadataElement implements Field {
     }
 
     protected String getDefaultProject() {
-        MetadataRepository metadataRepository = MetadataRepositoryManager
+        MetadataRepository metadataRepository = ModelInstanceRepositoryManager
                 .getMetadataRepostory(MetadataRepository.class);
         return metadataRepository.getApplicationName();
     }
@@ -397,8 +397,8 @@ public class FieldMetadata extends MetadataElement implements Field {
             }
         } else {
             // check enumeration type:
-            DefaultMetadataRepository metadataRepository = MetadataRepositoryManager
-                    .getMetadataRepostory(DefaultMetadataRepository.class);
+            DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
+                    .getMetadataRepostory(DefaultModelInstanceRepository.class);
             Enumeration e = metadataRepository.getEnumeration(typeToValidate);
 
             if (e == null) {

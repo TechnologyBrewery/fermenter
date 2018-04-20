@@ -4,8 +4,8 @@ import org.apache.commons.lang.StringUtils;
 import org.bitbucket.fermenter.mda.PackageManager;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.element.Parameter;
-import org.bitbucket.fermenter.mda.metamodel.DefaultMetadataRepository;
-import org.bitbucket.fermenter.mda.metamodel.MetadataRepositoryManager;
+import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
+import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
 
 public class JavaParameter implements Parameter {
@@ -41,7 +41,7 @@ public class JavaParameter implements Parameter {
 	private String getProjectValue() {
 		String project = getProject();
 		MetadataRepository metadataRepository = 
-                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+                ModelInstanceRepositoryManager.getMetadataRepostory(MetadataRepository.class);
 		project = (project != null) ? project : metadataRepository.getApplicationName();
 		return project;
 	}
@@ -78,19 +78,19 @@ public class JavaParameter implements Parameter {
 
 	public boolean isEntity() {
 		MetadataRepository metadataRepository = 
-                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+                ModelInstanceRepositoryManager.getMetadataRepostory(MetadataRepository.class);
 		return metadataRepository.getEntity(getType()) != null;
 	}
 
 	public boolean isEnumeration() {
 		MetadataRepository metadataRepository = 
-                MetadataRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+                ModelInstanceRepositoryManager.getMetadataRepostory(MetadataRepository.class);
 		return metadataRepository.getEnumeration(getType()) != null;
 	}
 
 	public Enumeration getEnumeration() {
-	    DefaultMetadataRepository metadataRepository = 
-                MetadataRepositoryManager.getMetadataRepostory(DefaultMetadataRepository.class);
+	    DefaultModelInstanceRepository metadataRepository = 
+                ModelInstanceRepositoryManager.getMetadataRepostory(DefaultModelInstanceRepository.class);
 		Enumeration e = metadataRepository.getEnumeration(getType());
 		return (e != null) ? new JavaEnumeration(e) : null;
 	}

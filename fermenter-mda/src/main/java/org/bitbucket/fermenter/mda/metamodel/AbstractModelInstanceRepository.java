@@ -1,9 +1,9 @@
 package org.bitbucket.fermenter.mda.metamodel;
 
 /**
- * Provides common methods needed for a metadata repository.
+ * Provides common methods needed for exposing model instances
  */
-public abstract class AbstractMetadataRepository implements MetadataRepository {
+public abstract class AbstractModelInstanceRepository implements ModelInstanceRepository {
 
     protected String basePackage;
 
@@ -13,7 +13,7 @@ public abstract class AbstractMetadataRepository implements MetadataRepository {
      * @param properties
      *            any applicable properties
      */
-    public AbstractMetadataRepository(String basePackage) {
+    public AbstractModelInstanceRepository(String basePackage) {
         this.basePackage = basePackage;
 
     }

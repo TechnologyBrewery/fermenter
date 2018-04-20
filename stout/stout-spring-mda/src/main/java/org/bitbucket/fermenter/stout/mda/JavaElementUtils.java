@@ -9,8 +9,8 @@ import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.Field;
 import org.bitbucket.fermenter.mda.metadata.element.Parameter;
-import org.bitbucket.fermenter.mda.metamodel.DefaultMetadataRepository;
-import org.bitbucket.fermenter.mda.metamodel.MetadataRepositoryManager;
+import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
+import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
 import org.bitbucket.fermenter.stout.mda.java.JavaTypeManager;
 import org.codehaus.plexus.util.StringUtils;
@@ -39,14 +39,14 @@ public final class JavaElementUtils {
 
             if (javaImportType == null) {
                 // Assume it's an application entity or enumeration at this point
-                MetadataRepository metadataRepository = MetadataRepositoryManager
+                MetadataRepository metadataRepository = ModelInstanceRepositoryManager
                         .getMetadataRepostory(MetadataRepository.class);
                 Entity e = metadataRepository.getEntity(appName, type);
                 if (e != null) {
                     javaImportType = createFullyQualifiedName(type + "BO", ".bizobj.", appName);
                 } else {
-                    DefaultMetadataRepository newRepository = MetadataRepositoryManager
-                            .getMetadataRepostory(DefaultMetadataRepository.class);
+                    DefaultModelInstanceRepository newRepository = ModelInstanceRepositoryManager
+                            .getMetadataRepostory(DefaultModelInstanceRepository.class);
                     Enumeration enumeration = newRepository.getEnumeration(type);
                     if (enumeration != null) {
                         if (StringUtils.isNotBlank(enumeration.getPackage())) {
@@ -71,7 +71,7 @@ public final class JavaElementUtils {
     }
 
     static String createFullyQualifiedName(String type, String nestedPackage) {
-        MetadataRepository metadataRepository = MetadataRepositoryManager
+        MetadataRepository metadataRepository = ModelInstanceRepositoryManager
                 .getMetadataRepostory(MetadataRepository.class);
         return createFullyQualifiedName(type, nestedPackage, metadataRepository.getApplicationName());
     }

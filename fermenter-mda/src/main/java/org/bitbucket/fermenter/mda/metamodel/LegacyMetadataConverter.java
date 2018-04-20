@@ -53,7 +53,7 @@ public class LegacyMetadataConverter {
     private void convertLegacyEnumerations(String applicationName, String basePackage, File sourceMain)
             throws IOException {
         // convert legacy metadata to new metadata:
-        org.bitbucket.fermenter.mda.metadata.MetadataRepository legacyMetadataRepo = MetadataRepositoryManager
+        org.bitbucket.fermenter.mda.metadata.MetadataRepository legacyMetadataRepo = ModelInstanceRepositoryManager
                 .getMetadataRepostory(org.bitbucket.fermenter.mda.metadata.MetadataRepository.class);
         Map<String, org.bitbucket.fermenter.mda.metadata.element.Enumeration> legacyEnumerations = legacyMetadataRepo
                 .getAllEnumerations(applicationName);

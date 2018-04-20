@@ -11,15 +11,15 @@ import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
 
 /**
- * Default metadata repository to serve up out of the box metamodel instances (metadata).
+ * Default implementation to serve up model instances of a specific metamodel type.
  */
-public class DefaultMetadataRepository extends AbstractMetadataRepository {
+public class DefaultModelInstanceRepository extends AbstractModelInstanceRepository {
 
-    private static final Log log = LogFactory.getLog(DefaultMetadataRepository.class);
+    private static final Log log = LogFactory.getLog(DefaultModelInstanceRepository.class);
 
     private MetamodelConfig config = KrauseningConfigFactory.create(MetamodelConfig.class);
 
-    private EnumerationMetadataManager enumerationManager = EnumerationMetadataManager.getInstance();
+    private EnumerationModelInstanceManager enumerationManager = EnumerationModelInstanceManager.getInstance();
 
     /**
      * Creates a new instance w/ the base package of the current project. This package name will become the default
@@ -28,7 +28,7 @@ public class DefaultMetadataRepository extends AbstractMetadataRepository {
      * @param basePackage
      *            package name
      */
-    public DefaultMetadataRepository(String basePackage) {
+    public DefaultModelInstanceRepository(String basePackage) {
         super(basePackage);
     }
 

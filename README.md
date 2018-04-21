@@ -28,7 +28,7 @@ Want Fermenter in your project? As demonstrated in the `stout-cookbook-domain` p
 ```
 #!xml
 <properties>
-	<fermenter.version>2.0.0.CR3</fermenter.version>
+	<fermenter.version>2.0.0.CR6</fermenter.version>
 </properties>
 <build>
 	<plugins>

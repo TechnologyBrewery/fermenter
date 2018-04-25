@@ -28,5 +28,12 @@
 			<column>CHILD_A_TYPE</column>
 		</field>
 	</fields>
-
+	
+	<associations>
+		<reference>
+			<name>refToIntKeyedEntity</name>
+			<type>IntegerKeyedEntity</type>
+			<required>true</required>
+		</reference>
+	</associations>
 </entity>

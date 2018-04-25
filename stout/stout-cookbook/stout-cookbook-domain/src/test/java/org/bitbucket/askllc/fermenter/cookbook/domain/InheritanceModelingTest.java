@@ -9,9 +9,11 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.math.RandomUtils;
+import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.IntegerKeyedEntityBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.MappedSuperclassChildABO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.MappedSuperclassChildBBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.MappedSuperclassParentBO;
+import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.MappedSuperclassChildAMaintenanceService;
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.MappedSuperclassChildBMaintenanceService;
 import org.bitbucket.fermenter.stout.messages.AbstractMsgMgrAwareTestSupport;
@@ -54,11 +56,13 @@ public class InheritanceModelingTest extends AbstractMsgMgrAwareTestSupport {
                 .findByPrimaryKey(saveChildAResponse.getValue().getKey());
         TestUtils.assertNoErrorMessages(findChildAResponse);
         assertEquals(commonStringAttr, findChildAResponse.getValue().getCommonStringValue());
+        assertNotNull(findChildAResponse.getValue().getRefToSimpleDomain().getName());
 
         ValueServiceResponse<MappedSuperclassChildBBO> findChildBResponse = childBService
                 .findByPrimaryKey(saveChildBResponse.getValue().getKey());
         TestUtils.assertNoErrorMessages(findChildBResponse);
         assertEquals(commonStringAttr, findChildBResponse.getValue().getCommonStringValue());
+        assertNotNull(findChildAResponse.getValue().getRefToSimpleDomain().getTheDate1());
     }
 
     @Test
@@ -87,6 +91,14 @@ public class InheritanceModelingTest extends AbstractMsgMgrAwareTestSupport {
         bizObj.setChildAType(RandomStringUtils.randomAlphabetic(10));
         bizObj.setCommonStringValue(
                 commonStringAttr != null ? commonStringAttr : RandomStringUtils.randomAlphabetic(15));
+        SimpleDomainBO simpleDomain = TestUtils.createRandomSimpleDomain();
+        simpleDomain.save();
+        bizObj.setRefToSimpleDomain(simpleDomain);
+
+        IntegerKeyedEntityBO intKeyBizObj = new IntegerKeyedEntityBO();
+        intKeyBizObj.save();
+        bizObj.setRefToIntKeyedEntity(intKeyBizObj);
+
         return bizObj;
     }
 
@@ -95,6 +107,9 @@ public class InheritanceModelingTest extends AbstractMsgMgrAwareTestSupport {
         bizObj.setChildBType(RandomStringUtils.randomAlphabetic(5));
         bizObj.setCommonStringValue(
                 commonStringAttr != null ? commonStringAttr : RandomStringUtils.randomAlphabetic(15));
+        SimpleDomainBO simpleDomain = TestUtils.createRandomSimpleDomain();
+        simpleDomain.save();
+        bizObj.setRefToSimpleDomain(simpleDomain);
         return bizObj;
     }
 

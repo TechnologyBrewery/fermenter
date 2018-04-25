@@ -14,4 +14,11 @@
 		</field>
 	</fields>
 
+	<associations>
+		<reference>
+			<name>refToSimpleDomain</name>
+			<type>SimpleDomain</type>
+			<required>true</required>
+		</reference>
+	</associations>
 </entity>

@@ -8,6 +8,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bitbucket.fermenter.mda.metadata.MetadataManager;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.element.Parent.InheritanceStrategy;
+import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 
 public class EntityMetadata extends MetadataElement implements Entity {
     
@@ -19,15 +22,10 @@ public class EntityMetadata extends MetadataElement implements Entity {
 	private String name;
 	private String documentation;
 	private String applicationName;
-	/**
-	 * @deprecated shouldn't be here anymore
-	 */
-	private String superclass;
+	
 	private String table;
-	/**
-	 * @deprecated don't think this is used anymore... still need to check
-	 */ 
-    private String parent;
+	
+    private Parent parent;
     private String lockStrategy;
     private boolean transientEntity; 
     
@@ -238,47 +236,16 @@ public class EntityMetadata extends MetadataElement implements Entity {
 		getReferences().put( reference.getName(), reference );
 	}
 	
-
-	/**
-	 * @see org.bitbucket.fermenter.mda.metadata.element.Entity#getSuperclass()
-	 * @deprecated shouldn't be here anymore
-	 */
-	public String getSuperclass() {
-		if( superclass == null ) {
-			superclass = "Base";
-		}
-        
-		return superclass;
-	}
-	
-	/**
-	 * @param superclass The superclass to set.
-	 * @deprecated shouldn't be here anymore
-	 */
-	public void setSuperclass(String superclass) {
-		this.superclass = superclass;
-	}
-
     /**
-	 * @see org.bitbucket.fermenter.mda.metadata.element.Entity#getParent()
-	 * @deprecated I don't think this is used anymore... need to check
-	 */
-    public String getParent() {
-    	if( parent == null ) {
-    		parent = "null";
-    	}
-    	
+     * @see org.bitbucket.fermenter.mda.metadata.element.Entity#getParent()
+     */
+    public Parent getParent() {
         return parent;
     }
 
-    /**
-     * @param parent The parent to set.
-     * @deprecated I don't think this is used anymore... need to check
-     */
-    public void setParent(String parent) {
+    public void setParent(Parent parent) {
         this.parent = parent;
     }
-
     
     /**
 	 * @see org.bitbucket.fermenter.mda.metadata.element.Entity#getQueries()
@@ -347,6 +314,13 @@ public class EntityMetadata extends MetadataElement implements Entity {
 	 * Performs validation on this instance and its children.
 	 */
 	public void validate() {
+	    
+	    // validates the parent entity, if provided
+	    Parent parent = getParent();
+	    if (parent != null) {
+	       ((MetadataElement)parent).validate();
+	    }
+	    
 		//id fields:
 		MetadataManager.validateElements(getIdFields().values());
 		// ID fields can't be enumerated types
@@ -380,27 +354,48 @@ public class EntityMetadata extends MetadataElement implements Entity {
         if (!isTransient()) {
 		    boolean transientIssuesFound = false;
 		    
-		    // is there a table?
-		    if (StringUtils.isBlank(getTable())) {
-		        transientIssuesFound = true;
-		        LOG.error("persistent entity '" + getName() + "' requires a table to be specified!");
-		    }
-
-		    if (getIdFields().size() == 0) {
-		        transientIssuesFound = true;
-                LOG.error("persistent entity '" + getName() + "' requires an id field to be specified!");
-		    }
-		    
-            for (Field f : getIdFields().values()) {
-                if (checkPersistentFieldForColumn(f)) {
-                    transientIssuesFound = true;
+		    if (isNonPersistentParentEntity()) {
+		        for (Field f : getFields().values()) {
+                    if (checkPersistentFieldForColumn(f)) {
+                        transientIssuesFound = true;
+                    }
                 }
-            }
-		    
-		    for (Field f : getFields().values()) {
-		        if (checkPersistentFieldForColumn(f)) {
+                // XXX at the moment due some complexities around how we use generics, ID elements can *not* be defined
+                // on a non-persistent parent entity. these ID fields must be defined in the corresponding concrete
+                // child entities.
+                if (!getIdFields().isEmpty()) {
                     transientIssuesFound = true;
-		        }
+                    LOG.error("non-persistent parent entity '" + getName() + "' cannot have any id fields specified");
+                }
+                
+                for (Field f : getIdFields().values()) {
+                    if (checkPersistentFieldForColumn(f)) {
+                        transientIssuesFound = true;
+                    }
+                }
+		    } else {
+		        // is there a table?
+                if (StringUtils.isBlank(getTable())) {
+                    transientIssuesFound = true;
+                    LOG.error("persistent entity '" + getName() + "' requires a table to be specified!");
+                }
+    
+                if (getIdFields().size() == 0) {
+                    transientIssuesFound = true;
+                    LOG.error("persistent entity '" + getName() + "' requires an id field to be specified!");
+                }
+                
+                for (Field f : getIdFields().values()) {
+                    if (checkPersistentFieldForColumn(f)) {
+                        transientIssuesFound = true;
+                    }
+                }
+                
+                for (Field f : getFields().values()) {
+                    if (checkPersistentFieldForColumn(f)) {
+                        transientIssuesFound = true;
+                    }
+                }
 		    }
 		    
 		    if (transientIssuesFound) {
@@ -428,12 +423,12 @@ public class EntityMetadata extends MetadataElement implements Entity {
     }
 
     protected boolean checkPersistentFieldForColumn(Field f) {
-        boolean transientIssuesFound = false;
+        boolean persistentFieldIssuesFound = false;
         if (StringUtils.isBlank(f.getColumn())) {
-            transientIssuesFound = true;
-            LOG.error(TRANSIENT_ENTITY + getName() + "." + f.getName()+ "' requires a column to be specified!");
+            persistentFieldIssuesFound = true;
+            LOG.error("persistent entity " + getName() + "." + f.getName()+ "' requires a column to be specified!");
         }
-        return transientIssuesFound;
+        return persistentFieldIssuesFound;
     }
     
     protected void checkTransientFieldForColumn(Field f) {
@@ -441,4 +436,21 @@ public class EntityMetadata extends MetadataElement implements Entity {
             LOG.error(TRANSIENT_ENTITY + getName() + "." + f.getName()+ "' specifies a column which will be ignored");
         }
     }    
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isNonPersistentParentEntity() {
+        Map<String, Entity> allEntities = ModelInstanceRepositoryManager.getMetadataRepostory(MetadataRepository.class)
+                .getAllEntities();
+        for (Entity entity : allEntities.values()) {
+            Parent parent = entity.getParent();
+            if (parent != null && getName().equals(parent.getType())
+                    && InheritanceStrategy.MAPPED_SUPERCLASS.equals(parent.getInheritanceStrategy())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -8,7 +8,7 @@ import feign.codec.Encoder;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
 #foreach( $entity in $entities )
-#if (!$entity.isTransient())
+#if (!$entity.isTransient() && !$entity.isNonPersistentParentEntity())
 import ${basePackage}.client.resource.${entity.name}MaintenanceResource;
 #end
 #end
@@ -33,7 +33,7 @@ import java.util.Properties;
 public class RestClient${configName}BaseConfig {
 
 #foreach( $entity in $entities )
-	#if (!$entity.isTransient())
+	#if (!$entity.isTransient() && !$entity.isNonPersistentParentEntity())
     /**
      * Resource for retrieving ${entity.name} related data.
      *

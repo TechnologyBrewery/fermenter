@@ -11,12 +11,16 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.commons.lang.StringUtils;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.element.Composite;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.Field;
+import org.bitbucket.fermenter.mda.metadata.element.Parent;
 import org.bitbucket.fermenter.mda.metadata.element.Query;
 import org.bitbucket.fermenter.mda.metadata.element.Reference;
 import org.bitbucket.fermenter.mda.metadata.element.Relation;
+import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
+import org.bitbucket.fermenter.stout.bizobj.BasePersistentSpringBO;
 
 /**
  * An {@link Entity} that has been decorated for easier generation of Java files.
@@ -261,17 +265,35 @@ public class JavaEntity implements Entity {
     /**
      * {@inheritDoc}
      */
-    public String getSuperclass() {
-        return entity.getSuperclass();
+    public Parent getParent() {
+        return entity.getParent();
     }
 
     /**
      * {@inheritDoc}
      */
-    public String getParent() {
-        return entity.getParent();
+    @Override
+    public boolean isNonPersistentParentEntity() {
+        return entity.isNonPersistentParentEntity();
     }
-
+    
+    /**
+     * Generates the appropriate super class for this entity if this entity is non-transient and not a non-persistent
+     * parent entity.
+     * 
+     * @return
+     */
+    public String getPersistentEntityParentJavaType() {
+        Parent parent = getParent();
+        if (parent != null) {
+            Entity parentEntity = ModelInstanceRepositoryManager.getMetadataRepostory(MetadataRepository.class)
+                    .getEntity(parent.getType());
+            return parentEntity.getName() + "BO";
+        } else {
+            return BasePersistentSpringBO.class.getSimpleName();
+        }
+    }
+    
     /**
      * {@inheritDoc}
      */

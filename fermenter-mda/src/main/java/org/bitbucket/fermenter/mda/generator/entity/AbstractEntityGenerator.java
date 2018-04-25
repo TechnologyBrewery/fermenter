@@ -31,7 +31,7 @@ public abstract class AbstractEntityGenerator extends AbstractGenerator {
         while (entities.hasNext()) {
             Entity entity = (Entity) entities.next();
 
-            if (!generatePersistentEntitiesOnly() || (generatePersistentEntitiesOnly() && !entity.isTransient())) {
+            if (!generatePersistentEntitiesOnly() || (generatePersistentEntitiesOnly() && !entity.isTransient() && !entity.isNonPersistentParentEntity())) {
                 VelocityContext vc = new VelocityContext();
                 populateVelocityContext(vc, entity, context);
 

@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!ELEMENT entity (name, namespace?, documentation?, table?, lockStrategy?, id?, fields?, composites?, associations?, queries?)>
+<!ELEMENT entity (name, namespace?, documentation?, parent?, table?, lockStrategy?, id?, fields?, composites?, associations?, queries?)>
 <!ELEMENT namespace (#PCDATA)>
 <!ELEMENT name (#PCDATA)>
 <!ELEMENT documentation (#PCDATA)>
+
+<!ELEMENT parent (type, inheritanceStrategy?)>
+<!ELEMENT type (#PCDATA)>
+<!ELEMENT inheritanceStrategy (#PCDATA)>
+
 <!ELEMENT table (#PCDATA)>
 <!ELEMENT lockStrategy (#PCDATA)>
 <!ATTLIST entity transient CDATA "false">
@@ -12,7 +17,6 @@
 
 <!ELEMENT fields (field+)>
 <!ELEMENT field (name, documentation?, type, project?, column?, required?, generator?, maxLength?, minLength?, maxValue?, minValue?, scale?, label?, format?)>
-<!ELEMENT type (#PCDATA)>
 <!ELEMENT column (#PCDATA)>
 <!ELEMENT required (#PCDATA)>
 <!ELEMENT generator (#PCDATA)>

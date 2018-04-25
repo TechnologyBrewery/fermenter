@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE entity PUBLIC "-//FERMENTER//DTD ENTITY//EN" "https://bitbucket.org/cpointe/fermenter/downloads/fermenter-2-entity.dtd">
+
+<entity>
+	<name>MappedSuperclassParent</name>
+	<documentation>Parent entity demonstrating an inheritance hierarchy with a mapped superclass strategy</documentation>
+
+	<fields>
+		<field>
+			<name>commonStringValue</name>
+			<documentation>Persistent string value that is shared across subclasses</documentation>
+			<type>string</type>
+			<column>COMMON_STRING_VALUE</column>
+		</field>
+	</fields>
+
+</entity>

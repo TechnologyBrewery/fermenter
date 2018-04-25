@@ -13,6 +13,7 @@ import org.bitbucket.fermenter.mda.metadata.element.CompositeInstanceMetadata;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.EntityMetadata;
 import org.bitbucket.fermenter.mda.metadata.element.FieldMetadata;
+import org.bitbucket.fermenter.mda.metadata.element.ParentMetadata;
 import org.bitbucket.fermenter.mda.metadata.element.QueryMetadata;
 import org.bitbucket.fermenter.mda.metadata.element.ReferenceMetadata;
 import org.bitbucket.fermenter.mda.metadata.element.RelationMetadata;
@@ -90,8 +91,7 @@ class EntityMetadataManager extends MetadataManager {
 		digester.addCallMethod(  "entity/namespace",     "setNamespace"       , 0 );
 		digester.addCallMethod( 	"entity/name", 			"setName"			, 0 );
 		digester.addCallMethod( 	"entity/documentation", "setDocumentation"	, 0 );
-		digester.addCallMethod( 	"entity/extends", 		"setSuperclass"		, 0 );
-        digester.addCallMethod( 	"entity/parent", 		"setParent"			, 0 );
+        parseParent(digester);
 		digester.addCallMethod( 	"entity/table", 		"setTable"			, 0 );
 		digester.addCallMethod( 	"entity/lockStrategy", 	"setLockStrategy"	, 0 );
 		digester.addSetProperties(  "entity", ENTITY_PROPERTIES, ENTITY_PROPERTIES);
@@ -124,6 +124,13 @@ class EntityMetadataManager extends MetadataManager {
 	public void addEntity(EntityMetadata ed) {
 		ed.setApplicationName(currentApplication);
 		addMetadataElement( ed.getName(), ed );
+	}
+	
+	private void parseParent(Digester digester) {
+	    digester.addObjectCreate(   "entity/parent"                     , ParentMetadata.class.getName());
+        digester.addCallMethod  (   "entity/parent/type"                , "setType"         , 0 );
+        digester.addCallMethod  (   "entity/parent/inheritanceStrategy" , "setInheritanceStrategy", 0 );
+        digester.addSetNext     (   "entity/parent"                     , "setParent"       , ParentMetadata.class.getName());
 	}
 	
 	private void parseFields(Digester digester) {

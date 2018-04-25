@@ -1,5 +1,6 @@
 package ${basePackage}.bizobj;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import static java.lang.Math.floor;
@@ -47,7 +48,9 @@ import static org.springframework.data.jpa.domain.Specifications.where;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.hibernate.annotations.Type;
 
+	#if (!$entity.isNonPersistentParentEntity())
 import ${basePackage}.persist.${entity.name}Repository;
+	#end
 #end
 
 #foreach ($import in $entity.imports )
@@ -76,9 +79,12 @@ import ${reference.importPrefix}.client.service.${reference.type}MaintenanceDele
  */
 #if ( $entity.isTransient() )
 public abstract class ${entity.name}BaseBO extends BaseSpringBO<${entity.name}BO> implements BusinessObject<${entity.name}BO> {
+#elseif ( $entity.isNonPersistentParentEntity() )
+@MappedSuperclass
+public abstract class ${entity.name}BaseBO<PK extends Serializable, BO, JPA extends JpaRepository<BO, PK>> extends BasePersistentSpringBO<PK, BO, JPA> implements PersistentBusinessObject<PK, BO> {
 #else 
 @MappedSuperclass
-public abstract class ${entity.name}BaseBO extends BasePersistentSpringBO<${idFieldJavaType}, ${entity.name}BO, ${entity.name}Repository> implements PersistentBusinessObject<${idFieldJavaType}, ${entity.name}BO> {
+public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityParentJavaType}<${idFieldJavaType}, ${entity.name}BO, ${entity.name}Repository> implements PersistentBusinessObject<${idFieldJavaType}, ${entity.name}BO> {
 
 	@Inject
 	@Transient
@@ -167,7 +173,7 @@ public abstract class ${entity.name}BaseBO extends BasePersistentSpringBO<${idFi
 	#end
 #end
 	
-#if ( !$entity.isTransient() )
+#if ( !$entity.isTransient() && !$entity.isNonPersistentParentEntity() )
 	#if (!$entity.relations.isEmpty())
   		#set ($idField = ${entity.idFields.values().iterator().next()})
 	public static ${entity.name}BO findByPrimaryKey(${idFieldJavaType} key) {
@@ -204,7 +210,7 @@ public abstract class ${entity.name}BaseBO extends BasePersistentSpringBO<${idFi
 	protected void postFindByPrimaryKey() {
 	}
 
-#if ( !$entity.isTransient() )	
+#if ( !$entity.isTransient() && !$entity.isNonPersistentParentEntity() )	
 	@Override
 	protected ${entity.name}Repository getRepository() {
 		return repository;

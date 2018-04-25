@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import ${basePackage}.bizobj.*;
-#if (!$entity.isTransient())
+#if (!$entity.isTransient() && !$entity.isNonPersistentParentEntity())
 import ${basePackage}.persist.${entity.name}Repository;
 #end
 
@@ -34,7 +34,7 @@ public abstract class ${entity.name}BaseMixIn {
 	@JsonIgnore
 	protected abstract Logger getLogger();
 
-#if (!$entity.isTransient())
+#if (!$entity.isTransient() && !$entity.isNonPersistentParentEntity())
 	@JsonIgnore
 	private ${entity.name}Repository repository;
 #end

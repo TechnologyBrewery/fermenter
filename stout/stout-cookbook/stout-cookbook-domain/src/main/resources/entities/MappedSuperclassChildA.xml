@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE entity PUBLIC "-//FERMENTER//DTD ENTITY//EN" "https://bitbucket.org/cpointe/fermenter/downloads/fermenter-2-entity.dtd">
+
+<entity>
+	<name>MappedSuperclassChildA</name>
+	<documentation>Child entity of MappedSuperclassParent demonstrating an inheritance hierarchy with a mapped superclass strategy</documentation>
+	<parent>
+		<type>MappedSuperclassParent</type>
+		<inheritanceStrategy>mapped-superclass</inheritanceStrategy>
+	</parent>
+	<table>MAPPED_SUPERCLASS_CHILD_A</table>
+	
+	<id>
+		<field>
+			<name>id</name>
+			<type>uuid</type>
+			<column>CHILD_A_ID</column>
+			<required>true</required>
+			<generator>uuid</generator>
+		</field>
+	</id>
+
+	<fields>
+		<field>
+			<name>childAType</name>
+			<documentation>String value specific to this subclass</documentation>
+			<type>string</type>
+			<column>CHILD_A_TYPE</column>
+		</field>
+	</fields>
+
+</entity>

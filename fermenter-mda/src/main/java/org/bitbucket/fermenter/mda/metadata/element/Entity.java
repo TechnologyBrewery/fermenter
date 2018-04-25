@@ -46,15 +46,22 @@ public interface Entity {
     Reference getReference(String type);
 
     /**
-     * @return Returns the superclass.
+     * @return Returns the parent entity of this entity.
      */
-    String getSuperclass();
+    Parent getParent();
 
     /**
-     * @return Returns the parent.
+     * Returns whether this entity has been marked as the parent of any other entity and the defined inheritance
+     * strategy indicates that this parent entity is non-persistent. <br>
+     * <br>
+     * <b>NOTE:</b> While somewhat similar, this models a different concept than {@link Entity#isTransient()}. Transient
+     * entities have *no* persistent state, while non-persistent parent entities may have persistent fields declared
+     * within them, but the parent entities are not directly persisted (their concrete child subclasses are).
+     * 
+     * @return
      */
-    String getParent();
-
+    boolean isNonPersistentParentEntity();
+    
     Map getQueries();
 
     Query getQuery(String name);
@@ -64,7 +71,7 @@ public interface Entity {
     boolean useOptimisticLocking();
 
     /**
-     * Sets whether or not the entity should persist.
+     * Sets whether or not the entity has any persistent state.
      * 
      * @param transientEntity
      *            setting
@@ -72,10 +79,12 @@ public interface Entity {
     void setTransient(boolean transientEntity);
 
     /**
-     * Returns whether or not the entity should persist.
-     * @return setting
+     * Returns whether or not the entity has any persistent state. If true, this entity will be exclusively used as a
+     * transfer object.
+     * 
+     * @return
      */
-     boolean isTransient();
+    boolean isTransient();
 
     /**
      * Returns the name of the application from which this element originates

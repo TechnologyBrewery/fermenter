@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.bitbucket.fermenter.mda.PackageManager;
 import org.bitbucket.fermenter.mda.metadata.MetadataManager;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.element.Parent.InheritanceStrategy;
@@ -38,11 +39,26 @@ public class EntityMetadata extends MetadataElement implements Entity {
     private Map    queries;
     
 	public String getNamespace() {
-        return namespace;
+
+		if(namespace == null){
+			return "";
+		} else {
+			return namespace;
+		}
     }
 
-    public void setNamespace(String namespace) {
-        this.namespace = namespace;
+	/**
+	 * Sets the namespace of the current entity. If a namespace is not given (method was provided null or ""), the base
+	 * package will be used.
+	 * @param namespace
+	 */
+	public void setNamespace(String namespace) {
+
+		if(namespace != null && !namespace.isEmpty()) {
+			this.namespace = namespace;
+		} else {
+			this.namespace = PackageManager.getBasePackage(applicationName);
+		}
     }
 
     /**
@@ -331,7 +347,7 @@ public class EntityMetadata extends MetadataElement implements Entity {
 			}
 		}
 		
-		checkForPesistentAndTransientViolations();
+		checkForPersistentAndTransientViolations();
 		
 		//fields:
 		MetadataManager.validateElements(getFields().values());
@@ -350,7 +366,7 @@ public class EntityMetadata extends MetadataElement implements Entity {
 		
 	}
 
-    public void checkForPesistentAndTransientViolations() {
+    public void checkForPersistentAndTransientViolations() {
         if (!isTransient()) {
 		    boolean transientIssuesFound = false;
 		    
@@ -442,13 +458,16 @@ public class EntityMetadata extends MetadataElement implements Entity {
      */
     @Override
     public boolean isNonPersistentParentEntity() {
+
         Map<String, Entity> allEntities = ModelInstanceRepositoryManager.getMetadataRepostory(MetadataRepository.class)
                 .getAllEntities();
         for (Entity entity : allEntities.values()) {
             Parent parent = entity.getParent();
-            if (parent != null && getName().equals(parent.getType())
-                    && InheritanceStrategy.MAPPED_SUPERCLASS.equals(parent.getInheritanceStrategy())) {
-                return true;
+            if (parent != null &&
+                getName().equals(parent.getType()) &&
+                getNamespace().equals(entity.getNamespace()) &&
+                InheritanceStrategy.MAPPED_SUPERCLASS.equals(parent.getInheritanceStrategy())) {
+                    return true;
             }
         }
         return false;

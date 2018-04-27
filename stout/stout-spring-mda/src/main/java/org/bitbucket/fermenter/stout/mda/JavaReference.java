@@ -18,7 +18,7 @@ import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 public class JavaReference implements Reference {
 	
 	private Reference reference;
-	private List decoratedFoerignKeyFieldList;
+	private List decoratedForeignKeyFieldList;
 	
 	/**
 	 * Create a new instance of <tt>Reference</tt> with the correct functionality set 
@@ -53,25 +53,23 @@ public class JavaReference implements Reference {
 	}
 
 	public List getForeignKeyFields() {
-		if (decoratedFoerignKeyFieldList == null) {
+		if (decoratedForeignKeyFieldList == null) {
 			List referenceForeignKeyFieldList = reference.getForeignKeyFields();
 			if ((referenceForeignKeyFieldList == null) || (referenceForeignKeyFieldList.size() == 0)) {
-				decoratedFoerignKeyFieldList = Collections.EMPTY_LIST;
+				decoratedForeignKeyFieldList = Collections.EMPTY_LIST;
 				
 			} else {
 				Field f;
-				decoratedFoerignKeyFieldList = new ArrayList((int)(referenceForeignKeyFieldList.size()));
+				decoratedForeignKeyFieldList = new ArrayList((int)(referenceForeignKeyFieldList.size()));
 				Iterator i = referenceForeignKeyFieldList.iterator();
 				while (i.hasNext()) {
 					f = (Field)i.next();
-					decoratedFoerignKeyFieldList.add(new JavaField(f));
-					
+					decoratedForeignKeyFieldList.add(new JavaField(f));
 				}
-				
 			}
 		}
 		
-		return decoratedFoerignKeyFieldList;
+		return decoratedForeignKeyFieldList;
 	}
 
 	public String getRequired() {

@@ -1,15 +1,5 @@
 package org.bitbucket.fermenter.stout.mda;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.apache.commons.lang.StringUtils;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.element.Composite;
@@ -21,6 +11,16 @@ import org.bitbucket.fermenter.mda.metadata.element.Reference;
 import org.bitbucket.fermenter.mda.metadata.element.Relation;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 import org.bitbucket.fermenter.stout.bizobj.BasePersistentSpringBO;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * An {@link Entity} that has been decorated for easier generation of Java files.
@@ -267,6 +267,14 @@ public class JavaEntity implements Entity {
      */
     public Parent getParent() {
         return entity.getParent();
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isChildOfNonPersistentParentEntity() {
+        return entity.isChildOfNonPersistentParentEntity();
     }
 
     /**

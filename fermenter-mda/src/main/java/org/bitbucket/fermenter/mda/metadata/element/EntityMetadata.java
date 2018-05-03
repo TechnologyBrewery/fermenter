@@ -472,4 +472,12 @@ public class EntityMetadata extends MetadataElement implements Entity {
         }
         return false;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isChildOfNonPersistentParentEntity() {
+        return (getParent() == null) ? false
+                : Parent.InheritanceStrategy.MAPPED_SUPERCLASS.equals(getParent().getInheritanceStrategy());
+    }
 }

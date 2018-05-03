@@ -20,5 +20,9 @@
 			<type>SimpleDomain</type>
 			<required>true</required>
 		</reference>
+		<!--<relation>			
+			<type>MappedSuperclassOneToManyChild</type>
+			<multiplicity>1-M</multiplicity>
+		</relation>-->
 	</associations>
 </entity>

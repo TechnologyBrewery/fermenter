@@ -7,6 +7,9 @@ package ${basePackage}.transfer;
  *
  * GENERATED STUB CODE - PLEASE *DO* MODIFY
  */
-public class ${entity.name} extends ${entity.name}Base{
-	
+#if($entity.isNonPersistentParentEntity())
+public abstract class ${entity.name} extends ${entity.name}Base {
+#else
+public class ${entity.name} extends ${entity.name}Base {
+#end
 }

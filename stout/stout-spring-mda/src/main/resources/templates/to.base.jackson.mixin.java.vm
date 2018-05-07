@@ -29,7 +29,11 @@ import ${import};
  *
  * Generated Code - DO NOT MODIFY
  */
+#if($entity.isChildOfNonPersistentParentEntity())
+public abstract class ${entity.name}BaseMixIn extends ${entity.getParent().getType()}MixIn {
+#else
 public abstract class ${entity.name}BaseMixIn {
+#end
 
 	@JsonIgnore
 	protected abstract Logger getLogger();

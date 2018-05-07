@@ -61,7 +61,9 @@ public interface Entity {
      * @return
      */
     boolean isNonPersistentParentEntity();
-    
+
+    boolean isChildOfNonPersistentParentEntity();
+
     Map getQueries();
 
     Query getQuery(String name);

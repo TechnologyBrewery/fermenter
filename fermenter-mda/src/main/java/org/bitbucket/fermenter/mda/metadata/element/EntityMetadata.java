@@ -463,10 +463,9 @@ public class EntityMetadata extends MetadataElement implements Entity {
                 .getAllEntities();
         for (Entity entity : allEntities.values()) {
             Parent parent = entity.getParent();
-            if (parent != null &&
-                getName().equals(parent.getType()) &&
-                getNamespace().equals(entity.getNamespace()) &&
-                InheritanceStrategy.MAPPED_SUPERCLASS.equals(parent.getInheritanceStrategy())) {
+            if (parent != null && getName().equals(parent.getType())
+                    && InheritanceStrategy.MAPPED_SUPERCLASS.equals(parent.getInheritanceStrategy())) {
+
                     return true;
             }
         }

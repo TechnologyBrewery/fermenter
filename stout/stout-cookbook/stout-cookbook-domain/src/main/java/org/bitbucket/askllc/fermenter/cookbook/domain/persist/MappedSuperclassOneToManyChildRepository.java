@@ -2,16 +2,16 @@ package org.bitbucket.askllc.fermenter.cookbook.domain.persist;
 
 import java.util.UUID;
 
-import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.MappedSuperclassChildABO;
+import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.MappedSuperclassOneToManyChildBO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
- * Data access repository for the MappedSuperclassChildA business object.
+ * Data access repository for the MappedSuperclassOneToManyChild business object.
  * 
  * GENERATED STUB CODE - PLEASE *DO* MODIFY
  */ 
-public interface MappedSuperclassChildARepository extends JpaRepository<MappedSuperclassChildABO, UUID>, JpaSpecificationExecutor<MappedSuperclassChildABO> {
+public interface MappedSuperclassOneToManyChildRepository extends JpaRepository<MappedSuperclassOneToManyChildBO, UUID>, JpaSpecificationExecutor<MappedSuperclassOneToManyChildBO> {
 	
 	/**
 	 * Developers should leverage this interface to define any query logic

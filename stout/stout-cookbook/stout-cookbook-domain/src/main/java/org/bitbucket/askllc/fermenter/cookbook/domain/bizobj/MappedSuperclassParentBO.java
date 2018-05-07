@@ -39,9 +39,9 @@ public abstract class MappedSuperclassParentBO<PK extends Serializable, BO, JPA 
      * @return
      */
     public static List<MappedSuperclassParentBO> findAll() {
-        List<MappedSuperclassParentBO> allChildBOs = new ArrayList<MappedSuperclassParentBO>();
-        allChildBOs.addAll(MappedSuperclassChildABO.findAllChildABOs());
-        allChildBOs.addAll(MappedSuperclassChildBBO.findAllChildBBOs());
+        List<MappedSuperclassParentBO> allChildBOs = new ArrayList<>();
+        allChildBOs.addAll(MappedSubclassABO.findAllSubclassAs());
+        allChildBOs.addAll(MappedSubclassBBO.findAllSubclassBs());
         return allChildBOs;
     }
 }

@@ -10,12 +10,12 @@ import javax.inject.Inject;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.math.RandomUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.IntegerKeyedEntityBO;
-import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.MappedSuperclassChildABO;
-import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.MappedSuperclassChildBBO;
+import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.MappedSubclassABO;
+import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.MappedSubclassBBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.MappedSuperclassParentBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainBO;
-import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.MappedSuperclassChildAMaintenanceService;
-import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.MappedSuperclassChildBMaintenanceService;
+import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.MappedSubclassAMaintenanceService;
+import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.MappedSubclassBMaintenanceService;
 import org.bitbucket.fermenter.stout.messages.AbstractMsgMgrAwareTestSupport;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.junit.Test;
@@ -35,30 +35,30 @@ import org.springframework.transaction.annotation.Transactional;
 public class InheritanceModelingTest extends AbstractMsgMgrAwareTestSupport {
 
     @Inject
-    private MappedSuperclassChildAMaintenanceService childAService;
+    private MappedSubclassAMaintenanceService childAService;
 
     @Inject
-    private MappedSuperclassChildBMaintenanceService childBService;
+    private MappedSubclassBMaintenanceService childBService;
 
     @Test
-    public void testSaveMappedSuperclassChildren() throws Exception {
+    public void testSaveMappedSubclassren() throws Exception {
         String commonStringAttr = RandomStringUtils.randomAlphabetic(10);
 
-        MappedSuperclassChildABO childABO = createRandomMappedSuperclassChildA(commonStringAttr);
-        ValueServiceResponse<MappedSuperclassChildABO> saveChildAResponse = childAService.saveOrUpdate(childABO);
+        MappedSubclassABO childABO = createRandomMappedSubclassA(commonStringAttr);
+        ValueServiceResponse<MappedSubclassABO> saveChildAResponse = childAService.saveOrUpdate(childABO);
         TestUtils.assertNoErrorMessages(saveChildAResponse);
 
-        MappedSuperclassChildBBO childBBO = createRandomMappedSuperclassChildB(commonStringAttr);
-        ValueServiceResponse<MappedSuperclassChildBBO> saveChildBResponse = childBService.saveOrUpdate(childBBO);
+        MappedSubclassBBO childBBO = createRandomMappedSubclassB(commonStringAttr);
+        ValueServiceResponse<MappedSubclassBBO> saveChildBResponse = childBService.saveOrUpdate(childBBO);
         TestUtils.assertNoErrorMessages(saveChildBResponse);
 
-        ValueServiceResponse<MappedSuperclassChildABO> findChildAResponse = childAService
+        ValueServiceResponse<MappedSubclassABO> findChildAResponse = childAService
                 .findByPrimaryKey(saveChildAResponse.getValue().getKey());
         TestUtils.assertNoErrorMessages(findChildAResponse);
         assertEquals(commonStringAttr, findChildAResponse.getValue().getCommonStringValue());
         assertNotNull(findChildAResponse.getValue().getRefToSimpleDomain().getName());
 
-        ValueServiceResponse<MappedSuperclassChildBBO> findChildBResponse = childBService
+        ValueServiceResponse<MappedSubclassBBO> findChildBResponse = childBService
                 .findByPrimaryKey(saveChildBResponse.getValue().getKey());
         TestUtils.assertNoErrorMessages(findChildBResponse);
         assertEquals(commonStringAttr, findChildBResponse.getValue().getCommonStringValue());
@@ -69,15 +69,15 @@ public class InheritanceModelingTest extends AbstractMsgMgrAwareTestSupport {
     public void testMappedSuperclassSimulatedPolymorphicQuery() throws Exception {
         int numChildAEntities = RandomUtils.nextInt(10) + 2;
         for (int iter = 0; iter < numChildAEntities; iter++) {
-            MappedSuperclassChildABO childABO = createRandomMappedSuperclassChildA(null);
-            ValueServiceResponse<MappedSuperclassChildABO> saveChildAResponse = childAService.saveOrUpdate(childABO);
+            MappedSubclassABO childABO = createRandomMappedSubclassA(null);
+            ValueServiceResponse<MappedSubclassABO> saveChildAResponse = childAService.saveOrUpdate(childABO);
             TestUtils.assertNoErrorMessages(saveChildAResponse);
         }
 
         int numChildBEntities = RandomUtils.nextInt(10) + 2;
         for (int iter = 0; iter < numChildBEntities; iter++) {
-            MappedSuperclassChildBBO childBBO = createRandomMappedSuperclassChildB(null);
-            ValueServiceResponse<MappedSuperclassChildBBO> saveChildBResponse = childBService.saveOrUpdate(childBBO);
+            MappedSubclassBBO childBBO = createRandomMappedSubclassB(null);
+            ValueServiceResponse<MappedSubclassBBO> saveChildBResponse = childBService.saveOrUpdate(childBBO);
             TestUtils.assertNoErrorMessages(saveChildBResponse);
         }
 
@@ -86,8 +86,8 @@ public class InheritanceModelingTest extends AbstractMsgMgrAwareTestSupport {
         assertEquals(numChildAEntities + numChildBEntities, allChildEntities.size());
     }
 
-    protected MappedSuperclassChildABO createRandomMappedSuperclassChildA(String commonStringAttr) {
-        MappedSuperclassChildABO bizObj = new MappedSuperclassChildABO();
+    protected MappedSubclassABO createRandomMappedSubclassA(String commonStringAttr) {
+        MappedSubclassABO bizObj = new MappedSubclassABO();
         bizObj.setChildAType(RandomStringUtils.randomAlphabetic(10));
         bizObj.setCommonStringValue(
                 commonStringAttr != null ? commonStringAttr : RandomStringUtils.randomAlphabetic(15));
@@ -102,8 +102,8 @@ public class InheritanceModelingTest extends AbstractMsgMgrAwareTestSupport {
         return bizObj;
     }
 
-    protected MappedSuperclassChildBBO createRandomMappedSuperclassChildB(String commonStringAttr) {
-        MappedSuperclassChildBBO bizObj = new MappedSuperclassChildBBO();
+    protected MappedSubclassBBO createRandomMappedSubclassB(String commonStringAttr) {
+        MappedSubclassBBO bizObj = new MappedSubclassBBO();
         bizObj.setChildBType(RandomStringUtils.randomAlphabetic(5));
         bizObj.setCommonStringValue(
                 commonStringAttr != null ? commonStringAttr : RandomStringUtils.randomAlphabetic(15));

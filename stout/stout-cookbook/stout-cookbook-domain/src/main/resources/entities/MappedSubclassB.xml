@@ -2,13 +2,13 @@
 <!DOCTYPE entity PUBLIC "-//FERMENTER//DTD ENTITY//EN" "https://bitbucket.org/cpointe/fermenter/downloads/fermenter-2-entity.dtd">
 
 <entity>
-	<name>MappedSuperclassChildB</name>
-	<documentation>Child entity of MappedSuperclassParent demonstrating an inheritance hierarchy with a mapped superclass strategy</documentation>
+	<name>MappedSubclassB</name>
+	<documentation>Sub entity of MappedSuperclassParent demonstrating an inheritance hierarchy with a mapped superclass strategy</documentation>
 	<parent>
 		<type>MappedSuperclassParent</type>
 		<inheritanceStrategy>mapped-superclass</inheritanceStrategy>
 	</parent>
-	<table>MAPPED_SUPERCLASS_CHILD_B</table>
+	<table>MAPPED_SUBCLASS_B</table>
 	
 	<id>
 		<field>

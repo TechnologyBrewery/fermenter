@@ -10,21 +10,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Business object for the MappedSuperclassChildB entity.
- * @see org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.MappedSuperclassChildBBaseBO
+ * Business object for the MappedSubclassB entity.
+ * @see org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.MappedSubclassBBaseBO
  *
  * GENERATED STUB CODE - PLEASE *DO* MODIFY
  */
 @Entity
-@Table(name="MAPPED_SUPERCLASS_CHILD_B")
-public class MappedSuperclassChildBBO extends MappedSuperclassChildBBaseBO {
+@Table(name="MAPPED_SUBCLASS_B")
+public class MappedSubclassBBO extends MappedSubclassBBaseBO {
 	
-	public MappedSuperclassChildBBO() {
+	public MappedSubclassBBO() {
 		super();
 		SpringAutowiringUtil.autowireBizObj(this);
 	}
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(MappedSuperclassChildBBO.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(MappedSubclassBBO.class);
 	
 	@Override
 	protected Logger getLogger() {
@@ -36,7 +36,8 @@ public class MappedSuperclassChildBBO extends MappedSuperclassChildBBaseBO {
 
 	}
 	
-    public static List<MappedSuperclassChildBBO> findAllChildBBOs() {
+    public static List<MappedSubclassBBO> findAllSubclassBs() {
         return getDefaultRepository().findAll();
-    }
+    }	
+	
 }

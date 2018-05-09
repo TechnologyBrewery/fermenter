@@ -23,6 +23,8 @@ import org.bitbucket.fermenter.stout.bizobj.BusinessObject;
 import org.bitbucket.fermenter.stout.bizobj.BasePersistentSpringBO;
 import org.bitbucket.fermenter.stout.bizobj.PersistentBusinessObject;
 
+import org.bitbucket.fermenter.stout.util.MetamodelInstanceUtil;
+
 import org.hibernate.annotations.Type;
 
 import javax.persistence.CascadeType;
@@ -89,6 +91,8 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
 	@Inject
 	@Transient
 	private ${entity.name}Repository repository;
+	
+	private static boolean hasCheckedTableMismatch;
 #end
 
 #foreach ( $idField in $entity.idFields.values() )
@@ -154,11 +158,26 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
 
 #end
 
+#if ( !$entity.isTransient() && !$entity.isNonPersistentParentEntity() )
+    /**
+     * While distasteful to leverage the name of a subclass, we know this to be 100% consistent w/in Stout and it
+     * allows for checking to ensure that the table name, which *must* be specified in the leaf class from a JPA
+     * perspective, matches the table name most recently specified in the metamodel instance for ${entity.name}.  In
+     * some cases, this just results in a straightforward error.  In others, it can be a pain to track down, so this
+     * compromise is justified as worth the labor/frustration savings.
+     */
+	protected ${entity.name}BaseBO() {
+		if (!hasCheckedTableMismatch) {
+	    	String leafClassName = "${basePackage}.bizobj.${entity.name}BO";
+	    	MetamodelInstanceUtil.checkTableNameForMismatch(leafClassName, "${entity.table}");
+	    	hasCheckedTableMismatch = true;
+	    }
+	}
+#end
+
+
 #if ( !$entity.idFields.isEmpty() )
   #set ($idField = ${entity.idFields.values().iterator().next()})
-  	
-  	protected ${entity.name}BaseBO() {
-	}
 	
 	#if ( !$entity.isTransient() )
 	@Override

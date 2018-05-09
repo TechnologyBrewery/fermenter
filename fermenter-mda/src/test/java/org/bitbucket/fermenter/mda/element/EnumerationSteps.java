@@ -104,7 +104,6 @@ public class EnumerationSteps {
         encounteredException = null;
 
         try {
-            // loadedEnumeration = JsonUtils.readAndValidateJson(enumerationFile, EnumerationElement.class);
             Properties metadataProperties = new Properties();
             metadataProperties.setProperty("application.name", "fermenter-mda");
             metadataProperties.setProperty("metadata.loader", StaticURLResolver.class.getName());

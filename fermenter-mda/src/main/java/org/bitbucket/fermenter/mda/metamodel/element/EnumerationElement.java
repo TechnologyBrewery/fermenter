@@ -19,6 +19,7 @@ public class EnumerationElement extends NamespacedMetamodelElement implements En
     @JsonProperty(required = true)
     protected List<Enum> enums = new ArrayList<>();
     protected Integer maxLength;
+    protected boolean isNamed = true;
 
     /**
      * {@inheritDoc}
@@ -62,6 +63,24 @@ public class EnumerationElement extends NamespacedMetamodelElement implements En
     public void addEnums(EnumElement contant) {
         enums.add(contant);
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @JsonIgnore
+    @Override
+    public boolean isNamed() {
+        return isNamed;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @JsonIgnore
+    @Override
+    public boolean isValued() {
+        return !isNamed;
+    }
 
     /**
      * {@inheritDoc}
@@ -70,6 +89,13 @@ public class EnumerationElement extends NamespacedMetamodelElement implements En
     public void validate() {
         if (CollectionUtils.isEmpty(enums)) {
             messageTracker.addWarningMessage("Enumeration " + getName() + " does NOT contain any enum constants!");
+        }
+        
+        for (Enum enumInstance : enums) {
+            if (enumInstance.getValue() != null) {
+                isNamed = false;
+                break;
+            }
         }
 
     }

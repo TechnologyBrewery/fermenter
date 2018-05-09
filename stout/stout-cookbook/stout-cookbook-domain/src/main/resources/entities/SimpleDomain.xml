@@ -48,6 +48,11 @@
 			<column>SIMPLE_DOMAIN_ENUM</column>
 		</field>
 		<field>
+			<name>anotherEnumeratedValue</name>
+			<type>ValuedEnumerationExample</type>
+			<column>VALUE_EXAMPLE_ENUM</column>
+		</field>
+		<field>
 			<name>bigDecimalValue</name>
 			<type>big_decimal</type>
 			<column>BIG_DECIMAL_COLUMN</column>

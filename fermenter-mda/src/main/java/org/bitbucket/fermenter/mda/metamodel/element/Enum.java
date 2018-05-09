@@ -12,4 +12,12 @@ public interface Enum {
      */
     public String getName();
 
+    /**
+     * The value of this enumeration (optional). For example, for a MonthOfYear enumeration, you might have a enum
+     * January with a value of 1. If you want a multi-valued enumeration, please use a Reference instead.
+     * 
+     * @return Value of the enumeration
+     */
+    public Integer getValue();
+
 }

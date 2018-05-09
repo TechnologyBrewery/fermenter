@@ -14,6 +14,8 @@ import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainChildBO;
+import org.bitbucket.askllc.fermenter.cookbook.domain.enumeration.SimpleDomainEnumeration;
+import org.bitbucket.askllc.fermenter.cookbook.domain.enumeration.ValuedEnumerationExample;
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.SimpleDomainMaintenanceService;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
@@ -94,7 +96,7 @@ public class SimpleDomainMaintenanceIT extends AbstractArquillianTestSupport {
 
 		SimpleDomainBO retrievedSimpleDomain = response.getValue();
 		assertNotNull("No generated key added to the persistented object!", retrievedSimpleDomain.getKey());
-		assertTrue(simpleDomain.getNumericBoolean());
+		assertTrue(retrievedSimpleDomain.getNumericBoolean());
 	}
 	
 	@Test
@@ -109,8 +111,38 @@ public class SimpleDomainMaintenanceIT extends AbstractArquillianTestSupport {
 
 		SimpleDomainBO retrievedSimpleDomain = response.getValue();
 		assertNotNull("No generated key added to the persistented object!", retrievedSimpleDomain.getKey());
-		assertFalse(simpleDomain.getNumericBoolean());
+		assertFalse(retrievedSimpleDomain.getNumericBoolean());
 	}
+	
+    @Test
+    @RunAsClient
+    public void testSaveNamedEnumeration(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
+        SimpleDomainMaintenanceService simpleDomainService = getMaintenanceService(webTarget);
+
+        SimpleDomainBO simpleDomain = TestUtils.createRandomSimpleDomain();
+        SimpleDomainEnumeration expectedValue = simpleDomain.getAnEnumeratedValue();
+        ValueServiceResponse<SimpleDomainBO> response = simpleDomainService.saveOrUpdate(simpleDomain);
+        TestUtils.assertNoErrorMessages(response);
+
+        SimpleDomainBO retrievedSimpleDomain = response.getValue();
+        assertNotNull("No generated key added to the persistented object!", retrievedSimpleDomain.getKey());
+        assertEquals(expectedValue, retrievedSimpleDomain.getAnEnumeratedValue());
+    }   	
+	
+    @Test
+    @RunAsClient
+    public void testSaveValuedEnumeration(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
+        SimpleDomainMaintenanceService simpleDomainService = getMaintenanceService(webTarget);
+
+        SimpleDomainBO simpleDomain = TestUtils.createRandomSimpleDomain();
+        ValuedEnumerationExample expectedValue = simpleDomain.getAnotherEnumeratedValue();
+        ValueServiceResponse<SimpleDomainBO> response = simpleDomainService.saveOrUpdate(simpleDomain);
+        TestUtils.assertNoErrorMessages(response);
+
+        SimpleDomainBO retrievedSimpleDomain = response.getValue();
+        assertNotNull("No generated key added to the persistented object!", retrievedSimpleDomain.getKey());
+        assertEquals(expectedValue, retrievedSimpleDomain.getAnotherEnumeratedValue());
+    }	
 	
     @Test
     @RunAsClient

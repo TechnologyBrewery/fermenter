@@ -6,12 +6,39 @@ import org.apache.commons.lang3.StringUtils;
  * Enumeration ${enumeration.name}.
  * 
  * Generated Code - DO NOT MODIFY
- *
  */ 
 public enum ${enumeration.name} {
 
 #foreach ($enum in $enumeration.enums)
+#if($enumeration.isValued())		
+	${enum.uppercasedName}(${enum.value})#if ($foreach.isLast());#else,#end
+	#else
 	${enum.uppercasedName}#if ($foreach.isLast());#else,#end
+	#end
+#end
+
+#if ($enumeration.isValued())
+ 
+	private Integer value;
+
+	/**
+	 * Creates new instance of this valued enumeration.
+	 * 
+	 * @param value the value to set for this constant item
+	 */
+	${enumeration.name}(Integer value) {
+		this.value = value;
+	}
+ 
+   	/**
+   	 * Gets the underlying value associated with this ${enumeration.name} enum instance.
+   	 * 
+   	 * @return underlying value associated with this ${enumeration.name} enum instance.
+   	 */
+   	public Integer getValue() {
+   		return value;
+   	}
+   	
 #end
 
     /**

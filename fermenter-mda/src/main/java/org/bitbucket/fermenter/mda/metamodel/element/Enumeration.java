@@ -22,4 +22,18 @@ public interface Enumeration extends NamespacedMetamodel {
      */
     List<Enum> getEnums();
 
+    /**
+     * Returns true if the constants are named (no values associated).
+     * 
+     * @return true if named
+     */
+    boolean isNamed();
+
+    /**
+     * Returns true if the constants are valued (values associated).
+     * 
+     * @return true if values
+     */
+    boolean isValued();
+
 }

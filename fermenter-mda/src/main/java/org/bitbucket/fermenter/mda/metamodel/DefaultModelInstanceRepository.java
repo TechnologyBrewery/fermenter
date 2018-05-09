@@ -60,7 +60,9 @@ public class DefaultModelInstanceRepository extends AbstractModelInstanceReposit
      */
     @Override
     public void validate(Properties properties) {
-        // Nothing to do so far with enumerations - will expand with other types of metadata
+        for (Enumeration enumeration : enumerationManager.getMetadataElementByPackage(basePackage).values()) {
+            enumeration.validate();
+        }
 
     }
 

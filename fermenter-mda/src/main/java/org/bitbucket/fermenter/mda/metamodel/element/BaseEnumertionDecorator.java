@@ -65,4 +65,20 @@ public class BaseEnumertionDecorator implements Enumeration {
         return wrapped.getMaxLength();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isNamed() {
+        return wrapped.isNamed();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isValued() {
+        return wrapped.isValued();
+    }
+
 }

@@ -5,6 +5,7 @@ Feature: Specify enumerations for use in model-driven file generation
     Given an enumeration named "<name>" in "<package>" and enum constants "<constants>"
     When enumerations a read
     Then an enumeration metamodel instance is returned for the name "<name>" in "<package>" with the enum constants "<constants>"
+    And the enumeration is of type "named"
 
     Examples: 
       | name      | package       | constants                                                      |
@@ -21,9 +22,16 @@ Feature: Specify enumerations for use in model-driven file generation
       | Compass     | my.navigation | North, East, South, West | alt.package   |
       | WeekendDays | my.weekends   | Saturday, Sunday         | my.weekdays   |
 
-  Scenario: FUTURE - Single valued enumerations are supported
+  Scenario Outline: Single valued enumerations are supported
+    Given an enumeration named "<name>" in "<package>" and enum constant names "<constantNames>" and values "<constantValues>"
+    When enumerations a read
+    Then an enumeration metamodel instance is returned for the name "<name>" in "<package>" with the enum constants "<constantNames>" and matching values "<constantValues>"
+    And the enumeration is of type "valued"
 
-  Scenario: FUTURE - Multi-valued enumerations are supported
+    Examples: 
+      | name          | package     | constantNames            | constantValues |
+      | FirstQuarter  | my.calendar | January, February, March | 1, 2, 3        |
+      | SecondQuarter | my.calendar | April, May, June         | 4, 5, 6        |
 
   Scenario: FUTURE - use an enumeration as field type in an entity metamodel
 

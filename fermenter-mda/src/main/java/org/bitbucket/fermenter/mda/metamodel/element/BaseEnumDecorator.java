@@ -29,5 +29,13 @@ public class BaseEnumDecorator implements Enum {
     public String getName() {
         return wrapped.getName();
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Integer getValue() {
+        return wrapped.getValue();
+    }    
 
 }

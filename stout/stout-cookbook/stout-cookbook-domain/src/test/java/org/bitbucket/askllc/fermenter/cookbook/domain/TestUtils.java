@@ -17,6 +17,7 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainEagerCh
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationExampleBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationExampleChildBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.enumeration.SimpleDomainEnumeration;
+import org.bitbucket.askllc.fermenter.cookbook.domain.enumeration.ValuedEnumerationExample;
 import org.bitbucket.fermenter.stout.messages.Message;
 import org.bitbucket.fermenter.stout.messages.MessageUtils;
 import org.bitbucket.fermenter.stout.messages.Messages;
@@ -51,6 +52,7 @@ public final class TestUtils {
 		domain.setType(RandomStringUtils.random(5));
 		domain.setAnEnumeratedValue(
 				SimpleDomainEnumeration.values()[RandomUtils.nextInt(0, SimpleDomainEnumeration.values().length)]);
+		domain.setAnotherEnumeratedValue(ValuedEnumerationExample.values()[RandomUtils.nextInt(0, SimpleDomainEnumeration.values().length)]);
 		domain.setStandardBoolean(false);
 		domain.setNumericBoolean(true);
 		return domain;

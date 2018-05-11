@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
  * GENERATED STUB CODE - PLEASE *DO* MODIFY
  */
 @Entity
-@Table(name="OLD_TABLE_NAME")
+@Table(name="NEW_TABLE_NAME")
 public class TableNameMismatchBO extends TableNameMismatchBaseBO {
 	
 	public TableNameMismatchBO() {

@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.persistence.Table;
 
 import org.bitbucket.fermenter.stout.exception.FermenterException;
+import org.bitbucket.fermenter.stout.exception.UnrecoverableException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +20,7 @@ import org.slf4j.LoggerFactory;
 public final class MetamodelInstanceUtil {
 
     public static final Logger logger = LoggerFactory.getLogger(MetamodelInstanceUtil.class);
-    
+
     private MetamodelInstanceUtil() {
         // prevent instantiation of all static class
     }
@@ -30,6 +31,7 @@ public final class MetamodelInstanceUtil {
      * @param expectedTableName metamodel instance value (typically maintained in generated code)
      */
     public static void checkTableNameForMismatch(String className, String expectedTableName) {
+        boolean isMismatched = false;
         try {
             Class<?> boTarget = Class.forName(className);
 
@@ -47,6 +49,7 @@ public final class MetamodelInstanceUtil {
 
             String foundTableName = tableAnnotation.name();
             if (!expectedTableName.equalsIgnoreCase(foundTableName)) {
+                isMismatched = true;
                 logger.error("Mismatching table names encountered for {}!\n\t table name found: {},\n\t table name expected: {}",
                         className, foundTableName, expectedTableName);
             }
@@ -54,6 +57,11 @@ public final class MetamodelInstanceUtil {
         } catch (Exception e) {
             throw new FermenterException(
                     "Exception encountered validating " + className + " against metamodel instances!", e);
+        }
+        
+        if (isMismatched) {
+            logger.error("To fix this, ensure {}'s @Table annotation matches your metamodel instance!", className);
+            throw new UnrecoverableException("Mimatching table names for " + className + " and its entity file!");            
         }
     }
 

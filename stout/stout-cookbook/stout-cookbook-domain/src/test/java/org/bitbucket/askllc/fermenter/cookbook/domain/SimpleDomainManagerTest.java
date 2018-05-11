@@ -157,4 +157,5 @@ public class SimpleDomainManagerTest extends AbstractMsgMgrAwareTestSupport {
         TestUtils.assertNoErrorMessages(primitivesCollectionResponse);
         assertEquals(returnListSize, primitivesCollectionResponse.getValue().size());
     }
+    
 }

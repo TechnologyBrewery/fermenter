@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE entity PUBLIC "-//FERMENTER//DTD ENTITY//EN" "https://bitbucket.org/cpointe/fermenter/downloads/fermenter-2-entity.dtd">
+
+<entity>
+	<name>TableNameMismatch</name>
+	<documentation>Entity that demonstrates an error when table names drift between src/main resources and metamodel instances</documentation>
+	<table>NEW_TABLE_NAME</table>
+
+	<id>
+		<field>
+			<name>id</name>
+			<type>integer</type>
+			<column>NEW_TABLE_NAME_ID</column>
+			<required>true</required>
+			<generator>identity</generator>
+		</field>
+	</id>
+
+</entity>

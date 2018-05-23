@@ -1,0 +1,51 @@
+[
+	{
+		"id": "urn:stout:jerseyNumber",
+		"category": "subject",
+		"type": "int",
+		"required": "true",
+		"attributePointClass": "org.bitbucket.fermenter.stout.authz.LocalAttributePoint "
+	},
+	{
+		"id": "urn:stout:hallOfFameProfile",
+		"category": "subject",
+		"type": "uri",
+		"required": "false",
+		"attributePointClass": "org.bitbucket.fermenter.stout.authz.LocalAttributePoint"
+	},
+	{
+		"id": "urn:stout:suspectedPedUser",
+		"category": "subject",
+		"type": "boolean",
+		"required": "false",
+		"attributePointClass": "org.bitbucket.fermenter.stout.authz.LocalAttributePoint"
+	},
+	{
+		"id": "urn:stout:battingAverage",
+		"category": "subject",
+		"type": "double",
+		"required": "true",
+		"attributePointClass": "org.bitbucket.fermenter.stout.authz.LocalAttributePoint"
+	},
+	{
+		"id": "urn:stout:serviceEntryDate",
+		"category": "subject",
+		"type": "date",
+		"required": "true",
+		"attributePointClass": "org.bitbucket.fermenter.stout.authz.LocalAttributePoint"
+	},
+	{
+		"id": "urn:stout:badClassNameErrorMessageTest",
+		"category": "subject",
+		"type": "date",
+		"required": "true",
+		"attributePointClass": "org.bitbucket.fermenter.stout.authz.TestErrorMessageWhenClassDoesNotExist"
+	},
+	{
+		"id": " urn:stout:trimClassNameTest",
+		"category": "subject ",
+		"type": " date",
+		"required": "true ",
+		"attributePointClass": " org.bitbucket.fermenter.stout.authz.LocalAttributePoint "
+	}
+]

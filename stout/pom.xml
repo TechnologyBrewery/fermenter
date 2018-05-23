@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 
@@ -18,10 +20,13 @@
 	</description>
 
 	<properties>
+		<authzforce.version>13.0.0</authzforce.version>
+		<authzforce.api.version>15.0.0</authzforce.api.version>
+		<authzforce.model.version>7.2.0</authzforce.model.version>
 		<krausening.version>7</krausening.version>
 		<jackson.version>2.8.5</jackson.version>
 		<spring.version>4.3.12.RELEASE</spring.version>
-		<spring.security.version>4.2.2.RELEASE</spring.security.version>
+		<spring.security.version>4.2.4.RELEASE</spring.security.version>
 		<jacoco.it.execution.data.file>${project.build.directory}/jacoco-it.exec</jacoco.it.execution.data.file>
 		<jacoco.test.execution.data.file>${project.build.directory}/jacoco.exec</jacoco.test.execution.data.file>
 		<jacoco.version>0.7.7.201606060606</jacoco.version>
@@ -31,7 +36,8 @@
 		<arquillian.version>1.1.11.Final</arquillian.version>
 		<arquillian.rest.extension.version>1.0.0.Alpha4</arquillian.rest.extension.version>
 
-		<!-- With jacoco, all arquillian parameters need to be on the argument line: -->
+		<!-- With jacoco, all arquillian parameters need to be on the argument 
+			line: -->
 		<wildfly.argline>${argLine} -Djboss.socket.binding.port-offset=10000
 			-DKRAUSENING_BASE=${project.basedir}/src/test/resources/krausening/base
 			-DKRAUSENING_EXTENSTIONS=${project.basedir}/src/test/resources/krausening/extensions</wildfly.argline>
@@ -43,8 +49,11 @@
 		<module>stout-build-tools</module>
 		<module>stout-core</module>
 		<module>stout-test</module>
+		<module>stout-authzforce-attribute-extension</module>
+		<module>stout-authzforce</module>
 		<module>stout-spring-mda</module>
 		<module>stout-spring</module>
+		<module>stout-spring-authentication</module>
 		<module>stout-web-container-mda</module>
 		<module>stout-cookbook</module>
 	</modules>
@@ -218,20 +227,20 @@
 				<type>pom</type>
 			</dependency>
 			<dependency>
-	            <groupId>org.springframework.security</groupId>
-	            <artifactId>spring-security-core</artifactId>
-	            <version>${spring.security.version}</version>
-	        </dependency>
-	        <dependency>
-	            <groupId>org.springframework.security</groupId>
-	            <artifactId>spring-security-web</artifactId>
-	            <version>${spring.security.version}</version>
-	        </dependency>
-	        <dependency>
-	            <groupId>org.springframework.security</groupId>
-	            <artifactId>spring-security-config</artifactId>
-	            <version>${spring.security.version}</version>
-	        </dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-core</artifactId>
+				<version>${spring.security.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-web</artifactId>
+				<version>${spring.security.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-config</artifactId>
+				<version>${spring.security.version}</version>
+			</dependency>
 
 			<dependency>
 				<groupId>org.hibernate</groupId>
@@ -248,9 +257,20 @@
 			<dependency>
 				<groupId>org.javassist</groupId>
 				<artifactId>javassist</artifactId>
-  				<version>3.20.0-GA</version>
-  			</dependency>
-  			
+				<version>3.20.0-GA</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.ow2.authzforce</groupId>
+				<artifactId>authzforce-ce-core-pdp-api</artifactId>
+				<version>${authzforce.api.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.ow2.authzforce</groupId>
+				<artifactId>authzforce-ce-core-pdp-engine</artifactId>
+				<version>${authzforce.version}</version>
+			</dependency>
+
 			<dependency>
 				<groupId>org.jboss.arquillian</groupId>
 				<artifactId>arquillian-bom</artifactId>

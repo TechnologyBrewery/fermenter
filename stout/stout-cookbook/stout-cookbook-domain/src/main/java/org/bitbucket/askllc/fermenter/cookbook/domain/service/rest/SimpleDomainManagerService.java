@@ -15,13 +15,18 @@ import javax.ws.rs.core.Response;
  * 
  *      GENERATED STUB CODE - PLEASE *DO* MODIFY
  */
-@Path("SimpleDomainManagerService")
+@Path(SimpleDomainManagerService.PATH)
 public interface SimpleDomainManagerService extends SimpleDomainManagerBaseService {
 
-	// Developers should add any service operations here that cannot be defined via the PIM
+    /**
+     * Path for this service. Path is used multiple places, so having it in a constant ensures they are all consistent.
+     */
+    public static final String PATH = "SimpleDomainManagerService";
 
-	@GET
-	@Path("getLargeString")
-	@Produces(MediaType.TEXT_PLAIN)
-	Response getLargeString(@QueryParam("simpleDomainId") String simpleDomainId);
+    // Developers should add any service operations here that cannot be defined via the PIM
+
+    @GET
+    @Path("getLargeString")
+    @Produces(MediaType.TEXT_PLAIN)
+    Response getLargeString(@QueryParam("simpleDomainId") String simpleDomainId);
 }

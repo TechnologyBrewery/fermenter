@@ -18,8 +18,12 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.spring.integration.test.annotation.SpringClientConfiguration;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 // Kicks off a test cookbook-domain war that can be used as the target of rest calls: 
@@ -38,6 +42,12 @@ public class RemoteReferenceRetrievalIT extends AbstractArquillianTestSupport {
     
     private LocalDomainBO localDomain;
     private ValidationReferencedObject reference;
+    
+    @Before
+    public void setUp() {
+        Authentication authentication = new UsernamePasswordAuthenticationToken("testUser", "somePassword");
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
 
     @After
     public void deleteSimpleDomains() throws Exception {

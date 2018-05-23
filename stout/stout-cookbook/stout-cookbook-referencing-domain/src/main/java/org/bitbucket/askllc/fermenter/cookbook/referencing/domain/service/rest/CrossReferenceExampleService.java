@@ -11,8 +11,13 @@ import javax.ws.rs.Path;
  * 
  * GENERATED STUB CODE - PLEASE *DO* MODIFY
  */
-@Path("CrossReferenceExample")
+@Path(CrossReferenceExampleService.PATH)
 public interface CrossReferenceExampleService extends CrossReferenceExampleBaseService {
+
+    /**
+     * Path for this service. Path is used multiple places, so having it in a constant ensures they are all consistent.
+     */
+    public static final String PATH = "CrossReferenceExampleService";
 	
 	// Developers should add any service operations here that cannot be defined via the PIM
 	

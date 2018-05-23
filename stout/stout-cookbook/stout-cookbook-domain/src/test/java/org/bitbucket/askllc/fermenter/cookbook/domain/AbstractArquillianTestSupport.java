@@ -51,6 +51,7 @@ public abstract class AbstractArquillianTestSupport {
 	 * @return
 	 */
 	protected <T extends WebTarget> T initWebTarget(T webTarget) {
+	    webTarget.register(new AddHeadersRequestFilter("testUser"));
 		return (T) webTarget.register(JacksonObjectMapperResteasyProvider.class);
 	}
 }

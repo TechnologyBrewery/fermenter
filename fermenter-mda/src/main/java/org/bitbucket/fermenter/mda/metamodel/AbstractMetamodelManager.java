@@ -45,6 +45,7 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
 
     private static final String METAMODEL_SUFFIX = "json";
     private Map<String, Map<String, T>> metadataByPackageMap = new HashMap<>();
+    private Map<String, Map<String, T>> metadataByArtifactIdMap = new HashMap<>();
     private Map<String, T> completeMetadataMap = new HashMap<>();
 
     private static MessageTracker messageTracker = MessageTracker.getInstance();
@@ -56,6 +57,7 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
      */
     public void reset() {
         metadataByPackageMap = new HashMap<>();
+        metadataByArtifactIdMap = new HashMap<>();
         completeMetadataMap = new HashMap<>();
     }
 
@@ -109,7 +111,7 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
                 for (URL resource : resources) {
                     InputStream is = resource.openStream();
                     try {
-                        loadMetamodelFile(is);
+                        loadMetamodelFile(is, metadataUrl.getArtifactId());
 
                     } finally {
                         IOUtils.closeQuietly(is);
@@ -179,11 +181,11 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
      */
     protected abstract String getMetadataLocation();
 
-    private void loadMetamodelFile(InputStream stream) {
+    private void loadMetamodelFile(InputStream stream, String artifactId) {
         ObjectMapper objectMapper = JsonUtils.getObjectMapper();
         try {
             T instance = objectMapper.readValue(stream, getMetamodelClass());
-            addMetadataElement(instance);
+            addMetadataElement(instance, artifactId);
 
         } catch (IOException e) {
             throw new FermenterException("Problem reading metamodel!", e);
@@ -213,12 +215,16 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
     protected Map<String, T> getMetadataMap(String packageName) {
         return metadataByPackageMap.get(packageName);
     }
+    
+    protected Map<String, T> getMetadataByArtifactIdMap(String artifactId) {
+        return metadataByArtifactIdMap.get(artifactId);
+    } 
 
     protected Map<String, T> getCompleteMetadataMap() {
         return completeMetadataMap;
     }
 
-    protected void addMetadataElement(T element) {
+    protected void addMetadataElement(T element, String artifactId) {
         String packageName = element.getPackage();
         String name = element.getName();
         Map<String, T> packageMap = getMetadataMap(packageName);
@@ -226,6 +232,14 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
             packageMap = new HashMap<>();
             metadataByPackageMap.put(packageName, packageMap);
         }
+        
+        Map<String, T> artifactIdMap = getMetadataByArtifactIdMap(artifactId);
+        if (artifactIdMap == null) {
+            artifactIdMap = new HashMap<>();
+            metadataByArtifactIdMap.put(artifactId, artifactIdMap);
+        }
+        artifactIdMap.put(name, element);
+        
         getMetadataMap(packageName).put(name, element);
         completeMetadataMap.put(name, element);
 
@@ -241,6 +255,17 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
         Map<String, T> metadataMap = getMetadataMap(packageName);
         return (metadataMap != null) ? metadataMap.get(name) : null;
     }
+    
+    /**
+     * Returns a metadata instance of this metamodel by artifact id and element name.
+     * @param artifactId artifact id
+     * @param name name of element
+     * @return instance of element or null if no instance exists
+     */
+    public T getMetadataElementByArtifactIdAndName(String artifactId, String name) {
+        Map<String, T> metadataMap = getMetadataByArtifactIdMap(artifactId);
+        return (metadataMap != null) ? metadataMap.get(name) : null;
+    }    
 
     /**
      * Returns all metadata instances of this metamodel by package name.

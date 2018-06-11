@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.bitbucket.fermenter.mda.metadata.AbstractMetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 
@@ -75,7 +76,7 @@ public class CompositeMetadata extends MetadataElement implements Composite {
 	}
 
 	public String getProject() {
-	    MetadataRepository metadataRepository = 
+	    AbstractMetadataRepository metadataRepository = 
                 ModelInstanceRepositoryManager.getMetadataRepostory(MetadataRepository.class);
 		return (StringUtils.isNotBlank(project)) ? project : metadataRepository.getApplicationName();
 	}

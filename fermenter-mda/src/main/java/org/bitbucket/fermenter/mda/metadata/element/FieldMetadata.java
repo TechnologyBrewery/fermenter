@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.bitbucket.fermenter.mda.metadata.AbstractMetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.FormatMetadataManager;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
@@ -198,7 +199,7 @@ public class FieldMetadata extends MetadataElement implements Field {
     }
 
     protected String getDefaultProject() {
-        MetadataRepository metadataRepository = ModelInstanceRepositoryManager
+        AbstractMetadataRepository metadataRepository = ModelInstanceRepositoryManager
                 .getMetadataRepostory(MetadataRepository.class);
         return metadataRepository.getApplicationName();
     }

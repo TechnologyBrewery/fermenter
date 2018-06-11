@@ -38,6 +38,9 @@
 					<metadataDependencies>
 						<metadataDependency>stout-cookbook-domain</metadataDependency>
 					</metadataDependencies>
+					<generationTargets>
+						<generationTarget>stout-cookbook-domain</generationTarget>
+					</generationTargets>
 				</configuration>
 				<dependencies>
 					<dependency>

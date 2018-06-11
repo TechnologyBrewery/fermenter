@@ -6,6 +6,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.bitbucket.fermenter.mda.metadata.AbstractMetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.FormatMetadataManager;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.element.Field;
@@ -193,7 +194,7 @@ public class JavaField implements Field {
 	//java-specific generation methods:
 	
 	public String getJavaType() {
-		MetadataRepository metadataRepository = 
+		AbstractMetadataRepository metadataRepository = 
                 ModelInstanceRepositoryManager.getMetadataRepostory(MetadataRepository.class);
 		return JavaElementUtils.getJavaType(metadataRepository.getApplicationName(), getType());
 	}
@@ -209,7 +210,7 @@ public class JavaField implements Field {
 			if (isExternal()) {
 				importName = JavaElementUtils.getJavaImportType(getProject(), getType());
 			} else {
-				MetadataRepository metadataRepository = 
+				AbstractMetadataRepository metadataRepository = 
 		                ModelInstanceRepositoryManager.getMetadataRepostory(MetadataRepository.class);
 				importName = JavaElementUtils.getJavaImportType(metadataRepository.getApplicationName(), getType());	
 			}

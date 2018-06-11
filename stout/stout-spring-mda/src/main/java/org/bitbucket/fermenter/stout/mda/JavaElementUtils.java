@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.bitbucket.fermenter.mda.PackageManager;
+import org.bitbucket.fermenter.mda.metadata.AbstractMetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.Field;
@@ -71,7 +72,7 @@ public final class JavaElementUtils {
     }
 
     static String createFullyQualifiedName(String type, String nestedPackage) {
-        MetadataRepository metadataRepository = ModelInstanceRepositoryManager
+        AbstractMetadataRepository metadataRepository = ModelInstanceRepositoryManager
                 .getMetadataRepostory(MetadataRepository.class);
         return createFullyQualifiedName(type, nestedPackage, metadataRepository.getApplicationName());
     }

@@ -5,6 +5,7 @@ import java.util.Map;
 import org.apache.velocity.VelocityContext;
 import org.bitbucket.fermenter.mda.generator.AbstractGenerator;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
+import org.bitbucket.fermenter.mda.metadata.AbstractMetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.Service;
@@ -25,13 +26,13 @@ public class AppConfigGenerator extends AbstractGenerator {
      * {@inheritDoc}
      */
     public void generate(GenerationContext context) {
-        String currentApplication = context.getArtifactId();
         MetadataRepository metadataRepository = ModelInstanceRepositoryManager
                 .getMetadataRepostory(MetadataRepository.class);
 
-        Map<String, Service> services = metadataRepository.getServicesByMetadataContext(metadataContext,
-                currentApplication);
-        Map<String, Entity> entities = metadataRepository.getAllEntities();
+        // only generate those concepts that are part of the targeted generation run (vice all model instances):
+        Map<String, Service> services = metadataRepository.getServicesByMetadataContext(AbstractMetadataRepository.TARGETED_METADATA_CONTEXT);
+        Map<String, Entity> entities = metadataRepository.getEntitiesByMetadataContext(AbstractMetadataRepository.TARGETED_METADATA_CONTEXT);
+        
         VelocityContext vc;
         String fileName;
         String basefileName = context.getOutputFile();

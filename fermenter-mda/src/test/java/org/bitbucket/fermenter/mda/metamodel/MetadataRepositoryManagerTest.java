@@ -3,8 +3,6 @@ package org.bitbucket.fermenter.mda.metamodel;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import java.util.Properties;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -91,18 +89,18 @@ public class MetadataRepositoryManagerTest {
  */
 class TestMetadataRepository extends AbstractModelInstanceRepository {
 
-    public TestMetadataRepository(String basePackage) {
-        super(basePackage);
+    public TestMetadataRepository(ModelRepositoryConfiguration config) {
+        super(config);
     }
 
     @Override
-    public void load(Properties properties) {
+    public void load() {
         // do nothing
 
     }
 
     @Override
-    public void validate(Properties properties) {
+    public void validate() {
         // do nothing
 
     }

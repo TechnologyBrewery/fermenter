@@ -12,7 +12,7 @@ public class ModelRepositoryConfiguration {
 
     private String currentApplicationName;
     private String basePackage;
-    private List<String> generationTargets = new ArrayList<>();
+    private List<String> targetModelInstances = new ArrayList<>();
     private Map<String, MetadataUrl> metamodelInstanceLocations = new HashMap<>();
     
     /**
@@ -35,12 +35,12 @@ public class ModelRepositoryConfiguration {
         this.basePackage = basePackage;
     }
     
-    public List<String> getGenerationTargets() {
-        return generationTargets;
+    public List<String> getTargetModelInstances() {
+        return targetModelInstances;
     }
     
-    public void setGenerationTargets(List<String> generationTargets) {
-        this.generationTargets = generationTargets;
+    public void setTargetModelInstances(List<String> targetModelInstances) {
+        this.targetModelInstances = targetModelInstances;
     }
 
     public Map<String, MetadataUrl> getMetamodelInstanceLocations() {

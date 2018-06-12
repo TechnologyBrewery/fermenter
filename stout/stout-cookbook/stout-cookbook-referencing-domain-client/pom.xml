@@ -35,9 +35,9 @@
 						<metadataDependency>stout-cookbook-referencing-domain</metadataDependency>
 						<metadataDependency>stout-cookbook-domain</metadataDependency>
 					</metadataDependencies>
-					<generationTargets>
-						<generationTarget>stout-cookbook-referencing-domain</generationTarget>
-					</generationTargets>
+					<targetModelInstances>
+						<targetModelInstance>stout-cookbook-referencing-domain</targetModelInstance>
+					</targetModelInstances>
 				</configuration>
 				<dependencies>
 					<dependency>

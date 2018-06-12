@@ -84,7 +84,7 @@ public class MetadataRepository extends AbstractMetadataRepository {
      * @return Map of entities keyed by name
      */
     public Map<String, Entity> getEntitiesByMetadataContext(String context) {
-        return getEntitiesByMetadataContext(context, config.getCurrentApplicationName(), config.getGenerationTargets());
+        return getEntitiesByMetadataContext(context, config.getCurrentApplicationName(), config.getTargetModelInstances());
     }
 
     /**
@@ -238,7 +238,7 @@ public class MetadataRepository extends AbstractMetadataRepository {
      * @return Map of services keyed by name
      */
     public Map<String, Service> getServicesByMetadataContext(String context) {
-        return getServicesByMetadataContext(context, config.getCurrentApplicationName(), config.getGenerationTargets());
+        return getServicesByMetadataContext(context, config.getCurrentApplicationName(), config.getTargetModelInstances());
     }
 
     /**

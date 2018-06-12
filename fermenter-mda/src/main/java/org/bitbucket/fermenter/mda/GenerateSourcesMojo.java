@@ -17,7 +17,6 @@ import java.util.Properties;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.LogFactory;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.AbstractMojo;
@@ -43,7 +42,6 @@ import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 import org.bitbucket.fermenter.mda.metamodel.ModelRepositoryConfiguration;
 import org.bitbucket.fermenter.mda.util.MessageTracker;
-import org.bitbucket.krausening.Krausening;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -81,7 +79,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
      * Represents the artifactIds that will be targeted for generation if the metadataContext equals 'targeted'.
      */
     @Parameter(required = false)
-    private List<String> generationTargets;
+    private List<String> targetModelInstances;
 
     @Parameter(required = true, readonly = true, defaultValue = "${project.basedir}/src/generated/java")
     private String generatedCompileSourceRoot;
@@ -99,7 +97,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
 
     private MessageTracker messageTracker = MessageTracker.getInstance();
 
-    public void execute() throws MojoExecutionException {        
+    public void execute() throws MojoExecutionException {
         try {
             setup();
         } catch (Exception ex) {
@@ -222,31 +220,31 @@ public class GenerateSourcesMojo extends AbstractMojo {
         LOG.info("COMPLETE: validation of legacy and new metadata repository in " + (stop - start) + "ms");
 
     }
-    
+
     private ModelRepositoryConfiguration createMetadataConfiguration() throws MalformedURLException {
         ModelRepositoryConfiguration config = new ModelRepositoryConfiguration();
         config.setCurrentApplicationName(project.getArtifactId());
         config.setBasePackage(basePackage);
-        
+
         List<String> targetedArtifactIds = new ArrayList<>();
-        if (CollectionUtils.isEmpty(generationTargets)) {
+        if (CollectionUtils.isEmpty(targetModelInstances)) {
             targetedArtifactIds.add(project.getArtifactId());
-            
+
         } else {
-            targetedArtifactIds = generationTargets;
-            
+            targetedArtifactIds = targetModelInstances;
+
         }
-        
+
         if ((targetedArtifactIds.size() > 1) || (!targetedArtifactIds.contains(project.getArtifactId()))) {
-            LOG.info("Generation targets (" + targetedArtifactIds.size() + ") are different from project's local metadata (" + targetedArtifactIds.toString() +")");
+            LOG.info("Generation targets (" + targetedArtifactIds.size()
+                    + ") are different from project's local metadata (" + targetedArtifactIds.toString() + ")");
         }
-        
-        config.setGenerationTargets(targetedArtifactIds);
+
+        config.setTargetModelInstances(targetedArtifactIds);
         Map<String, MetadataUrl> metadataUrls = config.getMetamodelInstanceLocations();
         String projectUrl = new File(mainSourceRoot, "resources").toURI().toURL().toString();
         metadataUrls.put(project.getArtifactId(), new MetadataUrl(project.getArtifactId(), projectUrl));
         PackageManager.addMapping(project.getArtifactId(), basePackage);
-        
 
         if (metadataDependencies != null) {
             metadataDependencies.add(project.getArtifactId());

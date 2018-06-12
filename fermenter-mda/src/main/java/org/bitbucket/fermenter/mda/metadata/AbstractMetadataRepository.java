@@ -46,7 +46,8 @@ public abstract class AbstractMetadataRepository implements ModelInstanceReposit
 
     protected boolean useLocalMetadataOnly(String metadataContext) {
         boolean useLocalMetadataOnly = true;
-        if (StringUtils.isBlank(metadataContext) || ALL_METADATA_CONTEXT.equalsIgnoreCase(metadataContext)) {
+        if (StringUtils.isBlank(metadataContext) || ALL_METADATA_CONTEXT.equalsIgnoreCase(metadataContext)
+                || TARGETED_METADATA_CONTEXT.equalsIgnoreCase(metadataContext) ) {
             useLocalMetadataOnly = false;
 
         } else if (LOCAL_METADATA_CONTEXT.equalsIgnoreCase(metadataContext)) {

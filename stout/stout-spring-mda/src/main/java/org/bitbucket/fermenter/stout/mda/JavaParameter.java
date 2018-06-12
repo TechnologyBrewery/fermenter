@@ -2,6 +2,7 @@ package org.bitbucket.fermenter.stout.mda;
 
 import org.apache.commons.lang.StringUtils;
 import org.bitbucket.fermenter.mda.PackageManager;
+import org.bitbucket.fermenter.mda.metadata.AbstractMetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.element.Parameter;
 import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
@@ -40,7 +41,7 @@ public class JavaParameter implements Parameter {
 
 	private String getProjectValue() {
 		String project = getProject();
-		MetadataRepository metadataRepository = 
+		AbstractMetadataRepository metadataRepository = 
                 ModelInstanceRepositoryManager.getMetadataRepostory(MetadataRepository.class);
 		project = (project != null) ? project : metadataRepository.getApplicationName();
 		return project;

@@ -17,7 +17,7 @@ public abstract class AbstractGenerator implements Generator {
 
     protected String metadataContext;
 
-    protected final void generateFile(GenerationContext gc, VelocityContext vc) throws GenerationException {
+    protected final void generateFile(GenerationContext gc, VelocityContext vc) {
         try {
             Template template = gc.getEngine().getTemplate(gc.getTemplateName());
             long templateLastModified = template.getLastModified();
@@ -61,8 +61,7 @@ public abstract class AbstractGenerator implements Generator {
                     return;
                 }
                 boolean isContentEqual = FileUtils.contentEquals(destinationFile, tempFile);
-                if (!isContentEqual) {
-                    System.out.println("Updating file: " + destinationFile.getName());
+                if (!isContentEqual) {                    
                     destinationFile.delete();
                     tempFile.renameTo(destinationFile);
                 } else {

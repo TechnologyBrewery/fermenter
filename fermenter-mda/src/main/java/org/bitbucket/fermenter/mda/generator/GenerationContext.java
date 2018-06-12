@@ -13,6 +13,7 @@ public final class GenerationContext {
 	private boolean append;
 	private String basePackage;
 	private String projectName;
+	private String metadataContext;
 	private File basedir;
 	private File mainSourceDirectory;
 	private File generatedSourceDirectory;
@@ -109,7 +110,15 @@ public final class GenerationContext {
 		this.projectName = projectName;
 	}
 	
-	public String getArtifactId() {
+	public String getMetadataContext() {
+        return metadataContext;
+    }
+
+    public void setMetadataContext(String metadataContext) {
+        this.metadataContext = metadataContext;
+    }
+
+    public String getArtifactId() {
 		return artifactId;
 	}
 

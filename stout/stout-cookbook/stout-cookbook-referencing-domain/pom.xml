@@ -33,7 +33,6 @@
 					<profile>domain</profile>
 					<metadataDependencies>
 						<metadataDependency>stout-cookbook-domain</metadataDependency>
-
 					</metadataDependencies>
 				</configuration>
 				<dependencies>

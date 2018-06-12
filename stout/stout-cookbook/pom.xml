@@ -18,6 +18,7 @@
 		<module>stout-cookbook-domain</module>
 		<module>stout-cookbook-domain-client</module>
 		<module>stout-cookbook-referencing-domain</module>
+		<module>stout-cookbook-referencing-domain-client</module>
 		<module>stout-cookbook-domain-webapp</module>
 	</modules>
     

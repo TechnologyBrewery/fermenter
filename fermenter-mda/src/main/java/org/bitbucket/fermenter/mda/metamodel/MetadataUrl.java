@@ -7,10 +7,18 @@ import com.google.common.base.MoreObjects;
  */
 public class MetadataUrl {
 
-    private static final String URL = "url";
-    private static final String ARTIFACT_ID = "artifactId";
     private String artifactId;
     private String url;
+    
+    /**
+     * New instance
+     * @param artifactId artifact id
+     * @param url url to artifact id
+     */
+    public MetadataUrl(String artifactId, String url) {
+        this.artifactId = artifactId;
+        this.url = url;
+    }
 
     /**
      * Returns the artifactId for this resource (jar or local module).
@@ -49,7 +57,7 @@ public class MetadataUrl {
      */
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add(ARTIFACT_ID, artifactId).add(URL, url).toString();
+        return MoreObjects.toStringHelper(this).add("artifactId", artifactId).add("url", url).toString();
     }
 
 }

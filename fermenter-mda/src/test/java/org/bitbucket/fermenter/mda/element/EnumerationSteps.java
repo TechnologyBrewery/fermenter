@@ -10,13 +10,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.stream.Collectors;
 
 import org.bitbucket.fermenter.mda.generator.GenerationException;
-import org.bitbucket.fermenter.mda.metadata.StaticURLResolver;
 import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
-import org.bitbucket.fermenter.mda.metamodel.MetadataUrlResolver;
+import org.bitbucket.fermenter.mda.metamodel.MetadataUrl;
+import org.bitbucket.fermenter.mda.metamodel.ModelRepositoryConfiguration;
 import org.bitbucket.fermenter.mda.metamodel.element.Enum;
 import org.bitbucket.fermenter.mda.metamodel.element.EnumElement;
 import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
@@ -104,16 +103,15 @@ public class EnumerationSteps {
         encounteredException = null;
 
         try {
-            Properties metadataProperties = new Properties();
-            metadataProperties.setProperty("application.name", "fermenter-mda");
-            metadataProperties.setProperty("metadata.loader", StaticURLResolver.class.getName());
-            metadataProperties.setProperty(MetadataUrlResolver.METADATA_LOCATIONS, "fermenter-mda;");
-            metadataProperties.setProperty(MetadataUrlResolver.METADATA_LOCATION_PREFIX + "fermenter-mda",
-                    enumerationsDirectory.getParentFile().toURI().toString());
+            ModelRepositoryConfiguration config = new ModelRepositoryConfiguration();
+            config.setCurrentApplicationName("fermenter-mda");
+            config.setBasePackage(currentBasePackage);
+            Map<String, MetadataUrl> metadataUrlMap = config.getMetamodelInstanceLocations();
+            metadataUrlMap.put("fermenter-mda", new MetadataUrl("fermenter-mda", enumerationsDirectory.getParentFile().toURI().toString()));
 
-            metadataRepo = new DefaultModelInstanceRepository(currentBasePackage);
-            metadataRepo.load(metadataProperties);
-            metadataRepo.validate(metadataProperties);
+            metadataRepo = new DefaultModelInstanceRepository(config);
+            metadataRepo.load();
+            metadataRepo.validate();
 
         } catch (GenerationException e) {
             encounteredException = e;

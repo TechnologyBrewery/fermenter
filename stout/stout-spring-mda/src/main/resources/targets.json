@@ -164,7 +164,7 @@
 		"templateName": "templates/to.base.java.vm",
 		"outputFile": "${basePackage}/transfer/${entityName}Base.java",
 		"generator": "org.bitbucket.fermenter.stout.mda.generator.entity.EntityJavaGenerator",
-		"metadataContext": "all",
+		"metadataContext": "targeted",
 		"overwritable": true
 	},
 	{
@@ -172,7 +172,7 @@
 		"templateName": "templates/to.java.vm",
 		"outputFile": "${basePackage}/transfer/${entityName}.java",
 		"generator": "org.bitbucket.fermenter.stout.mda.generator.entity.EntityJavaGenerator",
-		"metadataContext": "all",
+		"metadataContext": "targeted",
 		"overwritable": false
 	},
 	{
@@ -180,7 +180,7 @@
 		"templateName": "templates/rest.client.base.config.java.vm",
 		"outputFile": "${basePackage}/client/config/RestClient${artifactId}BaseConfig.java",
 		"generator": "org.bitbucket.fermenter.stout.mda.generator.crosscutting.AppConfigGenerator",
-		"metadataContext": "all",
+		"metadataContext": null,
 		"overwritable": true
 	},
 	{
@@ -188,7 +188,7 @@
 		"templateName": "templates/delegate.maintenance.resource.java.vm",
 		"outputFile": "${basePackage}/client/resource/${entityName}MaintenanceResource.java",
 		"generator": "org.bitbucket.fermenter.stout.mda.generator.entity.PersistentEntityJavaGenerator",
-		"metadataContext": "all",
+		"metadataContext": "targeted",
 		"overwritable": true
 	},
 	{
@@ -196,7 +196,7 @@
 		"templateName": "templates/delegate.maintenance.interface.java.vm",
 		"outputFile": "${basePackage}/client/service/${entityName}MaintenanceDelegate.java",
 		"generator": "org.bitbucket.fermenter.stout.mda.generator.entity.PersistentEntityJavaGenerator",
-		"metadataContext": "all",
+		"metadataContext": "targeted",
 		"overwritable": true
 	},
 	{
@@ -204,7 +204,7 @@
 		"templateName": "templates/delegate.maintenance.impl.java.vm",
 		"outputFile": "${basePackage}/client/service/impl/${entityName}MaintenanceDelegateImpl.java",
 		"generator": "org.bitbucket.fermenter.stout.mda.generator.entity.PersistentEntityJavaGenerator",
-		"metadataContext": "all",
+		"metadataContext": "targeted",
 		"overwritable": true
 	},
 	{
@@ -212,7 +212,7 @@
 		"templateName": "templates/delegate.service.resource.java.vm",
 		"outputFile": "${basePackage}/client/resource/${serviceName}Resource.java",
 		"generator": "org.bitbucket.fermenter.stout.mda.generator.service.ServiceDelegateJavaGenerator",
-		"metadataContext": "all",
+		"metadataContext": "targeted",
 		"overwritable": true
 	},	
 	{
@@ -220,7 +220,7 @@
 		"templateName": "templates/delegate.service.interface.java.vm",
 		"outputFile": "${basePackage}/client/service/${serviceName}Delegate.java",
 		"generator": "org.bitbucket.fermenter.stout.mda.generator.service.ServiceDelegateJavaGenerator",
-		"metadataContext": "all",
+		"metadataContext": "targeted",
 		"overwritable": true
 	},
 	{
@@ -228,7 +228,7 @@
 		"templateName": "templates/delegate.service.impl.java.vm",
 		"outputFile": "${basePackage}/client/service/impl/${serviceName}DelegateImpl.java",
 		"generator": "org.bitbucket.fermenter.stout.mda.generator.service.ServiceDelegateJavaGenerator",
-		"metadataContext": "all",
+		"metadataContext": "targeted",
 		"overwritable": true
 	}
 ]

@@ -5,7 +5,8 @@ package org.bitbucket.fermenter.mda.metamodel;
  */
 public abstract class AbstractModelInstanceRepository implements ModelInstanceRepository {
 
-    protected String basePackage;
+    
+    protected ModelRepositoryConfiguration config;
 
     /**
      * Instantiates this instance with any applicable properties.
@@ -13,9 +14,9 @@ public abstract class AbstractModelInstanceRepository implements ModelInstanceRe
      * @param properties
      *            any applicable properties
      */
-    public AbstractModelInstanceRepository(String basePackage) {
-        this.basePackage = basePackage;
-
+    public AbstractModelInstanceRepository(ModelRepositoryConfiguration config) {
+        this.config = config;
+        
     }
 
     /**
@@ -24,7 +25,8 @@ public abstract class AbstractModelInstanceRepository implements ModelInstanceRe
      * @return base package name
      */
     public String getBasePackage() {
-        return basePackage;
+        return config.getBasePackage();
+        
     }
 
 }

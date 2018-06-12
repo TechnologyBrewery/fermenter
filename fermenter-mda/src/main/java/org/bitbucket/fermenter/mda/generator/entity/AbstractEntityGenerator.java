@@ -17,12 +17,9 @@ import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 public abstract class AbstractEntityGenerator extends AbstractGenerator {
 
     public void generate(GenerationContext context) throws GenerationException {
-        String currentApplication = context.getArtifactId();
-
         MetadataRepository metadataRepository = ModelInstanceRepositoryManager
                 .getMetadataRepostory(MetadataRepository.class);
-        Map<String, Entity> entityMap = metadataRepository.getEntitiesByMetadataContext(metadataContext,
-                currentApplication);
+        Map<String, Entity> entityMap = metadataRepository.getEntitiesByMetadataContext(metadataContext);
         Iterator<Entity> entities = entityMap.values().iterator();
 
         String fileName;

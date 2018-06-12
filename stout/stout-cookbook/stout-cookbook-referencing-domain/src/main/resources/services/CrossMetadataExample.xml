@@ -2,7 +2,7 @@
 <!DOCTYPE service PUBLIC "-//FERMENTER//DTD SERVICE//EN" "https://bitbucket.org/cpointe/fermenter/downloads/fermenter-2-service.dtd">
 
 <service>
-	<name>CrossReferenceExample</name>
+	<name>CrossReferenceExample</name>	
 	<documentation>A collection of operations that intermix local and remote metadata assets</documentation>
 	<operations>
 		<operation>

@@ -5,7 +5,6 @@ import java.util.Map;
 import org.apache.velocity.VelocityContext;
 import org.bitbucket.fermenter.mda.generator.AbstractGenerator;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
-import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.element.Service;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
@@ -16,13 +15,11 @@ import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 public abstract class AbstractServiceGenerator extends AbstractGenerator {
 
     @Override
-    public void generate(GenerationContext context) throws GenerationException {
-        String currentApplication = context.getArtifactId();
+    public void generate(GenerationContext context) {
         MetadataRepository metadataRepository = ModelInstanceRepositoryManager
                 .getMetadataRepostory(MetadataRepository.class);
 
-        Map<String, Service> services = metadataRepository.getServicesByMetadataContext(metadataContext,
-                currentApplication);
+        Map<String, Service> services = metadataRepository.getServicesByMetadataContext(metadataContext);
 
         String fileName;
         String baseFileName = context.getOutputFile();

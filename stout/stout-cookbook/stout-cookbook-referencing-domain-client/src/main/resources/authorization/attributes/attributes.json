@@ -1,0 +1,9 @@
+[
+	{
+		"id": "urn:stout:placeholder",
+		"category": "subject",
+		"type": "string",
+		"required": "false",
+		"attributePointClass": "org.bitbucket.fermenter.stout.authz.NoOpAttributePoint"
+	}
+]

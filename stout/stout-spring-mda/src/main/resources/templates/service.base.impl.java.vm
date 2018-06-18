@@ -8,6 +8,8 @@ import ${basePackage}.bizobj.*;
 
 import javax.inject.Inject;
 
+import org.bitbucket.fermenter.stout.authz.Action;
+
 import org.bitbucket.fermenter.stout.messages.AbstractMsgMgrAwareService;
 import org.bitbucket.fermenter.stout.messages.DefaultMessages;
 
@@ -44,6 +46,7 @@ public abstract class ${service.name}BaseServiceImpl extends AbstractMsgMgrAware
 	public ValueServiceResponse<${operation.wrappedReturnType}> ${operation.lowercaseName}(${operation.signature}) {
 	#end
 		initMsgMgr(messages);
+		assertAuthorization(PATH + "/${operation.lowercaseName}", Action.EXECUTE);
 	
 		
 	#if( $operation.isReturnTypeCollection() )

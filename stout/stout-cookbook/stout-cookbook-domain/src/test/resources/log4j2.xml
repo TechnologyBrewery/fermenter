@@ -9,8 +9,11 @@
 		<Logger name="org.bitbucket.askllc.fermenter" level="debug" additivity="false">
 			<AppenderRef ref="Console" />
 		</Logger>
+		<Logger name="org.bitbucket.fermenter.stout.authz" level="info" additivity="false ">
+			<AppenderRef ref="Console"/>
+		</Logger>		
 		<Root level="warn">
 			<AppenderRef ref="Console" />
-		</Root>
+		</Root>		
 	</Loggers>
 </Configuration>

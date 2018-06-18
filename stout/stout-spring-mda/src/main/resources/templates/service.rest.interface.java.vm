@@ -11,8 +11,13 @@ import javax.ws.rs.Path;
  * 
  * GENERATED STUB CODE - PLEASE *DO* MODIFY
  */
-@Path("${service.name}Service")
+@Path(${service.name}Service.PATH)
 public interface ${service.name}Service extends ${service.name}BaseService {
+
+    /**
+     * Path for this service. Path is used multiple places, so having it in a constant ensures they are all consistent.
+     */
+    public static final String PATH = "${service.name}Service";
 	
 	// Developers should add any service operations here that cannot be defined via the PIM
 	

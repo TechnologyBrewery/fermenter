@@ -63,6 +63,18 @@
 			},
 			{
 				"name": "dataSourceProperties"
+			},
+			{
+				"name": "pdpXml"
+			},
+			{
+				"name": "pdpAttributesJson"
+			},
+			{
+				"name": "pdpAuthorizationProperties"
+			},
+			{
+				"name": "pdpPolicy"
 			}
 		]
 	},

@@ -18,8 +18,12 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.MappedSubclas
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.MappedSubclassBMaintenanceService;
 import org.bitbucket.fermenter.stout.messages.AbstractMsgMgrAwareTestSupport;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -39,6 +43,12 @@ public class InheritanceModelingTest extends AbstractMsgMgrAwareTestSupport {
 
     @Inject
     private MappedSubclassBMaintenanceService childBService;
+    
+    @Before
+    public void setUp() {
+        Authentication authentication = new UsernamePasswordAuthenticationToken("testUser", "somePassword");
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
 
     @Test
     public void testSaveMappedSubclassren() throws Exception {

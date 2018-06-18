@@ -34,8 +34,13 @@ import java.math.BigDecimal;
  *
  * Generated Code - DO NOT MODIFY
  */
-@Path("${entity.name}")
+@Path(${entity.name}MaintenanceService.PATH)
 public interface ${entity.name}MaintenanceService {
+
+    /**
+     * Path for this service. Path is used multiple places, so having it in a constant ensures they are all consistent.
+     */
+    public static final String PATH = "${entity.name}";
 
     #if ( !$entity.idFields.isEmpty() )
         #set ($idFieldJavaType = ${entity.idFields.values().iterator().next().javaType})

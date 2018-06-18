@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.bitbucket.fermenter.stout.authz.Action;
+
 import org.bitbucket.fermenter.stout.messages.AbstractMsgMgrAwareService;
 import org.bitbucket.fermenter.stout.messages.DefaultMessages;
 
@@ -60,8 +62,9 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 	@Override
 	public ValueServiceResponse<${entity.name}BO> saveOrUpdate(${entity.name}BO entity) {
 		initMsgMgr(messages);
+		assertAuthorization(PATH, Action.SAVE);
 		${entity.name}BO persistedEntity = entity.save();
-		ValueServiceResponse<${entity.name}BO> response = new ValueServiceResponse<${entity.name}BO>(persistedEntity);
+		ValueServiceResponse<${entity.name}BO> response = new ValueServiceResponse<>(persistedEntity);
 		addAllMsgMgrToResponse(response);
 		return response;
 	}
@@ -73,6 +76,7 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 	@Override
 	public VoidServiceResponse delete(${idFieldJavaType} ${idFieldName}) {
 		initMsgMgr(messages);
+		assertAuthorization(PATH, Action.DELETE);
 		${entity.name}BO entityToDelete = ${entity.name}BO.findByPrimaryKey(${idFieldName});
 		if (entityToDelete != null) {
 			entityToDelete.delete();
@@ -89,6 +93,7 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 	@Override
 	public ValueServiceResponse<${entity.name}BO> findByPrimaryKey(${idFieldJavaType} ${idFieldName}) {
 		initMsgMgr(messages);
+		assertAuthorization(PATH, Action.RETRIEVE);
 		${entity.name}BO retrievedEntity = ${entity.name}BO.findByPrimaryKey(${idFieldName} #if (!$entity.relations.isEmpty()), true#end);
 		ValueServiceResponse<${entity.name}BO> response = new ValueServiceResponse<${entity.name}BO>(retrievedEntity);
 		addAllMsgMgrToResponse(response);

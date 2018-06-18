@@ -37,7 +37,7 @@ public class SimpleDomainBusinessServicesIT extends AbstractArquillianTestSuppor
 	public void deleteSimpleDomains() throws Exception {
 		ResteasyClient client = new ResteasyClientBuilder().build();
         client.target(deploymentURL.toURI()).path("rest").path("SimpleDomainManagerService")
-                .path("deleteAllSimpleDomains").request().post(null).close();
+                .path("deleteAllSimpleDomains").request().header("username", "testUser").post(null).close();
 	}
 
 	@Test

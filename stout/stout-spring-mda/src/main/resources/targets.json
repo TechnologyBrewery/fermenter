@@ -230,5 +230,37 @@
 		"generator": "org.bitbucket.fermenter.stout.mda.generator.service.ServiceDelegateJavaGenerator",
 		"metadataContext": "targeted",
 		"overwritable": true
+	},
+	{
+		"name": "pdpXml",
+		"templateName": "templates/pdp.xml.vm",
+		"outputFile": "authorization/pdp.xml",
+		"generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
+		"metadataContext": "local",
+		"overwritable": false
+	},
+	{
+		"name": "pdpAttributesJson",
+		"templateName": "templates/pdp.default.attributes.json.vm",
+		"outputFile": "authorization/attributes/attributes.json",
+		"generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
+		"metadataContext": "local",
+		"overwritable": false
+	},
+	{
+		"name": "pdpAuthorizationProperties",
+		"templateName": "templates/pdp.stout.authorization.properties.vm",
+		"outputFile": "krausening/stout-authorization.properties",
+		"generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
+		"metadataContext": "local",
+		"overwritable": false
+	},
+	{
+		"name": "pdpPolicy",
+		"templateName": "templates/pdp.policy.xml.vm",
+		"outputFile": "authorization/policies/policy.xml",
+		"generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
+		"metadataContext": "local",
+		"overwritable": false
 	}
 ]

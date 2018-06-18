@@ -11,8 +11,13 @@ import javax.ws.rs.Path;
  * 
  * GENERATED STUB CODE - PLEASE *DO* MODIFY
  */
-@Path("EnumerationBasedService")
+@Path(EnumerationBasedService.PATH)
 public interface EnumerationBasedService extends EnumerationBasedBaseService {
+
+    /**
+     * Path for this service. Path is used multiple places, so having it in a constant ensures they are all consistent.
+     */
+    public static final String PATH = "EnumerationBasedService";
 	
 	// Developers should add any service operations here that cannot be defined via the PIM
 	

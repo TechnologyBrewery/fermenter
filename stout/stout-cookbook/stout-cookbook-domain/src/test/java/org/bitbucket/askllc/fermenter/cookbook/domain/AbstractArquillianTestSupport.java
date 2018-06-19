@@ -34,7 +34,7 @@ public abstract class AbstractArquillianTestSupport {
                         .importDirectory("src/generated/resources").as(GenericArchive.class),
                 "WEB-INF/classes", Filters.include("^.*\\.properties$"));
         }
-        war.addAsWebInfResource("base-application-context.xml");
+        war.addAsWebInfResource("base-stout-cookbook-domain-application-context.xml");
         war.addAsWebInfResource("stout-cookbook-domain-application-context.xml");
         war.addAsWebInfResource("h2-tomcat-ds-context.xml", "context.xml");
         war.addAsWebResource("log4j2.xml");

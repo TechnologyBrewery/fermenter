@@ -38,35 +38,35 @@ public abstract class ${service.name}BaseServiceImpl extends AbstractMsgMgrAware
 	 */
 	@Transactional(propagation=Propagation.${operation.transactionAttribute})
 	@Override
-	#if($operation.isReturnTypeCollection())	 
-	public ValueServiceResponse<Collection<${operation.wrappedReturnType}>> ${operation.lowercaseName}(${operation.signature}) {
+	#if($operation.return.isMany())	 
+	public ValueServiceResponse<Collection<${operation.return.javaType}>> ${operation.uncapitalizedName}(${operation.signature}) {
 	#elseif($operation.isResponseTypeVoid())
-	public VoidServiceResponse ${operation.lowercaseName}(${operation.signature}) {
+	public VoidServiceResponse ${operation.uncapitalizedName}(${operation.signature}) {
 	#else 
-	public ValueServiceResponse<${operation.wrappedReturnType}> ${operation.lowercaseName}(${operation.signature}) {
+	public ValueServiceResponse<${operation.return.javaType}> ${operation.uncapitalizedName}(${operation.signature}) {
 	#end
 		initMsgMgr(messages);
-		assertAuthorization(PATH + "/${operation.lowercaseName}", Action.EXECUTE);
+		assertAuthorization(PATH + "/${operation.uncapitalizedName}", Action.EXECUTE);
 	
 		
-	#if( $operation.isReturnTypeCollection() )
-		Collection<${operation.wrappedReturnType}> result =
+	#if( $operation.return.isMany() )
+		Collection<${operation.return.javaType}> result =
 	#elseif( $operation.isResponseTypeVoid() )
 	#else
-		${operation.wrappedReturnType} result =
+		${operation.return.javaType} result =
 	#end
-		${operation.lowercaseName}Impl(
+		${operation.uncapitalizedName}Impl(
 	#foreach( $parameter in $operation.parameters )			
 		${parameter.name} #if( $foreach.hasNext ),#end
 	#end
 		);
 		
-	#if($operation.isReturnTypeCollection())
-		ValueServiceResponse<Collection<${operation.wrappedReturnType}>> response = new ValueServiceResponse<>(result);
+	#if($operation.return.isMany())
+		ValueServiceResponse<Collection<${operation.return.javaType}>> response = new ValueServiceResponse<>(result);
 	#elseif( $operation.isResponseTypeVoid() )
 		VoidServiceResponse response = new VoidServiceResponse();
 	#else
-		ValueServiceResponse<${operation.wrappedReturnType}> response = new ValueServiceResponse<>(result);
+		ValueServiceResponse<${operation.return.javaType}> response = new ValueServiceResponse<>(result);
 	#end
 	
 		addAllMsgMgrToResponse(response);
@@ -84,18 +84,18 @@ public abstract class ${service.name}BaseServiceImpl extends AbstractMsgMgrAware
 			#end
 		#end
 	#end
-	#if($operation.isReturnTypeCollection())	 
+	#if($operation.return.isMany())	 
 	 * @return A {@link Collection} of {@link ${operation.returnManyTypeAsBO}}
 	#elseif($operation.isResponseTypeVoid()) 	 
 	 * @return A instance of {@link ${operation.returnManyTypeAsBO}}
 	#end
 	 */
-	#if($operation.isReturnTypeCollection())	 
-	protected abstract Collection<${operation.wrappedReturnType}> ${operation.lowercaseName}Impl(${operation.signature});
+	#if($operation.return.isMany())	 
+	protected abstract Collection<${operation.return.javaType}> ${operation.uncapitalizedName}Impl(${operation.signature});
 	#elseif($operation.isResponseTypeVoid())
-	protected abstract void ${operation.lowercaseName}Impl(${operation.signature});
+	protected abstract void ${operation.uncapitalizedName}Impl(${operation.signature});
 	#else
-	protected abstract ${operation.wrappedReturnType} ${operation.lowercaseName}Impl(${operation.signature});
+	protected abstract ${operation.return.javaType} ${operation.uncapitalizedName}Impl(${operation.signature});
 	#end 
  
 #end

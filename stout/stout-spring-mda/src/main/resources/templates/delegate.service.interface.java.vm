@@ -2,7 +2,7 @@ package ${basePackage}.client.service;
 
 import feign.Param;
 
-#foreach( $import in $delegateImports )
+#foreach( $import in $service.imports )
 import $import;
 #end
 
@@ -30,22 +30,20 @@ public interface ${service.name}Delegate {
 			#end
 		#end
 	#end
-	#if($operation.isReturnTypeCollection())
+	#if($operation.return.isMany())
 	 * @return A service response-wrapped {@link Collection>} of {@link ${operation.returnManyType}}
 	#elseif(!$operation.isResponseTypeVoid())
-	 * @return A service response-wrapped instance of {@link ${operation.wrappedReturnType}}
+	 * @return A service response-wrapped instance of {@link ${operation.return.javaType}}
 	#else
 	 * @return An empty service response
 	#end
 	 */
-	#if($operation.isReturnTypeCollection())
-	Collection<${operation.wrappedReturnType}> ${operation.lowercaseName}(${operation.getSignatureParametersWithParameterAnnotations("Param")});
+	#if($operation.return.isMany())
+	Collection<${operation.return.javaType}> ${operation.uncapitalizedName}(${operation.getSignatureParametersWithParameterAnnotations("Param")});
 	#elseif($operation.isResponseTypeVoid())
-	void ${operation.lowercaseName}(${operation.getSignatureParametersWithParameterAnnotations("Param")});
-	#elseif($operation.isReturnTypeEntity())
-	${operation.returnType} ${operation.lowercaseName}(${operation.getSignatureParametersWithParameterAnnotations("Param")});
+	void ${operation.uncapitalizedName}(${operation.getSignatureParametersWithParameterAnnotations("Param")});
 	#else
-	${operation.wrappedReturnType} ${operation.lowercaseName}(${operation.getSignatureParametersWithParameterAnnotations("Param")});
+	${operation.return.javaType} ${operation.uncapitalizedName}(${operation.getSignatureParametersWithParameterAnnotations("Param")});
 	#end
 
 #end

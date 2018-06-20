@@ -7,15 +7,14 @@ import org.apache.commons.logging.LogFactory;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 
-
-
+@Deprecated
 public class ParameterMetadata extends MetadataElement implements Parameter {
 
 	private String name;
 	private String documentation;
 	private String type;
 	private String project;
-	private Boolean many = Boolean.FALSE;
+	private Boolean many;
 	
 	private static Log log = LogFactory.getLog(ParameterMetadata.class);
 	
@@ -80,7 +79,7 @@ public class ParameterMetadata extends MetadataElement implements Parameter {
 	}
 
 	public boolean isMany() {
-		return many.booleanValue();
+		return many != null? many.booleanValue() : Boolean.FALSE;
 	}
 	
 	public void setMany(String many) {

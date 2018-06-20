@@ -14,26 +14,17 @@ public abstract class AbstractMetadataRepository implements ModelInstanceReposit
 
     private static final Log LOG = LogFactory.getLog(AbstractMetadataRepository.class);
 
-    /** Indicates that all metadata should be used. */
-    public static final String ALL_METADATA_CONTEXT = "all";
-
-    /** Indicates that only local metadata should be used (e.g., current application.name). */
-    public static final String LOCAL_METADATA_CONTEXT = "local";
-
-    /** Indicates that a target set of metadata for a specific list of artifactIds should be used. */
-    public static final String TARGETED_METADATA_CONTEXT = "targeted";
-    
     protected ModelRepositoryConfiguration config;
 
     /**
-	 * Instantiates this instance with any applicable properties.
-	 * 
-	 * @param config
-	 *            model configuration
-	 */
-	protected AbstractMetadataRepository(ModelRepositoryConfiguration config) {
-	    this.config = config;
-	}
+     * Instantiates this instance with any applicable properties.
+     * 
+     * @param config
+     *            model configuration
+     */
+    protected AbstractMetadataRepository(ModelRepositoryConfiguration config) {
+        this.config = config;
+    }
 
     /**
      * Returns the application name.
@@ -46,11 +37,12 @@ public abstract class AbstractMetadataRepository implements ModelInstanceReposit
 
     protected boolean useLocalMetadataOnly(String metadataContext) {
         boolean useLocalMetadataOnly = true;
-        if (StringUtils.isBlank(metadataContext) || ALL_METADATA_CONTEXT.equalsIgnoreCase(metadataContext)
-                || TARGETED_METADATA_CONTEXT.equalsIgnoreCase(metadataContext) ) {
+        if (StringUtils.isBlank(metadataContext)
+                || ModelRepositoryConfiguration.ALL_METADATA_CONTEXT.equalsIgnoreCase(metadataContext)
+                || ModelRepositoryConfiguration.TARGETED_METADATA_CONTEXT.equalsIgnoreCase(metadataContext)) {
             useLocalMetadataOnly = false;
 
-        } else if (LOCAL_METADATA_CONTEXT.equalsIgnoreCase(metadataContext)) {
+        } else if (ModelRepositoryConfiguration.LOCAL_METADATA_CONTEXT.equalsIgnoreCase(metadataContext)) {
             useLocalMetadataOnly = true;
 
         } else {
@@ -63,7 +55,7 @@ public abstract class AbstractMetadataRepository implements ModelInstanceReposit
     }
 
     protected boolean useTargetedMetadata(String metadataContext) {
-        return (TARGETED_METADATA_CONTEXT.equalsIgnoreCase(metadataContext));
+        return (ModelRepositoryConfiguration.TARGETED_METADATA_CONTEXT.equalsIgnoreCase(metadataContext));
     }
 
 }

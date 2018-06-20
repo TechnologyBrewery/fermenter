@@ -10,12 +10,20 @@ import org.aeonbits.owner.KrauseningConfig.KrauseningSources;
 public interface MetamodelConfig extends KrauseningConfig {
 
     /**
-     * Returns the locations within src/main/resources where enumeration metadata can be found.
+     * Returns the locations within src/main/resources where enumeration model instances can be found.
      * @return path location to enumerations
      */
     @Key("enumerations.relative.path")
     @DefaultValue("enumerations")
     public String getEnumerationsRelationPath();
+    
+    /**
+     * Returns the locations within src/main/resources where service model instances can be found.
+     * @return path location to services
+     */
+    @Key("services.relative.path")
+    @DefaultValue("services")
+    public String getServicesRelationPath();    
     
     /**
      * Returns the metadata resolver to use to lookup metadata.

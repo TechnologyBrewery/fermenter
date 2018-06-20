@@ -9,14 +9,17 @@ import org.bitbucket.fermenter.mda.metadata.AbstractMetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.Field;
-import org.bitbucket.fermenter.mda.metadata.element.Parameter;
 import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
+import org.bitbucket.fermenter.mda.metamodel.element.MetamodelType;
+import org.bitbucket.fermenter.mda.metamodel.element.Parameter;
 import org.bitbucket.fermenter.stout.mda.java.JavaTypeManager;
 import org.codehaus.plexus.util.StringUtils;
 
 public final class JavaElementUtils {
+
+    private static final String DOT = ".";
 
     private static final String ENUMERATION = ".enumeration.";
 
@@ -25,10 +28,111 @@ public final class JavaElementUtils {
     /** Needs to be a {@link List} and not {@link Collection} due to JAX-RS parameter requirements. */
     static final String PARAM_COLLECTION_TYPE = "List";
 
+    private static DefaultModelInstanceRepository modelInstanceRepository = ModelInstanceRepositoryManager
+            .getMetadataRepostory(DefaultModelInstanceRepository.class);
+    private static MetadataRepository legacyMetadataRepository = ModelInstanceRepositoryManager
+            .getMetadataRepostory(MetadataRepository.class);
+
     private JavaElementUtils() {
         // prevent instantiation of all static class
     }
 
+    /**
+     * Returns a full qualified java class name for the given package and short name. Base package is treated as a local
+     * reference.
+     * 
+     * @param packageName
+     *            package (e.g., org.bitbucket.fermenter)
+     * @param name
+     *            class (e.f., FooClass)
+     * @return fully qualified name (e.g., org.bitbucket.fermenter.bizobj.FooClassBO,
+     *         org.bitbucket.fermenter.transfer.FooClass)
+     */
+    static String getJavaImportByPackageAndType(String packageName, String name) {
+        return getJavaImportByPackageAndType(packageName, name, true);
+    }
+
+    /**
+     * Returns a full qualified java class name for the given package and short name while also specifying if the base
+     * package represents a local or remove reference. The local/remote distinction helps control whether or not you
+     * will get a BO or TO import for an entity.
+     * 
+     * @param packageName
+     *            package (e.g., org.bitbucket.fermenter)
+     * @param name
+     *            class (e.f., FooClass)
+     * @param if
+     *            the base package is local or not
+     * @return fully qualified name (e.g., org.bitbucket.fermenter.bizobj.FooClassBO,
+     *         org.bitbucket.fermenter.transfer.FooClass)
+     */
+    static String getJavaImportByPackageAndType(String packageName, String type, boolean basePackageLocal) {
+        MetamodelType metamodelType = MetamodelType.getMetamodelType(packageName, type);
+
+        String javaImportType = null;
+        if (metamodelType == null) {
+            javaImportType = VOID;
+
+        } else if (MetamodelType.ENTITY.equals(metamodelType)) {
+            String basePackage = modelInstanceRepository.getBasePackage();
+            Entity entity = legacyMetadataRepository.getEntity(type);
+            String entityPackage = StringUtils.isBlank(packageName) ? basePackage : packageName;
+            if (basePackage.equals(entityPackage) && basePackageLocal) {
+                // this is a local reference, so use the business object:
+                javaImportType = entityPackage + ".bizobj." + type + "BO";
+            } else {
+                // this is a remote reference, so use the transfer object:
+                javaImportType = entity.getNamespace() + ".transfer." + type;
+
+            }
+
+        } else if (MetamodelType.ENUMERATION.equals(metamodelType)) {
+            Enumeration enumeration = modelInstanceRepository.getEnumeration(type);
+            javaImportType = enumeration.getPackage() + ENUMERATION + type;
+
+        } else {
+            // Attempt to resolve primitive type:
+            javaImportType = JavaTypeManager.getJavaType(type);
+        }
+
+        return javaImportType;
+
+    }
+
+    /**
+     * Returns a short java class name for the given package and short name. Base package is treated as a local
+     * reference.
+     * 
+     * @param packageName
+     *            package (e.g., org.bitbucket.fermenter)
+     * @param name
+     *            class (e.f., FooClass)
+     * @return short name (e.g., FooClassBO, FooClass)
+     */
+    static String getJavaShortNameByPackageAndType(String packageName, String type) {
+        String fullyQualifiedJavaClass = getJavaImportByPackageAndType(packageName, type);
+        return getJavaShortName(fullyQualifiedJavaClass);
+    }
+
+    /**
+     * Returns a short java class name for the given package and short name while also specifying if the base package
+     * represents a local or remove reference. The local/remote distinction helps control whether or not you will get a
+     * BO or TO import for an entity.
+     * 
+     * @param packageName
+     *            package (e.g., org.bitbucket.fermenter)
+     * @param name
+     *            class (e.f., FooClass)
+     * @param if
+     *            the base package is local or not
+     * @return short name (e.g., FooClassBO, FooClass)
+     */
+    static String getJavaShortNameByPackageAndType(String packageName, String type, boolean basePackageLocal) {
+        String fullyQualifiedJavaClass = getJavaImportByPackageAndType(packageName, type, basePackageLocal);
+        return getJavaShortName(fullyQualifiedJavaClass);
+    }
+
+    @Deprecated
     static String getJavaImportType(String appName, String type) {
         String javaImportType = null;
         if (VOID.equals(type)) {
@@ -84,14 +188,28 @@ public final class JavaElementUtils {
         return sb.toString();
     }
 
+    @Deprecated
     public static String getJavaType(String appName, String type) {
         String javaType = getJavaImportType(appName, type);
-        int index = (javaType != null) ? javaType.lastIndexOf(".") : 0;
+        return getJavaShortName(javaType);
+
+    }
+
+    /**
+     * Utility to trim a fully qualified class name down to the short name
+     * 
+     * @param fullyQualifiedJavaClassName
+     *            fully qualified class name (e.g., org.bitbucket.fermenter.enumeration.BarEnumeration)
+     * @return short class name (e.g., BarEnumeration)
+     */
+    static String getJavaShortName(String fullyQualifiedJavaClassName) {
+        String result = fullyQualifiedJavaClassName;
+        int index = (fullyQualifiedJavaClassName != null) ? fullyQualifiedJavaClassName.lastIndexOf(DOT) : 0;
         if (index > 0) {
-            return javaType.substring(index + 1);
-        } else {
-            return type;
+            result = fullyQualifiedJavaClassName.substring(index + 1);
         }
+
+        return result;
     }
 
     static String createSignatureParameters(List<Parameter> parameterList) {
@@ -265,5 +383,30 @@ public final class JavaElementUtils {
      */
     public static String getBaseJndiName(String basePackage) {
         return (basePackage != null) ? basePackage.replace('.', '/') : "";
+    }
+
+    /**
+     * Ensures proper Javadoc formatting for documentation content. For example, making sure there is a period at the
+     * end of the first line so that previews of the content aren't limited to an incomplete set of characters.
+     * 
+     * @param documentation
+     *            input
+     * @return formatted input value
+     */
+    public static String formatForJavadoc(String documentation) {
+        return ((StringUtils.isNotBlank(documentation)) && (documentation.endsWith(DOT))) ? documentation + DOT
+                : documentation;
+
+    }
+
+    /**
+     * Returns true if the import should be included.
+     * 
+     * @param importValue
+     *            import to check
+     * @return whether or not to include
+     */
+    static boolean checkImportAgainstDefaults(String importValue) {
+        return (!importValue.startsWith("java.lang."));
     }
 }

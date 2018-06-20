@@ -12,6 +12,7 @@ import org.apache.commons.logging.LogFactory;
  * relevant to the concept of an operation.  Absolutely no implementation-specific
  * functionality should reside in this class.
  */
+@Deprecated
 public class OperationMetadata extends MetadataElement implements Operation {
 	
 	private String name;

@@ -3,7 +3,7 @@ package ${basePackage}.client.service.impl;
 import ${basePackage}.client.resource.${service.name}Resource;
 import ${basePackage}.client.service.${service.name}Delegate;
 
-#foreach( $import in $delegateImports )
+#foreach( $import in $service.imports )
 import $import;
 #end
 
@@ -30,25 +30,21 @@ public class ${service.name}DelegateImpl implements ${service.name}Delegate {
 	/**
 	 * {@inheritDoc}
 	 */
-	#if($operation.isReturnTypeCollection())
-	public Collection<${operation.wrappedReturnType}> ${operation.lowercaseName}(${operation.signature}) {
+	#if($operation.return.isMany())
+	public Collection<${operation.return.javaType}> ${operation.uncapitalizedName}(${operation.signature}) {
 	#elseif($operation.isResponseTypeVoid())
-	public void ${operation.lowercaseName}(${operation.signature}) {
-	#elseif($operation.isReturnTypeEntity())
-	public ${operation.returnType} ${operation.lowercaseName}(${operation.signature}) {
+	public void ${operation.uncapitalizedName}(${operation.signature}) {
 	#else
-	public ${operation.wrappedReturnType} ${operation.lowercaseName}(${operation.signature}) {
+	public ${operation.return.javaType} ${operation.uncapitalizedName}(${operation.signature}) {
 	#end
-	#if($operation.isReturnTypeCollection())
-		ValueServiceResponse<Collection<${operation.wrappedReturnType}>> response;
-	#elseif($operation.isReturnTypeEntity())
-		ValueServiceResponse<${operation.returnType}>
+	#if($operation.return.isMany())
+		ValueServiceResponse<Collection<${operation.return.javaType}>> response;
 	#elseif($operation.isResponseTypeVoid())
 		VoidServiceResponse
 	#else
-		ValueServiceResponse<${operation.wrappedReturnType}> response;
+		ValueServiceResponse<${operation.return.javaType}> response;
 	#end
-	response = ${service.name.toLowerCase()}Resource.${operation.lowercaseName}(
+	response = ${service.name.toLowerCase()}Resource.${operation.uncapitalizedName}(
 	#foreach( $parameter in $operation.parameters )
 				${parameter.name}
 		#if( $foreach.hasNext ),#end

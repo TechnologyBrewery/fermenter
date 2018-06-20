@@ -44,7 +44,7 @@ public class EnumerationSteps {
     protected GenerationException encounteredException;
     protected DefaultModelInstanceRepository metadataRepo;
 
-    @After("@enumeration")
+    @After("@enumeration,@service")
     public void cleanUp() {
         if (enumerationFile != null) {
             enumerationFile.delete();

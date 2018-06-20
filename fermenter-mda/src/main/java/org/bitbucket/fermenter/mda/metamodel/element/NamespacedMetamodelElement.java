@@ -4,7 +4,9 @@ import java.util.Objects;
 
 import org.bitbucket.fermenter.mda.element.ValidatedElement;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.google.common.base.MoreObjects;
 
 /**
@@ -13,9 +15,10 @@ import com.google.common.base.MoreObjects;
 public abstract class NamespacedMetamodelElement extends MetamodelElement
         implements ValidatedElement, NamespacedMetamodel {
 
-    private static final String NAME = "name";
-    private static final String PACKAGE = "package";
+    protected static final String NAME = "name";
+    protected static final String PACKAGE = "package";
 
+    @JsonInclude(Include.NON_NULL)
     @JsonProperty(value = PACKAGE, required = true)
     protected String packageName;
 

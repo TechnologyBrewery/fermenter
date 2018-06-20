@@ -23,12 +23,12 @@ public class ${service.name}ServiceImpl extends ${service.name}BaseServiceImpl i
 	 * {@inheritDoc}
 	 */
 	@Override
-	#if($operation.isReturnTypeCollection())	 
-	protected Collection<${operation.wrappedReturnType}> ${operation.lowercaseName}Impl(${operation.signature}) {
+	#if($operation.return.isMany())	 
+	protected Collection<${operation.return.javaType}> ${operation.uncapitalizedName}Impl(${operation.signature}) {
 	#elseif($operation.isResponseTypeVoid())
-	protected void ${operation.lowercaseName}Impl(${operation.signature}) {
+	protected void ${operation.uncapitalizedName}Impl(${operation.signature}) {
 	#else
-	protected ${operation.wrappedReturnType} ${operation.lowercaseName}Impl(${operation.signature}) {
+	protected ${operation.return.javaType} ${operation.uncapitalizedName}Impl(${operation.signature}) {
 	#end
 	//TODO: Add Business Logic Here
 	

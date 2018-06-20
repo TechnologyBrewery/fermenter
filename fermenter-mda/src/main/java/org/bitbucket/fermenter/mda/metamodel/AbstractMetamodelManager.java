@@ -49,6 +49,8 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
     private Map<String, T> completeMetadataMap = new HashMap<>();
 
     private static MessageTracker messageTracker = MessageTracker.getInstance();
+    
+    protected ModelRepositoryConfiguration repoConfiguration;
 
     protected MetamodelConfig config = KrauseningConfigFactory.create(MetamodelConfig.class);
 
@@ -86,7 +88,8 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
         }
     }
 
-    protected void loadMetadata(MetadataUrl metadataUrl) {
+    protected void loadMetadata(MetadataUrl metadataUrl, ModelRepositoryConfiguration repoConfiguration) {
+        this.repoConfiguration = repoConfiguration;
         if (StringUtils.isBlank(metadataUrl.getUrl())) {
             messageTracker.addErrorMessage("Metadata for artifactId '" + metadataUrl.getArtifactId()
                     + "' can not be found!  Please ensure the proper jar is on your classpath.");
@@ -284,5 +287,37 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
     public Map<String, T> getMetadataElementWithoutPackage() {
         return completeMetadataMap;
     }
+    
+    /**
+     * Retrieves services based on a generation context.
+     * @param context type of generation target context being used
+     * @return map of services
+     */
+    public Map<String, T> getMetadataElementByContext(String context) {       
+        Map<String, T> metamodelInstanceMap;
+        if (AbstractModelInstanceRepository.useLocalMetadataOnly(context)) {            
+            metamodelInstanceMap = getMetadataByArtifactIdMap(repoConfiguration.getCurrentApplicationName());
+            
+        } else if (AbstractModelInstanceRepository.useTargetedMetadata(context)) {
+            metamodelInstanceMap = new HashMap<>();
+            List<String> targetedArtifactIds = repoConfiguration.getTargetModelInstances();
+            for (String artifactId : targetedArtifactIds) {
+                Map<String, T> targetedModelMap = getMetadataByArtifactIdMap(artifactId);
+                metamodelInstanceMap.putAll(targetedModelMap);
+                if (targetedModelMap.size() == 0) {
+                    log.warn("No instances were found for targeted artifactId '" + artifactId + "'!");
+                    
+                }
+                
+            }
+            
+        } else {
+            metamodelInstanceMap = getMetadataByArtifactIdMap(repoConfiguration.getCurrentApplicationName());
+            
+        }
+
+        return metamodelInstanceMap;
+    }
+    
 
 }

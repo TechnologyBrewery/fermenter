@@ -129,11 +129,13 @@ public class MetadataRepository extends AbstractMetadataRepository {
         return EntityMetadataManager.getEntities(applicationName);
     }
 
+    @Deprecated
     public Service getService(String serviceName) {
         Map<String, Service> serviceMap = getAllServices();
         return serviceMap.get(serviceName);
     }
-
+    
+    @Deprecated
     public Service getService(String applicationName, String serviceName) {
         Map<String, Service> serviceMap = getAllServices(applicationName);
         return serviceMap.get(serviceName);
@@ -237,6 +239,7 @@ public class MetadataRepository extends AbstractMetadataRepository {
      *            current application to use for lookup if a local lookup
      * @return Map of services keyed by name
      */
+    @Deprecated
     public Map<String, Service> getServicesByMetadataContext(String context) {
         return getServicesByMetadataContext(context, config.getCurrentApplicationName(), config.getTargetModelInstances());
     }
@@ -251,6 +254,7 @@ public class MetadataRepository extends AbstractMetadataRepository {
      *            current application to use for lookup if a local lookup
      * @return Map of services keyed by name
      */
+    @Deprecated
     public Map<String, Service> getServicesByMetadataContext(String context, String currentApplication) {
         return getServicesByMetadataContext(context, currentApplication, null);
     }
@@ -267,6 +271,7 @@ public class MetadataRepository extends AbstractMetadataRepository {
      *            list of artifact ids for which to find metadata
      * @return Map of services keyed by name
      */
+    @Deprecated
     public Map<String, Service> getServicesByMetadataContext(String context, String currentApplication,
             List<String> targetedArtifactIds) {
         Map<String, Service> serviceMap;

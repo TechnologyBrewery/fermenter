@@ -3,6 +3,7 @@ package org.bitbucket.fermenter.mda.metadata.element;
 import java.util.HashMap;
 import java.util.Map;
 
+@Deprecated
 public class ServiceMetadata extends MetadataElement implements Service {
 
 	private String name;

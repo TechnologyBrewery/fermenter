@@ -4,11 +4,11 @@ import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
 import org.bitbucket.fermenter.mda.metamodel.element.EnumerationElement;
 
 /**
- * Responsible for maintaining the list of enumeration metadata elements in the system.
+ * Responsible for maintaining the list of enumeration model instances elements in the system.
  */
 class EnumerationModelInstanceManager extends AbstractMetamodelManager<Enumeration> {
 
-    private static final EnumerationModelInstanceManager INSTANCE = new EnumerationModelInstanceManager();
+    private static final EnumerationModelInstanceManager instance = new EnumerationModelInstanceManager();
 
     /**
      * Returns the singleton instance of this class.
@@ -16,7 +16,7 @@ class EnumerationModelInstanceManager extends AbstractMetamodelManager<Enumerati
      * @return singleton
      */
     public static EnumerationModelInstanceManager getInstance() {
-        return INSTANCE;
+        return instance;
     }
 
     /**

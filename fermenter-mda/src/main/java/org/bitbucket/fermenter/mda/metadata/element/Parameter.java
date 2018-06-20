@@ -1,5 +1,6 @@
 package org.bitbucket.fermenter.mda.metadata.element;
 
+@Deprecated
 public interface Parameter {
 
 	public String getName();

@@ -1,117 +1,83 @@
 package org.bitbucket.fermenter.stout.mda;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.bitbucket.fermenter.mda.metadata.element.Operation;
-import org.bitbucket.fermenter.mda.metadata.element.Parameter;
-import org.bitbucket.fermenter.mda.metadata.element.Service;
+import org.apache.commons.collections4.CollectionUtils;
+import org.bitbucket.fermenter.mda.metamodel.element.BaseServiceDecorator;
+import org.bitbucket.fermenter.mda.metamodel.element.Operation;
+import org.bitbucket.fermenter.mda.metamodel.element.Service;
 
-public class JavaService implements Service {
+/**
+ * Decorates a {@link Service} with Java-specific capabilities.
+ */
+public class JavaService extends BaseServiceDecorator implements Service, JavaPackagedElement {
 
-	private Service service;
-	private Map<String, Operation> decoratedOperationMap;
-	private Set<String> imports;
+    protected List<Operation> decoratedOperations;
+    protected Set<String> imports;
 
-	public JavaService(Service serviceToDecorate) {
-		if (serviceToDecorate == null) {
-			throw new IllegalArgumentException("JavaService must be instatiated with a non-null service!");
-		}
-		service = serviceToDecorate;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public JavaService(Service serviceToDecorate) {
+        super(serviceToDecorate);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public String getName() {
-		return service.getName();
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	public String getDocumentation() {
-		return service.getDocumentation();
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	public String getApplicationName() {
-		return service.getApplicationName();
-	}
-	
-	public boolean hasManyParameters() {
-		for (Operation op : getOperations().values()) {
-			for (Parameter param : op.getParameters()) {
-				if (param.isMany()) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public List<Operation> getOperations() {
+        if (decoratedOperations == null) {
+            List<Operation> serviceOperations = super.getOperations();
+            if (CollectionUtils.isEmpty(serviceOperations)) {
+                decoratedOperations = Collections.emptyList();
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public Map<String, Operation> getOperations() {
-		if (decoratedOperationMap == null) {
-			Map<String, Operation> serviceOperationMap = service.getOperations();
-			if ((serviceOperationMap == null) || (serviceOperationMap.size() == 0)) {
-				decoratedOperationMap = Collections.emptyMap();
+            } else {
+                decoratedOperations = new ArrayList<>();
+                for (Operation operation : serviceOperations) {
+                    decoratedOperations.add(new JavaOperation(operation));
 
-			} else {
-				decoratedOperationMap = new HashMap<>();
-				for (Operation o : serviceOperationMap.values()) {
-					decoratedOperationMap.put(o.getName(), new JavaOperation(o));
+                }
 
-				}
+            }
+        }
 
-			}
-		}
+        return decoratedOperations;
+    }
 
-		return decoratedOperationMap;
-	}
+    /**
+     * Returns all the imports needed for operations on this service.
+     * 
+     * @return operation imports
+     */
+    public Set<String> getOperationImports() {
+        Set<String> importSet = new HashSet<>();
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public Operation getOperation(String name) {
-		Map<String, Operation> decoratedMap = getOperations();
-		return decoratedMap.get(name);
-	}
+        List<Operation> operations = getOperations();
+        for (Operation operation : operations) {
+            JavaOperation javaOperation = (JavaOperation) operation;
+            importSet.addAll(javaOperation.getImports());
+        }
 
-	public Set<String> getOperationImports() {
-		Set<String> importSet = new HashSet<>();
+        return importSet;
+    }
 
-		JavaOperation operation;
-		Map<String, Operation> operationCollection = getOperations();
-		Iterator<Operation> operationIterator = operationCollection.values().iterator();
-		while (operationIterator.hasNext()) {
-			operation = (JavaOperation)operationIterator.next();
-			importSet.addAll(operation.getImports());
-		}
+    /**
+     * Returns all imports related to this service, including those uses on operations.
+     * 
+     * @return service imports
+     */
+    public Set<String> getImports() {
+        if (imports == null) {
+            imports = new TreeSet<>();
+            imports.addAll(getOperationImports());
+        }
 
-		return importSet;
-	}
+        return imports;
+    }
 
-	public Set<String> getImports() {
-		if (imports == null) {
-			imports = new TreeSet<>();
-			imports.addAll(getOperationImports());
-		}
-
-		return imports;
-	}
-
-	public String getBaseJndiName(String basePackage) {
-		return (basePackage != null) ? basePackage.replace('.', '/') : "";
-	}
-	
 }

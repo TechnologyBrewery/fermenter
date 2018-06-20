@@ -2,6 +2,7 @@ package org.bitbucket.fermenter.mda.metamodel;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -9,6 +10,10 @@ import org.apache.commons.logging.LogFactory;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metamodel.element.EnumElement;
 import org.bitbucket.fermenter.mda.metamodel.element.EnumerationElement;
+import org.bitbucket.fermenter.mda.metamodel.element.OperationElement;
+import org.bitbucket.fermenter.mda.metamodel.element.ParameterElement;
+import org.bitbucket.fermenter.mda.metamodel.element.ReturnElement;
+import org.bitbucket.fermenter.mda.metamodel.element.ServiceElement;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -40,12 +45,13 @@ public class LegacyMetadataConverter {
 
         try {
             convertLegacyEnumerations(applicationName, basePackage, sourceMain);
+            convertLegacyServices(applicationName, basePackage, sourceMain);
 
         } catch (Exception e) {
             throw new GenerationException("Could not convert legacy metadata!", e);
         }
 
-        log.info("Coverted " + convertedFileCount + " file(s)");
+        log.info("Converted " + convertedFileCount + " file(s)");
         log.info("########################################################################");
         log.info("");
     }
@@ -78,6 +84,103 @@ public class LegacyMetadataConverter {
 
         }
 
+    }
+
+    private void convertLegacyServices(String applicationName, String basePackage, File sourceMain) throws IOException {
+        // convert legacy metadata to new metadata:
+        org.bitbucket.fermenter.mda.metadata.MetadataRepository legacyMetadataRepo = ModelInstanceRepositoryManager
+                .getMetadataRepostory(org.bitbucket.fermenter.mda.metadata.MetadataRepository.class);
+        Map<String, org.bitbucket.fermenter.mda.metadata.element.Service> legacyServices = legacyMetadataRepo
+                .getAllServices(applicationName);
+        for (org.bitbucket.fermenter.mda.metadata.element.Service legacyService : legacyServices.values()) {
+            ServiceElement newService = new ServiceElement();
+            newService.setName(legacyService.getName());
+            newService.setPackage(basePackage);
+            newService.setDocumentation(legacyService.getDocumentation());
+
+            for (org.bitbucket.fermenter.mda.metadata.element.Operation legacyOperation : legacyService.getOperations()
+                    .values()) {
+                OperationElement newOperation = convertLegacyOperation(legacyOperation);
+
+                newService.getOperations().add(newOperation);
+            }
+
+            File newServiceFile = new File(sourceMain, "resources/services/" + newService.getName() + ".json");
+            log.info("\tConverting service '" + newService.getName() + "' to location "
+                    + newServiceFile.getAbsolutePath());
+            objectMapper.writerWithDefaultPrettyPrinter().writeValue(newServiceFile, newService);
+            convertedFileCount++;
+
+        }
+
+    }
+
+    private OperationElement convertLegacyOperation(
+            org.bitbucket.fermenter.mda.metadata.element.Operation legacyOperation) {
+        OperationElement newOperation = new OperationElement();
+        newOperation.setName(legacyOperation.getName());
+        newOperation.setDocumentation(legacyOperation.getDocumentation());
+        if (getUndefaultedValue(legacyOperation, "transactionAttribute") != null) {
+            newOperation.setTransactionAttribute(legacyOperation.getTransactionAttribute());
+        }
+        if (getUndefaultedValue(legacyOperation, "compressWithGzip") != null
+                && legacyOperation.isCompressedWithGzip()) {
+            newOperation.setCompressedWithGZip(true);
+        }
+
+        ReturnElement returnElement = convertLegacyReturn(legacyOperation);
+        newOperation.setReturn(returnElement);
+
+        for (org.bitbucket.fermenter.mda.metadata.element.Parameter legacyParameter : legacyOperation.getParameters()) {
+            ParameterElement newParameter = convertLegacyParameters(legacyParameter);
+
+            newOperation.getParameters().add(newParameter);
+        }
+        return newOperation;
+    }
+
+    private ReturnElement convertLegacyReturn(org.bitbucket.fermenter.mda.metadata.element.Operation legacyOperation) {
+        ReturnElement returnElement = new ReturnElement();
+        if (getUndefaultedValue(legacyOperation, "responseEncoding") != null) {
+            returnElement.setResponseEncoding(legacyOperation.getResponseEncoding());
+        }
+        if (getUndefaultedValue(legacyOperation, "returnManyType") != null
+                && legacyOperation.getReturnManyType() != null) {
+            returnElement.setType(legacyOperation.getReturnManyType());
+            returnElement.setMany(true);
+
+        } else {
+            returnElement.setType(legacyOperation.getReturnType());
+
+        }
+        return returnElement;
+    }
+
+    private ParameterElement convertLegacyParameters(
+            org.bitbucket.fermenter.mda.metadata.element.Parameter legacyParameter) {
+        ParameterElement newParameter = new ParameterElement();
+        newParameter.setName(legacyParameter.getName());
+        newParameter.setType(legacyParameter.getType());
+        if (getUndefaultedValue(legacyParameter, "many") != null && legacyParameter.isMany()) {
+            newParameter.setMany(true);
+        }
+        newParameter.setDocumentation(legacyParameter.getDocumentation());
+        return newParameter;
+    }
+
+    private Object getUndefaultedValue(Object instance, String variable) {
+        Object value = null;
+
+        try {
+            Field field = instance.getClass().getDeclaredField(variable);
+            field.setAccessible(true);
+            value = field.get(instance);
+
+        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+            throw new GenerationException("Coud not determine current value of field '" + variable + "'!", e);
+        }
+
+        return value;
     }
 
 }

@@ -9,6 +9,15 @@ import java.util.Map;
  * Provides configuration information to the a {@link ModelInstanceRepository}.
  */
 public class ModelRepositoryConfiguration {
+    
+    /** Indicates that all metadata should be used. */
+    public static final String ALL_METADATA_CONTEXT = "all";
+
+    /** Indicates that only local metadata should be used (e.g., current application.name). */
+    public static final String LOCAL_METADATA_CONTEXT = "local";
+
+    /** Indicates that a target set of metadata for a specific list of artifactIds should be used. */
+    public static final String TARGETED_METADATA_CONTEXT = "targeted"; 
 
     private String currentApplicationName;
     private String basePackage;

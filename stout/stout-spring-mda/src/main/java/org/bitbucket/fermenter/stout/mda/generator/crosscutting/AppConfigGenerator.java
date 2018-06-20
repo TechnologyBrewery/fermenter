@@ -5,11 +5,11 @@ import java.util.Map;
 import org.apache.velocity.VelocityContext;
 import org.bitbucket.fermenter.mda.generator.AbstractGenerator;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
-import org.bitbucket.fermenter.mda.metadata.AbstractMetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.Service;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
+import org.bitbucket.fermenter.mda.metamodel.ModelRepositoryConfiguration;
 import org.bitbucket.fermenter.stout.mda.java.JavaGeneratorUtil;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -30,8 +30,8 @@ public class AppConfigGenerator extends AbstractGenerator {
                 .getMetadataRepostory(MetadataRepository.class);
 
         // only generate those concepts that are part of the targeted generation run (vice all model instances):
-        Map<String, Service> services = metadataRepository.getServicesByMetadataContext(AbstractMetadataRepository.TARGETED_METADATA_CONTEXT);
-        Map<String, Entity> entities = metadataRepository.getEntitiesByMetadataContext(AbstractMetadataRepository.TARGETED_METADATA_CONTEXT);
+        Map<String, Service> services = metadataRepository.getServicesByMetadataContext(ModelRepositoryConfiguration.TARGETED_METADATA_CONTEXT);
+        Map<String, Entity> entities = metadataRepository.getEntitiesByMetadataContext(ModelRepositoryConfiguration.TARGETED_METADATA_CONTEXT);
         
         VelocityContext vc;
         String fileName;

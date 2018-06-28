@@ -1,6 +1,7 @@
 package org.bitbucket.fermenter.mda;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
@@ -42,15 +43,19 @@ import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 import org.bitbucket.fermenter.mda.metamodel.ModelRepositoryConfiguration;
 import org.bitbucket.fermenter.mda.util.MessageTracker;
+import org.bitbucket.krausening.Krausening;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.io.Files;
 
 /**
  * Executes the Fermenter MDA process.
  */
 @Mojo(name = "generate-sources", defaultPhase = LifecyclePhase.GENERATE_SOURCES, requiresDependencyResolution = ResolutionScope.COMPILE)
 public class GenerateSourcesMojo extends AbstractMojo {
+
+    private static final String METAMODEL_PROPERTIES = "metamodel.properties";
 
     private static final org.apache.commons.logging.Log LOG = LogFactory.getLog(GenerateSourcesMojo.class);
 
@@ -97,7 +102,9 @@ public class GenerateSourcesMojo extends AbstractMojo {
 
     private MessageTracker messageTracker = MessageTracker.getInstance();
 
-    public void execute() throws MojoExecutionException {
+    public void execute() throws MojoExecutionException {  
+        suppressKrauseningWarnings();
+        
         try {
             setup();
         } catch (Exception ex) {
@@ -107,7 +114,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
         generateSources();
 
     }
-
+    
     private void setup() throws Exception {
         if (metadataDependencies == null) {
             metadataDependencies = new ArrayList<>();
@@ -363,6 +370,36 @@ public class GenerateSourcesMojo extends AbstractMojo {
         if (LOG.isInfoEnabled()) {
             long stop = System.currentTimeMillis();
             LOG.info("Generation completed in " + (stop - start) + "ms");
+        }
+    }
+    
+    /**
+     * We don't have great fine-grained control of logging inside the plugin, so default some Krausening values when they aren't specified so warnings
+     * don't pollute the Maven output.
+     */
+    private void suppressKrauseningWarnings() {
+        if (System.getProperty(Krausening.BASE_LOCATION) == null) {
+            File tempKrauseningLocation = Files.createTempDir();
+            File tempBaseLocation = new File(tempKrauseningLocation, "base");
+            tempBaseLocation.mkdir();
+            File tempExtLocation = new File(tempKrauseningLocation, "ext");
+            tempExtLocation.mkdir();
+            try {
+                Properties p = new Properties();
+                String comments = "default file to suppress warnings";
+                p.store(new FileWriter(new File(tempBaseLocation, METAMODEL_PROPERTIES)), comments);
+                p.store(new FileWriter(new File(tempExtLocation, METAMODEL_PROPERTIES)), comments);
+                
+            } catch (IOException e) {
+                // do nothing, this is just to suppress some warnings...
+            }
+            
+            System.setProperty(Krausening.BASE_LOCATION, tempBaseLocation.getAbsolutePath());
+            System.setProperty(Krausening.EXTENSIONS_LOCATION, tempExtLocation.getAbsolutePath());
+        }
+        
+        if (System.getProperty(Krausening.KRAUSENING_PASSWORD) == null) {
+            System.setProperty(Krausening.KRAUSENING_PASSWORD, "stub");
         }
     }
 

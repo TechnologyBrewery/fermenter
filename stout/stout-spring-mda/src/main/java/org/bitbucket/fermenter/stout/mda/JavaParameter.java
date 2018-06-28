@@ -1,143 +1,107 @@
 package org.bitbucket.fermenter.stout.mda;
 
-import org.apache.commons.lang.StringUtils;
-import org.bitbucket.fermenter.mda.PackageManager;
-import org.bitbucket.fermenter.mda.metadata.AbstractMetadataRepository;
-import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
-import org.bitbucket.fermenter.mda.metadata.element.Parameter;
-import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
-import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
-import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
+import org.bitbucket.fermenter.mda.metamodel.element.BaseParameterDecorator;
+import org.bitbucket.fermenter.mda.metamodel.element.MetamodelType;
+import org.bitbucket.fermenter.mda.metamodel.element.Parameter;
 
-public class JavaParameter implements Parameter {
+/**
+ * Decorates a {@link Parameter} with Java-specific capabilities.
+ */
+public class JavaParameter extends BaseParameterDecorator implements Parameter, JavaPackagedElement {
 
-	private Parameter parameter;
-	private String importName;
-	private String javaType;
-	private String uncapitalizedJavaType;
-	private String basePackage;
-	private String signatureName;
-	private String signatureSuffix;
+    protected String javaImport;
+    protected String javaType;
+    protected String signatureName;
+    protected String signatureSuffix;
 
-	public JavaParameter(Parameter parameterToDecorate) {
-		parameter = parameterToDecorate;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public JavaParameter(Parameter parameterToDecorate) {
+        super(parameterToDecorate);
+    }
 
-	public String getName() {
-		return parameter.getName();
-	}
-	
-	public String getDocumentation() {
-		return parameter.getDocumentation();
-	}
+    /**
+     * Returns the java "short" class name for this parameter (e.g., BigDecimal).
+     * 
+     * @return java short class name
+     */
+    public String getJavaType() {
+        if (javaType == null) {
+            javaType = JavaElementUtils.getJavaShortName(getImport());
+        }
+        return javaType;
+    }
 
-	public String getType() {
-		return parameter.getType();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getImport() {
+        if (javaImport == null) {
+            javaImport = JavaElementUtils.getJavaImportByPackageAndType(getPackage(), getType());
+        }
+        return javaImport;
+    }
 
-	public String getProject() {
-		return parameter.getProject();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getDocumentation() {
+        return JavaElementUtils.formatForJavadoc(super.getDocumentation());
+    }
 
-	private String getProjectValue() {
-		String project = getProject();
-		AbstractMetadataRepository metadataRepository = 
-                ModelInstanceRepositoryManager.getMetadataRepostory(MetadataRepository.class);
-		project = (project != null) ? project : metadataRepository.getApplicationName();
-		return project;
-	}
+    /**
+     * Determines whether or not the parameter is an entity.
+     * 
+     * @return is entity?
+     */
+    public boolean isEntity() {
+        return MetamodelType.ENTITY.equals(MetamodelType.getMetamodelType(getPackage(), getType()));
+    }
 
-	public String getImport() {
-		if (importName == null ) {
-			importName = JavaElementUtils.getJavaImportType(getProjectValue(), getType());
-		}
+    /**
+     * Determines whether or not the parameter is an enumeration.
+     * 
+     * @return is enumeration?
+     */
+    public boolean isEnumeration() {
+        return MetamodelType.ENUMERATION.equals(MetamodelType.getMetamodelType(getPackage(), getType()));
+    }
 
-		return importName;
-	}
+    /**
+     * The name of the method signature.
+     * 
+     * @return signature name
+     */
+    public String getSignatureName() {
+        if (signatureName != null) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(getName()).append(getSignatureSuffix());
+            signatureName = sb.toString();
+        }
 
-	public String getJavaType() {
-		if (javaType == null) {
-			javaType = JavaElementUtils.getJavaType(getProjectValue(), getType());
-		}
-		return javaType;
-	}
+        return signatureName;
+    }
 
-	public String getJavaTypeAsBO() {
-		String localJavaType = getJavaType();
-		if (isEntity()) {
-			localJavaType += "BO";
-		}
-		return localJavaType;
-	}
-	
-	public String getUncapitalizedJavaType() {
-		if (uncapitalizedJavaType == null) {
-			uncapitalizedJavaType = StringUtils.uncapitalize(getJavaType());
-		}
-		return uncapitalizedJavaType;
-	}
+    /**
+     * A signature suffix (e.g., Impl).
+     * 
+     * @return Returns the signatureSuffix
+     */
+    public String getSignatureSuffix() {
+        return (signatureSuffix != null) ? signatureSuffix : "";
+    }
 
-	public boolean isEntity() {
-		MetadataRepository metadataRepository = 
-                ModelInstanceRepositoryManager.getMetadataRepostory(MetadataRepository.class);
-		return metadataRepository.getEntity(getType()) != null;
-	}
+    /**
+     * Sets the signature suffix (e.g., Impl).
+     * 
+     * @param signatureSuffix
+     *            The signatureSuffix to set.
+     */
+    public void setSignatureSuffix(String signatureSuffix) {
+        this.signatureSuffix = signatureSuffix;
+    }
 
-	public boolean isEnumeration() {
-		MetadataRepository metadataRepository = 
-                ModelInstanceRepositoryManager.getMetadataRepostory(MetadataRepository.class);
-		return metadataRepository.getEnumeration(getType()) != null;
-	}
-
-	public Enumeration getEnumeration() {
-	    DefaultModelInstanceRepository metadataRepository = 
-                ModelInstanceRepositoryManager.getMetadataRepostory(DefaultModelInstanceRepository.class);
-		Enumeration e = metadataRepository.getEnumeration(getType());
-		return (e != null) ? new JavaEnumeration(e) : null;
-	}
-
-	public String getUppercaseName() {
-		return StringUtils.capitalize( getName() );
-	}
-
-	public String getBasePackage() {
-		if (basePackage == null) {
-			String projectName = getProjectValue();
-			basePackage = PackageManager.getBasePackage(projectName);
-		}
-
-		return basePackage;
-	}
-
-	/**
-	 * The parameter name with a comma, if appropriate
-	 */
-	public String getSignatureName() {
-		if (signatureName != null) {
-			StringBuilder sb = new StringBuilder();
-			sb.append(getName()).append(getSignatureSuffix());
-			signatureName = sb.toString();
-		}
-
-		return signatureName;
-	}
-
-	/**
-	 * @return Returns the signatureSuffix.
-	 */
-	public String getSignatureSuffix() {
-		return (signatureSuffix != null) ? signatureSuffix : "";
-	}
-
-	/**
-	 * @param signatureSuffix The signatureSuffix to set.
-	 */
-	public void setSignatureSuffix(String signatureSuffix) {
-		this.signatureSuffix = signatureSuffix;
-	}
-
-
-	public boolean isMany() {
-		return parameter.isMany();
-	}
 }

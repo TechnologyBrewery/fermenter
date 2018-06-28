@@ -28,6 +28,7 @@ import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
 public interface ${service.name}BaseService {
 
 #foreach( $operation in $service.operations )
+
 	/**
 	#if ($operation.documentation)
 	 * ${operation.documentation}
@@ -44,10 +45,10 @@ public interface ${service.name}BaseService {
 			#end
 		#end
 	#end
-	#if($operation.isReturnTypeCollection())	 
-	 * @return A service response-wrapped {@link Collection>} of {@link ${operation.returnManyTypeAsBO}}
+	#if($operation.return.isMany())	 
+	 * @return A service response-wrapped {@link Collection>} of {@link ${operation.return.javaType}}
 	#elseif(!$operation.isResponseTypeVoid())	 
-	 * @return A service response-wrapped instance of {@link ${operation.wrappedReturnType}}
+	 * @return A service response-wrapped instance of {@link ${operation.return.javaType}}
 	#else
 	 * @return An empty service response
 	#end
@@ -58,20 +59,20 @@ public interface ${service.name}BaseService {
 	#else
 	@POST
 	#end
-	@Path("${operation.lowercaseName}")
-	@Produces("application/json;charset=${operation.responseEncoding}")
+	@Path("${operation.uncapitalizedName}")
+	@Produces("application/json;charset=${operation.return.responseEncoding}")
 	#if($operation.isCompressedWithGzip())
     @GZIP
     #end
 	#if($operation.hasEntityParameters())
 	@Consumes(MediaType.APPLICATION_JSON)
 	#end
-	#if($operation.isReturnTypeCollection())	 
-	ValueServiceResponse<Collection<${operation.wrappedReturnType}>> ${operation.lowercaseName}(${operation.getSignatureParametersWithJaxRS()});
+	#if($operation.return.isMany())	 
+	ValueServiceResponse<Collection<${operation.return.javaType}>> ${operation.uncapitalizedName}(${operation.getSignatureParametersWithJaxRS()});
 	#elseif($operation.isResponseTypeVoid())
-	public VoidServiceResponse ${operation.lowercaseName}(${operation.getSignatureParametersWithJaxRS()});
+	public VoidServiceResponse ${operation.uncapitalizedName}(${operation.getSignatureParametersWithJaxRS()});
 	#else 
-	ValueServiceResponse<${operation.wrappedReturnType}> ${operation.lowercaseName}(${operation.getSignatureParametersWithJaxRS()});
+	ValueServiceResponse<${operation.return.javaType}> ${operation.uncapitalizedName}(${operation.getSignatureParametersWithJaxRS()});
 	#end
 
 #end

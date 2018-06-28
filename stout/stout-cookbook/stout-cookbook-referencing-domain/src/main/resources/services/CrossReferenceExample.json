@@ -1,0 +1,28 @@
+{
+  "package" : "org.bitbucket.askllc.fermenter.cookbook.referencing.domain",
+  "name" : "CrossReferenceExample",
+  "documentation" : "A collection of operations that intermix local and remote metadata assets",
+  "operations" : [ {
+    "name" : "DoSomethingAndReturnARemoteEntity",
+    "transactionAttribute" : "Supports",
+    "parameters" : [ ],
+    "return" : {
+      "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+      "type" : "SimpleDomain",
+      "many" : true
+    }
+  }, {
+    "name" : "DoSomethingWithARemoteEntityParam",
+    "transactionAttribute" : "Supports",
+    "parameters" : [ {
+      "name" : "remoteEntity",
+      "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+      "type" : "SimpleDomain",
+      "documentation" : "A remote entity as an example"
+    } ],
+    "return" : {
+      "type" : "LocalDomain",
+      "many" : true
+    }
+  } ]
+}

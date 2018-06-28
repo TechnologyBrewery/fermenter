@@ -1,11 +1,13 @@
 package org.bitbucket.fermenter.mda.metamodel;
 
+import org.apache.commons.lang.StringUtils;
+import org.bitbucket.fermenter.mda.util.MessageTracker;
+
 /**
  * Provides common methods needed for exposing model instances
  */
 public abstract class AbstractModelInstanceRepository implements ModelInstanceRepository {
 
-    
     protected ModelRepositoryConfiguration config;
 
     /**
@@ -16,7 +18,7 @@ public abstract class AbstractModelInstanceRepository implements ModelInstanceRe
      */
     public AbstractModelInstanceRepository(ModelRepositoryConfiguration config) {
         this.config = config;
-        
+
     }
 
     /**
@@ -26,7 +28,7 @@ public abstract class AbstractModelInstanceRepository implements ModelInstanceRe
      */
     public String getBasePackage() {
         return config.getBasePackage();
-        
+
     }
 
 }

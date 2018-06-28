@@ -5,21 +5,24 @@ import java.util.Map;
 import org.apache.velocity.VelocityContext;
 import org.bitbucket.fermenter.mda.generator.AbstractGenerator;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
-import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
-import org.bitbucket.fermenter.mda.metadata.element.Service;
+import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
+import org.bitbucket.fermenter.mda.metamodel.element.Service;
 
 /**
  * Iterates through each service in the meta-model and enables the generation of a single file for each service.
  */
 public abstract class AbstractServiceGenerator extends AbstractGenerator {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void generate(GenerationContext context) {
-        MetadataRepository metadataRepository = ModelInstanceRepositoryManager
-                .getMetadataRepostory(MetadataRepository.class);
+        DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
+                .getMetadataRepostory(DefaultModelInstanceRepository.class);
 
-        Map<String, Service> services = metadataRepository.getServicesByMetadataContext(metadataContext);
+        Map<String, Service> services = metadataRepository.getServicesByContext(metadataContext);
 
         String fileName;
         String baseFileName = context.getOutputFile();

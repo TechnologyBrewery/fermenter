@@ -1,43 +1,33 @@
 package org.bitbucket.fermenter.stout.mda.generator.service;
 
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.apache.velocity.VelocityContext;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
-import org.bitbucket.fermenter.mda.metadata.element.Service;
+import org.bitbucket.fermenter.mda.generator.service.AbstractServiceGenerator;
+import org.bitbucket.fermenter.mda.metamodel.element.Service;
 import org.bitbucket.fermenter.stout.mda.JavaService;
+import org.bitbucket.fermenter.stout.mda.RemoteJavaService;
+import org.bitbucket.fermenter.stout.mda.java.JavaGeneratorUtil;
 
 /**
- * Iterates through service instances, passing {@link JavaService}s instance to the templates.
+ * Iterates through service instances, passing {@link JavaRemoteService}s instance to the templates.
  *
  */
-public class ServiceDelegateJavaGenerator extends ServiceJavaGenerator {
+public class ServiceDelegateJavaGenerator extends AbstractServiceGenerator {
 
-    private static final String BIZOBJ_SUBPACKAGE = ".bizobj.";
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void populateVelocityContext(VelocityContext vc, Service service, GenerationContext generationContext) {
-        super.populateVelocityContext(vc, service, generationContext);
-        JavaService javaService = (JavaService) vc.get(SERVICE);
+        RemoteJavaService javaService = new RemoteJavaService(service);
+        vc.put("service", javaService);
+        vc.put("basePackage", generationContext.getBasePackage());
 
-        // migrate BO references to TO references - fix in FER-94:
-        Set<String> delegateImports = new TreeSet<>();
-        Set<String> serviceImports = javaService.getImports();
-        for (String serviceImport : serviceImports) {
-            if (serviceImport.contains(BIZOBJ_SUBPACKAGE)) {
-                if (serviceImport.startsWith(generationContext.getBasePackage())) {
-                    serviceImport = serviceImport.replace(BIZOBJ_SUBPACKAGE, ".transfer.");
-                    serviceImport = serviceImport.substring(0, serviceImport.length() - "BO".length());
-                    delegateImports.add(serviceImport);
-                } else {
-                    // bad import - do nothing
-                }
-            } else {
-                delegateImports.add(serviceImport);
-            }
-        }
-        vc.put("delegateImports", delegateImports);
+    }
+    
+    @Override
+    protected String getOutputSubFolder() {
+        return JavaGeneratorUtil.OUTPUT_SUB_FOLDER_JAVA;
     }
 
 }

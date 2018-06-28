@@ -21,11 +21,11 @@ public interface JavaNamedElement {
      * @return capitalized name
      */
     default String getCapitalizedName() {
-        return StringUtils.uncapitalize(getName());
+        return StringUtils.capitalize(getName());
     }
 
     /**
-     * Returns the uncapitalized name of thie element.
+     * Returns the uncapitalized name of this element.
      * 
      * @return uncapitalized name
      */

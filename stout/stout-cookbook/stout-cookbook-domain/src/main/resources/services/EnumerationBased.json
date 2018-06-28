@@ -1,0 +1,42 @@
+{
+  "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "name" : "EnumerationBased",
+  "documentation" : "A service that uses enumerations as inputs and outputs for test purposes",
+  "operations" : [ {
+    "name" : "PassInSingleEnumeratedValue",
+    "parameters" : [ {
+      "name" : "enumeratedValue",
+      "type" : "SimpleDomainEnumeration",
+      "documentation" : "enumeration value"
+    } ],
+    "return" : {
+      "type" : "void"
+    }
+  }, {
+    "name" : "ReturnSingleEnumeratedValue",
+    "transactionAttribute" : "Supports",
+    "parameters" : [ ],
+    "return" : {
+      "type" : "SimpleDomainEnumeration"
+    }
+  }, {
+    "name" : "ReturnMultipleEnumeratedValue",
+    "transactionAttribute" : "Supports",
+    "parameters" : [ ],
+    "return" : {
+      "type" : "SimpleDomainEnumeration",
+      "many" : true
+    }
+  }, {
+    "name" : "PassInMultipleEnumeratedValues",
+    "parameters" : [ {
+      "name" : "enumeratedValue",
+      "type" : "SimpleDomainEnumeration",
+      "many" : true,
+      "documentation" : "enumeration value"
+    } ],
+    "return" : {
+      "type" : "void"
+    }
+  } ]
+}

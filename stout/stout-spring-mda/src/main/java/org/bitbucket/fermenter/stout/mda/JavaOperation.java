@@ -8,81 +8,57 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.commons.collections.CollectionUtils;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
-import org.bitbucket.fermenter.mda.metadata.element.Operation;
-import org.bitbucket.fermenter.mda.metadata.element.Parameter;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
+import org.bitbucket.fermenter.mda.metamodel.element.BaseOperationDecorator;
+import org.bitbucket.fermenter.mda.metamodel.element.Operation;
+import org.bitbucket.fermenter.mda.metamodel.element.Parameter;
+import org.bitbucket.fermenter.mda.metamodel.element.Return;
+import org.bitbucket.fermenter.mda.metamodel.element.Transaction;
 import org.jboss.resteasy.annotations.GZIP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class JavaOperation implements Operation {
+/**
+ * Decorates a {@link Operation} with Java-specific capabilities.
+ */
+public class JavaOperation extends BaseOperationDecorator implements Operation, JavaNamedElement {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(JavaOperation.class);
+    private static final Logger logger = LoggerFactory.getLogger(JavaOperation.class);
 
-    private static final String BUSINESS_OBJECT = "BO";
-    public static final String PROPAGATION_REQUIRED = "REQUIRED";
-    public static final String PROPAGATION_REQUIRES_NEW = "REQUIRES_NEW";
-    public static final String PROPAGATION_MANDATORY = "MANDATORY";
-    public static final String PROPAGATION_NOT_SUPPORTED = "NOT_SUPPORTED";
-    public static final String PROPAGATION_SUPPORTS = "SUPPORTS";
-    public static final String PROPAGATION_NEVER = "NEVER";
+    protected static final String BUSINESS_OBJECT = "BO";
 
-    private MetadataRepository metadataRepository = ModelInstanceRepositoryManager
+    protected MetadataRepository metadataRepository = ModelInstanceRepositoryManager
             .getMetadataRepostory(MetadataRepository.class);
 
-    private Operation operation;
-    private List<Parameter> decoratedParameterList;
+    protected List<Parameter> decoratedParameterList;
 
-    private String signature;
-    private String signatureWithBO;
-    private String parameterNames;
-    private Boolean isResponseTypeVoid;
+    protected String signature;
+    protected String signatureWithBO;
+    protected String parameterNames;
 
-    private static Log log = LogFactory.getLog(JavaOperation.class);
-
+    /**
+     * {@inheritDoc}
+     */
     public JavaOperation(Operation operationToDecorate) {
-        if (operationToDecorate == null) {
-            throw new IllegalArgumentException("JavaOperation must be instatiated with a non-null operation!");
-        }
-        operation = operationToDecorate;
+        super(operationToDecorate);
     }
 
     /**
      * {@inheritDoc}
      */
-    public String getName() {
-        return operation.getName();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public String getDocumentation() {
-        // make sure the is a trailing period for proper javadoc formatting:
-        String documentation = operation.getDocumentation();
-        if ((StringUtils.isNotBlank(documentation)) && (documentation.endsWith("."))) {
-            documentation += ".";
-        }
-
-        return documentation;
+        return JavaElementUtils.formatForJavadoc(super.getDocumentation());
     }
 
     /**
      * {@inheritDoc}
      */
-    public String getReturnType() {
-        return operation.getReturnType();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getLowercaseName() {
-        return operation.getLowercaseName();
+    @Override
+    public Return getReturn() {
+        return new JavaReturn(wrapped.getReturn());
     }
 
     /**
@@ -90,8 +66,8 @@ public class JavaOperation implements Operation {
      */
     public List<Parameter> getParameters() {
         if (decoratedParameterList == null) {
-            List<Parameter> operationParameterList = operation.getParameters();
-            if ((operationParameterList == null) || (operationParameterList.isEmpty())) {
+            List<Parameter> operationParameterList = super.getParameters();
+            if (CollectionUtils.isEmpty(operationParameterList)) {
                 decoratedParameterList = Collections.emptyList();
 
             } else {
@@ -112,7 +88,7 @@ public class JavaOperation implements Operation {
      * the next parameter, as needed. This functionality is aimed at allowing easy support for constructs such as
      * parameter-level annotations.
      * 
-     * @return
+     * @return para list with appropriate commas
      */
     public List<Parameter> getParametersWithCommas() {
         List<Parameter> parameterList = getParameters();
@@ -128,22 +104,20 @@ public class JavaOperation implements Operation {
     }
 
     /**
-     * {@inheritDoc}
+     * Whether or not this returns a collection or single instance.
+     * 
+     * @return is collection?
      */
-    public String getReturnManyType() {
-        return operation.getReturnManyType();
-    }
-
     public Boolean isResponseTypeVoid() {
-        if (isResponseTypeVoid == null) {
-            isResponseTypeVoid = (JavaElementUtils.VOID.equalsIgnoreCase(getReturnType())) ? Boolean.TRUE
-                    : Boolean.FALSE;
-
-        }
-
-        return isResponseTypeVoid;
+        return JavaElementUtils.VOID.equalsIgnoreCase(getReturn().getType()) ? Boolean.TRUE : Boolean.FALSE;
     }
 
+    /**
+     * Calculates the plain Java signature for this operation. It's labor intensive and messy in velocity, so much more
+     * clean to do it in the Java decorator.
+     * 
+     * @return signature
+     */
     public String getSignature() {
         if (signature == null) {
             signature = JavaElementUtils.createSignatureParameters(getParameters());
@@ -211,7 +185,7 @@ public class JavaOperation implements Operation {
         }
 
         if (entityParameterCount > 1) {
-            LOGGER.error("Cannot have a JAX-RS enabled operation with multiple entity parameters! "
+            logger.error("Cannot have a JAX-RS enabled operation with multiple entity parameters! "
                     + "Use a list of params or single container/transient entity instead!");
         }
 
@@ -225,7 +199,7 @@ public class JavaOperation implements Operation {
      */
     public String getRestStylePath() {
         StringBuilder path = new StringBuilder();
-        path.append(getLowercaseName());
+        path.append(getUncapitalizedName());
 
         int entityParameterCount = 0;
         List<Parameter> parameterList = getParameters();
@@ -250,13 +224,18 @@ public class JavaOperation implements Operation {
         }
 
         if (entityParameterCount > 1) {
-            LOGGER.error("Cannot have a JAX-RS enabled operation with multiple entity parameters! "
+            logger.error("Cannot have a JAX-RS enabled operation with multiple entity parameters! "
                     + "Use a list of params or single container/transient entity instead!");
         }
 
         return path.toString();
     }
 
+    /**
+     * Returns the parameter names in a comma-separated list.
+     * 
+     * @return param names
+     */
     public String getParameterNames() {
         if (parameterNames == null) {
             StringBuilder buff = new StringBuilder();
@@ -273,6 +252,11 @@ public class JavaOperation implements Operation {
         return parameterNames;
     }
 
+    /**
+     * Returns all imports leveraged by this operation's parameters.
+     * 
+     * @return parameter imports
+     */
     public Set<String> getParameterImports() {
         Set<String> imports = new HashSet<>();
 
@@ -285,8 +269,7 @@ public class JavaOperation implements Operation {
             }
 
             String importValue = parameter.getImport();
-            // java.lang is imported by default, so filter them out:
-            if (!importValue.startsWith("java.lang.")) {
+            if (JavaElementUtils.checkImportAgainstDefaults(importValue)) {
                 imports.add(importValue);
             }
 
@@ -295,106 +278,32 @@ public class JavaOperation implements Operation {
         return imports;
     }
 
+    /**
+     * All imports for this operation, inclusive of parameters and the return.
+     * 
+     * @return imports
+     */
     public Set<String> getImports() {
         Set<String> importSet = new HashSet<>();
         importSet.addAll(getParameterImports());
-        if (isReturnTypeCollection()) {
+        Return returnElement = getReturn();
+        if (returnElement.isMany()) {
             importSet.add(Collection.class.getName());
         }
-        if(isCompressedWithGzip()) {
+        if (isCompressedWithGZip()) {
             importSet.add(GZIP.class.getName());
         }
 
         // how return types are handled is very messy in general - will cleanup when we update the metamodel
         if (!isResponseTypeVoid()) {
             String currentAppName = metadataRepository.getApplicationName();
-            String returnImport = JavaElementUtils.getJavaImportType(currentAppName, getReturnTypeForLookup());
-            importSet.add(returnImport);
+            String returnImport = JavaElementUtils.getJavaImportType(currentAppName, returnElement.getType());
+            if (JavaElementUtils.checkImportAgainstDefaults(returnImport)) {
+                importSet.add(returnImport);
+            }
         }
 
         return importSet;
-    }
-
-    private String getReturnTypeForLookup() {
-        return getReturnType() == null ? getReturnManyType() : getReturnType();
-    }
-
-    /**
-     * Returns the original type of return object, as specified in metadata, in its Java form
-     * 
-     * @return The Java version of the wrapped return type
-     */
-    public String getWrappedReturnType() {
-        return JavaElementUtils.getJavaType(metadataRepository.getApplicationName(), getReturnTypeForLookup());
-    }
-
-    public boolean isReturnTypeEntity() {
-        return metadataRepository.getEntity(getReturnType()) != null;
-    }
-
-    public boolean isReturnTypeCollection() {
-        return !StringUtils.isBlank(getReturnManyType());
-    }
-
-    @Override
-    public String getResponseEncoding() {
-        return operation.getResponseEncoding();
-    }
-
-    public String getUncapitalizedName() {
-        return StringUtils.uncapitalize(getName());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getTransactionAttribute() {
-        String returnValue = null;
-        String txAttr = operation.getTransactionAttribute();
-
-        if (TRANSACTION_REQUIRED.equals(txAttr)) {
-            returnValue = PROPAGATION_REQUIRED;
-        } else if (TRANSACTION_REQUIRES_NEW.equals(txAttr)) {
-            returnValue = PROPAGATION_REQUIRES_NEW;
-        } else if (TRANSACTION_MANDATORY.equals(txAttr)) {
-            returnValue = PROPAGATION_MANDATORY;
-        } else if (TRANSACTION_SUPPORTS.equals(txAttr)) {
-            returnValue = PROPAGATION_SUPPORTS;
-        } else if (TRANSACTION_NOT_SUPPORTED.equals(txAttr)) {
-            returnValue = PROPAGATION_NOT_SUPPORTED;
-        } else if (TRANSACTION_NEVER.equals(txAttr)) {
-            returnValue = PROPAGATION_NEVER;
-        } else {
-            log.error("Unknown transaction attribute '" + txAttr + "' encountered!  Defaulting to "
-                    + PROPAGATION_REQUIRED);
-            returnValue = PROPAGATION_REQUIRED;
-        }
-
-        return returnValue;
-
-    }
-
-    /**
-     * Returns whether or not the operation requires the presence of an existing or new transaction.
-     * 
-     * @return
-     */
-    public boolean isTransactionNeeded() {
-        String transactionAttribute = getTransactionAttribute();
-        return PROPAGATION_REQUIRED.equals(transactionAttribute)
-                || PROPAGATION_REQUIRES_NEW.equals(transactionAttribute)
-                || PROPAGATION_MANDATORY.equals(transactionAttribute);
-    }
-
-    public Boolean isResponseTypeCrossProject() {
-        boolean isResponseTypeCrossProject = false;
-        if (isReturnTypeEntity()) {
-            String currentApplicationName = metadataRepository.getApplicationName();
-            String entityProject = metadataRepository.getAllEntities().get(getReturnType()).getApplicationName();
-            isResponseTypeCrossProject = (currentApplicationName.equals(entityProject));
-        }
-
-        return isResponseTypeCrossProject;
     }
 
     /**
@@ -417,7 +326,7 @@ public class JavaOperation implements Operation {
      * @return true if there are parameters, false otherwise
      */
     public boolean hasParameters() {
-        return ((decoratedParameterList != null) && (!decoratedParameterList.isEmpty()));
+        return !decoratedParameterList.isEmpty();
     }
 
     /**
@@ -440,13 +349,25 @@ public class JavaOperation implements Operation {
 
         return hasEntityParameters;
     }
-    
+
     /**
-     * @param compression true if the data will be compressed with GZIP, false otherwise
+     * {@inheritDoc}
      */
-    @Override
-    public boolean isCompressedWithGzip() {
-        return operation.isCompressedWithGzip();
-    }
+    public String getTransactionAttribute() {
+        String returnValue = null;
+        String sourceTransaction = super.getTransactionAttribute();
+        Transaction transaction = Transaction.getTransactionByJtaName(sourceTransaction);
+
+        if (transaction != null) {
+            returnValue = transaction.name();
+        } else {
+            logger.error("Unknown transaction attribute '{}' encountered!  Defaulting to '{}'", sourceTransaction,
+                    Transaction.REQUIRED);
+            returnValue = Transaction.REQUIRED.name();
+        }
+
+        return returnValue;
+
+    }   
 
 }

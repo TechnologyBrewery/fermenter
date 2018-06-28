@@ -4,7 +4,9 @@ import java.util.Objects;
 
 import org.bitbucket.fermenter.mda.util.MessageTracker;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.google.common.base.MoreObjects;
 
 /**
@@ -15,6 +17,7 @@ public abstract class MetamodelElement implements Metamodel {
     protected static MessageTracker messageTracker = MessageTracker.getInstance();
 
     @JsonProperty(required = true)
+    @JsonInclude(Include.NON_NULL)
     protected String name;
 
     /**

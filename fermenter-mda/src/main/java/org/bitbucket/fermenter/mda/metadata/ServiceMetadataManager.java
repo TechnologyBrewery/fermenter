@@ -1,6 +1,5 @@
 package org.bitbucket.fermenter.mda.metadata;
 
-
 import java.util.Map;
 
 import org.apache.commons.digester.Digester;
@@ -14,6 +13,7 @@ import org.bitbucket.fermenter.mda.metadata.element.ServiceMetadata;
 /**
  * Responsible for maintaining the list of service metadata in the system.
  */
+@Deprecated
 class ServiceMetadataManager extends MetadataManager {
 	
     private static ServiceMetadataManager INSTANCE = new ServiceMetadataManager();

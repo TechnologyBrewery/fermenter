@@ -9,6 +9,12 @@ import org.bitbucket.fermenter.mda.element.ValidatedElement;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metamodel.element.Enum;
 import org.bitbucket.fermenter.mda.metamodel.element.EnumElement;
+import org.bitbucket.fermenter.mda.metamodel.element.Operation;
+import org.bitbucket.fermenter.mda.metamodel.element.OperationElement;
+import org.bitbucket.fermenter.mda.metamodel.element.Parameter;
+import org.bitbucket.fermenter.mda.metamodel.element.ParameterElement;
+import org.bitbucket.fermenter.mda.metamodel.element.Return;
+import org.bitbucket.fermenter.mda.metamodel.element.ReturnElement;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -92,6 +98,9 @@ public final class JsonUtils {
 
             SimpleModule module = new SimpleModule();
             module.addAbstractTypeMapping(Enum.class, EnumElement.class);
+            module.addAbstractTypeMapping(Operation.class, OperationElement.class);
+            module.addAbstractTypeMapping(Return.class, ReturnElement.class);
+            module.addAbstractTypeMapping(Parameter.class, ParameterElement.class);
 
             ObjectMapper localMapper = new ObjectMapper();
             localMapper.registerModule(module);

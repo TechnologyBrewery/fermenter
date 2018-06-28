@@ -1,8 +1,8 @@
 package org.bitbucket.fermenter.mda.metadata.element;
 
-
 import java.util.Map;
 
+@Deprecated
 public interface Service {
 	
 	String getName();

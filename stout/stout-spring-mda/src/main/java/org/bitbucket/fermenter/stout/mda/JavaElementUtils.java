@@ -28,13 +28,8 @@ public final class JavaElementUtils {
     /** Needs to be a {@link List} and not {@link Collection} due to JAX-RS parameter requirements. */
     static final String PARAM_COLLECTION_TYPE = "List";
 
-    private static DefaultModelInstanceRepository modelInstanceRepository = ModelInstanceRepositoryManager
-            .getMetadataRepostory(DefaultModelInstanceRepository.class);
-    private static MetadataRepository legacyMetadataRepository = ModelInstanceRepositoryManager
-            .getMetadataRepostory(MetadataRepository.class);
-
     private JavaElementUtils() {
-        // prevent instantiation of all static class
+        // prevent instantiation of all static class        
     }
 
     /**
@@ -69,11 +64,16 @@ public final class JavaElementUtils {
     static String getJavaImportByPackageAndType(String packageName, String type, boolean basePackageLocal) {
         MetamodelType metamodelType = MetamodelType.getMetamodelType(packageName, type);
 
+        DefaultModelInstanceRepository modelInstanceRepository = ModelInstanceRepositoryManager
+                .getMetadataRepostory(DefaultModelInstanceRepository.class);
+        
         String javaImportType = null;
         if (metamodelType == null) {
             javaImportType = VOID;
 
-        } else if (MetamodelType.ENTITY.equals(metamodelType)) {
+        } else if (MetamodelType.ENTITY.equals(metamodelType)) {            
+            MetadataRepository legacyMetadataRepository = ModelInstanceRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+            
             String basePackage = modelInstanceRepository.getBasePackage();
             Entity entity = legacyMetadataRepository.getEntity(type);
             String entityPackage = StringUtils.isBlank(packageName) ? basePackage : packageName;

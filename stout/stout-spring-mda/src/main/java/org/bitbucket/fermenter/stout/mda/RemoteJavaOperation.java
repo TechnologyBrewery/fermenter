@@ -49,5 +49,13 @@ public class RemoteJavaOperation extends JavaOperation {
 
         return decoratedParameterList;
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getTransactionAttribute() {
+        return wrapped.getTransactionAttribute();
+    }
 
 }

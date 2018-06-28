@@ -111,6 +111,33 @@ Feature: Specify services for use in model-driven file generation
       | SomeOtherAction | my.action.other | operationB    | timestamp   |
       | SomeAction2     | my.action.other | operationB    | integer     |
 
+  Scenario Outline: Transaction types are set and retrieved appropriately
+    Given an service named "<name>" in "<package>" with an operation "<operationName>" with the transaction attribute "<txAttribute>"
+    When services a read
+    Then an operation "<operationName>" is found on service "<name>" in "<package>" with the transaction attribute "<txAttribute>"
+
+    Examples: 
+      | name           | package | operationName | txAttribute  |
+      | RequiredTx     | my.tx   | operationA    | Required     |
+      | SupportsTx     | my.tx   | operationB    | Supports     |
+      | NotSupportedTx | my.tx   | operationC    | NotSupported |
+      | MandatoryTx    | my.tx   | operationD    | Mandatory    |
+      | RequiresNewTx  | my.tx   | operationE    | RequiresNew  |
+      | NeverTx        | my.tx   | operationF    | Never        |
+
+  Scenario Outline: Transaction types are defaulted appropriately
+    Given an service named "<name>" in "<package>" with an operation "<operationName>" with a void return type
+    When services a read
+    Then an operation "<operationName>" is found on service "<name>" in "<package>" with the transaction attribute "<expectedTxAttribute>"
+
+    Examples: 
+      | name           | package | operationName | expectedTxAttribute |
+      | RequiredTx     | my.tx   | findByX       | Supports            |
+      | SupportsTx     | my.tx   | queryByY      | Supports            |
+      | NotSupportedTx | my.tx   | loadABC       | Supports            |
+      | MandatoryTx    | my.tx   | operationD    | Required            |
+      | RequiresNewTx  | my.tx   | operationE    | Required            |
+
   Scenario: Error returned when service name is not specified
     Given an service named "" in "error.missing.service.name"
     When services a read
@@ -125,11 +152,11 @@ Feature: Specify services for use in model-driven file generation
     Given an service named "ServiceX" in "error.missing.param.info" with an operation "noParamName" with parameters "" of type "string"
     When services a read
     Then the tracker reports that errors were encountered
-    
+
   Scenario: Default return type to void when not specified
-    Given an service named "ServiceX" in "return.type" with an operation "defaultReturnType" with the return type "" 
+    Given an service named "ServiceX" in "return.type" with an operation "defaultReturnType" with the return type ""
     When services a read
-    Then an operation "defaultReturnType" is found on service "ServiceX" in "return.type" with the return type "void"   
+    Then an operation "defaultReturnType" is found on service "ServiceX" in "return.type" with the return type "void"
 
   Scenario: FUTURE: Use an entity as an operation parameter in a serivce metamodel
 

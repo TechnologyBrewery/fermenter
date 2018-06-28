@@ -25,6 +25,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bitbucket.fermenter.mda.exception.FermenterException;
+import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metamodel.element.Metamodel;
 import org.bitbucket.fermenter.mda.metamodel.element.MetamodelElement;
 import org.bitbucket.fermenter.mda.metamodel.element.NamespacedMetamodel;
@@ -295,10 +296,10 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
      */
     public Map<String, T> getMetadataElementByContext(String context) {       
         Map<String, T> metamodelInstanceMap;
-        if (AbstractModelInstanceRepository.useLocalMetadataOnly(context)) {            
+        if (ModelContext.useLocalModelInstancesOnly(context)) {            
             metamodelInstanceMap = getMetadataByArtifactIdMap(repoConfiguration.getCurrentApplicationName());
             
-        } else if (AbstractModelInstanceRepository.useTargetedMetadata(context)) {
+        } else if (ModelContext.useTargetedModelInstances(context)) {
             metamodelInstanceMap = new HashMap<>();
             List<String> targetedArtifactIds = repoConfiguration.getTargetModelInstances();
             for (String artifactId : targetedArtifactIds) {
@@ -312,8 +313,12 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
             }
             
         } else {
-            metamodelInstanceMap = getMetadataByArtifactIdMap(repoConfiguration.getCurrentApplicationName());
+            throw new GenerationException("Invalid context being requested '" + context + "'!");
             
+        }
+        
+        if (metamodelInstanceMap == null) {
+            metamodelInstanceMap = Collections.emptyMap();
         }
 
         return metamodelInstanceMap;

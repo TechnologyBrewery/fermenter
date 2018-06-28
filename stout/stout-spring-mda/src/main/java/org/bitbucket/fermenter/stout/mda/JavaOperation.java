@@ -15,6 +15,7 @@ import org.bitbucket.fermenter.mda.metamodel.element.BaseOperationDecorator;
 import org.bitbucket.fermenter.mda.metamodel.element.Operation;
 import org.bitbucket.fermenter.mda.metamodel.element.Parameter;
 import org.bitbucket.fermenter.mda.metamodel.element.Return;
+import org.bitbucket.fermenter.mda.metamodel.element.Transaction;
 import org.jboss.resteasy.annotations.GZIP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,12 +28,6 @@ public class JavaOperation extends BaseOperationDecorator implements Operation, 
     private static final Logger logger = LoggerFactory.getLogger(JavaOperation.class);
 
     protected static final String BUSINESS_OBJECT = "BO";
-    public static final String PROPAGATION_REQUIRED = "REQUIRED";
-    public static final String PROPAGATION_REQUIRES_NEW = "REQUIRES_NEW";
-    public static final String PROPAGATION_MANDATORY = "MANDATORY";
-    public static final String PROPAGATION_NOT_SUPPORTED = "NOT_SUPPORTED";
-    public static final String PROPAGATION_SUPPORTS = "SUPPORTS";
-    public static final String PROPAGATION_NEVER = "NEVER";
 
     protected MetadataRepository metadataRepository = ModelInstanceRepositoryManager
             .getMetadataRepostory(MetadataRepository.class);
@@ -360,28 +355,19 @@ public class JavaOperation extends BaseOperationDecorator implements Operation, 
      */
     public String getTransactionAttribute() {
         String returnValue = null;
-        String transactionAttribute = wrapped.getTransactionAttribute();
+        String sourceTransaction = super.getTransactionAttribute();
+        Transaction transaction = Transaction.getTransactionByJtaName(sourceTransaction);
 
-        if (TRANSACTION_REQUIRED.equalsIgnoreCase(transactionAttribute)) {
-            returnValue = PROPAGATION_REQUIRED;
-        } else if (TRANSACTION_REQUIRES_NEW.equalsIgnoreCase(transactionAttribute)) {
-            returnValue = PROPAGATION_REQUIRES_NEW;
-        } else if (TRANSACTION_MANDATORY.equalsIgnoreCase(transactionAttribute)) {
-            returnValue = PROPAGATION_MANDATORY;
-        } else if (TRANSACTION_SUPPORTS.equalsIgnoreCase(transactionAttribute)) {
-            returnValue = PROPAGATION_SUPPORTS;
-        } else if (TRANSACTION_NOT_SUPPORTED.equalsIgnoreCase(transactionAttribute)) {
-            returnValue = PROPAGATION_NOT_SUPPORTED;
-        } else if (TRANSACTION_NEVER.equalsIgnoreCase(transactionAttribute)) {
-            returnValue = PROPAGATION_NEVER;
+        if (transaction != null) {
+            returnValue = transaction.name();
         } else {
-            logger.error("Unknown transaction attribute '{}' encountered!  Defaulting to '{}'", transactionAttribute,
-                    PROPAGATION_REQUIRED);
-            returnValue = PROPAGATION_REQUIRED;
+            logger.error("Unknown transaction attribute '{}' encountered!  Defaulting to '{}'", sourceTransaction,
+                    Transaction.REQUIRED);
+            returnValue = Transaction.REQUIRED.name();
         }
 
         return returnValue;
 
-    }
+    }   
 
 }

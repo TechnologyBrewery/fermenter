@@ -13,6 +13,7 @@ import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.Enumeration;
 import org.bitbucket.fermenter.mda.metadata.element.Service;
 import org.bitbucket.fermenter.mda.metamodel.MetadataUrl;
+import org.bitbucket.fermenter.mda.metamodel.ModelContext;
 import org.bitbucket.fermenter.mda.metamodel.ModelRepositoryConfiguration;
 
 public class MetadataRepository extends AbstractMetadataRepository {
@@ -103,9 +104,9 @@ public class MetadataRepository extends AbstractMetadataRepository {
     public Map<String, Entity> getEntitiesByMetadataContext(String context, String currentApplication,
             List<String> targetedArtifactIds) {
         Map<String, Entity> entityMap;
-        if (useLocalMetadataOnly(context)) {
+        if (ModelContext.useLocalModelInstancesOnly(context)) {
             entityMap = getAllEntities(currentApplication);
-        } else if (useTargetedMetadata(context)) {
+        } else if (ModelContext.useTargetedModelInstances(context)) {
             entityMap = new HashMap<>();
             for (String artifactId : targetedArtifactIds) {
                 Map<String, Entity> targetedEntityMap = getAllEntities(artifactId);
@@ -202,7 +203,7 @@ public class MetadataRepository extends AbstractMetadataRepository {
      */
     public Map<String, Enumeration> getEnumerationsByMetadataContext(String context, String currentApplication) {
         Map<String, Enumeration> enumerationMap;
-        if (useLocalMetadataOnly(context)) {
+        if (ModelContext.useLocalModelInstancesOnly(context)) {
             enumerationMap = getAllEnumerations(currentApplication);
         } else {
             enumerationMap = getAllEnumerations();
@@ -275,9 +276,9 @@ public class MetadataRepository extends AbstractMetadataRepository {
     public Map<String, Service> getServicesByMetadataContext(String context, String currentApplication,
             List<String> targetedArtifactIds) {
         Map<String, Service> serviceMap;
-        if (useLocalMetadataOnly(context)) {
+        if (ModelContext.useLocalModelInstancesOnly(context)) {
             serviceMap = getAllServices(currentApplication);
-        } else if (useTargetedMetadata(context)) {
+        } else if (ModelContext.useTargetedModelInstances(context)) {
             serviceMap = new HashMap<>();
             for (String artifactId : targetedArtifactIds) {
                 Map<String, Service> targetedServiceMap = getAllServices(artifactId);

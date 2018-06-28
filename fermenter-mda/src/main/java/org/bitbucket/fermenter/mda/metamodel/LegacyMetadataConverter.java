@@ -8,6 +8,8 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
+import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
+import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metamodel.element.EnumElement;
 import org.bitbucket.fermenter.mda.metamodel.element.EnumerationElement;
 import org.bitbucket.fermenter.mda.metamodel.element.OperationElement;
@@ -25,6 +27,9 @@ public class LegacyMetadataConverter {
     private static final Log log = LogFactory.getLog(LegacyMetadataConverter.class);
 
     private static ObjectMapper objectMapper = new ObjectMapper();
+
+    private static MetadataRepository legacyMetadataRepository = ModelInstanceRepositoryManager
+            .getMetadataRepostory(MetadataRepository.class);
 
     private int convertedFileCount;
 
@@ -59,9 +64,7 @@ public class LegacyMetadataConverter {
     private void convertLegacyEnumerations(String applicationName, String basePackage, File sourceMain)
             throws IOException {
         // convert legacy metadata to new metadata:
-        org.bitbucket.fermenter.mda.metadata.MetadataRepository legacyMetadataRepo = ModelInstanceRepositoryManager
-                .getMetadataRepostory(org.bitbucket.fermenter.mda.metadata.MetadataRepository.class);
-        Map<String, org.bitbucket.fermenter.mda.metadata.element.Enumeration> legacyEnumerations = legacyMetadataRepo
+        Map<String, org.bitbucket.fermenter.mda.metadata.element.Enumeration> legacyEnumerations = legacyMetadataRepository
                 .getAllEnumerations(applicationName);
         for (org.bitbucket.fermenter.mda.metadata.element.Enumeration legacyEnumeration : legacyEnumerations.values()) {
             EnumerationElement newEnumeration = new EnumerationElement();
@@ -100,7 +103,7 @@ public class LegacyMetadataConverter {
 
             for (org.bitbucket.fermenter.mda.metadata.element.Operation legacyOperation : legacyService.getOperations()
                     .values()) {
-                OperationElement newOperation = convertLegacyOperation(legacyOperation);
+                OperationElement newOperation = convertLegacyOperation(legacyOperation, basePackage);
 
                 newService.getOperations().add(newOperation);
             }
@@ -116,7 +119,7 @@ public class LegacyMetadataConverter {
     }
 
     private OperationElement convertLegacyOperation(
-            org.bitbucket.fermenter.mda.metadata.element.Operation legacyOperation) {
+            org.bitbucket.fermenter.mda.metadata.element.Operation legacyOperation, String basePackage) {
         OperationElement newOperation = new OperationElement();
         newOperation.setName(legacyOperation.getName());
         newOperation.setDocumentation(legacyOperation.getDocumentation());
@@ -128,39 +131,56 @@ public class LegacyMetadataConverter {
             newOperation.setCompressedWithGZip(true);
         }
 
-        ReturnElement returnElement = convertLegacyReturn(legacyOperation);
+        ReturnElement returnElement = convertLegacyReturn(legacyOperation, basePackage);
         newOperation.setReturn(returnElement);
 
         for (org.bitbucket.fermenter.mda.metadata.element.Parameter legacyParameter : legacyOperation.getParameters()) {
-            ParameterElement newParameter = convertLegacyParameters(legacyParameter);
+            ParameterElement newParameter = convertLegacyParameters(legacyParameter, basePackage);
 
             newOperation.getParameters().add(newParameter);
         }
         return newOperation;
     }
 
-    private ReturnElement convertLegacyReturn(org.bitbucket.fermenter.mda.metadata.element.Operation legacyOperation) {
+    private ReturnElement convertLegacyReturn(org.bitbucket.fermenter.mda.metadata.element.Operation legacyOperation,
+            String basePackage) {
         ReturnElement returnElement = new ReturnElement();
+        String returnType = null;
         if (getUndefaultedValue(legacyOperation, "responseEncoding") != null) {
             returnElement.setResponseEncoding(legacyOperation.getResponseEncoding());
         }
         if (getUndefaultedValue(legacyOperation, "returnManyType") != null
                 && legacyOperation.getReturnManyType() != null) {
-            returnElement.setType(legacyOperation.getReturnManyType());
+            returnType = legacyOperation.getReturnManyType();
             returnElement.setMany(true);
 
         } else {
-            returnElement.setType(legacyOperation.getReturnType());
+            returnType = legacyOperation.getReturnType();
 
         }
+        
+        returnElement.setType(returnType);
+        String returnPackage = findPackage(returnType, basePackage);
+        if (returnPackage != null) {
+            returnElement.setPackage(returnPackage);
+        }
+        
         return returnElement;
     }
 
     private ParameterElement convertLegacyParameters(
-            org.bitbucket.fermenter.mda.metadata.element.Parameter legacyParameter) {
+            org.bitbucket.fermenter.mda.metadata.element.Parameter legacyParameter, String basePackage) {
         ParameterElement newParameter = new ParameterElement();
         newParameter.setName(legacyParameter.getName());
-        newParameter.setType(legacyParameter.getType());
+
+        String parameterType = legacyParameter.getType();
+        String parameterPackage = findPackage(parameterType, basePackage);
+        if (parameterPackage != null) {
+            newParameter.setPackage(parameterPackage);
+        }
+
+        newParameter.setType(parameterType);
+
         if (getUndefaultedValue(legacyParameter, "many") != null && legacyParameter.isMany()) {
             newParameter.setMany(true);
         }
@@ -181,6 +201,33 @@ public class LegacyMetadataConverter {
         }
 
         return value;
+    }
+
+    /**
+     * Determine the package name so these are set automatically by the conversion. If an entity, set the package to the
+     * defined package or the default package if no specified package has been defined. If null, then no package is
+     * required. Cannot support enumerations because they aren't yet loaded.
+     * 
+     * @param type
+     *            the type for which to infer the package
+     * @param basePackage
+     *            the base package to use for defaulting
+     * @return the package name or null if not an entity
+     */
+    private String findPackage(String type, String basePackage) {
+        String packageName = null;
+
+        Map<String, Entity> allEntitis = legacyMetadataRepository.getAllEntities();
+        Entity entity = (allEntitis != null) ? legacyMetadataRepository.getAllEntities().get(type) : null;
+        if (entity != null) {
+            packageName = entity.getNamespace();
+
+            if (packageName == null) {
+                packageName = basePackage;
+            }
+        }
+
+        return packageName;
     }
 
 }

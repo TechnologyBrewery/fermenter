@@ -64,48 +64,54 @@ public class ServiceSteps {
 
     @Given("^an service named \"([^\"]*)\" in \"([^\"]*)\"$")
     public void an_service_named_in(String name, String packageValue) throws Throwable {
-        createServiceElement(name, packageValue, null, null, null, null, false, false);
+        createServiceElement(name, packageValue, null, null, null, null, false, false, null);
     }
 
     @Given("^an service named \"([^\"]*)\" in \"([^\"]*)\" with an operation \"([^\"]*)\" with no parameters$")
     public void an_service_named_in_with_an_operation_with_no_parameters(String name, String packageValue,
             String operationName) throws Throwable {
-        createServiceElement(name, packageValue, operationName, null, null, null, false, false);
+        createServiceElement(name, packageValue, operationName, null, null, null, false, false, null);
     }
 
     @Given("^an service named \"([^\"]*)\" in \"([^\"]*)\" with an operation \"([^\"]*)\" with a void return type$")
     public void an_service_named_in_with_an_operation_with_a_void_return_type(String name, String packageValue,
             String operationName) throws Throwable {
-        createServiceElement(name, packageValue, operationName, "void", null, null, false, false);
+        createServiceElement(name, packageValue, operationName, "void", null, null, false, false, null);
     }
 
     @Given("^an service named \"([^\"]*)\" in \"([^\"]*)\" with an operation \"([^\"]*)\" with parameters \"([^\"]*)\" of type \"([^\"]*)\"$")
     public void an_service_named_in_with_an_operation_with_parameters_of_type(String name, String packageValue,
             String operationName, List<String> paramNames, List<String> paramValues) throws Throwable {
-        createServiceElement(name, packageValue, operationName, null, paramNames, paramValues, false, false);
+        createServiceElement(name, packageValue, operationName, null, paramNames, paramValues, false, false, null);
     }
 
     @Given("^an service named \"([^\"]*)\" in \"([^\"]*)\" with an operation \"([^\"]*)\" with the return type \"([^\"]*)\"$")
     public void an_service_named_in_with_an_operation_with_the_return_type(String name, String packageValue,
             String operationName, String returnType) throws Throwable {
-        createServiceElement(name, packageValue, operationName, returnType, null, null, false, false);
+        createServiceElement(name, packageValue, operationName, returnType, null, null, false, false, null);
     }
 
     @Given("^an service named \"([^\"]*)\" in \"([^\"]*)\" with an operation \"([^\"]*)\" with many parameters \"([^\"]*)\" of type \"([^\"]*)\"$")
     public void an_service_named_in_with_an_operation_with_many_parameters_of_type(String name, String packageValue,
             String operationName, List<String> paramNames, List<String> paramValues) throws Throwable {
-        createServiceElement(name, packageValue, operationName, null, paramNames, paramValues, false, true);
+        createServiceElement(name, packageValue, operationName, null, paramNames, paramValues, false, true, null);
     }
 
     @Given("^an service named \"([^\"]*)\" in \"([^\"]*)\" with an operation \"([^\"]*)\" with the many return type \"([^\"]*)\"$")
     public void an_service_named_in_with_an_operation_with_the_many_return_type(String name, String packageValue,
             String operationName, String returnType) throws Throwable {
-        createServiceElement(name, packageValue, operationName, returnType, null, null, true, false);
+        createServiceElement(name, packageValue, operationName, returnType, null, null, true, false, null);
+    }
+
+    @Given("^an service named \"([^\"]*)\" in \"([^\"]*)\" with an operation \"([^\"]*)\" with the transaction attribute \"([^\"]*)\"$")
+    public void an_service_named_in_with_an_operation_with_the_transaction_attribute(String name, String packageValue,
+            String operationName, String transactionAttribute) throws Throwable {
+        createServiceElement(name, packageValue, operationName, "void", null, null, false, false, transactionAttribute);
     }
 
     private void createServiceElement(String name, String packageValue, String operationName, String returnType,
-            List<String> paramNames, List<String> paramTypes, boolean useManyResponse, boolean useManyParams)
-            throws Throwable {
+            List<String> paramNames, List<String> paramTypes, boolean useManyResponse, boolean useManyParams,
+            String transaction) throws Throwable {
         ServiceElement service = new ServiceElement();
         if (StringUtils.isNotBlank(name)) {
             service.setName(name);
@@ -116,6 +122,11 @@ public class ServiceSteps {
         if (operationName != null) {
             OperationElement operation = new OperationElement();
             operation.setName(operationName);
+
+            if (StringUtils.isNoneBlank(transaction)) {
+                operation.setTransactionAttribute(transaction);
+            }
+
             service.getOperations().add(operation);
 
             if (paramNames != null) {
@@ -126,7 +137,7 @@ public class ServiceSteps {
                     operation.getParameters().add(parameter);
                     i++;
                 }
-                
+
                 if (paramNames.size() == 0 && paramTypes.size() > 0) {
                     // for testing, allow a parameter with no name in this situation:
                     ParameterElement noNameParameter = new ParameterElement();
@@ -167,7 +178,7 @@ public class ServiceSteps {
         ReturnElement returnElement = new ReturnElement();
         if (returnType == null) {
             returnElement.setType("void");
-            
+
         } else {
             returnElement.setType(returnType);
 
@@ -257,6 +268,15 @@ public class ServiceSteps {
             String packageValue, String expectedReturnType) throws Throwable {
         validateReturnType(operationName, name, packageValue, expectedReturnType, true);
     }
+    
+    @Then("^an operation \"([^\"]*)\" is found on service \"([^\"]*)\" in \"([^\"]*)\" with the transaction attribute \"([^\"]*)\"$")
+    public void an_operation_is_found_on_service_in_with_the_transaction_attribute(String operationName, String name,
+            String packageValue, String expectedTransactionAttribute) throws Throwable {
+        validateLoadedServices(name, packageValue, null, null, null, null, false);
+        Operation foundOperation = getOperationFromLoadedService(operationName);
+        String foundTransactionAttribute = foundOperation.getTransactionAttribute();
+        assertEquals("Unexpected transaction attribute value!", expectedTransactionAttribute, foundTransactionAttribute);
+    }    
 
     private void validateParameters(String operationName, String name, String packageValue,
             List<String> expectedParamNames, List<String> expectedParamValues, boolean expectedManyValue) {

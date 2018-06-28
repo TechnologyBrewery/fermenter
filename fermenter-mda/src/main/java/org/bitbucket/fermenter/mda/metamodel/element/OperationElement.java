@@ -94,15 +94,10 @@ public class OperationElement extends MetamodelElement implements Operation {
     }
 
     private void validateTransactionAttribute() {
-        if ((!TRANSACTION_REQUIRED.equals(transactionAttribute))
-                && (!TRANSACTION_REQUIRES_NEW.equals(transactionAttribute))
-                && (!TRANSACTION_MANDATORY.equals(transactionAttribute))
-                && (!TRANSACTION_NOT_SUPPORTED.equals(transactionAttribute))
-                && (!TRANSACTION_SUPPORTS.equals(transactionAttribute))
-                && (!TRANSACTION_NEVER.equals(transactionAttribute))) {
-            messageTracker.addErrorMessage("Transaction attribute must be '" + TRANSACTION_REQUIRED + "', '"
-                    + TRANSACTION_REQUIRES_NEW + "', '" + TRANSACTION_MANDATORY + "', '" + TRANSACTION_NOT_SUPPORTED
-                    + "', '" + TRANSACTION_SUPPORTS + "' or '" + TRANSACTION_NEVER + "'");
+        if (!Transaction.isValidTransaction(getTransactionAttribute())) {
+            messageTracker.addErrorMessage("Transaction attribute must be '" + Transaction.REQUIRED + "', '"
+                    + Transaction.REQUIRES_NEW + "', '" + Transaction.MANDATORY + "', '" + Transaction.NOT_SUPPORTED
+                    + "', '" + Transaction.SUPPORTS + "' or '" + Transaction.NEVER + "'");
         }
 
     }
@@ -110,9 +105,9 @@ public class OperationElement extends MetamodelElement implements Operation {
     private void defaultTransactionAttribute() {
         if (StringUtils.isBlank(transactionAttribute)) {
             if (name.startsWith("find") || name.startsWith("query") || name.startsWith("load")) {
-                transactionAttribute = TRANSACTION_SUPPORTS;
+                transactionAttribute = Transaction.SUPPORTS.toString();
             } else {
-                transactionAttribute = TRANSACTION_REQUIRED;
+                transactionAttribute = Transaction.REQUIRED.toString();
             }
         }
     }

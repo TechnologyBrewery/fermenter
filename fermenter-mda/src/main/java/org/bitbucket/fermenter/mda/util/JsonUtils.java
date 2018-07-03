@@ -9,12 +9,22 @@ import org.bitbucket.fermenter.mda.element.ValidatedElement;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metamodel.element.Enum;
 import org.bitbucket.fermenter.mda.metamodel.element.EnumElement;
+import org.bitbucket.fermenter.mda.metamodel.element.Field;
+import org.bitbucket.fermenter.mda.metamodel.element.FieldElement;
 import org.bitbucket.fermenter.mda.metamodel.element.Operation;
 import org.bitbucket.fermenter.mda.metamodel.element.OperationElement;
 import org.bitbucket.fermenter.mda.metamodel.element.Parameter;
 import org.bitbucket.fermenter.mda.metamodel.element.ParameterElement;
+import org.bitbucket.fermenter.mda.metamodel.element.Parent;
+import org.bitbucket.fermenter.mda.metamodel.element.ParentElement;
+import org.bitbucket.fermenter.mda.metamodel.element.Reference;
+import org.bitbucket.fermenter.mda.metamodel.element.ReferenceElement;
+import org.bitbucket.fermenter.mda.metamodel.element.Relation;
+import org.bitbucket.fermenter.mda.metamodel.element.RelationElement;
 import org.bitbucket.fermenter.mda.metamodel.element.Return;
 import org.bitbucket.fermenter.mda.metamodel.element.ReturnElement;
+import org.bitbucket.fermenter.mda.metamodel.element.Type;
+import org.bitbucket.fermenter.mda.metamodel.element.TypeElement;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,6 +47,32 @@ public final class JsonUtils {
 
     private JsonUtils() {
         // prevent instantiation of final class with all static methods
+    }
+    
+    /**
+     * Read a Json stream and validate it based on the pass type.
+     * 
+     * @param jsonUrl
+     *            stream to read
+     * @param class1
+     *            type to validate against
+     * @return instance of the type or a {@link GenerationException}
+     */
+    public static <T extends ValidatedElement> T readAndValidateJsonByUrl(URL jsonUrl, Class<?> type) {
+        try {
+            T instance = objectMapper.readValue(jsonUrl, (Class<T>)type);            
+            boolean valid = isValid(objectMapper.readTree(jsonUrl), instance, new File(jsonUrl.getFile()));
+            if (!valid) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug(objectMapper.writeValueAsString(instance));
+                }
+                throw new GenerationException(jsonUrl.toExternalForm() + " contained validation errors!");
+            }
+            return instance;
+
+        } catch (Exception e) {
+            throw new GenerationException("Problem reading json file: " + jsonUrl.toExternalForm(), e);
+        }
     }
 
     /**
@@ -101,6 +137,11 @@ public final class JsonUtils {
             module.addAbstractTypeMapping(Operation.class, OperationElement.class);
             module.addAbstractTypeMapping(Return.class, ReturnElement.class);
             module.addAbstractTypeMapping(Parameter.class, ParameterElement.class);
+            module.addAbstractTypeMapping(Parent.class, ParentElement.class);
+            module.addAbstractTypeMapping(Field.class, FieldElement.class);
+            module.addAbstractTypeMapping(Type.class, TypeElement.class);
+            module.addAbstractTypeMapping(Reference.class, ReferenceElement.class);
+            module.addAbstractTypeMapping(Relation.class, RelationElement.class);
 
             ObjectMapper localMapper = new ObjectMapper();
             localMapper.registerModule(module);

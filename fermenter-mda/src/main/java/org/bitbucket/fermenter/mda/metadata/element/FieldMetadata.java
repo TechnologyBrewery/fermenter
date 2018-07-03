@@ -14,6 +14,7 @@ import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 
 import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
 
+@Deprecated
 public class FieldMetadata extends MetadataElement implements Field {
 
     private String name;

@@ -2,6 +2,7 @@ package org.bitbucket.fermenter.mda.metadata.element;
 
 import java.util.Collection;
 
+@Deprecated
 public interface Relation {
 
 	public String getDocumentation();

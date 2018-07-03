@@ -10,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 
+@Deprecated
 public class RelationMetadata extends MetadataElement implements Relation {
 
 	private String documentation;

@@ -1,0 +1,149 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"id": "#entity",
+	"title": "Entity",
+	"type": "object",
+	"additionalProperties": false,
+	"properties": {
+		"name": {
+			"type": "string"
+		},
+		"package": {
+			"type": "string"
+		},
+		"documentation": {
+			"type": "string"
+		},
+		"table": {
+			"type": "string"
+		},
+		"transient": {
+			"type": "boolean"
+		},
+		"parent": {
+			"type": "object",
+			"properties": {
+				"package": {
+					"type": "string"
+				},
+				"type": {
+					"type": "string"
+				},
+				"inheritanceStrategy": {
+					"type": "string"
+				}			
+			},
+			"required": [
+				"type"
+			]
+		},
+		"identifier": {
+			"type": "object",
+			"properties": {
+				"name": {
+					"type": "string"
+				},
+				"type": {
+					"type": "object",
+					"properties": {
+						"name": {
+							"type": "string"
+						}		
+					},
+					"required": [
+						"name"
+					]
+				},
+				"column": {
+					"type": "string"
+				},
+				"documentation": {
+					"type": "string"
+				},
+				"generator": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"name","type"
+			]
+		},
+		"fields": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"type": {
+						"type": "object",
+						"properties": {
+							"name": {
+								"type": "string"
+							},						
+							"package": {
+								"type": "string"
+							}		
+						},
+						"required": [
+							"name"
+						]
+					},
+					"column": {
+						"type": "string"
+					},
+					"documentation": {
+						"type": "string"
+					},
+					"required": {
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"name","type"
+				]
+			}
+		},
+		"references": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"type": {
+						"type": "object",
+						"properties": {
+							"name": {
+								"type": "string"
+							},
+							"package": {
+								"type": "string"
+							}	
+						},
+						"required": [
+							"name"
+						]
+					},
+					"localColumn": {
+						"type": "string"
+					},
+					"documentation": {
+						"type": "string"
+					},
+					"required": {
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"name","type"
+				]
+			}
+		}
+	},
+	"required": [
+		"name", "package"
+	]
+}

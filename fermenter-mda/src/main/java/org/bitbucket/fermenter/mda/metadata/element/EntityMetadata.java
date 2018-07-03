@@ -13,6 +13,7 @@ import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.element.Parent.InheritanceStrategy;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 
+@Deprecated
 public class EntityMetadata extends MetadataElement implements Entity {
     
     private static final String TRANSIENT_ENTITY = "transient entity '";

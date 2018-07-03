@@ -28,7 +28,7 @@ class ServiceModelInstanceManager extends AbstractMetamodelManager<Service> {
 
     @Override
     protected String getMetadataLocation() {
-        return config.getServicesRelationPath();
+        return config.getServicesRelativePath();
     }
 
     @Override

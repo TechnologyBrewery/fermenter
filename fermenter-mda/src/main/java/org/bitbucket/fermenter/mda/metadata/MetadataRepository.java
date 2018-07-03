@@ -12,7 +12,7 @@ import org.bitbucket.fermenter.mda.metadata.element.Composite;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.Enumeration;
 import org.bitbucket.fermenter.mda.metadata.element.Service;
-import org.bitbucket.fermenter.mda.metamodel.MetadataUrl;
+import org.bitbucket.fermenter.mda.metamodel.ModelInstanceUrl;
 import org.bitbucket.fermenter.mda.metamodel.ModelContext;
 import org.bitbucket.fermenter.mda.metamodel.ModelRepositoryConfiguration;
 
@@ -154,8 +154,8 @@ public class MetadataRepository extends AbstractMetadataRepository {
             serviceManager.reset();
             EnumerationMetadataManager enumerationManager = EnumerationMetadataManager.getInstance();
             enumerationManager.reset();
-            Collection<MetadataUrl> urls = config.getMetamodelInstanceLocations().values();
-            for (MetadataUrl url : urls) {
+            Collection<ModelInstanceUrl> urls = config.getMetamodelInstanceLocations().values();
+            for (ModelInstanceUrl url : urls) {
                 long start = System.currentTimeMillis();
                 compositeManager.loadMetadata(url.getArtifactId(), url.getUrl());
                 entityManager.loadMetadata(url.getArtifactId(), url.getUrl());

@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
-import org.bitbucket.fermenter.mda.metamodel.MetadataUrl;
+import org.bitbucket.fermenter.mda.metamodel.ModelInstanceUrl;
 import org.bitbucket.fermenter.mda.metamodel.ModelRepositoryConfiguration;
 import org.bitbucket.fermenter.mda.metamodel.element.Enum;
 import org.bitbucket.fermenter.mda.metamodel.element.EnumElement;
@@ -37,7 +37,6 @@ public class EnumerationSteps {
     private ObjectMapper objectMapper = new ObjectMapper();
     private MessageTracker messageTracker = MessageTracker.getInstance();
     private File enumerationsDirectory = new File("target/temp-metadata", "enumerations");
-    private EnumerationElement enumeration = new EnumerationElement();
 
     private String currentBasePackage;
     
@@ -48,16 +47,10 @@ public class EnumerationSteps {
 
     @After("@enumeration,@service")
     public void cleanUp() {
-        if (enumerationFile != null) {
-            enumerationFile.delete();
-            enumerationFile = null;
-        }
 
         loadedEnumeration = null;
 
         messageTracker.clear();
-
-        enumerationsDirectory.delete();
         
         currentBasePackage = null;
     }
@@ -86,7 +79,6 @@ public class EnumerationSteps {
             index++;
         }
 
-        enumerationsDirectory.mkdirs();
         enumerationFile = new File(enumerationsDirectory, name + ".json");
         objectMapper.writeValue(enumerationFile, enumeration);
         assertTrue("Enumeration not written to file!", enumerationFile.exists());
@@ -129,8 +121,8 @@ public class EnumerationSteps {
             ModelRepositoryConfiguration config = new ModelRepositoryConfiguration();
             config.setCurrentApplicationName("fermenter-mda");
             config.setBasePackage(currentBasePackage);
-            Map<String, MetadataUrl> metadataUrlMap = config.getMetamodelInstanceLocations();
-            metadataUrlMap.put("fermenter-mda", new MetadataUrl("fermenter-mda", enumerationsDirectory.getParentFile().toURI().toString()));
+            Map<String, ModelInstanceUrl> metadataUrlMap = config.getMetamodelInstanceLocations();
+            metadataUrlMap.put("fermenter-mda", new ModelInstanceUrl("fermenter-mda", enumerationsDirectory.getParentFile().toURI().toString()));
 
             metadataRepo = new DefaultModelInstanceRepository(config);
             metadataRepo.load();

@@ -3,9 +3,9 @@ package org.bitbucket.fermenter.mda.metamodel;
 import com.google.common.base.MoreObjects;
 
 /**
- * Stores information about a specific location of metadata.
+ * Stores information about a specific location of model instances.
  */
-public class MetadataUrl {
+public class ModelInstanceUrl {
 
     private String artifactId;
     private String url;
@@ -15,7 +15,7 @@ public class MetadataUrl {
      * @param artifactId artifact id
      * @param url url to artifact id
      */
-    public MetadataUrl(String artifactId, String url) {
+    public ModelInstanceUrl(String artifactId, String url) {
         this.artifactId = artifactId;
         this.url = url;
     }

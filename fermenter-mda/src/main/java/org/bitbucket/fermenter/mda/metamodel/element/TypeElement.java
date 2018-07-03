@@ -1,0 +1,213 @@
+package org.bitbucket.fermenter.mda.metamodel.element;
+
+import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
+import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.google.common.base.MoreObjects;
+
+/**
+ * Represents a enumeration of declared constants.
+ */
+@JsonPropertyOrder({ "package", "name" })
+public class TypeElement extends NamespacedMetamodelElement implements Type {
+
+	@JsonInclude(Include.NON_NULL)
+	private String documentation;
+
+	@JsonInclude(Include.NON_NULL)
+	private Integer maxLength;
+
+	@JsonInclude(Include.NON_NULL)
+	private Integer minLength;
+
+	/**
+	 * Applies to both integers and floating point values, so use a String to store.
+	 */
+	@JsonInclude(Include.NON_NULL)
+	private String maxValue;
+
+	/**
+	 * Applies to both integers and floating point values, so use a String to store.
+	 */
+	@JsonInclude(Include.NON_NULL)
+	private String minValue;
+
+	@JsonInclude(Include.NON_NULL)
+	private Integer scale;
+
+	@JsonInclude(Include.NON_NULL)
+	private String format;
+
+	@JsonIgnore
+	private DefaultModelInstanceRepository repository = ModelInstanceRepositoryManager
+			.getMetadataRepostory(DefaultModelInstanceRepository.class);
+
+	/**
+	 * Override to make optional (for base types) and not write if null.
+	 * 
+	 * {@inheritDoc}
+	 */
+	@JsonInclude(Include.NON_NULL)
+	@JsonProperty(value = PACKAGE, required = false)
+	@Override
+	public String getPackage() {
+		return super.getPackage();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getDocumentation() {
+		return documentation;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@JsonIgnore
+	public Boolean isSimpleType() {
+		return BaseType.valueOf(getName()) != null;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@JsonIgnore
+	public Boolean isEnumerationType() {
+		return repository.getEnumeration(getPackage(), getName()) != null;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Integer getMaxLength() {
+		return maxLength;
+	}
+
+	@Override
+	@JsonInclude(Include.NON_NULL)
+	public Integer getMinLength() {
+		return minLength;
+	}
+
+	@Override
+	@JsonInclude(Include.NON_NULL)
+	public String getMaxValue() {
+		return maxValue;
+	}
+
+	@Override
+	@JsonInclude(Include.NON_NULL)
+	public String getMinValue() {
+		return minValue;
+	}
+
+	@Override
+	@JsonInclude(Include.NON_NULL)
+	public Integer getScale() {
+		return scale;
+	}
+
+	@Override
+	@JsonInclude(Include.NON_NULL)
+	public String getFormat() {
+		return format;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void validate() {
+
+	}
+
+	/**
+	 * Sets the documentation for this type.
+	 * 
+	 * @param documentation description of the type
+	 */
+	public void setDocumentation(String documentation) {
+		this.documentation = documentation;
+	}
+
+	/**
+	 * Sets the maximum length of a string.
+	 * 
+	 * @param maxLength string max length
+	 */
+	public void setMaxLength(Integer maxLength) {
+		this.maxLength = maxLength;
+	}
+
+	/**
+	 * Sets the minimum length of a string.
+	 * 
+	 * @param minLength string min length
+	 */
+	public void setMinLength(Integer minLength) {
+		this.minLength = minLength;
+	}
+
+	/**
+	 * Sets the maximum value of a numeric type.
+	 * 
+	 * @param maxValue numeric max value
+	 */
+	public void setMaxValue(String maxValue) {
+		this.maxValue = maxValue;
+	}
+
+	/**
+	 * Sets the minimum value of a numeric type.
+	 * 
+	 * @param minValue numeric min value
+	 */
+	public void setMinValue(String minValue) {
+		this.minValue = minValue;
+	}
+
+	/**
+	 * Sets scale (number of places to right of decimal point).
+	 * 
+	 * @param scale allowed places
+	 */
+	public void setScale(Integer scale) {
+		this.scale = scale;
+	}
+
+	/**
+	 * Format name for regular expression matching.
+	 * 
+	 * @param format format name (reference to {@link Format}).
+	 */
+	public void setFormat(String format) {
+		this.format = format;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getSchemaFileName() {
+		return "fermenter-2-entity-schema.json";
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(this).add("package", getPackage()).add("name", name).toString();
+	}
+
+}

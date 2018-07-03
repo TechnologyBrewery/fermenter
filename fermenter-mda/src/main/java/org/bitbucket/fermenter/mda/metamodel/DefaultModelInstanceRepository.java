@@ -5,8 +5,8 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.bitbucket.fermenter.mda.exception.FermenterException;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
+import org.bitbucket.fermenter.mda.metamodel.element.Entity;
 import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
 import org.bitbucket.fermenter.mda.metamodel.element.Service;
 import org.bitbucket.fermenter.mda.util.MessageTracker;
@@ -19,6 +19,7 @@ public class DefaultModelInstanceRepository extends AbstractModelInstanceReposit
     private static final Log log = LogFactory.getLog(DefaultModelInstanceRepository.class);
 
     private EnumerationModelInstanceManager enumerationManager = EnumerationModelInstanceManager.getInstance();
+    private EntityModelInstanceManager entityManager = EntityModelInstanceManager.getInstance();
     private ServiceModelInstanceManager serviceManager = ServiceModelInstanceManager.getInstance();
 
     /**
@@ -40,17 +41,19 @@ public class DefaultModelInstanceRepository extends AbstractModelInstanceReposit
     public void load() {
         enumerationManager.reset();
         serviceManager.reset();
+        entityManager.reset();
 
-        Collection<MetadataUrl> metadataUrls = config.getMetamodelInstanceLocations().values();
-        for (MetadataUrl metadataUrl : metadataUrls) {
+        Collection<ModelInstanceUrl> modelInstanceUrls = config.getMetamodelInstanceLocations().values();
+        for (ModelInstanceUrl modelInstanceUrl : modelInstanceUrls) {
             long start = System.currentTimeMillis();
 
-            enumerationManager.loadMetadata(metadataUrl, config);
-            serviceManager.loadMetadata(metadataUrl, config);
+            enumerationManager.loadMetadata(modelInstanceUrl, config);
+            serviceManager.loadMetadata(modelInstanceUrl, config);
+            entityManager.loadMetadata(modelInstanceUrl, config);
 
             if (log.isInfoEnabled()) {
                 long stop = System.currentTimeMillis();
-                log.info("Metamodel instances for artifactId '" + metadataUrl.getArtifactId() + "' have been loaded - "
+                log.info("Metamodel instances for artifactId '" + modelInstanceUrl.getArtifactId() + "' have been loaded - "
                         + (stop - start) + "ms");
             }
         }
@@ -70,12 +73,16 @@ public class DefaultModelInstanceRepository extends AbstractModelInstanceReposit
             service.validate();
         }
         
+        for (Entity entity : entityManager.getMetadataElementByPackage(basePackage).values()) {
+            entity.validate();
+        }
+        
         MessageTracker messageTracker = MessageTracker.getInstance();
         messageTracker.emitMessages(log);
         
         if (messageTracker.hasErrors()) {
         	throw new GenerationException("Encountered one or more error!  Please check your Maven output for details.");
-        }
+        }        
 
     }
 
@@ -196,5 +203,64 @@ public class DefaultModelInstanceRepository extends AbstractModelInstanceReposit
     public Map<String, Service> getServicesByContext(String context) {
         return serviceManager.getMetadataElementByContext(context);
     }
+    
+    /**
+     * Gets an entity by name from the current package.
+     * 
+     * @param name
+     *            name of the entity to look up
+     * @return instance of the {@link Entity} or null if none is found with the request name
+     */
+    public Entity getEntity(String name) {
+        return entityManager.getMetadataElementByPackageAndName(config.getBasePackage(), name);
+
+    }
+
+    /**
+     * Gets an entity by name from the current package.
+     * 
+     * @param name
+     *            name of the entity to look up
+     * @param packageName
+     *            the package in which to look for the request element
+     * @return instance of the {@link Entity} or null if none is found with the request name
+     */
+    public Entity getEntity(String packageName, String name) {
+        return entityManager.getMetadataElementByPackageAndName(packageName, name);
+
+    }
+
+    /**
+     * Gets all entities from the specified package.
+     * 
+     * @param packageName
+     *            the requested package
+     * @return all entities within the request package, keyed by name
+     */
+    public Map<String, Entity> getEntities(String packageName) {
+        return entityManager.getMetadataElementByPackage(packageName);
+    }
+
+    /**
+     * Gets all entities from the specified artifact id.
+     * 
+     * @param artifactId
+     *            the requested artifact id
+     * @return all entities within the request artifact id, keyed by name
+     */
+    public Map<String, Entity> getEntitiesByArtifactId(String artifactId) {
+        return entityManager.getMetadataByArtifactIdMap(artifactId);
+    }
+
+    /**
+     * Retrieves entities based on a generation context.
+     * 
+     * @param context
+     *            type of generation target context being used
+     * @return map of entities
+     */
+    public Map<String, Entity> getEntitiesByContext(String context) {
+        return entityManager.getMetadataElementByContext(context);
+    }    
 
 }

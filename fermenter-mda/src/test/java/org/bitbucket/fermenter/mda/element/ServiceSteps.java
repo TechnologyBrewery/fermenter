@@ -14,7 +14,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
-import org.bitbucket.fermenter.mda.metamodel.MetadataUrl;
+import org.bitbucket.fermenter.mda.metamodel.ModelInstanceUrl;
 import org.bitbucket.fermenter.mda.metamodel.ModelRepositoryConfiguration;
 import org.bitbucket.fermenter.mda.metamodel.element.Operation;
 import org.bitbucket.fermenter.mda.metamodel.element.OperationElement;
@@ -50,16 +50,9 @@ public class ServiceSteps {
 
     @After("@service")
     public void cleanUp() {
-        if (serviceFile != null) {
-            serviceFile.delete();
-            serviceFile = null;
-        }
-
         loadedService = null;
 
         messageTracker.clear();
-
-        servicesDirectory.delete();
 
         currentBasePackage = null;
     }
@@ -160,9 +153,9 @@ public class ServiceSteps {
 
         }
 
-        servicesDirectory.mkdirs();
         serviceFile = new File(servicesDirectory, name + ".json");
         objectMapper.writeValue(serviceFile, service);
+        // TODO: remove
         System.out.println(objectMapper.writeValueAsString(service));
         assertTrue("Services not written to file!", serviceFile.exists());
 
@@ -205,9 +198,9 @@ public class ServiceSteps {
             ModelRepositoryConfiguration config = new ModelRepositoryConfiguration();
             config.setCurrentApplicationName("fermenter-mda");
             config.setBasePackage(currentBasePackage);
-            Map<String, MetadataUrl> metadataUrlMap = config.getMetamodelInstanceLocations();
+            Map<String, ModelInstanceUrl> metadataUrlMap = config.getMetamodelInstanceLocations();
             metadataUrlMap.put("fermenter-mda",
-                    new MetadataUrl("fermenter-mda", servicesDirectory.getParentFile().toURI().toString()));
+                    new ModelInstanceUrl("fermenter-mda", servicesDirectory.getParentFile().toURI().toString()));
 
             metadataRepo = new DefaultModelInstanceRepository(config);
             metadataRepo.load();
@@ -342,8 +335,8 @@ public class ServiceSteps {
         }
 
         loadedService = metadataRepo.getServices(packageName).get(name);
-        assertEquals("Unexpected enumeration name!", name, loadedService.getName());
-        assertEquals("Unexpected enumeration package!", packageName, loadedService.getPackage());
+        assertEquals("Unexpected service name!", name, loadedService.getName());
+        assertEquals("Unexpected service package!", packageName, loadedService.getPackage());
 
     }
 

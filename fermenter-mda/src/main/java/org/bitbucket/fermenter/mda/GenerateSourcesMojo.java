@@ -38,7 +38,7 @@ import org.bitbucket.fermenter.mda.generator.GenerationContext;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.generator.Generator;
 import org.bitbucket.fermenter.mda.metamodel.LegacyMetadataConverter;
-import org.bitbucket.fermenter.mda.metamodel.MetadataUrl;
+import org.bitbucket.fermenter.mda.metamodel.ModelInstanceUrl;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 import org.bitbucket.fermenter.mda.metamodel.ModelRepositoryConfiguration;
@@ -248,9 +248,9 @@ public class GenerateSourcesMojo extends AbstractMojo {
         }
 
         config.setTargetModelInstances(targetedArtifactIds);
-        Map<String, MetadataUrl> metadataUrls = config.getMetamodelInstanceLocations();
+        Map<String, ModelInstanceUrl> metadataUrls = config.getMetamodelInstanceLocations();
         String projectUrl = new File(mainSourceRoot, "resources").toURI().toURL().toString();
-        metadataUrls.put(project.getArtifactId(), new MetadataUrl(project.getArtifactId(), projectUrl));
+        metadataUrls.put(project.getArtifactId(), new ModelInstanceUrl(project.getArtifactId(), projectUrl));
         PackageManager.addMapping(project.getArtifactId(), basePackage);
 
         if (metadataDependencies != null) {
@@ -267,7 +267,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
             for (Artifact a : artifacts) {
                 if (metadataDependencies.contains(a.getArtifactId())) {
                     URL url = a.getFile().toURI().toURL();
-                    metadataUrls.put(a.getArtifactId(), new MetadataUrl(a.getArtifactId(), url.toString()));
+                    metadataUrls.put(a.getArtifactId(), new ModelInstanceUrl(a.getArtifactId(), url.toString()));
                     PackageManager.addMapping(a.getArtifactId(), url);
                     LOG.info("Adding metadataDependency to current set of metadata: " + a.getArtifactId());
                 }

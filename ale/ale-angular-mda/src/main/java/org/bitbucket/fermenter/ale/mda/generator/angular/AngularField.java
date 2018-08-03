@@ -270,5 +270,21 @@ public class AngularField implements Field {
     public boolean isGeospatialType() {
         return isSimpleType() && getType().startsWith("geospatial_");
     }
+    
+	/**
+     * {@inheritDoc}
+     */
+    @Override
+    public Object getDefaultValue() {
+        return field.getDefaultValue();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean hasDefaultValue() {
+        return (getDefaultValue() != null);
+    }
 
 }

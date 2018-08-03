@@ -59,5 +59,39 @@ export class ${entity.name}Base {
 #end
 #end
     }
+
+    this.defaultFieldValues();
   }
+
+  /**
+  * Lifecycle method that is invoked before this business object's pre-save validation occurs to support defaulting.
+  */
+  defaultFieldValues() {
+#foreach ( $field in $entity.allFields.values() )
+#if ($field.hasDefaultValue())
+      this.setDefault${field.capitalizedName}();
+#end
+#end
+     }
+
+#foreach ( $field in $entity.allFields.values() )
+#if ( $field.hasDefaultValue() )
+  setDefault${field.capitalizedName}() {
+#if($field.angularType == "string")
+    if (this.${field.name} == null) {
+        this.${field.name} = '${field.defaultValue}';
+    }
+#elseif($field.angularType == "Date")
+    if (this.${field.name} == null) {
+        this.${field.name} = new Date('${field.defaultValue}');
+    }
+#else
+    if (this.${field.name} == null) {
+        this.${field.name} = ${field.defaultValue};
+    }
+#end
+  }
+
+#end
+#end
 }

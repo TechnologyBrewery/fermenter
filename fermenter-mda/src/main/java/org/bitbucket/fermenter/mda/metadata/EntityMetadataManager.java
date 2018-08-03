@@ -146,9 +146,10 @@ class EntityMetadataManager extends MetadataManager {
 		digester.addCallMethod	( 	"entity/fields/field/minLength"	,	"setMinLength"	, 	0 );
 		digester.addCallMethod	( 	"entity/fields/field/maxValue"	, 	"setMaxValue"	, 	0 );
 		digester.addCallMethod	( 	"entity/fields/field/minValue"	, 	"setMinValue"	, 	0 );
-		digester.addCallMethod	( 	"entity/fields/field/scale"	, 	"setScale"	, 	0 );
+		digester.addCallMethod	( 	"entity/fields/field/scale"	    , 	"setScale"	    , 	0 );
 		digester.addCallMethod	( 	"entity/fields/field/project"	, 	"setProject"	, 	0 );
-		digester.addCallMethod	( 	"entity/fields/field/format"	, 	"setFormat"	, 	0 );
+		digester.addCallMethod	( 	"entity/fields/field/format"	, 	"setFormat"	    , 	0 );
+		digester.addCallMethod  (   "entity/fields/field/defaultValue", "setDefaultValue",  0 );
 		digester.addSetNext		(	"entity/fields/field"			, 	"addField"		,	FieldMetadata.class.getName() );
 	}
 	

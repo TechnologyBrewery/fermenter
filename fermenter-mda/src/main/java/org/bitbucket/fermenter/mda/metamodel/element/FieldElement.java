@@ -34,7 +34,10 @@ public class FieldElement extends MetamodelElement implements Field {
     protected Boolean required;
 
     @JsonInclude(Include.NON_NULL)
-    protected Generator generator;    
+    protected Generator generator;   
+    
+    @JsonInclude(Include.NON_NULL)
+    protected String defaultValue;
 
 	/**
 	 * {@inheritDoc}
@@ -175,6 +178,14 @@ public class FieldElement extends MetamodelElement implements Field {
         }
     }    
     
+	public String getDefaultValue() {
+		return defaultValue;
+	}
+
+	public void setDefaultValue(String defaultValue) {
+		this.defaultValue = defaultValue;
+	}
+    
     /**
      * {@inheritDoc}
      */
@@ -182,5 +193,4 @@ public class FieldElement extends MetamodelElement implements Field {
     public String toString() {
         return MoreObjects.toStringHelper(this).add("name", name).toString();
     }
-
 }

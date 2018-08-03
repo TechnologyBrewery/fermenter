@@ -97,7 +97,10 @@
 							},						
 							"format": {
 								"type": "string"
-							}	
+							},
+							"defaultValue": {
+								"type": "string"
+							}
 						}
 					},
 					"column": {

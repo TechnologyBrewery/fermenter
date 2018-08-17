@@ -10,7 +10,8 @@ import org.aeonbits.owner.KrauseningConfig.KrauseningSources;
 public interface AuthorizationConfig extends KrauseningConfig {
 
     /**
-     * Location of the pdp.xml file to use for Authzforce Policy Decision Point configuration.
+     * Location of the pdp.xml file to use for Authzforce Policy Decision Point
+     * configuration.
      * 
      * @return path to file in authzforce path naming standards
      */
@@ -19,7 +20,8 @@ public interface AuthorizationConfig extends KrauseningConfig {
     public String getPdpConfigurationLocation();
 
     /**
-     * Location of the catalog.xml file to use for Authzforce Policy Decision Point configuration.
+     * Location of the catalog.xml file to use for Authzforce Policy Decision
+     * Point configuration.
      * 
      * @return path to file in authzforce path naming standards
      */
@@ -28,7 +30,8 @@ public interface AuthorizationConfig extends KrauseningConfig {
     public String getPdpCatalogLocation();
 
     /**
-     * Location of the pdp-ext.xsd file to use for Authzforce Policy Decision Point configuration.
+     * Location of the pdp-ext.xsd file to use for Authzforce Policy Decision
+     * Point configuration.
      * 
      * @return path to file in authzforce path naming standards
      */
@@ -46,12 +49,15 @@ public interface AuthorizationConfig extends KrauseningConfig {
     public String getAttributeDefinitionLocation();
 
     /**
-     * Determines how external schemas should be accessed.
+     * Determines how external schemas should be accessed. This is a comma
+     * delimited list, ie "http,file". The list must include http for AuthzCore
+     * (see System Requirements here: https://github.com/authzforce/core) so if
+     * the default is modified, ensure that http is included.
      * 
      * @return javax.xml.accessExternalSchema scheme
      */
     @Key("javax.xml.accessExternalSchema")
-    @DefaultValue("http")
+    @DefaultValue("all")
     public String getAccessExternalSchemaType();
 
 }

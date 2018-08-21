@@ -1,5 +1,7 @@
 package org.bitbucket.fermenter.stout.authz;
 
+import java.util.Collection;
+
 /**
  * The interface that defines the contract for looking up attribute values. This can be a local or remote source. It
  * should be specified in the stout attribute definition json file for each attribute so that
@@ -23,6 +25,6 @@ public interface StoutAttributePoint {
      *            the subject for which to find the attribute
      * @return The attribute's value
      */
-    AttributeValue<?> getValueForAttribute(String attributeId, String subject);
+    Collection<AttributeValue<?>> getValueForAttribute(String attributeId, String subject);
 
 }

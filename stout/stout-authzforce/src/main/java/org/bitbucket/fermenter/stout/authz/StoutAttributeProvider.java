@@ -103,25 +103,30 @@ public class StoutAttributeProvider extends BaseNamedAttributeProvider {
         String subject = findSubjectInEnvironmentContext(context);
 
         // lookup the correct attribute point to use:
-        StoutAttributePoint attributePoint = idToAttributePointMap.get(id);
-        org.bitbucket.fermenter.stout.authz.AttributeValue<?> retrievedValue = attributePoint.getValueForAttribute(id,
-                subject);
-
-        SimpleValue<?> simpleValue = convertRetrievedValueToXacmlFormat(attributeDatatype, id, subject, retrievedValue);
-
         AttributeBag<AV> attrVals = null;
-        if (simpleValue != null) {
-            Collection<AV> attributeCollection = new ArrayList<>();
-            attributeCollection.add((AV) simpleValue);
-            attrVals = Bags.newAttributeBag(attributeDatatype, attributeCollection);
+        Collection<AV> attributeCollection = new ArrayList<>();
+        StoutAttributePoint attributePoint = idToAttributePointMap.get(id);
+        Collection<org.bitbucket.fermenter.stout.authz.AttributeValue<?>> retrievedValues = attributePoint.getValueForAttribute(id,
+                subject);
+        
+        for (org.bitbucket.fermenter.stout.authz.AttributeValue<?> retrievedValue : retrievedValues) {
+            SimpleValue<?> simpleValue = convertRetrievedValueToXacmlFormat(attributeDatatype, id, subject, retrievedValue);
+                
+            if (simpleValue != null) {            
+                attributeCollection.add((AV) simpleValue);
+                if (attrVals == null) {
+                    attrVals = Bags.newAttributeBag(attributeDatatype, attributeCollection);
+                }
+            }
         }
-
+        
         if (attrVals == null || attrVals.getElementDatatype().equals(attributeDatatype)) {
             return (AttributeBag<AV>) attrVals;
         }
-
+        
         throw new IndeterminateEvaluationException("Requested datatype (" + attributeDatatype + ") != provided by "
                 + this + " (" + attrVals.getElementDatatype() + ")", XacmlStatusCode.MISSING_ATTRIBUTE.value());
+
     }
 
     protected <AV extends AttributeValue> SimpleValue<?> convertRetrievedValueToXacmlFormat(

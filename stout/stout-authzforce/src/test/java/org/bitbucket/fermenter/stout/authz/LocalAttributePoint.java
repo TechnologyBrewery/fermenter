@@ -1,6 +1,9 @@
 package org.bitbucket.fermenter.stout.authz;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Test attribute point that just does some local logic to support test cases.
@@ -8,7 +11,8 @@ import java.util.Date;
 public class LocalAttributePoint implements StoutAttributePoint {
 
     @Override
-    public AttributeValue<?> getValueForAttribute(String attributeId, String subject) {
+    public Collection<AttributeValue<?>> getValueForAttribute(String attributeId, String subject) {    
+        List<AttributeValue<?>> values = null;
         AttributeValue<?> value = null;
         if ("urn:stout:jerseyNumber".equals(attributeId)) {
             value = sourceJerseyNumberAttribute(attributeId, subject, value);
@@ -21,8 +25,13 @@ public class LocalAttributePoint implements StoutAttributePoint {
         } else if ("urn:stout:serviceEntryDate".equals(attributeId)) {
             value = sourceServiceEntryDateAttribute(attributeId, subject, value);
         }
+        
+        if (value != null) {
+            values = new ArrayList<>();
+            values.add(value);
+        }
 
-        return value;
+        return values;
     }
 
     protected AttributeValue<?> sourceJerseyNumberAttribute(String attributeId, String subject,

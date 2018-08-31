@@ -59,5 +59,27 @@ public interface AuthorizationConfig extends KrauseningConfig {
     @Key("javax.xml.accessExternalSchema")
     @DefaultValue("all")
     public String getAccessExternalSchemaType();
+    
+    /**
+     * Returns the clock skew to use for both "not before" and "expiration" times.
+     * @return clock skew in seconds.  Defaults to 1 minute.
+     */
+    @Key("token.skew")
+    @DefaultValue("60")
+    public long getTokenSkewInSeconds();
 
+    /**
+     * Returns the time to add to the current time in order to set an expiration for a token.
+     * @return expiration offset (not including skew), in seconds.  Defaults to 1 hour.
+     */
+    @Key("token.expiration")
+    @DefaultValue("3600")
+    public long getTokenExpirationInSeconds();
+    
+    /**
+     * Returns the issuer for tokens. 
+     * @return token issuer
+     */
+    @Key("token.issuer")
+    public String getTokenIssuer();
 }

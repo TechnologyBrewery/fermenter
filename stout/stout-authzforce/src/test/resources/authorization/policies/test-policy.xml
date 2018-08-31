@@ -147,7 +147,7 @@
 		</Condition>
 	</Rule>
 	<Rule Effect="Permit"
-		RuleId="urn:oasis:names:tc:xacml:2.0:unit-test:action:attribute:permit">
+		RuleId="urn:oasis:names:tc:xacml:2.0:unit-test:action:is-jersey-number-44">
 		<Description>Test a custom attribute - user has a jersey number that
 			matches Reggie Jackson's
 		</Description>

@@ -5,6 +5,7 @@ import java.util.GregorianCalendar;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.ow2.authzforce.core.pdp.api.XmlUtils;
 import org.ow2.authzforce.core.pdp.api.value.AnyUriValue;
 import org.ow2.authzforce.core.pdp.api.value.BooleanValue;
@@ -64,6 +65,11 @@ public class AttributeValue<T> {
         valueAsGc.setTime(valueAsDate);
         XMLGregorianCalendar xmlGc = XmlUtils.XML_TEMPORAL_DATATYPE_FACTORY.newXMLGregorianCalendar(valueAsGc);
         return (valueAsDate != null) ? DateValue.getInstance(xmlGc): null;
-    }  
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
     
 }

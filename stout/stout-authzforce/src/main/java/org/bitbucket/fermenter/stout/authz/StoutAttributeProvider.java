@@ -106,24 +106,32 @@ public class StoutAttributeProvider extends BaseNamedAttributeProvider {
         AttributeBag<AV> attrVals = null;
         Collection<AV> attributeCollection = new ArrayList<>();
         StoutAttributePoint attributePoint = idToAttributePointMap.get(id);
-        Collection<org.bitbucket.fermenter.stout.authz.AttributeValue<?>> retrievedValues = attributePoint.getValueForAttribute(id,
-                subject);
-        
-        for (org.bitbucket.fermenter.stout.authz.AttributeValue<?> retrievedValue : retrievedValues) {
-            SimpleValue<?> simpleValue = convertRetrievedValueToXacmlFormat(attributeDatatype, id, subject, retrievedValue);
-                
-            if (simpleValue != null) {            
-                attributeCollection.add((AV) simpleValue);
-                if (attrVals == null) {
-                    attrVals = Bags.newAttributeBag(attributeDatatype, attributeCollection);
+        Collection<org.bitbucket.fermenter.stout.authz.AttributeValue<?>> retrievedValues = attributePoint
+                .getValueForAttribute(id, subject);
+        if (retrievedValues != null) {
+            for (org.bitbucket.fermenter.stout.authz.AttributeValue<?> retrievedValue : retrievedValues) {
+                SimpleValue<?> simpleValue = convertRetrievedValueToXacmlFormat(attributeDatatype, id, subject,
+                        retrievedValue);
+
+                if (simpleValue != null) {
+                    attributeCollection.add((AV) simpleValue);
                 }
             }
         }
-        
+
+        if (attrVals == null) {
+            attrVals = Bags.newAttributeBag(attributeDatatype, attributeCollection);
+            if (logger.isDebugEnabled()) {
+                logger.debug("Retrieved attribute '{}' for subject '{}' with the values '{}'", id, subject,
+                        attributeCollection.toString());
+
+            }
+        }
+
         if (attrVals == null || attrVals.getElementDatatype().equals(attributeDatatype)) {
             return (AttributeBag<AV>) attrVals;
         }
-        
+
         throw new IndeterminateEvaluationException("Requested datatype (" + attributeDatatype + ") != provided by "
                 + this + " (" + attrVals.getElementDatatype() + ")", XacmlStatusCode.MISSING_ATTRIBUTE.value());
 
@@ -160,10 +168,6 @@ public class StoutAttributeProvider extends BaseNamedAttributeProvider {
             }
         }
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("Retrieved attribute '{}' for subject '{}' with the value '{}'", id, subject, simpleValue);
-
-        }
         return simpleValue;
     }
 
@@ -307,7 +311,7 @@ public class StoutAttributeProvider extends BaseNamedAttributeProvider {
         } catch (InstantiationException | IllegalAccessException e) {
             logger.error("Could not instantiate attribute point '" + attributePointClassName + "'!", e);
 
-        }      
+        }
 
         return attributePoint;
     }

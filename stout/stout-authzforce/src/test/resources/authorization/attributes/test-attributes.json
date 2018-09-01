@@ -47,5 +47,12 @@
 		"type": " date",
 		"required": "true ",
 		"attributePointClass": " org.bitbucket.fermenter.stout.authz.LocalAttributePoint "
+	},
+	{
+		"id": "urn:stout:seasonsBattingOver350",
+		"category":"subject",
+		"type": "integer",
+		"required": "false",
+		"attributePointClass": "org.bitbucket.fermenter.stout.authz.LocalAttributePoint"
 	}
 ]

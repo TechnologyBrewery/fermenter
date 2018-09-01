@@ -474,4 +474,36 @@
 			</AnyOf>
 		</Target>
 	</Rule>
+	<Rule Effect="Permit"
+		RuleId="urn:oasis:names:tc:xacml:2.0:unit-test:multiple-attributes:permit">
+		<Description>Test a custom attribute - multiple attributes returned</Description>
+		<Target>
+			<AnyOf>
+				<AllOf>
+					<Match
+						MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+						<AttributeValue
+							DataType="http://www.w3.org/2001/XMLSchema#string">hit-over-350-in-1984</AttributeValue>
+						<AttributeDesignator
+							AttributeId="urn:oasis:names:tc:xacml:1.0:action:action-id"
+							Category="urn:oasis:names:tc:xacml:3.0:attribute-category:action"
+							DataType="http://www.w3.org/2001/XMLSchema#string"
+							MustBePresent="false" />
+					</Match>
+				</AllOf>
+			</AnyOf>
+		</Target>
+		<Condition>
+			<Apply
+				FunctionId="urn:oasis:names:tc:xacml:1.0:function:integer-is-in">
+					<AttributeValue
+						DataType="http://www.w3.org/2001/XMLSchema#integer">1984</AttributeValue>
+					<AttributeDesignator
+						AttributeId="urn:stout:seasonsBattingOver350"
+						Category="urn:oasis:names:tc:xacml:1.0:subject-category:access-subject"
+						DataType="http://www.w3.org/2001/XMLSchema#integer"
+						MustBePresent="false" />
+			</Apply>
+		</Condition>
+	</Rule>		
 </Policy>

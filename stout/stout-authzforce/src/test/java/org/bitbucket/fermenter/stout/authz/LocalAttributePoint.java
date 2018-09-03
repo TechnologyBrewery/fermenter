@@ -3,7 +3,6 @@ package org.bitbucket.fermenter.stout.authz;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Test attribute point that just does some local logic to support test cases.
@@ -12,31 +11,28 @@ public class LocalAttributePoint implements StoutAttributePoint {
 
     @Override
     public Collection<AttributeValue<?>> getValueForAttribute(String attributeId, String subject) {    
-        List<AttributeValue<?>> values = null;
-        AttributeValue<?> value = null;
+        Collection<AttributeValue<?>> values = null;
         if ("urn:stout:jerseyNumber".equals(attributeId)) {
-            value = sourceJerseyNumberAttribute(attributeId, subject, value);
+            values = sourceJerseyNumberAttribute(attributeId, subject);
         } else if ("urn:stout:hallOfFameProfile".equals(attributeId)) {
-            value = sourceHallOfFameProfileAttribute(attributeId, subject, value);
+            values = sourceHallOfFameProfileAttribute(attributeId, subject);
         } else if ("urn:stout:suspectedPedUser".equals(attributeId)) {
-            value = sourceSuspectedPedUserAttribute(attributeId, subject, value);
+            values = sourceSuspectedPedUserAttribute(attributeId, subject);
         } else if ("urn:stout:battingAverage".equals(attributeId)) {
-            value = sourceBattingAverageAttribute(attributeId, subject, value);
+            values = sourceBattingAverageAttribute(attributeId, subject);
         } else if ("urn:stout:serviceEntryDate".equals(attributeId)) {
-            value = sourceServiceEntryDateAttribute(attributeId, subject, value);
-        }
-        
-        if (value != null) {
-            values = new ArrayList<>();
-            values.add(value);
+            values = sourceServiceEntryDateAttribute(attributeId, subject);
+        } else if ("urn:stout:seasonsBattingOver350".equals(attributeId)) {
+            values = sourceSeasonsBattingOver350Attribute(attributeId, subject);
         }
 
         return values;
     }
 
-    protected AttributeValue<?> sourceJerseyNumberAttribute(String attributeId, String subject,
-            AttributeValue<?> value) {
-        if ("reggieJackson".equals(subject)) {
+    protected Collection<AttributeValue<?>> sourceJerseyNumberAttribute(String attributeId, String subject) {
+        AttributeValue<?> value = null;
+        
+        if ("reggieJackson".equals(subject)) {        
             value = new AttributeValue<Integer>(attributeId, 44);
         } else if ("tonyGwynn".equals(subject)) {
             value = new AttributeValue<Integer>(attributeId, 19);
@@ -45,12 +41,14 @@ public class LocalAttributePoint implements StoutAttributePoint {
         } else if ("anthonyRizzo".equals(subject)) {
             value = new AttributeValue<Integer>(attributeId, 44);
         }
+        
+        return wrapSingleValueInCollection(value);
 
-        return value;
     }
-
-    protected AttributeValue<?> sourceHallOfFameProfileAttribute(String attributeId, String subject,
-            AttributeValue<?> value) {
+    
+    protected Collection<AttributeValue<?>> sourceHallOfFameProfileAttribute(String attributeId, String subject) {
+        AttributeValue<?> value = null;
+        
         if ("reggieJackson".equals(subject)) {
             value = new AttributeValue<String>(attributeId, "https://baseballhall.org/hall-of-famers/jackson-reggie");
         } else if ("tonyGwynn".equals(subject)) {
@@ -61,11 +59,12 @@ public class LocalAttributePoint implements StoutAttributePoint {
             value = new AttributeValue<String>(attributeId, "https://www.nhl.com/news/alex-ovechkin-100-greatest");
         }
 
-        return value;
+        return wrapSingleValueInCollection(value);
     }
 
-    protected AttributeValue<?> sourceSuspectedPedUserAttribute(String attributeId, String subject,
-            AttributeValue<?> value) {
+    protected Collection<AttributeValue<?>> sourceSuspectedPedUserAttribute(String attributeId, String subject) {
+        AttributeValue<?> value = null;        
+        
         if ("reggieJackson".equals(subject)) {
             value = new AttributeValue<Boolean>(attributeId, Boolean.FALSE);
         } else if ("tonyGwynn".equals(subject)) {
@@ -76,11 +75,12 @@ public class LocalAttributePoint implements StoutAttributePoint {
             value = new AttributeValue<Boolean>(attributeId, Boolean.TRUE);
         }
 
-        return value;
+        return wrapSingleValueInCollection(value);
     }
 
-    protected AttributeValue<?> sourceBattingAverageAttribute(String attributeId, String subject,
-            AttributeValue<?> value) {
+    protected Collection<AttributeValue<?>> sourceBattingAverageAttribute(String attributeId, String subject) {
+        AttributeValue<?> value = null;
+        
         if ("reggieJackson".equals(subject)) {
             value = new AttributeValue<Double>(attributeId, new Double(.262));
         } else if ("tonyGwynn".equals(subject)) {
@@ -91,11 +91,12 @@ public class LocalAttributePoint implements StoutAttributePoint {
             value = new AttributeValue<Double>(attributeId, new Double(.215));
         }
 
-        return value;
+        return wrapSingleValueInCollection(value);
     }
 
-    protected AttributeValue<?> sourceServiceEntryDateAttribute(String attributeId, String subject,
-            AttributeValue<?> value) {
+    protected Collection<AttributeValue<?>> sourceServiceEntryDateAttribute(String attributeId, String subject) {
+        AttributeValue<?> value = null;
+        
         if ("reggieJackson".equals(subject)) {
             value = new AttributeValue<Date>(attributeId, new Date(-78364800000L));
         } else if ("tonyGwynn".equals(subject)) {
@@ -106,7 +107,40 @@ public class LocalAttributePoint implements StoutAttributePoint {
             value = new AttributeValue<Date>(attributeId, new Date(136166400000L));
         }
 
-        return value;
+        return wrapSingleValueInCollection(value);
     }
 
+    protected Collection<AttributeValue<?>> sourceSeasonsBattingOver350Attribute(String attributeId, String subject) {
+        Collection<AttributeValue<?>> values = new ArrayList<>();
+        if ("reggieJackson".equals(subject)) {
+            //none
+        } else if ("tonyGwynn".equals(subject)) {
+            values.add(new AttributeValue<Integer>(attributeId, 1984));
+            values.add(new AttributeValue<Integer>(attributeId, 1987));
+            values.add(new AttributeValue<Integer>(attributeId, 1993));
+            values.add(new AttributeValue<Integer>(attributeId, 1994));
+            values.add(new AttributeValue<Integer>(attributeId, 1995));
+            values.add(new AttributeValue<Integer>(attributeId, 1996));
+            values.add(new AttributeValue<Integer>(attributeId, 1997));
+            
+        } else if ("wadeBoggs".equals(subject)) {
+            values.add(new AttributeValue<Integer>(attributeId, 1983));
+            values.add(new AttributeValue<Integer>(attributeId, 1984));
+            values.add(new AttributeValue<Integer>(attributeId, 1985));
+            values.add(new AttributeValue<Integer>(attributeId, 1987));
+            values.add(new AttributeValue<Integer>(attributeId, 1988));
+            
+        } else if ("kirbyPuckett".equals(subject)) {
+            values.add(new AttributeValue<Integer>(attributeId, 1988));
+        }
+
+        return values;
+    }
+    
+    private Collection<AttributeValue<?>> wrapSingleValueInCollection(AttributeValue<?> value) {
+        Collection<AttributeValue<?>> values = new ArrayList<>();
+        values.add(value);
+        return values;
+    }
+    
 }

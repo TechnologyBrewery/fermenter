@@ -87,3 +87,15 @@ Feature: Specify authorization policies
       | no-ear-flap-test | tonyGwynn     | PERMIT   |
       | no-ear-flap-test | kenCaminiti   | DENY     |
       | no-ear-flap-test | marioMendoza  | PERMIT   |
+
+  Scenario Outline: specify authorization by finding a value in a collection attributes from an attribute store (hit over .350 in 1984)
+    Given a resource action "<action>" and subject "<subject>"
+    When a policy decision is requested
+    Then a "<decision>" decision is returned
+
+    Examples: 
+      | action               | subject       | decision       |
+      | hit-over-350-in-1984 | reggieJackson | NOT_APPLICABLE |
+      | hit-over-350-in-1984 | tonyGwynn     | PERMIT         |
+      | hit-over-350-in-1984 | wadeBoggs     | PERMIT         |
+      | hit-over-350-in-1984 | kirbyPuckett  | NOT_APPLICABLE |

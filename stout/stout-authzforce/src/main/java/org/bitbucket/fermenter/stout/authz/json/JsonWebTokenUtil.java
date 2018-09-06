@@ -22,14 +22,14 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
 /**
- * Builds a JSON Web Token (JWT) for a given subject and set of policies (represented as resource/action pairs). This
+ * Builds/decodes a JSON Web Token (JWT) for a given subject and set of policies (represented as resource/action pairs). This
  * allows you to ask the PDP for a number of claims and represent them in a JWT format. Within a service, you can simply
  * return this token as a string.
  *
  */
-public final class JsonWebTokenBuilder {
+public final class JsonWebTokenUtil {
 
-    private static final Logger logger = LoggerFactory.getLogger(JsonWebTokenBuilder.class);
+    private static final Logger logger = LoggerFactory.getLogger(JsonWebTokenUtil.class);
 
     private static AuthorizationConfig config = KrauseningConfigFactory.create(AuthorizationConfig.class);
 
@@ -37,11 +37,19 @@ public final class JsonWebTokenBuilder {
 
     private static PolicyDecisionPoint pdp = PolicyDecisionPoint.getInstance();
 
+    private JsonWebTokenUtil() {
+        // prevent instantiation of all private class
+    }
+
     /**
      * Creates a JSON Web Token (JWT) for the given subject, audience, and resource/action pairs.
-     * @param subject The subject for which the token will contain information
-     * @param audience The audience to whom this token is intended
-     * @param ruleClaims resource/action pairs for which the PDP will be asked for decisions
+     * 
+     * @param subject
+     *            The subject for which the token will contain information
+     * @param audience
+     *            The audience to whom this token is intended
+     * @param ruleClaims
+     *            resource/action pairs for which the PDP will be asked for decisions
      * @return A signed, compressed JWT token
      */
     public static String createToken(String subject, String audience, Collection<PolicyRequest> ruleClaims) {
@@ -71,8 +79,10 @@ public final class JsonWebTokenBuilder {
 
     /**
      * Decodes a JSON Web Token.
-     * @param token the token to decode
-     * @return the decoded token.  See JJWT for usage details.
+     * 
+     * @param token
+     *            the token to decode
+     * @return the decoded token. See JJWT for usage details.
      */
     public static Jws<Claims> parseLocalToken(String token) {
         JwtParser parser = Jwts.parser();

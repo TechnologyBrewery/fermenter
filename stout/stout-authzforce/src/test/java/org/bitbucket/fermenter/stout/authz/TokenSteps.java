@@ -6,7 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import java.util.Date;
 import java.util.List;
 
-import org.bitbucket.fermenter.stout.authz.json.JsonWebTokenBuilder;
+import org.bitbucket.fermenter.stout.authz.json.JsonWebTokenUtil;
 import org.bitbucket.fermenter.stout.authz.json.PolicyRequest;
 
 import cucumber.api.java.After;
@@ -32,18 +32,18 @@ public class TokenSteps {
     public void a_token_is_requested_for_and(String subject, String audience) throws Throwable {
         this.subject = subject;
         this.audience = audience;
-        token = JsonWebTokenBuilder.createToken(subject, audience, null);
+        token = JsonWebTokenUtil.createToken(subject, audience, null);
     }
     
     @When("^the following claims:$")
     public void a_token_is_requested_for_and_and_the_following_claims(List<PolicyRequest> claims) throws Throwable {        
-        token = JsonWebTokenBuilder.createToken(subject, audience, claims);
+        token = JsonWebTokenUtil.createToken(subject, audience, claims);
         
     }    
 
     @Then("^the token contains claims for \"([^\"]*)\", \"([^\"]*)\", and \"([^\"]*)\"$")
     public void the_token_contains_claims_for_and(String expectedSubject, String expectedAudience, String expectedIssuer) throws Throwable {
-        Jws<Claims> jwt = JsonWebTokenBuilder.parseLocalToken(token);
+        Jws<Claims> jwt = JsonWebTokenUtil.parseLocalToken(token);
         assertNotNull("token could not be parsed!", jwt);
         
         Claims claims = jwt.getBody();
@@ -54,7 +54,7 @@ public class TokenSteps {
 
     @Then("^a claim with not before time skew of (\\d+) seconds from the issue time$")
     public void a_claim_with_not_before_time_skew_of_seconds_from_the_issue_time(int expectedSkewSeconds) throws Throwable {
-        Jws<Claims> jwt = JsonWebTokenBuilder.parseLocalToken(token);
+        Jws<Claims> jwt = JsonWebTokenUtil.parseLocalToken(token);
         assertNotNull("token could not be parsed!", jwt);
         
         Claims claims = jwt.getBody();
@@ -66,7 +66,7 @@ public class TokenSteps {
 
     @Then("^a claim with an expiration time (\\d+) seconds from the issue time with an addition (\\d+) seconds for skew$")
     public void a_claim_with_an_expiration_time_seconds_from_the_issue_time_with_an_addition_seconds_for_skew(int expectedExpiration, int expectedSkew) throws Throwable {
-        Jws<Claims> jwt = JsonWebTokenBuilder.parseLocalToken(token);
+        Jws<Claims> jwt = JsonWebTokenUtil.parseLocalToken(token);
         assertNotNull("token could not be parsed!", jwt);
         
         Claims claims = jwt.getBody();
@@ -79,7 +79,7 @@ public class TokenSteps {
     
     @Then("^a claim is returned with the following rule and decision pairings:$")
     public void a_claim_is_returned_with_the_following_rule_and_decision_pairings(List<TokenDataInput> expectedResults) throws Throwable {
-        Jws<Claims> jwt = JsonWebTokenBuilder.parseLocalToken(token);
+        Jws<Claims> jwt = JsonWebTokenUtil.parseLocalToken(token);
         assertNotNull("token could not be parsed!", jwt);
         
         for (TokenDataInput expectedResult : expectedResults) {

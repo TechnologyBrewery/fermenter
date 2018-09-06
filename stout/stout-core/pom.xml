@@ -22,6 +22,8 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 		</dependency>
+		
+		<!-- test dependencies -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -35,10 +37,6 @@
             <groupId>info.cukes</groupId>
             <artifactId>cucumber-junit</artifactId>
         </dependency>
-		<dependency>
-			<groupId>info.cukes</groupId>
-			<artifactId>cucumber-junit</artifactId>
-		</dependency>
 	</dependencies>
 
 	<build>

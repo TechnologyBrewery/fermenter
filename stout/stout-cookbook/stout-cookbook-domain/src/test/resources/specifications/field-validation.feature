@@ -1,4 +1,4 @@
- @fieldValidation
+@fieldValidation
 Feature: Field Level Validation Requirements
 
   Scenario Outline: maxLength validation against valid values (ex: 20 character max)
@@ -15,8 +15,8 @@ Feature: Field Level Validation Requirements
       | abcdefghijklmnopqrst |
 
   Scenario Outline: maxLength validation against invalid values (ex. exceeds 20 character max)
-    Given a "<value>" to validate against the invalidation example string example field
-    When field level invalidation is performed on that value
+    Given a "<value>" to validate against the validation example string example field
+    When field level validation is performed on that value
     Then the validation return errors
 
     Examples: 
@@ -38,8 +38,8 @@ Feature: Field Level Validation Requirements
       | abcdefghijklmnopqrst |
 
   Scenario Outline: minLength validation against invalid values (ex. does not meet 2 character min)
-    Given a "<value>" to validate against the invalidation example string example field
-    When field level invalidation is performed on that value
+    Given a "<value>" to validate against the validation example string example field
+    When field level validation is performed on that value
     Then the validation return errors
 
     Examples: 

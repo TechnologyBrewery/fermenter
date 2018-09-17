@@ -22,7 +22,6 @@ public class ValidationSteps {
 
 	private String userString;
 	private ValidationExampleBO example;
-	private ValidationExampleBO example2;
 
 	@After("@fieldValidation")
 	public void cleanupMsgMgr() throws Exception {
@@ -48,26 +47,10 @@ public class ValidationSteps {
 
 	@Then("^the validation returns no errors$")
 	public void the_validation_returns_no_errors() throws Throwable {
+		
 		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(),
 				org.bitbucket.fermenter.stout.messages.Messages.class);
 		assertFalse("Should not have encountered messages!", MessageManager.hasErrorMessages());
-
-	}
-
-	@Given("^a \"([^\"]*)\" to validate against the invalidation example string example field$")
-	public void a_to_validate_against_the_invalidation_example_string_example_field(String value2) throws Throwable {
-		this.userString = value2;
-
-		example2 = new ValidationExampleBO();
-		example2.setStringExample(userString);
-		example2.setRequiredField(RandomStringUtils.randomAlphanumeric(3));
-
-	}
-
-	@When("^field level invalidation is performed on that value$")
-	public void field_level_invalidation_is_performed_on_that_value() throws Throwable {
-
-		example2.validate();
 
 	}
 

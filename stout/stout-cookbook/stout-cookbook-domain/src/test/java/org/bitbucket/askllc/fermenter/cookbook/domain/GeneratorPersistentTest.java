@@ -8,6 +8,7 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.LongKeyedEntityBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.UuidKeyedEntityBO;
 import org.bitbucket.fermenter.stout.messages.AbstractMsgMgrAwareTestSupport;
 import org.bitbucket.fermenter.stout.messages.MessageManager;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -21,6 +22,13 @@ import org.springframework.transaction.annotation.Transactional;
 @WebAppConfiguration
 public class GeneratorPersistentTest extends AbstractMsgMgrAwareTestSupport {
 
+	@After
+	public void deleteAllGeneratorPersistentTestExamples() {
+		UuidKeyedEntityBO.deleteAllUuidKeyedEntity();
+		IntegerKeyedEntityBO.deleteAllIntegerKeyedEntity();
+		LongKeyedEntityBO.deleteAllLongKeyedEntity();
+	}
+	
 	@Test
 	public void testSaveUuidGeneratedPriamryKey() throws Exception {
 		UuidKeyedEntityBO bizObj = new UuidKeyedEntityBO();

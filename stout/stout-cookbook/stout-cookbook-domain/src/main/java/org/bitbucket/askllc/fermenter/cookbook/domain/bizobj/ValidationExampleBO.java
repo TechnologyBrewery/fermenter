@@ -9,19 +9,24 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Business object for the ValidationExample entity.
+ * 
  * @see org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationExampleBaseBO
  *
- * GENERATED STUB CODE - PLEASE *DO* MODIFY
+ *      GENERATED STUB CODE - PLEASE *DO* MODIFY
  */
 @Entity
-@Table(name="VALIDATION_EXAMPLE")
+@Table(name = "VALIDATION_EXAMPLE")
 public class ValidationExampleBO extends ValidationExampleBaseBO {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(ValidationExampleBO.class);
 
 	public ValidationExampleBO() {
 		super();
 		SpringAutowiringUtil.autowireBizObj(this);
+	}
+
+	public static void deleteAllValidationExamples() {
+		getDefaultRepository().deleteAllInBatch();
 	}
 
 	@Override
@@ -33,5 +38,5 @@ public class ValidationExampleBO extends ValidationExampleBaseBO {
 	protected void complexValidation() {
 
 	}
-	
+
 }

@@ -23,6 +23,9 @@ public class UuidKeyedEntityBO extends UuidKeyedEntityBaseBO {
 		super();
 		SpringAutowiringUtil.autowireBizObj(this);
 	}
+	public static void deleteAllUuidKeyedEntity() {
+		getDefaultRepository().deleteAllInBatch();
+	}
 
 	@Override
 	protected Logger getLogger() {

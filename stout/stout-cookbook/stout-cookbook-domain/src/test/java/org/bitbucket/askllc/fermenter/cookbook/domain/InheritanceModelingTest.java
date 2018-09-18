@@ -18,6 +18,7 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.MappedSubclas
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.MappedSubclassBMaintenanceService;
 import org.bitbucket.fermenter.stout.messages.AbstractMsgMgrAwareTestSupport;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,6 +49,11 @@ public class InheritanceModelingTest extends AbstractMsgMgrAwareTestSupport {
     public void setUp() {
         Authentication authentication = new UsernamePasswordAuthenticationToken("testUser", "somePassword");
         SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+    @After
+    public void deleteAllInheritanceModelingTestExamples() {
+    	MappedSubclassABO.deleteAllMappedSubclassA();
+    	MappedSubclassBBO.deleteAllMappedSubclassB();
     }
 
     @Test

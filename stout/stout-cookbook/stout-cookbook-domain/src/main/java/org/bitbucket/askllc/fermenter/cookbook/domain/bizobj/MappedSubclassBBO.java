@@ -23,6 +23,9 @@ public class MappedSubclassBBO extends MappedSubclassBBaseBO {
 		super();
 		SpringAutowiringUtil.autowireBizObj(this);
 	}
+	public static void deleteAllMappedSubclassB() {
+		getDefaultRepository().deleteAllInBatch();
+	}
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(MappedSubclassBBO.class);
 	

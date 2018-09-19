@@ -8,12 +8,10 @@
 		<version>2.0.0.CR9-SNAPSHOT</version>
 	</parent>
 
-	<name>Fermenter::Stout::Spring</name>
-	<description>Provides base functionality and patterns for utilizing Spring to provide core 
-		business object and business service needs, such as dependency injection, object 
-		lifecycle management, transaction management, and data access</description>
+	<name>Fermenter::Stout::Spring::Client</name>
+	<description>Provides base functionality and patterns for utilizing Spring to provide rest client needs</description>
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>stout-spring</artifactId>
+	<artifactId>stout-spring-client</artifactId>
 	<packaging>jar</packaging>
 
 	<dependencies>
@@ -25,11 +23,6 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>stout-spring-client</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>stout-authzforce</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -45,28 +38,12 @@
 			<artifactId>commons-lang3</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-dbcp2</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-jpa</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-tx</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-orm</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -84,11 +61,7 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
-			<version>1.1.0.Final</version>
-		</dependency>
+
 		<dependency>
 			<groupId>javax.inject</groupId>
 			<artifactId>javax.inject</artifactId>
@@ -107,38 +80,13 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.datatype</groupId>
-			<artifactId>jackson-datatype-hibernate5</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>resteasy-jackson2-provider</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-jaxrs</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>resteasy-spring</artifactId>
-		</dependency>
-
-		<dependency>
 			<groupId>io.github.openfeign</groupId>
 			<artifactId>feign-core</artifactId>
 			<version>9.4.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.ow2.authzforce</groupId>
-			<artifactId>authzforce-ce-core-pdp-engine</artifactId>
 		</dependency>
 
 		<dependency>

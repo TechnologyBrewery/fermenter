@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 
@@ -81,6 +83,12 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>stout-cookbook-domain</artifactId>
 			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.bitbucket.askllc.fermenter.stout</groupId>
+					<artifactId>stout-spring</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
@@ -97,7 +105,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.bitbucket.askllc.fermenter.stout</groupId>
-			<artifactId>stout-spring</artifactId>
+			<artifactId>stout-spring-client</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -140,6 +148,12 @@
 			<version>${project.version}</version>
 			<type>test-jar</type>
 			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.bitbucket.askllc.fermenter.stout</groupId>
+					<artifactId>stout-spring</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>

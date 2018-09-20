@@ -80,10 +80,10 @@ import ${reference.importPrefix}.client.service.${reference.type}MaintenanceDele
  * Generated Code - DO NOT MODIFY
  */
 #if ( $entity.isTransient())
-	#if ($entity.isNonPersistentParentEntity())
+	#if ($entity.hasParent())
+public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityParentJavaType} implements BusinessObject<${entity.persistentEntityParentJavaType}> {
+    #else    
 public abstract class ${entity.name}BaseBO extends BaseSpringBO<${entity.name}BO> implements BusinessObject<${entity.name}BO> {
-    #else
-public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityParentJavaType} implements BusinessObject<${entity.persistentEntityParentJavaType}> {    
     #end
 #elseif ( $entity.isNonPersistentParentEntity() )
 @MappedSuperclass

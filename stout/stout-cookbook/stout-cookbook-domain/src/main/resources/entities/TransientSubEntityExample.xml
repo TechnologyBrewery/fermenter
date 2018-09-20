@@ -6,7 +6,6 @@
 	<documentation>A non-persistent entity</documentation>
 	
 	<parent>
-		<!-- TODO: doesn't seem to work w/ transient entities... -->
 		<type>TransientEntityExample</type>
 		<inheritanceStrategy>mapped-superclass</inheritanceStrategy>
 	</parent>	

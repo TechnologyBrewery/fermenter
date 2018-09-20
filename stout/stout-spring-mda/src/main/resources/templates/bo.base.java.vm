@@ -79,8 +79,12 @@ import ${reference.importPrefix}.client.service.${reference.type}MaintenanceDele
  *
  * Generated Code - DO NOT MODIFY
  */
-#if ( $entity.isTransient() )
+#if ( $entity.isTransient())
+	#if ($entity.hasParent())
+public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityParentJavaType} implements BusinessObject<${entity.persistentEntityParentJavaType}> {
+    #else    
 public abstract class ${entity.name}BaseBO extends BaseSpringBO<${entity.name}BO> implements BusinessObject<${entity.name}BO> {
+    #end
 #elseif ( $entity.isNonPersistentParentEntity() )
 @MappedSuperclass
 public abstract class ${entity.name}BaseBO<PK extends Serializable, BO, JPA extends JpaRepository<BO, PK>> extends BasePersistentSpringBO<PK, BO, JPA> implements PersistentBusinessObject<PK, BO> {

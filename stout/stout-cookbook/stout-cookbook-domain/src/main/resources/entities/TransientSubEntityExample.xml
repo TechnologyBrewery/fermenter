@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE entity PUBLIC "-//FERMENTER//DTD ENTITY//EN" "https://bitbucket.org/cpointe/fermenter/downloads/fermenter-2-entity.dtd">
+
+<entity transient="true">
+	<name>TransientSubEntityExample</name>
+	<documentation>A non-persistent entity</documentation>
+	
+	<parent>
+		<type>TransientEntityExample</type>
+		<inheritanceStrategy>mapped-superclass</inheritanceStrategy>
+	</parent>	
+
+	<fields>
+		<field>
+			<name>someOtherName</name>
+			<documentation>The friendly domain moniker</documentation>
+			<type>string</type>
+		</field>
+	</fields>
+
+</entity>

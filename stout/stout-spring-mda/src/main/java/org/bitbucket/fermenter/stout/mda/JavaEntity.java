@@ -269,6 +269,12 @@ public class JavaEntity implements Entity {
         return entity.getParent();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public boolean hasParent() {
+        return entity.getParent() != null;
+    }    
 
     /**
      * {@inheritDoc}

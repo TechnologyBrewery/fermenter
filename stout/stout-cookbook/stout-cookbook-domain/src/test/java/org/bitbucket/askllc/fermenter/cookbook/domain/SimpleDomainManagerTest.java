@@ -16,6 +16,7 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.SimpleDomainM
 import org.bitbucket.fermenter.stout.messages.AbstractMsgMgrAwareTestSupport;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -50,7 +51,12 @@ public class SimpleDomainManagerTest extends AbstractMsgMgrAwareTestSupport {
         Authentication authentication = new UsernamePasswordAuthenticationToken("testUser", "somePassword");
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
-
+    
+    @After
+    public void deleteSimpleDomainManagerTestExamples() {
+    	SimpleDomainBO.deleteAllSimpleDomain();
+    }
+    
 	@Test
 	public void testCountPassedCollection() throws Exception {
 		Integer numBizObjs = RandomUtils.nextInt(5, 10);
@@ -101,8 +107,8 @@ public class SimpleDomainManagerTest extends AbstractMsgMgrAwareTestSupport {
 		int pageSize = 5;
 		int numTotalBizObjs = RandomUtils.nextInt(6, 10);
 		TestUtils.createAndPersistRandomSimpleDomains(numTotalBizObjs);
-		ValueServiceResponse<Collection<SimpleDomainBO>> response = simpleDomainMgr.selectAllSimpleDomainsWithPaging(0,
-				pageSize);
+		ValueServiceResponse<Collection<SimpleDomainBO>> response = simpleDomainMgr.selectAllSimpleDomainsWithPaging(0, pageSize);
+		
 		TestUtils.assertNoErrorMessages(response);
 		assertEquals(pageSize, response.getValue().size());
 

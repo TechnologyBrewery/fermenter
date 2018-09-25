@@ -14,10 +14,16 @@ import javax.persistence.UniqueConstraint;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.TableNameMismatchBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.TableNameMismatchBaseBO;
 import org.bitbucket.fermenter.stout.exception.UnrecoverableException;
+import org.junit.After;
 import org.junit.Test;
 
 public class MismatchTest {
 
+	@After
+	public void deleteAllMismatchTestExamples() {
+		TableNameMismatchBO.deleteAllTableNameMismatch();
+	}
+	
     /**
      * Use reflection to set a table name mismatch, then restore the value after the test.
      * @throws Exception

@@ -21,6 +21,9 @@ public class TableNameMismatchBO extends TableNameMismatchBaseBO {
 		super();
 		SpringAutowiringUtil.autowireBizObj(this);
 	}
+	public static void deleteAllTableNameMismatch() {
+		getDefaultRepository().deleteAllInBatch();
+	}
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(TableNameMismatchBO.class);
 	

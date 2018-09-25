@@ -51,6 +51,10 @@ public class SimpleDomainBO extends SimpleDomainBaseBO {
 		SpringAutowiringUtil.autowireBizObj(this);
 	}
 
+	public static void deleteAllSimpleDomain() {
+		getDefaultRepository().deleteAllInBatch();
+	}
+	
 	@Override
 	protected Logger getLogger() {
 		return LOGGER;

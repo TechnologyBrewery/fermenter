@@ -23,6 +23,9 @@ public class LongKeyedEntityBO extends LongKeyedEntityBaseBO {
 		super();
 		SpringAutowiringUtil.autowireBizObj(this);
 	}
+	public static void deleteAllLongKeyedEntity() {
+		getDefaultRepository().deleteAllInBatch();
+	}
 
 	@Override
 	protected Logger getLogger() {

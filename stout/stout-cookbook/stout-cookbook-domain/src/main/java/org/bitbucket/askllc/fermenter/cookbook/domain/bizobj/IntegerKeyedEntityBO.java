@@ -23,7 +23,9 @@ public class IntegerKeyedEntityBO extends IntegerKeyedEntityBaseBO {
 		super();
 		SpringAutowiringUtil.autowireBizObj(this);
 	}
-
+	public static void deleteAllIntegerKeyedEntity() {
+		getDefaultRepository().deleteAllInBatch();
+	}
 	@Override
 	protected Logger getLogger() {
 		return LOGGER;

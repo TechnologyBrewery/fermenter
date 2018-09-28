@@ -47,7 +47,7 @@ Feature: Field Level Validation Requirements
       | b |
       |   |
 
-  Scenario Outline: maxValue validation against valid values (ex. positive Long.MAX_VALUE)
+  Scenario Outline: maxValue validation against valid values (ex. positive Long maxValue)
     Given a <long> to validate against the validation example long example field
     When field level validation is performed on that long value
     Then the long validation returns no errors
@@ -58,7 +58,7 @@ Feature: Field Level Validation Requirements
       |   6637985 |
       | 123456789 |
 
-  Scenario Outline: maxValue validation against invalid values (ex. exceeds Long.MAX_VALUE)
+  Scenario Outline: maxValue validation against invalid values (ex. exceeds Long maxValue)
     Given a <long> to validate against the validation example long example field
     When field level validation is performed on that long value
     Then the long validation returns errors
@@ -68,7 +68,7 @@ Feature: Field Level Validation Requirements
       | 999999999 |
       | 123456790 |
 
-  Scenario Outline: minValue validation against valid values (ex. negative Long.MAX_VALUE)
+  Scenario Outline: minValue validation against valid values (ex. negative Long maxValue)
     Given a negative <long> to validate against the validation example long example field
     When field level validation is performed on that long value
     Then the long validation returns no errors
@@ -79,7 +79,7 @@ Feature: Field Level Validation Requirements
       |   -6637985 |
       | -123456789 |
 
-  Scenario Outline: minValue validation against invalid values (ex. exceeds negative Long.MAX_VALUE)
+  Scenario Outline: minValue validation against invalid values (ex. exceeds negative Long maxValue)
     Given a negative <long> to validate against the validation example long example field
     When field level validation is performed on that long value
     Then the long validation returns errors

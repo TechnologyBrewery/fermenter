@@ -49,6 +49,13 @@ import javax.persistence.metamodel.PluralAttribute;
 import org.springframework.data.jpa.domain.Specification;
 import static org.springframework.data.jpa.domain.Specifications.where;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+
 import org.hibernate.annotations.Type;
 
 	#if (!$entity.isNonPersistentParentEntity())
@@ -223,6 +230,11 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
 		return foundBO;
 	}
 	#end
+
+	public static Page<${entity.name}BO> findByExample(${entity.name}BO probe, Integer page, Integer size, Sort sort) {
+	    Pageable pageable = new PageRequest(page, size, sort);
+        return getDefaultRepository().findAll(Example.of(probe), pageable);
+    }
 #end
 
 	/**

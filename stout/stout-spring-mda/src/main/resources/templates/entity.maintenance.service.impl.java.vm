@@ -16,6 +16,11 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
+
+import org.bitbucket.fermenter.stout.transfer.PageResponse;
+import org.bitbucket.fermenter.stout.page.json.FindByExampleCriteria;
 
 import org.bitbucket.fermenter.stout.authz.Action;
 
@@ -98,6 +103,19 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 		ValueServiceResponse<${entity.name}BO> response = new ValueServiceResponse<${entity.name}BO>(retrievedEntity);
 		addAllMsgMgrToResponse(response);
 		return response;
-	}	
+	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Transactional(propagation = Propagation.SUPPORTS)
+	@Override
+	public ValueServiceResponse<Page<${entity.name}BO>> findByExample(FindByExampleCriteria<${entity.name}BO> criteria) {
+		initMsgMgr(messages);
+		Page<${entity.name}BO> allEntities = ${entity.name}BO.findByExample(criteria.getProbe(), criteria.getPage(), criteria.getSize(), criteria.getSort());
+		ValueServiceResponse<Page<${entity.name}BO>> response = new ValueServiceResponse<Page<${entity.name}BO>>(
+				allEntities);
+		addAllMsgMgrToResponse(response);
+		return response;
+	}
 }

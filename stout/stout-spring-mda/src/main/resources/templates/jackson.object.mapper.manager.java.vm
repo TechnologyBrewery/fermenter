@@ -7,6 +7,8 @@ import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.bitbucket.fermenter.stout.messages.DefaultMessage;
 import org.bitbucket.fermenter.stout.messages.DefaultMessages;
 import org.bitbucket.fermenter.stout.messages.Message;
@@ -14,6 +16,11 @@ import org.bitbucket.fermenter.stout.messages.Messages;
 import org.bitbucket.fermenter.stout.messages.json.MessageDeserializer;
 import org.bitbucket.fermenter.stout.messages.json.MessageSerializer;
 import org.bitbucket.fermenter.stout.messages.json.MessagesMixIn;
+import org.bitbucket.fermenter.stout.page.json.PageDeserializer;
+import org.bitbucket.fermenter.stout.page.json.PageMixIn;
+import org.bitbucket.fermenter.stout.page.json.PageSerializer;
+import org.bitbucket.fermenter.stout.page.json.SortDeserializer;
+import org.bitbucket.fermenter.stout.transfer.PageResponse;
 
 import ${basePackage}.bizobj.*;
 import ${basePackage}.transfer.json.*;
@@ -44,7 +51,13 @@ public final class ObjectMapperManager {
 #foreach( $entity in $entities )		
 		module.setMixInAnnotation(${entity.name}BO.class, ${entity.name}MixIn.class);
 #end
-		
+
+		module.addAbstractTypeMapping(Page.class, PageResponse.class);
+		module.setMixInAnnotation(Page.class, PageMixIn.class);
+		module.addSerializer(Page.class, new PageSerializer());
+		module.addDeserializer(Page.class, new PageDeserializer());
+		module.addDeserializer(Sort.class, new SortDeserializer());
+
 		module.addAbstractTypeMapping(Messages.class, DefaultMessages.class);
 		module.setMixInAnnotation(Messages.class, MessagesMixIn.class);
 		module.setMixInAnnotation(DefaultMessages.class, MessagesMixIn.class);

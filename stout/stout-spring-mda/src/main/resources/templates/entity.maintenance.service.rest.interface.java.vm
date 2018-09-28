@@ -17,18 +17,25 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
+import org.bitbucket.fermenter.stout.transfer.PageResponse;
+import org.bitbucket.fermenter.stout.page.json.FindByExampleCriteria;
 
 import java.math.BigDecimal;
 
 /**
- * Provides an interface for create, retrieve, update, and delete (CRUD) functionality for ${entity.name}
+ * Provides an interface for create, retrieve (single and all), update, and delete (CRUD) functionality for ${entity.name}
  * business objects and may be utilized as a Resteasy client proxy to facilitate RESTful service
  * invocation.
  *
@@ -99,4 +106,16 @@ public interface ${entity.name}MaintenanceService {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{${idFieldName}}")
     ValueServiceResponse<${entity.name}BO> findByPrimaryKey(@PathParam("${idFieldName}") ${idFieldJavaType} ${idFieldName});
+
+    /**
+     * Find by example
+     *
+     * @return a service response containing entities from search and/or any collected messages
+     */
+    @PreAuthorize("hasPermission(authentication, 'read')")
+	@POST
+    @Path("findByExample")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	ValueServiceResponse<Page<${entity.name}BO>> findByExample(FindByExampleCriteria<${entity.name}BO> criteria);
 }

@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.net.URL;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.UUID;
@@ -17,103 +18,147 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainChildBO
 import org.bitbucket.askllc.fermenter.cookbook.domain.enumeration.SimpleDomainEnumeration;
 import org.bitbucket.askllc.fermenter.cookbook.domain.enumeration.ValuedEnumerationExample;
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.SimpleDomainMaintenanceService;
+import org.bitbucket.fermenter.stout.page.json.FindByExampleCriteria;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
+import org.bitbucket.fermenter.stout.transfer.PageResponse;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.extension.rest.client.ArquillianResteasyResource;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.test.api.ArquillianResource;
+import org.jboss.resteasy.client.jaxrs.ResteasyClient;
+import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 
 @RunWith(Arquillian.class)
 public class SimpleDomainMaintenanceIT extends RunTestsWithinArquillianWar {
 
+    @ArquillianResource
+    private URL deploymentURL;
+
+    @Before
+    public void deleteSimpleDomains() throws Exception {
+        ResteasyClient client = new ResteasyClientBuilder().build();
+        client.target(deploymentURL.toURI()).path("rest").path("SimpleDomainManagerService")
+                .path("deleteAllSimpleDomains").request().header("username", "testUser").post(null).close();
+    }
+
     @Test
     @RunAsClient
-    public void testGetNonExistentSimpleDomain(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
+    public void testGetNonExistentSimpleDomain(@ArquillianResteasyResource ResteasyWebTarget webTarget)
+            throws Exception {
         SimpleDomainMaintenanceService simpleDomainService = getMaintenanceService(webTarget);
         ValueServiceResponse<SimpleDomainBO> result = simpleDomainService.findByPrimaryKey(UUID.randomUUID());
         assertNotNull(result);
         assertNull(result.getValue());
     }
-    
-	@Test
-	@RunAsClient
-	public void testGetSimpleDomain(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
-		SimpleDomainMaintenanceService simpleDomainService = getMaintenanceService(webTarget);
-		int numChildEntities = RandomUtils.nextInt(5) + 2;
-		SimpleDomainBO simpleDomain = TestUtils.createRandomSimpleDomain(numChildEntities);
-		ValueServiceResponse<SimpleDomainBO> response = simpleDomainService.saveOrUpdate(simpleDomain);
-		TestUtils.assertNoErrorMessages(response);
 
-		ValueServiceResponse<SimpleDomainBO> resultWrapper = simpleDomainService
-				.findByPrimaryKey(response.getValue().getKey());
-		assertNotNull(resultWrapper);
-		SimpleDomainBO result = resultWrapper.getValue();
-		assertNotNull(result);
-		assertEquals(numChildEntities, result.getSimpleDomainChilds().size());
-	}
-    
-	@Test
-	@RunAsClient
-	public void testSaveNewSimpleDomain(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
-		SimpleDomainMaintenanceService simpleDomainService = getMaintenanceService(webTarget);
+    @Test
+    @RunAsClient
+    public void testGetSimpleDomain(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
+        SimpleDomainMaintenanceService simpleDomainService = getMaintenanceService(webTarget);
+        int numChildEntities = RandomUtils.nextInt(5) + 2;
+        SimpleDomainBO simpleDomain = TestUtils.createRandomSimpleDomain(numChildEntities);
+        ValueServiceResponse<SimpleDomainBO> response = simpleDomainService.saveOrUpdate(simpleDomain);
+        TestUtils.assertNoErrorMessages(response);
 
-		SimpleDomainBO simpleDomain = TestUtils.createRandomSimpleDomain();
-		ValueServiceResponse<SimpleDomainBO> response = simpleDomainService.saveOrUpdate(simpleDomain);
-		TestUtils.assertNoErrorMessages(response);
+        ValueServiceResponse<SimpleDomainBO> resultWrapper = simpleDomainService
+                .findByPrimaryKey(response.getValue().getKey());
+        assertNotNull(resultWrapper);
+        SimpleDomainBO result = resultWrapper.getValue();
+        assertNotNull(result);
+        assertEquals(numChildEntities, result.getSimpleDomainChilds().size());
+    }
 
-		SimpleDomainBO retrievedSimpleDomain = response.getValue();
-		assertNotNull("No generated key added to the persistented object!", retrievedSimpleDomain.getKey());
-		assertNotNull(retrievedSimpleDomain.getUpdatedAt());
-	}
-	
-	@Test
-	@RunAsClient
-	public void testDefaultSimpleDomain(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
-		SimpleDomainMaintenanceService simpleDomainService = getMaintenanceService(webTarget);
+    @Test
+    @RunAsClient
+    public void testFindAllSimpleDomain(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
+        SimpleDomainMaintenanceService simpleDomainService = getMaintenanceService(webTarget);
+        int totalCount = 50;
+        for (int i = 0; i < totalCount; i++) {
+            SimpleDomainBO simpleDomain = TestUtils.createRandomSimpleDomain();
+            simpleDomainService.saveOrUpdate(simpleDomain);
+        }
 
-		SimpleDomainBO simpleDomain = TestUtils.createRandomSimpleDomain();
-		simpleDomain.setType(null);
-		assertNull(simpleDomain.getType());
-		ValueServiceResponse<SimpleDomainBO> response = simpleDomainService.saveOrUpdate(simpleDomain);
-		TestUtils.assertNoErrorMessages(response);
+        int page = 0;
+        int size = 25;
+        // TODO: generate field names as enums
+        Sort sort = new Sort(Sort.Direction.ASC, "name");
+        SimpleDomainBO simpleDomainBOWithoutAnyRestrictions = new SimpleDomainBO();
+        FindByExampleCriteria<SimpleDomainBO> criteria = new FindByExampleCriteria<>(
+                simpleDomainBOWithoutAnyRestrictions, page, size, sort);
+        ValueServiceResponse results = simpleDomainService.findByExample(criteria);
 
-		SimpleDomainBO retrievedSimpleDomain = response.getValue();
-		assertNotNull("No generated key added to the persistented object!", retrievedSimpleDomain.getKey());
-		assertNotNull(retrievedSimpleDomain.getType());
-	}
-	
-	@Test
-	@RunAsClient
-	public void testSaveNumericBooleanTrue(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
-		SimpleDomainMaintenanceService simpleDomainService = getMaintenanceService(webTarget);
+        PageResponse<SimpleDomainBO> value = (PageResponse<SimpleDomainBO>) results.getValue();
+        assertEquals("Total count of elements didn't match!", totalCount, value.getTotalElements());
+        assertEquals("Expected there to be two pages of 25!", 2, value.getTotalPages());
+        assertEquals("Page size didn't match!", size, value.getNumberOfElements());
+    }
 
-		SimpleDomainBO simpleDomain = TestUtils.createRandomSimpleDomain();
-		ValueServiceResponse<SimpleDomainBO> response = simpleDomainService.saveOrUpdate(simpleDomain);
-		TestUtils.assertNoErrorMessages(response);
+    @Test
+    @RunAsClient
+    public void testSaveNewSimpleDomain(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
+        SimpleDomainMaintenanceService simpleDomainService = getMaintenanceService(webTarget);
 
-		SimpleDomainBO retrievedSimpleDomain = response.getValue();
-		assertNotNull("No generated key added to the persistented object!", retrievedSimpleDomain.getKey());
-		assertTrue(retrievedSimpleDomain.getNumericBoolean());
-	}
-	
-	@Test
-	@RunAsClient
-	public void testSaveNumericBooleanFalse(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
-		SimpleDomainMaintenanceService simpleDomainService = getMaintenanceService(webTarget);
+        SimpleDomainBO simpleDomain = TestUtils.createRandomSimpleDomain();
+        ValueServiceResponse<SimpleDomainBO> response = simpleDomainService.saveOrUpdate(simpleDomain);
+        TestUtils.assertNoErrorMessages(response);
 
-		SimpleDomainBO simpleDomain = TestUtils.createRandomSimpleDomain();
-		simpleDomain.setNumericBoolean(false);
-		ValueServiceResponse<SimpleDomainBO> response = simpleDomainService.saveOrUpdate(simpleDomain);
-		TestUtils.assertNoErrorMessages(response);
+        SimpleDomainBO retrievedSimpleDomain = response.getValue();
+        assertNotNull("No generated key added to the persistented object!", retrievedSimpleDomain.getKey());
+        assertNotNull(retrievedSimpleDomain.getUpdatedAt());
+    }
 
-		SimpleDomainBO retrievedSimpleDomain = response.getValue();
-		assertNotNull("No generated key added to the persistented object!", retrievedSimpleDomain.getKey());
-		assertFalse(retrievedSimpleDomain.getNumericBoolean());
-	}
-	
+    @Test
+    @RunAsClient
+    public void testDefaultSimpleDomain(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
+        SimpleDomainMaintenanceService simpleDomainService = getMaintenanceService(webTarget);
+
+        SimpleDomainBO simpleDomain = TestUtils.createRandomSimpleDomain();
+        simpleDomain.setType(null);
+        assertNull(simpleDomain.getType());
+        ValueServiceResponse<SimpleDomainBO> response = simpleDomainService.saveOrUpdate(simpleDomain);
+        TestUtils.assertNoErrorMessages(response);
+
+        SimpleDomainBO retrievedSimpleDomain = response.getValue();
+        assertNotNull("No generated key added to the persistented object!", retrievedSimpleDomain.getKey());
+        assertNotNull(retrievedSimpleDomain.getType());
+    }
+
+    @Test
+    @RunAsClient
+    public void testSaveNumericBooleanTrue(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
+        SimpleDomainMaintenanceService simpleDomainService = getMaintenanceService(webTarget);
+
+        SimpleDomainBO simpleDomain = TestUtils.createRandomSimpleDomain();
+        ValueServiceResponse<SimpleDomainBO> response = simpleDomainService.saveOrUpdate(simpleDomain);
+        TestUtils.assertNoErrorMessages(response);
+
+        SimpleDomainBO retrievedSimpleDomain = response.getValue();
+        assertNotNull("No generated key added to the persistented object!", retrievedSimpleDomain.getKey());
+        assertTrue(retrievedSimpleDomain.getNumericBoolean());
+    }
+
+    @Test
+    @RunAsClient
+    public void testSaveNumericBooleanFalse(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
+        SimpleDomainMaintenanceService simpleDomainService = getMaintenanceService(webTarget);
+
+        SimpleDomainBO simpleDomain = TestUtils.createRandomSimpleDomain();
+        simpleDomain.setNumericBoolean(false);
+        ValueServiceResponse<SimpleDomainBO> response = simpleDomainService.saveOrUpdate(simpleDomain);
+        TestUtils.assertNoErrorMessages(response);
+
+        SimpleDomainBO retrievedSimpleDomain = response.getValue();
+        assertNotNull("No generated key added to the persistented object!", retrievedSimpleDomain.getKey());
+        assertFalse(retrievedSimpleDomain.getNumericBoolean());
+    }
+
     @Test
     @RunAsClient
     public void testSaveNamedEnumeration(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
@@ -127,8 +172,8 @@ public class SimpleDomainMaintenanceIT extends RunTestsWithinArquillianWar {
         SimpleDomainBO retrievedSimpleDomain = response.getValue();
         assertNotNull("No generated key added to the persistented object!", retrievedSimpleDomain.getKey());
         assertEquals(expectedValue, retrievedSimpleDomain.getAnEnumeratedValue());
-    }   	
-	
+    }
+
     @Test
     @RunAsClient
     public void testSaveValuedEnumeration(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
@@ -142,11 +187,12 @@ public class SimpleDomainMaintenanceIT extends RunTestsWithinArquillianWar {
         SimpleDomainBO retrievedSimpleDomain = response.getValue();
         assertNotNull("No generated key added to the persistented object!", retrievedSimpleDomain.getKey());
         assertEquals(expectedValue, retrievedSimpleDomain.getAnotherEnumeratedValue());
-    }	
-	
+    }
+
     @Test
     @RunAsClient
-    public void testUpdateExistingSimpleDomain(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
+    public void testUpdateExistingSimpleDomain(@ArquillianResteasyResource ResteasyWebTarget webTarget)
+            throws Exception {
         SimpleDomainMaintenanceService simpleDomainService = getMaintenanceService(webTarget);
         SimpleDomainBO domain = TestUtils.createRandomSimpleDomain();
 
@@ -171,7 +217,8 @@ public class SimpleDomainMaintenanceIT extends RunTestsWithinArquillianWar {
 
     @Test
     @RunAsClient
-    public void testDeleteExistingSimpleDomain(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
+    public void testDeleteExistingSimpleDomain(@ArquillianResteasyResource ResteasyWebTarget webTarget)
+            throws Exception {
         SimpleDomainMaintenanceService simpleDomainService = getMaintenanceService(webTarget);
         SimpleDomainBO domain = TestUtils.createRandomSimpleDomain();
 
@@ -189,7 +236,7 @@ public class SimpleDomainMaintenanceIT extends RunTestsWithinArquillianWar {
         assertNull(foundResult.getValue());
 
     }
-    
+
     @Test
     @RunAsClient
     public void testDeleteSimpleDomainChild(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
@@ -248,12 +295,94 @@ public class SimpleDomainMaintenanceIT extends RunTestsWithinArquillianWar {
         assertEquals(1, children.size());
         assertEquals(updatedChildName, children.iterator().next().getName());
     }
-    
-    
+
+    @Test
+    @RunAsClient
+    public void testFindByExampleSimple(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
+        SimpleDomainMaintenanceService simpleDomainService = getMaintenanceService(webTarget);
+        SimpleDomainBO domain = new SimpleDomainBO();
+        String[] searchNames = new String[] { "name1", "name1", "name2", "name3" };
+        for (String name : searchNames) {
+            domain.setName(name);
+            ValueServiceResponse<SimpleDomainBO> result = simpleDomainService.saveOrUpdate(domain);
+            TestUtils.assertNoErrorMessages(result);
+        }
+
+        int page = 0;
+        int size = 25;
+        Sort sort = new Sort(Sort.Direction.ASC, "name");
+
+        SimpleDomainBO probe = new SimpleDomainBO();
+        probe.setName(searchNames[0]);
+        FindByExampleCriteria<SimpleDomainBO> criteria = new FindByExampleCriteria<>(probe, page, size, sort);
+        ValueServiceResponse<Page<SimpleDomainBO>> searchResults = simpleDomainService.findByExample(criteria);
+        TestUtils.assertNoErrorMessages(searchResults);
+
+        Page<SimpleDomainBO> value = searchResults.getValue();
+        assertEquals(2, value.getTotalElements());
+    }
+
+    @Test
+    @RunAsClient
+    public void testFindByExamplePages(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
+        SimpleDomainMaintenanceService simpleDomainService = getMaintenanceService(webTarget);
+        SimpleDomainBO domain = new SimpleDomainBO();
+        String[] searchNames = new String[] { "name1", "name1", "name2", "name3" };
+        for (String name : searchNames) {
+            domain.setName(name);
+            ValueServiceResponse<SimpleDomainBO> result = simpleDomainService.saveOrUpdate(domain);
+            TestUtils.assertNoErrorMessages(result);
+        }
+
+        int page = 0;
+        int size = 1;
+        Sort sort = new Sort(Sort.Direction.ASC, "name");
+
+        SimpleDomainBO probe = new SimpleDomainBO();
+        probe.setName(searchNames[0]);
+        FindByExampleCriteria<SimpleDomainBO> criteria = new FindByExampleCriteria<>(probe, page, size, sort);
+        ValueServiceResponse<Page<SimpleDomainBO>> searchResults = simpleDomainService.findByExample(criteria);
+        TestUtils.assertNoErrorMessages(searchResults);
+
+        Page<SimpleDomainBO> value = searchResults.getValue();
+        assertEquals(2, value.getTotalElements());
+        assertEquals(2, value.getTotalPages());
+        assertEquals(size, value.getSize());
+    }
+
+    @Test
+    @RunAsClient
+    public void testFindByExampleSort(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {
+        SimpleDomainMaintenanceService simpleDomainService = getMaintenanceService(webTarget);
+        SimpleDomainBO domain = new SimpleDomainBO();
+        String[] searchNames = new String[] { "bbb", "hhh", "aaa", "zzz" };
+        for (String name : searchNames) {
+            domain.setName(name);
+            ValueServiceResponse<SimpleDomainBO> result = simpleDomainService.saveOrUpdate(domain);
+            TestUtils.assertNoErrorMessages(result);
+        }
+
+        int page = 0;
+        int size = 25;
+        Sort sort = new Sort(Sort.Direction.ASC, "name");
+
+        SimpleDomainBO probe = new SimpleDomainBO();
+        FindByExampleCriteria<SimpleDomainBO> criteria = new FindByExampleCriteria<>(probe, page, size, sort);
+        ValueServiceResponse<Page<SimpleDomainBO>> searchResults = simpleDomainService.findByExample(criteria);
+        TestUtils.assertNoErrorMessages(searchResults);
+
+        Page<SimpleDomainBO> value = searchResults.getValue();
+        assertEquals(searchNames.length, value.getTotalElements());
+        assertEquals(searchNames[2], value.getContent().get(0).getName());
+        assertEquals(searchNames[0], value.getContent().get(1).getName());
+        assertEquals(searchNames[1], value.getContent().get(2).getName());
+        assertEquals(searchNames[3], value.getContent().get(3).getName());
+    }
+
     private SimpleDomainMaintenanceService getMaintenanceService(ResteasyWebTarget webTarget) {
         webTarget = initWebTarget(webTarget);
         SimpleDomainMaintenanceService simpleDomainService = webTarget.proxy(SimpleDomainMaintenanceService.class);
         return simpleDomainService;
-    }    
+    }
 
 }

@@ -14,8 +14,10 @@ import org.apache.commons.lang3.RandomUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.SimpleDomainMaintenanceService;
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.SimpleDomainManagerService;
+import org.bitbucket.fermenter.stout.page.json.FindByExampleCriteria;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
+import org.bitbucket.fermenter.stout.transfer.PageResponse;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.extension.rest.client.ArquillianResteasyResource;
 import org.jboss.arquillian.junit.Arquillian;
@@ -26,11 +28,14 @@ import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 
 @RunWith(Arquillian.class)
 public class SimpleDomainBusinessServicesIT extends RunTestsWithinArquillianWar {
 
-	@ArquillianResource
+	private static final int FIRST_PAGE = 0;
+    @ArquillianResource
 	private URL deploymentURL;
 
 	@Before
@@ -190,12 +195,13 @@ public class SimpleDomainBusinessServicesIT extends RunTestsWithinArquillianWar 
 			maintenanceService.saveOrUpdate(TestUtils.createRandomSimpleDomain(numSimpleDomainChildren));
 		}
 
-		SimpleDomainManagerService managerService = getService(webTarget);
-		ValueServiceResponse<Collection<SimpleDomainBO>> allSimpleDomainsResponse = managerService
-				.selectAllSimpleDomainsLazySimpleDomainChild();
+		Sort sort = new Sort(Sort.Direction.ASC, "name");
+		FindByExampleCriteria<SimpleDomainBO> criteria = new FindByExampleCriteria<SimpleDomainBO>(new SimpleDomainBO(), FIRST_PAGE, numSimpleDomains, sort);
+		ValueServiceResponse allSimpleDomainsResponse = maintenanceService.findByExample(criteria);
+		PageResponse<SimpleDomainBO> test2 = (PageResponse<SimpleDomainBO>) allSimpleDomainsResponse.getValue();
 		TestUtils.assertNoErrorMessages(allSimpleDomainsResponse);
 
-		Collection<SimpleDomainBO> allSimpleDomains = allSimpleDomainsResponse.getValue();
+		Collection<SimpleDomainBO> allSimpleDomains = test2.getContent();
 		assertEquals(numSimpleDomains, allSimpleDomains.size());
 
 		assertEquals(0, allSimpleDomains.iterator().next().getSimpleDomainChilds().size());

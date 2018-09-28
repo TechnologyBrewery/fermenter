@@ -9,6 +9,8 @@ import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.bitbucket.fermenter.stout.page.json.FindByExampleCriteria;
 import org.springframework.stereotype.Service;
 
 #foreach( $import in $entity.idFieldImports )
@@ -66,5 +68,14 @@ public class ${entity.name}MaintenanceDelegateImpl implements ${entity.name}Main
     public void delete(${idFieldJavaType} ${idFieldName}) {
 		VoidServiceResponse response = ${entity.name.toLowerCase()}Resource.delete(${idFieldName});
 		MessageManager.addMessages(response.getMessages());
+    }
+
+	/**
+	 * {@inheritDoc}
+	 */
+    public Page<${entity.name}> findByExample(FindByExampleCriteria<${entity.name}> criteria) {
+		ValueServiceResponse<Page<${entity.name}>> response = ${entity.name.toLowerCase()}Resource.findByExample(criteria);
+		MessageManager.addMessages(response.getMessages());
+		return response.getValue();
     }
 }

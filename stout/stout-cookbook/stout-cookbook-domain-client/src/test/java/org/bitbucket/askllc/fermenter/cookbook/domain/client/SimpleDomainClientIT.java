@@ -19,6 +19,7 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.RunTestsWithinArquillianWa
 import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.SimpleDomainMaintenanceDelegate;
 import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.SimpleDomainManagerDelegate;
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.SimpleDomain;
+import org.bitbucket.fermenter.stout.page.json.FindByExampleCriteria;
 import org.bitbucket.fermenter.stout.test.MessageTestUtils;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
@@ -28,6 +29,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,7 +42,7 @@ import org.springframework.stereotype.Component;
 @SpringClientConfiguration("application-test-context.xml")
 // Allows Spring to inject the service endpoints into this class:
 @Component
-public class SimpleDomainBusinessServicesClientIT extends RunTestsWithinArquillianWar {
+public class SimpleDomainClientIT extends AbstractArquillianTestSupport {
 
     @ArquillianResource
     private URL deploymentURL;
@@ -175,6 +178,32 @@ public class SimpleDomainBusinessServicesClientIT extends RunTestsWithinArquilli
         assertEquals(numSimpleDomains, allSimpleDomains.size());
 
         assertEquals(numSimpleDomainChildren, allSimpleDomains.iterator().next().getSimpleDomainChilds().size());
+    }
+    
+    @Test
+    @RunAsClient
+    public void testFindByExampleSimpleDomains() throws Exception {
+        int numSimpleDomains = RandomUtils.nextInt(5, 10);
+        int numSimpleDomainChildren = RandomUtils.nextInt(2, 6);
+
+        SimpleDomain lastCreatedSimpleDomain = null;
+        for (int iter = 0; iter < numSimpleDomains; iter++) {
+             lastCreatedSimpleDomain = simpleDomainMaintenanceDelagte.create(TestUtils.createRandomSimpleDomain(numSimpleDomainChildren));
+        }
+
+        Sort sort = new Sort(Sort.Direction.ASC, "name");
+        FindByExampleCriteria<SimpleDomain> criteria = new FindByExampleCriteria<SimpleDomain>(new SimpleDomain(), 0, numSimpleDomains, sort);
+        Page<SimpleDomain> allSimpleDomains = simpleDomainMaintenanceDelagte.findByExample(criteria);
+        MessageTestUtils.assertNoErrorMessages();
+
+        assertEquals(numSimpleDomains, allSimpleDomains.getTotalElements());
+        boolean responseContainsLastCreatedSimpleDomain = false;
+        for(SimpleDomain simpleDomain : allSimpleDomains.getContent()) {
+            if(simpleDomain.getName().equals(lastCreatedSimpleDomain.getName())) {
+                responseContainsLastCreatedSimpleDomain = true;
+            }
+        }
+        assertTrue(responseContainsLastCreatedSimpleDomain);
     }
 
     @Test

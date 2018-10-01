@@ -24,6 +24,7 @@ public class ValidationSteps {
 
 	private String userString;
 	private Long userLong;
+	private int userInt;
 	private ValidationExampleBO example;
 
 	@After("@fieldValidation")
@@ -31,6 +32,10 @@ public class ValidationSteps {
 		MessageManagerInitializationDelegate.cleanupMessageManager();
 		ValidationExampleBO.deleteAllValidationExamples();
 	}
+	
+	/* 
+	 * validation steps for maxLength and minLength of a String
+	 */
 
 	@Given("^a \"([^\"]*)\" to validate against the validation example string example field$")
 	public void a_to_validate_against_the_validation_example_string_example_field(String value) throws Throwable {
@@ -67,6 +72,10 @@ public class ValidationSteps {
 
 	}
 
+	/* 
+	 * validation steps for maxValue and minValue of a Long
+	 */
+	
 	@Given("^a (\\d+) to validate against the validation example long example field$")
 	public void a_to_validate_against_the_validation_example_long_example_field(long value) throws Throwable {
 		this.userLong = value;
@@ -112,5 +121,57 @@ public class ValidationSteps {
 		example.setRequiredField(RandomStringUtils.randomAlphanumeric(10));
 
 	}
+	
+	/* 
+	 * validation steps for maxValue and minValue of an Integer
+	 */
+	
+	@Given("^an (\\d+) to validate against the validation example integer example field$")
+	public void an_to_validate_against_the_validation_example_integer_example_field(int value) throws Throwable {
+		this.userInt = value;
+		
+		example = new ValidationExampleBO();
+		example.setIntegerExample(userInt);
+		example.setRequiredField(RandomStringUtils.randomAlphanumeric(10));
+
+
+	}
+	
+	@When("^field level validation is performed on that integer value$")
+	public void field_level_validation_is_performed_on_that_integer_value() throws Throwable {
+		
+	    example.validate();
+	    
+	}
+	
+	@Then("^the integer validation returns no errors$")
+	public void the_integer_validation_returns_no_errors() throws Throwable {
+	    
+		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(),
+				ValidationSteps.class);
+		assertFalse("Should not have encountered messages!", MessageManager.hasErrorMessages());
+		
+	}
+	
+	@Then("^the integer validation returns errors$")
+	public void the_integer_validation_returns_errors() throws Throwable {
+	    
+		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(),
+				ValidationSteps.class);
+		assertTrue("Should have encountered messages!", MessageManager.hasErrorMessages());
+		
+	}
+	
+	@Given("^a negative -(\\d+) to validate against the validation example integer example field$")
+	public void a_negative_to_validate_against_the_validation_example_integer_example_field(int value) throws Throwable {
+		this.userInt = value;
+
+		example = new ValidationExampleBO();
+		example.setIntegerExample(userInt);
+		example.setRequiredField(RandomStringUtils.randomAlphanumeric(10));
+
+		
+	}
+
 
 }

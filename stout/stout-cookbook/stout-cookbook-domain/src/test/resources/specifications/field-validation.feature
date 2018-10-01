@@ -68,7 +68,7 @@ Feature: Field Level Validation Requirements
       | 999999999 |
       | 123456790 |
 
-  Scenario Outline: minValue validation against valid values (ex. negative Long maxValue)
+  Scenario Outline: minValue validation against valid values (ex. negative Long minValue)
     Given a negative <long> to validate against the validation example long example field
     When field level validation is performed on that long value
     Then the long validation returns no errors
@@ -79,7 +79,7 @@ Feature: Field Level Validation Requirements
       |   -6637985 |
       | -123456789 |
 
-  Scenario Outline: minValue validation against invalid values (ex. exceeds negative Long maxValue)
+  Scenario Outline: minValue validation against invalid values (ex. exceeds negative Long minValue)
     Given a negative <long> to validate against the validation example long example field
     When field level validation is performed on that long value
     Then the long validation returns errors
@@ -88,4 +88,47 @@ Feature: Field Level Validation Requirements
       | long       |
       | -999999999 |
       | -123456790 |
-      
+
+  Scenario Outline: maxValue validation against valid values (ex. positive Integer maxValue in entity)
+    Given an <integer> to validate against the validation example integer example field
+    When field level validation is performed on that integer value
+    Then the integer validation returns no errors
+
+    Examples: 
+      | integer |
+      |   12345 |
+      |     999 |
+      |       1 |
+
+  Scenario Outline: maxValue validation against invalid values (ex. exceeds positive Integer maxValue in entity)
+    Given an <integer> to validate against the validation example integer example field
+    When field level validation is performed on that integer value
+    Then the integer validation returns errors
+
+    Examples: 
+      | integer   |
+      |     12346 |
+      |   9999999 |
+      | 100000000 |
+
+  Scenario Outline: minValue validation against valid values (ex. negative Integer minValue in entity)
+    Given a negative <integer> to validate against the validation example integer example field
+    When field level validation is performed on that integer value
+    Then the integer validation returns no errors
+
+    Examples: 
+      | integer |
+      |  -12345 |
+      |    -999 |
+      |      -1 |
+
+  Scenario Outline: maxValue validation against invalid values (ex. exceeds negative Integer minValue in entity)
+    Given a negative <integer> to validate against the validation example integer example field
+    When field level validation is performed on that integer value
+    Then the integer validation returns errors
+
+    Examples: 
+      | integer    |
+      |     -12346 |
+      |   -9999999 |
+      | -100000000 |

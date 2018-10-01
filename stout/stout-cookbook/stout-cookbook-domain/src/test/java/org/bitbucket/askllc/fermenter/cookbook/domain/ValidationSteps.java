@@ -32,6 +32,10 @@ public class ValidationSteps {
 		MessageManagerInitializationDelegate.cleanupMessageManager();
 		ValidationExampleBO.deleteAllValidationExamples();
 	}
+	
+	/* 
+	 * validation steps for maxLength and minLength of a String
+	 */
 
 	@Given("^a \"([^\"]*)\" to validate against the validation example string example field$")
 	public void a_to_validate_against_the_validation_example_string_example_field(String value) throws Throwable {
@@ -68,6 +72,10 @@ public class ValidationSteps {
 
 	}
 
+	/* 
+	 * validation steps for maxValue and minValue of a Long
+	 */
+	
 	@Given("^a (\\d+) to validate against the validation example long example field$")
 	public void a_to_validate_against_the_validation_example_long_example_field(long value) throws Throwable {
 		this.userLong = value;
@@ -113,6 +121,10 @@ public class ValidationSteps {
 		example.setRequiredField(RandomStringUtils.randomAlphanumeric(10));
 
 	}
+	
+	/* 
+	 * validation steps for maxValue and minValue of an Integer
+	 */
 	
 	@Given("^an (\\d+) to validate against the validation example integer example field$")
 	public void an_to_validate_against_the_validation_example_integer_example_field(int value) throws Throwable {

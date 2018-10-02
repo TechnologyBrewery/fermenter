@@ -178,8 +178,6 @@ public class ValidationSteps {
 			if (value2 / 10 > 0) {
 				value2 = value2 / 10;
 				count++;
-			} else {
-				System.out.println(count);
 			}
 		}
 		count = count * 10;
@@ -224,8 +222,6 @@ public class ValidationSteps {
 			if (value2 / 10 > 0) {
 				value2 = value2 / 10;
 				count++;
-			} else {
-				System.out.println(count);
 			}
 		}
 		count = count * 10;

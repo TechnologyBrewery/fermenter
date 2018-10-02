@@ -132,3 +132,47 @@ Feature: Field Level Validation Requirements
       |     -12346 |
       |   -9999999 |
       | -100000000 |
+
+  Scenario Outline: maxValue validation against valid values (ex. positive BigDecimal maxValue)
+    Given a <bigdecimal> to validate against the validation example BigDecimal example field
+    When field level validation is performed on that BigDecimal value
+    Then the BigDecimal validation returns no errors
+
+    Examples: 
+      | bigdecimal          |
+      | 123456789.123456789 |
+      |          12.3456789 |
+      |  99999999.999999999 |
+
+  Scenario Outline: maxValue validation against invalid values (ex. exceeds positive BigDecimal maxValue)
+    Given a <bigdecimal> to validate against the validation example BigDecimal example field
+    When field level validation is performed on that BigDecimal value
+    Then the BigDecimal validation returns errors
+
+    Examples: 
+      | bigdecimal            |
+      |   123456790.123456790 |
+      | 1234567891.3456789121 |
+      |  99999999199.99999999 |
+
+  Scenario Outline: minValue validation against valid values (ex. negative BigDecimal minValue)
+    Given a negative <bigdecimal> to validate against the validation example BigDecimal example field
+    When field level validation is performed on that BigDecimal value
+    Then the BigDecimal validation returns no errors
+
+    Examples: 
+      | bigdecimal           |
+      | -123456789.123456789 |
+      |          -12.3456789 |
+      |  -99999999.999999999 |
+
+  Scenario Outline: minValue validation against invalid values (ex. exceeds negative BigDecimal minValue)
+    Given a negative <bigdecimal> to validate against the validation example BigDecimal example field
+    When field level validation is performed on that BigDecimal value
+    Then the BigDecimal validation returns errors
+
+    Examples: 
+      | bigdecimal             |
+      |   -123456790.123456790 |
+      | -1234567891.3456789121 |
+      |   -9999999999.99999999 |

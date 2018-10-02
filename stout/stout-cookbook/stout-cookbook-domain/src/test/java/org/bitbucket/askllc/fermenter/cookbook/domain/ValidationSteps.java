@@ -3,6 +3,8 @@ package org.bitbucket.askllc.fermenter.cookbook.domain;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.math.BigDecimal;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationExampleBO;
 
@@ -25,6 +27,7 @@ public class ValidationSteps {
 	private String userString;
 	private Long userLong;
 	private int userInt;
+	private BigDecimal userBigDecimal;
 	private ValidationExampleBO example;
 
 	@After("@fieldValidation")
@@ -32,8 +35,8 @@ public class ValidationSteps {
 		MessageManagerInitializationDelegate.cleanupMessageManager();
 		ValidationExampleBO.deleteAllValidationExamples();
 	}
-	
-	/* 
+
+	/*
 	 * validation steps for maxLength and minLength of a String
 	 */
 
@@ -72,14 +75,14 @@ public class ValidationSteps {
 
 	}
 
-	/* 
+	/*
 	 * validation steps for maxValue and minValue of a Long
 	 */
-	
+
 	@Given("^a (\\d+) to validate against the validation example long example field$")
 	public void a_to_validate_against_the_validation_example_long_example_field(long value) throws Throwable {
 		this.userLong = value;
-		
+
 		example = new ValidationExampleBO();
 		example.setLongExample(userLong);
 		example.setRequiredField(RandomStringUtils.randomAlphanumeric(10));
@@ -95,20 +98,17 @@ public class ValidationSteps {
 
 	@Then("^the long validation returns no errors$")
 	public void the_long_validation_returns_no_errors() throws Throwable {
-	    
-		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(),
-				ValidationSteps.class);
+
+		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ValidationSteps.class);
 		assertFalse("Should not have encountered messages!", MessageManager.hasErrorMessages());
 
 	}
 
 	@Then("^the long validation returns errors$")
 	public void the_long_validation_returns_errors() throws Throwable {
-	    
-		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(),
-				ValidationSteps.class);
-		assertTrue("Should have encountered messages!", MessageManager.hasErrorMessages());
 
+		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ValidationSteps.class);
+		assertTrue("Should have encountered messages!", MessageManager.hasErrorMessages());
 
 	}
 
@@ -121,57 +121,119 @@ public class ValidationSteps {
 		example.setRequiredField(RandomStringUtils.randomAlphanumeric(10));
 
 	}
-	
-	/* 
+
+	/*
 	 * validation steps for maxValue and minValue of an Integer
 	 */
-	
+
 	@Given("^an (\\d+) to validate against the validation example integer example field$")
 	public void an_to_validate_against_the_validation_example_integer_example_field(int value) throws Throwable {
 		this.userInt = value;
-		
+
 		example = new ValidationExampleBO();
 		example.setIntegerExample(userInt);
 		example.setRequiredField(RandomStringUtils.randomAlphanumeric(10));
 
-
 	}
-	
+
 	@When("^field level validation is performed on that integer value$")
 	public void field_level_validation_is_performed_on_that_integer_value() throws Throwable {
-		
-	    example.validate();
-	    
+
+		example.validate();
+
 	}
-	
+
 	@Then("^the integer validation returns no errors$")
 	public void the_integer_validation_returns_no_errors() throws Throwable {
-	    
-		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(),
-				ValidationSteps.class);
+
+		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ValidationSteps.class);
 		assertFalse("Should not have encountered messages!", MessageManager.hasErrorMessages());
-		
+
 	}
-	
+
 	@Then("^the integer validation returns errors$")
 	public void the_integer_validation_returns_errors() throws Throwable {
-	    
-		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(),
-				ValidationSteps.class);
+
+		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ValidationSteps.class);
 		assertTrue("Should have encountered messages!", MessageManager.hasErrorMessages());
-		
+
 	}
-	
+
 	@Given("^a negative -(\\d+) to validate against the validation example integer example field$")
-	public void a_negative_to_validate_against_the_validation_example_integer_example_field(int value) throws Throwable {
+	public void a_negative_to_validate_against_the_validation_example_integer_example_field(int value)
+			throws Throwable {
 		this.userInt = value;
 
 		example = new ValidationExampleBO();
 		example.setIntegerExample(userInt);
 		example.setRequiredField(RandomStringUtils.randomAlphanumeric(10));
 
-		
 	}
 
+	@Given("^a (\\d+)\\.(\\d+) to validate against the validation example BigDecimal example field$")
+	public void a_to_validate_against_the_validation_example_BigDecimal_example_field(double value1, double value2)
+			throws Throwable {
+		int count = 0;
+		for (int i = 0; i < 10; i++) {
+			if (value2 / 10 > 0) {
+				value2 = value2 / 10;
+				count++;
+			}
+		}
+		count = count * 10;
+
+		double value = value1 + (value2 / count);
+
+		this.userBigDecimal = BigDecimal.valueOf(value);
+
+		example = new ValidationExampleBO();
+		example.setBigDecimalExample(userBigDecimal);
+		example.setRequiredField(RandomStringUtils.randomAlphanumeric(10));
+
+	}
+
+	@When("^field level validation is performed on that BigDecimal value$")
+	public void field_level_validation_is_performed_on_that_BigDecimal_value() throws Throwable {
+
+		example.validate();
+
+	}
+
+	@Then("^the BigDecimal validation returns no errors$")
+	public void the_BigDecimal_validation_returns_no_errors() throws Throwable {
+
+		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ValidationSteps.class);
+		assertFalse("Should not have encountered messages!", MessageManager.hasErrorMessages());
+
+	}
+	
+	@Then("^the BigDecimal validation returns errors$")
+	public void the_BigDecimal_validation_returns_errors() throws Throwable {
+
+		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ValidationSteps.class);
+		assertTrue("Should have encountered messages!", MessageManager.hasErrorMessages());
+
+	}
+
+	@Given("^a negative -(\\d+)\\.(\\d+) to validate against the validation example BigDecimal example field$")
+	public void a_negative_to_validate_against_the_validation_example_BigDecimal_example_field(double value1, double value2) throws Throwable {
+		int count = 0;
+		for (int i = 0; i < 10; i++) {
+			if (value2 / 10 > 0) {
+				value2 = value2 / 10;
+				count++;
+			}
+		}
+		count = count * 10;
+
+		double value = value1 + (value2 / count);
+
+		this.userBigDecimal = BigDecimal.valueOf(value);
+
+		example = new ValidationExampleBO();
+		example.setBigDecimalExample(userBigDecimal);
+		example.setRequiredField(RandomStringUtils.randomAlphanumeric(10));
+
+	}
 
 }

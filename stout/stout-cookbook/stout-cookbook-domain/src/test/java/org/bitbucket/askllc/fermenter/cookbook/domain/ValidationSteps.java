@@ -25,6 +25,7 @@ import cucumber.api.java.en.When;
 public class ValidationSteps {
 
 	private String userString;
+	private String userString2;
 	private Long userLong;
 	private int userInt;
 	private BigDecimal userBigDecimal;
@@ -169,6 +170,10 @@ public class ValidationSteps {
 		example.setRequiredField(RandomStringUtils.randomAlphanumeric(10));
 
 	}
+	
+	/*
+	 * Validation steps for maxValue and minValue of a BigDecimal
+	 */
 
 	@Given("^a (\\d+)\\.(\\d+) to validate against the validation example BigDecimal example field$")
 	public void a_to_validate_against_the_validation_example_BigDecimal_example_field(double value1, double value2)
@@ -234,6 +239,39 @@ public class ValidationSteps {
 		example.setBigDecimalExample(userBigDecimal);
 		example.setRequiredField(RandomStringUtils.randomAlphanumeric(10));
 
+	}
+	
+	@Given("^a \"([^\"]*)\" to validate against the regEx example String example field$")
+	public void a_to_validate_against_the_regEx_example_String_example_field(String value) throws Throwable {
+	    this.userString2 = value;
+	    
+	    example = new ValidationExampleBO();
+	    example.setRegexExample(userString2);
+	    example.setRequiredField(RandomStringUtils.randomAlphanumeric(10));
+
+	}
+	
+	@When("^field level validation is performed on that regEx String value$")
+	public void field_level_validation_is_performed_on_that_regEx_String_value() throws Throwable {
+	    
+		example.validate();
+		
+	}
+	
+	@Then("^the regEx String validation returns no errors$")
+	public void the_regEx_String_validation_returns_no_errors() throws Throwable {
+	    
+		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ValidationSteps.class);
+		assertFalse("Should not have encountered messages!", MessageManager.hasErrorMessages());
+		
+	}
+	
+	@Then("^the regEx String validation returns errors$")
+	public void the_regEx_String_validation_returns_errors() throws Throwable {
+	    
+		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ValidationSteps.class);
+		assertTrue("Should have encountered messages!", MessageManager.hasErrorMessages());
+		
 	}
 
 }

@@ -176,3 +176,26 @@ Feature: Field Level Validation Requirements
       |   -123456790.123456790 |
       | -1234567891.3456789121 |
       |   -9999999999.99999999 |
+
+  Scenario Outline: RegEx String format validation against format
+    Given a "<value>" to validate against the regEx example String example field
+    When field level validation is performed on that regEx String value
+    Then the regEx String validation returns no errors
+
+    Examples: 
+      | value                                  |
+      | example@exampleemail.com               |
+      | theexample4validaiton@validaddress.org |
+      | echun@cpointe-inc.com                  |
+
+  Scenario Outline: RegEx String format validation against incorrect format
+    Given a "<value>" to validate against the regEx example String example field
+    When field level validation is performed on that regEx String value
+    Then the regEx String validation returns errors
+
+    Examples: 
+      | value                         |
+      | example@exampleemail          |
+      | @validaddress.org             |
+      | echuncpointe-inc.com          |
+      | someperson1234@2346836777123. |

@@ -1,18 +1,22 @@
 package org.bitbucket.fermenter.mda.metadata;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.digester.Digester;
 import org.apache.commons.digester.RuleSetBase;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.xml.resolver.CatalogManager;
 import org.apache.xml.resolver.tools.CatalogResolver;
 import org.bitbucket.fermenter.mda.metadata.element.Format;
@@ -20,6 +24,7 @@ import org.bitbucket.fermenter.mda.metadata.element.FormatMetadata;
 import org.bitbucket.fermenter.mda.metadata.element.PatternMetadata;
 import org.bitbucket.fermenter.mda.xml.TrackErrorsErrorHandler;
 import org.xml.sax.EntityResolver;
+import org.xml.sax.SAXException;
 
 public final class FormatMetadataManager {
 
@@ -74,26 +79,54 @@ public final class FormatMetadataManager {
 			throw new RuntimeException("Encountered XML parsing errors; check log for details");
 		}
 	}
-
-	private void loadAllFormats(EntityResolver resolver, String url, TrackErrorsErrorHandler handler) throws Exception {
-		String path = url + FORMATS;		
-		File file = new File( new URI(path) );
-		if(!file.exists()){
-			LOG.info("No formats found at: " + file + ". Skipping....");
-			return;
-		}
-		
-		URL resource = file.toURI().toURL();
-		LOG.info("Loading formats from: " + resource);
-		
-		if (resource != null) {
-			Digester digester = configureDigester(resolver, handler);
-			InputStream is = resource.openStream();
-			digester.parse(is);
-			is.close();
+	
+	private void loadAllFormats(EntityResolver resolver, String url, TrackErrorsErrorHandler handler) throws Exception {	
+        if (url.contains(".jar")) {		
+	        Enumeration<URL> formatEnumeration = null;
+	        try {
+	            formatEnumeration = getClass().getClassLoader().getResources(FORMATS);
+	        } catch (IOException ioe) {
+	            throw new MojoExecutionException("Unable to find formats", ioe);
+	        }
+	
+	        while (formatEnumeration.hasMoreElements()) {
+	        	URL resource = formatEnumeration.nextElement();
+	            LOG.info("Loading formats from: " + resource.toString());
+	            
+	            loadFormats(resolver, handler, resource);
+	        }
+	        
 		} else {
-			LOG.info("Resource not found: " + path);
-			LOG.info("Skipping format loading");
+			String path = url + FORMATS;
+			File file = new File(new URI(path));
+			if (!file.exists()) {
+				LOG.info("No formats found at: " + file + ". Skipping....");
+				return;
+			}
+			URL resource = file.toURI().toURL();
+			LOG.info("Loading formats from: " + resource);
+			if (resource != null) {
+				loadFormats(resolver, handler, resource);
+
+			} else {
+				LOG.info("Resource not found: " + path);
+				LOG.info("Skipping format loading");
+
+			}
+
+		}
+
+	}
+
+	private void loadFormats(EntityResolver resolver, TrackErrorsErrorHandler handler, URL resource)
+			throws IOException, SAXException {
+		InputStream is = null;
+		try {
+			is = resource.openStream();
+			Digester digester = configureDigester(resolver, handler);
+			digester.parse(is);
+		} finally {
+			IOUtils.closeQuietly(is);
 		}
 	}
 	
@@ -125,9 +158,10 @@ public final class FormatMetadataManager {
 	public void addFormat(Format format) {
 		String name = format.getName();
 		if (formats.containsKey(name)) {
-			throw new IllegalArgumentException("Duplicate format name: " + name);
+			LOG.info("Format " + name + " has been overloaded!");
 		}
 		formats.put(name, format);
+		LOG.debug("added format: " + name );
 	}
 	
 	public Format getFormat(String name) {

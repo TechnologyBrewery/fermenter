@@ -144,6 +144,8 @@ public class MetadataRepository extends AbstractMetadataRepository {
 
     private void loadAllMetadata() {
         if (config != null) {
+        	FormatMetadataManager formatManager = FormatMetadataManager.getInstance();
+            formatManager.reset();
             CompositeMetadataManager compositeManager = CompositeMetadataManager.getInstance();
             compositeManager.reset();
             EntityMetadataManager entityManager = EntityMetadataManager.getInstance();
@@ -159,17 +161,16 @@ public class MetadataRepository extends AbstractMetadataRepository {
                 entityManager.loadMetadata(url.getArtifactId(), url.getUrl());
                 serviceManager.loadMetadata(url.getArtifactId(), url.getUrl());
                 enumerationManager.loadMetadata(url.getArtifactId(), url.getUrl());
+                
+                // Load format information for the current project only                
+                formatManager.loadMetadata(url.getUrl());
 
                 if (config.getCurrentApplicationName().equals(url.getArtifactId())) {
                     // Messages metadata only needs to be loaded for the current project
                     MessagesMetadataManager messagesManager = MessagesMetadataManager.getInstance();
                     messagesManager.reset();
                     MessagesMetadataManager.getInstance().loadMetadata(url.getUrl());
-
-                    // Load format information for the current project only
-                    FormatMetadataManager formatManager = FormatMetadataManager.getInstance();
-                    formatManager.reset();
-                    formatManager.loadMetadata(url.getUrl());
+                   
                 }
                 if (LOG.isInfoEnabled()) {
                     long stop = System.currentTimeMillis();

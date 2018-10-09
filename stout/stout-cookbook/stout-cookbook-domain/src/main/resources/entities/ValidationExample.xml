@@ -81,6 +81,12 @@
 			<type>character</type>
 			<column>CHAR_EXAMPLE</column>
 		</field>
+		<field>
+			<name>regexExample</name>
+			<type>string</type>
+			<column>REGEX_EXAMPLE</column>
+			<format>email</format>
+		</field>
 	</fields>
 
 	<associations>

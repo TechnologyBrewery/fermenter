@@ -25,7 +25,8 @@ import cucumber.api.java.en.When;
 public class ValidationSteps {
 
 	private String userString;
-	private String userString2;
+	private String userStringRegex;
+	private String userStringReqField;
 	private Long userLong;
 	private int userInt;
 	private BigDecimal userBigDecimal;
@@ -241,12 +242,16 @@ public class ValidationSteps {
 
 	}
 	
+	/*
+	 * Validation steps for the regular expression (regex) String format 
+	 */
+	
 	@Given("^a \"([^\"]*)\" to validate against the regEx example String example field$")
 	public void a_to_validate_against_the_regEx_example_String_example_field(String value) throws Throwable {
-	    this.userString2 = value;
+	    this.userStringRegex = value;
 	    
 	    example = new ValidationExampleBO();
-	    example.setRegexExample(userString2);
+	    example.setRegexExample(userStringRegex);
 	    example.setRequiredField(RandomStringUtils.randomAlphanumeric(10));
 
 	}
@@ -268,6 +273,46 @@ public class ValidationSteps {
 	
 	@Then("^the regEx String validation returns errors$")
 	public void the_regEx_String_validation_returns_errors() throws Throwable {
+	    
+		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ValidationSteps.class);
+		assertTrue("Should have encountered messages!", MessageManager.hasErrorMessages());
+		
+	}
+	
+	@Given("^a \"([^\"]*)\" to validate against the required field String example field$")
+	public void a_to_validate_against_the_required_field_String_example_field(String value) throws Throwable {
+	    this.userStringReqField = value;
+		
+	    example = new ValidationExampleBO();
+	    example.setRequiredField(userStringReqField);
+		
+	}
+	
+	@When("^a field validation is performed on the required field String value$")
+	public void a_field_validation_is_performed_on_the_required_field_String_value() throws Throwable {
+	    
+		example.validate();
+		
+	}
+
+	@Then("^the required field returns a value with no errors$")
+	public void the_required_field_returns_a_value_with_no_errors() throws Throwable {
+	    
+		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ValidationSteps.class);
+		assertFalse("Should not have encountered messages!", MessageManager.hasErrorMessages());
+		
+	}
+	
+	@Given("^a null to validate against the required field String example field$")
+	public void a_null_to_validate_against_the_required_field_String_example_field() throws Throwable {
+	    
+		example = new ValidationExampleBO();
+		example.setRequiredField(null);
+		
+	}
+	
+	@Then("^the required field returns a null with errors$")
+	public void the_required_field_returns_a_null_with_errors() throws Throwable {
 	    
 		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ValidationSteps.class);
 		assertTrue("Should have encountered messages!", MessageManager.hasErrorMessages());

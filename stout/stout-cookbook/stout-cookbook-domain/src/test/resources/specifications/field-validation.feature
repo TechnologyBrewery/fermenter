@@ -199,3 +199,19 @@ Feature: Field Level Validation Requirements
       | @validaddress.org             |
       | echuncpointe-inc.com          |
       | someperson1234@2346836777123. |
+
+  Scenario Outline: required field validation that contains a value
+    Given a "<value>" to validate against the required field String example field
+    When a field validation is performed on the required field String value
+    Then the required field returns a value with no errors
+
+    Examples: 
+      | value            |
+      | this is required |
+      | String value     |
+
+  Scenario: required field validation that contains no value
+    Given a null to validate against the required field String example field
+    When a field validation is performed on the required field String value
+    Then the required field returns a null with errors
+

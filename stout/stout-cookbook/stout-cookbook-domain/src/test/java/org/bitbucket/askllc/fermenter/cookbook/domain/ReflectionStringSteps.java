@@ -5,6 +5,8 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.api.java.After;
+import cucumber.api.DataTable;
+import cucumber.api.PendingException;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -23,57 +25,43 @@ import org.springframework.transaction.annotation.Transactional;
         "classpath:h2-spring-ds-context.xml" })
 @Transactional
 public class ReflectionStringSteps {
-    private HashMap<String, ArrayList<String>> fieldNamesByObjectType = new HashMap<String, ArrayList<String>>();
-    private Object reflectionObject;
-    private String reflectedString;
-    private String objectType;
+    private ArrayList<String> fieldNames;
+    private Object springObject;
+    private String enhancedString;
 
-    @After("@apacheReflectionToString")
+    @After("@enhancedToString")
     public void cleanup() throws Exception {
-        reflectionObject = null;
-        reflectedString = null;
-        objectType = null;
+        springObject = null;
+        enhancedString = null;
+        fieldNames = new ArrayList<String>();
 
     }
-    @Given("^the following object types exist with the following field names$")
-    public void the_following_object_types_exist_with_the_following_field_names(List<List<String>> objectsAndFields) throws Throwable {
-        for(int i = 0; i < objectsAndFields.size(); i++){
-            ArrayList<String> fieldNames = new ArrayList<String>();
-            String[] test = objectsAndFields.get(i).get(1).trim().split(":");
-            for(int k = 0; k < test.length; k++){
-                fieldNames.add(test[k]);
-            }
 
-            fieldNamesByObjectType.put(objectsAndFields.get(i).get(0), fieldNames);
+    @Given("^the object is type \"([^\"]*)\"$")
+    public void the_object_is_type(String currentObjectType) throws Throwable {
+        if(currentObjectType.equals("IdentityKeyedEntityBO")){
+            springObject = new IdentityKeyedEntityBO();
+        }else if (currentObjectType.equals("TransientEntityExampleBO")){
+            springObject = new TransientEntityExampleBO();
+        }
+        assertNotNull("Incorrect type declaration: " + currentObjectType, springObject);
+
+    }
+
+    @When("^the system checks the fields of the toStringOutput$")
+    public void the_system_checks_the_fields_of_the_toStringOutput() throws Throwable {
+        enhancedString = springObject.toString();
+        assertNotNull("toString should not return null", enhancedString);
+    }
+
+    @Then("^the toStringOutput should contain all of the object fields \"([^\"]*)\"$")
+    public void the_toStringOutput_should_contain_all_of_the_object_fields(String fieldNames) throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        String[] fieldNamesArr = fieldNames.trim().split("");
+        for(String temp : fieldNamesArr){
+            assertTrue("Expected field not encountered: " + temp, enhancedString.contains(temp));
         }
     }
 
-    @Given("^the object type is \"([^\"]*)\"$")
-    public void the_object_type_is(String type) throws Throwable {
-        objectType = type;
-        if(objectType.equals("IdentityKeyedEntityBO")) {
-            reflectionObject = new IdentityKeyedEntityBO();
-        }else if(objectType.equals("TransientEntityExampleBO")){
-            reflectionObject = new TransientEntityExampleBO();
-        }else{
-            reflectionObject = null;
-        }
-
-    }
-
-    @When("^the system returns the reflection string$")
-    public void the_system_returns_the_reflection_string() throws Throwable {
-        assertNotNull(objectType
-                + " is not in the background data", reflectionObject);
-        reflectedString = reflectionObject.toString();
-    }
-
-    @Then("^the reflection string should contain all field names$")
-    public void the_reflection_string_should_contain_all_field_names() throws Throwable {
-        for(String fieldName : fieldNamesByObjectType.get(objectType)){
-            assertTrue("Expected field " + fieldName + " does not exist in the reflected string: "
-                        + reflectedString + " / " + reflectionObject.getClass().toString(), reflectedString.contains(fieldName));
-        }
-    }
 
 }

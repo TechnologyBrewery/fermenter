@@ -1,22 +1,19 @@
 
-@apacheReflectionToString
-Feature: Reflection to String with Apache
+@enhancedToString
+Feature: Data rich toString method
 
-Background:
-    Given the following object types exist with the following field names
-        | objectType               | fieldNames                                  |
-        | IdentityKeyedEntityBO    | repository:id:internalTransientID:validator |
-        | TransientEntityExampleBO | name:requiredReference:validator            |
+    Scenario Outline: Ensure all fields for the object are present in the enhanced toString output
+        Given the object is type "<objectType>"
+        When the system checks the fields of the toStringOutput
+        Then the toStringOutput should contain all of the object fields "<fieldNames>"
 
-Scenario: Check field names of IdentityKeyedEntityBO reflection string
-    Given the object type is "IdentityKeyedEntityBO"
-    When the system returns the reflection string
-    Then the reflection string should contain all field names
+    Examples:
+        | objectType                | fieldNames                                  |
+        | IdentityKeyedEntityBO     | repository,id,internalTransientID,validator |
+        | TransientEntityExampleBO  | name,requiredReference,validator            |
 
-Scenario: Check field names of TransientEntityExampleBO reflection string
-    Given the object type is "TransientEntityExampleBO"
-    When the system returns the reflection string
-    Then the reflection string should contain all field names
+
+
 
 
 

@@ -5,16 +5,11 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import cucumber.api.java.After;
-import cucumber.api.DataTable;
-import cucumber.api.PendingException;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import java.util.HashMap;
 
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.TransientEntityExampleBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.IdentityKeyedEntityBO;
@@ -62,6 +57,5 @@ public class ReflectionStringSteps {
             assertTrue("Expected field not encountered: " + temp, enhancedString.contains(temp));
         }
     }
-
 
 }

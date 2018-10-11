@@ -1,4 +1,3 @@
-
 @enhancedToString
 Feature: Data rich toString method
 

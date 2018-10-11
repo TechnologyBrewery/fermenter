@@ -215,3 +215,17 @@ Feature: Field Level Validation Requirements
     When a field validation is performed on the required field String value
     Then the required field returns a null with errors
 
+  Scenario Outline: a child required field validation that contains a value
+    Given a "<value>" to validate against the child required field String example field
+    When a field validation is performed on the child required field String value
+    Then the child required field returns a value with no errors
+
+    Examples: 
+      | value                    |
+      | this is a child required |
+      | String value for child   |
+
+  Scenario: a child required field validation that contains no value
+    Given a null to validate against the child required field String example field
+    When a field validation is performed on the child required field String value
+    Then the child required field returns a null with errors

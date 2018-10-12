@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationExampleBO;
-
+import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationExampleChildBO;
 import org.bitbucket.fermenter.stout.messages.MessageManager;
 import org.bitbucket.fermenter.stout.messages.MessageManagerInitializationDelegate;
 import org.bitbucket.fermenter.stout.test.MessageTestUtils;
@@ -27,10 +27,12 @@ public class ValidationSteps {
 	private String userString;
 	private String userStringRegex;
 	private String userStringReqField;
+	private String userStringChildReqField;
 	private Long userLong;
 	private int userInt;
 	private BigDecimal userBigDecimal;
 	private ValidationExampleBO example;
+	private ValidationExampleChildBO exampleChild;
 
 	@After("@fieldValidation")
 	public void cleanupMsgMgr() throws Exception {
@@ -279,6 +281,10 @@ public class ValidationSteps {
 		
 	}
 	
+	/*
+	 * Validation steps for the required field String example
+	 */
+	
 	@Given("^a \"([^\"]*)\" to validate against the required field String example field$")
 	public void a_to_validate_against_the_required_field_String_example_field(String value) throws Throwable {
 	    this.userStringReqField = value;
@@ -318,5 +324,53 @@ public class ValidationSteps {
 		assertTrue("Should have encountered messages!", MessageManager.hasErrorMessages());
 		
 	}
+	
+	/*
+	 * Validation steps for the child required field String example
+	 */
 
+	@Given("^a \"([^\"]*)\" to validate against the child required field String example field$")
+	public void a_to_validate_against_the_child_required_field_String_example_field(String value) throws Throwable {
+	    this.userStringChildReqField = value;
+		
+	    example = new ValidationExampleBO();
+		exampleChild = new ValidationExampleChildBO();
+		example.setRequiredField(RandomStringUtils.randomAlphabetic(5));
+		exampleChild.setRequiredField(userStringChildReqField);
+	    example.addValidationExampleChild(exampleChild);
+	    
+	}
+	
+	@When("^a field validation is performed on the child required field String value$")
+	public void a_field_validation_is_performed_on_the_child_required_field_String_value() throws Throwable {
+	    	
+		example.validate();
+		
+	}
+	
+	@Then("^the child required field returns a value with no errors$")
+	public void the_child_required_field_returns_a_value_with_no_errors() throws Throwable {
+	    
+		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ValidationSteps.class);
+		assertFalse("Should not have encountered messages!", MessageManager.hasErrorMessages());
+		
+	}
+	
+	@Given("^a null to validate against the child required field String example field$")
+	public void a_null_to_validate_against_the_child_required_field_String_example_field() throws Throwable {
+	    
+		example = new ValidationExampleBO();
+		exampleChild = new ValidationExampleChildBO();
+		exampleChild.setRequiredField(null);
+		example.addValidationExampleChild(exampleChild);
+		
+	}
+	
+	@Then("^the child required field returns a null with errors$")
+	public void the_child_required_field_returns_a_null_with_errors() throws Throwable {
+	    
+		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ValidationSteps.class);
+		assertTrue("Should have encountered messages!", MessageManager.hasErrorMessages());
+		
+	}
 }

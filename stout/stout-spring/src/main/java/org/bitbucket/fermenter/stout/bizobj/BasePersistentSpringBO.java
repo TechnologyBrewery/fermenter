@@ -39,7 +39,11 @@ public abstract class BasePersistentSpringBO<PK extends Serializable, BO, JPA ex
             postSave();
             return persistedBizObj;
         } else {
-            if (getLogger().isDebugEnabled()) {
+        	if (getLogger().isWarnEnabled()) {
+                getLogger().warn("Attempt to save BO of type [" + this.getClass() + "] with PK = [" + this.getKey()
+                        + "] was ignored due to collected errors");
+            }
+            if (getLogger().isInfoEnabled()) {
                 Collection<Message> messages = MessageManager.getMessages().getErrorMessages();
                 for (Message message : messages) {
                     String summary = message.getKey();
@@ -49,15 +53,11 @@ public abstract class BasePersistentSpringBO<PK extends Serializable, BO, JPA ex
                         // Just swallowing this because it would just add confusion
                         // to log errors about the error logging
                     }
-                    getLogger().debug("Encountered the following error when trying to save persistent object: "
+                    getLogger().info("Encountered the following error when trying to save persistent object: "
                             + this.toString() + "\n\t"
                             + summary);
                 }
 
-            }
-            if (getLogger().isWarnEnabled()) {
-                getLogger().warn("Attempt to save BO of type [" + this.getClass() + "] with PK = [" + this.getKey()
-                        + "] was ignored due to collected errors");
             }
 
             return (BO) this;

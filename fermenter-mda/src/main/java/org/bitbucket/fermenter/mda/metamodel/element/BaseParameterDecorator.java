@@ -30,6 +30,10 @@ public class BaseParameterDecorator implements Parameter {
         return wrapped.getName();
     }    
 
+    @Override
+    public String getFileName() {
+    	return wrapped.getFileName();
+    }
     /**
      * {@inheritDoc}
      */

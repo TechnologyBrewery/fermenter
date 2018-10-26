@@ -115,7 +115,7 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
                 for (URL resource : resources) {
                     InputStream is = resource.openStream();
                     try {
-                        loadMetamodelFile(is, metadataUrl.getArtifactId());
+                        loadMetamodelFile(is, metadataUrl.getArtifactId(), resource.getFile());
 
                     } finally {
                         IOUtils.closeQuietly(is);
@@ -185,10 +185,11 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
      */
     protected abstract String getMetadataLocation();
 
-    private void loadMetamodelFile(InputStream stream, String artifactId) {
+    private void loadMetamodelFile(InputStream stream, String artifactId, String resourceName) {
         ObjectMapper objectMapper = JsonUtils.getObjectMapper();
         try {
             T instance = objectMapper.readValue(stream, getMetamodelClass());
+            ((MetamodelElement)instance).setFileName(resourceName);            
             addMetadataElement(instance, artifactId);
 
         } catch (IOException e) {

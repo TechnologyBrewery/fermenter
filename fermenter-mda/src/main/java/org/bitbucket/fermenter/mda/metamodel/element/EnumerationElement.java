@@ -87,6 +87,8 @@ public class EnumerationElement extends NamespacedMetamodelElement implements En
      */
     @Override
     public void validate() {
+    	super.validate();
+    	
         if (CollectionUtils.isEmpty(enums)) {
             messageTracker.addWarningMessage("Enumeration " + getName() + " does NOT contain any enum constants!");
         }

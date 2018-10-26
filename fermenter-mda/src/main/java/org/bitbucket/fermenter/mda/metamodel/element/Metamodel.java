@@ -10,6 +10,8 @@ public interface Metamodel {
      * element, let's ensure that element exists.
      */
     void validate();
+    
+    String getFileName();
 
     /**
      * Returns the name of the metadata element.
@@ -17,5 +19,5 @@ public interface Metamodel {
      * @return name
      */
     String getName();
-
+    
 }

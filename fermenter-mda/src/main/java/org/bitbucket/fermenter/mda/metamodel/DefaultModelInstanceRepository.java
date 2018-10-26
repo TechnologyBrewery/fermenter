@@ -5,8 +5,11 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.bitbucket.fermenter.mda.exception.FermenterException;
+import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
 import org.bitbucket.fermenter.mda.metamodel.element.Service;
+import org.bitbucket.fermenter.mda.util.MessageTracker;
 
 /**
  * Default implementation to serve up model instances of a specific metamodel type.
@@ -65,6 +68,13 @@ public class DefaultModelInstanceRepository extends AbstractModelInstanceReposit
 
         for (Service service : serviceManager.getMetadataElementByPackage(basePackage).values()) {
             service.validate();
+        }
+        
+        MessageTracker messageTracker = MessageTracker.getInstance();
+        messageTracker.emitMessages(log);
+        
+        if (messageTracker.hasErrors()) {
+        	throw new GenerationException("Encountered one or more error!  Please check your Maven output for details.");
         }
 
     }

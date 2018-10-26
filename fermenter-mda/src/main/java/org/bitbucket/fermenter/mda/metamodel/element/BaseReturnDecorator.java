@@ -30,6 +30,10 @@ public class BaseReturnDecorator implements Return {
         return wrapped.getName();
     }    
 
+    @Override
+    public String getFileName() {
+    	return wrapped.getFileName();
+    }
     /**
      * {@inheritDoc}
      */
@@ -69,6 +73,6 @@ public class BaseReturnDecorator implements Return {
     @Override
     public String getResponseEncoding() {
         return wrapped.getResponseEncoding();
-    }  
+    }
 
 }

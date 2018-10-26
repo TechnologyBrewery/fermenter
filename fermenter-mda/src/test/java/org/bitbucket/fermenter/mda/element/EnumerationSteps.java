@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
 import org.bitbucket.fermenter.mda.metamodel.MetadataUrl;
@@ -36,6 +37,7 @@ public class EnumerationSteps {
     private ObjectMapper objectMapper = new ObjectMapper();
     private MessageTracker messageTracker = MessageTracker.getInstance();
     private File enumerationsDirectory = new File("target/temp-metadata", "enumerations");
+    private EnumerationElement enumeration = new EnumerationElement();
 
     private String currentBasePackage;
     
@@ -97,9 +99,30 @@ public class EnumerationSteps {
             List<String> constantNames, List<String> constantValues) throws Throwable {
         createEnumerations(name, packageValue, constantNames, constantValues);
     }
+    
+    @Given("^an enumeration named \"([^\"]*)\" in \"([^\"]*)\"$")
+    public void an_enumeration_named_in(String name, String fileName) throws Throwable {        
+    	final String localPackage = "default.package";
+    	EnumerationElement enumeration = new EnumerationElement();
+        enumeration.setName(name);
+        enumeration.setPackage(localPackage);
 
-    @When("^enumerations a read$")
-    public void enumerations_a_read() throws Throwable {
+        EnumElement newEnumConstant = new EnumElement();
+        newEnumConstant.setName(RandomStringUtils.randomAlphabetic(3));
+        enumeration.addEnums(newEnumConstant);
+
+        enumerationsDirectory.mkdirs();
+        enumerationFile = new File(enumerationsDirectory, fileName);
+        objectMapper.writeValue(enumerationFile, enumeration);
+        assertTrue("Enumeration not written to file!", enumerationFile.exists());
+        
+        currentBasePackage = localPackage;
+    	
+    }
+
+
+    @When("^enumerations are read$")
+    public void enumerations_are_read() throws Throwable {
         encounteredException = null;
 
         try {
@@ -153,6 +176,12 @@ public class EnumerationSteps {
             assertTrue("Should have been a valued enumeration!", loadedEnumeration.isValued());
             
         }
+    }
+    
+    @Then("^an error is returned$")
+    public void an_error_is_returned() throws Throwable {
+    	assertNotNull("Expected at least on error!", encounteredException);
+    	
     }
 
     private void validateLoadedConstants(String name, String packageName, List<String> constantNames,

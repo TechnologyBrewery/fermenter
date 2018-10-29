@@ -33,6 +33,10 @@ public class BaseOperationDecorator implements Operation {
         return wrapped.getName();
     }
     
+    @Override
+    public String getFileName() {
+    	return wrapped.getFileName();
+    }
     /**
      * {@inheritDoc}
      */

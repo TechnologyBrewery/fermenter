@@ -82,9 +82,10 @@ public class OperationElement extends MetamodelElement implements Operation {
         for (Parameter parameter : parameters) {
             parameter.validate();
         }
-
-        validateTransactionAttribute();
+        
         defaultTransactionAttribute();
+        validateTransactionAttribute();
+        
         
         //default:
         if (compressedWithGZip == null) {

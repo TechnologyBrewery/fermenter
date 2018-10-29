@@ -32,6 +32,10 @@ public class BaseEnumertionDecorator implements Enumeration {
         return wrapped.getName();
     }
 
+    @Override
+    public String getFileName() {
+    	return wrapped.getFileName();
+    }
     /**
      * {@inheritDoc}
      */

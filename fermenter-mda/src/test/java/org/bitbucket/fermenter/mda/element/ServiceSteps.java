@@ -35,7 +35,9 @@ import cucumber.api.java.en.When;
 
 public class ServiceSteps {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+	private static final String TX_REQUIRED = "Required";
+	private static final String TX_SUPPORTS = "Supports";
+	private ObjectMapper objectMapper = new ObjectMapper();
     private MessageTracker messageTracker = MessageTracker.getInstance();
     private File servicesDirectory = new File("target/temp-metadata", "services");
 
@@ -62,51 +64,56 @@ public class ServiceSteps {
         currentBasePackage = null;
     }
 
-    @Given("^an service named \"([^\"]*)\" in \"([^\"]*)\"$")
-    public void an_service_named_in(String name, String packageValue) throws Throwable {
+    @Given("^a service named \"([^\"]*)\" in \"([^\"]*)\"$")
+    public void a_service_named_in(String name, String packageValue) throws Throwable {
         createServiceElement(name, packageValue, null, null, null, null, false, false, null);
     }
 
-    @Given("^an service named \"([^\"]*)\" in \"([^\"]*)\" with an operation \"([^\"]*)\" with no parameters$")
-    public void an_service_named_in_with_an_operation_with_no_parameters(String name, String packageValue,
+    @Given("^a service named \"([^\"]*)\" in \"([^\"]*)\" with an operation \"([^\"]*)\" with no parameters$")
+    public void a_service_named_in_with_an_operation_with_no_parameters(String name, String packageValue,
             String operationName) throws Throwable {
-        createServiceElement(name, packageValue, operationName, null, null, null, false, false, null);
+        createServiceElement(name, packageValue, operationName, null, null, null, false, false, TX_SUPPORTS);
     }
 
-    @Given("^an service named \"([^\"]*)\" in \"([^\"]*)\" with an operation \"([^\"]*)\" with a void return type$")
-    public void an_service_named_in_with_an_operation_with_a_void_return_type(String name, String packageValue,
+    @Given("^a service named \"([^\"]*)\" in \"([^\"]*)\" with an operation \"([^\"]*)\" with a void return type$")
+    public void a_service_named_in_with_an_operation_with_a_void_return_type(String name, String packageValue,
             String operationName) throws Throwable {
-        createServiceElement(name, packageValue, operationName, "void", null, null, false, false, null);
+        createServiceElement(name, packageValue, operationName, "void", null, null, false, false, TX_REQUIRED);
     }
 
-    @Given("^an service named \"([^\"]*)\" in \"([^\"]*)\" with an operation \"([^\"]*)\" with parameters \"([^\"]*)\" of type \"([^\"]*)\"$")
-    public void an_service_named_in_with_an_operation_with_parameters_of_type(String name, String packageValue,
+    @Given("^a service named \"([^\"]*)\" in \"([^\"]*)\" with an operation \"([^\"]*)\" with parameters \"([^\"]*)\" of type \"([^\"]*)\"$")
+    public void a_service_named_in_with_an_operation_with_parameters_of_type(String name, String packageValue,
             String operationName, List<String> paramNames, List<String> paramValues) throws Throwable {
-        createServiceElement(name, packageValue, operationName, null, paramNames, paramValues, false, false, null);
+        createServiceElement(name, packageValue, operationName, null, paramNames, paramValues, false, false, TX_SUPPORTS);
     }
 
-    @Given("^an service named \"([^\"]*)\" in \"([^\"]*)\" with an operation \"([^\"]*)\" with the return type \"([^\"]*)\"$")
-    public void an_service_named_in_with_an_operation_with_the_return_type(String name, String packageValue,
+    @Given("^a service named \"([^\"]*)\" in \"([^\"]*)\" with an operation \"([^\"]*)\" with the return type \"([^\"]*)\"$")
+    public void a_service_named_in_with_an_operation_with_the_return_type(String name, String packageValue,
             String operationName, String returnType) throws Throwable {
-        createServiceElement(name, packageValue, operationName, returnType, null, null, false, false, null);
+        createServiceElement(name, packageValue, operationName, returnType, null, null, false, false, TX_SUPPORTS);
     }
 
-    @Given("^an service named \"([^\"]*)\" in \"([^\"]*)\" with an operation \"([^\"]*)\" with many parameters \"([^\"]*)\" of type \"([^\"]*)\"$")
-    public void an_service_named_in_with_an_operation_with_many_parameters_of_type(String name, String packageValue,
+    @Given("^a service named \"([^\"]*)\" in \"([^\"]*)\" with an operation \"([^\"]*)\" with many parameters \"([^\"]*)\" of type \"([^\"]*)\"$")
+    public void a_service_named_in_with_an_operation_with_many_parameters_of_type(String name, String packageValue,
             String operationName, List<String> paramNames, List<String> paramValues) throws Throwable {
-        createServiceElement(name, packageValue, operationName, null, paramNames, paramValues, false, true, null);
+        createServiceElement(name, packageValue, operationName, null, paramNames, paramValues, false, true, TX_SUPPORTS);
     }
 
-    @Given("^an service named \"([^\"]*)\" in \"([^\"]*)\" with an operation \"([^\"]*)\" with the many return type \"([^\"]*)\"$")
-    public void an_service_named_in_with_an_operation_with_the_many_return_type(String name, String packageValue,
+    @Given("^a service named \"([^\"]*)\" in \"([^\"]*)\" with an operation \"([^\"]*)\" with the many return type \"([^\"]*)\"$")
+    public void a_service_named_in_with_an_operation_with_the_many_return_type(String name, String packageValue,
             String operationName, String returnType) throws Throwable {
-        createServiceElement(name, packageValue, operationName, returnType, null, null, true, false, null);
+        createServiceElement(name, packageValue, operationName, returnType, null, null, true, false, TX_REQUIRED);
     }
 
-    @Given("^an service named \"([^\"]*)\" in \"([^\"]*)\" with an operation \"([^\"]*)\" with the transaction attribute \"([^\"]*)\"$")
-    public void an_service_named_in_with_an_operation_with_the_transaction_attribute(String name, String packageValue,
+    @Given("^a service named \"([^\"]*)\" in \"([^\"]*)\" with an operation \"([^\"]*)\" with the transaction attribute \"([^\"]*)\"$")
+    public void a_service_named_in_with_an_operation_with_the_transaction_attribute(String name, String packageValue,
             String operationName, String transactionAttribute) throws Throwable {
         createServiceElement(name, packageValue, operationName, "void", null, null, false, false, transactionAttribute);
+    }
+    
+    @Given("^a service named \"([^\"]*)\" in \"([^\"]*)\" with an operation \"([^\"]*)\" with a void return type in default$")
+    public void a_service_named_in_with_an_operation_with_a_void_return_type_in_default(String name, String packageValue, String operationName) throws Throwable {
+    	createServiceElement(name, packageValue, operationName, "void", null, null, false, false, null);
     }
 
     private void createServiceElement(String name, String packageValue, String operationName, String returnType,
@@ -190,8 +197,8 @@ public class ServiceSteps {
         return returnElement;
     }
 
-    @When("^services a read$")
-    public void services_a_read() throws Throwable {
+    @When("^services are read$")
+    public void services_are_read() throws Throwable {
         encounteredException = null;
 
         try {
@@ -211,8 +218,8 @@ public class ServiceSteps {
         }
     }
 
-    @Then("^an service metamodel instance is returned for the name \"([^\"]*)\" in \"([^\"]*)\"$")
-    public void an_service_metamodel_instance_is_returned_for_the_name_in(String name, String packageValue)
+    @Then("^a service metamodel instance is returned for the name \"([^\"]*)\" in \"([^\"]*)\"$")
+    public void a_service_metamodel_instance_is_returned_for_the_name_in(String name, String packageValue)
             throws Throwable {
         validateLoadedServices(name, packageValue, null, null, null, null, false);
     }

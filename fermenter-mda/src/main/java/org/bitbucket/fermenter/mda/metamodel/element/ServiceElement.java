@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 /**
  * Represents a service contains at least one operation.
@@ -44,10 +43,7 @@ public class ServiceElement extends NamespacedMetamodelElement implements Servic
      */
     @Override
     public void validate() {
-        if (StringUtils.isBlank(getName())) {
-            messageTracker.addErrorMessage("A service has been specified without a name!");
-            
-        }
+        super.validate();
         
         if (CollectionUtils.isEmpty(operations)) {
             messageTracker.addWarningMessage("Service " + getName() + " does NOT contain any operations!");

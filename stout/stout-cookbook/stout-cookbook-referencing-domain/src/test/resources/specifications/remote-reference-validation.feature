@@ -1,14 +1,25 @@
 @remoteReferenceValidation
 Feature: Reference Level Validation Requirements
+  
+  Reference level validation checks that a referenced value exists
 
   #tests for remote reference
-  Scenario Outline: Reference level validation checks that a referenced value exists
-    Given the objects "e1" and "e2" exist
-    And "<entityOne>" has a remote reference to "<entityTwo>"
-    When the reference level validation is performed on the value "<entityOne>"
-    Then the reference level validation returns an error for the referenced value that does not exist
+  Scenario Outline: Reference level validation passes on valid references
+    Given the "<address>" has a remote reference to "<state>"
+    When the reference level validation is performed on the value "<address>"
+    Then the reference level validation does not return an error for the existing "<state>"
 
     Examples: 
-      | entityOne | entityTwo | 
-      | e1        | e2        | 
-      | e1        | e3        | 
+      | address      | state |
+      | 111 Ham Lane | VA    |
+      | 222 Ham Lane | CA    |
+
+  Scenario Outline: Reference level validation fails on invalid references
+    Given the "<address>" has a remote reference to "<state>"
+    When the reference level validation is performed on the value "<address>"
+    Then the reference level validation returns an error for the non-existant "<state>"
+
+    Examples: 
+      | address      | state |
+      | 111 Ham Lane | ZZ    |
+      | 222 Ham Lane | XY    |

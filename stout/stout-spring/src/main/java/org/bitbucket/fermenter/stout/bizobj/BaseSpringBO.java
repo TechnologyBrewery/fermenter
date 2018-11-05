@@ -33,6 +33,7 @@ public abstract class BaseSpringBO<BO> implements BusinessObject<BO> {
      */
     public void validate() {
         validateFields();
+        validateReferences();
         validateRelations();
 
         if (!MessageManager.hasErrorMessages()) {
@@ -70,6 +71,7 @@ public abstract class BaseSpringBO<BO> implements BusinessObject<BO> {
             addConstraintViolationToMsgMgr(violation);
         }
     }
+    
 
 	/**
 	 * Adds the given {@link ConstraintViolation} as an error message to the {@link MessageManager}.
@@ -83,7 +85,9 @@ public abstract class BaseSpringBO<BO> implements BusinessObject<BO> {
 				new String[] { invalidPropertyName }, new Object[] { invalidPropertyName, violation.getMessage() }));
 
 	}
-
+	
+	protected abstract void validateReferences();
+	
     protected abstract void validateRelations();
 
     protected abstract void complexValidation();

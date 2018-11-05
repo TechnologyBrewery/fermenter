@@ -23,6 +23,10 @@ public class ValidationReferenceExampleBO extends ValidationReferenceExampleBase
 		super();
 		SpringAutowiringUtil.autowireBizObj(this);
 	}
+	
+	public static void deleteAllValidationExamples() {
+		getDefaultRepository().deleteAllInBatch();
+	}
 
 	@Override
 	protected Logger getLogger() {

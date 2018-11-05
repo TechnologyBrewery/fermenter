@@ -66,6 +66,11 @@ import ${reference.importPrefix}.client.service.${reference.type}MaintenanceDele
   #end
 #end
 
+#if (!$entity.references.isEmpty())
+	import org.bitbucket.fermenter.stout.messages.CoreMessages;
+	import org.bitbucket.fermenter.stout.messages.MessageManager;
+	import org.bitbucket.fermenter.stout.messages.MessageUtils;
+#end
 
 #if ( !$entity.idFields.isEmpty() )
   #set ($idFieldJavaType = ${entity.idFields.values().iterator().next().javaType})
@@ -560,5 +565,42 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
       public String toString(){
          return ReflectionToStringBuilder.toString(this);
       }
-
+      
+      /**
+      * Executes field-level validations on all references.
+      */
+      @Override 
+      protected void validateReferences() {
+		#foreach ($reference in $entity.references.values())
+		  #if ( !$reference.isExternal() )
+		    #if( !$entity.references.isEmpty() ) 
+				#foreach ($reference in $entity.references.values())	
+					${reference.type}BO ${reference.name}Ref = get${reference.capitalizedName}();
+					if ((${reference.name}Ref != null && ${reference.name}Ref.getKey() != null)) {
+						${reference.type}BO ref = ${reference.type}BO.findByPrimaryKey(${reference.name}Ref.getKey());
+					    if(ref == null){
+					    		MessageManager.addMessage(MessageUtils.createErrorMessage(CoreMessages.INVALID_REFERENCE,
+							new String[] { ${reference.name}.toString() }, 
+                             new Object[] { ${reference.name} , "Invalid reference, reference does not exist"  }));
+					    }
+					}
+				#end
+			#end
+		  #else
+		    #if( !$entity.references.isEmpty() ) 
+				#foreach ($reference in $entity.references.values())
+					${reference.type} ${reference.name}Ref = 	get${reference.capitalizedName}();				
+					if ((${reference.name}Ref != null && ${reference.name}Key != null)) {
+						${reference.type} ref = ${reference.name}Delegate.findByPrimaryKey(${reference.name}Key);
+					    	if(ref == null){
+					    		MessageManager.addMessage(MessageUtils.createErrorMessage(CoreMessages.INVALID_REFERENCE,
+							new String[] { ${reference.name}.toString() }, 
+                             new Object[] { ${reference.name} , "Invalid reference, reference does not exist"  }));
+					    }
+					}
+				#end
+			#end
+		  #end				
+		#end
+      }
 }

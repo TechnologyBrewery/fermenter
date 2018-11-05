@@ -5,21 +5,21 @@ Feature: Reference Level Validation Requirements
 
   #tests for remote reference
   Scenario Outline: Reference level validation passes on valid references
-    Given the "<address>" has a remote reference to "<state>"
-    When the reference level validation is performed on the value "<address>"
-    Then the reference level validation does not return an error for the existing "<state>"
+    Given the "<address>" has a remote reference to an existing "<state>"
+    When the reference level validation is performed on the instance "<address>"
+    Then the reference level validation passes
 
     Examples: 
-      | address      | state |
-      | 111 Ham Lane | VA    |
-      | 222 Ham Lane | CA    |
+      | address       | state |
+      | 111 Good Lane | VA    |
+      | 222 Good Lane | CA    |
 
   Scenario Outline: Reference level validation fails on invalid references
-    Given the "<address>" has a remote reference to "<state>"
-    When the reference level validation is performed on the value "<address>"
-    Then the reference level validation returns an error for the non-existant "<state>"
+    Given the "<address>" has a remote reference to a non-existing "<state>"
+    When the reference level validation is performed on the instance "<address>"
+    Then the reference level validation fails
 
     Examples: 
       | address      | state |
-      | 111 Ham Lane | ZZ    |
-      | 222 Ham Lane | XY    |
+      | 111 Bad Lane | ZZ    |
+      | 222 Bad Lane | XY    |

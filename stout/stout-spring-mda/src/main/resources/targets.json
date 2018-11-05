@@ -175,14 +175,22 @@
 		"metadataContext": "targeted",
 		"overwritable": false
 	},
-	{
-		"name": "restClientBaseConfig",
-		"templateName": "templates/rest.client.base.config.java.vm",
-		"outputFile": "${basePackage}/client/config/RestClient${artifactId}BaseConfig.java",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.crosscutting.AppConfigGenerator",
-		"metadataContext": null,
-		"overwritable": true
-	},
+    {
+        "name": "restClientBaseConfig",
+        "templateName": "templates/rest.client.base.config.java.vm",
+        "outputFile": "${basePackage}/client/config/RestClient${artifactId}BaseConfig.java",
+        "generator": "org.bitbucket.fermenter.stout.mda.generator.crosscutting.AppConfigGenerator",
+        "metadataContext": null,
+        "overwritable": true
+    },
+    {
+        "name": "RestClientBasePropertiesConfig",
+        "templateName": "templates/rest.client.base.properties.config.java.vm",
+        "outputFile": "${basePackage}/client/config/RestClientBasePropertiesConfig.java",
+        "generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticJavaGenerator",
+        "metadataContext": null,
+        "overwritable": true
+    },
 	{
 		"name": "delegateMaintenanceResource",
 		"templateName": "templates/delegate.maintenance.resource.java.vm",

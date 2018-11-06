@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE entity PUBLIC "-//FERMENTER//DTD ENTITY//EN" "https://bitbucket.org/cpointe/fermenter/downloads/fermenter-2-entity.dtd">
+
+<entity>
+	<name>ServiceEntityExample</name>
+	<documentation>Entity that demonstrates uses a generated value primary key</documentation>
+	<table>SERVICE_ENTITY_EXAMPLE</table>
+
+	<id>
+		<field>
+			<name>id</name>
+			<type>uuid</type>
+			<column>SERVICE_ENTITY_EXAMPLE_ID</column>
+			<required>true</required>
+			<generator>uuid</generator>
+		</field>
+	</id>
+
+</entity>

@@ -1,0 +1,12 @@
+{
+  "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "name" : "ServiceExampleLogger",
+  "documentation" : "A service that logs standard and template methods",
+  "operations" : [ {
+    "name" : "LogServiceEntityExample",
+    "parameters" : [],
+    "return" : {
+      "type" : "void"
+    }
+  } ]
+}

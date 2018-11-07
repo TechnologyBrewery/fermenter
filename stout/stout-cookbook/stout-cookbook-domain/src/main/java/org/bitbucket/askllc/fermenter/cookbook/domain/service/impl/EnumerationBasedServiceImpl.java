@@ -62,4 +62,16 @@ public class EnumerationBasedServiceImpl extends EnumerationBasedBaseServiceImpl
 
     }
 
+//	@Override
+//	protected void passInSingleEnumeratedValueImpl(SimpleDomainEnumeration enumeratedValue) {
+//		// TODO Auto-generated method stub
+//		
+//	}
+//
+//	@Override
+//	protected void passInMultipleEnumeratedValuesImpl(List<SimpleDomainEnumeration> enumeratedValue) {
+//		// TODO Auto-generated method stub
+//		
+//	}
+
 }

@@ -28,7 +28,7 @@ public class ServiceExampleLoggerServiceImpl extends ServiceExampleLoggerBaseSer
 		ServiceEntityExampleBO bo = new ServiceEntityExampleBO();
 		
 		logger.debug("ServiceExampleLogger: ServiceEntityExampleBO() - START\n");
-		System.out.println(bo.save());
+		bo.save();
 		logger.debug("ServiceExampleLogger: ServiceEntityExampleBO() - END");
 		
 	}

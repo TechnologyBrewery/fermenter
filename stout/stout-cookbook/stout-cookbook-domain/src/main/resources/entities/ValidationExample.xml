@@ -32,6 +32,12 @@
 			<minLength>2</minLength>
 		</field>
 		<field>
+			<name>regexZipcodeExample</name>
+			<type>string</type>
+			<column>REGEX_ZIPCODE_EXAMPLE</column>			
+			<format>zipCode</format>
+		</field>
+		<field>
 			<name>longExample</name>
 			<type>long</type>
 			<column>LONG_EXAMPLE</column>

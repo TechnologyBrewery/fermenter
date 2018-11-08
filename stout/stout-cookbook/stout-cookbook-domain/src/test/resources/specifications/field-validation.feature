@@ -199,6 +199,28 @@ Feature: Field Level Validation Requirements
       | @validaddress.org             |
       | echuncpointe-inc.com          |
       | someperson1234@2346836777123. |
+      
+  Scenario Outline: RegEx Zipcode format validation against valid format
+    Given a "<value>" to validate against the regEx example Zipcode example field
+    When field level validation is performed on that regEx Zipcode value
+    Then the regEx Zipcode validation returns no errors
+
+    Examples: 
+      | value      |
+      | 12345      |
+      | 12345-6789 |
+     
+  Scenario Outline: RegEx Zipcode format validation against incorrect format
+	  Given a "<value>" to validate against the regEx example Zipcode example field
+    When field level validation is performed on that regEx Zipcode value
+    Then the regEx Zipcode validation returns errors
+
+    Examples: 
+      | value        |
+      | 1            |
+      | 12345-67894  |
+      | testExample  |
+      |              |
 
   Scenario Outline: required field validation that contains a value
     Given a "<value>" to validate against the required field String example field

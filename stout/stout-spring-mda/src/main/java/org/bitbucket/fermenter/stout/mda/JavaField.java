@@ -277,21 +277,23 @@ public class JavaField implements Field {
 	
 	public String getPatterns() {
 		Format format = FormatMetadataManager.getInstance().getFormat(getFormat());
-		
-		StringBuilder sb = new StringBuilder(100);
-		for (Iterator<Pattern> i = format.getPatterns().iterator(); i.hasNext();) {
-			Pattern pattern = i.next();
 			
-			sb.append("\"");
+		StringBuilder sb = new StringBuilder();
+		int current = 0;
+		int length = format.getPatterns().size();
+		sb.append("\"");
+		for (Pattern pattern : format.getPatterns()) {
+		    current++;
 			sb.append(StringEscapeUtils.escapeJava(pattern.getText()));
-			sb.append("\"");
 			
-			if (i.hasNext()) {
-				sb.append(", ");
+			if (current < length) {
+				sb.append("|");
 			}
 		}
+		sb.append("\"");
 		
 		return sb.toString();
+		
 	}
 
 	public boolean isGeospatialType() {

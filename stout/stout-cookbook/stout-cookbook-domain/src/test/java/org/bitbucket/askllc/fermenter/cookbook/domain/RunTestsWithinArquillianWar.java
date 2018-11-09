@@ -5,7 +5,7 @@ import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 
 @ArquillianSuiteDeployment
-public class ArquillianTestable extends AbstractArquillianTestSupport {
+public class RunTestsWithinArquillianWar extends AbstractArquillianTestSupport {
 
 	@Deployment()
     public static WebArchive createDeployment() {

@@ -1,14 +1,16 @@
-package org.bitbucket.askllc.fermenter.cookbook.domain;
+package org.bitbucket.askllc.fermenter.cookbook.referencing;
 
-
+import org.bitbucket.askllc.fermenter.cookbook.domain.AbstractArquillianTestSupport;
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 
 @ArquillianSuiteDeployment
-public class ArquillianTestableFalse extends AbstractArquillianTestSupport {
+public class RunTestsOutsideOfArquillianWar extends AbstractArquillianTestSupport {
+	
 	@Deployment(testable = false)
-    public static WebArchive createDeployment() {
+	public static WebArchive createDeployment() {
 		return AbstractArquillianTestSupport.createDeployment();
 	}
+	
 }

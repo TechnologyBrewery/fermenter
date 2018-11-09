@@ -20,7 +20,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(Arquillian.class)
-public class EnumerationBasedServiceIT extends ArquillianTestable {
+public class EnumerationBasedServiceIT extends RunTestsWithinArquillianWar {
 
 	@ArquillianResource
 	private URL deploymentURL;

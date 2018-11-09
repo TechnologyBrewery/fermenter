@@ -27,7 +27,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(Arquillian.class)
-public class SimpleDomainMaintenanceIT extends ArquillianTestable {
+public class SimpleDomainMaintenanceIT extends RunTestsWithinArquillianWar {
 
     @Test
     @RunAsClient

@@ -216,7 +216,6 @@
             <artifactId>cucumber-java</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- <dependency> <groupId>info.cukes</groupId> <artifactId>cucumber-spring</artifactId> <scope>test</scope> </dependency> -->
         <dependency>
             <groupId>com.github.cukespace</groupId>
             <artifactId>cukespace-core</artifactId>

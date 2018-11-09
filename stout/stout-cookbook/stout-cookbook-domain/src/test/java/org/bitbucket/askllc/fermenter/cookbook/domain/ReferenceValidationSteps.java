@@ -1,13 +1,14 @@
 package org.bitbucket.askllc.fermenter.cookbook.domain;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationReferenceExampleBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationReferencedObjectBO;
 import org.bitbucket.fermenter.stout.messages.MessageManager;
 import org.bitbucket.fermenter.stout.messages.MessageManagerInitializationDelegate;
-import org.bitbucket.fermenter.stout.messages.Messages;
 import org.bitbucket.fermenter.stout.test.MessageTestUtils;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,8 +28,8 @@ public class ReferenceValidationSteps {
 	@After("@localReferenceValidation")
 	public void cleanUp() throws Exception {
 		MessageManagerInitializationDelegate.cleanupMessageManager();
-		ValidationReferencedObjectBO.deleteAllValidationExamples();
 		ValidationReferenceExampleBO.deleteAllValidationExamples();
+		ValidationReferencedObjectBO.deleteAllValidationExamples();
 	}
 	
 	@Given("^the \"([^\"]*)\" has a local reference to an existing \"([^\"]*)\"$")
@@ -63,12 +64,18 @@ public class ReferenceValidationSteps {
 	public void the_reference_level_validation_passes() throws Throwable {
 		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ReferenceValidationSteps.class);
 		assertFalse("Should not have encountered messages!", MessageManager.hasErrorMessages());
+		
+		example.save();
+		ValidationReferenceExampleBO persisted = ValidationReferenceExampleBO.findByPrimaryKey(example.getKey());
+		assertNotNull("ValidationReferenceExampleBO should have been persisted to the DB", persisted);
 	}
 
 	@Then("^the reference level validation fails$")
 	public void the_reference_level_validation_fails() throws Throwable {
 		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ReferenceValidationSteps.class);
 		assertTrue("Should have encountered messages!", MessageManager.hasErrorMessages());
+		
+		example.save();
+		assertNull("ValidationReferenceExampleBO should not have been persisted to the DB", example.getKey());
 	}
-	
 }

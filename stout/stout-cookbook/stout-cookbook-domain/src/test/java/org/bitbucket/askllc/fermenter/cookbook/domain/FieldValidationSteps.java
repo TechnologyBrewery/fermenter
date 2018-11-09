@@ -305,7 +305,7 @@ public class FieldValidationSteps {
     @Then("^the regEx Zipcode validation returns no errors$")
     public void the_regEx_Zipcode_validation_returns_no_errors() throws Throwable {
         
-        MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ValidationSteps.class);
+        MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), FieldValidationSteps.class);
         assertFalse("Should not have encountered messages!", MessageManager.hasErrorMessages());
         
     }
@@ -313,7 +313,7 @@ public class FieldValidationSteps {
     @Then("^the regEx Zipcode validation returns errors$")
     public void the_regEx_Zipcode_validation_returns_errors() throws Throwable {
         
-        MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ValidationSteps.class);
+        MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), FieldValidationSteps.class);
         assertTrue("Should have encountered messages!", MessageManager.hasErrorMessages());
         
     }

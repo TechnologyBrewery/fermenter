@@ -1,6 +1,8 @@
 package org.bitbucket.askllc.fermenter.cookbook.referencing;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.net.URL;
@@ -96,6 +98,10 @@ public class RemoteReferenceValidationSteps {
     public void the_reference_level_validation_passes() throws Throwable {
 		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), RemoteReferenceValidationSteps.class);
 		assertFalse("Should not have encountered messages!", MessageManager.hasErrorMessages());
+		
+		localDomain.save();
+		LocalDomainBO persisted = LocalDomainBO.findByPrimaryKey(localDomain.getKey());
+		assertNotNull("LocalDomainBO should have been persisted to the DB", persisted);
     }
 
 
@@ -103,5 +109,8 @@ public class RemoteReferenceValidationSteps {
     public void the_reference_level_validation_fails() throws Throwable {
 		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ReferenceValidationSteps.class);
 		assertTrue("Should have encountered messages!", MessageManager.hasErrorMessages());
+		
+		localDomain.save();
+		assertNull("LocalDomainBO should not have been persisted to the DB", localDomain.getKey());
     }
 }

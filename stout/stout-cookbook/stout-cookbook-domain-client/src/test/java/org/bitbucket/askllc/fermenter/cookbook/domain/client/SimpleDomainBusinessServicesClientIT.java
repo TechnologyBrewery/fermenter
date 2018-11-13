@@ -15,7 +15,7 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
-import org.bitbucket.askllc.fermenter.cookbook.domain.AbstractArquillianTestSupport;
+import org.bitbucket.askllc.fermenter.cookbook.domain.RunTestsWithinArquillianWar;
 import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.SimpleDomainMaintenanceDelegate;
 import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.SimpleDomainManagerDelegate;
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.SimpleDomain;
@@ -39,7 +39,7 @@ import org.springframework.stereotype.Component;
 @SpringClientConfiguration("application-test-context.xml")
 // Allows Spring to inject the service endpoints into this class:
 @Component
-public class SimpleDomainBusinessServicesClientIT extends AbstractArquillianTestSupport {
+public class SimpleDomainBusinessServicesClientIT extends RunTestsWithinArquillianWar {
 
     @ArquillianResource
     private URL deploymentURL;

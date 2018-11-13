@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <arquillian xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://jboss.org/schema/arquillian"
-	xsi:schemaLocation="http://jboss.org/schema/arquillian http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
+    xsi:schemaLocation="http://jboss.org/schema/arquillian http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
 
-	<engine>
-    	<property name="deploymentExportPath">target/deployments</property>
-	</engine>
-	<container qualifier="tomcat" default="true">
-		<configuration>
-			<property name="bindHttpPort">8081</property>
-			<property name="unpackArchive">true</property>
-		</configuration>
-	</container>
+    <engine>
+        <property name="deploymentExportPath">target/deployments</property>
+    </engine>
+    <container qualifier="tomcat" default="true">
+        <configuration>
+            <property name="bindHttpPort">8085</property>
+            <property name="unpackArchive">true</property>
+        </configuration>
+    </container>
+
+    <extension qualifier="cucumber">
+        <property name="report">true</property>
+        <property name="reportDirectory">target/cucumber-html-reports</property>
+        <property name="generateDocs">true</property>
+        <property name="report-directory">target/cucumber-html-reports</property>
+        <!-- I don't know what this does, so look into it -->
+        <property name="persistenceEventsActivated">true</property>
+        <property name="colors">true</property>
+    </extension>
 </arquillian>

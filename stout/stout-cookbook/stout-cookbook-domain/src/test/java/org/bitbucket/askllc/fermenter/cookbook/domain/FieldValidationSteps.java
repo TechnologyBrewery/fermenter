@@ -22,7 +22,7 @@ import cucumber.api.java.en.When;
 @ContextConfiguration({ "classpath:stout-cookbook-domain-application-context.xml",
 		"classpath:h2-spring-ds-context.xml" })
 @Transactional
-public class ValidationSteps {
+public class FieldValidationSteps {
 
 	private String userString;
 	private String userStringRegex;
@@ -103,7 +103,7 @@ public class ValidationSteps {
 	@Then("^the long validation returns no errors$")
 	public void the_long_validation_returns_no_errors() throws Throwable {
 
-		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ValidationSteps.class);
+		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), FieldValidationSteps.class);
 		assertFalse("Should not have encountered messages!", MessageManager.hasErrorMessages());
 
 	}
@@ -111,7 +111,7 @@ public class ValidationSteps {
 	@Then("^the long validation returns errors$")
 	public void the_long_validation_returns_errors() throws Throwable {
 
-		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ValidationSteps.class);
+		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), FieldValidationSteps.class);
 		assertTrue("Should have encountered messages!", MessageManager.hasErrorMessages());
 
 	}
@@ -150,7 +150,7 @@ public class ValidationSteps {
 	@Then("^the integer validation returns no errors$")
 	public void the_integer_validation_returns_no_errors() throws Throwable {
 
-		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ValidationSteps.class);
+		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), FieldValidationSteps.class);
 		assertFalse("Should not have encountered messages!", MessageManager.hasErrorMessages());
 
 	}
@@ -158,7 +158,7 @@ public class ValidationSteps {
 	@Then("^the integer validation returns errors$")
 	public void the_integer_validation_returns_errors() throws Throwable {
 
-		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ValidationSteps.class);
+		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), FieldValidationSteps.class);
 		assertTrue("Should have encountered messages!", MessageManager.hasErrorMessages());
 
 	}
@@ -210,7 +210,7 @@ public class ValidationSteps {
 	@Then("^the BigDecimal validation returns no errors$")
 	public void the_BigDecimal_validation_returns_no_errors() throws Throwable {
 
-		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ValidationSteps.class);
+		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), FieldValidationSteps.class);
 		assertFalse("Should not have encountered messages!", MessageManager.hasErrorMessages());
 
 	}
@@ -218,7 +218,7 @@ public class ValidationSteps {
 	@Then("^the BigDecimal validation returns errors$")
 	public void the_BigDecimal_validation_returns_errors() throws Throwable {
 
-		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ValidationSteps.class);
+		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), FieldValidationSteps.class);
 		assertTrue("Should have encountered messages!", MessageManager.hasErrorMessages());
 
 	}
@@ -268,7 +268,7 @@ public class ValidationSteps {
 	@Then("^the regEx String validation returns no errors$")
 	public void the_regEx_String_validation_returns_no_errors() throws Throwable {
 	    
-		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ValidationSteps.class);
+		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), FieldValidationSteps.class);
 		assertFalse("Should not have encountered messages!", MessageManager.hasErrorMessages());
 		
 	}
@@ -276,7 +276,7 @@ public class ValidationSteps {
 	@Then("^the regEx String validation returns errors$")
 	public void the_regEx_String_validation_returns_errors() throws Throwable {
 	    
-		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ValidationSteps.class);
+		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), FieldValidationSteps.class);
 		assertTrue("Should have encountered messages!", MessageManager.hasErrorMessages());
 		
 	}
@@ -305,7 +305,7 @@ public class ValidationSteps {
     @Then("^the regEx Zipcode validation returns no errors$")
     public void the_regEx_Zipcode_validation_returns_no_errors() throws Throwable {
         
-        MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ValidationSteps.class);
+        MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), FieldValidationSteps.class);
         assertFalse("Should not have encountered messages!", MessageManager.hasErrorMessages());
         
     }
@@ -313,7 +313,7 @@ public class ValidationSteps {
     @Then("^the regEx Zipcode validation returns errors$")
     public void the_regEx_Zipcode_validation_returns_errors() throws Throwable {
         
-        MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ValidationSteps.class);
+        MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), FieldValidationSteps.class);
         assertTrue("Should have encountered messages!", MessageManager.hasErrorMessages());
         
     }
@@ -341,7 +341,7 @@ public class ValidationSteps {
 	@Then("^the required field returns a value with no errors$")
 	public void the_required_field_returns_a_value_with_no_errors() throws Throwable {
 	    
-		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ValidationSteps.class);
+		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), FieldValidationSteps.class);
 		assertFalse("Should not have encountered messages!", MessageManager.hasErrorMessages());
 		
 	}
@@ -357,7 +357,7 @@ public class ValidationSteps {
 	@Then("^the required field returns a null with errors$")
 	public void the_required_field_returns_a_null_with_errors() throws Throwable {
 	    
-		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ValidationSteps.class);
+		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), FieldValidationSteps.class);
 		assertTrue("Should have encountered messages!", MessageManager.hasErrorMessages());
 		
 	}
@@ -388,7 +388,7 @@ public class ValidationSteps {
 	@Then("^the child required field returns a value with no errors$")
 	public void the_child_required_field_returns_a_value_with_no_errors() throws Throwable {
 	    
-		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ValidationSteps.class);
+		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), FieldValidationSteps.class);
 		assertFalse("Should not have encountered messages!", MessageManager.hasErrorMessages());
 		
 	}
@@ -406,7 +406,7 @@ public class ValidationSteps {
 	@Then("^the child required field returns a null with errors$")
 	public void the_child_required_field_returns_a_null_with_errors() throws Throwable {
 	    
-		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ValidationSteps.class);
+		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), FieldValidationSteps.class);
 		assertTrue("Should have encountered messages!", MessageManager.hasErrorMessages());
 		
 	}

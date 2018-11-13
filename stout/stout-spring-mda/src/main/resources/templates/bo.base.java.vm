@@ -66,12 +66,6 @@ import ${reference.importPrefix}.client.service.${reference.type}MaintenanceDele
   #end
 #end
 
-#if (!$entity.references.isEmpty())
-	import org.bitbucket.fermenter.stout.messages.CoreMessages;
-	import org.bitbucket.fermenter.stout.messages.MessageManager;
-	import org.bitbucket.fermenter.stout.messages.MessageUtils;
-#end
-
 #if ( !$entity.idFields.isEmpty() )
   #set ($idFieldJavaType = ${entity.idFields.values().iterator().next().javaType})
 #else
@@ -578,11 +572,7 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
 					${reference.type}BO ${reference.name}Ref = get${reference.capitalizedName}();
 					if ((${reference.name}Ref != null && ${reference.name}Ref.getKey() != null)) {
 						${reference.type}BO ref = ${reference.type}BO.findByPrimaryKey(${reference.name}Ref.getKey());
-					    if(ref == null){
-					    		MessageManager.addMessage(MessageUtils.createErrorMessage(CoreMessages.INVALID_REFERENCE,
-							new String[] { ${reference.name}.toString() }, 
-                             new Object[] { ${reference.name} , "Invalid reference, reference does not exist"  }));
-					    }
+					    this.checkIfReferenceExists(ref);
 					}
 				#end
 			#end
@@ -592,11 +582,7 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
 					${reference.type} ${reference.name}Ref = 	get${reference.capitalizedName}();				
 					if ((${reference.name}Ref != null && ${reference.name}Key != null)) {
 						${reference.type} ref = ${reference.name}Delegate.findByPrimaryKey(${reference.name}Key);
-					    	if(ref == null){
-					    		MessageManager.addMessage(MessageUtils.createErrorMessage(CoreMessages.INVALID_REFERENCE,
-							new String[] { ${reference.name}.toString() }, 
-                             new Object[] { ${reference.name} , "Invalid reference, reference does not exist"  }));
-					    }
+					    this.checkIfReferenceExists(ref);
 					}
 				#end
 			#end

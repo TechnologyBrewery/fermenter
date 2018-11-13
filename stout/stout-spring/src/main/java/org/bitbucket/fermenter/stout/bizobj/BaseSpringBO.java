@@ -86,7 +86,7 @@ public abstract class BaseSpringBO<BO> implements BusinessObject<BO> {
 
 	}
 	
-	public void checkIfReferenceExists(Object reference) {
+	protected void checkIfReferenceExists(Object reference) {
 		if(reference == null) {
 	    		MessageManager.addMessage(MessageUtils.createErrorMessage(CoreMessages.INVALID_REFERENCE,
 			new String[] { "Invalid reference" }, 

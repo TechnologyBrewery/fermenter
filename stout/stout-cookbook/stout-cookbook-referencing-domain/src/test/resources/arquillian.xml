@@ -7,7 +7,7 @@
     </engine>
     <container qualifier="tomcat" default="true">
         <configuration>
-            <property name="bindHttpPort">8081</property>
+            <property name="bindHttpPort">8085</property>
             <property name="unpackArchive">true</property>
         </configuration>
     </container>

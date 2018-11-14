@@ -204,27 +204,25 @@
 					<autoReleaseAfterClose>true</autoReleaseAfterClose>
 				</configuration>
 			</plugin>
-			<plugin>
+            <plugin>
                 <groupId>net.masterthought</groupId>
                 <artifactId>maven-cucumber-reporting</artifactId>
-                <version>3.13.0</version>
+                <version>3.20.0</version>
                 <executions>
                     <execution>
                         <id>execution</id>
-                        <!-- Generating the cucumber html reports in post integration test phase because the verify phase 
-                            will fail the build without generating them, and we don't want to set the build to ignore failed tests because that's no 
-                            bueno. (The checkBuildResult flag is actually sort of useless. It still won't generate in the verify phase if there are failed 
-                            tests) This allows the reports to generate and the build to fail as well. -->
                         <phase>post-integration-test</phase>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <projectName>gdi-sidecar</projectName>
+                            <projectName>fermenter</projectName>
                             <outputDirectory>${project.build.directory}/cucumber-html-reports</outputDirectory>
-                            <cucumberOutput>${project.build.directory}/cucumber-html-reports</cucumberOutput>
-                            <enableFlashCharts>true</enableFlashCharts>
-                            <checkBuildResult>false</checkBuildResult>
+                            <jsonFiles>
+                                <!-- supports wildcard or name pattern -->
+                                <param>**/*.json</param>
+                            </jsonFiles>
+                            <checkBuildResult>true</checkBuildResult>
                         </configuration>
                     </execution>
                 </executions>

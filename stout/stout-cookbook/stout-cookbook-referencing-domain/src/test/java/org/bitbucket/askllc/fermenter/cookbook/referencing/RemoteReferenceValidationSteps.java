@@ -30,7 +30,6 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
-@SpringClientConfiguration({ "application-test-context.xml", "h2-spring-ds-context.xml" })
 @Component
 public class RemoteReferenceValidationSteps {
     
@@ -47,13 +46,20 @@ public class RemoteReferenceValidationSteps {
     public void setUp() {
         Authentication authentication = new UsernamePasswordAuthenticationToken("testUser", "somePassword");
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        assertNotNull("Missing needed delegate!", referenceMaintenanceDelegate);
     }
     
     @After("@remoteReferenceValidation")
     public void cleanUp() throws Exception {
-        localDomain.delete();
-        referenceMaintenanceDelegate.delete(reference.getId());
-    		MessageManagerInitializationDelegate.cleanupMessageManager();
+    	if (localDomain != null) {
+    		localDomain.delete();
+    	}
+    	
+    	if (reference != null) {
+    		referenceMaintenanceDelegate.delete(reference.getId());
+    	}
+    	
+    	MessageManagerInitializationDelegate.cleanupMessageManager();
     }
     
     @Given("^the \"([^\"]*)\" has a remote reference to an existing \"([^\"]*)\"$")

@@ -8,7 +8,6 @@ import java.util.UUID;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.bitbucket.askllc.fermenter.cookbook.domain.RunTestsWithinArquillianWar;
 import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.ValidationReferencedObjectMaintenanceDelegate;
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.ValidationReferencedObject;
 import org.bitbucket.askllc.fermenter.cookbook.referencing.domain.bizobj.LocalDomainBO;
@@ -32,7 +31,7 @@ import org.springframework.stereotype.Component;
 @SpringClientConfiguration("application-test-context.xml")
 // Allows Spring to inject the service endpoints into this class:
 @Component
-public class RemoteReferenceRetrievalIT extends RunTestsWithinArquillianWar {
+public class RemoteReferenceRetrievalIT extends RunTestsOutsideOfArquillianWar {
 
     @ArquillianResource
     private URL deploymentURL;

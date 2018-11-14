@@ -110,9 +110,12 @@
 			{
 				"name": "delegateServiceImpl"
 			},
-			{
-				"name": "restClientBaseConfig"
-			},
+            {
+                "name": "restClientBaseConfig"
+            },
+            {
+                "name": "RestClientBasePropertiesConfig"
+            },
 			{
 				"name": "restClientAppConfig"
 			},

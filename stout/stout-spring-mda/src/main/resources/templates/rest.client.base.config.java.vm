@@ -23,6 +23,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.context.SecurityContextHolder;
 import java.util.Properties;
+import org.aeonbits.owner.KrauseningConfigFactory;
 
 /**
  * Configuration for the REST Client.
@@ -94,18 +95,16 @@ public class RestClient${configName}BaseConfig {
      *
      */
     protected String getEndpoint() {
-        Krausening krausening = Krausening.getInstance();
-        Properties appProperties = krausening.getProperties("rest-client-endpoints.properties");
+        RestClientBasePropertiesConfig appPropertiesConfig = KrauseningConfigFactory.create(RestClientBasePropertiesConfig.class);
         StringBuilder urlBuilder = new StringBuilder();
         urlBuilder
-                .append(appProperties.getProperty("${artifactId}.endpoint.domain"))
+                .append(appPropertiesConfig.getDomain())
                 .append(":")
-                .append(appProperties.getProperty("${artifactId}.endpoint.port"))
+                .append(appPropertiesConfig.getPort())
                 .append("/")
-                .append(appProperties.getProperty("${artifactId}.endpoint.context"));
+                .append(appPropertiesConfig.getUrl());
 
         return urlBuilder.toString();
-
     }
 
     /**

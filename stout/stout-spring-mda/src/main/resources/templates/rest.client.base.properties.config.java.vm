@@ -1,0 +1,24 @@
+package ${basePackage}.client.config;
+
+import org.aeonbits.owner.KrauseningConfig;
+
+/**
+ * Contains rest client property configuration.
+ * 
+ * Generated Code - DO NOT MODIFY
+ */
+@KrauseningConfig.KrauseningSources("rest-client-endpoints.properties")
+public interface RestClientBasePropertiesConfig extends KrauseningConfig {
+
+    @Key("${artifactId}.endpoint.domain")
+    @DefaultValue("http://localhost")
+    String getDomain();
+    
+    @Key("${artifactId}.endpoint.port")
+    @DefaultValue("8080")
+    int getPort();
+    
+    @Key("${artifactId}.endpoint.context")
+    @DefaultValue("domain/rest")
+    String getUrl();
+}

@@ -29,7 +29,7 @@ public abstract class BasePersistentSpringBO<PK extends Serializable, BO, JPA ex
     /**
      * {@inheritDoc}
      */
-    public BO save() {
+    public final BO save() {
         defaultValues();
         preValidate();
         validate();

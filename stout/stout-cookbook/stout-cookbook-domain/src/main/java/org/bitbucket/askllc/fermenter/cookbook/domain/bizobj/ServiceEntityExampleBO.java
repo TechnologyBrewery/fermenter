@@ -29,14 +29,6 @@ public class ServiceEntityExampleBO extends ServiceEntityExampleBaseBO {
 		super();
 		SpringAutowiringUtil.autowireBizObj(this);
 	}
-	
-	@Override
-	public ServiceEntityExampleBO save() {
-		logger.debug("\tServiceEntityExampleBO: save() - START");
-		super.save();
-		logger.debug("\tServiceEntityExampleBO: save() - END");
-		return null;
-	}
 
 	@Override
 	protected void validateRelations() {

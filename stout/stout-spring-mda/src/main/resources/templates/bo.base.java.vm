@@ -568,23 +568,19 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
 		#foreach ($reference in $entity.references.values())
 		  #if ( !$reference.isExternal() )
 		    #if( !$entity.references.isEmpty() ) 
-				#foreach ($reference in $entity.references.values())	
-					${reference.type}BO ${reference.name}Ref = get${reference.capitalizedName}();
-					if ((${reference.name}Ref != null && ${reference.name}Ref.getKey() != null)) {
-						${reference.type}BO ref = ${reference.type}BO.findByPrimaryKey(${reference.name}Ref.getKey());
-					    this.checkIfReferenceExists(ref);
-					}
-				#end
+				${reference.type}BO ${reference.name}Ref = get${reference.capitalizedName}();
+				if ((${reference.name}Ref != null && ${reference.name}Ref.getKey() != null)) {
+					${reference.type}BO found${reference.type}Ref = ${reference.type}BO.findByPrimaryKey(${reference.name}Ref.getKey());
+				    this.checkIfReferenceExists(found${reference.type}Ref);
+				}
 			#end
 		  #else
 		    #if( !$entity.references.isEmpty() ) 
-				#foreach ($reference in $entity.references.values())
-					${reference.type} ${reference.name}Ref = 	get${reference.capitalizedName}();				
-					if ((${reference.name}Ref != null && ${reference.name}Key != null)) {
-						${reference.type} ref = ${reference.name}Delegate.findByPrimaryKey(${reference.name}Key);
-					    this.checkIfReferenceExists(ref);
-					}
-				#end
+				${reference.type} ${reference.name}Ref = 	get${reference.capitalizedName}();				
+				if ((${reference.name}Ref != null && ${reference.name}Key != null)) {
+					${reference.type} found${reference.type}Ref = ${reference.name}Delegate.findByPrimaryKey(${reference.name}Key);
+				    this.checkIfReferenceExists(found${reference.type}Ref);
+				}
 			#end
 		  #end				
 		#end

@@ -42,7 +42,7 @@ import org.springframework.stereotype.Component;
 @SpringClientConfiguration("application-test-context.xml")
 // Allows Spring to inject the service endpoints into this class:
 @Component
-public class SimpleDomainClientIT extends AbstractArquillianTestSupport {
+public class SimpleDomainClientIT extends RunTestsWithinArquillianWar {
 
     @ArquillianResource
     private URL deploymentURL;

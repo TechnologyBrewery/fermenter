@@ -21,13 +21,8 @@ public class PageDeserializer extends JsonDeserializer<Page> {
         
         Integer number = null;
         Integer size = null;
-        Integer totalPages;
-        Integer numberOfElements;
         Long totalElements = null;
         Boolean previousPage = null;
-        Boolean first;
-        Boolean nextPage;
-        Boolean last;
         List content = null;
         Sort sort = null;
         
@@ -41,23 +36,11 @@ public class PageDeserializer extends JsonDeserializer<Page> {
             case PageMixIn.SIZE:
                 size = jp.getIntValue();
                 break;
-            case PageMixIn.TOTAL_PAGES:
-                totalPages = jp.getIntValue();
-                break;
-            case PageMixIn.NUMBER_OF_ELEMENTS:
-                numberOfElements = jp.getIntValue();
-                break;
             case PageMixIn.TOTAL_ELEMENTS:
                 totalElements = jp.getLongValue();
                 break;
             case PageMixIn.PREVIOUS_PAGE:
                 previousPage = jp.getBooleanValue();
-                break;
-            case PageMixIn.NEXT_PAGE:
-                nextPage = jp.getBooleanValue();
-                break;
-            case PageMixIn.LAST:
-                last = jp.getBooleanValue();
                 break;
             case PageMixIn.CONTENT:
                 content = convertJsonToContent(jp);
@@ -75,7 +58,6 @@ public class PageDeserializer extends JsonDeserializer<Page> {
     }
     
     private List convertJsonToContent(JsonParser jp) {
-        // TODO Auto-generated method stub
         return null;
     }
 

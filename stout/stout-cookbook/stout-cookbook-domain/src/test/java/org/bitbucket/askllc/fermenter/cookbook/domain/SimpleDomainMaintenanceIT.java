@@ -334,9 +334,11 @@ public class SimpleDomainMaintenanceIT extends RunTestsWithinArquillianWar {
             TestUtils.assertNoErrorMessages(result);
         }
 
-        int page = 0;
-        int size = 1;
-        SortWrapper sort = new SortWrapper(OrderWrapper.ASC, "name");
+        Integer page = 0;
+        Integer size = 1;
+        OrderWrapper order = new OrderWrapper(OrderWrapper.ASC, "name", true);
+        SortWrapper sort = new SortWrapper(order);
+        
 
         SimpleDomainBO probe = new SimpleDomainBO();
         probe.setName(searchNames[0]);
@@ -347,7 +349,7 @@ public class SimpleDomainMaintenanceIT extends RunTestsWithinArquillianWar {
         PageWrapper<SimpleDomainBO> value = searchResults.getValue();
         assertEquals(new Long(2), value.getTotalElements());
         assertEquals(new Integer(2), value.getTotalPages());
-        assertEquals(new Integer(size), value.getSize());
+        assertEquals(size, value.getSize());
     }
 
     @Test

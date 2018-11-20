@@ -7,9 +7,27 @@ public class SortWrapper {
 
     private List<OrderWrapper> orders;
 
+    public SortWrapper() {
+        // needed for resteasy
+    }
+
     public SortWrapper(String direction, String property) {
         orders = new ArrayList<>();
         orders.add(new OrderWrapper(direction, property));
+    }
+
+    public SortWrapper(String property) {
+        orders = new ArrayList<>();
+        orders.add(new OrderWrapper(property));
+    }
+
+    public SortWrapper(OrderWrapper order) {
+        orders = new ArrayList<>();
+        orders.add(order);
+    }
+
+    public SortWrapper(List<OrderWrapper> orders) {
+        this.orders = orders;
     }
 
     public List<OrderWrapper> getOrders() {

@@ -16,11 +16,6 @@ import org.bitbucket.fermenter.stout.messages.Messages;
 import org.bitbucket.fermenter.stout.messages.json.MessageDeserializer;
 import org.bitbucket.fermenter.stout.messages.json.MessageSerializer;
 import org.bitbucket.fermenter.stout.messages.json.MessagesMixIn;
-import org.bitbucket.fermenter.stout.page.json.PageDeserializer;
-import org.bitbucket.fermenter.stout.page.json.PageMixIn;
-import org.bitbucket.fermenter.stout.page.json.PageSerializer;
-import org.bitbucket.fermenter.stout.page.json.SortDeserializer;
-import org.bitbucket.fermenter.stout.transfer.PageResponse;
 
 import ${basePackage}.bizobj.*;
 import ${basePackage}.transfer.json.*;
@@ -51,7 +46,6 @@ public final class ObjectMapperManager {
 #foreach( $entity in $entities )		
 		module.setMixInAnnotation(${entity.name}BO.class, ${entity.name}MixIn.class);
 #end
-		module.addDeserializer(Sort.class, new SortDeserializer());
 
 		module.addAbstractTypeMapping(Messages.class, DefaultMessages.class);
 		module.setMixInAnnotation(Messages.class, MessagesMixIn.class);

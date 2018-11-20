@@ -9,8 +9,6 @@ import org.bitbucket.fermenter.stout.messages.Messages;
 import org.bitbucket.fermenter.stout.messages.json.MessageDeserializer;
 import org.bitbucket.fermenter.stout.messages.json.MessageSerializer;
 import org.bitbucket.fermenter.stout.messages.json.MessagesMixIn;
-import org.bitbucket.fermenter.stout.page.json.SortDeserializer;
-import org.springframework.data.domain.Sort;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;

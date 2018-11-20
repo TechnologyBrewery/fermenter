@@ -21,6 +21,8 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.SimpleDomai
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.SimpleDomain;
 import org.bitbucket.fermenter.stout.page.PageWrapper;
 import org.bitbucket.fermenter.stout.page.json.FindByExampleCriteria;
+import org.bitbucket.fermenter.stout.sort.OrderWrapper;
+import org.bitbucket.fermenter.stout.sort.SortWrapper;
 import org.bitbucket.fermenter.stout.test.MessageTestUtils;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
@@ -191,7 +193,7 @@ public class SimpleDomainClientIT extends RunTestsWithinArquillianWar {
              lastCreatedSimpleDomain = simpleDomainMaintenanceDelagte.create(TestUtils.createRandomSimpleDomain(numSimpleDomainChildren));
         }
 
-        Sort sort = new Sort(Sort.Direction.ASC, "name");
+        SortWrapper sort = new SortWrapper(OrderWrapper.ASC, "name");
         FindByExampleCriteria<SimpleDomain> criteria = new FindByExampleCriteria<SimpleDomain>(new SimpleDomain(), 0, numSimpleDomains, sort);
         PageWrapper<SimpleDomain> allSimpleDomains = simpleDomainMaintenanceDelagte.findByExample(criteria);
         MessageTestUtils.assertNoErrorMessages();

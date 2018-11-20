@@ -22,7 +22,8 @@ import org.bitbucket.fermenter.stout.page.PageWrapper;
 import org.bitbucket.fermenter.stout.page.json.FindByExampleCriteria;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
-import org.bitbucket.fermenter.stout.transfer.PageResponse;
+import org.bitbucket.fermenter.stout.sort.OrderWrapper;
+import org.bitbucket.fermenter.stout.sort.SortWrapper;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.extension.rest.client.ArquillianResteasyResource;
 import org.jboss.arquillian.junit.Arquillian;
@@ -33,8 +34,6 @@ import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
 
 @RunWith(Arquillian.class)
 public class SimpleDomainMaintenanceIT extends RunTestsWithinArquillianWar {
@@ -89,7 +88,7 @@ public class SimpleDomainMaintenanceIT extends RunTestsWithinArquillianWar {
         int page = 0;
         int size = 25;
         // TODO: generate field names as enums
-        Sort sort = new Sort(Sort.Direction.ASC, "name");
+        SortWrapper sort = new SortWrapper(OrderWrapper.ASC, "name");
         SimpleDomainBO simpleDomainBOWithoutAnyRestrictions = new SimpleDomainBO();
         FindByExampleCriteria<SimpleDomainBO> criteria = new FindByExampleCriteria<>(
                 simpleDomainBOWithoutAnyRestrictions, page, size, sort);
@@ -311,7 +310,7 @@ public class SimpleDomainMaintenanceIT extends RunTestsWithinArquillianWar {
 
         int page = 0;
         int size = 25;
-        Sort sort = new Sort(Sort.Direction.ASC, "name");
+        SortWrapper sort = new SortWrapper(OrderWrapper.ASC, "name");
 
         SimpleDomainBO probe = new SimpleDomainBO();
         probe.setName(searchNames[0]);
@@ -337,7 +336,7 @@ public class SimpleDomainMaintenanceIT extends RunTestsWithinArquillianWar {
 
         int page = 0;
         int size = 1;
-        Sort sort = new Sort(Sort.Direction.ASC, "name");
+        SortWrapper sort = new SortWrapper(OrderWrapper.ASC, "name");
 
         SimpleDomainBO probe = new SimpleDomainBO();
         probe.setName(searchNames[0]);
@@ -365,7 +364,7 @@ public class SimpleDomainMaintenanceIT extends RunTestsWithinArquillianWar {
 
         int page = 0;
         int size = 25;
-        Sort sort = new Sort(Sort.Direction.ASC, "name");
+        SortWrapper sort = new SortWrapper(OrderWrapper.ASC, "name");
 
         SimpleDomainBO probe = new SimpleDomainBO();
         FindByExampleCriteria<SimpleDomainBO> criteria = new FindByExampleCriteria<>(probe, page, size, sort);

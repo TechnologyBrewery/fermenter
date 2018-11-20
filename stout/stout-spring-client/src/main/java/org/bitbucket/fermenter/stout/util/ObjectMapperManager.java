@@ -40,8 +40,6 @@ public final class ObjectMapperManager {
      */
     private static void configureObjectMapper() {
         SimpleModule module = new SimpleModule();
-
-        module.addDeserializer(Sort.class, new SortDeserializer());
         
         module.addAbstractTypeMapping(Messages.class, DefaultMessages.class);
         module.setMixInAnnotation(Messages.class, MessagesMixIn.class);

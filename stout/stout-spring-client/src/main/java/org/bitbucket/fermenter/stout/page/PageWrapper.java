@@ -3,32 +3,7 @@ package org.bitbucket.fermenter.stout.page;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.data.domain.Page;
-
 public class PageWrapper<T> {
-//    public Integer getSize();
-//    public Integer getNumber();
-//    public Integer getTotalPages();
-//    
-//    public Integer getNumberOfElements();    
-//    public Long getTotalElements();
-//    
-//    public Boolean getFirst();
-//    public Boolean getLast();
-//    public List<T> getContent();
-    
-    public PageWrapper<T> mapToPageWrapper(Page page) {
-        PageWrapper<T> wrapper = new PageWrapper<T>();
-        wrapper.setContent(page.getContent());
-        wrapper.setSize(page.getSize());
-        wrapper.setFirst(page.isFirst());
-        wrapper.setLast(page.isLast());
-        wrapper.setNumber(page.getNumber());
-        wrapper.setNumberOfElements(page.getNumberOfElements());
-        wrapper.setTotalElements(Long.valueOf(page.getTotalElements()));
-        wrapper.setTotalPages(Integer.valueOf(page.getTotalPages()));
-        return wrapper;
-    }
 
     private List<T> content = new ArrayList<T>();
     private Integer size;

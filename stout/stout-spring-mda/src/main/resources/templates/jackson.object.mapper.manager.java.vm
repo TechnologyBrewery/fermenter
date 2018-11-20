@@ -51,11 +51,6 @@ public final class ObjectMapperManager {
 #foreach( $entity in $entities )		
 		module.setMixInAnnotation(${entity.name}BO.class, ${entity.name}MixIn.class);
 #end
-
-		module.addAbstractTypeMapping(Page.class, PageResponse.class);
-		module.setMixInAnnotation(Page.class, PageMixIn.class);
-		module.addSerializer(Page.class, new PageSerializer());
-		module.addDeserializer(Page.class, new PageDeserializer());
 		module.addDeserializer(Sort.class, new SortDeserializer());
 
 		module.addAbstractTypeMapping(Messages.class, DefaultMessages.class);

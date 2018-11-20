@@ -7,7 +7,7 @@ import ${basePackage}.transfer.${entity.name};
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
 import org.bitbucket.fermenter.stout.page.json.FindByExampleCriteria;
-import org.springframework.data.domain.Page;
+import org.bitbucket.fermenter.stout.page.PageWrapper;
 
 #foreach( $import in $entity.idFieldImports )
 import $import;
@@ -43,5 +43,5 @@ public interface ${entity.name}MaintenanceResource {
 
     @RequestLine("GET /${entity.name}/findByExample")
     @Headers({"Content-Type: application/json"})
-    ValueServiceResponse<Page<${entity.name}>> findByExample(FindByExampleCriteria<${entity.name}> criteria);
+    ValueServiceResponse<PageWrapper<${entity.name}>> findByExample(FindByExampleCriteria<${entity.name}> criteria);
 }

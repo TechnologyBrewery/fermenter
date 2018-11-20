@@ -23,11 +23,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.data.domain.Page;
 
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
 import org.bitbucket.fermenter.stout.page.json.FindByExampleCriteria;
+import org.bitbucket.fermenter.stout.page.PageWrapper;
 
 import java.math.BigDecimal;
 
@@ -114,5 +114,5 @@ public interface ${entity.name}MaintenanceService {
     @Path("findByExample")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	ValueServiceResponse<Page<${entity.name}BO>> findByExample(FindByExampleCriteria<${entity.name}BO> criteria);
+	ValueServiceResponse<PageWrapper<${entity.name}BO>> findByExample(FindByExampleCriteria<${entity.name}BO> criteria);
 }

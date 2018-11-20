@@ -19,6 +19,7 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.RunTestsWithinArquillianWa
 import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.SimpleDomainMaintenanceDelegate;
 import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.SimpleDomainManagerDelegate;
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.SimpleDomain;
+import org.bitbucket.fermenter.stout.page.PageWrapper;
 import org.bitbucket.fermenter.stout.page.json.FindByExampleCriteria;
 import org.bitbucket.fermenter.stout.test.MessageTestUtils;
 import org.jboss.arquillian.container.test.api.RunAsClient;
@@ -29,7 +30,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -193,10 +193,10 @@ public class SimpleDomainClientIT extends RunTestsWithinArquillianWar {
 
         Sort sort = new Sort(Sort.Direction.ASC, "name");
         FindByExampleCriteria<SimpleDomain> criteria = new FindByExampleCriteria<SimpleDomain>(new SimpleDomain(), 0, numSimpleDomains, sort);
-        Page<SimpleDomain> allSimpleDomains = simpleDomainMaintenanceDelagte.findByExample(criteria);
+        PageWrapper<SimpleDomain> allSimpleDomains = simpleDomainMaintenanceDelagte.findByExample(criteria);
         MessageTestUtils.assertNoErrorMessages();
 
-        assertEquals(numSimpleDomains, allSimpleDomains.getTotalElements());
+        assertEquals(new Long(numSimpleDomains), allSimpleDomains.getTotalElements());
         boolean responseContainsLastCreatedSimpleDomain = false;
         for(SimpleDomain simpleDomain : allSimpleDomains.getContent()) {
             if(simpleDomain.getName().equals(lastCreatedSimpleDomain.getName())) {

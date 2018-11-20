@@ -2,7 +2,7 @@ package ${basePackage}.client.service;
 
 import feign.Param;
 import ${basePackage}.transfer.${entity.name};
-import org.springframework.data.domain.Page;
+import org.bitbucket.fermenter.stout.page.PageWrapper;
 import org.bitbucket.fermenter.stout.page.json.FindByExampleCriteria;
 
 #foreach( $import in $entity.idFieldImports )
@@ -29,7 +29,7 @@ public interface ${entity.name}MaintenanceDelegate {
 
     ${entity.name} update(@Param("id") ${idFieldJavaType} ${idFieldName}, ${entity.name} entity);
 
-    Page<${entity.name}> findByExample(FindByExampleCriteria<${entity.name}> criteria);
+    PageWrapper<${entity.name}> findByExample(FindByExampleCriteria<${entity.name}> criteria);
 
     void delete(@Param("id") ${idFieldJavaType} ${idFieldName});
 }

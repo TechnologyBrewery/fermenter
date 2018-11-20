@@ -18,6 +18,7 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainChildBO
 import org.bitbucket.askllc.fermenter.cookbook.domain.enumeration.SimpleDomainEnumeration;
 import org.bitbucket.askllc.fermenter.cookbook.domain.enumeration.ValuedEnumerationExample;
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.SimpleDomainMaintenanceService;
+import org.bitbucket.fermenter.stout.page.PageWrapper;
 import org.bitbucket.fermenter.stout.page.json.FindByExampleCriteria;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
@@ -92,12 +93,12 @@ public class SimpleDomainMaintenanceIT extends RunTestsWithinArquillianWar {
         SimpleDomainBO simpleDomainBOWithoutAnyRestrictions = new SimpleDomainBO();
         FindByExampleCriteria<SimpleDomainBO> criteria = new FindByExampleCriteria<>(
                 simpleDomainBOWithoutAnyRestrictions, page, size, sort);
-        ValueServiceResponse results = simpleDomainService.findByExample(criteria);
+        ValueServiceResponse<PageWrapper<SimpleDomainBO>> results = simpleDomainService.findByExample(criteria);
 
-        PageResponse<SimpleDomainBO> value = (PageResponse<SimpleDomainBO>) results.getValue();
-        assertEquals("Total count of elements didn't match!", totalCount, value.getTotalElements());
-        assertEquals("Expected there to be two pages of 25!", 2, value.getTotalPages());
-        assertEquals("Page size didn't match!", size, value.getNumberOfElements());
+        PageWrapper<SimpleDomainBO> value = results.getValue();
+        assertEquals("Total count of elements didn't match!", new Long(totalCount), value.getTotalElements());
+        assertEquals("Expected there to be two pages of 25!", new Integer(2), value.getTotalPages());
+        assertEquals("Page size didn't match!", new Integer(size), value.getNumberOfElements());
     }
 
     @Test
@@ -315,11 +316,11 @@ public class SimpleDomainMaintenanceIT extends RunTestsWithinArquillianWar {
         SimpleDomainBO probe = new SimpleDomainBO();
         probe.setName(searchNames[0]);
         FindByExampleCriteria<SimpleDomainBO> criteria = new FindByExampleCriteria<>(probe, page, size, sort);
-        ValueServiceResponse<Page<SimpleDomainBO>> searchResults = simpleDomainService.findByExample(criteria);
+        ValueServiceResponse<PageWrapper<SimpleDomainBO>> searchResults = simpleDomainService.findByExample(criteria);
         TestUtils.assertNoErrorMessages(searchResults);
 
-        Page<SimpleDomainBO> value = searchResults.getValue();
-        assertEquals(2, value.getTotalElements());
+        PageWrapper<SimpleDomainBO> value = searchResults.getValue();
+        assertEquals(new Long(2), value.getTotalElements());
     }
 
     @Test
@@ -341,13 +342,13 @@ public class SimpleDomainMaintenanceIT extends RunTestsWithinArquillianWar {
         SimpleDomainBO probe = new SimpleDomainBO();
         probe.setName(searchNames[0]);
         FindByExampleCriteria<SimpleDomainBO> criteria = new FindByExampleCriteria<>(probe, page, size, sort);
-        ValueServiceResponse<Page<SimpleDomainBO>> searchResults = simpleDomainService.findByExample(criteria);
+        ValueServiceResponse<PageWrapper<SimpleDomainBO>> searchResults = simpleDomainService.findByExample(criteria);
         TestUtils.assertNoErrorMessages(searchResults);
 
-        Page<SimpleDomainBO> value = searchResults.getValue();
-        assertEquals(2, value.getTotalElements());
-        assertEquals(2, value.getTotalPages());
-        assertEquals(size, value.getSize());
+        PageWrapper<SimpleDomainBO> value = searchResults.getValue();
+        assertEquals(new Long(2), value.getTotalElements());
+        assertEquals(new Integer(2), value.getTotalPages());
+        assertEquals(new Integer(size), value.getSize());
     }
 
     @Test
@@ -368,11 +369,11 @@ public class SimpleDomainMaintenanceIT extends RunTestsWithinArquillianWar {
 
         SimpleDomainBO probe = new SimpleDomainBO();
         FindByExampleCriteria<SimpleDomainBO> criteria = new FindByExampleCriteria<>(probe, page, size, sort);
-        ValueServiceResponse<Page<SimpleDomainBO>> searchResults = simpleDomainService.findByExample(criteria);
+        ValueServiceResponse<PageWrapper<SimpleDomainBO>> searchResults = simpleDomainService.findByExample(criteria);
         TestUtils.assertNoErrorMessages(searchResults);
 
-        Page<SimpleDomainBO> value = searchResults.getValue();
-        assertEquals(searchNames.length, value.getTotalElements());
+        PageWrapper<SimpleDomainBO> value = searchResults.getValue();
+        assertEquals(new Long(searchNames.length), value.getTotalElements());
         assertEquals(searchNames[2], value.getContent().get(0).getName());
         assertEquals(searchNames[0], value.getContent().get(1).getName());
         assertEquals(searchNames[1], value.getContent().get(2).getName());

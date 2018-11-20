@@ -9,12 +9,7 @@ import org.bitbucket.fermenter.stout.messages.Messages;
 import org.bitbucket.fermenter.stout.messages.json.MessageDeserializer;
 import org.bitbucket.fermenter.stout.messages.json.MessageSerializer;
 import org.bitbucket.fermenter.stout.messages.json.MessagesMixIn;
-import org.bitbucket.fermenter.stout.page.json.PageDeserializer;
-import org.bitbucket.fermenter.stout.page.json.PageMixIn;
-import org.bitbucket.fermenter.stout.page.json.PageSerializer;
 import org.bitbucket.fermenter.stout.page.json.SortDeserializer;
-import org.bitbucket.fermenter.stout.transfer.PageResponse;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 
 import com.fasterxml.jackson.core.JsonParser;
@@ -46,10 +41,6 @@ public final class ObjectMapperManager {
     private static void configureObjectMapper() {
         SimpleModule module = new SimpleModule();
 
-        module.addAbstractTypeMapping(Page.class, PageResponse.class);
-        module.setMixInAnnotation(Page.class, PageMixIn.class);
-        module.addSerializer(Page.class, new PageSerializer());
-        module.addDeserializer(Page.class, new PageDeserializer());
         module.addDeserializer(Sort.class, new SortDeserializer());
         
         module.addAbstractTypeMapping(Messages.class, DefaultMessages.class);
@@ -58,7 +49,7 @@ public final class ObjectMapperManager {
         module.addSerializer(Message.class, new MessageSerializer(ObjectMapperManager.class));
         module.addDeserializer(Message.class, new MessageDeserializer());
 
-        module.addDeserializer(String.class, new StdScalarDeserializer<String>(String.class) {            
+        module.addDeserializer(String.class, new StdScalarDeserializer<String>(String.class) {
             private static final long serialVersionUID = 8721520299501142938L;
 
             @Override

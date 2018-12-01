@@ -1,0 +1,21 @@
+[
+	{
+		"name": "angular",
+		"profileReferences": [
+			{
+				"name": "angular-entities"
+			}
+		]
+	},
+	{
+		"name": "angular-entities",
+		"targetReferences": [
+			{
+				"name": "entityBaseModel"
+			},
+			{
+				"name": "entityModel"
+			}
+		]
+	}
+]

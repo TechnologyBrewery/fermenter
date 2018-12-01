@@ -1,0 +1,13 @@
+import { ${entity.nameUpperCamel}Base } from '../../generated/model-base/${entity.name}-base.model';
+
+/*******************************************************
+* BO for Angular frontend for ${entity.nameUpperCamel}
+*
+* Generated Code - DO MODIFY
+*******************************************************/
+
+export class ${entity.nameUpperCamel} extends ${entity.nameUpperCamel}Base {
+  constructor(${entity.nameLowerCamel}?: ${entity.nameUpperCamel}Base) {
+    super(${entity.nameLowerCamel});
+  }
+}

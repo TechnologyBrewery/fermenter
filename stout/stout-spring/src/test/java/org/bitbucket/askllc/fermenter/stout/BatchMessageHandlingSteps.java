@@ -32,12 +32,12 @@ public class BatchMessageHandlingSteps {
 	
 	@Then("^the error step should process with an error message returned$")
 	public void the_error_step_should_process_with_an_error_message_returned() throws Throwable {
-	    assertTrue(postErrorStepMessages.hasErrorMessages());
+	    assertTrue("Error: no error messages were encountered by message manager (ironic)", postErrorStepMessages.hasErrorMessages());
 	}
 
 	@Then("^the success step should process without an error message returned$")
 	public void the_success_step_should_process_without_an_error_message_returned() throws Throwable {
-	    assertFalse(postSuccessStepMessages.hasErrorMessages());
+	    assertFalse("Error: error messages encountered by message manager", postSuccessStepMessages.hasErrorMessages());
 	}	
 	
 }

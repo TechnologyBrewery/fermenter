@@ -32,6 +32,9 @@ import org.bitbucket.fermenter.stout.messages.DefaultMessages;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
 
+import java.util.Collection;
+import java.util.ArrayList;
+
 /**
  * Concrete implementation for create, retrieve, update, and delete (CRUD) functionality 
  * for ${entity.name} business objects.
@@ -106,6 +109,25 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 		addAllMsgMgrToResponse(response);
 		return response;
 	}
+	
+	/**
+	 * Hammy - {@inheritDoc}
+	 */
+	@Transactional(propagation=Propagation.REQUIRED)
+	@Override
+	public ValueServiceResponse<Collection<${entity.name}BO>> bulkSaveOrUpdate(Collection<${entity.name}BO> entities) {
+		initMsgMgr(messages);
+	    assertAuthorization(PATH, Action.SAVE);
+		Collection<${entity.name}BO> values = new ArrayList<>();
+		for(${entity.name}BO entity : entities){
+			ValueServiceResponse<${entity.name}BO> response = saveOrUpdate(entity);
+			values.add(response.getValue());
+		}
+		
+		ValueServiceResponse<Collection<${entity.name}BO>> responses = new ValueServiceResponse<>(values);
+		return responses;
+	}
+
 
 	/**
 	 * {@inheritDoc}

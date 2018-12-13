@@ -33,7 +33,7 @@ Feature: Specify entities for use in model-driven file generation
       | Foo  | test.entity.parent | Alpha  | MAPPED-superCLASS   | mapped-superclass           |
       | Bar  | test.entity.parent | Beta   |                     | mapped-superclass           |
 
-  Scenario Outline: specify an table name via a JSON metamodel
+  Scenario Outline: specify a table name via a JSON metamodel
     Given an entity named "<name>" in "<package>" with table "<table>"
     When entities are read
     Then an entity metamodel instance is returned for the name "<name>" in "<package>" with table "<table>"
@@ -130,7 +130,7 @@ Feature: Specify entities for use in model-driven file generation
     Given an entity named "<type>" in "<referencePackage>" with an indentifier:
       | name | column |
       | id   | FOO_ID |
-    And an entity named "<name>" in "<package>" with an reference:
+    And an entity named "<name>" in "<package>" with a reference:
       | referenceName   | documentation   | type   | referencePackage   | localColumn   | required   |
       | <referenceName> | <documentation> | <type> | <referencePackage> | <localColumn> | <required> |
     When entities are read
@@ -191,7 +191,6 @@ Feature: Specify entities for use in model-driven file generation
       | Foo  | test.entity     |
       | Bar  | test.entity.alt |
 
-  @fast
   Scenario Outline: Invalid fetch mode results in an error
     Given an entity named "<name>" in "<package>" with an invalid fetch mode "<invalidFetchMode>"
     When entities are read

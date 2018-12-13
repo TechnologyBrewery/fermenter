@@ -11,110 +11,134 @@ import com.fasterxml.jackson.annotation.JsonValue;
  */
 public interface Entity extends NamespacedMetamodel {
 
-    /**
-     * Returns service-level documentation.
-     * 
-     * @return service documentation
-     */
-    String getDocumentation();
+	/**
+	 * Returns service-level documentation.
+	 * 
+	 * @return service documentation
+	 */
+	String getDocumentation();
 
-    /**
-     * Returns the name of the table mapped to this entity.
-     * 
-     * @return table name
-     */
-    String getTable();
+	/**
+	 * Returns the name of the table mapped to this entity.
+	 * 
+	 * @return table name
+	 */
+	String getTable();
 
-    /**
-     * Returns the lock strategy for the table. (e.g., optimistic, pessimistic, none)
-     * 
-     * @return lock strategy
-     */
-    LockStrategy getLockStrategy();
+	/**
+	 * Returns the lock strategy for the table. (e.g., optimistic, pessimistic,
+	 * none)
+	 * 
+	 * @return lock strategy
+	 */
+	LockStrategy getLockStrategy();
 
-    /**
-     * Determines whether this is a persistent or transient object. By default, all entities as persistent.
-     * 
-     * @return transient nature of this instance
-     */
-    Boolean isTransient();
+	/**
+	 * Determines whether this is a persistent or transient object. By default, all
+	 * entities as persistent.
+	 * 
+	 * @return transient nature of this instance
+	 */
+	Boolean isTransient();
 
-    /**
-     * Returns information about a parent entity.
-     * 
-     * @return parent entity info
-     */
-    Parent getParent();
+	/**
+	 * Returns information about a parent entity.
+	 * 
+	 * @return parent entity info
+	 */
+	Parent getParent();
 
-    /**
-     * Returns the identifier for this instance. If you want to use a multi-part key, we recommend treating those values
-     * as a business keys and maintain a single programmatic key. This makes generation substantially more
-     * straightforward in these situations.
-     * 
-     * @return identifier
-     */
-    Field getIdentifier();
-    
-    /**
-     * Returns fields for this instance.
-     * 
-     * @return list of fields
-     */
-    List<Field> getFields();    
-    
-    /**
-     * Returns references for this instance.
-     * 
-     * @return list of references
-     */
+	/**
+	 * Returns the identifier for this instance. If you want to use a multi-part
+	 * key, we recommend treating those values as a business keys and maintain a
+	 * single programmatic key. This makes generation substantially more
+	 * straightforward in these situations.
+	 * 
+	 * @return identifier
+	 */
+	Field getIdentifier();
+
+	/**
+	 * Returns fields for this instance.
+	 * 
+	 * @return list of fields
+	 */
+	List<Field> getFields();
+
+	/**
+	 * Returns references for this instance.
+	 * 
+	 * @return list of references
+	 */
 	List<Reference> getReferences();
-	
-    /**
-     * Returns relations for this instance.
-     * 
-     * @return list of relations
-     */
-	List<Relation> getRelations();	
 
-    /**
-     * Enumerated values representing allowed lock strategies.
-     */
-    public enum LockStrategy {
-        OPTIMISTIC("optimistic"), NONE("none");
+	/**
+	 * Returns relations for this instance.
+	 * 
+	 * @return list of relations
+	 */
+	List<Relation> getRelations();
 
-        private String value;
+	/**
+	 * Enumerated values representing allowed lock strategies.
+	 */
+	public enum LockStrategy {
+		OPTIMISTIC("optimistic"), NONE("none");
 
-        private LockStrategy(String value) {
-            this.value = value;
-        }
+		private String value;
 
-        /**
-         * Returns the instance for the passed strategy value (ignoring case).
-         * 
-         * @param value
-         *            string representation
-         * @return instance
-         */
-        public static LockStrategy fromString(String value) {
-            LockStrategy matchedStrategy = null;
-            for (LockStrategy strategy : LockStrategy.values()) {
-                if (StringUtils.equalsIgnoreCase(strategy.value, value)) {
-                    matchedStrategy = strategy;
-                    break;
-                }
-            }
+		private LockStrategy(String value) {
+			this.value = value;
+		}
 
-            return matchedStrategy;
-        }
+		/**
+		 * Returns the instance for the passed strategy value (ignoring case).
+		 * 
+		 * @param value string representation
+		 * @return instance
+		 */
+		public static LockStrategy fromString(String value) {
+			LockStrategy matchedStrategy = null;
+			for (LockStrategy strategy : LockStrategy.values()) {
+				if (StringUtils.equalsIgnoreCase(strategy.value, value)) {
+					matchedStrategy = strategy;
+					break;
+				}
+			}
 
-        /**
-         * {@inheritDoc}
-         */
-        @JsonValue
-        @Override
-        public String toString() {
-            return value;
-        }
-    }
+			return matchedStrategy;
+		}
+
+		/**
+		 * {@inheritDoc}
+		 */
+		@JsonValue
+		@Override
+		public String toString() {
+			return value;
+		}
+		
+		/**
+		 * A comma-separated list of valid options.
+		 * 
+		 * @return valid options
+		 */
+		public static String options() {
+			StringBuilder sb = new StringBuilder();
+			boolean isFirst = true;
+			for (LockStrategy strategy : values()) {
+				if (!isFirst) {
+					sb.append(", ");
+				}
+
+				sb.append(strategy.toString());
+
+				isFirst = false;
+			}
+
+			return sb.toString();
+		}
+				
+	}
 
 }

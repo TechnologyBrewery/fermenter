@@ -38,10 +38,10 @@ public class EntityElement extends NamespacedMetamodelElement implements Entity 
 
 	@JsonInclude(Include.NON_EMPTY)
 	protected List<Field> fields = new ArrayList<>();
-	
+
 	@JsonInclude(Include.NON_EMPTY)
 	protected List<Reference> references = new ArrayList<>();
-	
+
 	@JsonInclude(Include.NON_EMPTY)
 	protected List<Relation> relations = new ArrayList<>();
 
@@ -101,7 +101,7 @@ public class EntityElement extends NamespacedMetamodelElement implements Entity 
 	public List<Field> getFields() {
 		return fields;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -109,7 +109,7 @@ public class EntityElement extends NamespacedMetamodelElement implements Entity 
 	public List<Reference> getReferences() {
 		return references;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -138,16 +138,16 @@ public class EntityElement extends NamespacedMetamodelElement implements Entity 
 
 		if (parent != null) {
 			parent.validate();
-		}		
-		
+		}
+
 		for (Field field : fields) {
 			field.validate();
-		}		
-		
+		}
+
 		for (Reference reference : references) {
 			reference.validate();
 		}
-		
+
 		for (Relation relation : relations) {
 			relation.validate();
 		}
@@ -190,7 +190,7 @@ public class EntityElement extends NamespacedMetamodelElement implements Entity 
 
 		if (StringUtils.isNoneBlank(strategy) && this.lockStrategy == null) {
 			messageTracker.addErrorMessage("Could not map lock strategy '" + strategy
-					+ "' to one of the known lock strategy types! (" + LockStrategy.values() + ") ");
+					+ "' to one of the known lock strategy types! (" + LockStrategy.options() + ") ");
 		}
 	}
 
@@ -227,36 +227,24 @@ public class EntityElement extends NamespacedMetamodelElement implements Entity 
 	 * @param field field to add
 	 */
 	public void addField(Field field) {
-		if (fields == null) {
-			fields = new ArrayList<>();
-		}
-
 		fields.add(field);
 	}
-	
+
 	/**
 	 * Adds a reference to this entity.
 	 * 
 	 * @param reference reference to add
 	 */
 	public void addReference(Reference reference) {
-		if (references == null) {
-			references = new ArrayList<>();
-		}
-
 		references.add(reference);
 	}
-	
+
 	/**
 	 * Adds a relation to this entity.
 	 * 
 	 * @param relation relation to add
 	 */
 	public void addRelation(Relation relation) {
-		if (relations == null) {
-			relations = new ArrayList<>();
-		}
-
 		relations.add(relation);
 	}
 

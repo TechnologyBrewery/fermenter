@@ -64,7 +64,28 @@ public interface Field extends Metamodel {
         @Override
         public String toString() {
             return value;
-        }
+        }        
+		
+		/**
+		 * A comma-separated list of valid options.
+		 * 
+		 * @return valid options
+		 */
+		public static String options() {
+			StringBuilder sb = new StringBuilder();
+			boolean isFirst = true;
+			for (Generator generator : values()) {
+				if (!isFirst) {
+					sb.append(", ");
+				}
+
+				sb.append(generator.toString());
+
+				isFirst = false;
+			}
+
+			return sb.toString();
+		}        
         
     }
 

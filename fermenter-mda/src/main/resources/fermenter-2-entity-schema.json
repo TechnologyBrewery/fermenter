@@ -141,6 +141,43 @@
 					"name","type"
 				]
 			}
+		},
+		"relations": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"type": {
+						"type": "object",
+						"properties": {
+							"name": {
+								"type": "string"
+							},
+							"package": {
+								"type": "string"
+							}	
+						},
+						"required": [
+							"name"
+						]
+					},
+					"localColumn": {
+						"type": "string"
+					},
+					"documentation": {
+						"type": "string"
+					},
+					"multiplicity": {
+						"type": "string"
+					},
+					"fetchMode": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"name","type"
+				]
+			}
 		}
 	},
 	"required": [

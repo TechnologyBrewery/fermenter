@@ -119,7 +119,7 @@ public class RelationElement implements Relation {
         this.multiplicity = Multiplicity.fromString(multiplicityAsString);
         
 		if (StringUtils.isNoneBlank(multiplicityAsString) && multiplicity == null) {
-			messageTracker.addErrorMessage("Could not multiplicity '" + multiplicityAsString
+			messageTracker.addErrorMessage("Could not map multiplicity '" + multiplicityAsString
 					+ "' to one of the known multiplicity types! (" + Multiplicity.options() + ") ");
 		}        
     }

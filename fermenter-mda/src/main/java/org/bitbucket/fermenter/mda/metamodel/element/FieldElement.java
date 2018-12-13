@@ -128,7 +128,7 @@ public class FieldElement extends MetamodelElement implements Field {
 
         if (StringUtils.isNoneBlank(generator) && this.generator == null) {
             messageTracker.addErrorMessage("Could not map generator '" + generator
-                    + "' to one of the known generator types! (" + Generator.values() + ") ");
+                    + "' to one of the known generator types! (" + Generator.options() + ") ");
         }
     }    
     

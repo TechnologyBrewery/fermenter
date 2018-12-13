@@ -99,7 +99,7 @@ public class ParentElement extends NamespacedMetamodelElement implements Parent 
 
         if (StringUtils.isNoneBlank(inheritanceStrategy) && this.inheritanceStrategy == null) {
             messageTracker.addErrorMessage("Could not map inheritance strategy '" + inheritanceStrategy
-                    + "' to one of the known inheritance strategy types! (" + InheritanceStrategy.values() + ") ");
+                    + "' to one of the known inheritance strategy types! (" + InheritanceStrategy.options() + ") ");
         }
     }
 

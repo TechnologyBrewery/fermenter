@@ -137,8 +137,8 @@ public class EntitySteps {
 		createEntityElement(entity);
 	}
 
-	@Given("^an entity named \"([^\"]*)\" in \"([^\"]*)\" with an reference:$")
-	public void an_entity_named_in_with_an_reference(String name, String packageName, List<ReferenceInput> references)
+	@Given("^an entity named \"([^\"]*)\" in \"([^\"]*)\" with a reference:$")
+	public void an_entity_named_in_with_a_reference(String name, String packageName, List<ReferenceInput> references)
 			throws Throwable {
 		ReferenceInput reference = references.iterator().next();
 

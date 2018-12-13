@@ -2,6 +2,7 @@ package org.bitbucket.fermenter.mda.metadata.element;
 
 import java.util.Map;
 
+@Deprecated
 public interface Entity {
 
     static final String LOCK_STATEGY_OPTIMISTIC = "optimistic";

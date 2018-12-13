@@ -3,6 +3,7 @@ package org.bitbucket.fermenter.mda.metadata.element;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 
+@Deprecated
 public class ParentMetadata extends MetadataElement implements Parent {
 
     private String type;

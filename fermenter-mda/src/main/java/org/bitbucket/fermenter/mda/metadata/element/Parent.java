@@ -5,8 +5,10 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * Represents a parent of an {@link Entity}.
  */
+@Deprecated
 public interface Parent {
 
+    @Deprecated
     enum InheritanceStrategy {
         MAPPED_SUPERCLASS("mapped-superclass");
         private String value;

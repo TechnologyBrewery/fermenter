@@ -15,7 +15,7 @@ public interface MetamodelConfig extends KrauseningConfig {
      */
     @Key("enumerations.relative.path")
     @DefaultValue("enumerations")
-    public String getEnumerationsRelationPath();
+    public String getEnumerationsRelativePath();
     
     /**
      * Returns the locations within src/main/resources where service model instances can be found.
@@ -23,7 +23,15 @@ public interface MetamodelConfig extends KrauseningConfig {
      */
     @Key("services.relative.path")
     @DefaultValue("services")
-    public String getServicesRelationPath();    
+    public String getServicesRelativePath();    
+    
+    /**
+     * Returns the locations within src/main/resources where entity model instances can be found.
+     * @return path location to entities
+     */
+    @Key("entities.relative.path")
+    @DefaultValue("entities")
+    public String getEntitiesRelativePath();    
     
     /**
      * Returns the metadata resolver to use to lookup metadata.

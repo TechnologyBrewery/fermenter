@@ -11,6 +11,7 @@ import org.bitbucket.fermenter.mda.metadata.AbstractMetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 
+@Deprecated
 public class ReferenceMetadata extends MetadataElement implements Reference {
 
 	private String type;

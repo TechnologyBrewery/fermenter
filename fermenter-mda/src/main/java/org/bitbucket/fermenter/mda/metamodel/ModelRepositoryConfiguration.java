@@ -13,7 +13,7 @@ public class ModelRepositoryConfiguration {
     private String currentApplicationName;
     private String basePackage;
     private List<String> targetModelInstances = new ArrayList<>();
-    private Map<String, MetadataUrl> metamodelInstanceLocations = new HashMap<>();
+    private Map<String, ModelInstanceUrl> metamodelInstanceLocations = new HashMap<>();
     
     /**
      * The name (i.e., artifact id) of the current project.
@@ -43,11 +43,11 @@ public class ModelRepositoryConfiguration {
         this.targetModelInstances = targetModelInstances;
     }
 
-    public Map<String, MetadataUrl> getMetamodelInstanceLocations() {
+    public Map<String, ModelInstanceUrl> getMetamodelInstanceLocations() {
         return metamodelInstanceLocations;
     }
 
-    public void setMetamodelInstanceLocations(Map<String, MetadataUrl> metamodelInstanceLocations) {
+    public void setMetamodelInstanceLocations(Map<String, ModelInstanceUrl> metamodelInstanceLocations) {
         this.metamodelInstanceLocations = metamodelInstanceLocations;
     }
 

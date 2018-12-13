@@ -28,7 +28,7 @@ class EnumerationModelInstanceManager extends AbstractMetamodelManager<Enumerati
 
     @Override
     protected String getMetadataLocation() {
-        return config.getEnumerationsRelationPath();
+        return config.getEnumerationsRelativePath();
     }
 
     @Override

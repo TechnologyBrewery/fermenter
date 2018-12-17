@@ -8,7 +8,7 @@ import java.util.Set;
 /**
  * Convenience class used to aggregate messages contained in multiple <code>
  * Messages</code> instances into one object (which also implements the <code>
- * Messages</code> insterface. This class may be used to treat messages from
+ * Messages</code> interface. This class may be used to treat messages from
  * different sources (e.g. from a parent and a child object), as a single
  * collection of messages.
  * 
@@ -26,7 +26,7 @@ public final class MessagesSet implements Messages {
 	public MessagesSet() {
 		super();
 
-		messages = new HashSet<Messages>();
+		messages = new HashSet<>();
 	}
 
 	/**
@@ -135,7 +135,7 @@ public final class MessagesSet implements Messages {
 	}
 
 	private Collection<Message> getAllErrorMessages() {
-		Collection<Message> errors = new ArrayList<Message>();
+		Collection<Message> errors = new ArrayList<>();
 		for (Messages msgs : messages) {
 			errors.addAll(msgs.getErrorMessages());
 		}
@@ -143,7 +143,7 @@ public final class MessagesSet implements Messages {
 	}
 
 	private Collection<Message> getAllErrorMessages(String property) {
-		Collection<Message> errors = new ArrayList<Message>();
+		Collection<Message> errors = new ArrayList<>();
 		for (Messages msgs : messages) {
 			errors.addAll(msgs.getErrorMessages(property));
 		}
@@ -151,7 +151,7 @@ public final class MessagesSet implements Messages {
 	}
 
 	private Collection<Message> getAllInformationalMessages() {
-		Collection<Message> infos = new ArrayList<Message>();
+		Collection<Message> infos = new ArrayList<>();
 		for (Messages msgs : messages) {
 			infos.addAll(msgs.getInformationalMessages());
 		}
@@ -159,7 +159,7 @@ public final class MessagesSet implements Messages {
 	}
 
 	private Collection<Message> getAllInformationalMessages(String property) {
-		Collection<Message> infos = new ArrayList<Message>();
+		Collection<Message> infos = new ArrayList<>();
 		for (Messages msgs : messages) {
 			infos.addAll(msgs.getInformationalMessages(property));
 		}
@@ -170,7 +170,7 @@ public final class MessagesSet implements Messages {
 	 * {@inheritDoc}
 	 */
 	public Collection<Message> getAllMessages() {
-		Collection<Message> allMessages = new ArrayList<Message>();
+		Collection<Message> allMessages = new ArrayList<>();
 		for (Messages msgs : messages) {
 			allMessages.addAll(msgs.getAllMessages());
 		}

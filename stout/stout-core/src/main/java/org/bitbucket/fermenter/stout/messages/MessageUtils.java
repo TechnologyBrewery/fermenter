@@ -134,7 +134,7 @@ public final class MessageUtils {
 			return (string);
 
 		int n = string.length();
-		StringBuffer sb = new StringBuffer(n);
+		StringBuilder sb = new StringBuilder(n);
 
 		for(int i = 0; i < n; i++) {
 			char ch = string.charAt(i);

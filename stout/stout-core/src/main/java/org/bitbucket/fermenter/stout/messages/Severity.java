@@ -7,7 +7,6 @@ package org.bitbucket.fermenter.stout.messages;
  */
 public enum Severity {
 	
-	//TODO: consider updating to support FATAL, WARNING, and DEBUG
 	ERROR, INFO;
 
 }

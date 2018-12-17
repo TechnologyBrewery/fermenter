@@ -1,6 +1,10 @@
 package org.bitbucket.fermenter.stout.messages;
 
-public class MessageFactory {
+public final class MessageFactory{
+	
+	private MessageFactory() {
+		//Do not allow all static class to be instantiated 
+	}
 
 	public static Message createMessage() {
 		return new DefaultMessage();

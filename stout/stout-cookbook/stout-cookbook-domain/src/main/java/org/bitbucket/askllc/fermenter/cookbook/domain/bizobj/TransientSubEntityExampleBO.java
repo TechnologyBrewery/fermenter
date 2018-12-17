@@ -27,7 +27,7 @@ public class TransientSubEntityExampleBO extends TransientSubEntityExampleBaseBO
 
 	@Override
 	protected void complexValidation() {
-
+		//insert code
 	}
 	
 }

@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 /**
@@ -28,8 +29,8 @@ public class DefaultMessage implements Message {
 	public DefaultMessage() {
 		super();
 
-		inserts = new ArrayList<Object>();
-		properties = new HashSet<String>();
+		inserts = new ArrayList<>();
+		properties = new HashSet<>();
 	}
 
 	/**
@@ -95,14 +96,12 @@ public class DefaultMessage implements Message {
 	 * @return True of the parameter object equals this message, false otherwise
 	 */
 	public boolean equals(Object o) {
+		
+		EqualsBuilder.reflectionEquals(this, o, true);
+		
 		try {
 			DefaultMessage that = (DefaultMessage) o;
-
-			// This never equals a null value
-			if (that == null) {
-				return false;
-			}
-
+			
 			// First, ensure that the key and severity are the same
 			boolean areEqual = equalsBasedOnSeverityAndKey(that);
 
@@ -138,12 +137,12 @@ public class DefaultMessage implements Message {
 		}
 
 		// Exactly one key is null - return false
-		if ((thisKey == null && thatKey != null) || (thisKey != null && thatKey == null)) {
+		if (thisKey == null || thatKey == null) {
 			return false;
 		}
 
 		// Exactly one Severity is null - return false
-		if ((thisSeverity == null && thatSeverity != null) || (thisSeverity != null && thatSeverity == null)) {
+		if (thisSeverity == null || thatSeverity == null) {
 			return false;
 		}
 

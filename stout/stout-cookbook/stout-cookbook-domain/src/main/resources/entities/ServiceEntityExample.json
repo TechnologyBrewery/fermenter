@@ -1,0 +1,14 @@
+{
+  "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "name" : "ServiceEntityExample",
+  "documentation" : "Entity that demonstrates uses a generated value primary key",
+  "table" : "SERVICE_ENTITY_EXAMPLE",
+  "identifier" : {
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "name" : "id",
+    "type" : "uuid",
+    "column" : "SERVICE_ENTITY_EXAMPLE_ID",
+    "required" : true,
+    "generator" : "uuid"
+  }
+}

@@ -34,7 +34,7 @@ public interface Entity {
 
     Composite getComposite(String name);
 
-    Map getRelations();
+    Map<String, Relation> getRelations();
 
     Relation getRelation(String type);
 
@@ -42,7 +42,7 @@ public interface Entity {
 
     Relation getInverseRelation(String type);
 
-    Map getReferences();
+    Map<String, Reference> getReferences();
 
     Reference getReference(String type);
 

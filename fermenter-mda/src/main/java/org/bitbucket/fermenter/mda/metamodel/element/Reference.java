@@ -3,14 +3,14 @@ package org.bitbucket.fermenter.mda.metamodel.element;
 /**
  * Defines the contract for an entity referencing another entity.
  */
-public interface Reference extends Metamodel {
+public interface Reference extends NamespacedMetamodel {
     
     /**
-     * Returns the type of parameter.
+     * Returns the type of reference.
      * 
-     * @return parameter type
+     * @return reference type
      */
-    Type getType();
+    String getType();
     
     /**
      * Returns reference-level documentation.

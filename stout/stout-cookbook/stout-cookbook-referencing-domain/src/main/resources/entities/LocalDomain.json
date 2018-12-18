@@ -1,0 +1,28 @@
+{
+  "package" : "org.bitbucket.askllc.fermenter.cookbook.referencing.domain",
+  "name" : "LocalDomain",
+  "documentation" : "A local domain",
+  "table" : "LOCAL_DOMAIN",
+  "identifier" : {
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.referencing.domain",
+    "name" : "id",
+    "type" : "uuid",
+    "column" : "LOCAL_DOMAIN_ID",
+    "required" : true,
+    "generator" : "uuid"
+  },
+  "fields" : [ {
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.referencing.domain",
+    "name" : "name",
+    "type" : "string",
+    "column" : "NAME",
+    "documentation" : "The friendly domain moniker"
+  } ],
+  "references" : [ {
+    "name" : "externalReference",
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "type" : "ValidationReferencedObject",
+    "localColumn" : "VALIDATION_REF_OBJECT_VALIDATION_REF_OBJECT_ID",
+    "required" : true
+  } ]
+}

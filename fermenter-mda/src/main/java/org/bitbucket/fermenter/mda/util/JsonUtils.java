@@ -23,8 +23,8 @@ import org.bitbucket.fermenter.mda.metamodel.element.Relation;
 import org.bitbucket.fermenter.mda.metamodel.element.RelationElement;
 import org.bitbucket.fermenter.mda.metamodel.element.Return;
 import org.bitbucket.fermenter.mda.metamodel.element.ReturnElement;
-import org.bitbucket.fermenter.mda.metamodel.element.Type;
-import org.bitbucket.fermenter.mda.metamodel.element.TypeElement;
+import org.bitbucket.fermenter.mda.metamodel.element.Validation;
+import org.bitbucket.fermenter.mda.metamodel.element.ValidationElement;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -139,7 +139,7 @@ public final class JsonUtils {
             module.addAbstractTypeMapping(Parameter.class, ParameterElement.class);
             module.addAbstractTypeMapping(Parent.class, ParentElement.class);
             module.addAbstractTypeMapping(Field.class, FieldElement.class);
-            module.addAbstractTypeMapping(Type.class, TypeElement.class);
+            module.addAbstractTypeMapping(Validation.class, ValidationElement.class);
             module.addAbstractTypeMapping(Reference.class, ReferenceElement.class);
             module.addAbstractTypeMapping(Relation.class, RelationElement.class);
 

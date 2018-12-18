@@ -3,6 +3,7 @@ package org.bitbucket.fermenter.mda.metamodel.element;
 import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.google.common.base.MoreObjects;
@@ -14,10 +15,17 @@ import com.google.common.base.MoreObjects;
 public class FieldElement extends MetamodelElement implements Field {
 
     @JsonInclude(Include.NON_NULL)
+    @JsonProperty(value = NamespacedMetamodelElement.PACKAGE)
+    protected String packageName;
+    
+    @JsonInclude(Include.NON_NULL)
+    protected String type;
+	
+    @JsonInclude(Include.NON_NULL)
     protected String column;
 
     @JsonInclude(Include.NON_NULL)
-    protected Type type;
+    protected Validation validation;
 
     @JsonInclude(Include.NON_NULL)
     protected String documentation;
@@ -28,6 +36,22 @@ public class FieldElement extends MetamodelElement implements Field {
     @JsonInclude(Include.NON_NULL)
     protected Generator generator;    
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getType() {
+		return type;
+	}
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getPackage() {
+        return packageName;
+    }
+    
     /**
      * {@inheritDoc}
      */
@@ -40,8 +64,8 @@ public class FieldElement extends MetamodelElement implements Field {
      * {@inheritDoc}
      */
     @Override
-    public Type getType() {
-        return type;
+    public Validation getValidation() {
+        return validation;
     }
 
     /**
@@ -78,6 +102,25 @@ public class FieldElement extends MetamodelElement implements Field {
     }
 
     /**
+     * Sets the packageName of the field type.
+     * 
+     * @param packageName
+     *            namespace/package of the element
+     */
+    public void setPackage(String packageName) {
+        this.packageName = packageName;
+    }
+
+	/**
+	 * Sets the type of the metadata element.
+	 * 
+	 * @param type type to set
+	 */
+	public void setType(String type) {
+		this.type = type;
+	}    
+    
+    /**
      * Sets the column value.
      * 
      * @param column
@@ -88,13 +131,13 @@ public class FieldElement extends MetamodelElement implements Field {
     }
     
     /**
-     * Sets the field type.
+     * Sets the field validation constraints.
      * 
-     * @param type
+     * @param validation
      *            field type
      */
-    public void setType(Type type) {
-        this.type = type;
+    public void setType(Validation validation) {
+        this.validation = validation;
     }    
 
     /**

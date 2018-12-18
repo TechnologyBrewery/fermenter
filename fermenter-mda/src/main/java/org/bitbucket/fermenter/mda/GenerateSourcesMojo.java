@@ -37,6 +37,7 @@ import org.bitbucket.fermenter.mda.element.Target;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.generator.Generator;
+import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
 import org.bitbucket.fermenter.mda.metamodel.LegacyMetadataConverter;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceUrl;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepository;
@@ -211,6 +212,10 @@ public class GenerateSourcesMojo extends AbstractMojo {
         // first load the legacy repository:
         ModelInstanceRepository legacyRepository = loadMetadataRepository(config, true);
 
+		// This is a stand-in to prevent NPEs for some optional functionality that we want in the end product,
+		// but doesn't matter for the conversion:
+		ModelInstanceRepositoryManager.setRepository(new DefaultModelInstanceRepository(config));
+		
         LegacyMetadataConverter converter = new LegacyMetadataConverter();
         converter.convert(project.getArtifactId(), basePackage, mainSourceRoot);
 

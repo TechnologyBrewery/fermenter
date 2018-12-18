@@ -1,0 +1,93 @@
+{
+	"package": "org.bitbucket.askllc.fermenter.cookbook.domain",
+	"name": "SimpleDomain",
+	"documentation": "A simple domain entity with a generated id field, fields of different types, and a 1-M relation",
+	"table": "SIMPLE_DOMAIN",
+	"identifier": {
+		"package": "org.bitbucket.askllc.fermenter.cookbook.domain",
+		"name": "id",
+		"type": "uuid",
+		"column": "SIMPLE_DOMAIN_ID",
+		"required": true,
+		"generator": "uuid"
+	},
+	"fields": [
+		{
+			"package": "org.bitbucket.askllc.fermenter.cookbook.domain",
+			"name": "numericBoolean",
+			"type": "numeric_boolean",
+			"column": "NUMERIC_BOOLEAN"
+		},
+		{
+			"package": "org.bitbucket.askllc.fermenter.cookbook.domain",
+			"name": "bigDecimalValue",
+			"type": "big_decimal",
+			"column": "BIG_DECIMAL_COLUMN"
+		},
+		{
+			"package": "org.bitbucket.askllc.fermenter.cookbook.domain",
+			"name": "theDate1",
+			"type": "date",
+			"column": "DATE1",
+			"documentation": "An important date for this domain"
+		},
+		{
+			"package": "org.bitbucket.askllc.fermenter.cookbook.domain",
+			"name": "name",
+			"type": "string",
+			"column": "NAME",
+			"documentation": "The friendly domain moniker"
+		},
+		{
+			"package": "org.bitbucket.askllc.fermenter.cookbook.domain",
+			"name": "theLong1",
+			"type": "long",
+			"column": "LONG1",
+			"documentation": "A relevant number for this domain"
+		},
+		{
+			"package": "org.bitbucket.askllc.fermenter.cookbook.domain",
+			"name": "aMESSYNameThatConfusesJson",
+			"type": "string",
+			"column": "MESSY_NAMED_FIELD"
+		},
+		{
+			"package": "org.bitbucket.askllc.fermenter.cookbook.domain",
+			"name": "type",
+			"type": "string",
+			"column": "TYPE",
+			"documentation": "A simple domain classification"
+		},
+		{
+			"package": "org.bitbucket.askllc.fermenter.cookbook.domain",
+			"name": "standardBoolean",
+			"type": "boolean",
+			"column": "STANDARD_BOOLEAN"
+		},
+		{
+			"package": "org.bitbucket.askllc.fermenter.cookbook.domain",
+			"name": "anEnumeratedValue",
+			"type": "SimpleDomainEnumeration",
+			"column": "SIMPLE_DOMAIN_ENUM"
+		},
+		{
+			"package": "org.bitbucket.askllc.fermenter.cookbook.domain",
+			"name": "anotherEnumeratedValue",
+			"type": "ValuedEnumerationExample",
+			"column": "VALUE_EXAMPLE_ENUM"
+		}
+	],
+	"relations": [
+		{
+			"package": "org.bitbucket.askllc.fermenter.cookbook.domain",
+			"type": "SimpleDomainEagerChild",
+			"multiplicity": "1-M"
+		},
+		{
+			"package": "org.bitbucket.askllc.fermenter.cookbook.domain",
+			"type": "SimpleDomainChild",
+			"multiplicity": "1-M",
+			"fetchMode": "lazy"
+		}
+	]
+}

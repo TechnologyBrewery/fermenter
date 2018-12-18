@@ -1,0 +1,112 @@
+{
+  "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "name" : "ValidationExample",
+  "table" : "VALIDATION_EXAMPLE",
+  "identifier" : {
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "name" : "id",
+    "type" : "uuid",
+    "column" : "VALIDATION_EXAMPLE_ID",
+    "required" : true,
+    "generator" : "uuid"
+  },
+  "fields" : [ {
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "name" : "bigDecimalExampleWithLargeScaleInteger",
+    "type" : "big_decimal",
+    "column" : "BIG_DECIMAL_SCALE_LARGE_INTEGER",
+    "validation" : {
+      "maxValue" : "1192839128.2231231321",
+      "scale" : 2
+    }
+  }, {
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "name" : "integerExample",
+    "type" : "integer",
+    "column" : "INTEGER_EXAMPLE",
+    "validation" : {
+      "maxValue" : "12345",
+      "minValue" : "-12345"
+    }
+  }, {
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "name" : "bigDecimalExampleWithScale",
+    "type" : "big_decimal",
+    "column" : "BIG_DECIMAL_SCALE",
+    "validation" : {
+      "scale" : 3
+    }
+  }, {
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "name" : "requiredField",
+    "type" : "string",
+    "column" : "REQUIRED_FIELD",
+    "required" : true
+  }, {
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "name" : "bigDecimalExample",
+    "type" : "big_decimal",
+    "column" : "BIG_DECIMAL_EXAMPLE",
+    "validation" : {
+      "maxValue" : "123456789.123456789",
+      "minValue" : "-123456789.123456789"
+    }
+  }, {
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "name" : "regexZipcodeExample",
+    "type" : "string",
+    "column" : "REGEX_ZIPCODE_EXAMPLE",
+    "validation" : {
+      "format" : "zipCode"
+    }
+  }, {
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "name" : "characterExample",
+    "type" : "character",
+    "column" : "CHAR_EXAMPLE"
+  }, {
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "name" : "stringExample",
+    "type" : "string",
+    "column" : "STRING_EXAMPLE",
+    "validation" : {
+      "maxLength" : 20,
+      "minLength" : 2
+    }
+  }, {
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "name" : "dateExample",
+    "type" : "date",
+    "column" : "DATE_EXAMPLE"
+  }, {
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "name" : "bigDecimalExampleWithLargeScale",
+    "type" : "big_decimal",
+    "column" : "BIG_DECIMAL_SCALE_LARGE",
+    "validation" : {
+      "scale" : 10
+    }
+  }, {
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "name" : "regexExample",
+    "type" : "string",
+    "column" : "REGEX_EXAMPLE",
+    "validation" : {
+      "format" : "email"
+    }
+  }, {
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "name" : "longExample",
+    "type" : "long",
+    "column" : "LONG_EXAMPLE",
+    "validation" : {
+      "maxValue" : "123456789",
+      "minValue" : "-123456789"
+    }
+  } ],
+  "relations" : [ {
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "type" : "ValidationExampleChild",
+    "multiplicity" : "1-M"
+  } ]
+}

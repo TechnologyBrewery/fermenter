@@ -1,0 +1,17 @@
+{
+  "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "name" : "TransientSubEntityExample",
+  "documentation" : "A non-persistent entity",
+  "parent" : {
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "type" : "TransientEntityExample",
+    "inheritanceStrategy" : "mapped-superclass"
+  },
+  "fields" : [ {
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "name" : "someOtherName",
+    "type" : "string",
+    "documentation" : "The friendly domain moniker"
+  } ],
+  "transient" : true
+}

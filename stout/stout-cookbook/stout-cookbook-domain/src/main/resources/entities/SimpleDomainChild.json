@@ -1,0 +1,21 @@
+{
+  "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "name" : "SimpleDomainChild",
+  "documentation" : "Child end of the 1-M relationship with SimpleDomain",
+  "table" : "SIMPLE_DOMAIN_CHILD",
+  "identifier" : {
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "name" : "id",
+    "type" : "uuid",
+    "column" : "SIMPLE_DOMAIN_CHILD_ID",
+    "required" : true,
+    "generator" : "uuid"
+  },
+  "fields" : [ {
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "name" : "name",
+    "type" : "string",
+    "column" : "NAME",
+    "documentation" : "Name of the child entity"
+  } ]
+}

@@ -43,16 +43,11 @@
 				"name": {
 					"type": "string"
 				},
+				"package": {
+					"type": "string"
+				},
 				"type": {
-					"type": "object",
-					"properties": {
-						"name": {
-							"type": "string"
-						}		
-					},
-					"required": [
-						"name"
-					]
+					"type": "string"
 				},
 				"column": {
 					"type": "string"
@@ -76,19 +71,34 @@
 					"name": {
 						"type": "string"
 					},
+					"package": {
+						"type": "string"
+					},
 					"type": {
+						"type": "string"
+					},
+					"validation": {
 						"type": "object",
 						"properties": {
-							"name": {
+							"maxLength": {
+								"type": "integer"
+							},						
+							"minLength": {
+								"type": "integer"
+							},
+							"maxValue": {
 								"type": "string"
 							},						
-							"package": {
+							"minValue": {
 								"type": "string"
-							}		
-						},
-						"required": [
-							"name"
-						]
+							},						
+							"scale": {
+								"type": "integer"
+							},						
+							"format": {
+								"type": "string"
+							}	
+						}
 					},
 					"column": {
 						"type": "string"
@@ -114,18 +124,10 @@
 						"type": "string"
 					},
 					"type": {
-						"type": "object",
-						"properties": {
-							"name": {
-								"type": "string"
-							},
-							"package": {
-								"type": "string"
-							}	
-						},
-						"required": [
-							"name"
-						]
+						"type": "string"
+					},
+					"package": {
+						"type": "string"					
 					},
 					"localColumn": {
 						"type": "string"
@@ -148,18 +150,10 @@
 				"type": "object",
 				"properties": {
 					"type": {
-						"type": "object",
-						"properties": {
-							"name": {
-								"type": "string"
-							},
-							"package": {
-								"type": "string"
-							}	
-						},
-						"required": [
-							"name"
-						]
+						"type": "string"
+					},
+					"package": {
+						"type": "string"					
 					},
 					"localColumn": {
 						"type": "string"

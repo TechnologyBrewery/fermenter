@@ -60,7 +60,8 @@ public class LegacyMetadataConverter {
 		try {
 			convertLegacyEnumerations(applicationName, basePackage, sourceMain);
 			convertLegacyServices(applicationName, basePackage, sourceMain);
-			convertLegacyEntities(applicationName, basePackage, sourceMain);
+			// TODO: uncomment when we are actually ready  for migration (post FER-116):
+			//convertLegacyEntities(applicationName, basePackage, sourceMain);
 
 		} catch (Exception e) {
 			throw new GenerationException("Could not convert legacy metadata!", e);

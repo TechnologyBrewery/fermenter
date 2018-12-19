@@ -129,4 +129,14 @@ public interface ${entity.name}MaintenanceService {
     @Consumes(MediaType.APPLICATION_JSON)
     ValueServiceResponse<Collection<${entity.name}BO>> bulkSaveOrUpdate(Collection<${entity.name}BO> entities);
 
+    /**
+     * Hammy - Deletes the ${entity.name} entity with the provided primary key value.
+     *
+     * @param ${idFieldName} The primary key value ${idFieldName} for the ${entity.name} to delete
+     * @return response wrapper containing any collected messages
+     */
+    @PreAuthorize("hasPermission(authentication, 'write')")
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    VoidServiceResponse bulkDelete(Collection<${entity.name}BO> entities);
 }

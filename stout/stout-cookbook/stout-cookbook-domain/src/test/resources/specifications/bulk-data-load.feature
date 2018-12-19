@@ -5,29 +5,24 @@ Feature: Support Bulk Data Load
 
   Background: 
     Given the following valid data exists
-      | validDataValues |
-      | data1           |
-      | data2           |
-      | data3           |
-      | data4           |
-      | data5           |
-      | data6           |
-      | data7           |
-      | data8           |
-      #check to see what happens if you pass in an empty entity in bulk
-      |                 |
+      | data1 |
+      | data2 |
+      | data3 |
+      | data4 |
+      | data5 |
+      | data6 |
+      | data7 |
+      | data8 |
     And the following valid and invalid data exists
-      | mixedDataValues |
-      | good_data1      |
-      | good_data2      |
-      | good_data3      |
-      | good_data4      |
-      | bad_data5       |
-      | good_data6      |
-      | good_data7      |
-      | good_data8      |
-      #check to see what happens if you pass in an empty entity in bulk
-      |                 |
+      | good_data1 |
+      | bad_data2  |
+      | good_data3 |
+      | good_data4 |
+      | bad_data5  |
+      | good_data6 |
+      | bad_data7  |
+      | good_data8 |
+      |            |
 
   Scenario: Collections of data are created if all data is valid
     When the valid data is sent over in bulk to be created

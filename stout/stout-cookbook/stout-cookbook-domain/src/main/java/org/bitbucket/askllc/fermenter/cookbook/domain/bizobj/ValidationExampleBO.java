@@ -1,5 +1,7 @@
 package org.bitbucket.askllc.fermenter.cookbook.domain.bizobj;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -37,6 +39,10 @@ public class ValidationExampleBO extends ValidationExampleBaseBO {
 	@Override
 	protected void complexValidation() {
 
+	}
+	
+	public static List<ValidationExampleBO> grabAllWithRequiredField() {
+	    return getDefaultRepository().findAllWithARequiredField();
 	}
 
 }

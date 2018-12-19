@@ -12,6 +12,8 @@ import ${basePackage}.bizobj.${entity.name}BO;
 import ${basePackage}.service.rest.${entity.name}MaintenanceService;
 
 import javax.inject.Inject;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.WebApplicationException;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -28,12 +30,14 @@ import org.bitbucket.fermenter.stout.authz.Action;
 
 import org.bitbucket.fermenter.stout.messages.AbstractMsgMgrAwareService;
 import org.bitbucket.fermenter.stout.messages.DefaultMessages;
+import org.bitbucket.fermenter.stout.messages.MessageManager;
 
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
 
 import java.util.Collection;
 import java.util.ArrayList;
+
 
 /**
  * Concrete implementation for create, retrieve, update, and delete (CRUD) functionality 
@@ -122,9 +126,17 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 		for(${entity.name}BO entity : entities){
 			ValueServiceResponse<${entity.name}BO> response = saveOrUpdate(entity);
 			values.add(response.getValue());
+			MessageManager.addMessages(response.getMessages());
 		}
 		
 		ValueServiceResponse<Collection<${entity.name}BO>> responses = new ValueServiceResponse<>(values);
+		addAllMsgMgrToResponse(responses);
+		
+		if (responses.getMessages().hasErrorMessages()) {
+		    Response test = Response.status(Response.Status.BAD_REQUEST).entity(responses).build();
+			throw new WebApplicationException(test);
+		}
+        
 		return responses;
 	}
 
@@ -143,4 +155,24 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 		addAllMsgMgrToResponse(response);
 		return response;
 	}
+	
+	/**
+	 * Hammy - {@inheritDoc}
+	 */
+	@Transactional(propagation=Propagation.REQUIRED)
+	@Override
+	public VoidServiceResponse bulkDelete(Collection<${entity.name}BO> entities) {
+		initMsgMgr(messages);
+		assertAuthorization(PATH, Action.DELETE);
+		VoidServiceResponse responses = new VoidServiceResponse();
+		
+		for (${entity.name}BO entity : entities) {
+			VoidServiceResponse response = delete(entity.getKey());
+			MessageManager.addMessages(response.getMessages());
+		}
+		addAllMsgMgrToResponse(responses);
+		
+		return responses;
+	}	
+	
 }

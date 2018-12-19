@@ -27,6 +27,7 @@ import org.bitbucket.fermenter.mda.metamodel.element.Relation.Multiplicity;
 import org.bitbucket.fermenter.mda.metamodel.element.RelationElement;
 import org.bitbucket.fermenter.mda.metamodel.element.ReturnElement;
 import org.bitbucket.fermenter.mda.metamodel.element.ServiceElement;
+import org.bitbucket.fermenter.mda.metamodel.element.Validation;
 import org.bitbucket.fermenter.mda.metamodel.element.ValidationElement;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -385,7 +386,7 @@ public class LegacyMetadataConverter {
 
 	private void covertType(FieldElement newField, String typeName, String basePackage) {
 		newField.setType(typeName);
-		if (basePackage != null && ValidationElement) {
+		if (basePackage != null && !Validation.BaseType.isSimpleType(typeName)) {
 			newField.setPackage(basePackage);
 		}
 

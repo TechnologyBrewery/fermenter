@@ -9,7 +9,7 @@
     "inheritanceStrategy" : "mapped-superclass"
   },
   "identifier" : {
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : null,
     "name" : "id",
     "type" : "uuid",
     "column" : "CHILD_B_ID",
@@ -17,7 +17,7 @@
     "generator" : "uuid"
   },
   "fields" : [ {
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : null,
     "name" : "childBType",
     "type" : "string",
     "column" : "CHILD_B_TYPE",

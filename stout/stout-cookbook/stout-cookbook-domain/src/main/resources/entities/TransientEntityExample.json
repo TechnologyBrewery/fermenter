@@ -3,15 +3,15 @@
   "name" : "TransientEntityExample",
   "documentation" : "A non-persistent entity",
   "fields" : [ {
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : null,
     "name" : "name",
     "type" : "string",
     "documentation" : "The friendly domain moniker"
   } ],
   "references" : [ {
     "name" : "requiredReference",
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
     "type" : "ValidationReferencedObject",
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
     "required" : true
   } ],
   "transient" : true

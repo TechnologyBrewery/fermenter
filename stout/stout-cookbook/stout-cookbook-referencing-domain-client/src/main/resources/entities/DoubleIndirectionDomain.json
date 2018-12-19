@@ -4,12 +4,25 @@
   "documentation" : "A domain that reference an external domain that in turn references another external domain",
   "table" : "DOUBLE_INDIRECTION",
   "identifier" : {
+    "package" : null,
     "name" : "id",
+    "type" : "uuid",
     "column" : "DOUBLE_INDIRECTION_ID",
-    "type" : {
-      "name" : "uuid"
-    },
     "required" : true,
     "generator" : "uuid"
-  }
+  },
+  "fields" : [ {
+    "package" : null,
+    "name" : "name",
+    "type" : "string",
+    "column" : "NAME",
+    "documentation" : "The friendly domain moniker"
+  } ],
+  "references" : [ {
+    "name" : "externalDomain",
+    "type" : "LocalDomain",
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.referencing.domain",
+    "localColumn" : "LOCAL_DOMAIN_LOCAL_DOMAIN_ID",
+    "required" : true
+  } ]
 }

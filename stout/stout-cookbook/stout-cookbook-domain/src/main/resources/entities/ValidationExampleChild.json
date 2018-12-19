@@ -3,7 +3,7 @@
   "name" : "ValidationExampleChild",
   "table" : "VALIDATION_EXAMPLE_CHILD",
   "identifier" : {
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : null,
     "name" : "id",
     "type" : "uuid",
     "column" : "VALIDATION_EXAMPLE_CHILD_ID",
@@ -11,7 +11,7 @@
     "generator" : "uuid"
   },
   "fields" : [ {
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : null,
     "name" : "requiredField",
     "type" : "string",
     "column" : "STRING_EXAMPLE",

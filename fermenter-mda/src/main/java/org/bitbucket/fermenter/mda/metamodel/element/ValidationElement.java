@@ -212,5 +212,14 @@ public class ValidationElement extends NamespacedMetamodelElement implements Val
 		return maxLength != null || minLength != null || maxValue != null || minValue != null || scale != null
 				|| format != null || documentation != null;
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@JsonIgnore
+	public Boolean isEnumerationType() {
+		return repository.getEnumeration(getPackage(), getName()) != null;
+	}	
 
 }

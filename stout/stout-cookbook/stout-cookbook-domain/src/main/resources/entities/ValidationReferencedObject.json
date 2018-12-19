@@ -3,7 +3,7 @@
   "name" : "ValidationReferencedObject",
   "table" : "VALIDATION_REF_OBJECT",
   "identifier" : {
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : null,
     "name" : "id",
     "type" : "uuid",
     "column" : "VALIDATION_REF_OBJECT_ID",
@@ -11,7 +11,7 @@
     "generator" : "uuid"
   },
   "fields" : [ {
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : null,
     "name" : "someDataField",
     "type" : "string",
     "column" : "SOME_DATA_FIELD"

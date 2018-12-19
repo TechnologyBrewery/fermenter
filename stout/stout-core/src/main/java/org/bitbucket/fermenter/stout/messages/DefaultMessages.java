@@ -26,7 +26,7 @@ public class DefaultMessages implements Messages {
 
 		messages = new HashMap<Severity, Set<Message>>();
 		for (Severity s : Severity.values()) {
-			messages.put(s, new HashSet<Message>());
+			messages.put(s, new HashSet<>());
 
 		}
 	}
@@ -130,12 +130,12 @@ public class DefaultMessages implements Messages {
 	public boolean hasInformationalMessages(String property) {
 		return getInformationalMessageCount(property) > 0;
 	}
-	
+
 	private Collection<Message> getMessagesList(Severity s, String property) {
 		Collection<Message> msgs = messages.get(s);
-		Collection<Message> returnList = new HashSet<Message>();
-		for (Message msg : msgs) { 
-		    String msgKey = msg.getKey();
+		Collection<Message> returnList = new HashSet<>();
+		for (Message msg : msgs) {
+			String msgKey = msg.getKey();
 			if (msg.getProperties().contains(property) || msgKey.equals(property)) {
 				returnList.add(msg);
 			}
@@ -151,7 +151,7 @@ public class DefaultMessages implements Messages {
 		Collection<Message> msgs = messages.get(s);
 		int count = 0;
 		for (Message msg : msgs) {
-		    String msgKey = msg.getKey();
+			String msgKey = msg.getKey();
 			if (msgKey.equals(property) || msg.getProperties().contains(property)) {
 				count += 1;
 			}
@@ -161,31 +161,31 @@ public class DefaultMessages implements Messages {
 
 	/**
 	 * Add an entire list of messages to this message list.
+	 * 
 	 * @param messages The messages to add
 	 */
 	public void addMessages(Messages messages) {
 		for (Message m : messages.getErrorMessages()) {
 			addMessage(m);
 		}
-		
+
 		for (Message m : messages.getInformationalMessages()) {
 			addMessage(m);
 		}
 	}
 
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	public Collection<Message> getAllMessages() {
-		Collection<Message> allMessages = new HashSet<Message>();
+		Collection<Message> allMessages = new HashSet<>();
 		for (Set<Message> messageSet : messages.values()) {
 			allMessages.addAll(messageSet);
 		}
-		
+
 		return allMessages;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */

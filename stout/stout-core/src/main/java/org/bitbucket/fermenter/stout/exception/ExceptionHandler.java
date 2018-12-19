@@ -26,7 +26,7 @@ public class ExceptionHandler {
      *
      * @param givenException the given exception
      */
-    public void handleException(Exception givenException) throws FermenterException {
+    public void handleException(Exception givenException) {
 
         Exception rootException = this.getRootExceptionOfGivenException(givenException);
 
@@ -80,7 +80,7 @@ public class ExceptionHandler {
             }
 
             /* This should be logged as a FATAL error, but the  logger does not have this level. Fermenter cannot
-             * return control flow if one of these errors has occured. */
+             * return control flow if one of these errors has occurred. */
             throw logAndGetUnrecoverableException(unrecognizedException, exceptionMessage);
         }
 

@@ -9,9 +9,10 @@ package org.bitbucket.fermenter.stout.messages;
 public final class MessageManager {
 
 	private static final ThreadLocal<Messages> MESSAGES = new ThreadLocal<Messages>() {
+		@Override
 		protected Messages initialValue() {
 			return new DefaultMessages();
-		};
+		}
 	};
 
 	private MessageManager() {

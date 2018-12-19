@@ -14,9 +14,6 @@ import java.util.Collection;
  * @see org.bitbucket.fermenter.stout.messages.Severity
  */
 public interface Messages extends Serializable {
-
-	public static final String REQ_ATTR_ERROR_MSGS = "ErrorMessages";
-	public static final String REQ_ATTR_INFO_MSGS = "InfoMessages";
 	
 	/**
 	 * Get all messages, regardless of severity.

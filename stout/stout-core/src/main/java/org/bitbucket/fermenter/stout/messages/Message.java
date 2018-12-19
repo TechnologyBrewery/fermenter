@@ -15,8 +15,6 @@ import java.util.Collection;
  */
 public interface Message extends Serializable {
 
-	/** Unique string used to create {@link Message} instances. */
-	static final String BEAN_NAME = "Message";
 
 	/**
 	 * Get the key for this message.

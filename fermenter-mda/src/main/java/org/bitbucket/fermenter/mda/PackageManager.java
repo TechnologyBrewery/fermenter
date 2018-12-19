@@ -16,7 +16,7 @@ public class PackageManager {
 	private static final Log LOG = LogFactory.getLog(PackageManager.class.getName());
 	
 	private static PackageManager INSTANCE;
-	private Map<String, String> applicationToBasePackage = new HashMap<String, String>(10);
+	private Map<String, String> applicationToBasePackage = new HashMap<>(10);
 	
 	static {
 		INSTANCE = new PackageManager();
@@ -49,6 +49,10 @@ public class PackageManager {
 	public static void addMapping(String applicationName, String basePackage) {
 		INSTANCE.applicationToBasePackage.put(applicationName, basePackage);
 	}
+	
+	public static String getPackageForApplicationName(String applicationName) {
+		return INSTANCE.applicationToBasePackage.get(applicationName);
+	}	
 	
 	private static InputStream processURL(URL url) throws IOException{
 		String sUrl = url.toString();

@@ -9,6 +9,7 @@ import org.bitbucket.fermenter.mda.metadata.element.Composite;
 import org.bitbucket.fermenter.mda.metadata.element.CompositeMetadata;
 import org.bitbucket.fermenter.mda.metadata.element.FieldMetadata;
 
+@Deprecated
 class CompositeMetadataManager extends MetadataManager {
 
 	private static CompositeMetadataManager INSTANCE;

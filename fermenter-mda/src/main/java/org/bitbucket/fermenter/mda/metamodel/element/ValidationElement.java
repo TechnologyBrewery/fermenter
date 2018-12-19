@@ -1,5 +1,6 @@
 package org.bitbucket.fermenter.mda.metamodel.element;
 
+import org.bitbucket.fermenter.mda.metadata.element.Format;
 import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 
@@ -14,7 +15,7 @@ import com.google.common.base.MoreObjects;
  * Represents a enumeration of declared constants.
  */
 @JsonPropertyOrder({ "package", "name" })
-public class TypeElement extends NamespacedMetamodelElement implements Type {
+public class ValidationElement extends NamespacedMetamodelElement implements Validation {
 
 	@JsonInclude(Include.NON_NULL)
 	private String documentation;
@@ -71,26 +72,18 @@ public class TypeElement extends NamespacedMetamodelElement implements Type {
 	 * {@inheritDoc}
 	 */
 	@Override
-	@JsonIgnore
-	public Boolean isSimpleType() {
-		return BaseType.valueOf(getName()) != null;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	@JsonIgnore
-	public Boolean isEnumerationType() {
-		return repository.getEnumeration(getPackage(), getName()) != null;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public Integer getMaxLength() {
+		if (maxLength == null && isEnumerationType()) {
+			Enumeration enumeration = repository.getEnumeration(getPackage(), getName());
+			Integer enumerationMaxLength = enumeration.getMaxLength();
+			if (enumerationMaxLength != null) {
+				maxLength = enumerationMaxLength;
+
+			}
+		}
+
 		return maxLength;
+
 	}
 
 	@Override
@@ -208,6 +201,16 @@ public class TypeElement extends NamespacedMetamodelElement implements Type {
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this).add("package", getPackage()).add("name", name).toString();
+	}
+
+	/**
+	 * Determines if any validation constraint information has been configured.
+	 * 
+	 * @return true if configured
+	 */
+	public boolean hasValue() {
+		return maxLength != null || minLength != null || maxValue != null || minValue != null || scale != null
+				|| format != null || documentation != null;
 	}
 
 }

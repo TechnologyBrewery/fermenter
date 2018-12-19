@@ -24,6 +24,7 @@ import org.bitbucket.fermenter.mda.metadata.element.RelationMetadata;
  * @author sandrews
  *
  */
+@Deprecated
 class EntityMetadataManager extends MetadataManager {
 	
 
@@ -157,6 +158,7 @@ class EntityMetadataManager extends MetadataManager {
 		digester.addCallMethod	( "entity/id/field/type"		,	"setType"		, 0 					);
 		digester.addCallMethod	( "entity/id/field/label"		,	"setLabel"		, 0 					);
 		digester.addCallMethod	( "entity/id/field/column"		,	"setColumn"		, 0 					);
+		digester.addCallMethod	( "entity/id/field/required"	,	"setRequired"	, 0 					);
 		digester.addCallMethod	( "entity/id/field/maxLength"	,	"setMaxLength"	, 0 					);
 		digester.addCallMethod	( "entity/id/field/minLength"	, 	"setMinLength"	, 0 					);
 		digester.addCallMethod	( "entity/id/field/maxValue"	, 	"setMaxValue"	, 0 					);

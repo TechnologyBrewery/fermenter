@@ -1,0 +1,26 @@
+{
+  "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "name" : "ValidationReferenceExample",
+  "table" : "VALIDATION_REF_EXAMPLE",
+  "identifier" : {
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "name" : "id",
+    "type" : "uuid",
+    "column" : "VALIDATION_REF_EXAMPLE_ID",
+    "required" : true,
+    "generator" : "uuid"
+  },
+  "fields" : [ {
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "name" : "someDataField",
+    "type" : "string",
+    "column" : "SOME_DATA_FIELD"
+  } ],
+  "references" : [ {
+    "name" : "requiredReference",
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "type" : "ValidationReferencedObject",
+    "localColumn" : "VALIDATION_REF_OBJECT_ID",
+    "required" : true
+  } ]
+}

@@ -5,6 +5,7 @@ import org.bitbucket.fermenter.mda.util.MessageTracker;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.google.common.base.MoreObjects;
@@ -12,14 +13,18 @@ import com.google.common.base.MoreObjects;
 /**
  * Represents a reference on an entity.
  */
-@JsonPropertyOrder({ "type" })
+@JsonPropertyOrder({ "type", "package", "multiplicity" })
 public class RelationElement implements Relation {
 	
 	@JsonIgnore
 	private static MessageTracker messageTracker = MessageTracker.getInstance();
 
     @JsonInclude(Include.NON_NULL)
-    protected Type type;
+    @JsonProperty(value = NamespacedMetamodelElement.PACKAGE)
+    protected String packageName;
+	
+    @JsonInclude(Include.NON_NULL)
+    protected String type;
 
     @JsonInclude(Include.NON_NULL)
     protected String documentation;
@@ -37,7 +42,15 @@ public class RelationElement implements Relation {
      * {@inheritDoc}
      */
     @Override
-    public Type getType() {
+    public String getPackage() {
+        return packageName;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getType() {
         return type;
     }
 
@@ -88,14 +101,24 @@ public class RelationElement implements Relation {
     		fetchMode = FetchMode.EAGER;
     	}
     }
+
+    /**
+     * Sets the relation type package.
+     * 
+     * @param package
+     *            relation type package
+     */
+    public void setPackage(String packageName) {
+        this.packageName = packageName;
+    }      
     
     /**
-     * Sets the field type.
+     * Sets the relation type.
      * 
      * @param type
-     *            field type
+     *            relation type
      */
-    public void setType(Type type) {
+    public void setType(String type) {
         this.type = type;
     }    
 

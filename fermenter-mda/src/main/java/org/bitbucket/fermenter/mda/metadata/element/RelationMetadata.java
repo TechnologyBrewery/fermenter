@@ -141,6 +141,10 @@ public class RelationMetadata extends MetadataElement implements Relation {
 
         return keyValues;
     }
+    
+    public Field getForeignKeyOverride() { 
+    	return (fkOverrides != null) ? fkOverrides.values().iterator().next() : null;
+    }
 	
 	/**
 	 * Executed to ensure that valid combinations of metadata have been loaded.

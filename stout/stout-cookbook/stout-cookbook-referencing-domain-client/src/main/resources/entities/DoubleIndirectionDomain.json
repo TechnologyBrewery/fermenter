@@ -1,0 +1,15 @@
+{
+  "package" : "org.bitbucket.askllc.fermenter.cookbook.referencing.domain",
+  "name" : "DoubleIndirectionDomain",
+  "documentation" : "A domain that reference an external domain that in turn references another external domain",
+  "table" : "DOUBLE_INDIRECTION",
+  "identifier" : {
+    "name" : "id",
+    "column" : "DOUBLE_INDIRECTION_ID",
+    "type" : {
+      "name" : "uuid"
+    },
+    "required" : true,
+    "generator" : "uuid"
+  }
+}

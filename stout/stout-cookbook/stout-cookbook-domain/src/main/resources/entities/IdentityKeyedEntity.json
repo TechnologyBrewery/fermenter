@@ -1,0 +1,14 @@
+{
+  "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "name" : "IdentityKeyedEntity",
+  "documentation" : "Entity that demonstrates uses of an IDENTITY as a generated value primary key",
+  "table" : "IDENTITY_KEYED_ENTITY",
+  "identifier" : {
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "name" : "id",
+    "type" : "integer",
+    "column" : "IDENTITY_KEYED_ENTITY_ID",
+    "required" : true,
+    "generator" : "identity"
+  }
+}

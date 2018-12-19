@@ -1,0 +1,20 @@
+{
+  "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "name" : "ValidationExampleChild",
+  "table" : "VALIDATION_EXAMPLE_CHILD",
+  "identifier" : {
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "name" : "id",
+    "type" : "uuid",
+    "column" : "VALIDATION_EXAMPLE_CHILD_ID",
+    "required" : true,
+    "generator" : "uuid"
+  },
+  "fields" : [ {
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "name" : "requiredField",
+    "type" : "string",
+    "column" : "STRING_EXAMPLE",
+    "required" : true
+  } ]
+}

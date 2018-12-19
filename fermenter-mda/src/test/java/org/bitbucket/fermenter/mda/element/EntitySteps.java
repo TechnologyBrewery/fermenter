@@ -30,8 +30,8 @@ import org.bitbucket.fermenter.mda.metamodel.element.Relation;
 import org.bitbucket.fermenter.mda.metamodel.element.Relation.FetchMode;
 import org.bitbucket.fermenter.mda.metamodel.element.Relation.Multiplicity;
 import org.bitbucket.fermenter.mda.metamodel.element.RelationElement;
-import org.bitbucket.fermenter.mda.metamodel.element.Type;
-import org.bitbucket.fermenter.mda.metamodel.element.TypeElement;
+import org.bitbucket.fermenter.mda.metamodel.element.Validation;
+import org.bitbucket.fermenter.mda.metamodel.element.ValidationElement;
 import org.bitbucket.fermenter.mda.util.MessageTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +47,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
 public class EntitySteps {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(EntitySteps.class);
 
 	private ObjectMapper objectMapper = new ObjectMapper();
@@ -146,10 +146,8 @@ public class EntitySteps {
 
 		ReferenceElement entityReference = new ReferenceElement();
 		entityReference.setName(reference.referenceName);
-		TypeElement referenceType = new TypeElement();
-		referenceType.setName(reference.type);
-		referenceType.setPackage(reference.referencePackage);
-		entityReference.setType(referenceType);
+		entityReference.setPackage(reference.referencePackage);
+		entityReference.setType(reference.type);
 		entityReference.setLocalColumn(reference.localColumn);
 		entityReference.setDocumentation(reference.documentation);
 		entityReference.setRequired(reference.required);
@@ -214,8 +212,8 @@ public class EntitySteps {
 	}
 
 	@Given("^an entity named \"([^\"]*)\" in \"([^\"]*)\" with an invalid fetch mode \"([^\"]*)\"$")
-	public void an_entity_named_in_with_an_invalid_fetch_mode(String name, String packageName,
-			String invalidFetchMode) throws Throwable {
+	public void an_entity_named_in_with_an_invalid_fetch_mode(String name, String packageName, String invalidFetchMode)
+			throws Throwable {
 		String referencedEntityName = StringUtils.capitalize(RandomStringUtils.randomAlphabetic(10));
 		String referencedEntityPackage = "foo.bad.multiplicity";
 		createEntityWithDefaultIdentifier(referencedEntityName, referencedEntityPackage);
@@ -259,7 +257,7 @@ public class EntitySteps {
 		if (StringUtils.isNotBlank(id.generator)) {
 			idField.setGenerator(id.generator);
 		}
-		TypeElement type = new TypeElement();
+		ValidationElement type = new ValidationElement();
 		String typeValue = StringUtils.isNotBlank(id.type) ? id.type : "string";
 		type.setName(typeValue);
 		idField.setType(type);
@@ -271,7 +269,7 @@ public class EntitySteps {
 		idField.setName("id");
 		idField.setDocumentation("Auto created to make a valid entity");
 		idField.setColumn("ID");
-		TypeElement type = new TypeElement();
+		ValidationElement type = new ValidationElement();
 		type.setName("String");
 		idField.setType(type);
 		return idField;
@@ -282,7 +280,7 @@ public class EntitySteps {
 		newField.setName(field.name);
 		newField.setDocumentation(field.documentation);
 		newField.setColumn(field.column);
-		TypeElement type = new TypeElement();
+		ValidationElement type = new ValidationElement();
 		type.setName(field.type);
 		newField.setType(type);
 		return newField;
@@ -316,10 +314,8 @@ public class EntitySteps {
 		EntityElement entity = createBaseEntity(name, packageName, null);
 
 		RelationElement entityRelation = new RelationElement();
-		TypeElement relationType = new TypeElement();
-		relationType.setName(relation.type);
-		relationType.setPackage(relation.relationPackage);
-		entityRelation.setType(relationType);
+		entityRelation.setType(relation.type);
+		entityRelation.setPackage(relation.relationPackage);
 		entityRelation.setLocalColumn(relation.localColumn);
 		entityRelation.setDocumentation(relation.documentation);
 		entityRelation.setMultiplicity(relation.multiplicity);
@@ -416,7 +412,7 @@ public class EntitySteps {
 		assertEquals("Identifier documentation did not match!", expectedIdField.documentation,
 				foundIdField.getDocumentation());
 
-		Type foundType = foundIdField.getType();
+		Validation foundType = foundIdField.getValidation();
 		assertNotNull("No identifier type found!", foundType);
 		assertEquals("Identifier type name did not match!", expectedIdField.type, foundType.getName());
 
@@ -442,7 +438,7 @@ public class EntitySteps {
 			}
 		}
 
-		Type foundType = foundField.getType();
+		Validation foundType = foundField.getValidation();
 		assertNotNull("No field type found!", foundType);
 		assertEquals("Field type name did not match!", expectedField.type, foundType.getName());
 	}
@@ -459,9 +455,9 @@ public class EntitySteps {
 		assertEquals("Reference name did not match!", expectedReference.referenceName, foundReference.getName());
 		assertEquals("Reference documentation did not match!", expectedReference.documentation,
 				foundReference.getDocumentation());
-		assertEquals("Reference type did not match!", expectedReference.type, foundReference.getType().getName());
+		assertEquals("Reference type did not match!", expectedReference.type, foundReference.getType());
 		assertEquals("Reference type package did not match!", expectedReference.referencePackage,
-				foundReference.getType().getPackage());
+				foundReference.getPackage());
 		assertEquals("Reference local column did not match!", expectedReference.localColumn,
 				foundReference.getLocalColumn());
 		assertEquals("Reference requiredness did not match!", expectedReference.required, foundReference.isRequired());
@@ -477,9 +473,9 @@ public class EntitySteps {
 		RelationInput expectedRelation = expectedRelations.iterator().next();
 		assertEquals("Relation documentation did not match!", expectedRelation.documentation,
 				foundRelation.getDocumentation());
-		assertEquals("Relation type did not match!", expectedRelation.type, foundRelation.getType().getName());
+		assertEquals("Relation type did not match!", expectedRelation.type, foundRelation.getType());
 		assertEquals("Relation type package did not match!", expectedRelation.relationPackage,
-				foundRelation.getType().getPackage());
+				foundRelation.getPackage());
 		assertEquals("Relation local column did not match!", expectedRelation.localColumn,
 				foundRelation.getLocalColumn());
 		assertEquals("Relation multiplicity did not match!", Multiplicity.fromString(expectedRelation.multiplicity),

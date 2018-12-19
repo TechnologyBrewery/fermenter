@@ -23,7 +23,7 @@ public abstract class MetamodelElement implements Metamodel {
 	@JsonProperty(required = true)
 	@JsonInclude(Include.NON_NULL)
 	protected String name;
-	
+
 	@JsonIgnore
 	protected String fileName;
 
@@ -36,7 +36,7 @@ public abstract class MetamodelElement implements Metamodel {
 	}
 
 	/**
-	 * Sets the name of the metadata element. param name element name.
+	 * Sets the name of the metadata element.
 	 * 
 	 * @param name name to set
 	 */
@@ -63,14 +63,14 @@ public abstract class MetamodelElement implements Metamodel {
 	public void validate() {
 		if (StringUtils.isBlank(getName())) {
 			messageTracker.addErrorMessage("Name is a required attribute!");
-			
+
 		} else if (getFileName() != null) {
 			String localFileName = getFileName();
-			String stippedFileName = getFileName().substring(localFileName.lastIndexOf(File.separatorChar) + 1, 
+			String stippedFileName = getFileName().substring(localFileName.lastIndexOf(File.separatorChar) + 1,
 					localFileName.lastIndexOf('.'));
-			if (!getName().equals(stippedFileName)) {	
-				messageTracker.addErrorMessage("The file name must match the element name!  Excepted: '" 
-						+ getName() + "', but found: '**" + stippedFileName + "**.json' (file: " + localFileName + ")");
+			if (!getName().equals(stippedFileName)) {
+				messageTracker.addErrorMessage("The file name must match the element name!  Excepted: '" + getName()
+						+ "', but found: '**" + stippedFileName + "**.json' (file: " + localFileName + ")");
 			}
 		}
 	}

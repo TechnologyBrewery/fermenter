@@ -10,16 +10,23 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public interface Relation extends Validatable {
 
 	/**
-	 * Returns the type of parameter.
+	 * Returns the type package of relation.
 	 * 
-	 * @return parameter type
+	 * @return relation type package
 	 */
-	Type getType();
+	String getPackage();
+	
+	/**
+	 * Returns the type of relation.
+	 * 
+	 * @return relation type
+	 */
+	String getType();	
 
 	/**
-	 * Returns reference-level documentation.
+	 * Returns relation-level documentation.
 	 * 
-	 * @return reference documentation
+	 * @return relation documentation
 	 */
 	String getDocumentation();
 

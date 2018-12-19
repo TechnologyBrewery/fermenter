@@ -1,10 +1,12 @@
 package org.bitbucket.fermenter.mda.metamodel.element;
 
 import org.apache.commons.lang3.StringUtils;
+import org.bitbucket.fermenter.mda.metamodel.element.Validation.BaseType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public interface Type extends NamespacedMetamodel {
+public interface Validation extends NamespacedMetamodel {
 
 	String getDocumentation();
 
@@ -94,6 +96,14 @@ public interface Type extends NamespacedMetamodel {
 			}
 
 			return sb.toString();
+		}
+		
+		public Boolean isSimpleType(String typeName) {
+			return BaseType.valueOf(typeName) != null;
+		}
+
+		public Boolean isEnumerationType() {
+			return repository.getEnumeration(getPackage(), getName()) != null;
 		}
 
 	}

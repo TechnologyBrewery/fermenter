@@ -11,6 +11,7 @@ import org.bitbucket.fermenter.mda.metadata.AbstractMetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 
+@Deprecated
 public class CompositeMetadata extends MetadataElement implements Composite {
 
 	private String name;

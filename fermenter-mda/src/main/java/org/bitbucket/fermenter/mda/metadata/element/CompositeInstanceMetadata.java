@@ -1,6 +1,5 @@
 package org.bitbucket.fermenter.mda.metadata.element;
 
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -8,8 +7,8 @@ import java.util.Map;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
-import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 
+@Deprecated
 public class CompositeInstanceMetadata extends MetadataElement implements Composite {
 
 	private Composite referencedComposite;

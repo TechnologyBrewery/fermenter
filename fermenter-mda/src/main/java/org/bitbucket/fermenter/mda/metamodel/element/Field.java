@@ -11,61 +11,80 @@ public interface Field extends Metamodel {
 	 */
 	String getColumn();
 
-	
+	/**
+	 * Returns documentation for the field.
+	 * 
+	 * @return description of the field
+	 */
 	String getDocumentation();
 
 	/**
+	 * Package for the type.
+	 * 
+	 * @return Returns the type package
+	 */
+	String getPackage();
+
+	/**
+	 * Field type (simple type, type dictionary type, or enumeration).
+	 * 
 	 * @return Returns the type.
 	 */
-	Type getType();
+	String getType();
+
+	/**
+	 * Returns validation constraints for this field.
+	 * 
+	 * @return validation rules
+	 */
+	Validation getValidation();
 
 	/**
 	 * @return Returns the required.
 	 */
 	Boolean isRequired();
-	
-    /**
-     * @return Returns the generator.
-     */
-    Generator getGenerator();
-    
-    enum Generator {
-        UUID("uuid"), IDENTITY("identify"), ASSIGNED("assigned");
 
-        private String value;
+	/**
+	 * @return Returns the generator.
+	 */
+	Generator getGenerator();
 
-        private Generator(String value) {
-            this.value = value;
-        }
+	enum Generator {
+		UUID("uuid"), IDENTITY("identity"), ASSIGNED("assigned"), AUTO("auto");
 
-        /**
-         * Returns the instance for the passed generator value (ignoring case).
-         * 
-         * @param value
-         *            string representation
-         * @return instance
-         */
-        public static Generator fromString(String value) {
-            Generator matchedGenerator = null;
-            for (Generator generator : Generator.values()) {
-                if (StringUtils.equalsIgnoreCase(generator.value, value)) {
-                    matchedGenerator = generator;
-                    break;
-                }
-            }
+		private String value;
 
-            return matchedGenerator;
-        }
+		private Generator(String value) {
+			this.value = value;
+		}
 
-        /**
-         * {@inheritDoc}
-         */
-        @JsonValue
-        @Override
-        public String toString() {
-            return value;
-        }        
-		
+		/**
+		 * Returns the instance for the passed generator value (ignoring case).
+		 * 
+		 * @param value string representation
+		 * @return instance
+		 */
+		public static Generator fromString(String value) {
+			Generator matchedGenerator = null;
+			for (Generator generator : Generator.values()) {
+				if (StringUtils.equalsIgnoreCase(generator.value, value)) {
+					matchedGenerator = generator;
+					break;
+				}
+			}
+
+			return matchedGenerator;
+		}
+
+		/**
+		 * {@inheritDoc}
+		 */
+		@JsonValue
+		@Override
+		public String toString() {
+			return value;
+		}
+
 		/**
 		 * A comma-separated list of valid options.
 		 * 
@@ -85,8 +104,8 @@ public interface Field extends Metamodel {
 			}
 
 			return sb.toString();
-		}        
-        
-    }
+		}
+
+	}
 
 }

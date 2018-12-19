@@ -180,19 +180,23 @@ public class FieldMetadata extends MetadataElement implements Field {
      * {@inheritDoc}
      */
     public Enumeration getEnumeration() {
+    	if (enumeration == null) {	    	
+	        DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
+	                .getMetadataRepostory(DefaultModelInstanceRepository.class);
+	        enumeration = metadataRepository.getEnumeration(type);
+    	}
+        
         return (isEnumerationType().booleanValue()) ? enumeration : null;
     }
 
     private void determineType() {
         // determine which kind of type we are dealing with and store that info:
-        DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
-                .getMetadataRepostory(DefaultModelInstanceRepository.class);
-        Enumeration result = metadataRepository.getEnumeration(type);
+    	boolean isSimpleType = SIMPLE_TYPES_LIST.contains(getType());
 
-        if (result != null) {
+        if (!isSimpleType) {
             isEnumerationType = Boolean.TRUE;
             isSimpleType = Boolean.FALSE;
-            enumeration = result;
+            
         } else {
             isSimpleType = Boolean.TRUE;
             isEnumerationType = Boolean.FALSE;
@@ -209,17 +213,19 @@ public class FieldMetadata extends MetadataElement implements Field {
      * {@inheritDoc}
      */
     public String getMaxLength() {
-        if ((maxLength == null) && (isEnumerationType().booleanValue())) {
-            String enumerationMaxLength = getEnumeration().getMaxLength().toString();
-            if (enumerationMaxLength != null) {
-                maxLength = enumerationMaxLength;
-                if (log.isDebugEnabled()) {
-                    log.debug("Defaulting field '" + name + "''s max length to '" + maxLength
-                            + " based on the values of enumeration '" + getEnumeration().getName() + "'");
-
-                }
-            }
-        }
+    	// Moved to new model - but causes problems due to order of operations between old and new here, so disabling:
+//        if (maxLength == null) {
+        	 
+//            String enumerationMaxLength = getEnumeration().getMaxLength().toString();
+//            if (enumerationMaxLength != null) {
+//                maxLength = enumerationMaxLength;
+//                if (log.isDebugEnabled()) {
+//                    log.debug("Defaulting field '" + name + "''s max length to '" + maxLength
+//                            + " based on the values of enumeration '" + getEnumeration().getName() + "'");
+//
+//                }
+//            }
+//        }
         return maxLength;
     }
 

@@ -8,11 +8,11 @@ import com.google.common.base.MoreObjects;
 /**
  * Represents a reference on an entity.
  */
-@JsonPropertyOrder({ "package", "name" })
-public class ReferenceElement extends MetamodelElement implements Reference {
+@JsonPropertyOrder({ "name", "type", "package", "localColumn", "documentation", "required" })
+public class ReferenceElement extends NamespacedMetamodelElement implements Reference {
 
     @JsonInclude(Include.NON_NULL)
-    protected Type type;
+    protected String type;
 
     @JsonInclude(Include.NON_NULL)
     protected String documentation;
@@ -27,7 +27,7 @@ public class ReferenceElement extends MetamodelElement implements Reference {
      * {@inheritDoc}
      */
     @Override
-    public Type getType() {
+    public String getType() {
         return type;
     }
 
@@ -70,7 +70,7 @@ public class ReferenceElement extends MetamodelElement implements Reference {
      * @param type
      *            field type
      */
-    public void setType(Type type) {
+    public void setType(String type) {
         this.type = type;
     }    
 
@@ -111,5 +111,10 @@ public class ReferenceElement extends MetamodelElement implements Reference {
     public String toString() {
         return MoreObjects.toStringHelper(this).add("name", name).toString();
     }
+
+	@Override
+	public String getSchemaFileName() {
+		return "fermenter-2-service-schema.json";
+	}
 
 }

@@ -8,7 +8,7 @@
     "inheritanceStrategy" : "mapped-superclass"
   },
   "fields" : [ {
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : null,
     "name" : "someOtherName",
     "type" : "string",
     "documentation" : "The friendly domain moniker"

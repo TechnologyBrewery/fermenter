@@ -3,7 +3,7 @@
   "name" : "ValidationExample",
   "table" : "VALIDATION_EXAMPLE",
   "identifier" : {
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : null,
     "name" : "id",
     "type" : "uuid",
     "column" : "VALIDATION_EXAMPLE_ID",
@@ -11,7 +11,7 @@
     "generator" : "uuid"
   },
   "fields" : [ {
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : null,
     "name" : "bigDecimalExampleWithLargeScaleInteger",
     "type" : "big_decimal",
     "column" : "BIG_DECIMAL_SCALE_LARGE_INTEGER",
@@ -20,7 +20,7 @@
       "scale" : 2
     }
   }, {
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : null,
     "name" : "integerExample",
     "type" : "integer",
     "column" : "INTEGER_EXAMPLE",
@@ -29,7 +29,7 @@
       "minValue" : "-12345"
     }
   }, {
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : null,
     "name" : "bigDecimalExampleWithScale",
     "type" : "big_decimal",
     "column" : "BIG_DECIMAL_SCALE",
@@ -37,13 +37,13 @@
       "scale" : 3
     }
   }, {
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : null,
     "name" : "requiredField",
     "type" : "string",
     "column" : "REQUIRED_FIELD",
     "required" : true
   }, {
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : null,
     "name" : "bigDecimalExample",
     "type" : "big_decimal",
     "column" : "BIG_DECIMAL_EXAMPLE",
@@ -52,7 +52,7 @@
       "minValue" : "-123456789.123456789"
     }
   }, {
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : null,
     "name" : "regexZipcodeExample",
     "type" : "string",
     "column" : "REGEX_ZIPCODE_EXAMPLE",
@@ -60,12 +60,12 @@
       "format" : "zipCode"
     }
   }, {
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : null,
     "name" : "characterExample",
     "type" : "character",
     "column" : "CHAR_EXAMPLE"
   }, {
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : null,
     "name" : "stringExample",
     "type" : "string",
     "column" : "STRING_EXAMPLE",
@@ -74,12 +74,12 @@
       "minLength" : 2
     }
   }, {
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : null,
     "name" : "dateExample",
     "type" : "date",
     "column" : "DATE_EXAMPLE"
   }, {
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : null,
     "name" : "bigDecimalExampleWithLargeScale",
     "type" : "big_decimal",
     "column" : "BIG_DECIMAL_SCALE_LARGE",
@@ -87,7 +87,7 @@
       "scale" : 10
     }
   }, {
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : null,
     "name" : "regexExample",
     "type" : "string",
     "column" : "REGEX_EXAMPLE",
@@ -95,7 +95,7 @@
       "format" : "email"
     }
   }, {
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : null,
     "name" : "longExample",
     "type" : "long",
     "column" : "LONG_EXAMPLE",
@@ -105,8 +105,8 @@
     }
   } ],
   "relations" : [ {
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
     "type" : "ValidationExampleChild",
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
     "multiplicity" : "1-M"
   } ]
 }

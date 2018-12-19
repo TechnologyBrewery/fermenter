@@ -4,7 +4,7 @@
   "documentation" : "A local domain",
   "table" : "LOCAL_DOMAIN",
   "identifier" : {
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.referencing.domain",
+    "package" : null,
     "name" : "id",
     "type" : "uuid",
     "column" : "LOCAL_DOMAIN_ID",
@@ -12,7 +12,7 @@
     "generator" : "uuid"
   },
   "fields" : [ {
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.referencing.domain",
+    "package" : null,
     "name" : "name",
     "type" : "string",
     "column" : "NAME",
@@ -20,8 +20,8 @@
   } ],
   "references" : [ {
     "name" : "externalReference",
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
     "type" : "ValidationReferencedObject",
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
     "localColumn" : "VALIDATION_REF_OBJECT_VALIDATION_REF_OBJECT_ID",
     "required" : true
   } ]

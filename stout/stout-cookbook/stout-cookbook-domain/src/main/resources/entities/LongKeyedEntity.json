@@ -4,7 +4,7 @@
   "documentation" : "Entity that demonstrates uses a long as a generated value primary key",
   "table" : "LONG_KEYED_ENTITY",
   "identifier" : {
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : null,
     "name" : "id",
     "type" : "long",
     "column" : "LONG_KEYED_ENTITY_ID",

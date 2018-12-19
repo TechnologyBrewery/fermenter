@@ -136,12 +136,12 @@ public class DefaultMessage implements Message {
 			return this == that;
 		}
 
-		// Exactly one key is null - return false
+		// When the key is null - return false
 		if (thisKey == null || thatKey == null) {
 			return false;
 		}
 
-		// Exactly one Severity is null - return false
+		// When Severity is null - return false
 		if (thisSeverity == null || thatSeverity == null) {
 			return false;
 		}

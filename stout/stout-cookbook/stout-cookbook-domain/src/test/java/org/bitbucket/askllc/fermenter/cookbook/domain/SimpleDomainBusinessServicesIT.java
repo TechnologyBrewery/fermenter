@@ -30,8 +30,8 @@ import org.junit.runner.RunWith;
 @RunWith(Arquillian.class)
 public class SimpleDomainBusinessServicesIT extends RunTestsWithinArquillianWar {
 
-	@ArquillianResource
-	private URL deploymentURL;
+    @ArquillianResource
+    private URL deploymentURL;
 
 	@Before
 	public void deleteSimpleDomains() throws Exception {
@@ -190,12 +190,14 @@ public class SimpleDomainBusinessServicesIT extends RunTestsWithinArquillianWar 
 			maintenanceService.saveOrUpdate(TestUtils.createRandomSimpleDomain(numSimpleDomainChildren));
 		}
 
-		SimpleDomainManagerService managerService = getService(webTarget);
-		ValueServiceResponse<Collection<SimpleDomainBO>> allSimpleDomainsResponse = managerService
-				.selectAllSimpleDomainsLazySimpleDomainChild();
+        SimpleDomainManagerService managerService = getService(webTarget);
+        ValueServiceResponse<Collection<SimpleDomainBO>> allSimpleDomainsResponse = managerService
+                .selectAllSimpleDomainsLazySimpleDomainChild();
+
 		TestUtils.assertNoErrorMessages(allSimpleDomainsResponse);
 
 		Collection<SimpleDomainBO> allSimpleDomains = allSimpleDomainsResponse.getValue();
+
 		assertEquals(numSimpleDomains, allSimpleDomains.size());
 
 		assertEquals(0, allSimpleDomains.iterator().next().getSimpleDomainChilds().size());

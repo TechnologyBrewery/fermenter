@@ -118,4 +118,6 @@ public class SimpleDomainBO extends SimpleDomainBaseBO {
 	protected void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
+
+    
 }

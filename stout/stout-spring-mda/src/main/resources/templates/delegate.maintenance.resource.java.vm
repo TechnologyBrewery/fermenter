@@ -6,6 +6,8 @@ import feign.RequestLine;
 import ${basePackage}.transfer.${entity.name};
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
+import org.bitbucket.fermenter.stout.page.json.FindByExampleCriteria;
+import org.bitbucket.fermenter.stout.page.PageWrapper;
 
 #foreach( $import in $entity.idFieldImports )
 import $import;
@@ -38,4 +40,8 @@ public interface ${entity.name}MaintenanceResource {
 
     @RequestLine("DELETE /${entity.name}/{id}")
     VoidServiceResponse delete(@Param("id") ${idFieldJavaType} ${idFieldName});
+
+    @RequestLine("GET /${entity.name}/findByExample")
+    @Headers({"Content-Type: application/json"})
+    ValueServiceResponse<PageWrapper<${entity.name}>> findByExample(FindByExampleCriteria<${entity.name}> criteria);
 }

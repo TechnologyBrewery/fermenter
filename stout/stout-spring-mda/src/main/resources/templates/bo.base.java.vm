@@ -23,7 +23,10 @@ import org.bitbucket.fermenter.stout.bizobj.BusinessObject;
 #else
 import org.bitbucket.fermenter.stout.bizobj.BasePersistentSpringBO;
 import org.bitbucket.fermenter.stout.bizobj.PersistentBusinessObject;
-
+import org.bitbucket.fermenter.stout.messages.Message;
+import org.bitbucket.fermenter.stout.messages.MessageFactory;
+import org.bitbucket.fermenter.stout.messages.MessageManager;
+import org.bitbucket.fermenter.stout.messages.Severity;
 import org.bitbucket.fermenter.stout.util.MetamodelInstanceUtil;
 
 import org.hibernate.annotations.Type;
@@ -49,6 +52,12 @@ import javax.persistence.metamodel.PluralAttribute;
 import org.springframework.data.jpa.domain.Specification;
 import static org.springframework.data.jpa.domain.Specifications.where;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
 import org.hibernate.annotations.Type;
 
 	#if (!$entity.isNonPersistentParentEntity())
@@ -223,6 +232,37 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
 		return foundBO;
 	}
 	#end
+
+	public static Page<${entity.name}BO> findByExample(${entity.name}BO probe, Integer page, Integer size, Sort sort) {
+		Page<${entity.name}BO> result = null;
+	    if(probe == null) {
+			// default to find all if no probe is specified
+	        probe = new ${entity.name}BO();
+	    }
+	    if(sort == null) {
+            Message msg = MessageFactory.createMessage();
+            msg.setKey("${entity.name}BO.findByExample.requiresSort" );
+            msg.setSeverity(Severity.ERROR);
+            msg.addProperty("When searching by example, a valid sort is required." );
+            MessageManager.addMessage(msg);
+        } else if(page == null) {
+            Message pageMsg = MessageFactory.createMessage();
+            pageMsg.setKey("${entity.name}BO.findByExample.requiresPage");
+            pageMsg.setSeverity(Severity.ERROR);
+            pageMsg.addProperty("When searching by example, a valid page is required.");
+            MessageManager.addMessage(pageMsg);
+        } else if(size == null) {
+            Message sizeMsg = MessageFactory.createMessage();
+            sizeMsg.setKey("${entity.name}BO.findByExample.requiresSize");
+            sizeMsg.setSeverity(Severity.ERROR);
+            sizeMsg.addProperty("When searching by example, a valid size is required.");
+            MessageManager.addMessage(sizeMsg);
+	    } else {
+	        Pageable pageable = new PageRequest(page, size, sort);
+	        result = getDefaultRepository().findAll(Example.of(probe), pageable);	        
+	    }
+	    return result;
+    }
 #end
 
 	/**

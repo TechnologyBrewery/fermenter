@@ -38,14 +38,14 @@ public final class ObjectMapperManager {
      */
     private static void configureObjectMapper() {
         SimpleModule module = new SimpleModule();
-
+        
         module.addAbstractTypeMapping(Messages.class, DefaultMessages.class);
         module.setMixInAnnotation(Messages.class, MessagesMixIn.class);
         module.setMixInAnnotation(DefaultMessages.class, MessagesMixIn.class);
         module.addSerializer(Message.class, new MessageSerializer(ObjectMapperManager.class));
         module.addDeserializer(Message.class, new MessageDeserializer());
 
-        module.addDeserializer(String.class, new StdScalarDeserializer<String>(String.class) {            
+        module.addDeserializer(String.class, new StdScalarDeserializer<String>(String.class) {
             private static final long serialVersionUID = 8721520299501142938L;
 
             @Override

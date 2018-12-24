@@ -7,7 +7,7 @@ public class SortWrapper {
 
     private List<OrderWrapper> orders;
 
-    public SortWrapper() {
+    private SortWrapper() {
         // needed for resteasy
     }
 

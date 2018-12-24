@@ -240,11 +240,23 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
 	        probe = new ${entity.name}BO();
 	    }
 	    if(sort == null) {
-	        Message msg = MessageFactory.createMessage();
-	        msg.setKey("${entity.name}BO.findByExample.requiresSort");
-	        msg.setSeverity(Severity.ERROR);
-	        msg.addProperty("When searching by example, a valid sort is required.");
+            Message msg = MessageFactory.createMessage();
+            msg.setKey("${entity.name}BO.findByExample.requiresSort" );
+            msg.setSeverity(Severity.ERROR);
+            msg.addProperty("When searching by example, a valid sort is required." );
             MessageManager.addMessage(msg);
+        } else if(page == null) {
+            Message pageMsg = MessageFactory.createMessage();
+            pageMsg.setKey("${entity.name}BO.findByExample.requiresPage");
+            pageMsg.setSeverity(Severity.ERROR);
+            pageMsg.addProperty("When searching by example, a valid page is required.");
+            MessageManager.addMessage(pageMsg);
+        } else if(size == null) {
+            Message sizeMsg = MessageFactory.createMessage();
+            sizeMsg.setKey("${entity.name}BO.findByExample.requiresSize");
+            sizeMsg.setSeverity(Severity.ERROR);
+            sizeMsg.addProperty("When searching by example, a valid size is required.");
+            MessageManager.addMessage(sizeMsg);
 	    } else {
 	        Pageable pageable = new PageRequest(page, size, sort);
 	        result = getDefaultRepository().findAll(Example.of(probe), pageable);	        

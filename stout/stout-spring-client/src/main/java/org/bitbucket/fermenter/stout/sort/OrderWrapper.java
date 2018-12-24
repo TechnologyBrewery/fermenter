@@ -8,7 +8,7 @@ public class OrderWrapper {
     private String direction;
     private Boolean ignoreCase;
 
-    public OrderWrapper() {
+    private OrderWrapper() {
         // needed for resteasy
     }
 

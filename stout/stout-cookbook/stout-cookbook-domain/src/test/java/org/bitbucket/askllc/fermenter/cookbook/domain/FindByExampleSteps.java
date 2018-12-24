@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.enumeration.SimpleDomainEnumeration;
@@ -35,6 +36,7 @@ public class FindByExampleSteps {
 
     private static final Sort SORT_DEFAULT = new Sort(Sort.Direction.ASC, "name");
 
+    private long numOfSimpleDomainsCreated;
     private SimpleDomainBO probe;
     private Sort sort;
 
@@ -114,6 +116,23 @@ public class FindByExampleSteps {
         }
     }
 
+    @Given("^simple domains exist in the system$")
+    public void simple_domains_exist_in_the_system() throws Throwable {
+        long numSimpleDomainsToCreate = RandomUtils.nextLong(2,10);
+
+        for (int i = 0; i < numSimpleDomainsToCreate; i++) {
+            SimpleDomainBO simpleDomain = new SimpleDomainBO();
+            simpleDomain.save();
+        }
+        numOfSimpleDomainsCreated = numSimpleDomainsToCreate;
+    }
+
+    @When("^I query for simple domains with no examples provided$")
+    public void i_query_for_simple_domains_with_no_examples_provided() throws Throwable {
+        probe = new SimpleDomainBO();
+        findByExampleResults = SimpleDomainBO.findByExample(probe, PAGE_DEFAULT, SIZE_DEFAULT, SORT_DEFAULT);
+    }
+
     @When("^I find by the example$")
     public void i_find_by_the_example() throws Throwable {
         Sort sortToUse = SORT_DEFAULT;
@@ -133,21 +152,37 @@ public class FindByExampleSteps {
         assertEquals(countOfResults, findByExampleResults.getTotalElements());
     }
 
-    @Then("^I should get the following results:$")
-    public void i_should_get_the_following_results(List<SimpleDomainBO> expectedResults) throws Throwable {
-        for (int i = 0; i < expectedResults.size(); i++) {
-            SimpleDomainBO expectedSimpleDomain = expectedResults.get(i);
-            SimpleDomainBO actualSimpleDomain = findByExampleResults.getContent().get(i);
-            assertEquals(expectedSimpleDomain.getTheLong1(), actualSimpleDomain.getTheLong1());
-        }
-    }
-
     @Then("^I should get an error message saying \"([^\"]*)\"$")
     public void i_should_get_an_error_message_saying(String expectedMessage) throws Throwable {
         Messages messages = MessageManager.getMessages();
         Collection<Message> errorMessages = messages.getErrorMessages();
         Message firstMessage = errorMessages.iterator().next();
         assertEquals(expectedMessage, firstMessage.getProperties().iterator().next());
+    }
+
+    @Then("^all simple domains are returned$")
+    public void all_simple_domains_are_returned() throws Throwable {
+        long numOfSimpleDomainsReturned = findByExampleResults.getTotalElements();
+        assertEquals("Expected all simple domains to be returned", numOfSimpleDomainsCreated,
+                numOfSimpleDomainsReturned);
+    }
+
+    @Then("^I should get all simple domains sorted by name:$")
+    public void i_should_get_all_simple_domains_sorted_by_name(List<SimpleDomainBO> expectedResults) throws Throwable {
+        compareActualToExpectedQueryByExampleResults(expectedResults);
+    }
+
+    @Then("^I get all simple domains sorted by name then long:$")
+    public void i_get_all_simple_domains_sorted_by_name_then_long(List<SimpleDomainBO> expectedResults) throws Throwable {
+        compareActualToExpectedQueryByExampleResults(expectedResults);
+    }
+
+    private void compareActualToExpectedQueryByExampleResults(List<SimpleDomainBO> expectedResults) {
+        for (int i = 0; i < expectedResults.size(); i++) {
+            SimpleDomainBO expectedSimpleDomain = expectedResults.get(i);
+            SimpleDomainBO actualSimpleDomain = findByExampleResults.getContent().get(i);
+            assertEquals(expectedSimpleDomain.getTheLong1(), actualSimpleDomain.getTheLong1());
+        }
     }
 
 }

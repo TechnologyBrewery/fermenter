@@ -30,14 +30,12 @@ Feature: Find By Example
       # search for boolean and long together
       |  |  | 3 |  | true | 2 |
 
-  Scenario: query with empty probe
-    Given the following simple domain objects:
-      | name |
-      | Joe  |
-      | Jack |
-    And an empty probe
-    When I find by the example
-    Then I should get "2" results
+
+  Scenario: All results are returned when no examples are provided to the query
+    Given simple domains exist in the system
+    When I query for simple domains with no examples provided
+    Then all simple domains are returned
+
 
   Scenario: query with a null probe (will default to find all)
     Given the following simple domain objects:
@@ -57,7 +55,7 @@ Feature: Find By Example
     And an empty probe
     And a sort by "name" column
     When I find by the example
-    Then I should get the following results:
+    Then I should get all simple domains sorted by name:
       | name | theLong1 |
       | AAAA | 1        |
       | BBBB | 2        |
@@ -74,7 +72,7 @@ Feature: Find By Example
     And a sort by "name" column
     And a sort by "theLong1" column
     When I find by the example
-    Then I should get the following results:
+    Then I get all simple domains sorted by name then long:
       | name | theLong1 |
       | AAAA | 3        |
       | BBBB | 1        |

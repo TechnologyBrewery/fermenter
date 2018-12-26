@@ -506,5 +506,18 @@ public class JavaEntity implements Entity {
     public boolean isTransient() {
         return entity.isTransient();
     }
+    
+    public boolean hasNamedEnumeration() {
+        boolean result = false;
+        for(Field field : getFields().values()) {
+            if(field.isEnumerationType()) {
+                if(!field.getEnumeration().isValued()) {
+                    result = true;
+                    break;
+                }
+            }
+        }
+        return result;
+    }
 
 }

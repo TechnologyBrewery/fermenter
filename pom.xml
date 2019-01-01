@@ -58,6 +58,7 @@
 	<modules>
 		<module>fermenter-mda</module>
 		<module>stout</module>
+        <module>ale</module>
 	</modules>
 
 	<properties>

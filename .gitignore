@@ -10,3 +10,4 @@ target
 *.iml
 .idea/
 
+ale/ale-cookbook-angular/frontend/src/app/generated

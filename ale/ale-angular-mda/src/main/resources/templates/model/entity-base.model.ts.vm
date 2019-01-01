@@ -1,0 +1,62 @@
+#foreach ( $association in $entity.associations.values() )
+import { ${association.type} } from '../../shared/model/${association.typeLowerHypen}.model';
+#end
+
+/*******************************************************
+* Base BO for Angular frontend for ${entity.nameUpperCamel}
+*
+* Generated Code - DO NOT MODIFY
+*
+* NOTE: saving, updating, deleting actions need to be done
+*       through either maintenance or business services and
+*       thus those methods are not found within the BOs.
+*******************************************************/
+
+export class ${entity.nameUpperCamel}Base {
+
+  // Fields
+#foreach ( $field in $entity.allFields.values() )
+#if( $field.isEnumerationType() )
+  ${field.name}: string;
+#else
+  ${field.name}: ${field.angularType};
+#end
+#end
+
+  // Associations
+#foreach ( $association in $entity.associations.values() )
+#if( $association.multiplicity == '1-M' )
+  ${association.labelLowerCamel}s: ${association.type}[] = new Array<${association.type}>();
+#else
+  ${association.labelLowerCamel}: ${association.type} = new ${association.type}();
+#end
+#end
+
+  constructor(${entity.nameLowerCamel}Base?: ${entity.nameUpperCamel}Base) {
+    if (${entity.nameLowerCamel}Base) {
+#foreach ( $field in $entity.allFields.values() )
+#if( $field.angularType == "Date" )
+      if(${entity.nameLowerCamel}Base.${field.name}) {
+        this.${field.name} = new Date(${entity.nameLowerCamel}Base.${field.name});
+      }
+#else
+      this.${field.name} = ${entity.nameLowerCamel}Base.${field.name};
+#end
+#end
+#foreach ( $association in $entity.associations.values() )
+
+#if( $association.multiplicity == '1-M' )
+      if (${entity.nameLowerCamel}Base.${association.labelLowerCamel}s) {
+        for (const ${association.labelLowerCamel} of ${entity.nameLowerCamel}Base.${association.labelLowerCamel}s) {
+          this.${association.labelLowerCamel}s.push(new ${association.type}(${association.labelLowerCamel}));
+        }
+      }
+#else
+      if (${entity.nameLowerCamel}Base.${association.labelLowerCamel}) {
+        this.${association.labelLowerCamel} = new ${association.type}(${entity.nameLowerCamel}Base.${association.labelLowerCamel});
+      }
+#end
+#end
+    }
+  }
+}

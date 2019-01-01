@@ -1,0 +1,114 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.bitbucket.askllc.fermenter.ale</groupId>
+        <artifactId>ale</artifactId>
+        <version>2.0.0.CR12-SNAPSHOT</version>
+    </parent>
+
+    <name>Fermenter::Ale::Cookbook::Angular</name>
+    <description>A angular project that leverages ale-angular-mda generation</description>
+
+    <artifactId>ale-cookbook-angular</artifactId>
+    <packaging>pom</packaging>
+
+    <properties>
+        <frontend-plugin.version>1.6</frontend-plugin.version>
+        <node.version>v8.12.0</node.version>
+        <npm.version>6.4.1</npm.version>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.bitbucket.askllc.fermenter</groupId>
+                <artifactId>fermenter-mda</artifactId>
+                <version>${project.version}</version>
+                <executions>
+                    <execution>
+                        <id>generate-sources</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate-sources</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <basePackage>org.bitbucket.askllc.fermenter.cookbook.domain</basePackage>
+                    <profile>angular</profile>
+                    <mainSourceRoot>frontend</mainSourceRoot>
+                    <generatedBasedir>frontend/src/app/generated</generatedBasedir>
+                    <generatedSourceRoot>frontend</generatedSourceRoot>
+                    <metadataDependencies>
+                        <metadataDependency>stout-cookbook-domain</metadataDependency>
+                    </metadataDependencies>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>${project.groupId}</groupId>
+                        <artifactId>ale-angular-mda</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.bitbucket.askllc.fermenter.stout</groupId>
+                        <artifactId>stout-cookbook-domain</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>${frontend-plugin.version}</version>
+                <configuration>
+                    <!-- the workingDirectory is the folder where the angular app will be should be <project-folder-webapp>/frontend -->
+                    <workingDirectory>frontend</workingDirectory>
+                    <nodeVersion>${node.version}</nodeVersion>
+                    <npmVersion>${npm.version}</npmVersion>
+                    <!-- the folder where it will be installed -->
+                    <installDirectory>target</installDirectory>
+                </configuration>
+                <executions>
+                    <!-- install node and npm, then run an npm install, then run npm build for angular -->
+                    <execution>
+                        <id>install node and npm</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                    </execution>
+                    <execution>
+                        <id>npm install</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>install</arguments>
+                            <installDirectory>target</installDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>angular cli build</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <arguments>run build</arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

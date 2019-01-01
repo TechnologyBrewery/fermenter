@@ -28,6 +28,10 @@ public class AngularEntityGenerator extends AbstractEntityGenerator {
         String basefileName = context.getOutputFile();
         basefileName = replaceBasePackage(basefileName, context.getBasePackageAsPath());
         while (entities.hasNext()) {
+            // key piece that is needed for this generate method
+            // is that the entities need to be passed into the velocity context
+            // as Angular entities in order to have access to the angular entity
+            // methods like getting the name in lower case camel
             AngularEntity entity = new AngularEntity(entities.next());
 
             VelocityContext vc = new VelocityContext();

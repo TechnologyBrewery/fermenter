@@ -1,0 +1,19 @@
+export class FermenterMessageBase {
+  public detailMessage: string;
+  public inserts: Array<string>;
+  public key: string;
+  public properties: Array<string>;
+  public severity: string;
+  public summaryMessage: string;
+
+  constructor(message?: FermenterMessageBase) {
+    if (message) {
+      this.detailMessage = message.detailMessage;
+      this.inserts = message.inserts;
+      this.key = message.key;
+      this.properties = message.properties;
+      this.severity = message.severity;
+      this.summaryMessage = message.summaryMessage;
+    }
+  }
+}

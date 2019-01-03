@@ -1,0 +1,32 @@
+import { SortWrapper } from '../../shared/model/sort-wrapper.model';
+import { Constants } from '../../constants';
+
+export class FindByExampleCriteriaBase<T> {
+  public probe: T;
+  public page: number;
+  public size: number;
+  public sortWrapper: SortWrapper;
+
+  // NOTE that this is never constructed from a http call response, thus the constructor is a little different
+  constructor(sortWrapper: SortWrapper, probe?: T, page?: number, size?: number) {
+    this.sortWrapper = sortWrapper;
+    
+    if (probe) {
+      this.probe = probe;
+    }
+
+    if (page) {
+      this.page = page;
+    } else {
+      // start with the first page if no page is supplied
+      this.page = 0;
+    }
+
+    if (size) {
+      this.size = size;
+    } else {
+      const constants = new Constants();
+      this.size = constants.DEFAULT_PAGE_SIZE
+    }
+  }
+}

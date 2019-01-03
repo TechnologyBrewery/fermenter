@@ -1,0 +1,10 @@
+import { ErrorHandlerApi } from '../generated/error-handler-api';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ObservableInput } from 'rxjs';
+import { Injectable } from '@angular/core';
+
+@Injectable()
+export class GlobalErrorHandler implements ErrorHandlerApi {
+  // TODO: you need to implement the error handling API in order
+  //       to appropriately display errors to the end user
+}

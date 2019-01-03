@@ -3,16 +3,31 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { SimpleDomainComponent } from './simple-domain/simple-domain.component';
+import { SimpleDomainListItemComponent } from './simple-domain/simple-domain-list-item/simple-domain-list-item.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MaterialModule } from './material.module';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { GlobalErrorHandler } from './shared/global-error-handler.service';
+import { SimpleDomainMaintenanceService } from './generated/service/simple-domain-maintenance.service';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    SimpleDomainComponent,
+    SimpleDomainListItemComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MaterialModule,
+    FormsModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [SimpleDomainMaintenanceService, GlobalErrorHandler],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+// TODO: https://alligator.io/angular/providers-shared-modules/

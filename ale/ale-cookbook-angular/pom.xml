@@ -19,9 +19,28 @@
         <frontend-plugin.version>1.6</frontend-plugin.version>
         <node.version>v8.12.0</node.version>
         <npm.version>6.4.1</npm.version>
+        <embedded.tomcat.version>8.0.1</embedded.tomcat.version>
     </properties>
 
+
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.github.eirslett</groupId>
+                    <artifactId>frontend-maven-plugin</artifactId>
+                    <version>${frontend-plugin.version}</version>
+                    <configuration>
+                        <!-- the workingDirectory is the folder where the angular app will be should be <project-folder-webapp>/frontend -->
+                        <workingDirectory>frontend</workingDirectory>
+                        <nodeVersion>${node.version}</nodeVersion>
+                        <npmVersion>${npm.version}</npmVersion>
+                        <!-- the folder where it will be installed -->
+                        <installDirectory>target</installDirectory>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.bitbucket.askllc.fermenter</groupId>
@@ -69,15 +88,6 @@
             <plugin>
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
-                <version>${frontend-plugin.version}</version>
-                <configuration>
-                    <!-- the workingDirectory is the folder where the angular app will be should be <project-folder-webapp>/frontend -->
-                    <workingDirectory>frontend</workingDirectory>
-                    <nodeVersion>${node.version}</nodeVersion>
-                    <npmVersion>${npm.version}</npmVersion>
-                    <!-- the folder where it will be installed -->
-                    <installDirectory>target</installDirectory>
-                </configuration>
                 <executions>
                     <!-- install node and npm, then run an npm install, then run npm build for angular -->
                     <execution>
@@ -111,4 +121,111 @@
             </plugin>
         </plugins>
     </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.bitbucket.askllc.fermenter.stout</groupId>
+            <artifactId>stout-cookbook-domain-webapp</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.197</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>integration-test</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven2-plugin</artifactId>
+                        <version>1.7.1</version>
+                        <configuration>
+                            <container>
+                                <containerId>tomcat8x</containerId>
+                                <artifactInstaller>
+                                    <groupId>org.apache.tomcat</groupId>
+                                    <artifactId>tomcat</artifactId>
+                                    <version>8.0.1</version>
+                                </artifactInstaller>
+                                <dependencies>
+                                    <dependency>
+                                        <groupId>com.h2database</groupId>
+                                        <artifactId>h2</artifactId>
+                                    </dependency>
+                                </dependencies>
+                            </container>
+                            <configuration>
+                                <type>standalone</type>
+                                <home>
+                                    ${project.build.directory}/apache-tomcat
+                                </home>
+                                <configfiles>
+                                    <configfile>
+                                        <file>${project.basedir}/src/test/resources</file>
+                                        <todir>conf</todir>
+                                    </configfile>
+                                </configfiles>
+                                <properties>
+                                    <cargo.servlet.port>9090</cargo.servlet.port>
+                                    <!-- uncomment the line below for additional logging -->
+                                    <!-- <cargo.logging>high</cargo.logging> -->
+                                    <cargo.start.jvmargs>-DKRAUSENING_BASE=${project.basedir}/src/test/resources/krausening/base</cargo.start.jvmargs>
+                                </properties>
+                            </configuration>
+                            <deployables>
+                                <deployable>
+                                    <groupId>org.bitbucket.askllc.fermenter.stout</groupId>
+                                    <artifactId>stout-cookbook-domain-webapp</artifactId>
+                                    <type>war</type>
+                                    <properties>
+                                        <context>/cookbook</context>
+                                    </properties>
+                                </deployable>
+                            </deployables>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>start-server</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>stop-server</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>com.github.eirslett</groupId>
+                        <artifactId>frontend-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>run e2e tests</id>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>npm</goal>
+                                </goals>
+                                <configuration>
+                                    <arguments>run e2e:ci</arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

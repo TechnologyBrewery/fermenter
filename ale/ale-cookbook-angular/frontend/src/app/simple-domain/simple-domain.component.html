@@ -1,0 +1,49 @@
+<mat-card class="center">
+  <mat-card-title id="title">List of Simple Domains</mat-card-title>
+  <mat-card-content>
+    <div>
+      <form (ngSubmit)="onSubmit()">
+        <mat-form-field>
+          <input matInput placeholder="New Simple Domain Name" [(ngModel)]="simpleDomainAdding.name" id="simpleDomainName" name="simpleDomainName">
+        </mat-form-field>
+        &nbsp;
+        <button type="submit" mat-raised-button color="primary" id="addSimpleDomain">Add</button>
+      </form>
+    </div>
+    <br/>
+    <div>
+      <form (ngSubmit)="filterList()">
+        <mat-form-field>
+          <input matInput placeholder="Filter on ID" id="filterListById" name="filterListById" [(ngModel)]="filterListById">
+        </mat-form-field>
+        &nbsp;
+        <button type="submit" mat-raised-button color="primary" id="filterList">Filter</button>
+      </form>
+    </div>
+    <div>
+      <mat-list>
+        <mat-list-item [id]="simpleDomain.id" *ngFor="let simpleDomain of simpleDomains">
+          <div class="center">
+            <span class="small-padding line-item" *ngIf="!editingSimpleDomain(simpleDomain)">{{simpleDomain.name}}</span>
+            <form (ngSubmit)="onEditSubmit()" *ngIf="editingSimpleDomain(simpleDomain)" class="line-item">
+              <mat-form-field class="small-padding">
+                <input matInput placeholder="Edit Name" id="editField" name="editField" [(ngModel)]="simpleDomainEditing.name">
+              </mat-form-field>
+              <button type="submit" mat-raised-button color="primary" id="saveEdits" class="small-padding">Save</button>
+            </form>
+            &nbsp;
+            <button type="button" mat-raised-button color="primary" id="editSimpleDomain" (click)="editSimpleDomain(simpleDomain)" *ngIf="!editingSimpleDomain(simpleDomain)" class="small-padding line-item">Edit</button>
+            &nbsp;
+            <button type="button" mat-raised-button color="warn" id="deleteSimpleDomain" (click)="deleteSimpleDomain(simpleDomain)" class="small-padding line-item">Delete</button>
+          </div>
+        </mat-list-item>
+      </mat-list>
+      <br/>
+    </div>
+    <div>
+        <button type="button" mat-raised-button color="accent" id="getAllSimpleDomains" (click)="getAllSimpleDomains()">Get All Simple Domains</button>
+        &nbsp;
+        <button type="button" mat-raised-button color="warn" id="deleteAllSimpleDomains" (click)="deleteAllSimpleDomains()">Delete All Simple Domains</button>
+    </div>
+  </mat-card-content>
+</mat-card>

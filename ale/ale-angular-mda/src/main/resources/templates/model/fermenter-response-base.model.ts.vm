@@ -1,0 +1,23 @@
+import { FermenterMessage } from '../../shared/model/fermenter-message.model';
+
+export class FermenterResponseBase<T> {
+  public messages: FermenterMessage[] = new Array<FermenterMessage>();
+  public value: T;
+
+  constructor(response?: FermenterResponseBase<T>) {
+    if (response) {
+      if (response.messages) {
+        for (const message of response.messages) {
+          this.messages.push(new FermenterMessage(message));
+        }
+      }
+      if (response.value) {
+        this.value = response.value;
+      }
+    }
+  }
+
+  hasMessages(): boolean {
+    return this.messages.length > 0;
+  }
+}

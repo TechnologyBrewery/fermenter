@@ -94,7 +94,7 @@ public class AngularEntity implements Entity {
     public String getIdFieldName() {
         String idFieldName = ID_FIELD_DOES_NOT_EXIST;
         if(!getIdFields().isEmpty()) {
-            idFieldName = getIdFields().values().iterator().next().getLabel();
+            idFieldName = getIdFields().values().iterator().next().getName();
         }
         return idFieldName;
     }

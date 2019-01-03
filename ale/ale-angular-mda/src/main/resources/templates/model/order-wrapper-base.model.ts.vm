@@ -1,0 +1,15 @@
+import { OrderDirection } from './order-direction.enum'
+
+export class OrderWrapperBase {
+  public property: string;
+  public direction: OrderDirection = OrderDirection.ASC;
+  public ignoreCase: boolean = true;
+
+  // NOTE that this is never constructed from a http call response, thus the constructor is a little different
+  constructor(property?: string) {
+    if (property) {
+      this.property = property;
+    }
+  }
+
+}

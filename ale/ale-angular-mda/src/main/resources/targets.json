@@ -1,16 +1,135 @@
 [
-	{
-		"name": "entityBaseModel",
-		"templateName": "templates/model/entity-base.model.ts.vm",
-		"outputFile": "generated/model-base/${entityName}-base.model.ts",
-		"generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularEntityGenerator",
-		"overwritable": true
-	},
-	{
-		"name": "entityModel",
-		"templateName": "templates/model/entity.model.ts.vm",
-		"outputFile": "shared/model/${entityName}.model.ts",
-		"generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularEntityGenerator",
-		"overwritable": false
-	}
+  {
+    "name": "entityBaseModel",
+    "templateName": "templates/model/entity-base.model.ts.vm",
+    "outputFile": "generated/model-base/${entityName}-base.model.ts",
+    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularEntityGenerator",
+    "overwritable": true
+  },
+  {
+    "name": "entityModel",
+    "templateName": "templates/model/entity.model.ts.vm",
+    "outputFile": "shared/model/${entityName}.model.ts",
+    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularEntityGenerator",
+    "overwritable": false
+  },
+  {
+    "name": "maintenanceServices",
+    "templateName": "templates/service/maintenance.service.ts.vm",
+    "outputFile": "generated/service/${entityName}-maintenance.service.ts",
+    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularMaintServiceGenerator",
+    "overwritable": true
+  },
+  {
+    "name": "errorHandlerApi",
+    "templateName": "templates/error-handler-api.ts.vm",
+    "outputFile": "generated/error-handler-api.ts",
+    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "overwritable": true
+  },
+  {
+    "name": "globalErrorHandler",
+    "templateName": "templates/global-error-handler.service.ts.vm",
+    "outputFile": "shared/global-error-handler.service.ts",
+    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "overwritable": false
+  },
+  {
+    "name": "constants",
+    "templateName": "templates/constants.ts.vm",
+    "outputFile": "constants.ts",
+    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "overwritable": false
+  },
+  {
+    "name": "fermenterMessageBaseModel",
+    "templateName": "templates/model/fermenter-message-base.model.ts.vm",
+    "outputFile": "generated/model-base/fermenter-message-base.model.ts",
+    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "overwritable": true
+  },
+  {
+    "name": "fermenterMessageModel",
+    "templateName": "templates/model/fermenter-message.model.ts.vm",
+    "outputFile": "shared/model/fermenter-message.model.ts",
+    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "overwritable": false
+  },
+  {
+    "name": "fermenterBaseModel",
+    "templateName": "templates/model/fermenter-response-base.model.ts.vm",
+    "outputFile": "generated/model-base/fermenter-response-base.model.ts",
+    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "overwritable": true
+  },
+  {
+    "name": "fermenterModel",
+    "templateName": "templates/model/fermenter-response.model.ts.vm",
+    "outputFile": "shared/model/fermenter-response.model.ts",
+    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "overwritable": false
+  },
+  {
+    "name": "orderBaseModel",
+    "templateName": "templates/model/order-wrapper-base.model.ts.vm",
+    "outputFile": "generated/model-base/order-wrapper-base.model.ts",
+    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "overwritable": true
+  },
+  {
+    "name": "orderModel",
+    "templateName": "templates/model/order-wrapper.model.ts.vm",
+    "outputFile": "shared/model/order-wrapper.model.ts",
+    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "overwritable": false
+  },
+  {
+    "name": "sortBaseModel",
+    "templateName": "templates/model/sort-wrapper-base.model.ts.vm",
+    "outputFile": "generated/model-base/sort-wrapper-base.model.ts",
+    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "overwritable": true
+  },
+  {
+    "name": "sortModel",
+    "templateName": "templates/model/sort-wrapper.model.ts.vm",
+    "outputFile": "shared/model/sort-wrapper.model.ts",
+    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "overwritable": false
+  },
+  {
+    "name": "findByExampleCriteriaBaseModel",
+    "templateName": "templates/model/find-by-example-criteria-base.model.ts.vm",
+    "outputFile": "generated/model-base/find-by-example-criteria-base.model.ts",
+    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "overwritable": true
+  },
+  {
+    "name": "findByExampleCriteriaModel",
+    "templateName": "templates/model/find-by-example-criteria.model.ts.vm",
+    "outputFile": "shared/model/find-by-example-criteria.model.ts",
+    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "overwritable": false
+  },
+  {
+    "name": "sortOrderDirectionEnum",
+    "templateName": "templates/model/order-direction.enum.ts.vm",
+    "outputFile": "generated/model-base/order-direction.enum.ts",
+    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "overwritable": true
+  },
+  {
+    "name": "pageWrapperBaseModel",
+    "templateName": "templates/model/page-wrapper-base.model.ts.vm",
+    "outputFile": "generated/model-base/page-wrapper-base.model.ts",
+    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "overwritable": true
+  },
+  {
+    "name": "pageWrapperModel",
+    "templateName": "templates/model/page-wrapper.model.ts.vm",
+    "outputFile": "shared/model/page-wrapper.model.ts",
+    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "overwritable": false
+  }
 ]

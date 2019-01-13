@@ -1,0 +1,210 @@
+import { Injectable } from '@angular/core';
+import { FermenterResponse } from '../../../shared/model/fermenter-response.model';
+import { GlobalErrorHandler } from '../../../shared/global-error-handler.service';
+import { Constants } from '../../../constants';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { map, catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+
+#foreach( $import in $service.imports )
+#if( !$import.isEnumeration() )
+// package: ${import.getPackageName()} - ${import.isEnumeration()}
+import { ${import.type}Base } from '../../../generated/model-base/${import.typeLowerHyphen}-base.model';
+import { ${import.type} } from '../../../shared/model/${import.typeLowerHyphen}.model';
+#end## end if enum
+#end## end for imports
+
+/*******************************************************
+ * Business services for ${service.name}Service
+ *
+ * Generated Code - DO NOT MODIFY
+ * Template = business.service.ts.vm
+ *******************************************************/
+@Injectable({
+  providedIn: 'root'
+})
+export class ${service.name}Service {
+
+    private constants = new Constants();
+
+    // make sure that the ${service.artifactIdLowerCamel}EndPoint is
+    //    defined in the constants.ts file so that we know where the rest service is located
+    private ${service.name}ServiceURL =
+      this.constants.${service.artifactIdLowerCamel}EndPoint + '/${service.name}Service';
+
+    constructor(
+      private http: HttpClient,
+      private errorHandler: GlobalErrorHandler
+      ) {}
+
+#foreach( $operation in $service.angularOperations )
+#if(!$operation.usesEnumerations())## pending support for enums
+#if($operation.transactionAttribute == "Supports")
+##
+## Get calls
+##
+##
+    /**
+    * Call the ${operation.nameLowerCamel} operation on ${service.name}Service
+    * ${operation.documentation}
+    */
+#if( $operation.return.type == 'void' )
+## void responses return a fermenter response so we have something to return
+    public ${operation.nameLowerCamel}(${operation.getSignatureParametersForAngular()}): Observable<FermenterResponse<${operation.return.signature}>> {
+#else
+## non void responses return the item we are trying to get
+## we don't return the fermenter response as we don't expect any fermenter messages for get calls
+## if there is a fermenter error message then it will call the global error handler to handle the exception
+    public ${operation.nameLowerCamel}(${operation.getSignatureParametersForAngular()}): Observable<${operation.return.signature}> {
+#end## end of if return is void
+        const url = this.${service.name}ServiceURL + '/${operation.nameLowerCamel}' ;
+#if( !$operation.parameters.isEmpty() )
+
+        let params = new HttpParams();
+#foreach( $param in $operation.parameters)
+#if($param.ismany())
+        for(const ${param.name} of ${param.name}s) {
+            params = params.set('${param.name}', String(${param.name}));
+        }
+#else
+        params = params.set('${param.name}', String(${param.name}));
+#end## end of if is many
+#end## end of for loop
+
+        return this.http.get<FermenterResponse<${operation.return.signatureBase}>>(url, {params}).pipe(
+#else## else for if params is empty
+
+        return this.http.get<FermenterResponse<${operation.return.signatureBase}>>(url).pipe(
+#end## end for if params is empty
+            map((response: FermenterResponse<${operation.return.signatureBase}>) => {
+                const fermenterResponse = new FermenterResponse<${operation.return.signature}>(response);
+                this.checkFermenterResponseIsInitialized(fermenterResponse);
+
+#if( $operation.return.isBaseType() && $operation.return.angularTypeBase != 'Date')
+#if( !$operation.return.isMany() )
+                fermenterResponse.value = response.value;
+#else
+                if (response.value) {
+                    fermenterResponse.value = new Array<${operation.return.angularType}>();
+                    for (const element of response.value) {
+                        fermenterResponse.value.push(element);
+                    }
+                }
+#end## end of isMany
+#else
+#if( !$operation.return.isMany() )
+                if (response.value) {
+                    fermenterResponse.value = new ${operation.return.angularTypeBase}(response.value);
+                }
+#else
+                if (response.value) {
+                    fermenterResponse.value = new Array<${operation.return.angularType}>();
+                    for (const element of response.value) {
+                        fermenterResponse.value.push(new ${operation.return.angularType}(element));
+                    }
+                }
+#end## end of isMany
+#end## end for if isBaseType()
+
+                if (fermenterResponse.hasErrorMessages()) {
+                    const msg =
+                        'The get service is expected to retrieve the ${operation.return.angularType} without issues.';
+                    this.errorHandler.handleCriticalError(msg);
+                    throw new Error(msg);
+                }
+#if( $operation.return.type == 'void' )
+                return fermenterResponse;
+#else
+                return fermenterResponse.value;
+#end## end of return type void
+            }),
+            catchError(this.errorHandler.handleServiceCallError)
+        );
+    }
+#else
+##
+## Post calls
+##
+##
+    /**
+    * Call the ${operation.nameLowerCamel} operation on ${service.name}Service
+    * ${operation.documentation}
+    */
+    public ${operation.nameLowerCamel}(${operation.getSignatureParametersForAngular()}):
+                Observable<FermenterResponse<${operation.return.signature}>> {
+        const url = this.${service.name}ServiceURL + '/${operation.nameLowerCamel}' ;
+
+#if( $operation.hasUrlParams() )
+        let params = new HttpParams();
+#foreach( $param in $operation.angularParameters)
+#if( !$param.isEntity() )
+## for post calls entities are passed in the body, other params are query params
+#if( $param.ismany() )
+        for(const ${param.name} of ${param.name}s) {
+            params = params.set('${param.name}', String(${param.name}));
+        }
+#else## else for if is many
+        params = params.set('${param.name}', String(${param.name}));
+#end## end of if is many
+#end## end of if is entity
+#end## end of for param loop
+
+        return this.http.post<FermenterResponse<${operation.return.signatureBase}>>(url, ${operation.postBodyParameterName}, {params}).pipe(
+#else## else for if params is empty
+        return this.http.post<FermenterResponse<${operation.return.signatureBase}>>(url, ${operation.postBodyParameterName}).pipe(
+#end## end for if params is empty
+            map((response: FermenterResponse<${operation.return.signatureBase}>) => {
+                const fermenterResponse = new FermenterResponse<${operation.return.signature}>(response);
+                this.checkFermenterResponseIsInitialized(fermenterResponse);
+
+#if( $operation.return.isBaseType() && $operation.return.angularTypeBase != 'Date')
+#if( !$operation.return.isMany() )
+                fermenterResponse.value = response.value;
+#else
+                if (response.value) {
+                    fermenterResponse.value = new Array<${operation.return.angularType}>();
+                    for (const element of response.value) {
+                        fermenterResponse.value.push(element);
+                    }
+                }
+#end## end of isMany
+#else
+#if( !$operation.return.isMany() )
+                if (response.value) {
+                    fermenterResponse.value = new ${operation.return.angularTypeBase}(response.value);
+                }
+#else
+                if (response.value) {
+                    fermenterResponse.value = new Array<${operation.return.angularType}>();
+                    for (const element of response.value) {
+                        fermenterResponse.value.push(new ${operation.return.angularType}(element));
+                    }
+                }
+#end## end of isMany
+#end## end for if isBaseType()
+
+                if (fermenterResponse.hasErrorMessages()) {
+                    const msg =
+                        'The get service is expected to retrieve the ${operation.return.angularType} without issues.';
+                    this.errorHandler.handleCriticalError(msg);
+                    throw new Error(msg);
+                }
+                return fermenterResponse;
+            }),
+            catchError(this.errorHandler.handleServiceCallError)
+        );
+    }
+#end## end of post vs get if block
+#else
+    // support for enums is pending
+#end## end of if usesEnumerations
+#end## end of for operation
+
+    private checkFermenterResponseIsInitialized(fermenterResponse: FermenterResponse<{}>) {
+        if (!fermenterResponse) {
+            const msg = 'Failed to initialize fermenter response for service call.';
+            this.errorHandler.handleCriticalError(msg);
+            throw new Error(msg);
+        }
+    }
+}

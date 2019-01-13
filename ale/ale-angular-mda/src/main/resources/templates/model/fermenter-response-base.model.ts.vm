@@ -1,5 +1,11 @@
 import { FermenterMessage } from '../../shared/model/fermenter-message.model';
 
+/*******************************************************
+ * Fermenter Response Model Base
+ *
+ * Generated Code - DO NOT MODIFY
+ * Template = fermenter-response-base.model.ts.vm
+ *******************************************************/
 export class FermenterResponseBase<T> {
   public messages: FermenterMessage[] = new Array<FermenterMessage>();
   public value: T;
@@ -23,8 +29,8 @@ export class FermenterResponseBase<T> {
 
   hasErrorMessages(): boolean {
     let hasErrors = false;
-    for(const message of this.messages) {
-      if(message.severity === 'ERROR') {
+    for (const message of this.messages) {
+      if (message.severity === 'ERROR') {
         hasErrors = true;
       }
     }

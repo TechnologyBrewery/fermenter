@@ -69,6 +69,11 @@ export class SimpleDomainPage {
     element(by.id('getAllSimpleDomains')).click();
   }
 
+  getCountByBusinessService(): any {
+    element(by.id('getSimpleDomainCountButton')).click();
+    return element(by.id('simpleDomainCountByBusinessService')).getText();
+  }
+
   refresh() {
     browser.refresh();
   }

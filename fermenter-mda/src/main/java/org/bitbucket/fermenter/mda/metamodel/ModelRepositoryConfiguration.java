@@ -50,5 +50,4 @@ public class ModelRepositoryConfiguration {
     public void setMetamodelInstanceLocations(Map<String, ModelInstanceUrl> metamodelInstanceLocations) {
         this.metamodelInstanceLocations = metamodelInstanceLocations;
     }
-
 }

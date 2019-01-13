@@ -1,3 +1,9 @@
+/*******************************************************
+* Fermenter Message Model Base
+*
+* Generated Code - DO NOT MODIFY
+* Template = fermenter-message-base.model.ts.vm
+*******************************************************/
 export class FermenterMessageBase {
   public detailMessage: string;
   public inserts: Array<string>;

@@ -9,7 +9,7 @@ import { MaterialModule } from './material.module';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { GlobalErrorHandler } from './shared/global-error-handler.service';
-import { SimpleDomainMaintenanceService } from './generated/service/simple-domain-maintenance.service';
+import { SimpleDomainMaintenanceService } from './generated/service/maintenance/simple-domain-maintenance.service';
 
 @NgModule({
   declarations: [

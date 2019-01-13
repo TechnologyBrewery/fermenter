@@ -1,4 +1,9 @@
-
+/*******************************************************
+ * Page Wrapper Model Base
+ * 
+ * Generated Code - DO NOT MODIFY
+ * Template = page-wrapper-base.model.ts.vm
+ *******************************************************/
 export class PageWrapperBase<T> {
   public content: Array<T>;
   public size: number;

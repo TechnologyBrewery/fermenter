@@ -1,7 +1,9 @@
 package org.bitbucket.fermenter.mda.metamodel;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -57,6 +59,15 @@ public class DefaultModelInstanceRepository extends AbstractModelInstanceReposit
                         + (stop - start) + "ms");
             }
         }
+    }
+    
+    public Set<String> getArtifactIds() {
+        Set<String> artifactIds = new HashSet<>();
+        Collection<ModelInstanceUrl> urls = config.getMetamodelInstanceLocations().values();
+        for(ModelInstanceUrl url: urls) {
+            artifactIds.add(url.getArtifactId());
+        }
+        return artifactIds;
     }
 
     /**

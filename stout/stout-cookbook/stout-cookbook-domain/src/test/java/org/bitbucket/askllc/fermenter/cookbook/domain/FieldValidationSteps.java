@@ -1,5 +1,6 @@
 package org.bitbucket.askllc.fermenter.cookbook.domain;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -30,6 +31,7 @@ public class FieldValidationSteps {
 	private String userStringChildReqField;
 	private Long userLong;
 	private int userInt;
+	private int scale;
 	private BigDecimal userBigDecimal;
 	private ValidationExampleBO example;
 	private ValidationExampleChildBO exampleChild;
@@ -37,6 +39,7 @@ public class FieldValidationSteps {
 	@After("@fieldValidation")
 	public void cleanupMsgMgr() throws Exception {
 		MessageManagerInitializationDelegate.cleanupMessageManager();
+		ValidationExampleChildBO.deleteAllChildValidationExamples();
 		ValidationExampleBO.deleteAllValidationExamples();
 	}
 
@@ -211,6 +214,8 @@ public class FieldValidationSteps {
 	public void the_BigDecimal_validation_returns_no_errors() throws Throwable {
 
 		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), FieldValidationSteps.class);
+	    int errorCnt = MessageManager.getMessages().getErrorMessageCount();
+
 		assertFalse("Should not have encountered messages!", MessageManager.hasErrorMessages());
 
 	}
@@ -410,4 +415,67 @@ public class FieldValidationSteps {
 		assertTrue("Should have encountered messages!", MessageManager.hasErrorMessages());
 		
 	}
+	
+    @Given("^BigDecimal field default scale is (\\d+)$")
+    public void default_scale_is(int defaultScale) throws Throwable {
+        //information only: scale of 5 is used if no scale is specified 
+    }
+    
+    @Given("^RoundingMode is HALF_EVEN$")
+    public void roundingmode_is_HALF_EVEN() throws Throwable {
+        //information only:  rounding mode of HALF_EVEN is hardcoded in the velocity template
+    }
+
+    @When("^a \"([^\"]*)\" value without scale specification is added$")
+    public void a_value_without_scale_specification_is_added(String valueString) throws Throwable {
+        example = TestUtils.createRandomValidationExample();
+        
+        BigDecimal newNum = new BigDecimal(valueString); 
+        example.setBigDecimalExample(newNum);
+        
+        scale = example.getBigDecimalExample().scale();
+        userBigDecimal = example.getBigDecimalExample();
+        
+        example.validate();
+    }
+    
+    @When("^a \"([^\"]*)\" value with scale (\\d+) is added$")
+    public void a_value_with_scale_is_added(String valueString, int initialScale) throws Throwable {
+        BigDecimal newNum = new BigDecimal(valueString);
+        example = TestUtils.createRandomValidationExample();
+        
+        switch (initialScale)
+        {
+            case 2:
+                example.setBigDecimalExampleWithLargeScaleInteger(newNum);  
+                scale = example.getBigDecimalExampleWithLargeScaleInteger().scale();
+                userBigDecimal = example.getBigDecimalExampleWithLargeScaleInteger();
+                break;
+            case 3:
+                example.setBigDecimalExampleWithScale(newNum);
+                scale = example.getBigDecimalExampleWithScale().scale();
+                userBigDecimal = example.getBigDecimalExampleWithScale();
+                break; 
+            case 10:
+                example.setBigDecimalExampleWithLargeScale(newNum);
+                scale = example.getBigDecimalExampleWithLargeScale().scale();
+                userBigDecimal = example.getBigDecimalExampleWithLargeScale();
+                break;
+        }
+
+        example.validate(); 
+    }
+    
+    @Then("^the BigDecimal has scale of (\\d+)$")
+    public void the_BigDecimal_has_the_scale_of(int expectedScale) throws Throwable {
+        assertEquals("BigDecimal scale is incorrect!", expectedScale, scale);
+    }
+
+    @Then("^the BigDecimal value is \"([^\"]*)\"$")
+    public void the_BigDecimal_value_is(String expectedStringValue) throws Throwable {
+        String actualStringValue = userBigDecimal.toString();
+        assertEquals("BigDecimal value is incorrect!", expectedStringValue, actualStringValue);
+    }
 }
+
+

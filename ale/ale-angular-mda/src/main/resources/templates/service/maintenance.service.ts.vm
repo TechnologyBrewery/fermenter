@@ -44,7 +44,7 @@ export class ${entity.nameUpperCamel}MaintenanceService {
     return this.http.get<FermenterResponse<${entity.nameUpperCamel}Base>>(url).pipe(
       map((response: FermenterResponse<${entity.nameUpperCamel}Base>) => {
         const fermenterResponse = this.parseResponseToSingle(response);
-        if (fermenterResponse.hasMessages()) {
+        if (fermenterResponse.hasErrorMessages()) {
           const msg =
             'The get service is expected to retrieve the ${entity.nameUpperCamel} without issues.';
           this.errorHandler.handleCriticalError(msg);
@@ -73,7 +73,7 @@ export class ${entity.nameUpperCamel}MaintenanceService {
       .pipe(
         map((response: FermenterResponse<${entity.nameUpperCamel}Base>) => {
           const fermenterResponse = this.parseResponseToSingle(response);
-          if (fermenterResponse.hasMessages()) {
+          if (fermenterResponse.hasErrorMessages()) {
             const msg =
               'The get service is expected to save the ${entity.nameUpperCamel} without issues.';
             this.errorHandler.handleCriticalError(msg);
@@ -100,7 +100,7 @@ export class ${entity.nameUpperCamel}MaintenanceService {
       .pipe(
         map((response: FermenterResponse<${entity.nameUpperCamel}Base>) => {
           const fermenterResponse = this.parseResponseToSingle(response);
-          if (fermenterResponse.hasMessages()) {
+          if (fermenterResponse.hasErrorMessages()) {
             const msg =
               'The get service is expected to save the ${entity.nameUpperCamel} without issues.';
             this.errorHandler.handleCriticalError(msg);
@@ -123,7 +123,7 @@ export class ${entity.nameUpperCamel}MaintenanceService {
     return this.http.delete<FermenterResponse<${entity.nameUpperCamel}Base>>(url).pipe(
       map((response: FermenterResponse<${entity.nameUpperCamel}Base>) => {
         const fermenterResponse = new FermenterResponse<${entity.nameUpperCamel}Base>(response);
-        if (fermenterResponse.hasMessages()) {
+        if (fermenterResponse.hasErrorMessages()) {
           const msg =
             'The get service is expected to delete the ${entity.nameUpperCamel} without issues.';
           this.errorHandler.handleCriticalError(msg);
@@ -150,7 +150,7 @@ export class ${entity.nameUpperCamel}MaintenanceService {
       .pipe(
         map((response: FermenterResponse<PageWrapper<${entity.nameUpperCamel}>>) => {
           const fermenterResponse = this.parseResponseToPageWrapper(response);
-          if (fermenterResponse.hasMessages()) {
+          if (fermenterResponse.hasErrorMessages()) {
             const msg =
               'The find by example service is expected to return results without issues.';
             this.errorHandler.handleCriticalError(msg);

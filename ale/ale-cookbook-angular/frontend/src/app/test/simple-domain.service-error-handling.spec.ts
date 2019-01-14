@@ -164,7 +164,7 @@ describe('Ale Simple Domain Maintenance Service Error Handling', () => {
     }
   ));
 
-  it('should be able to handle a fermenter error response when trying to GET a simple domain', inject(
+  it('should be able to handle a fermenter ERROR response when trying to GET a simple domain', inject(
     [SimpleDomainMaintenanceService, GlobalErrorHandler],
     (
       simpleDomainService: SimpleDomainMaintenanceService,
@@ -204,9 +204,66 @@ describe('Ale Simple Domain Maintenance Service Error Handling', () => {
       // Respond with mock data, causing Observable to resolve.
       // Subscribe callback asserts that correct data was returned.
       const mockResponse = new FermenterResponse<SimpleDomain>();
+      mockResponse.value = testSimpleDomain;
       const mockMessage = new FermenterMessage();
       mockMessage.key = 'something.invalid';
-      mockMessage.severity = 'error';
+      mockMessage.severity = 'ERROR';
+      mockResponse.messages = [mockMessage];
+
+      req.flush(mockResponse);
+
+      // Finally, assert that there are no outstanding requests.
+      httpTestingController.verify();
+    }
+  ));
+
+  it('should be able to handle a fermenter INFO message in the response when trying to GET a simple domain', inject(
+    [SimpleDomainMaintenanceService, GlobalErrorHandler],
+    (
+      simpleDomainService: SimpleDomainMaintenanceService,
+      globalErrorHandler: GlobalErrorHandler
+    ) => {
+      const testName = 'Test Name';
+      const testId = 'Test Id';
+      const testSimpleDomain = new SimpleDomain();
+      testSimpleDomain.name = testName;
+      testSimpleDomain.id = testId;
+
+      spyOn(console, 'error');
+
+      const globalErrorHandlerSpy = spyOn(
+        globalErrorHandler,
+        'handleServiceCallError'
+      ).and.callThrough();
+
+      simpleDomainService.get(testId).subscribe(
+        (simpleDomainResponse: SimpleDomain) => {
+          expect(globalErrorHandlerSpy).not.toHaveBeenCalled();
+          expect(console.error).not.toHaveBeenCalled();
+          expect(simpleDomainResponse.id).toEqual(testId);
+        },
+        (error: any) => {
+          fail('it should NOT throw an error because the fermenter message was only info');
+        }
+      );
+
+      // The following `expectOne()` will match the request's URL.
+      // If no requests or multiple requests matched that URL
+      // `expectOne()` would throw.
+      const req = httpTestingController.expectOne(
+        constants.stoutCookbookDomainEndPoint + testUrl + '/' + testId
+      );
+
+      // Assert that the request is a GET.
+      expect(req.request.method).toEqual('GET');
+
+      // Respond with mock data, causing Observable to resolve.
+      // Subscribe callback asserts that correct data was returned.
+      const mockResponse = new FermenterResponse<SimpleDomain>();
+      mockResponse.value = testSimpleDomain;
+      const mockMessage = new FermenterMessage();
+      mockMessage.key = 'something.INFORMATIONAL';
+      mockMessage.severity = 'INFO';
       mockResponse.messages = [mockMessage];
 
       req.flush(mockResponse);

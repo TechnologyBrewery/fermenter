@@ -15,7 +15,7 @@ export class GlobalErrorHandler implements ErrorHandlerApi {
       error = <HttpErrorResponse>error;
       if (error.code === 404) {
         msg =
-          'This is embarassing, it looks like the resource you were trying to access is in correct.';
+          'This is embarassing, it looks like the resource you were trying to access is incorrect.';
       } else if (error.code === 403) {
         msg =
           'It looks like you are trying to access a resource you are not authorized for.';
@@ -23,7 +23,7 @@ export class GlobalErrorHandler implements ErrorHandlerApi {
         msg = 'It looks like you may not be logged in correctly.';
       } else if (error.code === 408 || error.code === 504) {
         msg =
-          'It looks like your request has timeed out. Please try again later or contact the helpdesk.';
+          'It looks like your request has timed out. Please try again later or contact the helpdesk.';
       }
       msg += ' Error details : ' + error.code + ' - ' + error.message;
     }

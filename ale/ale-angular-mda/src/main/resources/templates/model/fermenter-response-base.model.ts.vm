@@ -20,4 +20,14 @@ export class FermenterResponseBase<T> {
   hasMessages(): boolean {
     return this.messages.length > 0;
   }
+
+  hasErrorMessages(): boolean {
+    let hasErrors = false;
+    for(const message of this.messages) {
+      if(message.severity === 'ERROR') {
+        hasErrors = true;
+      }
+    }
+    return hasErrors;
+  }
 }

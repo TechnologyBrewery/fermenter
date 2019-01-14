@@ -30,7 +30,7 @@ export class ${entity.nameUpperCamel}MaintenanceService {
   ) {
     // be sure to define the applicaiton endpoint in the constants.ts file
     this.${entity.nameUpperCamel}URL =
-      this.constants.stoutCookbookDomainEndPoint + '/${entity.nameUpperCamel}';
+      this.constants.${entity.applicationNameLowerCamel}EndPoint + '/${entity.nameUpperCamel}';
   }
 
   /**

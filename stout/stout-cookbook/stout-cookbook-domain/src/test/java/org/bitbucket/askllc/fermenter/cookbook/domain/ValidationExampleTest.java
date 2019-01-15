@@ -56,8 +56,8 @@ public class ValidationExampleTest extends AbstractMsgMgrAwareTestSupport {
 		assertEquals(0, MessageManager.getMessages().getErrorMessageCount());
 		ValidationExampleBO retrievedBizObj = ValidationExampleBO.findByPrimaryKey(bizObj.getKey());
 		
-        int bizObjScale1 = bizObj.getBigDecimalExampleWithScale().scale();
-        int bizObjScale2 = bizObj.getBigDecimalExampleWithLargeScale().scale();
+		int bizObjScale1 = bizObj.getBigDecimalExampleWithScale().scale();
+		int bizObjScale2 = bizObj.getBigDecimalExampleWithLargeScale().scale();
         
 		assertEquals(bizObjScale1, retrievedBizObj.getBigDecimalExampleWithScale().scale());
 		assertEquals(bizObjScale2, retrievedBizObj.getBigDecimalExampleWithLargeScale().scale());
@@ -67,10 +67,10 @@ public class ValidationExampleTest extends AbstractMsgMgrAwareTestSupport {
 	@Test
 	public void testSaveInvalidBigDecimalAttrScale() throws Exception {
 		ValidationExampleBO bizObj = TestUtils.createRandomValidationExample();
-	    bizObj.setBigDecimalExample(new BigDecimal(RandomUtils.nextDouble(0.0d, 1000.0d)));
-	    bizObj = bizObj.save();
-	    
-	    assertEquals(0, MessageManager.getMessages().getErrorMessageCount());
+		bizObj.setBigDecimalExample(new BigDecimal(RandomUtils.nextDouble(0.0d, 1000.0d)));
+		bizObj = bizObj.save();
+		
+		assertEquals(0, MessageManager.getMessages().getErrorMessageCount());
 	
 		ValidationExampleBO retrievedBizObj = ValidationExampleBO.findByPrimaryKey(bizObj.getKey());
 		

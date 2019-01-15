@@ -213,8 +213,6 @@ public class FieldValidationSteps {
 	public void the_BigDecimal_validation_returns_no_errors() throws Throwable {
 
 		MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), FieldValidationSteps.class);
-	    int errorCnt = MessageManager.getMessages().getErrorMessageCount();
-
 		assertFalse("Should not have encountered messages!", MessageManager.hasErrorMessages());
 
 	}

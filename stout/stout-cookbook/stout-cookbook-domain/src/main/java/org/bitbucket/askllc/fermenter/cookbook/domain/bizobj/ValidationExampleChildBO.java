@@ -23,10 +23,6 @@ public class ValidationExampleChildBO extends ValidationExampleChildBaseBO {
 		super();
 		SpringAutowiringUtil.autowireBizObj(this);
 	}
-	
-	public static void deleteAllChildValidationExamples() {
-		getDefaultRepository().deleteAllInBatch();
-	}
 
 	@Override
 	protected Logger getLogger() {

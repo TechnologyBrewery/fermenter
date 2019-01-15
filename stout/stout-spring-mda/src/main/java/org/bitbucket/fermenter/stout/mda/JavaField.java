@@ -1,6 +1,5 @@
 package org.bitbucket.fermenter.stout.mda;
 
-import java.math.RoundingMode;
 import java.util.Iterator;
 
 import org.apache.commons.lang.StringEscapeUtils;

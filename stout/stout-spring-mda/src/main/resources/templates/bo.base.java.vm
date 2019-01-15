@@ -386,12 +386,16 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
 	 *
 	 * @param The ${field.label}
 	 */
-	public void set${field.capitalizedName}(${field.javaType} ${field.name}) {
+	public void set${field.capitalizedName}(${field.javaType} ${field.name}) {		
 		#if($field.javaType == 'BigDecimal')
-		this.${field.name} = new BigDecimal(${field.name}.toString()).setScale($field.getScale(), RoundingMode.HALF_EVEN);
+		if( ${field.name} == null ) {
+			this.${field.name} = ${field.name};
+		}else {
+			this.${field.name} = ${field.name}.setScale($field.getScale(), RoundingMode.HALF_UP);
+		}
 		#else
 		this.${field.name} = ${field.name};
-		#end		
+		#end
 	}
 #end
 

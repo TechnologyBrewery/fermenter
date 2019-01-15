@@ -39,7 +39,6 @@ public class FieldValidationSteps {
 	@After("@fieldValidation")
 	public void cleanupMsgMgr() throws Exception {
 		MessageManagerInitializationDelegate.cleanupMessageManager();
-		ValidationExampleChildBO.deleteAllChildValidationExamples();
 		ValidationExampleBO.deleteAllValidationExamples();
 	}
 

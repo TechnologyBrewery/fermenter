@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
@@ -45,33 +44,41 @@ public class ValidationExampleTest extends AbstractMsgMgrAwareTestSupport {
 	public void testSaveValidBigDecimalAttrScale() throws Exception {
 		ValidationExampleBO bizObj = TestUtils.createRandomValidationExample();
 		BigDecimal randomBigDecimal = new BigDecimal(RandomUtils.nextDouble(0.0d, 1000.0d));
-
+      
 		// NB developers should consider putting data normalization logic such as the
 		// following rounding code into one
 		// of the save() lifecycle hooks exposed on business objects, such as
 		// preValidate()
-		bizObj.setBigDecimalExampleWithScale(randomBigDecimal.setScale(3, RoundingMode.HALF_EVEN));
-		bizObj.setBigDecimalExampleWithLargeScale(randomBigDecimal.setScale(10, RoundingMode.HALF_EVEN));
-		bizObj = bizObj.save();
+		bizObj.setBigDecimalExampleWithScale(randomBigDecimal);
+		bizObj.setBigDecimalExampleWithLargeScale(randomBigDecimal);
+		bizObj = bizObj.save();	
 
 		assertEquals(0, MessageManager.getMessages().getErrorMessageCount());
 		ValidationExampleBO retrievedBizObj = ValidationExampleBO.findByPrimaryKey(bizObj.getKey());
-		assertEquals(3, retrievedBizObj.getBigDecimalExampleWithScale().scale());
-		assertEquals(10, retrievedBizObj.getBigDecimalExampleWithLargeScale().scale());
+		
+		int bizObjScale1 = bizObj.getBigDecimalExampleWithScale().scale();
+		int bizObjScale2 = bizObj.getBigDecimalExampleWithLargeScale().scale();
+        
+		assertEquals(bizObjScale1, retrievedBizObj.getBigDecimalExampleWithScale().scale());
+		assertEquals(bizObjScale2, retrievedBizObj.getBigDecimalExampleWithLargeScale().scale());
 	}
 
 	@Transactional
 	@Test
 	public void testSaveInvalidBigDecimalAttrScale() throws Exception {
 		ValidationExampleBO bizObj = TestUtils.createRandomValidationExample();
-		bizObj.setBigDecimalExampleWithScale(new BigDecimal(RandomUtils.nextDouble(0.0d, 1000.0d)));
+		bizObj.setBigDecimalExample(new BigDecimal(RandomUtils.nextDouble(0.0d, 1000.0d)));
 		bizObj = bizObj.save();
-
-		assertEquals(1, MessageManager.getMessages().getErrorMessageCount());
-		Message invalidScaleErrorMsg = MessageManager.getMessages().getErrorMessages().iterator().next();
-		assertEquals(CoreMessages.INVALID_FIELD, invalidScaleErrorMsg.getKey());
-		assertEquals("bigDecimalExampleWithScale", invalidScaleErrorMsg.getProperties().iterator().next());
-		assertNull(bizObj.getKey());
+		
+		assertEquals(0, MessageManager.getMessages().getErrorMessageCount());
+	
+		ValidationExampleBO retrievedBizObj = ValidationExampleBO.findByPrimaryKey(bizObj.getKey());
+		
+		//this field does not have scale defined but it is 5 by default
+		int bizObjScale = bizObj.getBigDecimalExample().scale();
+		//the db definition has scale of 2
+		int dbScale = retrievedBizObj.getBigDecimalExample().scale();
+		assertTrue(bizObjScale != dbScale);
 	}
 
 	@Transactional

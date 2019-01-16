@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 import static java.lang.Math.floor;
 import static java.lang.String.valueOf;
+import java.math.RoundingMode;
 
 import javax.inject.Inject;
 import javax.validation.constraints.Digits;
@@ -136,7 +137,8 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
 #foreach ( $field in $entity.fields.values() )
   #if ( !$entity.isTransient() )
   #set ( $isRequired = $field.isRequired() )
-	@Column(name="${field.column}" #if($isRequired), nullable=false#end #if($field.javaType == 'BigDecimal' && $field.hasScale()), scale=${field.scale}#end)
+	@Column(name="${field.column}" #if($isRequired), nullable=false#end #if($field.javaType == 'BigDecimal'), scale=$field.getScale()#end
+	)
   #end
   #if ( $field.isRequired() )
 	@NotNull
@@ -151,11 +153,11 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
   	@Max(${field.maxValue})
   	#end
   #end
-  	#if ($field.javaType == 'BigDecimal' && $field.hasScale())
+  	#if ($field.javaType == 'BigDecimal')
     @Digits(integer= #if($field.hasMaxValue())
             $field.maxValue.split('\.')[0].length()
 	#else Integer.MAX_VALUE
-	#end, fraction=$field.scale)
+	#end, fraction=$field.getScale())
   	#end
   #if ( $field.hasMinValue() )
   	#if ($field.javaType == 'BigDecimal')
@@ -384,8 +386,16 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
 	 *
 	 * @param The ${field.label}
 	 */
-	public void set${field.capitalizedName}(${field.javaType} ${field.name}) {
+	public void set${field.capitalizedName}(${field.javaType} ${field.name}) {		
+		#if($field.javaType == 'BigDecimal')
+		if( ${field.name} == null ) {
+			this.${field.name} = ${field.name};
+		}else {
+			this.${field.name} = ${field.name}.setScale($field.getScale(), RoundingMode.HALF_UP);
+		}
+		#else
 		this.${field.name} = ${field.name};
+		#end
 	}
 #end
 

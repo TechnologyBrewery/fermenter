@@ -18,6 +18,7 @@ import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
 public class JavaField implements Field {
 	
     private static Log log = LogFactory.getLog(Field.class);
+    private static String DEFAULT_SCALE = "5";
     
 	private Field field;
 	private String importName;
@@ -227,7 +228,12 @@ public class JavaField implements Field {
 	 * {@inheritDoc}
 	 */
 	public String getScale() {
-		return field.getScale();
+	    if (field.hasScale()) {
+	        return field.getScale();
+	    }else {
+	        return DEFAULT_SCALE;
+	    }
+
 	}
 
 	/**

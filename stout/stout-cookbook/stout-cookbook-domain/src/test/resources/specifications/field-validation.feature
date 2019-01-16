@@ -251,3 +251,35 @@ Feature: Field Level Validation Requirements
     Given a null to validate against the child required field String example field
     When a field validation is performed on the child required field String value
     Then the child required field returns a null with errors
+  
+  
+  Scenario Outline: BigDecimal value when no scale has been set
+    ## HALF_EVEN: round towards the "nearest neighbor" unless both neighbors are equidistant, in which case, round towards the even neighbor
+    Given BigDecimal field default scale is 5
+    And RoundingMode is HALF_EVEN
+    When a "<bigdecimal>" value without scale specification is added
+    Then the BigDecimal validation returns no errors
+    And the BigDecimal value is "<bigdecimalValue>"
+    And the BigDecimal has scale of 5
+
+    Examples: 
+     | bigdecimal         | bigdecimalValue |
+     |  12345678.12345678 |  12345678.12346 |  
+     |    12345678.987654 |  12345678.98765 |
+     |               12.3 |        12.30000 |
+     | -12345678.12345678 | -12345678.12346 |
+     
+  Scenario Outline: BigDecimal value when scale has been set
+    Given RoundingMode is HALF_EVEN
+    When a "<bigdecimal>" value with scale <scale> is added
+    Then the BigDecimal validation returns no errors
+    And the BigDecimal value is "<bigdecimalValue>"
+    And the BigDecimal has scale of <scale>
+    
+    Examples: 
+     | bigdecimal           | scale | bigdecimalValue |
+     |  12345678.987654     | 3     |    12345678.988 |
+     |  123456789.123456789 | 2     |    123456789.12 |
+     | -123456789.123456789 | 3     |  -123456789.123 |
+     |                12.30 | 3     |          12.300 |
+     |     123.123456789012 | 10    |  123.1234567890 |

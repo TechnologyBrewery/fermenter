@@ -118,9 +118,9 @@ public interface ${entity.name}MaintenanceService {
 	ValueServiceResponse<PageWrapper<${entity.name}BO>> findByExample(FindByExampleCriteria<${entity.name}BO> criteria);
     
     /**
-     * Hammy - Create the provided instance.
+     * Create a collection of ${entity.name} instances.
      *
-     * @param entity The ${entity.name} instance to save
+     * @param a collection of ${entity.name}BO instances to save
      * @return a service response containing the saved entity and/or any collected messages
      */
     @PreAuthorize("hasPermission(authentication, 'write')")
@@ -130,13 +130,14 @@ public interface ${entity.name}MaintenanceService {
     ValueServiceResponse<Collection<${entity.name}BO>> bulkSaveOrUpdate(Collection<${entity.name}BO> entities);
 
     /**
-     * Hammy - Deletes the ${entity.name} entity with the provided primary key value.
+     * Delete a collection of ${entity.name} instances.
      *
-     * @param ${idFieldName} The primary key value ${idFieldName} for the ${entity.name} to delete
+     * @param a collection of ${entity.name}BO instances to delete
      * @return response wrapper containing any collected messages
      */
     @PreAuthorize("hasPermission(authentication, 'write')")
     @DELETE
-    @Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
     VoidServiceResponse bulkDelete(Collection<${entity.name}BO> entities);
 }

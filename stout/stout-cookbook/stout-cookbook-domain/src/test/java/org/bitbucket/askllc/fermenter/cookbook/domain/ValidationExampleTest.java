@@ -78,7 +78,7 @@ public class ValidationExampleTest extends AbstractMsgMgrAwareTestSupport {
 		int bizObjScale = bizObj.getBigDecimalExample().scale();
 		//the db definition has scale of 2
 		int dbScale = retrievedBizObj.getBigDecimalExample().scale();
-		assertTrue(bizObjScale != dbScale);
+		assertTrue(bizObjScale == dbScale);
 	}
 
 	@Transactional

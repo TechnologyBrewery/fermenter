@@ -56,7 +56,10 @@ public class RemoteReferenceValidationSteps {
     	}
     	
     	if (reference != null) {
-    		referenceMaintenanceDelegate.delete(reference.getId());
+    	    ValidationReferencedObject persistedReference = referenceMaintenanceDelegate.findByPrimaryKey(reference.getId());
+    	    if(persistedReference != null) {
+    	        referenceMaintenanceDelegate.delete(reference.getId());
+    	    }
     	}
     	
     	MessageManagerInitializationDelegate.cleanupMessageManager();
@@ -85,7 +88,7 @@ public class RemoteReferenceValidationSteps {
         reference = referenceMaintenanceDelegate.create(newReference);
         MessageTestUtils.assertNoErrorMessages();
         
-        referenceMaintenanceDelegate.delete(reference.getId());;
+        referenceMaintenanceDelegate.delete(reference.getId());
         MessageTestUtils.assertNoErrorMessages();
         
         LocalDomainBO local = new LocalDomainBO();

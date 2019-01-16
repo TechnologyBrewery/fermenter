@@ -41,14 +41,23 @@ Feature: Support Bulk Data Load
     Then each data value is not saved and an error is thrown
 
   Scenario: Collections of data are not updated if any data is invalid
+    Given valid data already exists in the system
     When the valid and invalid data is sent over in bulk to be updated
     Then each data value is not updated and an error is thrown
 
   Scenario: Collections of data are not deleted if any data is invalid
+    Given valid data already exists in the system
     When the valid and invalid data is sent over in bulk to be deleted
     Then each data value is not deleted and an error is thrown
     
-  #Scenario: Empty collections of data return a HTTP 400
-    #Given the following data exists
-    #When the data is sent over in bulk as a CREATE, UPDATE, or DELETE
-    #Then the data is not saved, updated, or deleted and a HTTP 400 is returned
+  Scenario: Empty collections of data attempting to get created return a HTTP 400 
+    When the empty data is sent over in bulk to be created
+    Then a HTTP 400 error is returned
+    
+  Scenario: Empty collections of data attempting to get updated return a HTTP 400 
+    When the empty data is sent over in bulk to be updated
+    Then a HTTP 400 error is returned
+    
+  Scenario: Empty collections of data attempting to get deleted return a HTTP 400 
+    When the empty data is sent over in bulk to be deleted
+    Then a HTTP 400 error is returned

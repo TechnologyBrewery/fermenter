@@ -29,8 +29,11 @@ import org.bitbucket.fermenter.stout.page.SortMapper;
 import org.bitbucket.fermenter.stout.authz.Action;
 
 import org.bitbucket.fermenter.stout.messages.AbstractMsgMgrAwareService;
+import org.bitbucket.fermenter.stout.messages.CoreMessages;
 import org.bitbucket.fermenter.stout.messages.DefaultMessages;
 import org.bitbucket.fermenter.stout.messages.MessageManager;
+import org.bitbucket.fermenter.stout.messages.MessageUtils;
+import org.apache.commons.collections.CollectionUtils;
 
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
@@ -95,6 +98,10 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 		if (entityToDelete != null) {
 			entityToDelete.delete();
 		}
+		else {
+		    MessageManager.addMessage(MessageUtils.createErrorMessage(CoreMessages.INVALID_ENTITY_KEY,
+	                new String[] { id.toString() }, new Object[] { id, "a record with this key does not exist" }));
+		}
 		VoidServiceResponse response = new VoidServiceResponse();
 		addAllMsgMgrToResponse(response);
 		return response;
@@ -115,7 +122,22 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 	}
 	
 	/**
-	 * Hammy - {@inheritDoc}
+	 * {@inheritDoc}
+	 */
+	@Transactional(propagation = Propagation.SUPPORTS)
+	@Override
+	public ValueServiceResponse<PageWrapper<${entity.name}BO>> findByExample(FindByExampleCriteria<${entity.name}BO> criteria) {
+		initMsgMgr(messages);
+		Sort sort = SortMapper.mapToSort(criteria.getSortWrapper());
+		Page<${entity.name}BO> allEntitiesPage = ${entity.name}BO.findByExample(criteria.getProbe(), criteria.getPage(), criteria.getSize(), sort);
+		PageWrapper<${entity.name}BO> allEntities = (new PageMapper<${entity.name}BO>()).mapToPageWrapper(allEntitiesPage);
+		ValueServiceResponse<PageWrapper<${entity.name}BO>> response = new ValueServiceResponse<PageWrapper<${entity.name}BO>>(allEntities);
+		addAllMsgMgrToResponse(response);
+		return response;
+	}
+	
+	/**
+	 * {@inheritDoc}
 	 */
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
@@ -132,32 +154,16 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 		ValueServiceResponse<Collection<${entity.name}BO>> responses = new ValueServiceResponse<>(values);
 		addAllMsgMgrToResponse(responses);
 		
-		if (responses.getMessages().hasErrorMessages()) {
-		    Response test = Response.status(Response.Status.BAD_REQUEST).entity(responses).build();
-			throw new WebApplicationException(test);
+		if (responses.getMessages().hasErrorMessages() || CollectionUtils.isEmpty(entities)) {
+		    Response statusResponse = Response.status(Response.Status.BAD_REQUEST).entity(responses).build();
+			throw new WebApplicationException(statusResponse);
 		}
         
 		return responses;
 	}
-
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Transactional(propagation = Propagation.SUPPORTS)
-	@Override
-	public ValueServiceResponse<PageWrapper<${entity.name}BO>> findByExample(FindByExampleCriteria<${entity.name}BO> criteria) {
-		initMsgMgr(messages);
-		Sort sort = SortMapper.mapToSort(criteria.getSortWrapper());
-		Page<${entity.name}BO> allEntitiesPage = ${entity.name}BO.findByExample(criteria.getProbe(), criteria.getPage(), criteria.getSize(), sort);
-		PageWrapper<${entity.name}BO> allEntities = (new PageMapper<${entity.name}BO>()).mapToPageWrapper(allEntitiesPage);
-		ValueServiceResponse<PageWrapper<${entity.name}BO>> response = new ValueServiceResponse<PageWrapper<${entity.name}BO>>(allEntities);
-		addAllMsgMgrToResponse(response);
-		return response;
-	}
 	
 	/**
-	 * Hammy - {@inheritDoc}
+	 * {@inheritDoc}
 	 */
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
@@ -170,7 +176,13 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 			VoidServiceResponse response = delete(entity.getKey());
 			MessageManager.addMessages(response.getMessages());
 		}
+		
 		addAllMsgMgrToResponse(responses);
+		
+		if (responses.getMessages().hasErrorMessages() || CollectionUtils.isEmpty(entities)) {
+		    Response statusResponse = Response.status(Response.Status.BAD_REQUEST).entity(responses).build();
+			throw new WebApplicationException(statusResponse);
+		}
 		
 		return responses;
 	}	

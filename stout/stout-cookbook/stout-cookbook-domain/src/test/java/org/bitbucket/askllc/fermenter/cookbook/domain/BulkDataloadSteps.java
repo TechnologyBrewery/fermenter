@@ -63,8 +63,8 @@ public class BulkDataloadSteps {
         allMixedExamples = null;
     }
 
-    @Given("^the following valid data exists$")
-    public void the_following_valid_data_exists(List<String> fields) throws Throwable {
+    @Given("^the following valid data$")
+    public void the_following_valid_data(List<String> fields) throws Throwable {
         for (String field : fields) {
             ValidationExampleBO example = new ValidationExampleBO();
             example.setRequiredField(field);
@@ -72,8 +72,8 @@ public class BulkDataloadSteps {
         }
     }
 
-    @Given("^the following valid and invalid data exists$")
-    public void the_following_valid_and_invalid_data_exists(List<String> fields) throws Throwable {
+    @Given("^the following valid and invalid data$")
+    public void the_following_valid_and_invalid_data(List<String> fields) throws Throwable {
         for (String field : fields) {
             ValidationExampleBO example = new ValidationExampleBO();
             if (field.contains("good")) {

@@ -83,6 +83,12 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 		${entity.name}BO persistedEntity = entity.save();
 		ValueServiceResponse<${entity.name}BO> response = new ValueServiceResponse<>(persistedEntity);
 		addAllMsgMgrToResponse(response);
+		
+		if (response.getMessages().hasErrorMessages()) {
+		    Response statusResponse = Response.status(Response.Status.BAD_REQUEST).entity(response).build();
+			throw new WebApplicationException(statusResponse);
+		}
+		
 		return response;
 	}
 	

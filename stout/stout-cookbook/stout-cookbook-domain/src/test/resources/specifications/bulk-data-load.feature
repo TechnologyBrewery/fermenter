@@ -4,7 +4,7 @@ Feature: Support Bulk Data Load
   Collections can be created, updated, and deleted to support batch operations
 
   Background: 
-    Given the following valid data exists
+    Given the following valid data
       | data1 |
       | data2 |
       | data3 |
@@ -13,7 +13,7 @@ Feature: Support Bulk Data Load
       | data6 |
       | data7 |
       | data8 |
-    And the following valid and invalid data exists
+    And the following valid and invalid data
       | good_data1 |
       | bad_data2  |
       | good_data3 |

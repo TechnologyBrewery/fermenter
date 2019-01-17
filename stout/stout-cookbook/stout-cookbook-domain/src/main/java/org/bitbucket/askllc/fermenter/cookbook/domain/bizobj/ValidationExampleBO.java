@@ -47,7 +47,7 @@ public class ValidationExampleBO extends ValidationExampleBaseBO {
 
 	
 	public static List<ValidationExampleBO> grabAllWithRequiredField() {
-	    return getDefaultRepository().findAllWithARequiredField();
+	    return getDefaultRepository().findByRequiredFieldNotNull();
 	}
 
 }

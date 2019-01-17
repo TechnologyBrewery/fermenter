@@ -21,6 +21,5 @@ public interface ValidationExampleRepository extends JpaRepository<ValidationExa
 	 * functionality.  
 	 */
 
-    @Query(value = "select bo from ValidationExampleBO bo where requiredField is not null")
-    List<ValidationExampleBO> findAllWithARequiredField();
+    List<ValidationExampleBO> findByRequiredFieldNotNull();
 }

@@ -120,7 +120,7 @@ public interface ${entity.name}MaintenanceService {
     /**
      * Create a collection of ${entity.name} instances.
      *
-     * @param a collection of ${entity.name}BO instances to save
+     * @param entities The collection of ${entity.name}BO instances to save
      * @return a service response containing the saved entity and/or any collected messages
      */
     @PreAuthorize("hasPermission(authentication, 'write')")
@@ -132,7 +132,7 @@ public interface ${entity.name}MaintenanceService {
     /**
      * Delete a collection of ${entity.name} instances.
      *
-     * @param a collection of ${entity.name}BO instances to delete
+     * @param entities The collection of ${entity.name}BO instances to delete
      * @return response wrapper containing any collected messages
      */
     @PreAuthorize("hasPermission(authentication, 'write')")

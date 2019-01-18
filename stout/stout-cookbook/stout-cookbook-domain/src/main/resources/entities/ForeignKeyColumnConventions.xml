@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE entity PUBLIC "-//FERMENTER//DTD ENTITY//EN" "https://bitbucket.org/cpointe/fermenter/downloads/fermenter-2-entity.dtd">
+
+<entity>
+	<name>ForeignKeyColumnConventions</name>
+	<table>FK_COLUMN_CONVENTIONS</table>
+	<id>
+		<field>
+			<name>id</name>
+			<type>uuid</type>
+			<column>FK_COLUMN_CONVENTIONS_ID</column>
+			<required>true</required>
+			<generator>uuid</generator>
+			<label>foreign key column conventions id</label>
+		</field>
+	</id>
+	<fields>
+		<field>
+			<name>requiredField</name>
+			<type>string</type>
+			<column>REQUIRED_FIELD</column>
+			<required>true</required>
+			<label>required field</label>
+		</field>
+	</fields>
+
+	<associations>
+        <reference>
+            <name>withFKDef</name>
+            <type>ForeignKeyWithColumnDefinition</type>
+            <fk>
+                <name>withoutFKDef</name>
+                <source>id</source>
+                <column>FK_WITH_COLUMN_DEFINITION_ID</column>
+            </fk>
+        </reference>
+        <reference>
+            <name>withoutFKDef</name>
+            <type>ForeignKeyWithoutColumnDefinition</type>
+        </reference>
+        <reference>
+            <type>ForeignKeyColumnCustomName</type>
+            <fk>
+                <name>ForeignKeyColumnCustomName</name>
+                <source>id</source>
+                <column>SOME_COLUMN_NAME</column>
+            </fk>
+        </reference>
+	</associations>
+
+</entity>

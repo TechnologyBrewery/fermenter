@@ -12,6 +12,8 @@ import ${basePackage}.bizobj.${entity.name}BO;
 import ${basePackage}.service.rest.${entity.name}MaintenanceService;
 
 import javax.inject.Inject;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.WebApplicationException;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -27,10 +29,18 @@ import org.bitbucket.fermenter.stout.page.SortMapper;
 import org.bitbucket.fermenter.stout.authz.Action;
 
 import org.bitbucket.fermenter.stout.messages.AbstractMsgMgrAwareService;
+import org.bitbucket.fermenter.stout.messages.CoreMessages;
 import org.bitbucket.fermenter.stout.messages.DefaultMessages;
+import org.bitbucket.fermenter.stout.messages.MessageManager;
+import org.bitbucket.fermenter.stout.messages.MessageUtils;
+import org.apache.commons.collections.CollectionUtils;
 
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
+
+import java.util.Collection;
+import java.util.ArrayList;
+
 
 /**
  * Concrete implementation for create, retrieve, update, and delete (CRUD) functionality 
@@ -73,6 +83,12 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 		${entity.name}BO persistedEntity = entity.save();
 		ValueServiceResponse<${entity.name}BO> response = new ValueServiceResponse<>(persistedEntity);
 		addAllMsgMgrToResponse(response);
+		
+		if (response.getMessages().hasErrorMessages()) {
+		    Response statusResponse = Response.status(Response.Status.BAD_REQUEST).entity(response).build();
+			throw new WebApplicationException(statusResponse);
+		}
+		
 		return response;
 	}
 	
@@ -87,6 +103,10 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 		${entity.name}BO entityToDelete = ${entity.name}BO.findByPrimaryKey(${idFieldName});
 		if (entityToDelete != null) {
 			entityToDelete.delete();
+		}
+		else {
+		    MessageManager.addMessage(MessageUtils.createErrorMessage(CoreMessages.INVALID_ENTITY_KEY,
+	                new String[] { id.toString() }, new Object[] { id, "a record with this key does not exist" }));
 		}
 		VoidServiceResponse response = new VoidServiceResponse();
 		addAllMsgMgrToResponse(response);
@@ -106,7 +126,7 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 		addAllMsgMgrToResponse(response);
 		return response;
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -121,4 +141,56 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 		addAllMsgMgrToResponse(response);
 		return response;
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Transactional(propagation=Propagation.REQUIRED)
+	@Override
+	public ValueServiceResponse<Collection<${entity.name}BO>> bulkSaveOrUpdate(Collection<${entity.name}BO> entities) {
+		initMsgMgr(messages);
+	    assertAuthorization(PATH, Action.SAVE);
+		Collection<${entity.name}BO> values = new ArrayList<>();
+		for(${entity.name}BO entity : entities){
+			ValueServiceResponse<${entity.name}BO> response = saveOrUpdate(entity);
+			values.add(response.getValue());
+			MessageManager.addMessages(response.getMessages());
+		}
+		
+		ValueServiceResponse<Collection<${entity.name}BO>> responses = new ValueServiceResponse<>(values);
+		addAllMsgMgrToResponse(responses);
+		
+		if (responses.getMessages().hasErrorMessages() || CollectionUtils.isEmpty(entities)) {
+		    Response statusResponse = Response.status(Response.Status.BAD_REQUEST).entity(responses).build();
+			throw new WebApplicationException(statusResponse);
+		}
+        
+		return responses;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Transactional(propagation=Propagation.REQUIRED)
+	@Override
+	public VoidServiceResponse bulkDelete(Collection<${entity.name}BO> entities) {
+		initMsgMgr(messages);
+		assertAuthorization(PATH, Action.DELETE);
+		VoidServiceResponse responses = new VoidServiceResponse();
+		
+		for (${entity.name}BO entity : entities) {
+			VoidServiceResponse response = delete(entity.getKey());
+			MessageManager.addMessages(response.getMessages());
+		}
+		
+		addAllMsgMgrToResponse(responses);
+		
+		if (responses.getMessages().hasErrorMessages() || CollectionUtils.isEmpty(entities)) {
+		    Response statusResponse = Response.status(Response.Status.BAD_REQUEST).entity(responses).build();
+			throw new WebApplicationException(statusResponse);
+		}
+		
+		return responses;
+	}	
+	
 }

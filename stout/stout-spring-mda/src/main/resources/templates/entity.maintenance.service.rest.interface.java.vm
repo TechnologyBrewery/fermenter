@@ -30,6 +30,7 @@ import org.bitbucket.fermenter.stout.page.json.FindByExampleCriteria;
 import org.bitbucket.fermenter.stout.page.PageWrapper;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 
 /**
  * Provides an interface for create, retrieve (single and all), update, and delete (CRUD) functionality for ${entity.name}
@@ -115,4 +116,28 @@ public interface ${entity.name}MaintenanceService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	ValueServiceResponse<PageWrapper<${entity.name}BO>> findByExample(FindByExampleCriteria<${entity.name}BO> criteria);
+    
+    /**
+     * Create a collection of ${entity.name} instances.
+     *
+     * @param entities The collection of ${entity.name}BO instances to save
+     * @return a service response containing the saved entity and/or any collected messages
+     */
+    @PreAuthorize("hasPermission(authentication, 'write')")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    ValueServiceResponse<Collection<${entity.name}BO>> bulkSaveOrUpdate(Collection<${entity.name}BO> entities);
+
+    /**
+     * Delete a collection of ${entity.name} instances.
+     *
+     * @param entities The collection of ${entity.name}BO instances to delete
+     * @return response wrapper containing any collected messages
+     */
+    @PreAuthorize("hasPermission(authentication, 'write')")
+    @DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+    VoidServiceResponse bulkDelete(Collection<${entity.name}BO> entities);
 }

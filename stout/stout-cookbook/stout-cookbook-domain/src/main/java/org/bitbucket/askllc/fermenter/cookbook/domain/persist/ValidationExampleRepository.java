@@ -1,10 +1,12 @@
 package org.bitbucket.askllc.fermenter.cookbook.domain.persist;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationExampleBO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * Data access repository for the ValidationExample business object.
@@ -19,4 +21,5 @@ public interface ValidationExampleRepository extends JpaRepository<ValidationExa
 	 * functionality.  
 	 */
 
+    List<ValidationExampleBO> findByRequiredFieldNotNull();
 }

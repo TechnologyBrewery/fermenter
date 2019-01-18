@@ -16,8 +16,8 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.IdentityKeyedEntity
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-@ContextConfiguration({ "classpath:stout-cookbook-domain-application-context.xml",
-        "classpath:h2-spring-ds-context.xml" })
+@ContextConfiguration({ "classpath:application-test-context.xml",
+"classpath:h2-spring-ds-context.xml" })
 @Transactional
 public class ReflectionStringSteps {
     private ArrayList<String> fieldNames;

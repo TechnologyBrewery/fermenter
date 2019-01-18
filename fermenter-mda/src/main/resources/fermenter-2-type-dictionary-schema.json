@@ -1,0 +1,31 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"id":"#typeDictionary",
+	"title": "TypeDictionary",
+	"type": "object",
+	"additionalProperties": false,
+	"properties": {
+		"name": {
+			"type": "string"
+		},
+		"type": {
+			"type": "string"
+		},
+		"description": {
+			"type": ["string", "null"]
+		},
+		"minLength": {
+			"type": ["integer", "null"]
+		},
+		"maxLength": {
+			"type": ["integer", "null"]
+		},
+		"format": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		}	
+	},
+	"required": ["name", "type"]
+}

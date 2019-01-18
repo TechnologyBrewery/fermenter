@@ -125,6 +125,7 @@ public interface ${entity.name}MaintenanceService {
      */
     @PreAuthorize("hasPermission(authentication, 'write')")
     @POST
+    @Path("bulk")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     ValueServiceResponse<Collection<${entity.name}BO>> bulkSaveOrUpdate(Collection<${entity.name}BO> entities);
@@ -137,6 +138,7 @@ public interface ${entity.name}MaintenanceService {
      */
     @PreAuthorize("hasPermission(authentication, 'write')")
     @DELETE
+    @Path("bulk")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
     VoidServiceResponse bulkDelete(Collection<${entity.name}BO> entities);

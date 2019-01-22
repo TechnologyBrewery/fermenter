@@ -15,7 +15,10 @@
 			},
 			{
 				"name": "entityModel"
-			}
-		]
+			},
+            {
+                "name": "enumerations"
+            }
+        ]
 	}
 ]

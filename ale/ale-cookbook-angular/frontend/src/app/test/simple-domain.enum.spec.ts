@@ -25,10 +25,8 @@ describe('Ale Simple Domain Enumeration Serialization', () => {
     });
 
     it(`should be able to serialize from the enumeration value to json`, () => {
-        const enumJSON = JSON.stringify(SimpleDomainEnumeration);
-        const expectedEnum : any = {"FIRST":"FIRST","SECOND":"SECOND","THIRD":"THIRD","FOURTH":"FOURTH"};
-        const expectedJSON = JSON.stringify(expectedEnum);
-        expect(enumJSON).toEqual(expectedJSON);
+        const enumJSON = JSON.stringify(SimpleDomainEnumeration.FIRST);
+        expect(enumJSON).toEqual('"FIRST"');
     });
 
     it(`should be able to serialize from json the value-based enumeration values`, () => {
@@ -41,13 +39,12 @@ describe('Ale Simple Domain Enumeration Serialization', () => {
     });
 
     it(`should be able to serialize from the value-based enumeration values to json`, () => {
-        const enumJSON = JSON.stringify(ValuedEnumerationExample);
-        const expectedEnum : any = {"1":"JANUARY","2":"FEBRUARY","3":"MARCH","4":"APRIL","5":"MAY","6":"JUNE",
-            "7":"JULY","8":"AUGUST","9":"SEPTEMBER","10":"OCTOBER","11":"NOVEMBER","12":"DECEMBER",
-            "JANUARY":1,"FEBRUARY":2,"MARCH":3,"APRIL":4,"MAY":5,"JUNE":6,"JULY":7,"AUGUST":8,"SEPTEMBER":9,
-            "OCTOBER":10,"NOVEMBER":11,"DECEMBER":12};
-        const expectedJSON = JSON.stringify(expectedEnum);
-        expect(enumJSON).toEqual(expectedJSON);
+        const enumJanJSON = JSON.stringify(ValuedEnumerationExample[1]);
+        const expectedJanJSON = '"JANUARY"';
+        const enumJanJSON2 = JSON.stringify(ValuedEnumerationExample.JANUARY);
+        const expectedJanJSON2 = '1';
+        expect(enumJanJSON).toEqual(expectedJanJSON);
+        expect(enumJanJSON2).toEqual(expectedJanJSON2);
     });
 
 });

@@ -13,6 +13,7 @@ import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
 
 public class AngularEnumerationGenerator extends AbstractGenerator {
 
+    @Override
     public void generate(GenerationContext context) {
         DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
                 .getMetadataRepostory(DefaultModelInstanceRepository.class);

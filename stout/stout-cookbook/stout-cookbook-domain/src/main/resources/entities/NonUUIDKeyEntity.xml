@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE entity PUBLIC "-//FERMENTER//DTD ENTITY//EN" "https://bitbucket.org/cpointe/fermenter/downloads/fermenter-2-entity.dtd">
+
+<entity>
+	<name>NonUUIDKeyEntity</name>
+	<documentation>Entity that uses a non-generated value primary key</documentation>
+	<table>NON_UUID_KEY_ENTITY</table>
+
+	<id>
+		<field>
+			<name>id</name>
+			<type>string</type>
+			<column>NON_UUID_KEY_ENTITY_ID</column>
+			<required>true</required>
+		</field>
+	</id>
+
+</entity>

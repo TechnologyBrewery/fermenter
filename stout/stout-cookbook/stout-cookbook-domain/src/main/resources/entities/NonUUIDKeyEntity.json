@@ -1,0 +1,13 @@
+{
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "name" : "NonUUIDKeyEntity",
+    "documentation" : "Entity that demonstrates uses of an IDENTITY as a non-generated value primary key",
+    "table" : "NON_UUID_KEY_ENTITY",
+    "identifier" : {
+      "package" : null,
+      "name" : "id",
+      "type" : "string",
+      "column" : "NON_UUID_KEY_ENTITY",
+      "required" : true    
+    }
+}

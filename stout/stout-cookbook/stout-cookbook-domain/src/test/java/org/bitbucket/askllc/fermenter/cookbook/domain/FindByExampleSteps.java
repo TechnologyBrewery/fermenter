@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.Collection;
 import java.util.List;
 
+
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainBO;
@@ -15,11 +16,9 @@ import org.bitbucket.fermenter.stout.messages.MessageManagerInitializationDelega
 import org.bitbucket.fermenter.stout.messages.Messages;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Order;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.After;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -117,7 +116,7 @@ public class FindByExampleSteps {
 
     @Given("^simple domains exist in the system$")
     public void simple_domains_exist_in_the_system() throws Throwable {
-        long numSimpleDomainsToCreate = RandomUtils.nextLong(2,10);
+        long numSimpleDomainsToCreate = RandomUtils.nextLong(2, 10);
 
         for (int i = 0; i < numSimpleDomainsToCreate; i++) {
             SimpleDomainBO simpleDomain = new SimpleDomainBO();
@@ -172,7 +171,8 @@ public class FindByExampleSteps {
     }
 
     @Then("^I get all simple domains sorted by name then long:$")
-    public void i_get_all_simple_domains_sorted_by_name_then_long(List<SimpleDomainBO> expectedResults) throws Throwable {
+    public void i_get_all_simple_domains_sorted_by_name_then_long(List<SimpleDomainBO> expectedResults)
+            throws Throwable {
         compareActualToExpectedQueryByExampleResults(expectedResults);
     }
 

@@ -245,7 +245,7 @@ public class LegacyMetadataConverter {
 			}
 
 			for (org.bitbucket.fermenter.mda.metadata.element.Reference reference : legacyEntity.getReferences().values()) {
-				ReferenceElement newReference = convertLegacyReference(reference, basePackage, legacyEntity);
+				ReferenceElement newReference = convertLegacyReference(reference, basePackage);
 				newEntity.addReference(newReference);
 			}
 	        
@@ -334,7 +334,7 @@ public class LegacyMetadataConverter {
 	}
 
     private ReferenceElement convertLegacyReference(
-			org.bitbucket.fermenter.mda.metadata.element.Reference legacyReference, String basePackage, org.bitbucket.fermenter.mda.metadata.element.Entity legacyEntity) {
+			org.bitbucket.fermenter.mda.metadata.element.Reference legacyReference, String basePackage) {
 
 		ReferenceElement newReference = new ReferenceElement();
 

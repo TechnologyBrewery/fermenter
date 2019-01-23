@@ -1,0 +1,13 @@
+{
+  "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "name" : "ForeignKeyColumnCustomName",
+  "table" : "FK_CUSTOM_NAME",
+  "identifier" : {
+    "package" : null,
+    "name" : "id",
+    "type" : "uuid",
+    "column" : "FK_CUSTOM_NAME",
+    "required" : true,
+    "generator" : "uuid"
+  }
+}

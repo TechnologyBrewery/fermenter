@@ -1,0 +1,35 @@
+{
+  "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "name" : "ForeignKeyColumnConventions",
+  "table" : "FK_COLUMN_CONVENTIONS",
+  "identifier" : {
+    "package" : null,
+    "name" : "id",
+    "type" : "uuid",
+    "column" : "FK_COLUMN_CONVENTIONS_ID",
+    "required" : true,
+    "generator" : "uuid"
+  },
+  "fields" : [ {
+    "package" : null,
+    "name" : "requiredField",
+    "type" : "string",
+    "column" : "REQUIRED_FIELD",
+    "required" : true
+  } ],
+  "references" : [ {
+    "name" : "withoutFKDef",
+    "type" : "ForeignKeyWithoutColumnDefinition",
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "localColumn" : "FK_WITHOUT_COLUMN_DEFINITION_FK_WITHOUT_COLUMN_DEFINITION_ID"
+  }, {
+    "name" : "withFKDef",
+    "type" : "ForeignKeyWithColumnDefinition",
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain"
+  }, {
+    "name" : "foreignKeyColumnCustomName",
+    "type" : "ForeignKeyColumnCustomName",
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "localColumn" : "SOME_COLUMN_NAME"
+  } ]
+}

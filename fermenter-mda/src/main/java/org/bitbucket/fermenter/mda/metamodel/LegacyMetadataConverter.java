@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,8 @@ import org.bitbucket.fermenter.mda.PackageManager;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
+import org.bitbucket.fermenter.mda.metadata.element.FieldMetadata;
+import org.bitbucket.fermenter.mda.metadata.element.ForeignKeyFieldMetadata;
 import org.bitbucket.fermenter.mda.metamodel.element.EntityElement;
 import org.bitbucket.fermenter.mda.metamodel.element.EnumElement;
 import org.bitbucket.fermenter.mda.metamodel.element.EnumerationElement;
@@ -62,7 +65,7 @@ public class LegacyMetadataConverter {
 			convertLegacyEnumerations(applicationName, basePackage, sourceMain);
 			convertLegacyServices(applicationName, basePackage, sourceMain);
 			// TODO: uncomment when we are actually ready  for migration (post FER-116):
-			//convertLegacyEntities(applicationName, basePackage, sourceMain);
+//			convertLegacyEntities(applicationName, basePackage, sourceMain);
 
 		} catch (Exception e) {
 			throw new GenerationException("Could not convert legacy metadata!", e);
@@ -200,7 +203,7 @@ public class LegacyMetadataConverter {
 		return newParameter;
 	}
 
-	private void convertLegacyEntities(String applicationName, String basePackage, File sourceMain) throws IOException {
+    private void convertLegacyEntities(String applicationName, String basePackage, File sourceMain) throws IOException {
 		// convert legacy metadata to new metadata:
 		org.bitbucket.fermenter.mda.metadata.MetadataRepository legacyMetadataRepo = ModelInstanceRepositoryManager
 				.getMetadataRepostory(org.bitbucket.fermenter.mda.metadata.MetadataRepository.class);
@@ -245,7 +248,7 @@ public class LegacyMetadataConverter {
 				ReferenceElement newReference = convertLegacyReference(reference, basePackage);
 				newEntity.addReference(newReference);
 			}
-			
+	        
 			for (org.bitbucket.fermenter.mda.metadata.element.Relation relation : legacyEntity.getRelations().values()) {
 				RelationElement newRelation = convertLegacyRelation(relation, basePackage);
 				newEntity.addRelation(newRelation);
@@ -330,7 +333,7 @@ public class LegacyMetadataConverter {
 		return newField;
 	}
 
-	private ReferenceElement convertLegacyReference(
+    private ReferenceElement convertLegacyReference(
 			org.bitbucket.fermenter.mda.metadata.element.Reference legacyReference, String basePackage) {
 
 		ReferenceElement newReference = new ReferenceElement();
@@ -342,6 +345,21 @@ public class LegacyMetadataConverter {
 		
 		newReference.setType(type);
 		newReference.setPackage(packageName);
+		
+        //if the reference has a FK defined
+        Collection keys = legacyReference.getForeignKeyFields();
+        if(keys != null && keys.size() > 0) {
+            Iterator i = keys.iterator();
+            MetadataRepository metadataRepository = 
+                    ModelInstanceRepositoryManager.getMetadataRepostory(MetadataRepository.class);
+            Entity childEntity = metadataRepository.getEntity(type);
+            while(i.hasNext()) {
+                FieldMetadata fkField = (FieldMetadata) i.next();
+                    if(!(childEntity.getTable() + "_ID").equalsIgnoreCase(fkField.getColumn())) {
+                    newReference.setLocalColumn(fkField.getColumn());
+                }
+            }
+        }
 
 		newReference.setDocumentation(legacyReference.getDocumentation());
 
@@ -349,16 +367,10 @@ public class LegacyMetadataConverter {
 			newReference.setRequired(legacyReference.isRequired());
 		}
 
-		List<org.bitbucket.fermenter.mda.metadata.element.Field> legacyForeignKeys = legacyReference
-				.getForeignKeyFields();
-		org.bitbucket.fermenter.mda.metadata.element.Field legacyForeignKey = legacyForeignKeys.iterator().next();
-		
-		newReference.setLocalColumn(legacyForeignKey.getColumn());
-
 		return newReference;
 	}
 	
-	private RelationElement convertLegacyRelation(
+    private RelationElement convertLegacyRelation(
 			org.bitbucket.fermenter.mda.metadata.element.Relation legacyRelation, String basePackage) {
 
 		RelationElement newRelation = new RelationElement();
@@ -370,7 +382,7 @@ public class LegacyMetadataConverter {
 		newRelation.setPackage(packageName);
 
 		newRelation.setDocumentation(legacyRelation.getDocumentation());
-
+		
 		// currently, you can't do a local key in relations, so not migrating that part
 		
 		if (StringUtils.isNotBlank(legacyRelation.getMultiplicity())) {

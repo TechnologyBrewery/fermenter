@@ -20,7 +20,6 @@
     "name" : "requiredReference",
     "type" : "ValidationReferencedObject",
     "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
-    "localColumn" : "VALIDATION_REF_OBJECT_ID",
     "required" : true
   } ]
 }

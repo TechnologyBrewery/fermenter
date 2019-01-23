@@ -359,8 +359,6 @@ public class LegacyMetadataConverter {
                     newReference.setLocalColumn(fkField.getColumn());
                 }
             }
-        } else {
-            newReference.setLocalColumn(legacyEntity.getTable() + "_" + legacyEntity.getIdField("id").getColumn());
         }
 
 		newReference.setDocumentation(legacyReference.getDocumentation());

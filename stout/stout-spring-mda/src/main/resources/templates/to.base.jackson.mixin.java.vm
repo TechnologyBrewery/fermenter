@@ -75,8 +75,10 @@ public abstract class ${entity.name}BaseMixIn {
 	@JsonProperty
 	private ${reference.type}BO ${reference.name};
   #else
+    #if($reference.foreignKeyFields.iterator().hasNext())
   	@JsonProperty
   	private ${reference.foreignKeyFields.iterator().next().javaType}	${reference.name}Key;
+  	#end
   #end
 #end
 

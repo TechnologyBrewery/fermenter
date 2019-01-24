@@ -50,8 +50,13 @@ public class RemoteReferenceRetrievalIT extends RunTestsOutsideOfArquillianWar {
 
     @After
     public void deleteSimpleDomains() throws Exception {
-        localDomain.delete();
-        referenceMaintenanceDelegate.delete(reference.getId());
+        if (localDomain != null) {
+            localDomain.delete();
+        }
+        if (reference != null) {
+            referenceMaintenanceDelegate.delete(reference.getId());
+        }
+        
         MessageTestUtils.assertNoErrorMessages();
     }
 
@@ -69,7 +74,7 @@ public class RemoteReferenceRetrievalIT extends RunTestsOutsideOfArquillianWar {
         local.setExternalReference(reference);
         localDomain = local.save();
         
-        LocalDomainBO retreivedLocal = LocalDomainBO.findByPrimaryKey(local.getKey());
+        LocalDomainBO retreivedLocal = LocalDomainBO.findByPrimaryKey(localDomain.getKey());
         assertNotNull("Could not find newly minted local domain!", retreivedLocal);
         ValidationReferencedObject retreivedReference = retreivedLocal.getExternalReference();
         assertNotNull("Should have invoked the remote retrieval service!", retreivedReference);

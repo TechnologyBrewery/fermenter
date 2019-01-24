@@ -2,14 +2,14 @@
 <!DOCTYPE entity PUBLIC "-//FERMENTER//DTD ENTITY//EN" "https://bitbucket.org/cpointe/fermenter/downloads/fermenter-2-entity.dtd">
 
 <entity>
-	<name>ValidationReferenceExample</name>
+	<name>LocalTransientReferenceExample</name>
 	<namespace>org.bitbucket.askllc.fermenter.cookbook.domain</namespace>
-	<table>VALIDATION_REF_EXAMPLE</table>
+	<table>LOCAL_TRANSIENT_VALIDATION_REF_EXAMPLE</table>
   	<id>
   		<field>
        		<name>id</name>
       		<type>uuid</type>
-       		<column>VALIDATION_REF_EXAMPLE_ID</column>
+       		<column>LOCAL_TRANSIENT_VALIDATION_REF_EXAMPLE_ID</column>
        		<required>true</required>
        		<generator>uuid</generator>
        		<label>validation reference example id</label>
@@ -23,15 +23,11 @@
        		<label>some data field</label>
    		</field>
 	</fields>
-	<associations>
+
+    <associations>
 		<reference>
-			<name>requiredReference</name>
-			<type>ValidationReferencedObject</type>
-			<fk>
-				<name>id</name>
-				<source>id</source>
-				<column>VALIDATION_REF_OBJECT_ID</column>
-			</fk>
+			<name>transientReference</name>
+			<type>ValidationTransientReferencedObject</type>
 			<required>true</required>
 		</reference>
 	</associations>

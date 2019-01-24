@@ -8,6 +8,8 @@ import static java.lang.String.valueOf;
 import java.math.RoundingMode;
 
 import javax.inject.Inject;
+import javax.persistence.Column;
+import javax.persistence.Transient;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
@@ -33,7 +35,6 @@ import org.bitbucket.fermenter.stout.util.MetamodelInstanceUtil;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
@@ -42,7 +43,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.Transient;
 
 
 #if ($entity.hasNamedEnumeration())
@@ -77,7 +77,7 @@ import ${import};
 #end
 
 #foreach ($reference in $entity.references )
-  #if ($reference.isExternal() )
+  #if ($reference.isExternal() && $reference.foreignKeyFields.iterator().hasNext() )
 import ${reference.importPrefix}.client.service.${reference.type}MaintenanceDelegate;
   #end
 #end
@@ -140,9 +140,6 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
 	@Column(name="${field.column}" #if($isRequired), nullable=false#end #if($field.javaType == 'BigDecimal'), scale=$field.getScale()#end
 	)
   #end
-  #if ( $field.isRequired() )
-	@NotNull
-  #end
   #if ( $field.hasMinLength() || $field.hasMaxLength() && !$field.isEnumerationType())
   	@Size(#if($field.hasMinLength())min=${field.minLength}#if($field.hasMaxLength()),#end#end #if($field.hasMaxLength())max=${field.maxLength}#end)
   #end
@@ -179,6 +176,9 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
     #if (!$field.getEnumeration().isValued())
         @Enumerated(EnumType.STRING)
     #end
+  #end
+  #if ( $field.isRequired() )
+	@NotNull
   #end
 	private ${field.javaType} ${field.name};
 
@@ -298,9 +298,10 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
 	}
 #end
 
+
 #foreach ($relation in $entity.relations.values())
-#if ( !$entity.isTransient() )
-	@OneToMany(mappedBy="parent${entity.name}", cascade=CascadeType.ALL, fetch=FetchType.${relation.fetchMode.toUpperCase()}, orphanRemoval=true)
+#if ( !$entity.isTransient() && !$relation.idFields.isEmpty() )
+ @OneToMany(mappedBy="parent${entity.name}", cascade=CascadeType.ALL, fetch=FetchType.${relation.fetchMode.toUpperCase()}, orphanRemoval=true)
 #end
 	private Set<${relation.type}BO> ${relation.label}s;
 #end
@@ -312,33 +313,37 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
 	private ${inverseRelation.name}BO parent${inverseRelation.name};
 #end
 #foreach ($reference in $entity.references.values())
-
-	#if ( !$entity.isTransient() && !$reference.isExternal())
-	@ManyToOne(fetch=FetchType.EAGER #if($reference.isRequired()), optional=false#end)
+  #if ( !$entity.isTransient() && !$reference.isExternal())
+    #if($reference.foreignKeyFields.iterator().hasNext()) 
+	@ManyToOne(fetch=FetchType.EAGER #if($reference.isRequired()), optional=false#end) 
 	@JoinColumn(name="${reference.foreignKeyFields.iterator().next().column}")	
+    #end
     #if ( $reference.isRequired() )
 	@NotNull
     #end
-  #end	
+  #end 
   #if (!$reference.isExternal())
+    #if(!$reference.foreignKeyFields.iterator().hasNext()) 
+    @Transient
+    #end
 	private ${reference.type}BO ${reference.name};
   #else
   	@Transient
   	private ${reference.type} ${reference.name};
   #end
   #if ($reference.isExternal() )
-  	#if ( !$entity.isTransient() )
+    #if($reference.foreignKeyFields.iterator().hasNext()) 
   	@Inject
   	@Transient
 	private ${reference.type}MaintenanceDelegate ${reference.name}Delegate;
-  	
-    	@Column(name="${reference.foreignKeyFields.iterator().next().column}")
-  	#end
-  	#if ( $reference.isRequired() )
+	#end
+  	#if($reference.foreignKeyFields.iterator().hasNext()) 
+    @Column(name="${reference.foreignKeyFields.iterator().next().column}")
+    #if ( $reference.isRequired() )
 	@NotNull
-  	#end
-  	private ${reference.foreignKeyFields.iterator().next().javaType}	${reference.name}Key;
-  
+  	#end 
+    private ${reference.foreignKeyFields.iterator().next().javaType}	${reference.name}Key;
+    #end	
   #end
 #end
 
@@ -555,11 +560,14 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
 	 * @return ${reference.type} - The ${reference.label}
 	 */
 	public ${reference.type} get${reference.capitalizedName}() {
+	    #if ($reference.foreignKeyFields.iterator().hasNext())
 		if ((${reference.name} == null) && (${reference.name}Key != null)) {
 			${reference.name} = ${reference.name}Delegate.findByPrimaryKey(${reference.name}Key);
 		    set${reference.getCapitalizedName()}(${reference.name});
 		}
-		
+		#else
+		set${reference.getCapitalizedName()}(${reference.name});
+		#end
 		return ${reference.name};
 	}
 	 
@@ -570,7 +578,9 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
 	 */
 	public void set${reference.capitalizedName}(${reference.type} ${reference.name}) {
 		this.${reference.name} = ${reference.name};
+		#if ($reference.foreignKeyFields.iterator().hasNext())
 		this.${reference.name}Key = ${reference.name} != null ? ${reference.name}.get${reference.foreignKeyFields.iterator().next().getCapitalizedName()}() : null;
+		#end
 	}
   #end
 				
@@ -630,18 +640,34 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
 		  #if ( !$reference.isExternal() )
 		    #if( !$entity.references.isEmpty() ) 
 				${reference.type}BO ${reference.name}Ref = get${reference.capitalizedName}();
+				#if ($reference.foreignKeyFields.iterator().hasNext())				
 				if ((${reference.name}Ref != null && ${reference.name}Ref.getKey() != null)) {
 					${reference.type}BO found${reference.type}Ref = ${reference.type}BO.findByPrimaryKey(${reference.name}Ref.getKey());
 				    this.checkIfReferenceExists(found${reference.type}Ref);
 				}
+				#elseif ($reference.isRequired() )
+				this.checkIfReferenceExists(${reference.name}Ref);
+				#else
+				if (${reference.name}Ref != null) {
+					this.checkIfReferenceExists(${reference.name}Ref);
+				}
+				#end
 			#end
 		  #else
 		    #if( !$entity.references.isEmpty() ) 
-				${reference.type} ${reference.name}Ref = 	get${reference.capitalizedName}();				
+				${reference.type} ${reference.name}Ref = get${reference.capitalizedName}();	
+				#if ($reference.foreignKeyFields.iterator().hasNext())				
 				if ((${reference.name}Ref != null && ${reference.name}Key != null)) {
 					${reference.type} found${reference.type}Ref = ${reference.name}Delegate.findByPrimaryKey(${reference.name}Key);
 				    this.checkIfReferenceExists(found${reference.type}Ref);
 				}
+				#elseif ($reference.isRequired() )
+				this.checkIfReferenceExists(${reference.name}Ref);
+				#else
+				if (${reference.name}Ref != null) {
+					this.checkIfReferenceExists(${reference.name}Ref);
+				}
+				#end
 			#end
 		  #end				
 		#end

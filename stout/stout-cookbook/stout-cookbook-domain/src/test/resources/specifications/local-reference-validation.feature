@@ -39,7 +39,7 @@ Feature: Reference Level Validation Requirements
     When the reference level validation is performed on the persistent entity instance "<building>"
     Then the reference level validation on persistent entity fails
 
-   Examples: 
+    Examples: 
       | building  | postalDistrict |
       | schoolJKL | PS99           |
       | schoolMNO | PS100          |   

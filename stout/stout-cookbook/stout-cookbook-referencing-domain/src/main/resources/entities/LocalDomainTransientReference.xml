@@ -2,16 +2,16 @@
 <!DOCTYPE entity PUBLIC "-//FERMENTER//DTD ENTITY//EN" "https://bitbucket.org/cpointe/fermenter/downloads/fermenter-2-entity.dtd">
 
 <entity>
-	<name>LocalDomain</name>
+	<name>LocalDomainTransientReference</name>
 	<namespace>org.bitbucket.askllc.fermenter.cookbook.referencing.domain</namespace>
-	<documentation>A local persistent domain with external reference to persistent entity</documentation>
-	<table>LOCAL_DOMAIN</table>
+	<documentation>A local persistent domain with external reference to transient entity</documentation>
+	<table>LOCAL_DOMAIN_TWO</table>
 
 	<id>
 		<field>
 			<name>id</name>
 			<type>uuid</type>
-			<column>LOCAL_DOMAIN_ID</column>
+			<column>LOCAL_DOMAIN_TWO_ID</column>
 			<required>true</required>
 			<generator>uuid</generator>
 		</field>
@@ -20,7 +20,7 @@
 	<fields>
 		<field>
 			<name>name</name>
-			<documentation>The friendly domain moniker</documentation>
+			<documentation>The name of the entity</documentation>
 			<type>string</type>
 			<column>NAME</column>
 		</field>
@@ -28,10 +28,11 @@
 
 	<associations>
 		<reference>
-			<name>externalReference</name>
-			<type>ValidationReferencedObject</type>
+			<name>externalTransientReference</name>
+			<type>ValidationTransientReferencedObject</type>
 			<required>true</required>
 		</reference>
+
 	</associations>
 
 </entity>

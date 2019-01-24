@@ -32,6 +32,11 @@
 			<type>ValidationReferencedObject</type>
 			<required>true</required>
 		</reference>
+		<reference>
+			<name>externalTransientReference</name>
+			<type>ValidationTransientReferencedObject</type>
+			<required>true</required>
+		</reference>
 	</associations>
 
 </entity>

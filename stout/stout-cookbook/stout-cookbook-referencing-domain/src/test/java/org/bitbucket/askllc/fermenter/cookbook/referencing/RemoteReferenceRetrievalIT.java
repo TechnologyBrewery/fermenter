@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.ValidationReferencedObjectMaintenanceDelegate;
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.ValidationReferencedObject;
+import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.ValidationTransientReferencedObject;
 import org.bitbucket.askllc.fermenter.cookbook.referencing.domain.bizobj.LocalDomainBO;
 import org.bitbucket.fermenter.stout.test.MessageTestUtils;
 import org.jboss.arquillian.container.test.api.RunAsClient;
@@ -69,9 +70,14 @@ public class RemoteReferenceRetrievalIT extends RunTestsOutsideOfArquillianWar {
         reference = referenceMaintenanceDelegate.create(newReference);
         MessageTestUtils.assertNoErrorMessages();
         
+        //remote transient entity reference
+        ValidationTransientReferencedObject newTransientReference = new ValidationTransientReferencedObject();
+        
         LocalDomainBO local = new LocalDomainBO();
-        local.setName("testWithoutExternalReference");
+        local.setName("testWithExternalReference");
         local.setExternalReference(reference);
+        //transient reference is required in LocalDomain entity
+        local.setExternalTransientReference(newTransientReference);
         localDomain = local.save();
         
         LocalDomainBO retreivedLocal = LocalDomainBO.findByPrimaryKey(localDomain.getKey());

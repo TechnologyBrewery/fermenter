@@ -16,7 +16,6 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.ValidationR
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.ValidationReferencedObject;
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.ValidationTransientReferencedObject;
 import org.bitbucket.askllc.fermenter.cookbook.referencing.domain.bizobj.LocalDomainBO;
-import org.bitbucket.askllc.fermenter.cookbook.referencing.domain.bizobj.LocalDomainTransientReferenceBO;
 import org.bitbucket.askllc.fermenter.cookbook.referencing.domain.bizobj.LocalTransientDomainBO;
 import org.bitbucket.fermenter.stout.messages.MessageManager;
 import org.bitbucket.fermenter.stout.messages.MessageManagerInitializationDelegate;
@@ -44,7 +43,6 @@ public class RemoteReferenceValidationSteps {
     
     private LocalDomainBO localDomain;
     private LocalTransientDomainBO localTransientDomain;
-    private LocalDomainTransientReferenceBO localTransientReferenceDomain;
     private ValidationReferencedObject reference;
     private ValidationTransientReferencedObject transientReference;
     private static final ValidationTransientReferencedObject DEFAULT_TRANSIENT_REFERENCE = new ValidationTransientReferencedObject();
@@ -55,7 +53,6 @@ public class RemoteReferenceValidationSteps {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         assertNotNull("Missing needed delegate!", referenceMaintenanceDelegate);
         MessageManagerInitializationDelegate.cleanupMessageManager();
-        MessageTestUtils.assertNoErrorMessages();
     }
     
     @After("@remoteReferenceValidation")
@@ -76,26 +73,22 @@ public class RemoteReferenceValidationSteps {
     
     @Given("^the \"([^\"]*)\" has a remote reference to an existing \"([^\"]*)\"$")
     public void the_has_a_remote_reference_to_an_existing(String address, String state) throws Throwable {
-        ValidationReferencedObject newReference = new ValidationReferencedObject();
-        newReference.setId(UUID.randomUUID());
-        newReference.setSomeDataField(state);
-        reference = referenceMaintenanceDelegate.create(newReference);
-        MessageTestUtils.assertNoErrorMessages();
+        // remote persistent entity reference
+        reference = createRemotePersistentReference(state);
         
         LocalDomainBO local = new LocalDomainBO();
         local.setName(address);
         local.setExternalReference(reference);
+        //transient reference is required in LocalDomain entity
+        local.setExternalTransientReference(DEFAULT_TRANSIENT_REFERENCE);
         localDomain = local;
     }
     
     
     @Given("^the \"([^\"]*)\" has a remote reference to a non-existing \"([^\"]*)\"$")
     public void the_has_a_remote_reference_to_a_non_existing(String address, String state) throws Throwable {
-        ValidationReferencedObject newReference = new ValidationReferencedObject();
-        newReference.setId(UUID.randomUUID());
-        newReference.setSomeDataField(state);
-        reference = referenceMaintenanceDelegate.create(newReference);
-        MessageTestUtils.assertNoErrorMessages();
+        // remote persistent entity reference
+        reference = createRemotePersistentReference(state);
         
         referenceMaintenanceDelegate.delete(reference.getId());
         MessageTestUtils.assertNoErrorMessages();
@@ -103,13 +96,15 @@ public class RemoteReferenceValidationSteps {
         LocalDomainBO local = new LocalDomainBO();
         local.setName(address);
         local.setExternalReference(reference);
+        //transient reference is required in LocalDomain entity
+        local.setExternalTransientReference(DEFAULT_TRANSIENT_REFERENCE);
         localDomain = local;
     }
     
     
     @When("^the reference level validation is performed on the instance \"([^\"]*)\"$")
     public void the_reference_level_validation_is_performed_on_the_instance(String arg1) throws Throwable {
-    		localDomain.validate();
+    	localDomain.validate();
     }
 
     @Then("^the reference level validation passes$")
@@ -135,10 +130,9 @@ public class RemoteReferenceValidationSteps {
     @Given("^a \"([^\"]*)\" entity \"([^\"]*)\"$")
     public void a_entity(String persistence, String entityName) throws Throwable {
         if ("persistent".equalsIgnoreCase(persistence)) {
-            //local persistent entity with reference to a transient entity
-            LocalDomainTransientReferenceBO local=  new LocalDomainTransientReferenceBO();
+            LocalDomainBO local=  new LocalDomainBO();
             local.setName(entityName);
-            localTransientReferenceDomain = local;
+            localDomain = local;
         }else if ("transient".equalsIgnoreCase(persistence)) {
             LocalTransientDomainBO localTransient = new LocalTransientDomainBO();
             localTransient.setName(entityName);
@@ -151,11 +145,8 @@ public class RemoteReferenceValidationSteps {
     @Given("^a \"([^\"]*)\" entity \"([^\"]*)\" in another domain$")
     public void a_entity_in_another_domain(String persistence, String remoteEntityName) throws Throwable {
         if ("persistent".equalsIgnoreCase(persistence)) {
-            ValidationReferencedObject newReference = new ValidationReferencedObject();
-            //newReference.setId(UUID.randomUUID());
-            newReference.setSomeDataField(remoteEntityName);
-            reference = referenceMaintenanceDelegate.create(newReference);
-            MessageTestUtils.assertNoErrorMessages();
+            // remote persistent entity reference
+            reference = createRemotePersistentReference(remoteEntityName);
         }else if ("transient".equalsIgnoreCase(persistence)) {
             ValidationTransientReferencedObject newReference = new ValidationTransientReferencedObject();
             newReference.setName(remoteEntityName);
@@ -172,13 +163,18 @@ public class RemoteReferenceValidationSteps {
             // remote transient entity
             ValidationTransientReferencedObject newTransientReference = new ValidationTransientReferencedObject();
             newTransientReference.setName(remoteEntityName);
+            
+            // remote persistent entity reference
+            // not needed for this test but it is required on the localDomain entity
+            reference = createRemotePersistentReference(remoteEntityName);
 
             // local persistent entity
-            LocalDomainTransientReferenceBO local = new LocalDomainTransientReferenceBO();
+            LocalDomainBO local = new LocalDomainBO();
             local.setName(localEntityName);
+            // set reference to remote transient entity
             local.setExternalTransientReference(newTransientReference);
-
-            localTransientReferenceDomain = local;
+            local.setExternalReference(reference);
+            localDomain = local;
 
         } else if ("transient".equalsIgnoreCase(persistence)) {
             // remote transient entity
@@ -201,13 +197,12 @@ public class RemoteReferenceValidationSteps {
     public void a_entity_has_a_remote_reference_to_a_non_existing_transient_entity(String persistence, String localEntityName) throws Throwable {
         if ("persistent".equalsIgnoreCase(persistence)) {           
             //local persistent entity
-            LocalDomainTransientReferenceBO local=  new LocalDomainTransientReferenceBO();
+            LocalDomainBO local=  new LocalDomainBO();
             local.setName(localEntityName); 
             //remote transient reference does not exist
             local.setExternalTransientReference(null);
-            localTransientReferenceDomain = local;
-        }else if ("transient".equalsIgnoreCase(persistence)) {
-            
+            localDomain = local;
+        }else if ("transient".equalsIgnoreCase(persistence)) {            
             //local transient entity
             LocalTransientDomainBO localTransient = new LocalTransientDomainBO();
             localTransient.setName(localEntityName);
@@ -224,11 +219,8 @@ public class RemoteReferenceValidationSteps {
         if ("persistent".equalsIgnoreCase(persistence)) {
             //maybe move the existing code here
         }else if ("transient".equalsIgnoreCase(persistence)) {
-            //remote persistent entity
-            ValidationReferencedObject persistentReference = new ValidationReferencedObject();
-            persistentReference.setId(UUID.randomUUID());
-            persistentReference.setSomeDataField(remoteEntityName);
-            reference = referenceMaintenanceDelegate.create(persistentReference);
+            //remote persistent entity reference
+            reference = createRemotePersistentReference(remoteEntityName);
             
             //local transient entity
             LocalTransientDomainBO localTransient = new LocalTransientDomainBO();
@@ -251,13 +243,9 @@ public class RemoteReferenceValidationSteps {
         if ("persistent".equalsIgnoreCase(persistence)) {
             //maybe move the existing code here
         }else if ("transient".equalsIgnoreCase(persistence)) {
-            //remote persistent entity
+            //remote persistent entity reference
             //first create the reference
-            ValidationReferencedObject newReference = new ValidationReferencedObject();
-            newReference.setId(UUID.randomUUID());
-            newReference.setSomeDataField(remoteEntityName);
-            reference = referenceMaintenanceDelegate.create(newReference);
-            MessageTestUtils.assertNoErrorMessages();            
+            reference = createRemotePersistentReference(remoteEntityName);            
             //then delete it 
             referenceMaintenanceDelegate.delete(reference.getId());
             MessageTestUtils.assertNoErrorMessages();
@@ -285,7 +273,7 @@ public class RemoteReferenceValidationSteps {
             throws Throwable {
 
         if ("persistent".equalsIgnoreCase(persistence)) {
-            localTransientReferenceDomain.validate();
+            localDomain.validate();
         } else if ("transient".equalsIgnoreCase(persistence)) {
             localTransientDomain.validate();
         } else {
@@ -304,9 +292,9 @@ public class RemoteReferenceValidationSteps {
         MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), RemoteReferenceValidationSteps.class);
         assertFalse("Should not have encountered messages!", MessageManager.hasErrorMessages());        
 
-        localTransientReferenceDomain.save();
-        LocalDomainTransientReferenceBO persisted = LocalDomainTransientReferenceBO.findByPrimaryKey(localTransientReferenceDomain.getKey());
-        assertNotNull("LocalDomainTransientReferenceBO should have been persisted to the DB", persisted);
+        localDomain.save();
+        LocalDomainBO persisted = LocalDomainBO.findByPrimaryKey(localDomain.getKey());
+        assertNotNull("LocalDomainBO should have been persisted to the DB", persisted);
     }
     
     @Then("^the reference level validation on transient entity fails$")
@@ -320,8 +308,8 @@ public class RemoteReferenceValidationSteps {
         MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ReferenceValidationSteps.class);
         assertTrue("Should have encountered messages!", MessageManager.hasErrorMessages());
         
-        localTransientReferenceDomain.save();
-        assertNull("LocalDomainBO should not have been persisted to the DB", localTransientReferenceDomain.getKey());
+        localDomain.save();
+        assertNull("LocalDomainBO should not have been persisted to the DB", localDomain.getKey());
     }
 
     @Then("^the \"([^\"]*)\" entity \"([^\"]*)\" can have a reference \"([^\"]*)\"$")
@@ -329,7 +317,7 @@ public class RemoteReferenceValidationSteps {
             throws Throwable {
         if ("persistent".equalsIgnoreCase(persistence)) {
             // persistent local entity with transient remote reference
-            localTransientReferenceDomain.setExternalTransientReference(transientReference);
+            localDomain.setExternalTransientReference(transientReference);
         } else if ("transient".equalsIgnoreCase(persistence)) {
             // transient local entity with persistent remote reference
             localTransientDomain.setExternalReference(reference);
@@ -338,6 +326,13 @@ public class RemoteReferenceValidationSteps {
         }
     }
 
-
+    private ValidationReferencedObject createRemotePersistentReference(String remoteEntityValue) {
+        ValidationReferencedObject referenceObject = new ValidationReferencedObject();
+        referenceObject.setId(UUID.randomUUID());
+        referenceObject.setSomeDataField(remoteEntityValue);
+        ValidationReferencedObject newReference = referenceMaintenanceDelegate.create(referenceObject);
+        MessageTestUtils.assertNoErrorMessages();   
+        return newReference;
+    }
     
 }

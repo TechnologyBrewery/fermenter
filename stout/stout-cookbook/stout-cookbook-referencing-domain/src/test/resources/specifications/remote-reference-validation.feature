@@ -91,7 +91,7 @@ Feature: Reference Level Validation Requirements
     Given a "transient" entity "schoolBuilding" has a remote reference to a non-existing transient entity
     When the reference level validation is performed on the "transient" entity instance "schoolBuilding"
     Then the reference level validation on transient entity fails
-   @jls1 
+
   Scenario Outline: Persistent entity reference level validation passes on valid transient entity references
     Given a "persistent" entity "<building>" has a remote reference to an existing transient entity "<postalDistrict>"
     When the reference level validation is performed on the "persistent" entity instance "<building>"

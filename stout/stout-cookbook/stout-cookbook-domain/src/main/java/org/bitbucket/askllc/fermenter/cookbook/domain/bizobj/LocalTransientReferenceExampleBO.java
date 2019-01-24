@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
  * GENERATED STUB CODE - PLEASE *DO* MODIFY
  */
 @Entity
-@Table(name="LOCAL_VALIDATION_REF_EXAMPLE")
+@Table(name="LOCAL_TRANSIENT_VALIDATION_REF_EXAMPLE")
 public class LocalTransientReferenceExampleBO extends LocalTransientReferenceExampleBaseBO {
 	
 	public LocalTransientReferenceExampleBO() {

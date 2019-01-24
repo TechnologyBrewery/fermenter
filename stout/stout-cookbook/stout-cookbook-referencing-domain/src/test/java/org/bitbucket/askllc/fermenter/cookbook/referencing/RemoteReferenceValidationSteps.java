@@ -47,6 +47,7 @@ public class RemoteReferenceValidationSteps {
     private LocalDomainTransientReferenceBO localTransientReferenceDomain;
     private ValidationReferencedObject reference;
     private ValidationTransientReferencedObject transientReference;
+    private static final ValidationTransientReferencedObject DEFAULT_TRANSIENT_REFERENCE = new ValidationTransientReferencedObject();
     
     @Before("@remoteReferenceValidation")
     public void setUp() {
@@ -180,24 +181,39 @@ public class RemoteReferenceValidationSteps {
             localTransientReferenceDomain = local;
 
         } else if ("transient".equalsIgnoreCase(persistence)) {
+            // remote transient entity
+            ValidationTransientReferencedObject remoteTransientReference = new ValidationTransientReferencedObject();
+            remoteTransientReference.setName(remoteEntityName);
+            
+            //local transient entity
+            LocalTransientDomainBO localTransient = new LocalTransientDomainBO();
+            localTransient.setName(localEntityName);
+            //set remote transient reference
+            localTransient.setExternalTransientReference(remoteTransientReference);
+            localTransientDomain = localTransient;
 
         } else {
             fail("Invalid entity state.  Should be either persistent or transient");
         }
     }
 
-    @Given("^a \"([^\"]*)\" entity \"([^\"]*)\" has a remote reference to a non-existing transient entity \"([^\"]*)\"$")
-    public void a_entity_has_a_remote_reference_to_a_non_existing_transient_entity(String persistence, String localEntityName, String remoteEntityName) throws Throwable {
+    @Given("^a \"([^\"]*)\" entity \"([^\"]*)\" has a remote reference to a non-existing transient entity$")
+    public void a_entity_has_a_remote_reference_to_a_non_existing_transient_entity(String persistence, String localEntityName) throws Throwable {
         if ("persistent".equalsIgnoreCase(persistence)) {           
             //local persistent entity
             LocalDomainTransientReferenceBO local=  new LocalDomainTransientReferenceBO();
             local.setName(localEntityName); 
-            //external reference does not exist
+            //remote transient reference does not exist
             local.setExternalTransientReference(null);
-            
             localTransientReferenceDomain = local;
         }else if ("transient".equalsIgnoreCase(persistence)) {
             
+            //local transient entity
+            LocalTransientDomainBO localTransient = new LocalTransientDomainBO();
+            localTransient.setName(localEntityName);
+            //remote transient reference does not exist 
+            localTransient.setExternalTransientReference(null);
+            localTransientDomain = localTransient;          
         }else{
             fail ("Invalid entity state.  Should be either persistent or transient");
         }
@@ -217,7 +233,10 @@ public class RemoteReferenceValidationSteps {
             //local transient entity
             LocalTransientDomainBO localTransient = new LocalTransientDomainBO();
             localTransient.setName(localEntityName);
+            //persistent reference
             localTransient.setExternalReference(reference);
+            //transient reference is required
+            localTransient.setExternalTransientReference(DEFAULT_TRANSIENT_REFERENCE);
             localTransientDomain = localTransient;
             
             MessageTestUtils.assertNoErrorMessages();
@@ -246,8 +265,10 @@ public class RemoteReferenceValidationSteps {
             //local transient entity
             LocalTransientDomainBO localTransient = new LocalTransientDomainBO();
             localTransient.setName(localEntityName);
-            //reference non-existing reference
+            //set non-existing persistent reference
             localTransient.setExternalReference(reference);
+            //set transient reference since it is required although not a part of this test
+            localTransient.setExternalTransientReference(DEFAULT_TRANSIENT_REFERENCE);
             localTransientDomain = localTransient;
         }else{
             fail ("Invalid entity state.  Should be either persistent or transient");
@@ -258,7 +279,7 @@ public class RemoteReferenceValidationSteps {
     public void references_are_added() throws Throwable {
         //nothing to do here
     }
-      
+    
     @When("^the reference level validation is performed on the \"([^\"]*)\" entity instance \"([^\"]*)\"$")
     public void the_reference_level_validation_is_performed_on_the_entity_instance(String persistence, String arg2)
             throws Throwable {

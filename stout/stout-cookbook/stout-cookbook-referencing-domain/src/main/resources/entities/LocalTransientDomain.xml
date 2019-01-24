@@ -19,6 +19,11 @@
 			<name>externalReference</name>
 			<type>ValidationReferencedObject</type>
 		</reference>
+		<reference>
+			<name>externalTransientReference</name>
+			<type>ValidationTransientReferencedObject</type>
+			<required>true</required>
+		</reference>
 	</associations>
 
 </entity>

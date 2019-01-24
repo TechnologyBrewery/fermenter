@@ -45,15 +45,10 @@ Feature: Reference Level Validation Requirements
       | schoolABC | PS1            |
       | schoolDEF | PS2            |    
     
-  Scenario Outline: Persistent entity reference level validation fails on invalid transient entity references
-    Given a "persistent" entity "<building>" has a remote reference to a non-existing transient entity "<postalDistrict>"
-    When the reference level validation is performed on the "persistent" entity instance "<building>"
+  Scenario: Persistent entity reference level validation fails on invalid transient entity references
+    Given a "persistent" entity "Building" has a remote reference to a non-existing transient entity
+    When the reference level validation is performed on the "persistent" entity instance "Building"
     Then the reference level validation on persistent entity fails
-
-    Examples: 
-      | building  | postalDistrict |
-      | schoolABC |                |
-      | schoolDEF |                | 
       
   Scenario Outline: Transient entity can have an external reference to a persistent entity
     Given a "transient" entity "<schoolBuilding>"
@@ -66,17 +61,17 @@ Feature: Reference Level Validation Requirements
       | schoolABC      | Alexandria |
       | schoolDEF      | Annandale  |        
       
- # Scenario Outline: Transient entity can have an external reference to a transient entity
-#    Given a "transient" entity "<schoolBuilding>"
- #   And a "transient" entity "<postalDistrict>" in another domain
- #   When references are added
- #   Then the "transient" entity "<schoolBuilding>" can have a reference "<postalDistrict>"
+ Scenario Outline: Transient entity can have an external reference to a transient entity
+   Given a "transient" entity "<schoolBuilding>"
+   And a "transient" entity "<postalDistrict>" in another domain
+   When references are added
+   Then the "transient" entity "<schoolBuilding>" can have a reference "<postalDistrict>"
     
- #   Examples: 
- #     | schoolBuilding | postalDistrict |
- #     | schoolABC      | PS1            |
-  #    | schoolDEF      | PS2            |   
- 
+   Examples: 
+    | schoolBuilding | postalDistrict |
+    | schoolABC      | PS1            |
+    | schoolDEF      | PS2            |   
+
   Scenario Outline: Transient entity reference level validation passes on valid persistent entity references
     Given a "transient" entity "<schoolBuilding>" has a remote reference to an existing persistent entity "<county>"
     When the reference level validation is performed on the "transient" entity instance "<schoolBuilding>"
@@ -96,26 +91,22 @@ Feature: Reference Level Validation Requirements
       | schoolBuilding | county       |
       | schoolABC      | Loudon       |
       | schoolDEF      | Spotsylvania | 
-              
- #  Scenario Outline: Transient entity reference level validation passes on valid transient entity references
- #   Given a "transient" entity "<schoolBuilding>" has a remote reference to an existing transient entity "<postalDistrict>"
- #   When the reference level validation is performed on the "transient" entity instance "<schoolBuilding>"
- #   Then the reference level validation on transient entity passes
+             
+  Scenario Outline: Transient entity reference level validation passes on valid transient entity references
+    Given a "transient" entity "<schoolBuilding>" has a remote reference to an existing transient entity "<postalDistrict>"
+    When the reference level validation is performed on the "transient" entity instance "<schoolBuilding>"
+    Then the reference level validation on transient entity passes
 
- #  Examples: 
- #     | schoolBuilding | postalDistrict |
- #     | schoolABC      | PS1            |
-  #    | schoolDEF      | PS2            |   
+    Examples: 
+      | schoolBuilding | postalDistrict |
+      | schoolABC      | PS1            |
+      | schoolDEF      | PS2            |   
+  
+  Scenario: Transient entity reference level validation fails on invalid transient entity references
+    Given a "transient" entity "schoolBuilding" has a remote reference to a non-existing transient entity
+    When the reference level validation is performed on the "transient" entity instance "schoolBuilding"
+    Then the reference level validation on transient entity fails
 
- # Scenario Outline: Transient entity reference level validation fails on invalid transient entity references
- #   Given a "transient" entity "<schoolBuilding>" has a remote reference to a non-existing transient entity "<postalDistrict>"
- #   When the reference level validation is performed on the "transient" entity instance "<schoolBuilding>" 
- #   Then the reference level validation on transient entity fails
-
- #  Examples: 
- #     | schoolBuilding | postalDistrict |
- #     | schoolABC      | PS7            |
-  #    | schoolDEF      | PS8            | 
    
 
       

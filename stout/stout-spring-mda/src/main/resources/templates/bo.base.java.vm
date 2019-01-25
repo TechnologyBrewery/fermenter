@@ -563,11 +563,9 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
 	    #if ($reference.foreignKeyFields.iterator().hasNext())
 		if ((${reference.name} == null) && (${reference.name}Key != null)) {
 			${reference.name} = ${reference.name}Delegate.findByPrimaryKey(${reference.name}Key);
-		    set${reference.getCapitalizedName()}(${reference.name});
 		}
-		#else
-		set${reference.getCapitalizedName()}(${reference.name});
 		#end
+		set${reference.getCapitalizedName()}(${reference.name});
 		return ${reference.name};
 	}
 	 

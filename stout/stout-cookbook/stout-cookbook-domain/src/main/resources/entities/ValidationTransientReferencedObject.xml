@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE entity PUBLIC "-//FERMENTER//DTD ENTITY//EN" "https://bitbucket.org/cpointe/fermenter/downloads/fermenter-2-entity.dtd">
+
+<entity transient="true">
+	<name>ValidationTransientReferencedObject</name>
+	<namespace>org.bitbucket.askllc.fermenter.cookbook.domain</namespace>
+	<documentation>A non-persistent entity</documentation>
+
+	<fields>
+		<field>
+			<name>name</name>
+			<documentation>The name of the entity</documentation>
+			<type>string</type>
+		</field>
+	</fields>	
+
+</entity>

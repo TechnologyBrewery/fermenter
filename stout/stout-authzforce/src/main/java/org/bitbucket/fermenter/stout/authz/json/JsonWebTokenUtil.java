@@ -95,8 +95,7 @@ public final class JsonWebTokenUtil {
             signingKey = getSigningKey();
         }
         catch (Exception e) {
-            logger.error("Exception thrown while attempting to find key", e);
-            throw new UnsupportedOperationException(e);
+            throw new UnsupportedOperationException("Unable to retrieve private key", e);
         }
 
         builder.setIssuer(getIssuer());
@@ -132,7 +131,7 @@ public final class JsonWebTokenUtil {
 
     private static String getIssuer() {
         String issuer = null;
-        // Probably the krausening value, then the key, then a placeholder.
+        // Check the krausening value, then the key, else use a placeholder.
         issuer = config.getTokenIssuer();
         if (StringUtils.isBlank(issuer)) {
             //Check for key
@@ -141,9 +140,8 @@ public final class JsonWebTokenUtil {
                 issuer = cert.getIssuerDN().getName();
             }
             else {
-                //Output error message for missing signing cert
-                logger.warn("No signing certificate found, defaulting to unspecified issuer");
                 issuer = "unspecified";
+                logger.warn("No signing certificate found, defaulting to" + issuer);
             }
         }
 

@@ -26,3 +26,8 @@ Feature: Create JSON Web Tokens based on PDP rules
       | canStrikeout                 |            | strikeout                         | DENY           |
       | hitOver350In84               |            | hit-over-350-in-1984              | PERMIT         |
       | hasReggieJacksonJerseyNumber |            | reggie-jackson-jersey-number-test | NOT_APPLICABLE |
+
+  Scenario: create a token using an existing private key
+    When a private key exists on the server
+    And a token is requested for "tonyGwynn" and "unitTest"
+    Then a token will be returned using the private key

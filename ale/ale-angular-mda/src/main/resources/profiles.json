@@ -1,24 +1,91 @@
 [
-	{
-		"name": "angular",
-		"profileReferences": [
-			{
-				"name": "angular-entities"
-			}
-		]
-	},
-	{
-		"name": "angular-entities",
-		"targetReferences": [
-			{
-				"name": "entityBaseModel"
-			},
-			{
-				"name": "entityModel"
-			},
-            {
-                "name": "enumerations"
-            }
-        ]
-	}
+  {
+    "name": "angular",
+    "profileReferences": [
+      {
+        "name": "angular-entities"
+      },
+      {
+        "name": "angular-base"
+      },
+      {
+        "name": "angular-services"
+      }
+    ]
+  },
+  {
+    "name": "angular-base",
+    "targetReferences": [
+      {
+        "name": "constants"
+      },
+      {
+        "name": "fermenterMessageBaseModel"
+      },
+      {
+        "name": "fermenterMessageModel"
+      },
+      {
+        "name": "fermenterBaseModel"
+      },
+      {
+        "name": "fermenterModel"
+      },
+      {
+        "name": "orderBaseModel"
+      },
+      {
+        "name": "orderModel"
+      },
+      {
+        "name": "sortBaseModel"
+      },
+      {
+        "name": "sortModel"
+      },
+      {
+        "name": "findByExampleCriteriaBaseModel"
+      },
+      {
+        "name": "findByExampleCriteriaModel"
+      },
+      {
+        "name": "errorHandlerApi"
+      },
+      {
+        "name": "globalErrorHandler"
+      }, 
+      {
+        "name": "sortOrderDirectionEnum"
+      },
+      {
+        "name": "pageWrapperBaseModel"
+      },
+      {
+        "name": "pageWrapperModel"
+      }
+    ]
+  },
+  {
+    "name": "angular-entities",
+    "targetReferences": [
+      {
+        "name": "entityBaseModel"
+      },
+      {
+        "name": "entityModel"
+      },
+      {
+        "name": "enumerations"
+      }
+    ]
+  },
+  {
+    "name": "angular-services",
+    "targetReferences": [
+      {
+        "name": "maintenanceServices"
+      }
+    ]
+  }
 ]

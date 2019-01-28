@@ -1,0 +1,13 @@
+import { OrderWrapper } from '../../shared/model/order-wrapper.model';
+
+export class SortWrapperBase {
+  public orders: OrderWrapper[] = new Array<OrderWrapper>();
+
+  // NOTE that this is never constructed from a http call response, thus the constructor is a little different
+  constructor(property?: string) {
+    if (property) {
+      this.orders.push(new OrderWrapper(property));
+    }
+  }
+
+}

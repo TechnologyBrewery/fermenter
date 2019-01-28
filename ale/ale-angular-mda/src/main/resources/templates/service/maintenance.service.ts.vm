@@ -1,0 +1,203 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { map, catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { Constants } from '../../constants';
+
+import { ${entity.nameUpperCamel}Base } from '../model-base/${entity.name}-base.model';
+import { ${entity.nameUpperCamel} } from '../../shared/model/${entity.name}.model';
+import { FermenterResponse } from '../../shared/model/fermenter-response.model';
+import { GlobalErrorHandler } from '../../shared/global-error-handler.service';
+import { FindByExampleCriteria } from '../../shared/model/find-by-example-criteria.model';
+import { PageWrapper } from '../../shared/model/page-wrapper.model';
+
+/*******************************************************
+ * Maintenance (CRUD) services for ${entity.nameUpperCamel}
+ *
+ * Generated Code - DO NOT MODIFY
+ *******************************************************/
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ${entity.nameUpperCamel}MaintenanceService {
+  private ${entity.nameUpperCamel}URL: string;
+  private constants = new Constants();
+
+  constructor(
+    private http: HttpClient,
+    private errorHandler: GlobalErrorHandler
+  ) {
+    // be sure to define the applicaiton endpoint in the constants.ts file
+    this.${entity.nameUpperCamel}URL =
+      this.constants.${entity.applicationNameLowerCamel}EndPoint + '/${entity.nameUpperCamel}';
+  }
+
+  /**
+   * Will retrieve the entity based on ID.
+   *
+   * @param id - the identifier of the entity that you want to get
+   */
+  public get(id: string): Observable<${entity.nameUpperCamel}> {
+    const url = this.${entity.nameUpperCamel}URL + '/' + id;
+
+    return this.http.get<FermenterResponse<${entity.nameUpperCamel}Base>>(url).pipe(
+      map((response: FermenterResponse<${entity.nameUpperCamel}Base>) => {
+        const fermenterResponse = this.parseResponseToSingle(response);
+        if (fermenterResponse.hasErrorMessages()) {
+          const msg =
+            'The get service is expected to retrieve the ${entity.nameUpperCamel} without issues.';
+          this.errorHandler.handleCriticalError(msg);
+          throw new Error(msg);
+        }
+        return fermenterResponse.value;
+      }),
+      catchError(this.errorHandler.handleServiceCallError)
+    );
+  }
+
+  /**
+   * Will save or update the entity using PUT
+   *
+   * @param id - the identifier of the entity that you want to PUT
+   * @param ${entity.nameLowerCamel} - entity that you want to save/update
+   */
+  public put(
+    id: string,
+    ${entity.nameLowerCamel}: ${entity.nameUpperCamel}
+  ): Observable<FermenterResponse<${entity.nameUpperCamel}>> {
+    const url = this.${entity.nameUpperCamel}URL + '/' + id;
+
+    return this.http
+      .put<FermenterResponse<${entity.nameUpperCamel}Base>>(url, ${entity.nameLowerCamel})
+      .pipe(
+        map((response: FermenterResponse<${entity.nameUpperCamel}Base>) => {
+          const fermenterResponse = this.parseResponseToSingle(response);
+          if (fermenterResponse.hasErrorMessages()) {
+            const msg =
+              'The get service is expected to save the ${entity.nameUpperCamel} without issues.';
+            this.errorHandler.handleCriticalError(msg);
+            throw new Error(msg);
+          }
+          return fermenterResponse;
+        }),
+        catchError(this.errorHandler.handleServiceCallError)
+      );
+  }
+
+  /**
+   * Will save or update the entity using POST
+   *
+   * @param ${entity.nameLowerCamel} - entity that you want to save/update
+   */
+  public post(
+    ${entity.nameLowerCamel}: ${entity.nameUpperCamel}
+  ): Observable<FermenterResponse<${entity.nameUpperCamel}>> {
+    const url = this.${entity.nameUpperCamel}URL;
+
+    return this.http
+      .post<FermenterResponse<${entity.nameUpperCamel}Base>>(url, ${entity.nameLowerCamel})
+      .pipe(
+        map((response: FermenterResponse<${entity.nameUpperCamel}Base>) => {
+          const fermenterResponse = this.parseResponseToSingle(response);
+          if (fermenterResponse.hasErrorMessages()) {
+            const msg =
+              'The get service is expected to save the ${entity.nameUpperCamel} without issues.';
+            this.errorHandler.handleCriticalError(msg);
+            throw new Error(msg);
+          }
+          return fermenterResponse;
+        }),
+        catchError(this.errorHandler.handleServiceCallError)
+      );
+  }
+
+  /**
+   * Will delete the entity using DELETE
+   *
+   * @param id - the id of the entity that you want to delete
+   */
+  public delete(id: string): Observable<FermenterResponse<${entity.nameUpperCamel}Base>> {
+    const url = this.${entity.nameUpperCamel}URL + '/' + id;
+
+    return this.http.delete<FermenterResponse<${entity.nameUpperCamel}Base>>(url).pipe(
+      map((response: FermenterResponse<${entity.nameUpperCamel}Base>) => {
+        const fermenterResponse = new FermenterResponse<${entity.nameUpperCamel}Base>(response);
+        if (fermenterResponse.hasErrorMessages()) {
+          const msg =
+            'The get service is expected to delete the ${entity.nameUpperCamel} without issues.';
+          this.errorHandler.handleCriticalError(msg);
+          throw new Error(msg);
+        }
+        return fermenterResponse;
+      }),
+      catchError(this.errorHandler.handleServiceCallError)
+    );
+  }
+
+  /**
+   * Will find entities based on the example provided
+   *
+   * @param findByExampleCriteria - an instance of the FindByExampleCriteria that should be used for the search
+   */
+  public findByExample(
+    findByExampleCriteria: FindByExampleCriteria<${entity.nameUpperCamel}>
+  ): Observable<PageWrapper<${entity.nameUpperCamel}>> {
+    const url = this.${entity.nameUpperCamel}URL + '/findByExample';
+
+    return this.http
+      .post<FermenterResponse<PageWrapper<${entity.nameUpperCamel}Base>>>(url, findByExampleCriteria)
+      .pipe(
+        map((response: FermenterResponse<PageWrapper<${entity.nameUpperCamel}>>) => {
+          const fermenterResponse = this.parseResponseToPageWrapper(response);
+          if (fermenterResponse.hasErrorMessages()) {
+            const msg =
+              'The find by example service is expected to return results without issues.';
+            this.errorHandler.handleCriticalError(msg);
+          }
+          return fermenterResponse.value;
+        }),
+        catchError(this.errorHandler.handleServiceCallError)
+      );
+  }
+
+  private parseResponseToPageWrapper(
+    response: FermenterResponse<PageWrapper<${entity.nameUpperCamel}Base>>
+  ): FermenterResponse<PageWrapper<${entity.nameUpperCamel}>> {
+    const fermenterResponse = new FermenterResponse<PageWrapper<${entity.nameUpperCamel}>>(response);
+    this.checkFermenterResponseIsInitialized(response);
+
+    const pageWrapper = new PageWrapper<${entity.nameUpperCamel}>(response.value);
+
+    const ${entity.nameLowerCamel}s = new Array<${entity.nameUpperCamel}>();
+    for (const ${entity.nameLowerCamel} of response.value.content) {
+      ${entity.nameLowerCamel}s.push(new ${entity.nameUpperCamel}(${entity.nameLowerCamel}));
+    }
+
+    pageWrapper.content = ${entity.nameLowerCamel}s;
+    fermenterResponse.value = pageWrapper;
+
+    return fermenterResponse;
+  }
+
+  private parseResponseToSingle(
+    response: FermenterResponse<${entity.nameUpperCamel}Base>
+  ): FermenterResponse<${entity.nameUpperCamel}> {
+    const fermenterResponse = new FermenterResponse(response);
+    this.checkFermenterResponseIsInitialized(fermenterResponse);
+
+    if (response.value) {
+      fermenterResponse.value = new ${entity.nameUpperCamel}(response.value);
+    }
+
+    return fermenterResponse;
+  }
+
+  private checkFermenterResponseIsInitialized(fermenterResponse: FermenterResponse<{}>) {
+    if (!fermenterResponse) {
+      const msg = 'Failed to initialize fermenter response for service call.';
+      this.errorHandler.handleCriticalError(msg);
+      throw new Error(msg);
+    }
+  }
+}

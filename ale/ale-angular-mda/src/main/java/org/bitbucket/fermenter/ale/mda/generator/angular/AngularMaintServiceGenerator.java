@@ -1,9 +1,10 @@
 package org.bitbucket.fermenter.ale.mda.generator.angular;
 
-public class AngularEntityGenerator extends AbstractAngularEntityGenerator {
+public class AngularMaintServiceGenerator extends AbstractAngularEntityGenerator {
 
     @Override
     protected boolean generatePersistentEntitiesOnly() {
-        return false;
+        return true;
     }
+
 }

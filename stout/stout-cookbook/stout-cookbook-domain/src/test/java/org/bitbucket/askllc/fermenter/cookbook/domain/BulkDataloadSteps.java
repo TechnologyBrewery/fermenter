@@ -12,12 +12,20 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationExampleBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.ValidationExampleMaintenanceService;
 import org.bitbucket.fermenter.stout.mock.MockRequestScope;
+import org.bitbucket.fermenter.stout.messages.DefaultMessage;
+import org.bitbucket.fermenter.stout.messages.Message;
+import org.bitbucket.fermenter.stout.messages.MessageManagerInitializationDelegate;
+import org.bitbucket.fermenter.stout.messages.MessageUtils;
+import org.bitbucket.fermenter.stout.messages.Messages;
+import org.bitbucket.fermenter.stout.messages.MessagesSet;
+import org.bitbucket.fermenter.stout.service.ServiceResponse;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,6 +35,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import cucumber.api.PendingException;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
@@ -38,6 +47,7 @@ import cucumber.api.java.en.When;
 public class BulkDataloadSteps {
     @Inject
     private ValidationExampleMaintenanceService validationExampleMaintenanceService;
+    
 
     private Collection<ValidationExampleBO> allValidExamples = new ArrayList<>();
     private Collection<ValidationExampleBO> allMixedExamples = new ArrayList<>();
@@ -46,6 +56,8 @@ public class BulkDataloadSteps {
     private ValueServiceResponse valueServiceResponse = new ValueServiceResponse();
     private VoidServiceResponse voidServiceResponse = new VoidServiceResponse();
     private Boolean errorCaught = false;
+    private ValidationExampleBO messageTestBO = new ValidationExampleBO();
+    private ArrayList<ValidationExampleBO> bulkUpdateObjects = new ArrayList<ValidationExampleBO>();
 
     @Inject
     private MockRequestScope mockRequestScope;
@@ -65,6 +77,8 @@ public class BulkDataloadSteps {
         allValidExamples = null;
         allMixedExamples = null;
         mockRequestScope.cleanMessageManager();
+        messageTestBO = null;
+        bulkUpdateObjects = null;
     }
 
     @Given("^the following valid data$")
@@ -253,6 +267,117 @@ public class BulkDataloadSteps {
             assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
             errorCaught = Boolean.TRUE;
         }
+    }
+    
+    @Given("^an object created with valid fields$")
+    public void an_object_created_with_valid_fields() throws Throwable {
+        messageTestBO.setRequiredField("value");
+        messageTestBO.save();
+    }
+
+    @When("^the object is bulk updated with an invalid field$")
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public void the_object_is_bulk_updated_with_an_invalid_field() throws Throwable {
+        messageTestBO.setRequiredField(null);
+        Collection<ValidationExampleBO> updateList = new ArrayList<>();
+        updateList.add(messageTestBO);
+        try {
+            validationExampleMaintenanceService.bulkSaveOrUpdate(updateList);
+        } catch (WebApplicationException e) {
+            assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+            valueServiceResponse = ((ValueServiceResponse) e.getResponse().getEntity());
+        }
+    }
+
+    @Then("^a message is created with the object's primary key$")
+    public void a_message_is_created_with_the_object_s_primary_key() throws Throwable {
+        Collection<Message> errors = getErrorMessages();
+        for (Message error : errors) {
+            String errorText = MessageUtils.getSummaryMessage(error.getKey(), error.getInserts(), this.getClass());
+            assertTrue("Bulk error did not contain the primary key: " + messageTestBO.getKey(), errorText.contains(messageTestBO.getKey() + ""));
+        }
+    }
+
+    @When("^the object is bulk deleted with an invalid field$")
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public void the_object_is_bulk_deleted_with_an_invalid_field() throws Throwable {
+        validationExampleMaintenanceService.delete(messageTestBO.getKey());
+        Collection<ValidationExampleBO> updateList = new ArrayList<>();
+        updateList.add(messageTestBO);
+        try {
+            validationExampleMaintenanceService.bulkDelete(updateList);
+        } catch (WebApplicationException e) {
+            assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus()); 
+            voidServiceResponse = ((VoidServiceResponse) e.getResponse().getEntity());
+        }
+    }
+    
+    @Given("^three objects are created with valid fields$")
+    public void three_objects_are_created_with_valid_fields() throws Throwable {
+        for(int i = 0; i < 3; i++) {
+            ValidationExampleBO object = new ValidationExampleBO();
+            object.setRequiredField("value");
+            object.save();
+            bulkUpdateObjects.add(object);
+        }
+        
+    }
+
+    @When("^two objects are bulk updated with an invalid field$")
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public void two_objects_are_bulk_updated_with_an_invalid_field() throws Throwable {
+        for(int i = 0; i < 2; i++) {
+            bulkUpdateObjects.get(i).setRequiredField(null);
+        }
+        try {
+            validationExampleMaintenanceService.bulkSaveOrUpdate(bulkUpdateObjects);
+        } catch (WebApplicationException e) {
+            assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+            valueServiceResponse = ((ValueServiceResponse) e.getResponse().getEntity());
+        }
+    }
+    
+    @When("^two objects are bulk deleted after they are no longer in the database$")
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public void two_objects_are_bulk_deleted_after_they_are_no_longer_in_the_database() throws Throwable {
+        for(int i = 0; i < 2; i++) {
+            validationExampleMaintenanceService.delete(bulkUpdateObjects.get(i).getKey());
+        }
+        try {
+            validationExampleMaintenanceService.bulkDelete(bulkUpdateObjects);
+        } catch (WebApplicationException e) {
+            assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+            voidServiceResponse = ((VoidServiceResponse) e.getResponse().getEntity());
+        }
+    }
+
+    @Then("^a message is created with the objects' primary keys$")
+    public void a_message_is_created_with_the_objects_primary_keys() throws Throwable {
+        Collection<Message> errors = getErrorMessages();
+        for (Message error : errors) {
+            String errorText = MessageUtils.getSummaryMessage(error.getKey(), error.getInserts(), this.getClass());
+            for(ValidationExampleBO object : bulkUpdateObjects) {
+                if(object.getRequiredField() == null) {
+                    assertTrue("Bulk update error did not contain the primary key: " + object.getKey(), errorText.contains(object.getKey() + ""));
+                }
+            }
+        }
+    }
+
+    private Collection<Message> getErrorMessages() {
+        Messages messages = new MessagesSet();
+        if (voidServiceResponse.getMessages().getErrorMessageCount() > 0) {
+            messages = voidServiceResponse.getMessages();
+        } else if (valueServiceResponse.getMessages().getErrorMessageCount() > 0) {
+            messages = valueServiceResponse.getMessages();
+        } else {
+            assertTrue("No error messages found", false);
+        }
+        Collection<Message> errors = null;
+        if (messages.hasErrorMessages()) {
+            errors = messages.getErrorMessages();
+        }
+        return errors;
     }
 
     private void saveOrUpdateRecords(Collection<ValidationExampleBO> examples) {

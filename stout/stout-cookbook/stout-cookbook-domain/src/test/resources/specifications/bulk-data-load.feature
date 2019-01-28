@@ -61,3 +61,24 @@ Feature: Support Bulk Data Load
   Scenario: Empty collections of data attempting to get deleted return a HTTP 400 
     When the empty data is sent over in bulk to be deleted
     Then a HTTP 400 error is returned
+    
+  Scenario: The primary key is added to the message manager when a bulk update fails
+    Given an object created with valid fields
+    When the object is bulk updated with an invalid field
+    Then a message is created with the object's primary key
+    
+  Scenario: The primary key is added to the message manager when a bulk delete fails
+    Given an object created with valid fields
+    When the object is bulk deleted with an invalid field
+    Then a message is created with the object's primary key
+    
+  Scenario: The primary key is added to the message manager when a bulk update fails for multiple objects
+    Given three objects are created with valid fields
+    When two objects are bulk updated with an invalid field
+    Then a message is created with the objects' primary keys
+    
+  Scenario: The primary key is added to the message manager when a bulk delete fails for multiple objects
+    Given three objects are created with valid fields
+    When two objects are bulk deleted after they are no longer in the database
+    Then a message is created with the objects' primary keys
+  

@@ -396,7 +396,7 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
 		if( ${field.name} == null ) {
 			this.${field.name} = ${field.name};
 		}else {
-			this.${field.name} = ${field.name}.setScale($field.getScale(), RoundingMode.HALF_UP);
+			this.${field.name} = ${field.name}.setScale($field.getScale(), RoundingMode.HALF_EVEN);
 		}
 		#else
 		this.${field.name} = ${field.name};

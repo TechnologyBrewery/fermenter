@@ -84,14 +84,14 @@ public interface AuthorizationConfig extends KrauseningConfig {
     public String getTokenIssuer();
 
     /**
-     * Returns alias for private key to be used when signing JWT
+     * Returns alias for private key to be used when signing JWT.
      * @return key alias
      */
     @Key("private.key.alias")
     public String getKeyAlias();
 
     /**
-     * Returns system path to keystore
+     * Returns system path to keystore.
      * @return keystore location
      */
     @Key("keystore.location")
@@ -99,15 +99,15 @@ public interface AuthorizationConfig extends KrauseningConfig {
     public String getKeyStoreLocation();
 
     /**
-     * Returns system path to keystore password
-     * @return keystore password location
+     * Returns system path to keystore password. It is assumed that this password will match the private key password.
+     * @return keystore / private key password location
      */
     @Key("keystore.password.location")
     @DefaultValue("javax.net.ssl.keyStorePassword")
     public String getKeyStorePasswordLocation();
 
     /**
-     * Returns keystore type
+     * Returns keystore type.
      * @return default type of keystore
      */
     @Key("keystore.type")

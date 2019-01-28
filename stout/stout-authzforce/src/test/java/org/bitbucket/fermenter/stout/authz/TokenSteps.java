@@ -27,7 +27,7 @@ public class TokenSteps {
 
     private static final String PASSWORD = "password";
     private static final String PATH_TO_KEYSTORE = "src/test/resources/truststore/testKeyStore.jks";
-    private static final String TEST_ISSUER = "test.com";
+    private static final String TEST_ISSUER = "CN=test.com, C=US";
 
     @After("@jwtToken")
     public void tearDown() {

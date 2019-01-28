@@ -95,7 +95,8 @@ public final class JsonWebTokenUtil {
             signingKey = getSigningKey();
         }
         catch (Exception e) {
-            logger.debug("Exception thrown while attempting to find key: ", e);
+            logger.error("Exception thrown while attempting to find key", e);
+            throw new UnsupportedOperationException(e);
         }
 
         builder.setIssuer(getIssuer());
@@ -137,16 +138,11 @@ public final class JsonWebTokenUtil {
             //Check for key
             if (certificate != null) {
                 X509Certificate cert = (X509Certificate) certificate;
-                String issuerDN = cert.getIssuerDN().getName();
-                //Returned in the form "CN=issuerVAR,C=LOCALEVAR", we only want the issuerVAR
-                if(!StringUtils.isBlank(issuerDN)) {
-                    int splitPoint = issuerDN.indexOf(",");
-                    issuer = issuerDN.substring(3, splitPoint);
-                }
+                issuer = cert.getIssuerDN().getName();
             }
             else {
                 //Output error message for missing signing cert
-                logger.error("No signing certificate found");
+                logger.warn("No signing certificate found, defaulting to unspecified issuer");
                 issuer = "unspecified";
             }
         }

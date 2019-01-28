@@ -1,9 +1,19 @@
 package org.bitbucket.fermenter.stout.authz.json;
 
-import java.security.Key;
 import java.util.Collection;
 import java.util.Date;
 import java.util.UUID;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.security.Key;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
 
 import org.aeonbits.owner.KrauseningConfigFactory;
 import org.apache.commons.lang3.StringUtils;
@@ -33,9 +43,19 @@ public final class JsonWebTokenUtil {
 
     private static AuthorizationConfig config = KrauseningConfigFactory.create(AuthorizationConfig.class);
 
-    private static Key signingKey = getSigningKey();
+    private static String keyAlias = config.getKeyAlias();
+
+    private static String keyStoreLocation = config.getKeyStoreLocation();
+
+    private static String keyStorePasswordLocation = config.getKeyStorePasswordLocation();
+
+    private static String keyStoreType = config.getKeyStoreType();
 
     private static PolicyDecisionPoint pdp = PolicyDecisionPoint.getInstance();
+
+    private static Key signingKey;
+
+    private static Certificate certificate;
 
     private JsonWebTokenUtil() {
         // prevent instantiation of all private class
@@ -57,7 +77,6 @@ public final class JsonWebTokenUtil {
         builder.setId(UUID.randomUUID().toString());
         builder.setSubject(subject);
         builder.setAudience(audience);
-        builder.setIssuer(getIssuer());
 
         // handle dates off a common baseline to ensure millisecond consistency:
         Date currentTime = new Date();
@@ -72,6 +91,14 @@ public final class JsonWebTokenUtil {
             }
         }
 
+        try {
+            signingKey = getSigningKey();
+        }
+        catch (Exception e) {
+            logger.debug("Exception thrown while attempting to find key: ", e);
+        }
+
+        builder.setIssuer(getIssuer());
         builder.signWith(signingKey);
 
         return builder.compact();
@@ -104,20 +131,45 @@ public final class JsonWebTokenUtil {
 
     private static String getIssuer() {
         String issuer = null;
-
-        // TODO: FER-128 - if we have a private key set, we should just use that. But not there just yet.
         // Probably the krausening value, then the key, then a placeholder.
         issuer = config.getTokenIssuer();
         if (StringUtils.isBlank(issuer)) {
-            issuer = "unspecified";
+            //Check for key
+            if (certificate != null) {
+                X509Certificate cert = (X509Certificate) certificate;
+                String issuerDN = cert.getIssuerDN().getName();
+                //Returned in the form "CN=issuerVAR,C=LOCALEVAR", we only want the issuerVAR
+                if(!StringUtils.isBlank(issuerDN)) {
+                    int splitPoint = issuerDN.indexOf(",");
+                    issuer = issuerDN.substring(3, splitPoint);
+                }
+            }
+            else {
+                //Output error message for missing signing cert
+                logger.error("No signing certificate found");
+                issuer = "unspecified";
+            }
         }
 
         return issuer;
     }
 
-    private static Key getSigningKey() {
-        // TODO: FER-128 - look up server key first, but for now, just create one:
-        return Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    }
+    private static Key getSigningKey() throws KeyStoreException, IOException, NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException {
+        String storeLocation = System.getProperty(keyStoreLocation);
+        String ksPw = System.getProperty(keyStorePasswordLocation);
+        KeyStore ks = KeyStore.getInstance(keyStoreType);
+        Key privateKey;
 
+        if(storeLocation != null && ksPw != null) {
+            ks.load(new FileInputStream(storeLocation), ksPw.toCharArray());
+            //Correctly loads KS
+            certificate = ks.getCertificate(keyAlias);
+            privateKey = ks.getKey(keyAlias, ksPw.toCharArray());
+            logger.debug("Successfully retrieved key and certificate");
+        }
+        else {
+            privateKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+        }
+        return privateKey;
+    }
 }

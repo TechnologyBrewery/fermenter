@@ -243,16 +243,26 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
 		if (packageMap == null) {
 			packageMap = new HashMap<>();
 			metadataByPackageMap.put(packageName, packageMap);
+		} else if (packageMap.containsKey(name)) {
+		    log.warn("Metamodel " + name + " exists for package " + packageName + ". Replacing...");
+		    messageTracker.addWarningMessage("Metamodel " + name + " exists for package " + packageName + ". Replacing...");
 		}
+		packageMap.put(name, element);
 
 		Map<String, T> artifactIdMap = getMetadataByArtifactIdMap(artifactId);
 		if (artifactIdMap == null) {
 			artifactIdMap = new HashMap<>();
 			metadataByArtifactIdMap.put(artifactId, artifactIdMap);
+		} else if (artifactIdMap.containsKey(name)) {
+		    log.warn("Metamodel " + name + " exists for artifact Id " + artifactId + ". Replacing...");
+		    messageTracker.addWarningMessage("Metamodel " + name + " exists for artifact Id " + artifactId + ". Replacing...");
 		}
 		artifactIdMap.put(name, element);
 
-		getMetadataMap(packageName).put(name, element);
+		if (getCompleteMetadataMap().containsKey(name)) {
+		    log.warn("Metamodel " + name + " exists. Replacing...");
+		    messageTracker.addWarningMessage("Metamodel " + name + " exists. Replacing...");
+		}
 		completeMetadataMap.put(name, element);
 
 	}

@@ -27,6 +27,15 @@ public class AngularReturn extends BaseReturnDecorator implements Return {
         return AngularGeneratorUtil.isBaseType(getType());
     }
     
+    @Override
+    public Boolean isMany() {
+        Boolean isMany = false;
+        if(wrapped.isMany() != null) {
+            isMany = wrapped.isMany();
+        }
+        return isMany;
+    }
+    
     public String getSignature() {
         String signature;
         if(isMany()) {

@@ -8,7 +8,6 @@ import { Observable } from 'rxjs';
 
 #foreach( $import in $service.imports )
 #if( !$import.isEnumeration() )
-// package: ${import.getPackageName()} - ${import.isEnumeration()}
 import { ${import.type}Base } from '../../../generated/model-base/${import.typeLowerHyphen}-base.model';
 import { ${import.type} } from '../../../shared/model/${import.typeLowerHyphen}.model';
 #end## end if enum
@@ -38,7 +37,7 @@ export class ${service.name}Service {
       ) {}
 
 #foreach( $operation in $service.angularOperations )
-#if(!$operation.usesEnumerations())## pending support for enums
+#if( !$operation.usesEnumerations() && !$operation.usesPaging() )## pending support for enums and paging
 #if($operation.transactionAttribute == "Supports")
 ##
 ## Get calls

@@ -20,6 +20,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
+
 #if ( $entity.isTransient() )
 import org.bitbucket.fermenter.stout.bizobj.BaseSpringBO;
 import org.bitbucket.fermenter.stout.bizobj.BusinessObject;
@@ -31,6 +32,8 @@ import org.bitbucket.fermenter.stout.messages.MessageFactory;
 import org.bitbucket.fermenter.stout.messages.MessageManager;
 import org.bitbucket.fermenter.stout.messages.Severity;
 import org.bitbucket.fermenter.stout.util.MetamodelInstanceUtil;
+import org.bitbucket.fermenter.stout.messages.CoreMessages;
+import org.bitbucket.fermenter.stout.messages.MessageUtils;
 
 import org.hibernate.annotations.Type;
 
@@ -43,6 +46,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.persistence.ManyToOne;
+
 
 
 #if ($entity.hasNamedEnumeration())
@@ -254,19 +258,19 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
 	    }
 	    if(sort == null) {
             Message msg = MessageFactory.createMessage();
-            msg.setKey("${entity.name}BO.findByExample.requiresSort" );
+            msg.setKey("requiresSort" );
             msg.setSeverity(Severity.ERROR);
             msg.addProperty("When searching by example, a valid sort is required." );
             MessageManager.addMessage(msg);
         } else if(page == null) {
             Message pageMsg = MessageFactory.createMessage();
-            pageMsg.setKey("${entity.name}BO.findByExample.requiresPage");
+            pageMsg.setKey("requiresPage");
             pageMsg.setSeverity(Severity.ERROR);
             pageMsg.addProperty("When searching by example, a valid page is required.");
             MessageManager.addMessage(pageMsg);
         } else if(size == null) {
             Message sizeMsg = MessageFactory.createMessage();
-            sizeMsg.setKey("${entity.name}BO.findByExample.requiresSize");
+            sizeMsg.setKey("requiresSize");
             sizeMsg.setSeverity(Severity.ERROR);
             sizeMsg.addProperty("When searching by example, a valid size is required.");
             MessageManager.addMessage(sizeMsg);

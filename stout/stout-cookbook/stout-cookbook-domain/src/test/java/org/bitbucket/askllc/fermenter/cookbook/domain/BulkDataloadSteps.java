@@ -17,7 +17,7 @@ import javax.ws.rs.core.Response.Status;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationExampleBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.ValidationExampleMaintenanceService;
-import org.bitbucket.fermenter.stout.messages.MessageManagerInitializationDelegate;
+import org.bitbucket.fermenter.stout.mock.MockRequestScope;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -47,20 +47,24 @@ public class BulkDataloadSteps {
     private VoidServiceResponse voidServiceResponse = new VoidServiceResponse();
     private Boolean errorCaught = false;
 
+    @Inject
+    private MockRequestScope mockRequestScope;
+
     @Before("@bulkDataload")
     public void setUp() {
         Authentication authentication = new UsernamePasswordAuthenticationToken("testUser", "somePassword");
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        mockRequestScope.cleanMessageManager();
     }
 
     @After("@bulkDataload")
     public void cleanupMsgMgr() throws Exception {
-        MessageManagerInitializationDelegate.cleanupMessageManager();
         ValidationExampleBO.deleteAllValidationExamples();
         valueServiceResponse = null;
         voidServiceResponse = null;
         allValidExamples = null;
         allMixedExamples = null;
+        mockRequestScope.cleanMessageManager();
     }
 
     @Given("^the following valid data$")

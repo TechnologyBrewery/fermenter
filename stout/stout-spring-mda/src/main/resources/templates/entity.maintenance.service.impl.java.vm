@@ -103,10 +103,9 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 		${entity.name}BO entityToDelete = ${entity.name}BO.findByPrimaryKey(${idFieldName});
 		if (entityToDelete != null) {
 			entityToDelete.delete();
-		}
-		else {
-		    MessageManager.addMessage(MessageUtils.createErrorMessage(CoreMessages.INVALID_ENTITY_KEY,
-	                new String[] { id.toString() }, new Object[] { id, "a record with this key does not exist" }));
+		} else {
+	          MessageManager.addMessage(MessageUtils.createErrorMessage(CoreMessages.INVALID_ENTITY_KEY,
+	                    new String[] { ${idFieldName}.toString() }, new Object[] { ${idFieldName}, "a record with this key does not exist" }));
 		}
 		VoidServiceResponse response = new VoidServiceResponse();
 		addAllMsgMgrToResponse(response);
@@ -121,9 +120,24 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 	public ValueServiceResponse<${entity.name}BO> findByPrimaryKey(${idFieldJavaType} ${idFieldName}) {
 		initMsgMgr(messages);
 		assertAuthorization(PATH, Action.RETRIEVE);
-		${entity.name}BO retrievedEntity = ${entity.name}BO.findByPrimaryKey(${idFieldName} #if (!$entity.relations.isEmpty()), true#end);
+		${entity.name}BO retrievedEntity = new ${entity.name}BO();
+		if (${idFieldName} == null) {
+	          MessageManager.addMessage(MessageUtils.createErrorMessage(CoreMessages.INVALID_ENTITY_KEY,
+	                    new String[] { "null" }, new Object[] { "null", "cannot pass in a null key" }));
+		} else {
+			retrievedEntity = ${entity.name}BO.findByPrimaryKey(${idFieldName} #if (!$entity.relations.isEmpty()), true#end);
+			if (retrievedEntity == null) {
+		          MessageManager.addMessage(MessageUtils.createErrorMessage(CoreMessages.INVALID_ENTITY_KEY,
+		                    new String[] { ${idFieldName}.toString() }, new Object[] { ${idFieldName}, "a record with this key does not exist" }));
+			}
+		}
 		ValueServiceResponse<${entity.name}BO> response = new ValueServiceResponse<${entity.name}BO>(retrievedEntity);
 		addAllMsgMgrToResponse(response);
+		
+		if (response.getMessages().hasErrorMessages()) {
+		    Response statusResponse = Response.status(Response.Status.BAD_REQUEST).entity(response).build();
+			throw new WebApplicationException(statusResponse);
+		}
 		return response;
 	}
 	

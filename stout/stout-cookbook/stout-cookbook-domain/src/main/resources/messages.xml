@@ -18,6 +18,14 @@
 	<message key="hello.world">
 		<summary>Hello, world!</summary>
 	</message>
+	
+	<message key="requiresSort">
+		<summary>Sorting is required</summary>
+	</message>
+
+	<message key="invalid.entity.key">
+		<summary>A look up with the given key did not return anything</summary>
+	</message>
 
 	<message key="valid.message">
 		<summary>This is a valid message used for testing purposes</summary>

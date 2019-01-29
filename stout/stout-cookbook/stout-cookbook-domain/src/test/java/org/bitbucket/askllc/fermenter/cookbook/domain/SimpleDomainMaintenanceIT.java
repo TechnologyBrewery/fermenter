@@ -11,6 +11,9 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response.Status;
+
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainBO;
@@ -34,6 +37,8 @@ import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(Arquillian.class)
 public class SimpleDomainMaintenanceIT extends RunTestsWithinArquillianWar {
@@ -46,16 +51,6 @@ public class SimpleDomainMaintenanceIT extends RunTestsWithinArquillianWar {
         ResteasyClient client = new ResteasyClientBuilder().build();
         client.target(deploymentURL.toURI()).path("rest").path("SimpleDomainManagerService")
                 .path("deleteAllSimpleDomains").request().header("username", "testUser").post(null).close();
-    }
-
-    @Test
-    @RunAsClient
-    public void testGetNonExistentSimpleDomain(@ArquillianResteasyResource ResteasyWebTarget webTarget)
-            throws Exception {
-        SimpleDomainMaintenanceService simpleDomainService = getMaintenanceService(webTarget);
-        ValueServiceResponse<SimpleDomainBO> result = simpleDomainService.findByPrimaryKey(UUID.randomUUID());
-        assertNotNull(result);
-        assertNull(result.getValue());
     }
 
     @Test
@@ -231,9 +226,11 @@ public class SimpleDomainMaintenanceIT extends RunTestsWithinArquillianWar {
         VoidServiceResponse deleteResult = simpleDomainService.delete(id);
         TestUtils.assertNoErrorMessages(deleteResult);
 
-        ValueServiceResponse<SimpleDomainBO> foundResult = simpleDomainService.findByPrimaryKey(id);
-        assertNotNull(foundResult);
-        assertNull(foundResult.getValue());
+        try {
+            ValueServiceResponse<SimpleDomainBO> foundResult = simpleDomainService.findByPrimaryKey(id);
+        } catch (WebApplicationException e) {
+            assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
+        }
 
     }
 

@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.LocalTransientReferenceExampleBO;
+
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationReferenceExampleBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationReferencedObjectBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationTransientReferencedObjectBO;
@@ -20,8 +21,7 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
-@ContextConfiguration({ "classpath:application-test-context.xml",
-"classpath:h2-spring-ds-context.xml" })
+@ContextConfiguration({ "classpath:application-test-context.xml", "classpath:h2-spring-ds-context.xml" })
 @Transactional
 public class ReferenceValidationSteps {
     private ValidationReferencedObjectBO object;

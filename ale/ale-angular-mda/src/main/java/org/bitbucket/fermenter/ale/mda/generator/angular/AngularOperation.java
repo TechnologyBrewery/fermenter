@@ -71,6 +71,16 @@ public class AngularOperation extends BaseOperationDecorator implements AngularN
         }
         return usesEnumerations;
     }
+    
+    public boolean usesPaging() {
+        boolean usesPaging = false;
+        for(AngularImport angularImport : getImports()) {
+            if("PageWrapper".equals(angularImport.getType())) {
+                usesPaging = true;
+            }
+        }
+        return usesPaging;
+    }
 
     public boolean isResponseTypeVoid() {
         return "void".equalsIgnoreCase(getReturn().getType()) ? Boolean.TRUE : Boolean.FALSE;

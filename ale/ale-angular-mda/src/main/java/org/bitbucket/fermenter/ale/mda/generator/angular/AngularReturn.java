@@ -29,11 +29,7 @@ public class AngularReturn extends BaseReturnDecorator implements Return {
     
     @Override
     public Boolean isMany() {
-        Boolean isMany = false;
-        if(wrapped.isMany() != null) {
-            isMany = wrapped.isMany();
-        }
-        return isMany;
+        return wrapped.isMany() != null && wrapped.isMany();
     }
     
     public String getSignature() {

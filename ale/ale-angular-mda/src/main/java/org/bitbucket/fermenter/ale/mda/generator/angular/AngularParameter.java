@@ -8,22 +8,18 @@ public class AngularParameter extends BaseParameterDecorator {
     public AngularParameter(Parameter parameterToDecorate) {
         super(parameterToDecorate);
     }
-    
+
     public boolean isEntity() {
         return !AngularGeneratorUtil.isBaseType(getType());
     }
-    
+
     public String getAngularType() {
         return AngularGeneratorUtil.getAngularType(getType());
     }
-    
+
     @Override
     public Boolean isMany() {
-        Boolean isMany = false;
-        if(wrapped.isMany() != null) {
-            isMany = wrapped.isMany();
-        }
-        return isMany;
+        return wrapped.isMany() != null && wrapped.isMany();
     }
 
 }

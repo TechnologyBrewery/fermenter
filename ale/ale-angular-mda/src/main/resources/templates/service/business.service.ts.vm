@@ -195,7 +195,7 @@ export class ${service.name}Service {
     }
 #end## end of post vs get if block
 #else
-    // support for enums is pending
+    // support for enums and paging is pending
 #end## end of if usesEnumerations
 #end## end of for operation
 

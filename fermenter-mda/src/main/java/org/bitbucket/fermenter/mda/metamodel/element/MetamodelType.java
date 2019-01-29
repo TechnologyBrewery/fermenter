@@ -10,7 +10,7 @@ import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
  */
 public enum MetamodelType {
 
-    SIMPLE_TYPE, ENUMERATION, ENTITY;
+    SIMPLE_TYPE, ENUMERATION, ENTITY, DICTIONARY_TYPE;
 
     private static DefaultModelInstanceRepository modelInstanceRepository = ModelInstanceRepositoryManager
             .getMetadataRepostory(DefaultModelInstanceRepository.class);
@@ -31,7 +31,10 @@ public enum MetamodelType {
         
         String lookupPackageName = packageName == null ? modelInstanceRepository.getBasePackage() : packageName; 
         
-        if (modelInstanceRepository.getEnumeration(lookupPackageName, name) != null) {
+        if (modelInstanceRepository.getDictionaryType(name) != null) {
+            metamodelType = MetamodelType.DICTIONARY_TYPE;
+
+        } else if (modelInstanceRepository.getEnumeration(lookupPackageName, name) != null) {
             metamodelType = MetamodelType.ENUMERATION;
 
             // TODO: update w/ package once entities are migrated:

@@ -20,7 +20,7 @@
 		"maxLength": {
 			"type": ["integer", "null"]
 		},
-		"format": {
+		"formats": {
 			"type": "array",
 			"items": {
 				"type": "string"

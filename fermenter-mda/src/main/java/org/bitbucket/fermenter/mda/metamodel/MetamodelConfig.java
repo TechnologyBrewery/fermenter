@@ -34,6 +34,14 @@ public interface MetamodelConfig extends KrauseningConfig {
     public String getEntitiesRelativePath();    
     
     /**
+     * Returns the locations within src/main/resources where dictionary type model instances can be found.
+     * @return path location to dictionary types
+     */
+    @Key("dictionary-types.relative.path")
+    @DefaultValue("dictionaryTypes")
+    public String getDictionaryTypesRelativePath();    
+    
+    /**
      * Returns the metadata resolver to use to lookup metadata.
      * @return url resolver class
      */

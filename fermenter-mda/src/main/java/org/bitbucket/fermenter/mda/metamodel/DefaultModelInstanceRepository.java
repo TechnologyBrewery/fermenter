@@ -8,6 +8,7 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
+import org.bitbucket.fermenter.mda.metamodel.element.DictionaryType;
 import org.bitbucket.fermenter.mda.metamodel.element.Entity;
 import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
 import org.bitbucket.fermenter.mda.metamodel.element.Service;
@@ -23,7 +24,8 @@ public class DefaultModelInstanceRepository extends AbstractModelInstanceReposit
     private EnumerationModelInstanceManager enumerationManager = EnumerationModelInstanceManager.getInstance();
     private EntityModelInstanceManager entityManager = EntityModelInstanceManager.getInstance();
     private ServiceModelInstanceManager serviceManager = ServiceModelInstanceManager.getInstance();
-
+    private DictionaryModelInstanceManager dictionaryManager = DictionaryModelInstanceManager.getInstance();
+    
     /**
      * Creates a new instance w/ the base package of the current project. This package name will become the default
      * package where no other is specified.
@@ -42,14 +44,14 @@ public class DefaultModelInstanceRepository extends AbstractModelInstanceReposit
     @Override
     public void load() {
         enumerationManager.reset();
+        dictionaryManager.reset();
         serviceManager.reset();
         entityManager.reset();
-
         Collection<ModelInstanceUrl> modelInstanceUrls = config.getMetamodelInstanceLocations().values();
         for (ModelInstanceUrl modelInstanceUrl : modelInstanceUrls) {
             long start = System.currentTimeMillis();
-
             enumerationManager.loadMetadata(modelInstanceUrl, config);
+            dictionaryManager.loadMetadata(modelInstanceUrl, config);
             serviceManager.loadMetadata(modelInstanceUrl, config);
             entityManager.loadMetadata(modelInstanceUrl, config);
 
@@ -60,7 +62,7 @@ public class DefaultModelInstanceRepository extends AbstractModelInstanceReposit
             }
         }
     }
-    
+
     public Set<String> getArtifactIds() {
         Set<String> artifactIds = new HashSet<>();
         Collection<ModelInstanceUrl> urls = config.getMetamodelInstanceLocations().values();
@@ -69,7 +71,7 @@ public class DefaultModelInstanceRepository extends AbstractModelInstanceReposit
         }
         return artifactIds;
     }
-
+    
     /**
      * {@inheritDoc}
      */
@@ -80,6 +82,10 @@ public class DefaultModelInstanceRepository extends AbstractModelInstanceReposit
             enumeration.validate();
         }
 
+        for (DictionaryType dictionaryType : dictionaryManager.getMetadataElementByPackage(basePackage).values()) {
+            dictionaryType.validate();
+        }
+        
         for (Service service : serviceManager.getMetadataElementByPackage(basePackage).values()) {
             service.validate();
         }
@@ -157,11 +163,53 @@ public class DefaultModelInstanceRepository extends AbstractModelInstanceReposit
     }    
 
     /**
+     * Gets a dictionary type by name from the current package.
+     * 
+     * @param name
+     *            name of the dictionary type to look up.
+     * @return instance of the {@link DictionaryType} or null if none is found with the request name.
+     */
+    public DictionaryType getDictionaryType(String name) {
+        return dictionaryManager.getMetadataElementByPackageAndName(config.getBasePackage(), name);
+    }
+
+    /**
+     * Gets all dictionary types from the current package.
+     * 
+     * @return all dictionary types within the current package, keyed by name.
+     */
+    public Map<String, DictionaryType> getDictionaryTypes() {
+        return dictionaryManager.getMetadataElementWithoutPackage();
+    }
+
+    /**
+     * Gets all dictionary types from the specified artifact id.
+     * 
+     * @param artifactId
+     *            the requested artifact id.
+     * @return all dictionary types within the request artifact id, keyed by name.
+     */
+    public Map<String, DictionaryType> getDictionaryTypesByArtifactId(String artifactId) {
+        return dictionaryManager.getMetadataByArtifactIdMap(artifactId);
+    }
+
+    /**
+     * Retrieves dictionary types based on a generation context.
+     * 
+     * @param context
+     *            type of generation target context being used.
+     * @return map of dictionary types.
+     */
+    public Map<String, DictionaryType> getDictionaryTypesByContext(String context) {
+        return dictionaryManager.getMetadataElementByContext(context);
+    }
+
+    /**
      * Gets an service by name from the current package.
      * 
      * @param name
-     *            name of the service to look up
-     * @return instance of the {@link Service} or null if none is found with the request name
+     *            name of the service to look up.
+     * @return instance of the {@link Service} or null if none is found with the request name.
      */
     public Service getService(String name) {
         return serviceManager.getMetadataElementByPackageAndName(config.getBasePackage(), name);
@@ -172,10 +220,10 @@ public class DefaultModelInstanceRepository extends AbstractModelInstanceReposit
      * Gets an service by name from the current package.
      * 
      * @param name
-     *            name of the service to look up
+     *            name of the service to look up.
      * @param packageName
-     *            the package in which to look for the request element
-     * @return instance of the {@link Service} or null if none is found with the request name
+     *            the package in which to look for the request element.
+     * @return instance of the {@link Service} or null if none is found with the request name.
      */
     public Service getService(String packageName, String name) {
         return serviceManager.getMetadataElementByPackageAndName(packageName, name);

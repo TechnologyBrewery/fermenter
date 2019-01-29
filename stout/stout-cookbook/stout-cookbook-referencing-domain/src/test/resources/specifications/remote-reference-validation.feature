@@ -86,7 +86,7 @@ Feature: Reference Level Validation Requirements
       | schoolBuilding | postalDistrict |
       | schoolABC      | PS1            |
       | schoolDEF      | PS2            |   
-@hammy
+
   Scenario: Transient entity reference level validation fails on invalid transient entity references
     Given a "transient" entity "schoolBuilding" has a remote reference to a non-existing transient entity
     When the reference level validation is performed on the "transient" entity instance "schoolBuilding"

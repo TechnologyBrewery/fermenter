@@ -34,7 +34,7 @@ public class EntityMaintenanceValidationSteps {
     private NonUUIDKeyEntityMaintenanceService nonUUIDKeyEntityMaintenanceService;
 
     private ValueServiceResponse<NonUUIDKeyEntityBO> valueServiceResponse;
-    private Boolean errorThrown = false;
+    private boolean errorThrown = false;
 
     @Inject
     private MockRequestScope mockRequestScope;
@@ -70,7 +70,7 @@ public class EntityMaintenanceValidationSteps {
         } catch (WebApplicationException e) {
             assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
             valueServiceResponse = (ValueServiceResponse) e.getResponse().getEntity();
-            errorThrown = Boolean.TRUE;
+            errorThrown = true;
         }
     }
     
@@ -82,7 +82,7 @@ public class EntityMaintenanceValidationSteps {
         } catch (WebApplicationException e) {
             assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
             valueServiceResponse = (ValueServiceResponse) e.getResponse().getEntity();
-            errorThrown = Boolean.TRUE;
+            errorThrown = true;
         }
     }
 

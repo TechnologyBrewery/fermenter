@@ -3,16 +3,17 @@ import { ${association.type} } from '../../shared/model/${association.typeLowerH
 #end
 
 /*******************************************************
-* Base BO for Angular frontend for ${entity.nameUpperCamel}
+* Base BO for Angular frontend for ${entity.name}
 *
 * Generated Code - DO NOT MODIFY
+* Template = entity-base.model.ts.vm
 *
 * NOTE: saving, updating, deleting actions need to be done
 *       through either maintenance or business services and
 *       thus those methods are not found within the BOs.
 *******************************************************/
 
-export class ${entity.nameUpperCamel}Base {
+export class ${entity.name}Base {
 
   // Fields
 #foreach ( $field in $entity.allFields.values() )
@@ -32,11 +33,11 @@ export class ${entity.nameUpperCamel}Base {
 #end
 #end
 
-  constructor(${entity.nameLowerCamel}Base?: ${entity.nameUpperCamel}Base) {
+  constructor(${entity.nameLowerCamel}Base?: ${entity.name}Base) {
     if (${entity.nameLowerCamel}Base) {
 #foreach ( $field in $entity.allFields.values() )
 #if( $field.angularType == "Date" )
-      if(${entity.nameLowerCamel}Base.${field.name}) {
+      if (${entity.nameLowerCamel}Base.${field.name}) {
         this.${field.name} = new Date(${entity.nameLowerCamel}Base.${field.name});
       }
 #else

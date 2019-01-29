@@ -2,26 +2,27 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { Constants } from '../../constants';
+import { Constants } from '../../../constants';
 
-import { ${entity.nameUpperCamel}Base } from '../model-base/${entity.name}-base.model';
-import { ${entity.nameUpperCamel} } from '../../shared/model/${entity.name}.model';
-import { FermenterResponse } from '../../shared/model/fermenter-response.model';
-import { GlobalErrorHandler } from '../../shared/global-error-handler.service';
-import { FindByExampleCriteria } from '../../shared/model/find-by-example-criteria.model';
-import { PageWrapper } from '../../shared/model/page-wrapper.model';
+import { ${entity.name}Base } from '../../model-base/${entity.nameLowerHyphen}-base.model';
+import { ${entity.name} } from '../../../shared/model/${entity.nameLowerHyphen}.model';
+import { FermenterResponse } from '../../../shared/model/fermenter-response.model';
+import { GlobalErrorHandler } from '../../../shared/global-error-handler.service';
+import { FindByExampleCriteria } from '../../../shared/model/find-by-example-criteria.model';
+import { PageWrapper } from '../../../shared/model/page-wrapper.model';
 
 /*******************************************************
- * Maintenance (CRUD) services for ${entity.nameUpperCamel}
+ * Maintenance (CRUD) services for ${entity.name}
  *
  * Generated Code - DO NOT MODIFY
+ * Template = maintenance.service.ts.vm
  *******************************************************/
 
 @Injectable({
   providedIn: 'root'
 })
-export class ${entity.nameUpperCamel}MaintenanceService {
-  private ${entity.nameUpperCamel}URL: string;
+export class ${entity.name}MaintenanceService {
+  private ${entity.name}URL: string;
   private constants = new Constants();
 
   constructor(
@@ -29,8 +30,8 @@ export class ${entity.nameUpperCamel}MaintenanceService {
     private errorHandler: GlobalErrorHandler
   ) {
     // be sure to define the applicaiton endpoint in the constants.ts file
-    this.${entity.nameUpperCamel}URL =
-      this.constants.${entity.applicationNameLowerCamel}EndPoint + '/${entity.nameUpperCamel}';
+    this.${entity.name}URL =
+      this.constants.${entity.applicationNameLowerCamel}EndPoint + '/${entity.name}';
   }
 
   /**
@@ -38,15 +39,15 @@ export class ${entity.nameUpperCamel}MaintenanceService {
    *
    * @param id - the identifier of the entity that you want to get
    */
-  public get(id: string): Observable<${entity.nameUpperCamel}> {
-    const url = this.${entity.nameUpperCamel}URL + '/' + id;
+  public get(id: string): Observable<${entity.name}> {
+    const url = this.${entity.name}URL + '/' + id;
 
-    return this.http.get<FermenterResponse<${entity.nameUpperCamel}Base>>(url).pipe(
-      map((response: FermenterResponse<${entity.nameUpperCamel}Base>) => {
+    return this.http.get<FermenterResponse<${entity.name}Base>>(url).pipe(
+      map((response: FermenterResponse<${entity.name}Base>) => {
         const fermenterResponse = this.parseResponseToSingle(response);
         if (fermenterResponse.hasErrorMessages()) {
           const msg =
-            'The get service is expected to retrieve the ${entity.nameUpperCamel} without issues.';
+            'The get service is expected to retrieve the ${entity.name} without issues.';
           this.errorHandler.handleCriticalError(msg);
           throw new Error(msg);
         }
@@ -64,18 +65,18 @@ export class ${entity.nameUpperCamel}MaintenanceService {
    */
   public put(
     id: string,
-    ${entity.nameLowerCamel}: ${entity.nameUpperCamel}
-  ): Observable<FermenterResponse<${entity.nameUpperCamel}>> {
-    const url = this.${entity.nameUpperCamel}URL + '/' + id;
+    ${entity.nameLowerCamel}: ${entity.name}
+  ): Observable<FermenterResponse<${entity.name}>> {
+    const url = this.${entity.name}URL + '/' + id;
 
     return this.http
-      .put<FermenterResponse<${entity.nameUpperCamel}Base>>(url, ${entity.nameLowerCamel})
+      .put<FermenterResponse<${entity.name}Base>>(url, ${entity.nameLowerCamel})
       .pipe(
-        map((response: FermenterResponse<${entity.nameUpperCamel}Base>) => {
+        map((response: FermenterResponse<${entity.name}Base>) => {
           const fermenterResponse = this.parseResponseToSingle(response);
           if (fermenterResponse.hasErrorMessages()) {
             const msg =
-              'The get service is expected to save the ${entity.nameUpperCamel} without issues.';
+              'The get service is expected to save the ${entity.name} without issues.';
             this.errorHandler.handleCriticalError(msg);
             throw new Error(msg);
           }
@@ -91,18 +92,18 @@ export class ${entity.nameUpperCamel}MaintenanceService {
    * @param ${entity.nameLowerCamel} - entity that you want to save/update
    */
   public post(
-    ${entity.nameLowerCamel}: ${entity.nameUpperCamel}
-  ): Observable<FermenterResponse<${entity.nameUpperCamel}>> {
-    const url = this.${entity.nameUpperCamel}URL;
+    ${entity.nameLowerCamel}: ${entity.name}
+  ): Observable<FermenterResponse<${entity.name}>> {
+    const url = this.${entity.name}URL;
 
     return this.http
-      .post<FermenterResponse<${entity.nameUpperCamel}Base>>(url, ${entity.nameLowerCamel})
+      .post<FermenterResponse<${entity.name}Base>>(url, ${entity.nameLowerCamel})
       .pipe(
-        map((response: FermenterResponse<${entity.nameUpperCamel}Base>) => {
+        map((response: FermenterResponse<${entity.name}Base>) => {
           const fermenterResponse = this.parseResponseToSingle(response);
           if (fermenterResponse.hasErrorMessages()) {
             const msg =
-              'The get service is expected to save the ${entity.nameUpperCamel} without issues.';
+              'The get service is expected to save the ${entity.name} without issues.';
             this.errorHandler.handleCriticalError(msg);
             throw new Error(msg);
           }
@@ -117,15 +118,15 @@ export class ${entity.nameUpperCamel}MaintenanceService {
    *
    * @param id - the id of the entity that you want to delete
    */
-  public delete(id: string): Observable<FermenterResponse<${entity.nameUpperCamel}Base>> {
-    const url = this.${entity.nameUpperCamel}URL + '/' + id;
+  public delete(id: string): Observable<FermenterResponse<${entity.name}Base>> {
+    const url = this.${entity.name}URL + '/' + id;
 
-    return this.http.delete<FermenterResponse<${entity.nameUpperCamel}Base>>(url).pipe(
-      map((response: FermenterResponse<${entity.nameUpperCamel}Base>) => {
-        const fermenterResponse = new FermenterResponse<${entity.nameUpperCamel}Base>(response);
+    return this.http.delete<FermenterResponse<${entity.name}Base>>(url).pipe(
+      map((response: FermenterResponse<${entity.name}Base>) => {
+        const fermenterResponse = new FermenterResponse<${entity.name}Base>(response);
         if (fermenterResponse.hasErrorMessages()) {
           const msg =
-            'The get service is expected to delete the ${entity.nameUpperCamel} without issues.';
+            'The get service is expected to delete the ${entity.name} without issues.';
           this.errorHandler.handleCriticalError(msg);
           throw new Error(msg);
         }
@@ -141,14 +142,14 @@ export class ${entity.nameUpperCamel}MaintenanceService {
    * @param findByExampleCriteria - an instance of the FindByExampleCriteria that should be used for the search
    */
   public findByExample(
-    findByExampleCriteria: FindByExampleCriteria<${entity.nameUpperCamel}>
-  ): Observable<PageWrapper<${entity.nameUpperCamel}>> {
-    const url = this.${entity.nameUpperCamel}URL + '/findByExample';
+    findByExampleCriteria: FindByExampleCriteria<${entity.name}>
+  ): Observable<PageWrapper<${entity.name}>> {
+    const url = this.${entity.name}URL + '/findByExample';
 
     return this.http
-      .post<FermenterResponse<PageWrapper<${entity.nameUpperCamel}Base>>>(url, findByExampleCriteria)
+      .post<FermenterResponse<PageWrapper<${entity.name}Base>>>(url, findByExampleCriteria)
       .pipe(
-        map((response: FermenterResponse<PageWrapper<${entity.nameUpperCamel}>>) => {
+        map((response: FermenterResponse<PageWrapper<${entity.name}>>) => {
           const fermenterResponse = this.parseResponseToPageWrapper(response);
           if (fermenterResponse.hasErrorMessages()) {
             const msg =
@@ -162,16 +163,16 @@ export class ${entity.nameUpperCamel}MaintenanceService {
   }
 
   private parseResponseToPageWrapper(
-    response: FermenterResponse<PageWrapper<${entity.nameUpperCamel}Base>>
-  ): FermenterResponse<PageWrapper<${entity.nameUpperCamel}>> {
-    const fermenterResponse = new FermenterResponse<PageWrapper<${entity.nameUpperCamel}>>(response);
+    response: FermenterResponse<PageWrapper<${entity.name}Base>>
+  ): FermenterResponse<PageWrapper<${entity.name}>> {
+    const fermenterResponse = new FermenterResponse<PageWrapper<${entity.name}>>(response);
     this.checkFermenterResponseIsInitialized(response);
 
-    const pageWrapper = new PageWrapper<${entity.nameUpperCamel}>(response.value);
+    const pageWrapper = new PageWrapper<${entity.name}>(response.value);
 
-    const ${entity.nameLowerCamel}s = new Array<${entity.nameUpperCamel}>();
+    const ${entity.nameLowerCamel}s = new Array<${entity.name}>();
     for (const ${entity.nameLowerCamel} of response.value.content) {
-      ${entity.nameLowerCamel}s.push(new ${entity.nameUpperCamel}(${entity.nameLowerCamel}));
+      ${entity.nameLowerCamel}s.push(new ${entity.name}(${entity.nameLowerCamel}));
     }
 
     pageWrapper.content = ${entity.nameLowerCamel}s;
@@ -181,13 +182,13 @@ export class ${entity.nameUpperCamel}MaintenanceService {
   }
 
   private parseResponseToSingle(
-    response: FermenterResponse<${entity.nameUpperCamel}Base>
-  ): FermenterResponse<${entity.nameUpperCamel}> {
+    response: FermenterResponse<${entity.name}Base>
+  ): FermenterResponse<${entity.name}> {
     const fermenterResponse = new FermenterResponse(response);
     this.checkFermenterResponseIsInitialized(fermenterResponse);
 
     if (response.value) {
-      fermenterResponse.value = new ${entity.nameUpperCamel}(response.value);
+      fermenterResponse.value = new ${entity.name}(response.value);
     }
 
     return fermenterResponse;

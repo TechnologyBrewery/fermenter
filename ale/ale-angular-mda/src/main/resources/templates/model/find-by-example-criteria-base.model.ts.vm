@@ -1,13 +1,21 @@
 import { SortWrapper } from '../../shared/model/sort-wrapper.model';
 import { Constants } from '../../constants';
 
+/*******************************************************
+ * Find By Example Criteria Model Base
+ * This is used to specify criteria to find entities using the find by example maintenance service.
+ * 
+ * Generated Code - DO NOT MODIFY
+ * Template = find-by-example-criteria-base.model.ts.vm
+ *******************************************************/
 export class FindByExampleCriteriaBase<T> {
   public probe: T;
   public page: number;
   public size: number;
   public sortWrapper: SortWrapper;
 
-  // NOTE that this is never constructed from a http call response, thus the constructor is a little different
+  // NOTE that this is never constructed from a http call response, 
+  // thus the constructor is setup to be able to easily create the object on the frontend
   constructor(sortWrapper: SortWrapper, probe?: T, page?: number, size?: number) {
     this.sortWrapper = sortWrapper;
     

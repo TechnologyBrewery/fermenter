@@ -14,7 +14,7 @@ import org.bitbucket.fermenter.mda.metadata.element.Relation;
 
 import com.google.common.base.CaseFormat;
 
-public class AngularEntity implements Entity {
+public class AngularEntity implements Entity, AngularNamedElement {
 
     private static final String ID_FIELD_DOES_NOT_EXIST = "ID_FIELD_DOES_NOT_EXIST";
     private Entity entity;
@@ -30,22 +30,9 @@ public class AngularEntity implements Entity {
     public String getNamespace() {
         return entity.getNamespace();
     }
-
-    @Override
-    public String getName() {
-        return CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_HYPHEN, entity.getName());
-    }
-
-    public String getNameUpperCamel() {
-        return CaseFormat.LOWER_HYPHEN.to(CaseFormat.UPPER_CAMEL, entity.getName());
-    }
-
-    public String getNameLowerCamel() {
-        return CaseFormat.LOWER_HYPHEN.to(CaseFormat.LOWER_CAMEL, entity.getName());
-    }
     
     public String getApplicationNameLowerCamel() {
-        return CaseFormat.LOWER_HYPHEN.to(CaseFormat.LOWER_CAMEL, entity.getApplicationName());
+        return CaseFormat.LOWER_HYPHEN.to(CaseFormat.LOWER_CAMEL, getApplicationName());
     }
 
     public Map<String, AngularAssociation> getAssociations() {
@@ -90,10 +77,10 @@ public class AngularEntity implements Entity {
 
         return decoratedIdFieldMap;
     }
-    
+
     public String getIdFieldName() {
         String idFieldName = ID_FIELD_DOES_NOT_EXIST;
-        if(!getIdFields().isEmpty()) {
+        if (!getIdFields().isEmpty()) {
             idFieldName = getIdFields().values().iterator().next().getName();
         }
         return idFieldName;
@@ -235,6 +222,11 @@ public class AngularEntity implements Entity {
     @Override
     public boolean isChildOfNonPersistentParentEntity() {
         return entity.isChildOfNonPersistentParentEntity();
+    }
+
+    @Override
+    public String getName() {
+        return entity.getName();
     }
 
 }

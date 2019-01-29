@@ -85,6 +85,9 @@
     "targetReferences": [
       {
         "name": "maintenanceServices"
+      },
+      {
+        "name": "businessServices"
       }
     ]
   }

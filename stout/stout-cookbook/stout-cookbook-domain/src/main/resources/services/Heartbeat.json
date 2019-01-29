@@ -1,0 +1,16 @@
+{
+  "package": "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "name": "Heartbeat",
+  "documentation": "An example of a supports/get service that returns a void response",
+  "operations": [
+    {
+      "name": "Heartbeat",
+      "documentation": "An example of a supports/get service that returns a void response",
+      "transactionAttribute": "Supports",
+      "parameters": [],
+      "return": {
+        "type": "void"
+      }
+    }
+  ]
+}

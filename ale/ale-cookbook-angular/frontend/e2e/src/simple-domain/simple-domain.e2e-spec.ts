@@ -53,6 +53,15 @@ describe('Simple Domain e2e Test Page', () => {
     expect(simpleDomains).not.toContain(testNameToDelete);
   });
 
+  it('should be able to verify Simple Domain Count via a Business Service', () => {
+    const numberToCreate = Math.floor(Math.random() * 5) + 1;
+    const name = 'Test Name #';
+    for (let i = 0; i < numberToCreate; i++) {
+      page.addSimpleDomain(name + i);
+    }
+    expect(page.getCountByBusinessService()).toEqual(String(numberToCreate));
+  });
+
   afterEach(() => {
     page.deleteAllSimpleDomains();
   });

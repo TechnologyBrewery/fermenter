@@ -1,9 +1,6 @@
 package org.bitbucket.fermenter.ale.mda.generator.angular;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
@@ -17,7 +14,7 @@ import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
 
 public class AngularField implements Field {
 
-    private static final String TYPE_NOT_FOUND = "TYPE_NOT_FOUND";
+    
     private Field field;
 
     public AngularField(Field fieldToDecorate) {
@@ -27,28 +24,10 @@ public class AngularField implements Field {
         field = fieldToDecorate;
     }
 
-    private static final Map<String, String> fermenterTypeToAngularTypeMap;
-    static {
-        Map<String, String> map = new HashMap<>();
-        map.put("date", "Date");
-        map.put("timestamp", "Date");
-        map.put("integer", "number");
-        map.put("long", "number");
-        map.put("big_decimal", "number");
-        map.put("boolean", "boolean");
-        map.put("numeric_boolean", "boolean");
-        map.put("string", "string");
-        map.put("character", "string");
-        map.put("uuid", "string");
-        map.put("geospatial_point", "string");
-        map.put("blob", "string");
-        fermenterTypeToAngularTypeMap = Collections.unmodifiableMap(map);
-    }
-
     public String getAngularType() {
-        String type = TYPE_NOT_FOUND;
-        if (field != null && field.getType() != null && fermenterTypeToAngularTypeMap.containsKey(field.getType())) {
-            type = fermenterTypeToAngularTypeMap.get(field.getType());
+        String type = AngularGeneratorUtil.TYPE_NOT_FOUND;
+        if(field != null) {
+            type = AngularGeneratorUtil.getAngularType(field.getType());
         }
         return type;
     }

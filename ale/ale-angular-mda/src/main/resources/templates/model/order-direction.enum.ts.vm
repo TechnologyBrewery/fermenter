@@ -1,3 +1,9 @@
+/*******************************************************
+ * Order Direction Enum
+ * 
+ * Generated Code - DO NOT MODIFY
+ * Template = order-direction.enum.ts.vm
+ *******************************************************/
 export enum OrderDirection {
     ASC = "asc",
     DESC = "desc"

@@ -13,7 +13,7 @@ import { Constants } from '../constants';
 import { FermenterResponse } from '../shared/model/fermenter-response.model';
 import { GlobalErrorHandler } from '../shared/global-error-handler.service';
 import { FermenterMessage } from '../shared/model/fermenter-message.model';
-import { SimpleDomainMaintenanceService } from '../generated/service/simple-domain-maintenance.service';
+import { SimpleDomainMaintenanceService } from '../generated/service/maintenance/simple-domain-maintenance.service';
 
 const testUrl = '/SimpleDomain';
 

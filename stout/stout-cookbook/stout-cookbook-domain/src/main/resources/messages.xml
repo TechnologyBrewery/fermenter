@@ -22,4 +22,8 @@
 	<message key="valid.message">
 		<summary>This is a valid message used for testing purposes</summary>
 	</message>
+    
+    <message key="heartbeat">
+        <summary>Server is responsive.</summary>
+    </message>
 </messages>

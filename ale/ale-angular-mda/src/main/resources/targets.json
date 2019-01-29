@@ -24,8 +24,15 @@
   {
     "name": "maintenanceServices",
     "templateName": "templates/service/maintenance.service.ts.vm",
-    "outputFile": "generated/service/${entityName}-maintenance.service.ts",
+    "outputFile": "generated/service/maintenance/${entityName}-maintenance.service.ts",
     "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularMaintServiceGenerator",
+    "overwritable": true
+  },
+  {
+    "name": "businessServices",
+    "templateName": "templates/service/business.service.ts.vm",
+    "outputFile": "generated/service/business/${serviceName}.service.ts",
+    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBusinessServiceGenerator",
     "overwritable": true
   },
   {

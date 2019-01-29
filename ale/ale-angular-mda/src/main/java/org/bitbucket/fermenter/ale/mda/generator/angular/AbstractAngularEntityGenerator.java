@@ -6,7 +6,6 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.VelocityContext;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
-import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.generator.entity.AbstractEntityGenerator;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
@@ -40,7 +39,7 @@ public abstract class AbstractAngularEntityGenerator extends AbstractEntityGener
                 VelocityContext vc = new VelocityContext();
                 populateVelocityContext(vc, entity, context);
 
-                fileName = replaceEntityName(basefileName, entity.getName());
+                fileName = replaceEntityName(basefileName, entity.getNameLowerHyphen());
                 context.setOutputFile(fileName);
 
                 generateFile(context, vc);

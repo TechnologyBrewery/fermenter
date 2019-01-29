@@ -1,9 +1,16 @@
 import { OrderWrapper } from '../../shared/model/order-wrapper.model';
 
+/*******************************************************
+ * Sort Wrapper Model Base
+ * 
+ * Generated Code - DO NOT MODIFY
+ * Template = sort-wrapper-base.model.ts.vm
+ *******************************************************/
 export class SortWrapperBase {
   public orders: OrderWrapper[] = new Array<OrderWrapper>();
 
-  // NOTE that this is never constructed from a http call response, thus the constructor is a little different
+  // NOTE that this is never constructed from a http call response, 
+  // thus the constructor is setup to be able to easily create the object on the frontend
   constructor(property?: string) {
     if (property) {
       this.orders.push(new OrderWrapper(property));

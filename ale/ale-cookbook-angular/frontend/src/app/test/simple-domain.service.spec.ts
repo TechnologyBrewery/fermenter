@@ -11,7 +11,7 @@ import { SimpleDomain } from '../shared/model/simple-domain.model';
 import { Constants } from '../constants';
 import { FermenterResponse } from '../shared/model/fermenter-response.model';
 import { GlobalErrorHandler } from '../shared/global-error-handler.service';
-import { SimpleDomainMaintenanceService } from '../generated/service/simple-domain-maintenance.service';
+import { SimpleDomainMaintenanceService } from '../generated/service/maintenance/simple-domain-maintenance.service';
 import { FindByExampleCriteria } from '../shared/model/find-by-example-criteria.model';
 import { SortWrapper } from '../shared/model/sort-wrapper.model';
 import { PageWrapper } from '../shared/model/page-wrapper.model';

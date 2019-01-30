@@ -170,7 +170,7 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 		Collection<${entity.name}BO> values = new ArrayList<>();
 		ValueServiceResponse<${entity.name}BO> response = null;
         ValueServiceResponse<Collection<${entity.name}BO>> responses = new ValueServiceResponse<>(values);
-        String keyList = "";
+        String keyList = null;
         
 		for(${entity.name}BO entity : entities){
             try {
@@ -182,7 +182,7 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
             }
         }
         
-        if(!keyList.isEmpty()) {
+        if(keyList != null) {
             MessageManager.addMessage(MessageUtils.createErrorMessage(CoreMessages.BULK_OPERATION_FAILED,
                     new String[] { "Bulk Save failed" }, new Object[] { keyList }));
             addAllMsgMgrToResponse(responses);
@@ -206,7 +206,7 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
         assertAuthorization(PATH, Action.DELETE);
         VoidServiceResponse responses = new VoidServiceResponse();
         VoidServiceResponse response = new VoidServiceResponse();
-        String keyList = "";
+        String keyList = null;
         
         for (${entity.name}BO entity : entities) {
             response = delete(entity.getKey());
@@ -215,7 +215,7 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
             }
         }
 
-        if(!keyList.isEmpty()) {
+        if(keyList != null) {
             MessageManager.addMessage(MessageUtils.createErrorMessage(CoreMessages.BULK_OPERATION_FAILED,
                     new String[] { "Bulk Delete failed" }, new Object[] { keyList }));
             addAllMsgMgrToResponse(responses);
@@ -230,7 +230,7 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
     } 
     
     private String addToFailedKeys(String keyList, ${entity.name}BO entity) {
-        if (!keyList.isEmpty()) {
+        if (keyList != null) {
             keyList += ", ";
         }
         keyList += entity.getKey();

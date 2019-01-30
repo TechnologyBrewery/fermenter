@@ -35,7 +35,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
@@ -55,9 +54,10 @@ public class BulkDataloadSteps {
     private Collection<ValidationExampleBO> emptyExamples = new ArrayList<>();
     private ValueServiceResponse valueServiceResponse = new ValueServiceResponse();
     private VoidServiceResponse voidServiceResponse = new VoidServiceResponse();
+    private ServiceResponse serviceResponse;
     private Boolean errorCaught = false;
     private ValidationExampleBO messageTestBO = new ValidationExampleBO();
-    private ArrayList<ValidationExampleBO> bulkUpdateObjects = new ArrayList<ValidationExampleBO>();
+    private List<ValidationExampleBO> bulkUpdateObjects = new ArrayList<ValidationExampleBO>();
 
     @Inject
     private MockRequestScope mockRequestScope;
@@ -285,7 +285,7 @@ public class BulkDataloadSteps {
             validationExampleMaintenanceService.bulkSaveOrUpdate(updateList);
         } catch (WebApplicationException e) {
             assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
-            valueServiceResponse = ((ValueServiceResponse) e.getResponse().getEntity());
+            serviceResponse = ((ValueServiceResponse) e.getResponse().getEntity());
         }
     }
 
@@ -308,7 +308,7 @@ public class BulkDataloadSteps {
             validationExampleMaintenanceService.bulkDelete(updateList);
         } catch (WebApplicationException e) {
             assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus()); 
-            voidServiceResponse = ((VoidServiceResponse) e.getResponse().getEntity());
+            serviceResponse = ((VoidServiceResponse) e.getResponse().getEntity());
         }
     }
     
@@ -333,7 +333,7 @@ public class BulkDataloadSteps {
             validationExampleMaintenanceService.bulkSaveOrUpdate(bulkUpdateObjects);
         } catch (WebApplicationException e) {
             assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
-            valueServiceResponse = ((ValueServiceResponse) e.getResponse().getEntity());
+            serviceResponse = ((ValueServiceResponse) e.getResponse().getEntity());
         }
     }
     
@@ -347,7 +347,7 @@ public class BulkDataloadSteps {
             validationExampleMaintenanceService.bulkDelete(bulkUpdateObjects);
         } catch (WebApplicationException e) {
             assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
-            voidServiceResponse = ((VoidServiceResponse) e.getResponse().getEntity());
+            serviceResponse = ((VoidServiceResponse) e.getResponse().getEntity());
         }
     }
 
@@ -366,18 +366,16 @@ public class BulkDataloadSteps {
 
     private Collection<Message> getErrorMessages() {
         Messages messages = new MessagesSet();
-        if (voidServiceResponse.getMessages().getErrorMessageCount() > 0) {
-            messages = voidServiceResponse.getMessages();
-        } else if (valueServiceResponse.getMessages().getErrorMessageCount() > 0) {
-            messages = valueServiceResponse.getMessages();
+        if (serviceResponse.getMessages().getErrorMessageCount() > 0) {
+            messages = serviceResponse.getMessages();
         } else {
             assertTrue("No error messages found", false);
         }
-        Collection<Message> errors = null;
         if (messages.hasErrorMessages()) {
-            errors = messages.getErrorMessages();
+            return messages.getErrorMessages();
+        } else {
+            return null;
         }
-        return errors;
     }
 
     private void saveOrUpdateRecords(Collection<ValidationExampleBO> examples) {

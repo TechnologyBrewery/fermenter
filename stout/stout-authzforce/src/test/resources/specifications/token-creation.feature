@@ -27,6 +27,16 @@ Feature: Create JSON Web Tokens based on PDP rules
       | hitOver350In84               |            | hit-over-350-in-1984              | PERMIT         |
       | hasReggieJacksonJerseyNumber |            | reggie-jackson-jersey-number-test | NOT_APPLICABLE |
 
+  Scenario Outline: create token with Attribute Store values
+    When a token is requested for "<player>" with an attribute value claim for seasons batting over .350
+    Then a claim is returned with the attributes "<seasonsBattingOver350>"
+
+    Examples: 
+      | player        | seasonsBattingOver350                    |
+      | tonyGwynn     | 1984, 1987, 1993, 1994, 1995, 1996, 1997 |
+      | reggieJackson |                                          |
+      | kirbyPuckett  |                                     1988 |
+
   Scenario: create a token using an existing private key
     When a private key exists on the server
     And a token is requested for "tonyGwynn" and "unitTest"

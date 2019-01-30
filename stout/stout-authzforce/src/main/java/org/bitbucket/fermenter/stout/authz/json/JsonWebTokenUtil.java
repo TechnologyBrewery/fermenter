@@ -3,7 +3,7 @@ package org.bitbucket.fermenter.stout.authz.json;
 import java.util.Collection;
 import java.util.Date;
 import java.util.UUID;
-
+import java.util.stream.Collectors;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.Key;
@@ -17,9 +17,12 @@ import java.security.UnrecoverableKeyException;
 
 import org.aeonbits.owner.KrauseningConfigFactory;
 import org.apache.commons.lang3.StringUtils;
+import org.bitbucket.fermenter.stout.authz.AttributeValue;
 import org.bitbucket.fermenter.stout.authz.PolicyDecision;
 import org.bitbucket.fermenter.stout.authz.PolicyDecisionPoint;
+import org.bitbucket.fermenter.stout.authz.StoutAttributeProvider;
 import org.bitbucket.fermenter.stout.authz.config.AuthorizationConfig;
+import org.bitbucket.fermenter.stout.authz.json.AbstractAuthorizationRequest.ClaimType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,9 +35,9 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
 /**
- * Builds/decodes a JSON Web Token (JWT) for a given subject and set of policies (represented as resource/action pairs). This
- * allows you to ask the PDP for a number of claims and represent them in a JWT format. Within a service, you can simply
- * return this token as a string.
+ * Builds/decodes a JSON Web Token (JWT) for a given subject and set of policies (represented as resource/action pairs).
+ * This allows you to ask the PDP for a number of claims and represent them in a JWT format. Within a service, you can
+ * simply return this token as a string.
  *
  */
 public final class JsonWebTokenUtil {
@@ -53,6 +56,8 @@ public final class JsonWebTokenUtil {
 
     private static PolicyDecisionPoint pdp = PolicyDecisionPoint.getInstance();
 
+    private static StoutAttributeProvider attributeProvider = new StoutAttributeProvider();
+
     private static Key signingKey;
 
     private static Certificate certificate;
@@ -69,10 +74,11 @@ public final class JsonWebTokenUtil {
      * @param audience
      *            The audience to whom this token is intended
      * @param ruleClaims
-     *            resource/action pairs for which the PDP will be asked for decisions
+     *            resource/action pairs for which the PDP will be asked for decisions or id requests for attributes
      * @return A signed, compressed JWT token
      */
-    public static String createToken(String subject, String audience, Collection<PolicyRequest> ruleClaims) {
+    public static String createToken(String subject, String audience,
+            Collection<? extends AbstractAuthorizationRequest> ruleClaims) {
         JwtBuilder builder = Jwts.builder();
         builder.setId(UUID.randomUUID().toString());
         builder.setSubject(subject);
@@ -85,16 +91,29 @@ public final class JsonWebTokenUtil {
         builder.setExpiration(new Date(currentTime.getTime() + getExpirationInMillis() + getSkewInMillis()));
 
         if (ruleClaims != null) {
-            for (PolicyRequest ruleClaim : ruleClaims) {
-                PolicyDecision decision = pdp.isAuthorized(subject, ruleClaim.getResource(), ruleClaim.getAction());
-                builder.claim(ruleClaim.toString(), decision.toString());
+            for (AbstractAuthorizationRequest ruleClaim : ruleClaims) {
+                if (ClaimType.POLICY.equals(ruleClaim.getClaimType())) {
+                    PolicyRequest policyClaim = (PolicyRequest) ruleClaim;
+                    PolicyDecision decision = pdp.isAuthorized(subject, policyClaim.getResource(),
+                            policyClaim.getAction());
+                    builder.claim(policyClaim.toString(), decision.toString());
+                } else {
+                    AttributeRequest attributeClaim = (AttributeRequest) ruleClaim;
+                    Collection<AttributeValue<?>> foundAttributes = attributeProvider
+                            .getStoutAttributeByIdAndSubject(attributeClaim.getRequestedAttributeId(), subject);
+                    String attributeValue = null;
+                    if (foundAttributes != null) {
+                        attributeValue = foundAttributes.stream().map(AttributeValue::getValueAsString)
+                                .collect(Collectors.joining(","));
+                    }
+                    builder.claim(attributeClaim.getRequestedAttributeId(), attributeValue);
+                }
             }
         }
 
         try {
             signingKey = getSigningKey();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new UnsupportedOperationException("Unable to retrieve private key", e);
         }
 
@@ -134,12 +153,11 @@ public final class JsonWebTokenUtil {
         // Check the krausening value, then the key, else use a placeholder.
         issuer = config.getTokenIssuer();
         if (StringUtils.isBlank(issuer)) {
-            //Check for key
+            // Check for key
             if (certificate != null) {
                 X509Certificate cert = (X509Certificate) certificate;
                 issuer = cert.getIssuerDN().getName();
-            }
-            else {
+            } else {
                 issuer = "unspecified";
                 logger.warn("No signing certificate found, defaulting to" + issuer);
             }
@@ -148,20 +166,20 @@ public final class JsonWebTokenUtil {
         return issuer;
     }
 
-    private static Key getSigningKey() throws KeyStoreException, IOException, NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException {
+    private static Key getSigningKey() throws KeyStoreException, IOException, NoSuchAlgorithmException,
+            CertificateException, UnrecoverableKeyException {
         String storeLocation = System.getProperty(keyStoreLocation);
         String ksPw = System.getProperty(keyStorePasswordLocation);
         KeyStore ks = KeyStore.getInstance(keyStoreType);
         Key privateKey;
 
-        if(storeLocation != null && ksPw != null) {
+        if (storeLocation != null && ksPw != null) {
             ks.load(new FileInputStream(storeLocation), ksPw.toCharArray());
-            //Correctly loads KS
+            // Correctly loads KS
             certificate = ks.getCertificate(keyAlias);
             privateKey = ks.getKey(keyAlias, ksPw.toCharArray());
             logger.debug("Successfully retrieved key and certificate");
-        }
-        else {
+        } else {
             privateKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
         }
         return privateKey;

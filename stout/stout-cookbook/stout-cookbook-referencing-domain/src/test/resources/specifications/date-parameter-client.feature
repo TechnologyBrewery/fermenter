@@ -11,5 +11,5 @@ Feature: Date Parameter
     Examples: 
       | dateType                |
       | java.util.Date          |
-      | java.sql.Date           |
-      | hibernate.type.DateType |
+     # | java.sql.Date           |
+     # | hibernate.type.DateType |

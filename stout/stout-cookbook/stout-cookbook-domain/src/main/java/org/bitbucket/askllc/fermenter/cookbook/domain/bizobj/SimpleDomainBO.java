@@ -118,6 +118,18 @@ public class SimpleDomainBO extends SimpleDomainBaseBO {
 	protected void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
+	
+	public static List<SimpleDomainBO> findAllBefore(Date date){
+	    return getDefaultRepository().findByTheDate1Before(date);
+	}
+	
+	public static List<SimpleDomainBO> findAllAfter(Date date){
+	        return getDefaultRepository().findByTheDate1After(date);
+	}
+    
+    public static List<SimpleDomainBO> findAllByDate(Date date){
+        return getDefaultRepository().findByTheDate1(date);
+    }
 
     
 }

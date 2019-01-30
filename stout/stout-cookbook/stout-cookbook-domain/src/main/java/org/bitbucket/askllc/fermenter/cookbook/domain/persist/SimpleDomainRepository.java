@@ -1,5 +1,6 @@
 package org.bitbucket.askllc.fermenter.cookbook.domain.persist;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -45,4 +46,11 @@ public interface SimpleDomainRepository
 	 */
 	@Query(value = "select bo from SimpleDomainBO bo left join fetch bo.simpleDomainChilds", countQuery = "select count(*) from SimpleDomainBO")
 	Page<SimpleDomainBO> findAllEagerFetchRelations(Pageable pageable);
+	
+	
+	List<SimpleDomainBO> findByTheDate1Before(Date date);
+	
+	List<SimpleDomainBO> findByTheDate1After(Date date);
+	
+	List<SimpleDomainBO> findByTheDate1(Date date);
 }

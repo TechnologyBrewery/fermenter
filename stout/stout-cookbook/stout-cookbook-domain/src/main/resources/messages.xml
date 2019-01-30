@@ -34,4 +34,8 @@
     <message key="heartbeat">
         <summary>Server is responsive.</summary>
     </message>
+
+    <message key="bulk.operation.failed">
+        <summary>The bulk save failed because at least one object could not be saved. The object IDs in question are: {0}</summary>
+    </message>
 </messages>

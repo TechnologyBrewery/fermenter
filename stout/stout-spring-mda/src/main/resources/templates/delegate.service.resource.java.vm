@@ -55,11 +55,11 @@ public interface ${service.name}Resource {
 	@Headers({"Content-Type: " + MediaType.APPLICATION_JSON })
 	#end
 	#if($operation.return.isMany())	 
-	ValueServiceResponse<Collection<${operation.return.javaType}>> ${operation.uncapitalizedName}(${operation.getSignatureParametersWithFeign()});
+	ValueServiceResponse<Collection<${operation.return.javaType}>> ${operation.uncapitalizedName}(${operation.getSignatureParametersWithFeignForDate()});
 	#elseif($operation.isResponseTypeVoid())
-	public VoidServiceResponse ${operation.uncapitalizedName}(${operation.getSignatureParametersWithFeign()});
+	public VoidServiceResponse ${operation.uncapitalizedName}(${operation.getSignatureParametersWithFeignForDate()});
 	#else 
-	ValueServiceResponse<${operation.return.javaType}> ${operation.uncapitalizedName}(${operation.getSignatureParametersWithFeign()});
+	ValueServiceResponse<${operation.return.javaType}> ${operation.uncapitalizedName}(${operation.getSignatureParametersWithFeignForDate()});
 	#end
 
 #end

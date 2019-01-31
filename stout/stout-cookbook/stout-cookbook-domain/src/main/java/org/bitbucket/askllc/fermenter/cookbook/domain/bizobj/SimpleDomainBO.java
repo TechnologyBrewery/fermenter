@@ -132,4 +132,8 @@ public class SimpleDomainBO extends SimpleDomainBaseBO {
     }
 
     
+    public static Integer getSimpleDomainCount(Date date) {
+        return findAllByDate(date).size();
+    }
+    
 }

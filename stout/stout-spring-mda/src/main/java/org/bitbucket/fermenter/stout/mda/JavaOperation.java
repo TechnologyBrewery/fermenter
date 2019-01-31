@@ -143,6 +143,15 @@ public class JavaOperation extends BaseOperationDecorator implements Operation, 
     public String getSignatureParametersWithFeign() {
         return getSignatureParametersWithParameterAnnotations("Param");
     }
+    
+    /**
+     * Creates the signature changing Date to Long with needed feign parameter descriptors included.
+     * 
+     * @return feign compliant signature
+     */
+    public String getSignatureParametersWithFeignForDate() {
+        return getSignatureParametersWithParameterAnnotations("DateParam");
+    }
 
     /**
      * Creates the signature with passed parameter annotation descriptors included.
@@ -160,18 +169,30 @@ public class JavaOperation extends BaseOperationDecorator implements Operation, 
                 JavaParameter param = (JavaParameter) i.next();
 
                 if (!param.isEntity()) {
-                    params.append("@").append(annotationParam).append("(\"").append(param.getName()).append("\") ");
-
+                    if (annotationParam.equalsIgnoreCase("DateParam")) {
+                        params.append("@").append("Param").append("(\"").append(param.getName()).append("\") ");
+                    } else {
+                        params.append("@").append(annotationParam).append("(\"").append(param.getName()).append("\") ");                        
+                    }
                 } else {
                     entityParameterCount++;
                 }
 
                 if (param.isMany()) {
-                    params.append(JavaElementUtils.PARAM_COLLECTION_TYPE + "<").append(param.getJavaType());
+                    if (annotationParam.equalsIgnoreCase("DateParam") && param.getJavaType().equalsIgnoreCase("Date")) {
+                        params.append(JavaElementUtils.PARAM_COLLECTION_TYPE + "<").append("Long");
+                    } else {
+                        params.append(JavaElementUtils.PARAM_COLLECTION_TYPE + "<").append(param.getJavaType());                       
+                    }
                     params.append(">");
 
                 } else {
-                    params.append(param.getJavaType());
+                    if (annotationParam.equalsIgnoreCase("DateParam") && param.getJavaType().equalsIgnoreCase("Date")) {
+                        params.append("Long");
+                    } else {
+                        params.append(param.getJavaType());
+                    }
+
 
                 }
 

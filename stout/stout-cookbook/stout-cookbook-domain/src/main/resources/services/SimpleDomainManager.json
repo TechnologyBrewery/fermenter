@@ -185,7 +185,7 @@
       "type" : "SimpleDomain",
       "many" : true
     }
-    }, {
+  }, {
     "name" : "SelectAllSimpleDomainsBeforeDate",
     "transactionAttribute" : "Supports",
     "parameters" : [ {
@@ -197,19 +197,38 @@
       "type" : "SimpleDomain",
       "many" : true
     }
-    }, {
+  }, {
     "name" : "SelectAllSimpleDomainsAfterDate",
     "transactionAttribute" : "Supports",
     "parameters" : [ {
       "name" : "inputDate",
       "type" : "date"
-    } ],
+     } ],
     "return" : {
       "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
       "type" : "SimpleDomain",
       "many" : true
     }
-    }, {
+  }, {
+    "name" : "GetCountForDate",
+    "transactionAttribute" : "Supports",
+    "parameters" : [ {
+      "name" : "inputDate",
+      "type" : "date"
+     } ],
+    "return" : {
+      "type" : "integer"
+    }
+  }, {
+    "name" : "ReturnVoidForDateInput",
+    "parameters" : [ {
+      "name" : "inputDate",
+      "type" : "date"
+     } ],
+    "return" : {
+      "type" : "void"
+    }
+  }, {
     "name" : "SelectAllSimpleDomainsByType",
     "transactionAttribute" : "Supports",
     "parameters" : [ {

@@ -25,6 +25,7 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.SimpleDomainM
 import org.bitbucket.fermenter.stout.messages.MessageManager;
 import org.bitbucket.fermenter.stout.messages.MessageUtils;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
+import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -234,6 +235,17 @@ public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServi
     protected Collection<SimpleDomainBO> selectAllSimpleDomainsAfterDateImpl(Date inputDate) {
         return SimpleDomainBO.findAllAfter(inputDate);
     }
+
+    @Override
+    protected Integer getCountForDateImpl(Date inputDate) {
+        return SimpleDomainBO.getSimpleDomainCount(inputDate);
+    }
+
+    @Override
+    protected void returnVoidForDateInputImpl(Date inputDate) {
+        LOGGER.info("did something with " + inputDate.toString().toString());
+    }
+
 
 
 

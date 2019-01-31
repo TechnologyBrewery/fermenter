@@ -87,4 +87,12 @@
 		<summary>Field {0} is invalid</summary>
 		<detail>{1}</detail>
 	</message>
+
+	<message key="invalid.entity.key">
+		<summary>An entity with key {0} could not be found.</summary>
+	</message>
+
+	<message key="bulk.operation.failed">
+		<summary>The operation failed for the following ids {0}</summary>
+	</message>
 </messages>

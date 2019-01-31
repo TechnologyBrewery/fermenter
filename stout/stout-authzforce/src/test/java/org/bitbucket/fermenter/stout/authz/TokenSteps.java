@@ -2,16 +2,22 @@ package org.bitbucket.fermenter.stout.authz;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.FileInputStream;
 import java.security.Key;
 import java.security.KeyStore;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
-import java.util.Properties;
 import java.util.List;
 
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.bitbucket.fermenter.stout.authz.json.AttributeRequest;
 import org.bitbucket.fermenter.stout.authz.json.JsonWebTokenUtil;
 import org.bitbucket.fermenter.stout.authz.json.PolicyRequest;
+import org.bitbucket.fermenter.stout.authz.json.StoutAttribute;
 
 import cucumber.api.java.After;
 import cucumber.api.java.en.Then;
@@ -21,6 +27,7 @@ import io.jsonwebtoken.Jws;
 
 public class TokenSteps {
 
+    private static final String ATTRIBUTE_ID_SEASONS_BATTING_OVER_350 = "urn:stout:seasonsBattingOver350";
     private String token;
     private String subject;
     private String audience;
@@ -47,7 +54,16 @@ public class TokenSteps {
     public void a_token_is_requested_for_and_and_the_following_claims(List<PolicyRequest> claims) throws Throwable {        
         token = JsonWebTokenUtil.createToken(subject, audience, claims);
         
-    }    
+    }
+
+    @When("^a token is requested for \"([^\"]*)\" with an attribute value claim for seasons batting over \\.(\\d+)$")
+    public void a_token_is_requested_for_with_an_attribute_value_claim_for_seasons_batting_over(String player, int notApplicable) throws Throwable {
+        Collection<AttributeRequest> attributeClaims = new ArrayList<>();
+        AttributeRequest requestedAttribute = new AttributeRequest(ATTRIBUTE_ID_SEASONS_BATTING_OVER_350);
+        attributeClaims.add(requestedAttribute);
+        
+        token = JsonWebTokenUtil.createToken(player, RandomStringUtils.randomAlphanumeric(5), attributeClaims);
+    }
 
     @Then("^the token contains claims for \"([^\"]*)\", \"([^\"]*)\", and \"([^\"]*)\"$")
     public void the_token_contains_claims_for_and(String expectedSubject, String expectedAudience, String expectedIssuer) throws Throwable {
@@ -101,6 +117,24 @@ public class TokenSteps {
             assertEquals("Unexpected decision encountered! ", expectedResult.getResult(), result); 
         }
     }
+    
+    @Then("^a claim is returned with the attributes \"([^\"]*)\"$")
+    public void a_claim_is_returned_with_the_attributes(List<String> expectedAttributeValues) throws Throwable {
+        Jws<Claims> jwt = JsonWebTokenUtil.parseLocalToken(token);
+        assertNotNull("token could not be parsed!", jwt);
+        
+        Claims claims = jwt.getBody();
+        String rawAttributeValues = claims.get(ATTRIBUTE_ID_SEASONS_BATTING_OVER_350, String.class);
+        String[] foundAttributes = StringUtils.split(rawAttributeValues,",");
+        
+        for (int i = 0; i < foundAttributes.length; i++) {
+            assertTrue("Returned attribute value was NOT expected!", expectedAttributeValues.contains(foundAttributes[i]));
+        }
+        
+        if (foundAttributes.length == 0) {
+            assertEquals("Expected attributes, but found none!", 0, expectedAttributeValues.size());
+        }
+    }    
 
     @When("^a private key exists on the server$")
     public void a_private_key_exists_on_the_server() throws Throwable {

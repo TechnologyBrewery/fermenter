@@ -19,7 +19,7 @@ import org.ow2.authzforce.core.pdp.api.value.StringValue;
  * Holds an attribute value returned via a {@link AttributeStoutProvider}.
  */
 public class AttributeValue<T> {
-    
+
     private String attributeId;
     private T value;
 
@@ -35,41 +35,50 @@ public class AttributeValue<T> {
     public T getValue() {
         return value;
     }
-    
+
+    /**
+     * Returns the value as a string if not null
+     * 
+     * @return string value
+     */
+    public String getValueAsString() {
+        return (value != null) ? value.toString() : null;
+    }
+
     public StringValue getAsStringValue() {
         return (value != null) ? new StringValue(value.toString()) : null;
     }
-    
+
     public IntegerValue getAsIntegerValue() {
-        Integer valueAsInteger = (Integer)value;
+        Integer valueAsInteger = (Integer) value;
         return (valueAsInteger != null) ? new IntegerValue(new MediumInteger(valueAsInteger.intValue())) : null;
     }
-    
+
     public DoubleValue getAsDoubleValue() {
-        Double valueAsDouble = (Double)value;
+        Double valueAsDouble = (Double) value;
         return (valueAsDouble != null) ? new DoubleValue(valueAsDouble) : null;
-    }    
-    
+    }
+
     public AnyUriValue getAsAnyUriValue() {
         return (value != null) ? new AnyUriValue(value.toString()) : null;
     }
-    
+
     public BooleanValue getAsBooleanValue() {
-        Boolean valueAsBoolean = (Boolean)value;
+        Boolean valueAsBoolean = (Boolean) value;
         return (valueAsBoolean != null) ? new BooleanValue(valueAsBoolean) : null;
     }
-    
+
     public DateValue getAsDateValue() {
-        Date valueAsDate = (Date)value;
+        Date valueAsDate = (Date) value;
         GregorianCalendar valueAsGc = new GregorianCalendar();
         valueAsGc.setTime(valueAsDate);
         XMLGregorianCalendar xmlGc = XmlUtils.XML_TEMPORAL_DATATYPE_FACTORY.newXMLGregorianCalendar(valueAsGc);
-        return (valueAsDate != null) ? DateValue.getInstance(xmlGc): null;
+        return (valueAsDate != null) ? DateValue.getInstance(xmlGc) : null;
     }
 
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
     }
-    
+
 }

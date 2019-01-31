@@ -15,6 +15,7 @@ import java.util.Set;
 
 import org.aeonbits.owner.KrauseningConfigFactory;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bitbucket.fermenter.stout.authz.attribute._2.StoutAttributeExtension;
 import org.bitbucket.fermenter.stout.authz.config.AuthorizationConfig;
@@ -64,6 +65,7 @@ public class StoutAttributeProvider extends BaseNamedAttributeProvider {
     };
 
     private static final Logger logger = LoggerFactory.getLogger(StoutAttributeProvider.class);
+
     protected AuthorizationConfig config = KrauseningConfigFactory.create(AuthorizationConfig.class);
     protected Map<String, AttributeDesignatorType> supportedDesignatorTypes = new HashMap<>();
     protected Map<Class<StoutAttributePoint>, StoutAttributePoint> pointClassToInstanceMap = new HashMap<>();
@@ -74,6 +76,15 @@ public class StoutAttributeProvider extends BaseNamedAttributeProvider {
 
         loadAttributeConfiguration();
 
+    }
+
+    /**
+     * Allows an instance to be created outside the PDP.
+     */
+    public StoutAttributeProvider() {
+        super(RandomStringUtils.randomAlphabetic(10));
+
+        loadAttributeConfiguration();
     }
 
     /**
@@ -105,9 +116,8 @@ public class StoutAttributeProvider extends BaseNamedAttributeProvider {
         // lookup the correct attribute point to use:
         AttributeBag<AV> attrVals = null;
         Collection<AV> attributeCollection = new ArrayList<>();
-        StoutAttributePoint attributePoint = idToAttributePointMap.get(id);
-        Collection<org.bitbucket.fermenter.stout.authz.AttributeValue<?>> retrievedValues = attributePoint
-                .getValueForAttribute(id, subject);
+        Collection<org.bitbucket.fermenter.stout.authz.AttributeValue<?>> retrievedValues = getStoutAttributeByIdAndSubject(
+                id, subject);
         if (retrievedValues != null) {
             for (org.bitbucket.fermenter.stout.authz.AttributeValue<?> retrievedValue : retrievedValues) {
                 SimpleValue<?> simpleValue = convertRetrievedValueToXacmlFormat(attributeDatatype, id, subject,
@@ -135,6 +145,25 @@ public class StoutAttributeProvider extends BaseNamedAttributeProvider {
         throw new IndeterminateEvaluationException("Requested datatype (" + attributeDatatype + ") != provided by "
                 + this + " (" + attrVals.getElementDatatype() + ")", XacmlStatusCode.MISSING_ATTRIBUTE.value());
 
+    }
+
+    /**
+     * Returns a request for a simple, Stout attribute by attribute id and subject.
+     * 
+     * @param id
+     *            attribute id
+     * @param subject
+     *            subject name
+     * @return collection of attributes or null if none found
+     */
+    public Collection<org.bitbucket.fermenter.stout.authz.AttributeValue<?>> getStoutAttributeByIdAndSubject(String id,
+            String subject) {
+
+        StoutAttributePoint attributePoint = idToAttributePointMap.get(id);
+        Collection<org.bitbucket.fermenter.stout.authz.AttributeValue<?>> retrievedValues = attributePoint
+                .getValueForAttribute(id, subject);
+
+        return retrievedValues;
     }
 
     protected <AV extends AttributeValue> SimpleValue<?> convertRetrievedValueToXacmlFormat(

@@ -19,6 +19,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.StringUtils;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 
 
 #if ( $entity.isTransient() )
@@ -27,6 +31,7 @@ import org.bitbucket.fermenter.stout.bizobj.BusinessObject;
 #else
 import org.bitbucket.fermenter.stout.bizobj.BasePersistentSpringBO;
 import org.bitbucket.fermenter.stout.bizobj.PersistentBusinessObject;
+import org.bitbucket.fermenter.stout.exception.UnrecoverableException;
 import org.bitbucket.fermenter.stout.messages.Message;
 import org.bitbucket.fermenter.stout.messages.MessageFactory;
 import org.bitbucket.fermenter.stout.messages.MessageManager;
@@ -185,7 +190,7 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
 	@NotNull
   #end
 	private ${field.javaType} ${field.name};
-
+	
 #end
 
 #if ( !$entity.isTransient() && !$entity.isNonPersistentParentEntity() )
@@ -373,6 +378,47 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
 #end
 
 #foreach ( $field in $entity.fields.values() )
+
+#if ( $field.hasDefaultValue() )
+	protected void setDefault${field.capitalizedName}() {
+#if ($field.javaType == 'String')
+		if (StringUtils.isEmpty(${field.name})) {
+			set${field.capitalizedName}("${field.defaultValue}");
+		}
+#elseif ($field.javaType == 'BigDecimal')
+		if (${field.name} == null) {
+			BigDecimal defaultBigDecimal = new BigDecimal(${field.defaultValue});
+			set${field.capitalizedName}(defaultBigDecimal);
+		}
+#elseif ($field.javaType == 'Long')
+		if (${field.name} == null) {
+			long defaultLong = ${field.defaultValue}L;
+			set${field.capitalizedName}(defaultLong);
+		}
+#elseif ($field.javaType == 'Timestamp')
+		if (${field.name} == null) {
+			Timestamp defaultTimestamp = Timestamp.valueOf("${field.defaultValue}");
+			set${field.capitalizedName}(defaultTimestamp);
+		}
+#elseif ($field.javaType == 'Date')
+		if (${field.name} == null) {
+			DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+			Date defaultDate = null;
+			try {
+				defaultDate = formatter.parse("${field.defaultValue}");
+			} catch (ParseException e) {
+				throw new UnrecoverableException();
+			}
+			set${field.capitalizedName}(defaultDate);
+		}
+#else
+		if (${field.name} == null) {
+			set${field.capitalizedName}(${field.defaultValue});
+		}
+#end
+	}
+#end
+	
 	/**
   #if ($field.documentation)
 	 * Gets: ${field.documentation}.
@@ -606,7 +652,18 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
   #end		
 #end
 	}	
-		
+	
+    /**
+     * Lifecycle method that is invoked before this business object's pre-save validation occurs to support defaulting.
+     */
+     protected void defaultFieldValues() {
+     	#foreach ( $field in $entity.fields.values() )
+     		#if ($field.hasDefaultValue())
+     			setDefault${field.capitalizedName}();
+     		#end
+     	#end
+     }
+     
 	/**
 	 * Executes all complex validation on child relations.
 	 */
@@ -673,5 +730,12 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
 			#end
 		  #end				
 		#end
+      }
+      
+#if( !$entity.isTransient() )
+      @Override
+#end
+      protected void defaultValues() {
+           defaultFieldValues();
       }
 }

@@ -49,5 +49,4 @@ public abstract class ${entity.name}BO<PK extends Serializable, BO, JPA extends 
 	protected void complexValidation() {
 
 	}
-	
 }

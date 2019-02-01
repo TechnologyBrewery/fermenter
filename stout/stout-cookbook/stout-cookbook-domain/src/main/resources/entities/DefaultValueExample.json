@@ -1,0 +1,54 @@
+{
+  "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "name" : "DefaultValueExample",
+  "documentation" : "A simple domain entity with a generated id field, fields of different types, and default values assigned to many of its fields",
+  "table" : "DEFAULT_VALUE",
+  "identifier" : {
+    "package" : null,
+    "name" : "id",
+    "type" : "uuid",
+    "column" : "DEFAULT_VALUE_ID",
+    "required" : true,
+    "generator" : "uuid"
+  },
+  "fields" : [ {
+    "package" : null,
+    "name" : "bigDecimalValue",
+    "type" : "big_decimal",
+    "column" : "BIG_DECIMAL_COLUMN",
+    "defaultValue" : 3.141592645
+  }, {
+    "package" : null,
+    "name" : "name",
+    "type" : "string",
+    "column" : "NAME",
+    "documentation" : "The friendly domain moniker",
+    "defaultValue" : "Default name value"
+  }, {
+    "package" : null,
+    "name" : "theLong1",
+    "type" : "long",
+    "column" : "LONG1",
+    "documentation" : "A relevant number for this domain",
+    "defaultValue" : 31415926
+  }, {
+    "package" : null,
+    "name" : "aMESSYNameThatConfusesJson",
+    "type" : "string",
+    "column" : "MESSY_NAMED_FIELD",
+    "defaultValue" : "true"
+  }, {
+    "package" : null,
+    "name" : "type",
+    "type" : "string",
+    "column" : "TYPE",
+    "documentation" : "A simple domain classification",
+    "defaultValue" : "DefaultType"
+  }, {
+    "package" : null,
+    "name" : "standardBoolean",
+    "type" : "boolean",
+    "column" : "STANDARD_BOOLEAN",
+    "defaultValue" : false
+  }]
+}

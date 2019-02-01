@@ -35,6 +35,7 @@ public class FieldMetadata extends MetadataElement implements Field {
     private Boolean isEnumerationType;
     private Enumeration enumeration;
     private String format;
+    private String defaultValue;
 
     private static Log log = LogFactory.getLog(Field.class);
 
@@ -462,4 +463,26 @@ public class FieldMetadata extends MetadataElement implements Field {
     public boolean isExternal() {
         return !StringUtils.isBlank(getProject());
     }
+
+    /**
+	 * Sets the default value of this field to the given data.
+	 * @param newDefaultValue the default value to assign to this field.
+	 */
+	public void setDefaultValue(String newDefaultValue) {
+	    this.defaultValue = newDefaultValue;
+	}
+	
+	/**
+	 * @return the default value of this field.
+	 */
+	public String getDefaultValue() {
+	    return this.defaultValue;
+	}
+	
+	/**
+	 * @return whether the field has a default value set
+	 */
+	public boolean hasDefaultValue() {
+	    return (getDefaultValue() != null);
+	}
 }

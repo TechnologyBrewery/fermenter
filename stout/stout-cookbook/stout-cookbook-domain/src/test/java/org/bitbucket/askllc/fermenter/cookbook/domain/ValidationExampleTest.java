@@ -65,24 +65,6 @@ public class ValidationExampleTest extends AbstractMsgMgrAwareTestSupport {
 
 	@Transactional
 	@Test
-	public void testSaveInvalidBigDecimalAttrScale() throws Exception {
-		ValidationExampleBO bizObj = TestUtils.createRandomValidationExample();
-		bizObj.setBigDecimalExample(new BigDecimal(RandomUtils.nextDouble(0.0d, 1000.0d)));
-		bizObj = bizObj.save();
-		
-		assertEquals(0, MessageManager.getMessages().getErrorMessageCount());
-	
-		ValidationExampleBO retrievedBizObj = ValidationExampleBO.findByPrimaryKey(bizObj.getKey());
-		
-		//this field does not have scale defined but it is 5 by default
-		int bizObjScale = bizObj.getBigDecimalExample().scale();
-		//the db definition has scale of 2
-		int dbScale = retrievedBizObj.getBigDecimalExample().scale();
-		assertTrue(bizObjScale == dbScale);
-	}
-
-	@Transactional
-	@Test
 	public void testSaveMultipleInvalidFields() throws Exception {
 		ValidationExampleBO bizObj = TestUtils.createRandomValidationExample();
 		bizObj.setRequiredField(null);

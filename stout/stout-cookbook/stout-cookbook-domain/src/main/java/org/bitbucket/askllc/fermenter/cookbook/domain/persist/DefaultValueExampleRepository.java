@@ -1,0 +1,22 @@
+package org.bitbucket.askllc.fermenter.cookbook.domain.persist;
+
+import java.util.UUID;
+
+import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.DefaultValueExampleBO;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+
+/**
+ * Data access repository for the DefaultValueExample business object.
+ * 
+ * GENERATED STUB CODE - PLEASE *DO* MODIFY
+ */ 
+public interface DefaultValueExampleRepository extends JpaRepository<DefaultValueExampleBO, UUID>, JpaSpecificationExecutor<DefaultValueExampleBO> {
+	
+	/**
+	 * Developers should leverage this interface to define any query logic
+	 * that cannot be realized through {@link JpaRepository}'s built-in
+	 * functionality.  
+	 */
+
+}

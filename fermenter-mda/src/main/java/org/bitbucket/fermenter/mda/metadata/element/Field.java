@@ -126,5 +126,14 @@ public interface Field {
 	String getFormat();
 	
 	boolean hasFormat();
-
+	
+	/**
+	 * @return the default value assigned to this field.
+	 */
+	public Object getDefaultValue();
+	
+	/**
+	 * @return true if this field has a default value
+	 */
+	public boolean hasDefaultValue();
 }

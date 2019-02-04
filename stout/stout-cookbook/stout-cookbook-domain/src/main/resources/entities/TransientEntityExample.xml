@@ -11,6 +11,11 @@
 			<documentation>The friendly domain moniker</documentation>
 			<type>string</type>
 		</field>
+		<field>
+			<name>anEnumeratedValue</name>
+			<type>SimpleDomainEnumeration</type>
+			<column>SIMPLE_DOMAIN_ENUM</column>
+		</field>
 	</fields>		
 
 	<associations>

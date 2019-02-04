@@ -51,13 +51,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.persistence.ManyToOne;
-
-
-
-#if ($entity.hasNamedEnumeration())
-    import javax.persistence.Enumerated;
-    import javax.persistence.EnumType;
-#end
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.JoinType;
@@ -79,6 +72,11 @@ import org.hibernate.annotations.Type;
 	#if (!$entity.isNonPersistentParentEntity())
 import ${basePackage}.persist.${entity.name}Repository;
 	#end
+#end
+
+#if ($entity.hasNamedEnumeration())
+    import javax.persistence.Enumerated;
+    import javax.persistence.EnumType;
 #end
 
 #foreach ($import in $entity.imports )

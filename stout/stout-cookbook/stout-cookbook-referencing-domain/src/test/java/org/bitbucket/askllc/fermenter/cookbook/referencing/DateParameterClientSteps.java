@@ -55,8 +55,6 @@ public class DateParameterClientSteps {
 
     @When("^the simple domain for today's date is retrieved using \"([^\"]*)\"$")
     public void the_simple_domain_for_today_s_date_is_retrieved_using(String dateType) throws Throwable {
-        // Collection<SimpleDomain> allDomains =
-        // delegate.selectAllSimpleDomains();
         if (dateType.equals("java.util.Date")) {
             System.out.println("Integration test: " + today.toString());
             simpleDomains = delegate.selectAllSimpleDomainsByDate(today);

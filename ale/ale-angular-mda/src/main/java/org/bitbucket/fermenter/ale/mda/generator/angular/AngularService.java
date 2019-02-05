@@ -24,8 +24,8 @@ public class AngularService extends BaseServiceDecorator implements Service, Ang
         return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_HYPHEN, getName());
     }
     
-    public String getArtifactIdLowerCamel() {
-        return CaseFormat.LOWER_HYPHEN.to(CaseFormat.LOWER_CAMEL, artifactId);
+    public String getArtifactIdUpperUnderscore() {
+        return CaseFormat.LOWER_HYPHEN.to(CaseFormat.UPPER_UNDERSCORE, artifactId);
     }
     
     public List<AngularOperation> getAngularOperations() {

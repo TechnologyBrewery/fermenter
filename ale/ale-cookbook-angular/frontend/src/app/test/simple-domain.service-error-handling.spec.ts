@@ -15,11 +15,11 @@ import { GlobalErrorHandler } from '../shared/global-error-handler.service';
 import { FermenterMessage } from '../shared/model/fermenter-message.model';
 import { SimpleDomainMaintenanceService } from '../generated/service/maintenance/simple-domain-maintenance.service';
 
-const testUrl = '/SimpleDomain';
-
 describe('Ale Simple Domain Maintenance Service Error Handling', () => {
   let httpTestingController: HttpTestingController;
   const constants = new Constants();
+  const simpleDomainMaintUrl =
+    constants.STOUT_COOKBOOK_DOMAIN_END_POINT + '/SimpleDomain';
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -67,7 +67,7 @@ describe('Ale Simple Domain Maintenance Service Error Handling', () => {
       );
 
       const req = httpTestingController.expectOne(
-        constants.stoutCookbookDomainEndPoint + testUrl + '/' + testId
+        simpleDomainMaintUrl + '/' + testId
       );
 
       // Respond with mock error
@@ -107,7 +107,7 @@ describe('Ale Simple Domain Maintenance Service Error Handling', () => {
       );
 
       const req = httpTestingController.expectOne(
-        constants.stoutCookbookDomainEndPoint + testUrl + '/' + testId
+        simpleDomainMaintUrl + '/' + testId
       );
 
       // Respond with mock error
@@ -145,7 +145,7 @@ describe('Ale Simple Domain Maintenance Service Error Handling', () => {
       );
 
       const req = httpTestingController.expectOne(
-        constants.stoutCookbookDomainEndPoint + testUrl + '/' + testId
+        simpleDomainMaintUrl + '/' + testId
       );
 
       // Create mock ErrorEvent, raised when something goes wrong at the network level.
@@ -195,7 +195,7 @@ describe('Ale Simple Domain Maintenance Service Error Handling', () => {
       // If no requests or multiple requests matched that URL
       // `expectOne()` would throw.
       const req = httpTestingController.expectOne(
-        constants.stoutCookbookDomainEndPoint + testUrl + '/' + testId
+        simpleDomainMaintUrl + '/' + testId
       );
 
       // Assert that the request is a GET.
@@ -251,7 +251,7 @@ describe('Ale Simple Domain Maintenance Service Error Handling', () => {
       // If no requests or multiple requests matched that URL
       // `expectOne()` would throw.
       const req = httpTestingController.expectOne(
-        constants.stoutCookbookDomainEndPoint + testUrl + '/' + testId
+        simpleDomainMaintUrl + '/' + testId
       );
 
       // Assert that the request is a GET.

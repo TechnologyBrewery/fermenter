@@ -17,7 +17,7 @@ describe('Ale: Business Service Generation', () => {
   let httpTestingController: HttpTestingController;
   const constants = new Constants();
   const simpleDomainMgrUrl =
-    constants.stoutCookbookDomainEndPoint + '/SimpleDomainManagerService';
+    constants.STOUT_COOKBOOK_DOMAIN_END_POINT + '/SimpleDomainManagerService';
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -109,7 +109,7 @@ describe('Ale: Business Service Generation', () => {
         });
 
       const req = httpTestingController.expectOne(
-        constants.stoutCookbookDomainEndPoint + '/HeartbeatService/heartbeat'
+        constants.STOUT_COOKBOOK_DOMAIN_END_POINT + '/HeartbeatService/heartbeat'
       );
 
       expect(req.request.method).toEqual('GET');

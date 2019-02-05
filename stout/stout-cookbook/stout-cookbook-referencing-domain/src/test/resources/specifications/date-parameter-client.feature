@@ -9,7 +9,6 @@ Feature: Date Parameter
     Then the simple domain is retrieved successfully
 
     Examples: 
-      | dateType                |
-      | java.util.Date          |
-     # | java.sql.Date           |
-     # | hibernate.type.DateType |
+      | dateType       |
+      | java.util.Date |
+      | java.sql.Date  |

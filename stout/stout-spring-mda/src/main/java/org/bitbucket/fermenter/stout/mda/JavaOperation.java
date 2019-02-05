@@ -16,6 +16,7 @@ import org.bitbucket.fermenter.mda.metamodel.element.Operation;
 import org.bitbucket.fermenter.mda.metamodel.element.Parameter;
 import org.bitbucket.fermenter.mda.metamodel.element.Return;
 import org.bitbucket.fermenter.mda.metamodel.element.Transaction;
+import org.bitbucket.fermenter.stout.util.ToDateExpander;
 import org.jboss.resteasy.annotations.GZIP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -169,7 +170,9 @@ public class JavaOperation extends BaseOperationDecorator implements Operation, 
                 JavaParameter param = (JavaParameter) i.next();
 
                 if (!param.isEntity()) {
-                    if (annotationParam.equalsIgnoreCase("DateParam")) {
+                    if (annotationParam.equalsIgnoreCase("DateParam")  && param.getJavaType().equalsIgnoreCase("Date")) {
+                        params.append("@").append("Param").append("(value = \"").append(param.getName()).append("\", expander = ToDateExpander.class) ");
+                    } else if (annotationParam.equalsIgnoreCase("DateParam")){
                         params.append("@").append("Param").append("(\"").append(param.getName()).append("\") ");
                     } else {
                         params.append("@").append(annotationParam).append("(\"").append(param.getName()).append("\") ");                        
@@ -179,21 +182,10 @@ public class JavaOperation extends BaseOperationDecorator implements Operation, 
                 }
 
                 if (param.isMany()) {
-                    if (annotationParam.equalsIgnoreCase("DateParam") && param.getJavaType().equalsIgnoreCase("Date")) {
-                        params.append(JavaElementUtils.PARAM_COLLECTION_TYPE + "<").append("Long");
-                    } else {
-                        params.append(JavaElementUtils.PARAM_COLLECTION_TYPE + "<").append(param.getJavaType());                       
-                    }
+                    params.append(JavaElementUtils.PARAM_COLLECTION_TYPE + "<").append(param.getJavaType()); 
                     params.append(">");
-
                 } else {
-                    if (annotationParam.equalsIgnoreCase("DateParam") && param.getJavaType().equalsIgnoreCase("Date")) {
-                        params.append("Long");
-                    } else {
-                        params.append(param.getJavaType());
-                    }
-
-
+                    params.append(param.getJavaType());
                 }
 
                 params.append(" ");

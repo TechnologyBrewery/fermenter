@@ -175,7 +175,6 @@
     }
   }, {
     "name" : "SelectAllSimpleDomainsByDate",
-    "transactionAttribute" : "Supports",
     "parameters" : [ {
       "name" : "inputDate",
       "type" : "date"
@@ -187,7 +186,6 @@
     }
   }, {
     "name" : "SelectAllSimpleDomainsBeforeDate",
-    "transactionAttribute" : "Supports",
     "parameters" : [ {
       "name" : "inputDate",
       "type" : "date"
@@ -199,7 +197,6 @@
     }
   }, {
     "name" : "SelectAllSimpleDomainsAfterDate",
-    "transactionAttribute" : "Supports",
     "parameters" : [ {
       "name" : "inputDate",
       "type" : "date"
@@ -211,7 +208,6 @@
     }
   }, {
     "name" : "GetCountForDate",
-    "transactionAttribute" : "Supports",
     "parameters" : [ {
       "name" : "inputDate",
       "type" : "date"

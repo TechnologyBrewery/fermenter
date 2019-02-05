@@ -9,16 +9,11 @@ import java.util.Date;
 
 import javax.inject.Inject;
 
-import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.SimpleDomainMaintenanceDelegate;
 import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.SimpleDomainManagerDelegate;
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.SimpleDomain;
-import org.bitbucket.askllc.fermenter.cookbook.referencing.domain.bizobj.LocalDomainBO;
 import org.bitbucket.fermenter.stout.messages.MessageManagerInitializationDelegate;
 import org.bitbucket.fermenter.stout.test.MessageTestUtils;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import cucumber.api.java.After;
@@ -32,16 +27,15 @@ public class DateParameterClientSteps {
 
     @Inject
     private SimpleDomainManagerDelegate delegate;
-    
+
     @Inject
     private SimpleDomainMaintenanceDelegate maintenanceDelegate;
 
     Collection<SimpleDomain> simpleDomains = null;
+    Date today = getCalendarCurrentDateInstance().getTime();
 
     @Before("@dateParameterClient")
     public void setUp() {
-        Authentication authentication = new UsernamePasswordAuthenticationToken("testUser", "somePassword");
-        SecurityContextHolder.getContext().setAuthentication(authentication);
         assertNotNull("Missing needed delegate!", delegate);
         MessageManagerInitializationDelegate.cleanupMessageManager();
     }
@@ -54,36 +48,26 @@ public class DateParameterClientSteps {
 
     @Given("^a simple domain with today's date$")
     public void a_simple_domain_with_today_s_date() throws Throwable {
-        // SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        // Date dateWithoutTime = sdf.parse(sdf.format(new Date()));
-        Date todayWithoutTime = getCalendarCurrentDateInstance().getTime();
         SimpleDomain domain = new SimpleDomain();
-        domain.setTheDate1(todayWithoutTime);
-
+        domain.setTheDate1(today);
         maintenanceDelegate.create(domain);
-
-        //SimpleDomainBO domain = new SimpleDomainBO();
-        //domain.setTheDate1(todayWithoutTime);
-        //domain.save();
-        // fail("test");
-        // java.sql.Date today = new
-        // java.sql.Date(Calendar.getInstance().getTime().getTime());
-        // Hibernate.type.DateType today = new Hibernate.type.DateType()
-
     }
 
     @When("^the simple domain for today's date is retrieved using \"([^\"]*)\"$")
     public void the_simple_domain_for_today_s_date_is_retrieved_using(String dateType) throws Throwable {
+        // Collection<SimpleDomain> allDomains =
+        // delegate.selectAllSimpleDomains();
         if (dateType.equals("java.util.Date")) {
-            java.util.Date today = getCalendarCurrentDateInstance().getTime();
+            System.out.println("Integration test: " + today.toString());
             simpleDomains = delegate.selectAllSimpleDomainsByDate(today);
         } else if (dateType.equals("java.sql.Date")) {
-            java.sql.Date today = new java.sql.Date(getCalendarCurrentDateInstance().getTimeInMillis());
-            simpleDomains = delegate.selectAllSimpleDomainsByDate(today);
+            // create a java.sql.Date from the java.util.Date
+            java.sql.Date sqlToday = new java.sql.Date(today.getTime());
+            System.out.println("Integration test: " + sqlToday.toString());
+            simpleDomains = delegate.selectAllSimpleDomainsByDate(sqlToday);
         } else {
             simpleDomains = null;
         }
-
     }
 
     @Then("^the simple domain is retrieved successfully$")

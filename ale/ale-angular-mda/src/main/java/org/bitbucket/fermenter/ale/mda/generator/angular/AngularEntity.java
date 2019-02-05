@@ -31,8 +31,8 @@ public class AngularEntity implements Entity, AngularNamedElement {
         return entity.getNamespace();
     }
     
-    public String getApplicationNameLowerCamel() {
-        return CaseFormat.LOWER_HYPHEN.to(CaseFormat.LOWER_CAMEL, getApplicationName());
+    public String getApplicationNameUpperUnderscore() {
+        return CaseFormat.LOWER_HYPHEN.to(CaseFormat.UPPER_UNDERSCORE, getApplicationName());
     }
 
     public Map<String, AngularAssociation> getAssociations() {

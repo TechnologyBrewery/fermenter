@@ -56,15 +56,9 @@ export class SimpleDomainComponent implements OnInit {
       .deleteAllSimpleDomains()
       .subscribe((response: FermenterResponse<undefined>) => {
         if (response.hasErrorMessages()) {
-          this.snackBar.open('PROBLEMS DELETING ALL SIMPLE DOMAINS', null, {
-            duration: 50000,
-            panelClass: ['toast-failure']
-          });
+          this.toast('PROBLEMS DELETING ALL SIMPLE DOMAINS', false);
         } else {
-          this.snackBar.open('Sucessfully deleted all simple domains.', null, {
-            duration: 3000,
-            panelClass: ['toast-success']
-          });
+          this.toast('Sucessfully deleted all simple domains.', true);
         }
       });
   }

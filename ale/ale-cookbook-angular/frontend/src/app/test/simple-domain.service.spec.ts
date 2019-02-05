@@ -21,6 +21,8 @@ const testUrl = '/SimpleDomain';
 describe('Ale Simple Domain Maintenance Service', () => {
   let httpTestingController: HttpTestingController;
   const constants = new Constants();
+  const simpleDomainMaintUrl =
+    constants.STOUT_COOKBOOK_DOMAIN_END_POINT + '/SimpleDomain';
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -56,7 +58,7 @@ describe('Ale Simple Domain Maintenance Service', () => {
       // If no requests or multiple requests matched that URL
       // `expectOne()` would throw.
       const req = httpTestingController.expectOne(
-        constants.stoutCookbookDomainEndPoint + testUrl + '/' + testId
+        simpleDomainMaintUrl + '/' + testId
       );
 
       // Assert that the request is a GET.
@@ -93,7 +95,7 @@ describe('Ale Simple Domain Maintenance Service', () => {
       // If no requests or multiple requests matched that URL
       // `expectOne()` would throw.
       const req = httpTestingController.expectOne(
-        constants.stoutCookbookDomainEndPoint + testUrl + '/' + testId
+        simpleDomainMaintUrl + '/' + testId
       );
 
       // Assert that the request is a PUT.
@@ -130,7 +132,7 @@ describe('Ale Simple Domain Maintenance Service', () => {
       // If no requests or multiple requests matched that URL
       // `expectOne()` would throw.
       const req = httpTestingController.expectOne(
-        constants.stoutCookbookDomainEndPoint + testUrl
+        simpleDomainMaintUrl
       );
 
       // Assert that the request is a PUT.
@@ -163,7 +165,7 @@ describe('Ale Simple Domain Maintenance Service', () => {
       // If no requests or multiple requests matched that URL
       // `expectOne()` would throw.
       const req = httpTestingController.expectOne(
-        constants.stoutCookbookDomainEndPoint + testUrl + '/' + testId
+        simpleDomainMaintUrl + '/' + testId
       );
 
       // Assert that the request is a PUT.
@@ -206,7 +208,7 @@ describe('Ale Simple Domain Maintenance Service', () => {
       // If no requests or multiple requests matched that URL
       // `expectOne()` would throw.
       const req = httpTestingController.expectOne(
-        constants.stoutCookbookDomainEndPoint + testUrl + '/findByExample'
+        simpleDomainMaintUrl + '/findByExample'
       );
 
       // Assert that the request is a PUT.

@@ -24,16 +24,16 @@ import { ${import.type} } from '../../../shared/model/${import.typeLowerHyphen}.
 })
 export class ${service.name}Service {
 
-    private constants = new Constants();
+    protected constants = new Constants();
 
-    // make sure that the ${service.artifactIdLowerCamel}EndPoint is
+    // make sure that the ${service.artifactIdUpperUnderscore}_END_POINT is
     //    defined in the constants.ts file so that we know where the rest service is located
-    private ${service.name}ServiceURL =
-      this.constants.${service.artifactIdLowerCamel}EndPoint + '/${service.name}Service';
+    protected ${service.name}ServiceURL =
+      this.constants.${service.artifactIdUpperUnderscore}_END_POINT + '/${service.name}Service';
 
     constructor(
-      private http: HttpClient,
-      private errorHandler: GlobalErrorHandler
+      protected http: HttpClient,
+      protected errorHandler: GlobalErrorHandler
       ) {}
 
 #foreach( $operation in $service.angularOperations )
@@ -195,11 +195,16 @@ export class ${service.name}Service {
     }
 #end## end of post vs get if block
 #else
-    // support for enums and paging is pending
+    /**
+    * ${operation.nameLowerCamel} is not implemeneted because support for enums and paging is pending
+    */
+    public ${operation.nameLowerCamel}(NOT_SUPPORTED: string) {
+        throw new Error('${operation.nameLowerCamel} is not implemeneted because support for enums and paging is pending');
+    }
 #end## end of if usesEnumerations
 #end## end of for operation
 
-    private checkFermenterResponseIsInitialized(fermenterResponse: FermenterResponse<{}>) {
+    protected checkFermenterResponseIsInitialized(fermenterResponse: FermenterResponse<{}>) {
         if (!fermenterResponse) {
             const msg = 'Failed to initialize fermenter response for service call.';
             this.errorHandler.handleCriticalError(msg);

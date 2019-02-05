@@ -13,4 +13,8 @@ public interface AngularNamedElement {
     default String getNameLowerCamel() {
         return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, getName());
     }
+    
+    default String getNameUpperUnderscore() {
+        return CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, getName());
+    }
 }

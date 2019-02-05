@@ -22,16 +22,16 @@ import { PageWrapper } from '../../../shared/model/page-wrapper.model';
   providedIn: 'root'
 })
 export class ${entity.name}MaintenanceService {
-  private ${entity.name}URL: string;
-  private constants = new Constants();
+  protected ${entity.name}URL: string;
+  protected constants = new Constants();
 
   constructor(
-    private http: HttpClient,
-    private errorHandler: GlobalErrorHandler
+    protected http: HttpClient,
+    protected errorHandler: GlobalErrorHandler
   ) {
     // be sure to define the applicaiton endpoint in the constants.ts file
     this.${entity.name}URL =
-      this.constants.${entity.applicationNameLowerCamel}EndPoint + '/${entity.name}';
+      this.constants.${entity.applicationNameUpperUnderscore}_END_POINT + '/${entity.name}';
   }
 
   /**
@@ -162,7 +162,7 @@ export class ${entity.name}MaintenanceService {
       );
   }
 
-  private parseResponseToPageWrapper(
+  protected parseResponseToPageWrapper(
     response: FermenterResponse<PageWrapper<${entity.name}Base>>
   ): FermenterResponse<PageWrapper<${entity.name}>> {
     const fermenterResponse = new FermenterResponse<PageWrapper<${entity.name}>>(response);
@@ -181,7 +181,7 @@ export class ${entity.name}MaintenanceService {
     return fermenterResponse;
   }
 
-  private parseResponseToSingle(
+  protected parseResponseToSingle(
     response: FermenterResponse<${entity.name}Base>
   ): FermenterResponse<${entity.name}> {
     const fermenterResponse = new FermenterResponse(response);

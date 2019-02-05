@@ -146,7 +146,7 @@ public class JavaOperation extends BaseOperationDecorator implements Operation, 
     }
     
     /**
-     * Creates the signature changing Date to Long with needed feign parameter descriptors included.
+     * Creates the signature with needed feign parameter descriptors and custom parameter expansion included.
      * 
      * @return feign compliant signature
      */

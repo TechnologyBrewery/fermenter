@@ -24,6 +24,8 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.enumeration.SimpleDomainEn
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.SimpleDomainManagerService;
 import org.bitbucket.fermenter.stout.messages.MessageManager;
 import org.bitbucket.fermenter.stout.messages.MessageUtils;
+import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
+import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -218,4 +220,33 @@ public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServi
     protected Collection<Integer> returnManyPrimitivesImpl(Integer input, Integer returnListSize) {
         return IntStream.range(0, returnListSize).mapToObj(n -> input).collect(Collectors.toList());
     }
+
+    @Override
+    protected Collection<SimpleDomainBO> selectAllSimpleDomainsByDateImpl(Date inputDate) {
+        return SimpleDomainBO.findAllByDate(inputDate);
+    }
+
+    @Override
+    protected Collection<SimpleDomainBO> selectAllSimpleDomainsBeforeDateImpl(Date inputDate) {
+        return SimpleDomainBO.findAllBefore(inputDate);
+    }
+
+    @Override
+    protected Collection<SimpleDomainBO> selectAllSimpleDomainsAfterDateImpl(Date inputDate) {
+        return SimpleDomainBO.findAllAfter(inputDate);
+    }
+
+    @Override
+    protected Integer getCountForDateImpl(Date inputDate) {
+        return SimpleDomainBO.getSimpleDomainCount(inputDate);
+    }
+
+    @Override
+    protected void returnVoidForDateInputImpl(Date inputDate) {
+        LOGGER.info("made a call for SimpleDomain with " + inputDate.toString());
+    }
+
+
+
+
 }

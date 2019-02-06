@@ -28,6 +28,9 @@ public class JavaOperation extends BaseOperationDecorator implements Operation, 
     private static final Logger logger = LoggerFactory.getLogger(JavaOperation.class);
 
     protected static final String BUSINESS_OBJECT = "BO";
+    protected static final String FEIGN_ANNOTATION= "Param";
+    protected static final String JAXRS_ANNOTATION= "QueryParam";
+    protected static final String DATE_PARAMETER= "Date";
 
     protected MetadataRepository metadataRepository = ModelInstanceRepositoryManager
             .getMetadataRepostory(MetadataRepository.class);
@@ -132,7 +135,7 @@ public class JavaOperation extends BaseOperationDecorator implements Operation, 
      * @return jax-rs compliant signature
      */
     public String getSignatureParametersWithJaxRS() {
-        return getSignatureParametersWithParameterAnnotations("QueryParam");
+        return getSignatureParametersWithParameterAnnotations(JAXRS_ANNOTATION);
     }
 
     /**
@@ -141,9 +144,9 @@ public class JavaOperation extends BaseOperationDecorator implements Operation, 
      * @return feign compliant signature
      */
     public String getSignatureParametersWithFeign() {
-        return getSignatureParametersWithParameterAnnotations("Param");
+        return getSignatureParametersWithParameterAnnotations(FEIGN_ANNOTATION);
     }
-
+    
     /**
      * Creates the signature with passed parameter annotation descriptors included.
      * 
@@ -160,19 +163,20 @@ public class JavaOperation extends BaseOperationDecorator implements Operation, 
                 JavaParameter param = (JavaParameter) i.next();
 
                 if (!param.isEntity()) {
-                    params.append("@").append(annotationParam).append("(\"").append(param.getName()).append("\") ");
-
+                    if (annotationParam.equalsIgnoreCase(FEIGN_ANNOTATION)  && param.getJavaType().equalsIgnoreCase(DATE_PARAMETER)) {
+                        params.append("@").append(annotationParam).append("(value = \"").append(param.getName()).append("\", expander = ToDateExpander.class) ");
+                    } else {
+                        params.append("@").append(annotationParam).append("(\"").append(param.getName()).append("\") ");                        
+                    }
                 } else {
                     entityParameterCount++;
                 }
 
                 if (param.isMany()) {
-                    params.append(JavaElementUtils.PARAM_COLLECTION_TYPE + "<").append(param.getJavaType());
+                    params.append(JavaElementUtils.PARAM_COLLECTION_TYPE + "<").append(param.getJavaType()); 
                     params.append(">");
-
                 } else {
                     params.append(param.getJavaType());
-
                 }
 
                 params.append(" ");
@@ -267,7 +271,9 @@ public class JavaOperation extends BaseOperationDecorator implements Operation, 
             if (parameter.isMany()) {
                 imports.add(List.class.getName());
             }
-
+            if (parameter.getJavaType().equalsIgnoreCase(DATE_PARAMETER)) {
+                imports.add(org.bitbucket.fermenter.stout.util.ToDateExpander.class.getName());
+            }
             String importValue = parameter.getImport();
             if (JavaElementUtils.checkImportAgainstDefaults(importValue)) {
                 imports.add(importValue);

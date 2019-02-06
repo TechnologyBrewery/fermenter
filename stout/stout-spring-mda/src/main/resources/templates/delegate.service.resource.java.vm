@@ -3,7 +3,6 @@ package ${basePackage}.client.resource;
 import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
-
 import javax.ws.rs.core.MediaType;
 
 #foreach( $import in $service.imports )

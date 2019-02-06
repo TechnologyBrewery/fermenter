@@ -1,6 +1,7 @@
 package org.bitbucket.askllc.fermenter.cookbook.referencing;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Calendar;
@@ -55,25 +56,40 @@ public class DateParameterClientSteps {
 
     @When("^the simple domain for today's date is retrieved using \"([^\"]*)\"$")
     public void the_simple_domain_for_today_s_date_is_retrieved_using(String dateType) throws Throwable {
-        if (dateType.equals("java.util.Date")) {
-            System.out.println("Integration test: " + today.toString());
-            simpleDomains = delegate.selectAllSimpleDomainsByDate(today);
-        } else if (dateType.equals("java.sql.Date")) {
+        if (java.util.Date.class.equals(Class.forName(dateType))) {
+             simpleDomains = delegate.selectAllSimpleDomainsByDate(today);
+        } else if (java.sql.Date.class.equals(Class.forName(dateType))) {
             // create a java.sql.Date from the java.util.Date
             java.sql.Date sqlToday = new java.sql.Date(today.getTime());
-            System.out.println("Integration test: " + sqlToday.toString());
             simpleDomains = delegate.selectAllSimpleDomainsByDate(sqlToday);
         } else {
             simpleDomains = null;
         }
     }
+    
+    @When("^the simple domain for null date is retrieved$")
+    public void the_simple_domain_for_null_date_is_retrieved() throws Throwable {
+        simpleDomains = delegate.selectAllSimpleDomainsByDate(null);
+    }
 
     @Then("^the simple domain is retrieved successfully$")
     public void the_simple_domain_is_retrieved_successfully() throws Throwable {
         MessageTestUtils.assertNoErrorMessages();
-        assertNotNull(simpleDomains);
-        assertTrue(simpleDomains.size() > 0);
+        assertNotNull("SimpleDomain should not have been null", simpleDomains);
+        assertTrue("Expected to find at least one SimpleDomain", simpleDomains.size() > 0);
     }
+    
+    @Then("^there are no errors$")
+    public void there_are_no_errors() throws Throwable {
+        MessageTestUtils.assertNoErrorMessages();
+    }
+    
+    @Then("^no simple domains are returned$")
+    public void no_simple_domains_are_returned() throws Throwable {
+        assertNotNull("SimpleDomain should not have been null", simpleDomains);
+        assertTrue("Expected to find no SimpleDomains", simpleDomains.size() == 0);
+    }
+
 
     private Calendar getCalendarCurrentDateInstance() {
         // get a calendar instance, which defaults to "now"

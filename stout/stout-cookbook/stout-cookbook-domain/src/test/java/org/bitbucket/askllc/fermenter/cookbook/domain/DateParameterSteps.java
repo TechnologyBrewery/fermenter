@@ -22,7 +22,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import cucumber.api.java.After;
-import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -30,6 +29,10 @@ import cucumber.api.java.en.When;
 @ContextConfiguration({ "classpath:application-test-context.xml", "classpath:h2-spring-ds-context.xml" })
 @Transactional
 public class DateParameterSteps {
+    private static final String PRIOR_TO = "prior to";
+    private static final String FOR = "for";
+    private static final String AFTER = "after";
+    
     List<SimpleDomainBO> records = new ArrayList<>();
     Collection<SimpleDomainBO> retrievedBOs;
     Date today = getCalendarCurrentDateInstance().getTime();
@@ -81,13 +84,13 @@ public class DateParameterSteps {
 
         switch (comparisonType) {
 
-        case "prior to":
+        case PRIOR_TO:
             response = simpleDomainMgr.selectAllSimpleDomainsBeforeDate(today);
             break;
-        case "for":
+        case FOR:
             response = simpleDomainMgr.selectAllSimpleDomainsByDate(today);
             break;
-        case "after":
+        case AFTER:
             response = simpleDomainMgr.selectAllSimpleDomainsAfterDate(today);
             break;
         default:
@@ -103,14 +106,14 @@ public class DateParameterSteps {
         for (SimpleDomainBO simpleDomainBO : retrievedBOs) {
             Date actualDate = simpleDomainBO.getTheDate1();
             switch (comparisonType) {
-            case "prior to":
-                assertTrue(today.compareTo(actualDate) > 0);
+            case PRIOR_TO:
+                assertTrue("Actual date should be before current date", today.compareTo(actualDate) > 0);
                 break;
-            case "for":
-                assertEquals(today, actualDate);
+            case FOR:
+                assertEquals("Actual date and current date should be the same", today, actualDate);
                 break;
-            case "after":
-                assertTrue(today.compareTo(actualDate) < 0);
+            case AFTER:
+                assertTrue("Actual date should be later than current date ", today.compareTo(actualDate) < 0);
                 break;
             default:
                 fail("invalid comparison type");

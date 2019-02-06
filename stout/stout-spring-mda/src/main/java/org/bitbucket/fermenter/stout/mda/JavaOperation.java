@@ -16,7 +16,6 @@ import org.bitbucket.fermenter.mda.metamodel.element.Operation;
 import org.bitbucket.fermenter.mda.metamodel.element.Parameter;
 import org.bitbucket.fermenter.mda.metamodel.element.Return;
 import org.bitbucket.fermenter.mda.metamodel.element.Transaction;
-import org.bitbucket.fermenter.stout.util.ToDateExpander;
 import org.jboss.resteasy.annotations.GZIP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +28,9 @@ public class JavaOperation extends BaseOperationDecorator implements Operation, 
     private static final Logger logger = LoggerFactory.getLogger(JavaOperation.class);
 
     protected static final String BUSINESS_OBJECT = "BO";
+    protected static final String FEIGN_ANNOTATION= "Param";
+    protected static final String JAXRS_ANNOTATION= "QueryParam";
+    protected static final String DATE_PARAMETER= "Date";
 
     protected MetadataRepository metadataRepository = ModelInstanceRepositoryManager
             .getMetadataRepostory(MetadataRepository.class);
@@ -133,7 +135,7 @@ public class JavaOperation extends BaseOperationDecorator implements Operation, 
      * @return jax-rs compliant signature
      */
     public String getSignatureParametersWithJaxRS() {
-        return getSignatureParametersWithParameterAnnotations("QueryParam");
+        return getSignatureParametersWithParameterAnnotations(JAXRS_ANNOTATION);
     }
 
     /**
@@ -142,18 +144,9 @@ public class JavaOperation extends BaseOperationDecorator implements Operation, 
      * @return feign compliant signature
      */
     public String getSignatureParametersWithFeign() {
-        return getSignatureParametersWithParameterAnnotations("Param");
+        return getSignatureParametersWithParameterAnnotations(FEIGN_ANNOTATION);
     }
     
-    /**
-     * Creates the signature with needed feign parameter descriptors and custom parameter expansion included.
-     * 
-     * @return feign compliant signature
-     */
-    public String getSignatureParametersWithFeignForDate() {
-        return getSignatureParametersWithParameterAnnotations("DateParam");
-    }
-
     /**
      * Creates the signature with passed parameter annotation descriptors included.
      * 
@@ -170,10 +163,8 @@ public class JavaOperation extends BaseOperationDecorator implements Operation, 
                 JavaParameter param = (JavaParameter) i.next();
 
                 if (!param.isEntity()) {
-                    if (annotationParam.equalsIgnoreCase("DateParam")  && param.getJavaType().equalsIgnoreCase("Date")) {
-                        params.append("@").append("Param").append("(value = \"").append(param.getName()).append("\", expander = ToDateExpander.class) ");
-                    } else if (annotationParam.equalsIgnoreCase("DateParam")){
-                        params.append("@").append("Param").append("(\"").append(param.getName()).append("\") ");
+                    if (annotationParam.equalsIgnoreCase(FEIGN_ANNOTATION)  && param.getJavaType().equalsIgnoreCase(DATE_PARAMETER)) {
+                        params.append("@").append(annotationParam).append("(value = \"").append(param.getName()).append("\", expander = ToDateExpander.class) ");
                     } else {
                         params.append("@").append(annotationParam).append("(\"").append(param.getName()).append("\") ");                        
                     }
@@ -280,7 +271,9 @@ public class JavaOperation extends BaseOperationDecorator implements Operation, 
             if (parameter.isMany()) {
                 imports.add(List.class.getName());
             }
-
+            if (parameter.getJavaType().equalsIgnoreCase(DATE_PARAMETER)) {
+                imports.add(org.bitbucket.fermenter.stout.util.ToDateExpander.class.getName());
+            }
             String importValue = parameter.getImport();
             if (JavaElementUtils.checkImportAgainstDefaults(importValue)) {
                 imports.add(importValue);

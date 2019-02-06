@@ -243,7 +243,7 @@ public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServi
 
     @Override
     protected void returnVoidForDateInputImpl(Date inputDate) {
-        LOGGER.info("did something with " + inputDate.toString().toString());
+        LOGGER.info("made a call for SimpleDomain with " + inputDate.toString());
     }
 
 

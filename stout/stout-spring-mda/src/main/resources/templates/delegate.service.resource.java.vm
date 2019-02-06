@@ -4,7 +4,6 @@ import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
 import javax.ws.rs.core.MediaType;
-import org.bitbucket.fermenter.stout.util.ToDateExpander;
 
 #foreach( $import in $service.imports )
 import $import;
@@ -55,11 +54,11 @@ public interface ${service.name}Resource {
 	@Headers({"Content-Type: " + MediaType.APPLICATION_JSON })
 	#end
 	#if($operation.return.isMany())	 
-	ValueServiceResponse<Collection<${operation.return.javaType}>> ${operation.uncapitalizedName}(${operation.getSignatureParametersWithFeignForDate()});
+	ValueServiceResponse<Collection<${operation.return.javaType}>> ${operation.uncapitalizedName}(${operation.getSignatureParametersWithFeign()});
 	#elseif($operation.isResponseTypeVoid())
-	public VoidServiceResponse ${operation.uncapitalizedName}(${operation.getSignatureParametersWithFeignForDate()});
+	public VoidServiceResponse ${operation.uncapitalizedName}(${operation.getSignatureParametersWithFeign()});
 	#else 
-	ValueServiceResponse<${operation.return.javaType}> ${operation.uncapitalizedName}(${operation.getSignatureParametersWithFeignForDate()});
+	ValueServiceResponse<${operation.return.javaType}> ${operation.uncapitalizedName}(${operation.getSignatureParametersWithFeign()});
 	#end
 
 #end

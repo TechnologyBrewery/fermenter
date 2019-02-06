@@ -12,3 +12,9 @@ Feature: Date Parameter
       | dateType       |
       | java.util.Date |
       | java.sql.Date  |
+
+  Scenario:  Null date does not result in 400 error
+    Given a simple domain with today's date
+    When the simple domain for null date is retrieved 
+    Then there are no errors
+    But no simple domains are returned

@@ -1,7 +1,6 @@
 package org.bitbucket.askllc.fermenter.cookbook.referencing;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Calendar;
@@ -15,6 +14,9 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.SimpleDomai
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.SimpleDomain;
 import org.bitbucket.fermenter.stout.messages.MessageManagerInitializationDelegate;
 import org.bitbucket.fermenter.stout.test.MessageTestUtils;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import cucumber.api.java.After;
@@ -37,7 +39,10 @@ public class DateParameterClientSteps {
 
     @Before("@dateParameterClient")
     public void setUp() {
-        assertNotNull("Missing needed delegate!", delegate);
+        Authentication authentication = new UsernamePasswordAuthenticationToken("testUser", "somePassword");
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        assertNotNull("Missing needed manager delegate!", delegate);
+        assertNotNull("Missing needed maintenance delegate!", maintenanceDelegate);
         MessageManagerInitializationDelegate.cleanupMessageManager();
     }
 

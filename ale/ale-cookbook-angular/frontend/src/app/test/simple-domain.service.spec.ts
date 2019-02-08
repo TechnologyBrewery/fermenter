@@ -75,6 +75,47 @@ describe('Ale Simple Domain Maintenance Service', () => {
     }
   ));
 
+  it('should be able to GET a simple domain with an extended property', inject(
+    [SimpleDomainMaintenanceService],
+    (simpleDomainService: SimpleDomainMaintenanceService) => {
+      const testName = 'Test Name';
+      const testId = 'Test Id';
+      const extendedPropertyValue = 'test extended Property';
+
+      simpleDomainService
+        .get(testId)
+        .subscribe((simpleDomain: SimpleDomain) => {
+          expect(simpleDomain).toBeTruthy();
+          expect(simpleDomain.name).toEqual(testName);
+          expect(simpleDomain.extendedProperty).toEqual(extendedPropertyValue);
+        });
+
+      // The following `expectOne()` will match the request's URL.
+      // If no requests or multiple requests matched that URL
+      // `expectOne()` would throw.
+      const req = httpTestingController.expectOne(
+        simpleDomainMaintUrl + '/' + testId
+      );
+
+      // Assert that the request is a GET.
+      expect(req.request.method).toEqual('GET');
+
+      // Respond with mock data, causing Observable to resolve.
+      // Subscribe callback asserts that correct data was returned.
+      const mockResponse = new FermenterResponse<SimpleDomain>();
+      const testSimpleDomain = new SimpleDomain();
+      testSimpleDomain.name = testName;
+      testSimpleDomain.id = testId;
+      testSimpleDomain.extendedProperty = extendedPropertyValue;
+
+      mockResponse.value = testSimpleDomain;
+      req.flush(mockResponse);
+
+      // Finally, assert that there are no outstanding requests.
+      httpTestingController.verify();
+    }
+  ));
+
   it('should be able to PUT a simple domain', inject(
     [SimpleDomainMaintenanceService],
     (simpleDomainService: SimpleDomainMaintenanceService) => {

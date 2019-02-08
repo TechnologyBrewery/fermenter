@@ -4,10 +4,10 @@ import { ForeignKeyWithColumnDefinitionBase } from '../../generated/model-base/f
 * BO for Angular frontend for ForeignKeyWithColumnDefinition
 *
 * Generated Code - DO MODIFY
+* Template = entity.model.ts.vm
 *******************************************************/
-
 export class ForeignKeyWithColumnDefinition extends ForeignKeyWithColumnDefinitionBase {
-  constructor(foreignKeyWithColumnDefinition?: ForeignKeyWithColumnDefinitionBase) {
+  constructor(foreignKeyWithColumnDefinition?: ForeignKeyWithColumnDefinition) {
     super(foreignKeyWithColumnDefinition);
   }
 }

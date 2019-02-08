@@ -4,10 +4,10 @@ import { MappedSubclassABase } from '../../generated/model-base/mapped-subclass-
 * BO for Angular frontend for MappedSubclassA
 *
 * Generated Code - DO MODIFY
+* Template = entity.model.ts.vm
 *******************************************************/
-
 export class MappedSubclassA extends MappedSubclassABase {
-  constructor(mappedSubclassA?: MappedSubclassABase) {
+  constructor(mappedSubclassA?: MappedSubclassA) {
     super(mappedSubclassA);
   }
 }

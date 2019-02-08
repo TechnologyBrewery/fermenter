@@ -7,7 +7,7 @@ import { ${entity.name}Base } from '../../generated/model-base/${entity.nameLowe
 * Template = entity.model.ts.vm
 *******************************************************/
 export class ${entity.name} extends ${entity.name}Base {
-  constructor(${entity.nameLowerCamel}?: ${entity.name}Base) {
+  constructor(${entity.nameLowerCamel}?: ${entity.name}) {
     super(${entity.nameLowerCamel});
   }
 }

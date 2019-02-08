@@ -4,10 +4,10 @@ import { DefaultValueExampleBase } from '../../generated/model-base/default-valu
 * BO for Angular frontend for DefaultValueExample
 *
 * Generated Code - DO MODIFY
+* Template = entity.model.ts.vm
 *******************************************************/
-
 export class DefaultValueExample extends DefaultValueExampleBase {
-  constructor(defaultValueExample?: DefaultValueExampleBase) {
+  constructor(defaultValueExample?: DefaultValueExample) {
     super(defaultValueExample);
   }
 }

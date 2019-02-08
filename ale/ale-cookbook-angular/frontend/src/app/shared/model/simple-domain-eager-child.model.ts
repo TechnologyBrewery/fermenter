@@ -4,10 +4,10 @@ import { SimpleDomainEagerChildBase } from '../../generated/model-base/simple-do
 * BO for Angular frontend for SimpleDomainEagerChild
 *
 * Generated Code - DO MODIFY
+* Template = entity.model.ts.vm
 *******************************************************/
-
 export class SimpleDomainEagerChild extends SimpleDomainEagerChildBase {
-  constructor(simpleDomainEagerChild?: SimpleDomainEagerChildBase) {
+  constructor(simpleDomainEagerChild?: SimpleDomainEagerChild) {
     super(simpleDomainEagerChild);
   }
 }

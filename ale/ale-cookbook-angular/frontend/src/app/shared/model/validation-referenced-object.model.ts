@@ -4,10 +4,10 @@ import { ValidationReferencedObjectBase } from '../../generated/model-base/valid
 * BO for Angular frontend for ValidationReferencedObject
 *
 * Generated Code - DO MODIFY
+* Template = entity.model.ts.vm
 *******************************************************/
-
 export class ValidationReferencedObject extends ValidationReferencedObjectBase {
-  constructor(validationReferencedObject?: ValidationReferencedObjectBase) {
+  constructor(validationReferencedObject?: ValidationReferencedObject) {
     super(validationReferencedObject);
   }
 }

@@ -4,10 +4,10 @@ import { UuidKeyedEntityBase } from '../../generated/model-base/uuid-keyed-entit
 * BO for Angular frontend for UuidKeyedEntity
 *
 * Generated Code - DO MODIFY
+* Template = entity.model.ts.vm
 *******************************************************/
-
 export class UuidKeyedEntity extends UuidKeyedEntityBase {
-  constructor(uuidKeyedEntity?: UuidKeyedEntityBase) {
+  constructor(uuidKeyedEntity?: UuidKeyedEntity) {
     super(uuidKeyedEntity);
   }
 }

@@ -4,10 +4,10 @@ import { ValidationExampleBase } from '../../generated/model-base/validation-exa
 * BO for Angular frontend for ValidationExample
 *
 * Generated Code - DO MODIFY
+* Template = entity.model.ts.vm
 *******************************************************/
-
 export class ValidationExample extends ValidationExampleBase {
-  constructor(validationExample?: ValidationExampleBase) {
+  constructor(validationExample?: ValidationExample) {
     super(validationExample);
   }
 }

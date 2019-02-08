@@ -4,10 +4,10 @@ import { ForeignKeyColumnConventionsBase } from '../../generated/model-base/fore
 * BO for Angular frontend for ForeignKeyColumnConventions
 *
 * Generated Code - DO MODIFY
+* Template = entity.model.ts.vm
 *******************************************************/
-
 export class ForeignKeyColumnConventions extends ForeignKeyColumnConventionsBase {
-  constructor(foreignKeyColumnConventions?: ForeignKeyColumnConventionsBase) {
+  constructor(foreignKeyColumnConventions?: ForeignKeyColumnConventions) {
     super(foreignKeyColumnConventions);
   }
 }

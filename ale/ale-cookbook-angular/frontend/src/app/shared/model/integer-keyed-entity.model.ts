@@ -4,10 +4,10 @@ import { IntegerKeyedEntityBase } from '../../generated/model-base/integer-keyed
 * BO for Angular frontend for IntegerKeyedEntity
 *
 * Generated Code - DO MODIFY
+* Template = entity.model.ts.vm
 *******************************************************/
-
 export class IntegerKeyedEntity extends IntegerKeyedEntityBase {
-  constructor(integerKeyedEntity?: IntegerKeyedEntityBase) {
+  constructor(integerKeyedEntity?: IntegerKeyedEntity) {
     super(integerKeyedEntity);
   }
 }

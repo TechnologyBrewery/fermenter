@@ -4,10 +4,10 @@ import { TableNameMismatchBase } from '../../generated/model-base/table-name-mis
 * BO for Angular frontend for TableNameMismatch
 *
 * Generated Code - DO MODIFY
+* Template = entity.model.ts.vm
 *******************************************************/
-
 export class TableNameMismatch extends TableNameMismatchBase {
-  constructor(tableNameMismatch?: TableNameMismatchBase) {
+  constructor(tableNameMismatch?: TableNameMismatch) {
     super(tableNameMismatch);
   }
 }

@@ -4,10 +4,10 @@ import { MappedSuperclassParentBase } from '../../generated/model-base/mapped-su
 * BO for Angular frontend for MappedSuperclassParent
 *
 * Generated Code - DO MODIFY
+* Template = entity.model.ts.vm
 *******************************************************/
-
 export class MappedSuperclassParent extends MappedSuperclassParentBase {
-  constructor(mappedSuperclassParent?: MappedSuperclassParentBase) {
+  constructor(mappedSuperclassParent?: MappedSuperclassParent) {
     super(mappedSuperclassParent);
   }
 }

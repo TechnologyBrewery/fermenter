@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 
 #foreach( $import in $service.imports )
 #if( !$import.isEnumeration() )
-import { ${import.type}Base } from '../../../generated/model-base/${import.typeLowerHyphen}-base.model';
+//import { ${import.type}Base } from '../../../generated/model-base/${import.typeLowerHyphen}-base.model';
 import { ${import.type} } from '../../../shared/model/${import.typeLowerHyphen}.model';
 #end## end if enum
 #end## end for imports
@@ -70,12 +70,12 @@ export class ${service.name}Service {
 #end## end of if is many
 #end## end of for loop
 
-        return this.http.get<FermenterResponse<${operation.return.signatureBase}>>(url, {params}).pipe(
+        return this.http.get<FermenterResponse<${operation.return.signature}>>(url, {params}).pipe(
 #else## else for if params is empty
 
-        return this.http.get<FermenterResponse<${operation.return.signatureBase}>>(url).pipe(
+        return this.http.get<FermenterResponse<${operation.return.signature}>>(url).pipe(
 #end## end for if params is empty
-            map((response: FermenterResponse<${operation.return.signatureBase}>) => {
+            map((response: FermenterResponse<${operation.return.signature}>) => {
                 const fermenterResponse = new FermenterResponse<${operation.return.signature}>(response);
                 this.checkFermenterResponseIsInitialized(fermenterResponse);
 
@@ -93,7 +93,7 @@ export class ${service.name}Service {
 #else
 #if( !$operation.return.isMany() )
                 if (response.value) {
-                    fermenterResponse.value = new ${operation.return.angularTypeBase}(response.value);
+                    fermenterResponse.value = new ${operation.return.angularType}(response.value);
                 }
 #else
                 if (response.value) {
@@ -148,11 +148,11 @@ export class ${service.name}Service {
 #end## end of if is entity
 #end## end of for param loop
 
-        return this.http.post<FermenterResponse<${operation.return.signatureBase}>>(url, ${operation.postBodyParameterName}, {params}).pipe(
+        return this.http.post<FermenterResponse<${operation.return.signature}>>(url, ${operation.postBodyParameterName}, {params}).pipe(
 #else## else for if params is empty
-        return this.http.post<FermenterResponse<${operation.return.signatureBase}>>(url, ${operation.postBodyParameterName}).pipe(
+        return this.http.post<FermenterResponse<${operation.return.signature}>>(url, ${operation.postBodyParameterName}).pipe(
 #end## end for if params is empty
-            map((response: FermenterResponse<${operation.return.signatureBase}>) => {
+            map((response: FermenterResponse<${operation.return.signature}>) => {
                 const fermenterResponse = new FermenterResponse<${operation.return.signature}>(response);
                 this.checkFermenterResponseIsInitialized(fermenterResponse);
 
@@ -170,7 +170,7 @@ export class ${service.name}Service {
 #else
 #if( !$operation.return.isMany() )
                 if (response.value) {
-                    fermenterResponse.value = new ${operation.return.angularTypeBase}(response.value);
+                    fermenterResponse.value = new ${operation.return.angularType}(response.value);
                 }
 #else
                 if (response.value) {
@@ -198,7 +198,7 @@ export class ${service.name}Service {
     /**
     * ${operation.nameLowerCamel} is not implemeneted because support for enums and paging is pending
     */
-    public ${operation.nameLowerCamel}(NOT_SUPPORTED: string) {
+    public ${operation.nameLowerCamel}_PENDING(NOT_SUPPORTED: string) {
         throw new Error('${operation.nameLowerCamel} is not implemeneted because support for enums and paging is pending');
     }
 #end## end of if usesEnumerations

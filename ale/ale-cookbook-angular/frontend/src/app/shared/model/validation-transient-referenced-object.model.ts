@@ -7,7 +7,7 @@ import { ValidationTransientReferencedObjectBase } from '../../generated/model-b
 * Template = entity.model.ts.vm
 *******************************************************/
 export class ValidationTransientReferencedObject extends ValidationTransientReferencedObjectBase {
-  constructor(validationTransientReferencedObject?: ValidationTransientReferencedObjectBase) {
+  constructor(validationTransientReferencedObject?: ValidationTransientReferencedObject) {
     super(validationTransientReferencedObject);
   }
 }

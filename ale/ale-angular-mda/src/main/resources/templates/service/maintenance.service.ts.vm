@@ -4,7 +4,7 @@ import { map, catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { Constants } from '../../../constants';
 
-import { ${entity.name}Base } from '../../model-base/${entity.nameLowerHyphen}-base.model';
+//import { ${entity.name}Base } from '../../model-base/${entity.nameLowerHyphen}-base.model';
 import { ${entity.name} } from '../../../shared/model/${entity.nameLowerHyphen}.model';
 import { FermenterResponse } from '../../../shared/model/fermenter-response.model';
 import { GlobalErrorHandler } from '../../../shared/global-error-handler.service';
@@ -42,8 +42,8 @@ export class ${entity.name}MaintenanceService {
   public get(id: string): Observable<${entity.name}> {
     const url = this.${entity.name}URL + '/' + id;
 
-    return this.http.get<FermenterResponse<${entity.name}Base>>(url).pipe(
-      map((response: FermenterResponse<${entity.name}Base>) => {
+    return this.http.get<FermenterResponse<${entity.name}>>(url).pipe(
+      map((response: FermenterResponse<${entity.name}>) => {
         const fermenterResponse = this.parseResponseToSingle(response);
         if (fermenterResponse.hasErrorMessages()) {
           const msg =
@@ -70,9 +70,9 @@ export class ${entity.name}MaintenanceService {
     const url = this.${entity.name}URL + '/' + id;
 
     return this.http
-      .put<FermenterResponse<${entity.name}Base>>(url, ${entity.nameLowerCamel})
+      .put<FermenterResponse<${entity.name}>>(url, ${entity.nameLowerCamel})
       .pipe(
-        map((response: FermenterResponse<${entity.name}Base>) => {
+        map((response: FermenterResponse<${entity.name}>) => {
           const fermenterResponse = this.parseResponseToSingle(response);
           if (fermenterResponse.hasErrorMessages()) {
             const msg =
@@ -97,9 +97,9 @@ export class ${entity.name}MaintenanceService {
     const url = this.${entity.name}URL;
 
     return this.http
-      .post<FermenterResponse<${entity.name}Base>>(url, ${entity.nameLowerCamel})
+      .post<FermenterResponse<${entity.name}>>(url, ${entity.nameLowerCamel})
       .pipe(
-        map((response: FermenterResponse<${entity.name}Base>) => {
+        map((response: FermenterResponse<${entity.name}>) => {
           const fermenterResponse = this.parseResponseToSingle(response);
           if (fermenterResponse.hasErrorMessages()) {
             const msg =
@@ -118,12 +118,12 @@ export class ${entity.name}MaintenanceService {
    *
    * @param id - the id of the entity that you want to delete
    */
-  public delete(id: string): Observable<FermenterResponse<${entity.name}Base>> {
+  public delete(id: string): Observable<FermenterResponse<${entity.name}>> {
     const url = this.${entity.name}URL + '/' + id;
 
-    return this.http.delete<FermenterResponse<${entity.name}Base>>(url).pipe(
-      map((response: FermenterResponse<${entity.name}Base>) => {
-        const fermenterResponse = new FermenterResponse<${entity.name}Base>(response);
+    return this.http.delete<FermenterResponse<${entity.name}>>(url).pipe(
+      map((response: FermenterResponse<${entity.name}>) => {
+        const fermenterResponse = new FermenterResponse<${entity.name}>(response);
         if (fermenterResponse.hasErrorMessages()) {
           const msg =
             'The get service is expected to delete the ${entity.name} without issues.';
@@ -147,7 +147,7 @@ export class ${entity.name}MaintenanceService {
     const url = this.${entity.name}URL + '/findByExample';
 
     return this.http
-      .post<FermenterResponse<PageWrapper<${entity.name}Base>>>(url, findByExampleCriteria)
+      .post<FermenterResponse<PageWrapper<${entity.name}>>>(url, findByExampleCriteria)
       .pipe(
         map((response: FermenterResponse<PageWrapper<${entity.name}>>) => {
           const fermenterResponse = this.parseResponseToPageWrapper(response);
@@ -163,7 +163,7 @@ export class ${entity.name}MaintenanceService {
   }
 
   protected parseResponseToPageWrapper(
-    response: FermenterResponse<PageWrapper<${entity.name}Base>>
+    response: FermenterResponse<PageWrapper<${entity.name}>>
   ): FermenterResponse<PageWrapper<${entity.name}>> {
     const fermenterResponse = new FermenterResponse<PageWrapper<${entity.name}>>(response);
     this.checkFermenterResponseIsInitialized(response);
@@ -182,7 +182,7 @@ export class ${entity.name}MaintenanceService {
   }
 
   protected parseResponseToSingle(
-    response: FermenterResponse<${entity.name}Base>
+    response: FermenterResponse<${entity.name}>
   ): FermenterResponse<${entity.name}> {
     const fermenterResponse = new FermenterResponse(response);
     this.checkFermenterResponseIsInitialized(fermenterResponse);

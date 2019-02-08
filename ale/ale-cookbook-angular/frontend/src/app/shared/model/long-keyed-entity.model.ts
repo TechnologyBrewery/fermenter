@@ -4,10 +4,10 @@ import { LongKeyedEntityBase } from '../../generated/model-base/long-keyed-entit
 * BO for Angular frontend for LongKeyedEntity
 *
 * Generated Code - DO MODIFY
+* Template = entity.model.ts.vm
 *******************************************************/
-
 export class LongKeyedEntity extends LongKeyedEntityBase {
-  constructor(longKeyedEntity?: LongKeyedEntityBase) {
+  constructor(longKeyedEntity?: LongKeyedEntity) {
     super(longKeyedEntity);
   }
 }

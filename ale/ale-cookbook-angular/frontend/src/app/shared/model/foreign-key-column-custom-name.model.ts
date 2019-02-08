@@ -4,10 +4,10 @@ import { ForeignKeyColumnCustomNameBase } from '../../generated/model-base/forei
 * BO for Angular frontend for ForeignKeyColumnCustomName
 *
 * Generated Code - DO MODIFY
+* Template = entity.model.ts.vm
 *******************************************************/
-
 export class ForeignKeyColumnCustomName extends ForeignKeyColumnCustomNameBase {
-  constructor(foreignKeyColumnCustomName?: ForeignKeyColumnCustomNameBase) {
+  constructor(foreignKeyColumnCustomName?: ForeignKeyColumnCustomName) {
     super(foreignKeyColumnCustomName);
   }
 }

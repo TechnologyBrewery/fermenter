@@ -4,10 +4,10 @@ import { TransientEntityExampleBase } from '../../generated/model-base/transient
 * BO for Angular frontend for TransientEntityExample
 *
 * Generated Code - DO MODIFY
+* Template = entity.model.ts.vm
 *******************************************************/
-
 export class TransientEntityExample extends TransientEntityExampleBase {
-  constructor(transientEntityExample?: TransientEntityExampleBase) {
+  constructor(transientEntityExample?: TransientEntityExample) {
     super(transientEntityExample);
   }
 }

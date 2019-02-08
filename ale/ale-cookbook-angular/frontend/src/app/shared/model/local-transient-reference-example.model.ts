@@ -7,7 +7,7 @@ import { LocalTransientReferenceExampleBase } from '../../generated/model-base/l
 * Template = entity.model.ts.vm
 *******************************************************/
 export class LocalTransientReferenceExample extends LocalTransientReferenceExampleBase {
-  constructor(localTransientReferenceExample?: LocalTransientReferenceExampleBase) {
+  constructor(localTransientReferenceExample?: LocalTransientReferenceExample) {
     super(localTransientReferenceExample);
   }
 }

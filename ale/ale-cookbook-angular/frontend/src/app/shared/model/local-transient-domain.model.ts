@@ -7,7 +7,7 @@ import { LocalTransientDomainBase } from '../../generated/model-base/local-trans
 * Template = entity.model.ts.vm
 *******************************************************/
 export class LocalTransientDomain extends LocalTransientDomainBase {
-  constructor(localTransientDomain?: LocalTransientDomainBase) {
+  constructor(localTransientDomain?: LocalTransientDomain) {
     super(localTransientDomain);
   }
 }

@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.bitbucket.askllc.fermenter</groupId>
         <artifactId>root</artifactId>
-        <version>2.0.0.CR13</version>
+        <version>2.0.0.CR14-SNAPSHOT</version>
     </parent>
 
     <groupId>org.bitbucket.askllc.fermenter.ale</groupId>

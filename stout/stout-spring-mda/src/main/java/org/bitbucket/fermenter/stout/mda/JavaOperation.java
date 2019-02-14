@@ -163,7 +163,7 @@ public class JavaOperation extends BaseOperationDecorator implements Operation, 
                 JavaParameter param = (JavaParameter) i.next();
 
                 if (!param.isEntity()) {
-                    if (annotationParam.equalsIgnoreCase(FEIGN_ANNOTATION)  && param.getJavaType().equalsIgnoreCase(DATE_PARAMETER)) {
+                    if (FEIGN_ANNOTATION.equalsIgnoreCase(annotationParam)  && DATE_PARAMETER.equalsIgnoreCase(param.getJavaType())) {
                         params.append("@").append(annotationParam).append("(value = \"").append(param.getName()).append("\", expander = ToDateExpander.class) ");
                     } else {
                         params.append("@").append(annotationParam).append("(\"").append(param.getName()).append("\") ");                        
@@ -271,7 +271,7 @@ public class JavaOperation extends BaseOperationDecorator implements Operation, 
             if (parameter.isMany()) {
                 imports.add(List.class.getName());
             }
-            if (parameter.getJavaType().equalsIgnoreCase(DATE_PARAMETER)) {
+            if (DATE_PARAMETER.equalsIgnoreCase(parameter.getJavaType())) {
                 imports.add(org.bitbucket.fermenter.stout.util.ToDateExpander.class.getName());
             }
             String importValue = parameter.getImport();

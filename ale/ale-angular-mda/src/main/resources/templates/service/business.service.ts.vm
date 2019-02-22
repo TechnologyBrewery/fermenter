@@ -5,10 +5,10 @@ import { Constants } from '../../../constants';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { BusinessError } from '../../../generated/business-error.model';
 
 #foreach( $import in $service.imports )
 #if( !$import.isEnumeration() )
-//import { ${import.type}Base } from '../../../generated/model-base/${import.typeLowerHyphen}-base.model';
 import { ${import.type} } from '../../../shared/model/${import.typeLowerHyphen}.model';
 #end## end if enum
 #end## end for imports
@@ -49,13 +49,25 @@ export class ${service.name}Service {
     */
 #if( $operation.return.type == 'void' )
 ## void responses return a fermenter response so we have something to return
-    public ${operation.nameLowerCamel}(${operation.getSignatureParametersForAngular()}): Observable<FermenterResponse<${operation.return.signature}>> {
+#if( $operation.parameters.isEmpty() )
+    public ${operation.nameLowerCamel}(skipGlobalErrorHandler = false): Observable<FermenterResponse<${operation.return.signature}>> {
+#else
+    public ${operation.nameLowerCamel}(${operation.getSignatureParametersForAngular()}, skipGlobalErrorHandler = false): Observable<FermenterResponse<${operation.return.signature}>> {
+#end## end of if there are multiple params
 #else
 ## non void responses return the item we are trying to get
 ## we don't return the fermenter response as we don't expect any fermenter messages for get calls
 ## if there is a fermenter error message then it will call the global error handler to handle the exception
-    public ${operation.nameLowerCamel}(${operation.getSignatureParametersForAngular()}): Observable<${operation.return.signature}> {
+#if( $operation.parameters.isEmpty() )
+    public ${operation.nameLowerCamel}(skipGlobalErrorHandler = false): Observable<${operation.return.signature}> {
+#else
+    public ${operation.nameLowerCamel}(${operation.getSignatureParametersForAngular()}, skipGlobalErrorHandler = false): Observable<${operation.return.signature}> {
+#end## end of if there are multiple params
 #end## end of if return is void
+##
+##
+##
+##
         const url = this.${service.name}ServiceURL + '/${operation.nameLowerCamel}' ;
 #if( !$operation.parameters.isEmpty() )
 
@@ -105,11 +117,8 @@ export class ${service.name}Service {
 #end## end of isMany
 #end## end for if isBaseType()
 
-                if (fermenterResponse.hasErrorMessages()) {
-                    const msg =
-                        'The get service is expected to retrieve the ${operation.return.angularType} without issues.';
-                    this.errorHandler.handleCriticalError(msg);
-                    throw new Error(msg);
+                if (fermenterResponse.messages.hasErrorMessages() && !skipGlobalErrorHandler) {
+                    throw new BusinessError(fermenterResponse.messages);
                 }
 #if( $operation.return.type == 'void' )
                 return fermenterResponse;
@@ -117,7 +126,7 @@ export class ${service.name}Service {
                 return fermenterResponse.value;
 #end## end of return type void
             }),
-            catchError(this.errorHandler.handleServiceCallError)
+            catchError(error => this.errorHandler.handleServiceCallError(error))
         );
     }
 #else
@@ -129,8 +138,13 @@ export class ${service.name}Service {
     * Call the ${operation.nameLowerCamel} operation on ${service.name}Service
     * ${operation.documentation}
     */
-    public ${operation.nameLowerCamel}(${operation.getSignatureParametersForAngular()}):
+#if( $operation.parameters.isEmpty() )
+    public ${operation.nameLowerCamel}(skipGlobalErrorHandler = false):
                 Observable<FermenterResponse<${operation.return.signature}>> {
+#else
+    public ${operation.nameLowerCamel}(${operation.getSignatureParametersForAngular()}, skipGlobalErrorHandler = false):
+                Observable<FermenterResponse<${operation.return.signature}>> {
+#end## end of if there are multiple params
         const url = this.${service.name}ServiceURL + '/${operation.nameLowerCamel}' ;
 
 #if( $operation.hasUrlParams() )
@@ -182,15 +196,12 @@ export class ${service.name}Service {
 #end## end of isMany
 #end## end for if isBaseType()
 
-                if (fermenterResponse.hasErrorMessages()) {
-                    const msg =
-                        'The get service is expected to retrieve the ${operation.return.angularType} without issues.';
-                    this.errorHandler.handleCriticalError(msg);
-                    throw new Error(msg);
+                if (fermenterResponse.messages.hasErrorMessages() && !skipGlobalErrorHandler) {
+                    throw new BusinessError(fermenterResponse.messages);
                 }
                 return fermenterResponse;
             }),
-            catchError(this.errorHandler.handleServiceCallError)
+            catchError(error => this.errorHandler.handleServiceCallError(error))
         );
     }
 #end## end of post vs get if block
@@ -207,7 +218,7 @@ export class ${service.name}Service {
     protected checkFermenterResponseIsInitialized(fermenterResponse: FermenterResponse<{}>) {
         if (!fermenterResponse) {
             const msg = 'Failed to initialize fermenter response for service call.';
-            this.errorHandler.handleCriticalError(msg);
+            this.errorHandler.handleServiceCallError(msg);
             throw new Error(msg);
         }
     }

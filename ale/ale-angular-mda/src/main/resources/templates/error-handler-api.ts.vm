@@ -2,7 +2,5 @@ import { ErrorHandler } from '@angular/core';
 import { Observable } from 'rxjs';
 
 export interface ErrorHandlerApi extends ErrorHandler {
-  handleCriticalError(message: string): void;
-
   handleServiceCallError(error: any): Observable<never>;
 }

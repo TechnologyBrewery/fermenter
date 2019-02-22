@@ -47,7 +47,11 @@
     </div>
     <br/>
     <div>
-        <button type="button" mat-raised-button color="primary" id="getSimpleDomainCountButton" (click)="getSimpleDomainCountByBusinessService()">Get Simple Domain Count By Business Service</button>
+        <button type="button" mat-raised-button (click)="testGlobalErrorHandler()">Test Global Error Handler</button>
+        <br/>
+        <br/>
+        <br/>
+        <button type="button" mat-raised-button id="getSimpleDomainCountButton" (click)="getSimpleDomainCountByBusinessService()">Get Simple Domain Count By Business Service</button>
         <br/>
         <br/>
         Simple Domain Count By Business Service: <span *ngIf="simpleDomainCountByBusinessService != -1" id="simpleDomainCountByBusinessService">{{simpleDomainCountByBusinessService}}</span>

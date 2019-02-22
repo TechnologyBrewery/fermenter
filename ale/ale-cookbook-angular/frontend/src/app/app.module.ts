@@ -10,11 +10,15 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { GlobalErrorHandler } from './shared/global-error-handler.service';
 import { SimpleDomainMaintenanceService } from './generated/service/maintenance/simple-domain-maintenance.service';
+import { GlobalErrorHandlerComponent } from './shared/global-error-handler/global-error-handler.component';
+import { ErrorDialogComponent } from './shared/error-dialog/error-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    SimpleDomainComponent
+    SimpleDomainComponent,
+    GlobalErrorHandlerComponent,
+    ErrorDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -25,7 +29,8 @@ import { SimpleDomainMaintenanceService } from './generated/service/maintenance/
     HttpClientModule
   ],
   providers: [SimpleDomainMaintenanceService, GlobalErrorHandler],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [ErrorDialogComponent]
 })
 export class AppModule { }
 // TODO: https://alligator.io/angular/providers-shared-modules/

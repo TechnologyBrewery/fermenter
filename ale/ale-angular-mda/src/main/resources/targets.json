@@ -71,6 +71,27 @@
     "overwritable": false
   },
   {
+    "name": "fermenterMessagesBaseModel",
+    "templateName": "templates/model/fermenter-messages-base.model.ts.vm",
+    "outputFile": "generated/model-base/fermenter-messages-base.model.ts",
+    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "overwritable": true
+  },
+  {
+    "name": "fermenterMessagesModel",
+    "templateName": "templates/model/fermenter-messages.model.ts.vm",
+    "outputFile": "shared/model/fermenter-messages.model.ts",
+    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "overwritable": false
+  },
+  {
+    "name": "businessErrorModel",
+    "templateName": "templates/business-error.model.ts.vm",
+    "outputFile": "generated/business-error.model.ts",
+    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "overwritable": false
+  },
+  {
     "name": "fermenterBaseModel",
     "templateName": "templates/model/fermenter-response-base.model.ts.vm",
     "outputFile": "generated/model-base/fermenter-response-base.model.ts",

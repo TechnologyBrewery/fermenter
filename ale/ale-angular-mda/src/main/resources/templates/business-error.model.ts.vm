@@ -1,0 +1,8 @@
+import { FermenterMessages } from '../shared/model/fermenter-messages.model';
+
+export class BusinessError {
+  public messages: FermenterMessages;
+  constructor(messages: FermenterMessages) {
+    this.messages = messages;
+  }
+}

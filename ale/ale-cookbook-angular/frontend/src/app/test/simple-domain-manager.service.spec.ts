@@ -12,6 +12,7 @@ import { GlobalErrorHandler } from '../shared/global-error-handler.service';
 import { SimpleDomainManagerService } from '../generated/service/business/simple-domain-manager.service';
 import { HeartbeatService } from '../generated/service/business/heartbeat.service';
 import { FermenterMessage } from '../shared/model/fermenter-message.model';
+import { FermenterMessages } from '../shared/model/fermenter-messages.model';
 
 describe('Ale: Business Service Generation', () => {
   let httpTestingController: HttpTestingController;
@@ -103,9 +104,9 @@ describe('Ale: Business Service Generation', () => {
         .subscribe((response: FermenterResponse<undefined>) => {
           expect(response).toBeTruthy();
           expect(response.value).toBeUndefined();
-          expect(response.hasErrorMessages()).toBeFalsy();
-          expect(response.hasMessages()).toBeTruthy();
-          expect(response.messages[0].key).toEqual(messageKey);
+          expect(response.messages.hasErrorMessages()).toBeFalsy();
+          expect(response.messages.hasMessages()).toBeTruthy();
+          expect(response.messages.messages[0].key).toEqual(messageKey);
         });
 
       const req = httpTestingController.expectOne(
@@ -115,12 +116,13 @@ describe('Ale: Business Service Generation', () => {
       expect(req.request.method).toEqual('GET');
 
       const mockResponse = new FermenterResponse<undefined>();
+      mockResponse.messages = new FermenterMessages();
       const mockMessage = new FermenterMessage();
       mockMessage.key = messageKey;
       mockMessage.severity = 'INFO';
       mockMessage.summaryMessage = 'Server is responsive.';
       mockMessage.detailMessage = mockMessage.summaryMessage;
-      mockResponse.messages = [mockMessage];
+      mockResponse.messages.messages = [mockMessage];
       req.flush(mockResponse);
     }
   ));

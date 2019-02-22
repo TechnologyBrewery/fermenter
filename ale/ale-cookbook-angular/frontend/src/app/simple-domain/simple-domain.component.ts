@@ -7,6 +7,8 @@ import { SortWrapper } from '../shared/model/sort-wrapper.model';
 import { PageWrapper } from '../shared/model/page-wrapper.model';
 import { MatSnackBar } from '@angular/material';
 import { SimpleDomainManagerService } from '../generated/service/business/simple-domain-manager.service';
+import { ValidationExample } from '../shared/model/validation-example.model';
+import { ValidationExampleMaintenanceService } from '../generated/service/maintenance/validation-example-maintenance.service';
 
 @Component({
   selector: 'app-simple-domain',
@@ -29,6 +31,7 @@ export class SimpleDomainComponent implements OnInit {
   constructor(
     private simpleDomainService: SimpleDomainMaintenanceService,
     private simpleDomainManagerService: SimpleDomainManagerService,
+    private validationMaintService: ValidationExampleMaintenanceService,
     public snackBar: MatSnackBar
   ) {}
 
@@ -55,7 +58,7 @@ export class SimpleDomainComponent implements OnInit {
     this.simpleDomainManagerService
       .deleteAllSimpleDomains()
       .subscribe((response: FermenterResponse<undefined>) => {
-        if (response.hasErrorMessages()) {
+        if (response.messages.hasErrorMessages()) {
           this.toast('PROBLEMS DELETING ALL SIMPLE DOMAINS', false);
         } else {
           this.toast('Sucessfully deleted all simple domains.', true);
@@ -78,7 +81,7 @@ export class SimpleDomainComponent implements OnInit {
     this.simpleDomainService
       .delete(simpleDomain.id)
       .subscribe((response: FermenterResponse<SimpleDomain>) => {
-        if (!response.hasMessages()) {
+        if (!response.messages.hasMessages()) {
           this.toast('Sucessfully deleted ' + simpleDomain.name, true);
         }
       });
@@ -101,7 +104,7 @@ export class SimpleDomainComponent implements OnInit {
     this.simpleDomainService
       .put(this.simpleDomainEditing.id, this.simpleDomainEditing)
       .subscribe((response: FermenterResponse<SimpleDomain>) => {
-        if (response.hasMessages()) {
+        if (response.messages.hasMessages()) {
           this.toast(
             'Failed to update ' + this.simpleDomainEditing.name,
             false
@@ -138,5 +141,21 @@ export class SimpleDomainComponent implements OnInit {
       .subscribe((response: number) => {
         this.simpleDomainCountByBusinessService = response;
       });
+  }
+
+  testGlobalErrorHandler() {
+    const validation = new ValidationExample();
+    validation.requiredField = 'testss';
+    validation.regexZipcodeExample = 'this should fail';
+
+    // make two calls to show how the popup can show multiple errors
+    this.validationMaintService.post(validation).subscribe();
+
+    this.simpleDomainManagerService.createAndPropagateErrorMessages(3).subscribe(
+      data => {
+        // if there is a fermenter error or other error it should by default, be caught and handled by the global error handler.
+        alert('YOU SHOULD NEVER SEE THIS ALERT');
+      }
+    );
   }
 }

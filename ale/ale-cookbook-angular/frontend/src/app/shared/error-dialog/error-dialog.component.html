@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>ERROR</h1>
+<mat-dialog-content>
+  <mat-list>
+    <mat-list-item *ngFor="let message of data">
+        <h3 mat-line>{{message.severity}} - {{message.summaryMessage}}</h3>
+        <p mat-line> {{message.detailMessage}} </p>
+    </mat-list-item>
+  </mat-list>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

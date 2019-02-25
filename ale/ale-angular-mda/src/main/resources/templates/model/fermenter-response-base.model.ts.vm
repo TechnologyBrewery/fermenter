@@ -1,4 +1,4 @@
-import { FermenterMessage } from '../../shared/model/fermenter-message.model';
+import { FermenterMessages } from '../../shared/model/fermenter-messages.model';
 
 /*******************************************************
  * Fermenter Response Model Base
@@ -7,33 +7,18 @@ import { FermenterMessage } from '../../shared/model/fermenter-message.model';
  * Template = fermenter-response-base.model.ts.vm
  *******************************************************/
 export class FermenterResponseBase<T> {
-  public messages: FermenterMessage[] = new Array<FermenterMessage>();
+  
   public value: T;
+  public messages = new FermenterMessages();
 
   constructor(response?: FermenterResponseBase<T>) {
     if (response) {
       if (response.messages) {
-        for (const message of response.messages) {
-          this.messages.push(new FermenterMessage(message));
-        }
+        this.messages = new FermenterMessages(response.messages);
       }
       if (response.value) {
         this.value = response.value;
       }
     }
-  }
-
-  hasMessages(): boolean {
-    return this.messages.length > 0;
-  }
-
-  hasErrorMessages(): boolean {
-    let hasErrors = false;
-    for (const message of this.messages) {
-      if (message.severity === 'ERROR') {
-        hasErrors = true;
-      }
-    }
-    return hasErrors;
   }
 }

@@ -1,17 +1,36 @@
 import { ErrorHandlerApi } from '../generated/error-handler-api';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ObservableInput, Observable, throwError } from 'rxjs';
+import { Observable, throwError, Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
+import { BusinessError } from '../generated/business-error.model';
+import { FermenterMessage } from './model/fermenter-message.model';
 
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandlerApi {
-  handleCriticalError(message: string): void {
-    throw new Error('Method not implemented.');
-  }
+
+  protected errorsToShowToUser = new Subject<FermenterMessage>();
+  public errorsToShowToUser$ = this.errorsToShowToUser.asObservable();
 
   handleServiceCallError(error: any): Observable<never> {
     let msg = 'Sorry, it looks like you have encountered an error.';
-    if (error instanceof HttpErrorResponse) {
+
+    // Fermenter Message errors
+    if (error instanceof BusinessError) {
+      error = <BusinessError>error;
+      // show error handler dialog
+      for(const message of error.messages.messages) {
+        console.error(message.detailMessage);
+        this.errorsToShowToUser.next(message);
+      }
+
+    // malformed request comes back as 400 w/ fermenter error messages
+    } else if (error.status === 400 && error.error && error.error.messages && error.error.messages.messages) {
+      for(const message of error.error.messages.messages) {
+        this.errorsToShowToUser.next(new FermenterMessage(message));
+      }
+
+    // HTTP errors
+    } else if (error instanceof HttpErrorResponse) {
       error = <HttpErrorResponse>error;
       if (error.code === 404) {
         msg =
@@ -25,12 +44,12 @@ export class GlobalErrorHandler implements ErrorHandlerApi {
         msg =
           'It looks like your request has timed out. Please try again later or contact the helpdesk.';
       }
-      msg += ' Error details : ' + error.code + ' - ' + error.message;
+      const message = new FermenterMessage();
+      message.severity = 'CRITICAL';
+      message.summaryMessage = 'Sever connection error';
+      message.detailMessage = msg;
+      this.errorsToShowToUser.next(message);
     }
-    // should show the error to the user not using alerts as they are evil
-    // example of a nicer error handler for users:
-    // https://stackoverflow.com/questions/44526390/angular-material-create-alert-similar-to-bootstrap-alerts
-    // alert(msg);
     console.error(msg);
     return throwError(error);
   }

@@ -26,6 +26,15 @@
         "name": "fermenterMessageModel"
       },
       {
+        "name": "fermenterMessagesModel"
+      },
+      {
+        "name": "fermenterMessagesBaseModel"
+      },
+      {
+        "name": "businessErrorModel"
+      },
+      {
         "name": "fermenterBaseModel"
       },
       {

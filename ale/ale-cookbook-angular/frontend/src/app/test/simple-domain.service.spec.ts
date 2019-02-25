@@ -49,7 +49,7 @@ describe('Ale Simple Domain Maintenance Service', () => {
 
       simpleDomainService
         .get(testId)
-        .subscribe((simpleDomain: SimpleDomain) => {
+        .subscribe(simpleDomain => {
           expect(simpleDomain).toBeTruthy();
           expect(simpleDomain.name).toEqual(testName);
         });
@@ -199,7 +199,7 @@ describe('Ale Simple Domain Maintenance Service', () => {
         .delete(testId)
         .subscribe((response: FermenterResponse<{}>) => {
           expect(response).toBeTruthy();
-          expect(response.hasMessages()).toBeFalsy();
+          expect(response.messages.hasMessages()).toBeFalsy();
         });
 
       // The following `expectOne()` will match the request's URL.

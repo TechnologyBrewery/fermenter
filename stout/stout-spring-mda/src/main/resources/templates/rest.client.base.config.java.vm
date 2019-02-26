@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.context.SecurityContextHolder;
 import java.util.Properties;
 import org.aeonbits.owner.KrauseningConfigFactory;
-import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.FeignErrorTranslator;
+import org.bitbucket.fermenter.stout.util.FeignErrorTranslator;
 
 /**
  * Configuration for the REST Client.

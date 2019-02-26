@@ -1,4 +1,4 @@
-package org.bitbucket.askllc.fermenter.cookbook.domain.transfer;
+package org.bitbucket.fermenter.stout.util;
 
 import javax.ws.rs.WebApplicationException;
 

@@ -1,6 +1,8 @@
 package org.bitbucket.fermenter.stout.mda;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.LogFactory;
+import org.bitbucket.fermenter.mda.GenerateSourcesMojo;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.element.Composite;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
@@ -9,6 +11,7 @@ import org.bitbucket.fermenter.mda.metadata.element.Parent;
 import org.bitbucket.fermenter.mda.metadata.element.Query;
 import org.bitbucket.fermenter.mda.metadata.element.Reference;
 import org.bitbucket.fermenter.mda.metadata.element.Relation;
+import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 import org.bitbucket.fermenter.stout.bizobj.BasePersistentSpringBO;
 
@@ -23,9 +26,12 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * An {@link Entity} that has been decorated for easier generation of Java files.
+ * An {@link Entity} that has been decorated for easier generation of Java
+ * files.
  */
 public class JavaEntity implements Entity {
+
+    private static final org.apache.commons.logging.Log LOG = LogFactory.getLog(JavaEntity.class);
 
     private Entity entity;
     private Map<String, Field> decoratedFieldMap;
@@ -60,7 +66,7 @@ public class JavaEntity implements Entity {
     public String getName() {
         return entity.getName();
     }
-    
+
     @Override
     public String getNamespace() {
         return entity.getNamespace();
@@ -213,8 +219,7 @@ public class JavaEntity implements Entity {
                 decoratedInverseRelationMap = Collections.<String, Entity> emptyMap();
 
             } else {
-                decoratedInverseRelationMap = new HashMap<>(
-                        (int) (entityInverseRelationMap.size() * 1.25));
+                decoratedInverseRelationMap = new HashMap<>((int) (entityInverseRelationMap.size() * 1.25));
                 for (Entity r : entityInverseRelationMap.values()) {
                     decoratedInverseRelationMap.put(r.getName(), new RelatedJavaEntity(r, this));
 
@@ -274,7 +279,7 @@ public class JavaEntity implements Entity {
      */
     public boolean hasParent() {
         return entity.getParent() != null;
-    }    
+    }
 
     /**
      * {@inheritDoc}
@@ -290,10 +295,10 @@ public class JavaEntity implements Entity {
     public boolean isNonPersistentParentEntity() {
         return entity.isNonPersistentParentEntity();
     }
-    
+
     /**
-     * Generates the appropriate super class for this entity if this entity is non-transient and not a non-persistent
-     * parent entity.
+     * Generates the appropriate super class for this entity if this entity is
+     * non-transient and not a non-persistent parent entity.
      * 
      * @return
      */
@@ -307,7 +312,7 @@ public class JavaEntity implements Entity {
             return BasePersistentSpringBO.class.getSimpleName();
         }
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -352,9 +357,10 @@ public class JavaEntity implements Entity {
     }
 
     // java-specific generation methods:
-    
+
     /**
      * Returns the uncapitalized name of this entity for variable generation.
+     * 
      * @return name
      */
     public String getUncapitalizedName() {
@@ -363,6 +369,7 @@ public class JavaEntity implements Entity {
 
     /**
      * Returns the full set of imports.
+     * 
      * @return all imports
      */
     public Set<String> getImports() {
@@ -377,6 +384,7 @@ public class JavaEntity implements Entity {
 
     /**
      * Returns the full set of imports for fields.
+     * 
      * @return field imports
      */
     public Set<String> getFieldImports() {
@@ -385,22 +393,23 @@ public class JavaEntity implements Entity {
 
     /**
      * Returns the full set of imports for fields.
+     * 
      * @return field imports
      */
     public Set<String> getIdFieldImports() {
         return getFieldImports(false);
     }
-    
+
     protected Set<String> getFieldImports(boolean includeNonIdFields) {
         Set<String> importSet = new HashSet<>();
-        
+
         Map<String, Field> fieldCollection = new HashMap<>();
         fieldCollection.putAll(getIdFields());
         if (includeNonIdFields) {
             fieldCollection.putAll(getFields());
         }
 
-        JavaField javaField;       
+        JavaField javaField;
         for (Field field : fieldCollection.values()) {
             javaField = (JavaField) field;
             String importValue = javaField.getImport();
@@ -411,10 +420,11 @@ public class JavaEntity implements Entity {
         }
 
         return importSet;
-    }    
-    
+    }
+
     /**
      * Returns the full set of imports for references.
+     * 
      * @return reference imports
      */
     public Set<String> getReferenceImports() {
@@ -428,7 +438,7 @@ public class JavaEntity implements Entity {
             if (fkSet != null) {
                 importSet.addAll(fkSet);
             }
-            
+
             if (javaReference.isExternal()) {
                 importSet.add(javaReference.getImport());
             }
@@ -506,14 +516,22 @@ public class JavaEntity implements Entity {
     public boolean isTransient() {
         return entity.isTransient();
     }
-    
+
     public boolean hasNamedEnumeration() {
         boolean result = false;
-        for(Field field : getFields().values()) {
-            if(field.isEnumerationType()) {
-                if(!field.getEnumeration().isValued()) {
-                    result = true;
-                    break;
+        Map<String, Field> fields = getFields();
+        if (!fields.isEmpty()) {
+            for (Field field : fields.values()) {
+                if (field.isEnumerationType()) {
+                    Enumeration enumeration = field.getEnumeration();
+                    if (enumeration == null) {
+                        LOG.error("Field type is most likely set incorrectly "
+                                + "or you have an entity set as a field type instead of as an "
+                                + "association or reference for: \n\tEntity: " + getName() + "\n\tField: " + field.getName());
+                    } else if (!enumeration.isValued()) {
+                        result = true;
+                        break;
+                    }
                 }
             }
         }

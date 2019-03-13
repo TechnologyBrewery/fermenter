@@ -610,10 +610,9 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
 	public ${reference.type} get${reference.capitalizedName}() {
 	    #if ($reference.foreignKeyFields.iterator().hasNext())
 		if ((${reference.name} == null) && (${reference.name}Key != null)) {
-			${reference.name} = ${reference.name}Delegate.findByPrimaryKey(${reference.name}Key);
+			this.${reference.name} = ${reference.name}Delegate.findByPrimaryKey(${reference.name}Key);
 		}
 		#end
-		set${reference.getCapitalizedName()}(${reference.name});
 		return ${reference.name};
 	}
 	 

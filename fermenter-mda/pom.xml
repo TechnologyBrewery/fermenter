@@ -114,6 +114,11 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!-- Since we have cucumber surefire tests that run as part of the build, generate cucumber reports -->
+            <plugin>
+                <groupId>net.masterthought</groupId>
+                <artifactId>maven-cucumber-reporting</artifactId>
+            </plugin>
 		</plugins>
 	</build>
 </project>

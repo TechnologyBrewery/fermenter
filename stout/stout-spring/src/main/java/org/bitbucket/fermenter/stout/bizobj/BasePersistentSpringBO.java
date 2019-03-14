@@ -72,7 +72,7 @@ public abstract class BasePersistentSpringBO<PK extends Serializable, BO, JPA ex
     
     /**
      * Lifecycle method that is invoked before this business object's pre-save validation occurs to support
-     * defaulting of field values.
+     * defaulting of field values that have been set in the entity metamodel.
      */
     protected void defaultFieldValues() {
 
@@ -80,7 +80,9 @@ public abstract class BasePersistentSpringBO<PK extends Serializable, BO, JPA ex
     
 
     /**
-     * Lifecycle method that is invoked before this business object's pre-save validation occurs to support defaulting.
+     * Lifecycle method that is invoked before this business object's pre-save validation occurs to support
+     * defaulting. This should be overridden by the developer in cases when the defaults cannot be defined
+     * in the entity metamodel and more complex values are necessary.
      */
     protected void defaultComplexValues() {
 

@@ -651,8 +651,8 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
 	}	
 	
     /**
-     * Lifecycle method that is invoked before this business object's complex default
-	 * to support defaulting of the field values set in the entity model.
+     * Lifecycle method that is invoked before this business object's pre-save validation occurs to support
+     * defaulting of field values that have been set in the entity metamodel.
      */
 	 #if( !$entity.isTransient() )
 	       @Override

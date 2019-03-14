@@ -98,8 +98,7 @@ public class SimpleDomainBO extends SimpleDomainBaseBO {
 	}
 
 	@Override
-	protected void defaultValues() {
-		super.defaultValues();
+	protected void defaultComplexValues() {
 		
 		if (StringUtils.isBlank(getType())) {
 			setType(RandomStringUtils.randomAlphabetic(3));

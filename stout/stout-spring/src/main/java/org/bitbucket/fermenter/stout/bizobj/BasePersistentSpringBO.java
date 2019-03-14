@@ -30,7 +30,7 @@ public abstract class BasePersistentSpringBO<PK extends Serializable, BO, JPA ex
      * {@inheritDoc}
      */
     public final BO save() {
-        defaultValues();
+        setDefaults();
         preValidate();
         validate();
         if (!MessageManager.hasErrorMessages()) {
@@ -64,11 +64,25 @@ public abstract class BasePersistentSpringBO<PK extends Serializable, BO, JPA ex
         }
 
     }
+    
+    protected final void setDefaults() {
+        defaultFieldValues();
+        defaultComplexValues();
+    }
+    
+    /**
+     * Lifecycle method that is invoked before this business object's pre-save validation occurs to support
+     * defaulting of field values.
+     */
+    protected void defaultFieldValues() {
+
+    }
+    
 
     /**
      * Lifecycle method that is invoked before this business object's pre-save validation occurs to support defaulting.
      */
-    protected void defaultValues() {
+    protected void defaultComplexValues() {
 
     }
 

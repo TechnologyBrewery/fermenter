@@ -30,6 +30,8 @@
 		<jacoco.test.execution.data.file>${project.build.directory}/jacoco.exec</jacoco.test.execution.data.file>
 		<jacoco.version>0.7.7.201606060606</jacoco.version>
 		<resteasy.version>3.6.1.Final</resteasy.version>
+		<!-- Based on the resteasy version that is used -->
+		<jaxrs.version>1.0.1.Final</jaxrs.version>
 		<weld.version>2.1.2.Final</weld.version>
 		<wildfly.version>8.2.1.Final</wildfly.version>
 		<arquillian.version>1.1.11.Final</arquillian.version>

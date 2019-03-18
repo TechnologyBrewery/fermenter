@@ -1,11 +1,12 @@
 package org.bitbucket.askllc.fermenter.cookbook.domain;
 
-import org.bitbucket.fermenter.stout.messages.MessageManagerInitializationDelegate;
+import javax.inject.Inject;
+
 import org.bitbucket.fermenter.stout.mock.MockRequestScope;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+
 import cucumber.api.java.After;
-import javax.inject.Inject;
 
 @ContextConfiguration({ "classpath:application-test-context.xml", "classpath:h2-spring-ds-context.xml" })
 @Transactional

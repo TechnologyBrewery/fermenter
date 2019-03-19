@@ -3,6 +3,10 @@ package org.bitbucket.fermenter.stout.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 
 import org.bitbucket.fermenter.stout.messages.Message;
 import org.bitbucket.fermenter.stout.messages.MessageManager;
@@ -10,11 +14,13 @@ import org.bitbucket.fermenter.stout.messages.MessageUtils;
 import org.bitbucket.fermenter.stout.messages.Messages;
 import org.bitbucket.fermenter.stout.messages.Severity;
 import org.bitbucket.fermenter.stout.service.ServiceResponse;
+import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Useful utilities methods when working with Fermenter objects in a unit/integration test scenario.
+ * Useful utilities methods when working with Fermenter objects in a
+ * unit/integration test scenario.
  */
 public final class MessageTestUtils {
 
@@ -24,8 +30,17 @@ public final class MessageTestUtils {
         // private constructor to prevent instantiation of all static class
     }
 
+    @SuppressWarnings("rawtypes")
+    public static ValueServiceResponse getValueServiceResponse(Response response) {
+        assertTrue("No ValueServiceResponse was passed back", response.hasEntity());
+        Object obj = response.getEntity();
+        assertTrue("Returned response did not contain a ValueServiceResponse", obj instanceof ValueServiceResponse);
+        return (ValueServiceResponse) obj;
+    }
+
     /**
-     * Asserts that no messages have been encountered in the current {@link MessageManager}.
+     * Asserts that no messages have been encountered in the current
+     * {@link MessageManager}.
      */
     public static void assertNoErrorMessages() {
         Messages messages = MessageManager.getMessages();
@@ -60,7 +75,8 @@ public final class MessageTestUtils {
     }
 
     /**
-     * Utility method that tests whether a response has any error messages, logging any error messages found.
+     * Utility method that tests whether a response has any error messages,
+     * logging any error messages found.
      * 
      * @param contentInformation
      *            contextual information about the message being logged
@@ -81,8 +97,9 @@ public final class MessageTestUtils {
     }
 
     /**
-     * Utility method that tests whether a response has any error messages (without the contextual background), and
-     * logging message key and inserts for an error messages.
+     * Utility method that tests whether a response has any error messages
+     * (without the contextual background), and logging message key and inserts
+     * for an error messages.
      * 
      * @param response
      *            the response instance to check for errors
@@ -98,6 +115,34 @@ public final class MessageTestUtils {
             }
             assertFalse("Encountered error messages unexpectedly", hasErrorMessages);
         }
+    }
+
+    /**
+     * Method used to validate error messages in a {@link Response}, returned by
+     * a ({@link WebApplicationException}.
+     * 
+     * @param valueServiceResponse the value service response
+     * @param messageKey
+     *            the message key of the expected error message returned
+     * @param messageSummary
+     *            the message summary of the expected error message summary
+     *            returned
+     * @param clazz
+     *            the class that inserted the message, for looking up the
+     *            message summary
+     */
+    @SuppressWarnings("rawtypes")
+    public static void assertErrorMessageInResponse(ValueServiceResponse valueServiceResponse,
+            String messageKey, String messageSummary, Class clazz) {
+
+        assertTrue("Response was unexpectedly error-free", valueServiceResponse.hasErrors());
+        assertErrorMessagesInResponse(valueServiceResponse, 1);
+        Messages messages = valueServiceResponse.getMessages();
+        Message message = messages.getErrorMessages().iterator().next();
+
+        assertEquals("Message key did not match expected value", messageKey, message.getKey());
+        String actualSummaryMessage = MessageUtils.getSummaryMessage(messageKey, message.getInserts(), clazz);
+        assertEquals("Error messages were unexpectedly not the same", messageSummary, actualSummaryMessage);
     }
 
     /**

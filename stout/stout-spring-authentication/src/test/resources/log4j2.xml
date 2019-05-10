@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%highlight{%d{HH:mm:ss.SSS} [%t] %-5level %logger{36}.%M():%L - %msg%n}{FATAL=red blink, ERROR=red, WARN=yellow bold, INFO=gold, DEBUG=green bold, TRACE=blue}"/>
+		</Console>
+	</Appenders>
+	<Loggers>
+		<Logger name="org.bitbucket.askllc.fermenter" level="debug" additivity="false">
+			<AppenderRef ref="Console" />
+		</Logger>
+        <Logger name="org.bitbucket.fermenter.stout.authz" level="warn" additivity="false">
+            <AppenderRef ref="Console" />
+        </Logger>
+        <Logger name="org.ow2.authzforce.core" level="info" additivity="false">
+            <AppenderRef ref="Console" />
+        </Logger>
+		<Logger name="org.springframework" level="warn" additivity="false">
+			<AppenderRef ref="Console" />
+		</Logger>
+		<!-- Update to info to see the sql statements -->
+		<Logger name="org.hibernate" level="warn" additivity="false">
+			<AppenderRef ref="Console" />
+		</Logger>
+		<!-- Update to trace to see the parameter values that are bound to hibernate queries -->
+		<Logger name="org.hibernate.type" level="info" additivity="false">
+			<AppenderRef ref="Console" />
+		</Logger>
+		<Logger name="org.apache" level="warn" additivity="false">
+			<AppenderRef ref="Console" />
+		</Logger>
+		<Logger name="gov.irs.gdi.sidecar.integration.domain" level="debug" additivity="false">
+			<AppenderRef ref="Console" />
+		</Logger>
+		<Logger name="gov.irs.gdi.sidecar.integration.domain.search" level="info" additivity="false">
+			<AppenderRef ref="Console" />
+		</Logger>		
+		<Logger name="com.querydsl.jpa.impl.JPAQuery" level="info" additivity="false">
+			<AppenderRef ref="Console" />
+		</Logger>
+		<Logger name="org.bitbucket.fermenter.stout.mock.MockRequestScope" level="info" additivity="false">
+			<AppenderRef ref="Console" />
+		</Logger>
+		<Root level="debug">
+			<AppenderRef ref="Console" />
+		</Root>
+	</Loggers>
+</Configuration>

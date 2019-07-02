@@ -13,6 +13,8 @@ import org.bitbucket.fermenter.stout.page.PageWrapper;
 import org.bitbucket.fermenter.stout.page.json.FindByExampleCriteria;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+
 #foreach( $import in $entity.idFieldImports )
 import $import;
 #end
@@ -77,5 +79,22 @@ public class ${entity.name}MaintenanceDelegateImpl implements ${entity.name}Main
 		ValueServiceResponse<PageWrapper<${entity.name}>> response = ${entity.name.toLowerCase()}Resource.findByExample(criteria);
 		MessageManager.addMessages(response.getMessages());
 		return response.getValue();
+    }
+    
+   /**
+	 * {@inheritDoc}
+	 */
+    public Collection<${entity.name}> bulkSaveOrUpdate(Collection<${entity.name}> entities) {
+        ValueServiceResponse<Collection<${entity.name}>> response = ${entity.name.toLowerCase()}Resource.bulkSaveOrUpdate(entities);
+        MessageManager.addMessages(response.getMessages());
+        return response.getValue();
+    }
+    
+    /**
+	 * {@inheritDoc}
+	 */
+    public void bulkDelete(Collection<${entity.name}> entities) {
+        VoidServiceResponse response = ${entity.name.toLowerCase()}Resource.bulkDelete(entities);
+        MessageManager.addMessages(response.getMessages());
     }
 }

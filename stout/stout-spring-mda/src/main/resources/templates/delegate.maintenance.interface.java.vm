@@ -5,6 +5,8 @@ import ${basePackage}.transfer.${entity.name};
 import org.bitbucket.fermenter.stout.page.PageWrapper;
 import org.bitbucket.fermenter.stout.page.json.FindByExampleCriteria;
 
+import java.util.Collection;
+
 #foreach( $import in $entity.idFieldImports )
 import $import;
 #end
@@ -32,4 +34,19 @@ public interface ${entity.name}MaintenanceDelegate {
     PageWrapper<${entity.name}> findByExample(FindByExampleCriteria<${entity.name}> criteria);
 
     void delete(@Param("id") ${idFieldJavaType} ${idFieldName});
+    
+    /**
+     * Create a collection of ${entity.name} instances.
+     *
+     * @param entities The collection of ${entity.name} instances to save
+     * @return collection of saved entity
+     */
+    Collection<${entity.name}> bulkSaveOrUpdate(Collection<${entity.name}> entities);
+    
+    /**
+     * Delete a collection of ${entity.name} instances.
+     *
+     * @param entities The collection of ${entity.name} instances to delete
+     */
+    void bulkDelete(Collection<${entity.name}> entities);
 }

@@ -53,11 +53,12 @@
 		<module>stout-core</module>
 		<module>stout-test</module>
 		<module>stout-authzforce-attribute-extension</module>
-		<module>stout-authzforce</module>
+		<module>stout-authzforce</module>		
 		<module>stout-spring-mda</module>
 		<module>stout-spring-client</module>
 		<module>stout-spring</module>
 		<module>stout-spring-authentication</module>
+		<module>stout-oak</module>
 		<module>stout-web-container-mda</module>
 		<module>stout-cookbook</module>
 	</modules>

@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --base-href /cookbook/",
-    "build": "ng test --karma-config src/karma-headless.conf.js && ng build --prod --base-href /cookbook/ --deployUrl /cookbook/",
+    "build": "ng test --karma-config src/karma-headless.conf.js && ng build --base-href /cookbook/ --deployUrl /cookbook/",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "watch 'ng e2e' src e2e --wait=2",

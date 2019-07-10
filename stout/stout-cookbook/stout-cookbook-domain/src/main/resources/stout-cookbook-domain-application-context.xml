@@ -26,4 +26,9 @@
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/>
     </context:component-scan>
 
+	<bean id="contentRepository"
+		class="org.bitbucket.fermenter.stout.content.ContentRepository">
+		<constructor-arg index="0" ref="krauseningProps" />
+	</bean>
+
 </beans>

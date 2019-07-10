@@ -96,6 +96,11 @@
 			<artifactId>stout-spring-authentication</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>stout-oak</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 		<!-- Runtime and Provided Dependencies -->
 		<dependency>

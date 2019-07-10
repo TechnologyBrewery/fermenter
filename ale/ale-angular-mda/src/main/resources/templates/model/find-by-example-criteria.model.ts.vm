@@ -9,7 +9,7 @@ import { SortWrapper } from './sort-wrapper.model'
  * Template = find-by-example-criteria.model.ts.vm
  *******************************************************/
 export class FindByExampleCriteria<T> extends FindByExampleCriteriaBase<T> {
-  constructor(sortWrapper: SortWrapper, probe?: T, page?: number, size?: number) {
-    super(sortWrapper, probe, page, size);
+  constructor(sortWrapper: SortWrapper, probe?: T, containsMatch?: boolean, page?: number, size?: number) {
+    super(sortWrapper, probe, containsMatch, page, size);
   }
 }

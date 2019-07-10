@@ -10,17 +10,24 @@ import { Constants } from '../../constants';
  *******************************************************/
 export class FindByExampleCriteriaBase<T> {
   public probe: T;
+  public containsMatch: boolean;
   public page: number;
   public size: number;
   public sortWrapper: SortWrapper;
 
   // NOTE that this is never constructed from a http call response, 
   // thus the constructor is setup to be able to easily create the object on the frontend
-  constructor(sortWrapper: SortWrapper, probe?: T, page?: number, size?: number) {
+  constructor(sortWrapper: SortWrapper, probe?: T, containsMatch?: boolean, page?: number, size?: number) {
     this.sortWrapper = sortWrapper;
-    
+
     if (probe) {
       this.probe = probe;
+    }
+
+    if(containsMatch) {
+        this.containsMatch = true;
+    } else {
+        this.containsMatch = false;
     }
 
     if (page) {
@@ -34,7 +41,7 @@ export class FindByExampleCriteriaBase<T> {
       this.size = size;
     } else {
       const constants = new Constants();
-      this.size = constants.DEFAULT_PAGE_SIZE
+      this.size = constants.DEFAULT_PAGE_SIZE;
     }
   }
 }

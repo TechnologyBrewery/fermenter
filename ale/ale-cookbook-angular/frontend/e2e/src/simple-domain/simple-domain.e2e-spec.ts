@@ -62,6 +62,11 @@ describe('Simple Domain e2e Test Page', () => {
     expect(page.getCountByBusinessService()).toEqual(String(numberToCreate));
   });
 
+  it('should be able to find by example using contains', () => {
+    page.runSimplifiedTests();
+    expect(page.getFindByExampleContainsTestResult()).toEqual('PASSED');
+  });
+
   afterEach(() => {
     page.deleteAllSimpleDomains();
   });

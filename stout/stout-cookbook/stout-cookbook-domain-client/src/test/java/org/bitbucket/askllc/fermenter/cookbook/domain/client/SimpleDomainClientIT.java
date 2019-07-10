@@ -194,7 +194,7 @@ public class SimpleDomainClientIT extends RunTestsWithinArquillianWar {
         }
 
         SortWrapper sort = new SortWrapper(OrderWrapper.ASC, "name");
-        FindByExampleCriteria<SimpleDomain> criteria = new FindByExampleCriteria<SimpleDomain>(new SimpleDomain(), 0, numSimpleDomains, sort);
+        FindByExampleCriteria<SimpleDomain> criteria = new FindByExampleCriteria<>(new SimpleDomain(), 0, numSimpleDomains, sort);
         PageWrapper<SimpleDomain> allSimpleDomains = simpleDomainMaintenanceDelagte.findByExample(criteria);
         MessageTestUtils.assertNoErrorMessages();
 

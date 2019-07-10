@@ -58,3 +58,17 @@
     </div>
   </mat-card-content>
 </mat-card>
+
+<mat-card>
+  <mat-card-title>Simplified UI E2E test setup</mat-card-title>
+  <mat-card-content>
+    <button type="button" mat-raised-button color="primary" id="runSimplifiedTests" (click)="runSimplifiedTests()">Run Simplified Tests</button>
+    <br/>
+    <br/>
+    <br/>
+    <div fxLayout="row" fxLayoutAlign="space-around">
+      <div>Find By Example Contains Test Results:</div>
+      <div id="findByExampleContainsTestResults">{{findByExampleContainsTestResults}}</div>
+    </div>
+  </mat-card-content>
+</mat-card>

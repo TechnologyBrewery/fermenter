@@ -37,8 +37,6 @@ import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(Arquillian.class)
 public class SimpleDomainMaintenanceIT extends RunTestsWithinArquillianWar {
@@ -86,7 +84,7 @@ public class SimpleDomainMaintenanceIT extends RunTestsWithinArquillianWar {
         SortWrapper sort = new SortWrapper(OrderWrapper.ASC, "name");
         SimpleDomainBO simpleDomainBOWithoutAnyRestrictions = new SimpleDomainBO();
         FindByExampleCriteria<SimpleDomainBO> criteria = new FindByExampleCriteria<>(
-                simpleDomainBOWithoutAnyRestrictions, page, size, sort);
+                simpleDomainBOWithoutAnyRestrictions, Boolean.FALSE, page, size, sort);
         ValueServiceResponse<PageWrapper<SimpleDomainBO>> results = simpleDomainService.findByExample(criteria);
 
         PageWrapper<SimpleDomainBO> value = results.getValue();
@@ -311,7 +309,7 @@ public class SimpleDomainMaintenanceIT extends RunTestsWithinArquillianWar {
 
         SimpleDomainBO probe = new SimpleDomainBO();
         probe.setName(searchNames[0]);
-        FindByExampleCriteria<SimpleDomainBO> criteria = new FindByExampleCriteria<>(probe, page, size, sort);
+        FindByExampleCriteria<SimpleDomainBO> criteria = new FindByExampleCriteria<>(probe, Boolean.FALSE, page, size, sort);
         ValueServiceResponse<PageWrapper<SimpleDomainBO>> searchResults = simpleDomainService.findByExample(criteria);
         TestUtils.assertNoErrorMessages(searchResults);
 
@@ -339,7 +337,7 @@ public class SimpleDomainMaintenanceIT extends RunTestsWithinArquillianWar {
 
         SimpleDomainBO probe = new SimpleDomainBO();
         probe.setName(searchNames[0]);
-        FindByExampleCriteria<SimpleDomainBO> criteria = new FindByExampleCriteria<>(probe, page, size, sort);
+        FindByExampleCriteria<SimpleDomainBO> criteria = new FindByExampleCriteria<>(probe, Boolean.FALSE, page, size, sort);
         ValueServiceResponse<PageWrapper<SimpleDomainBO>> searchResults = simpleDomainService.findByExample(criteria);
         TestUtils.assertNoErrorMessages(searchResults);
 
@@ -366,7 +364,7 @@ public class SimpleDomainMaintenanceIT extends RunTestsWithinArquillianWar {
         SortWrapper sort = new SortWrapper(OrderWrapper.ASC, "name");
 
         SimpleDomainBO probe = new SimpleDomainBO();
-        FindByExampleCriteria<SimpleDomainBO> criteria = new FindByExampleCriteria<>(probe, page, size, sort);
+        FindByExampleCriteria<SimpleDomainBO> criteria = new FindByExampleCriteria<>(probe, Boolean.FALSE, page, size, sort);
         ValueServiceResponse<PageWrapper<SimpleDomainBO>> searchResults = simpleDomainService.findByExample(criteria);
         TestUtils.assertNoErrorMessages(searchResults);
 

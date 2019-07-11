@@ -41,7 +41,7 @@ public interface ${entity.name}MaintenanceResource {
     @RequestLine("DELETE /${entity.name}/{id}")
     VoidServiceResponse delete(@Param("id") ${idFieldJavaType} ${idFieldName});
 
-    @RequestLine("GET /${entity.name}/findByExample")
+    @RequestLine("POST /${entity.name}/findByExample")
     @Headers({"Content-Type: application/json"})
     ValueServiceResponse<PageWrapper<${entity.name}>> findByExample(FindByExampleCriteria<${entity.name}> criteria);
 }

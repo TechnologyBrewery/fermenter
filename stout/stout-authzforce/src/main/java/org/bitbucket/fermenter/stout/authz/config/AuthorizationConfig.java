@@ -113,4 +113,21 @@ public interface AuthorizationConfig extends KrauseningConfig {
     @Key("keystore.type")
     @DefaultValue("JKS")
     public String getKeyStoreType();
+    
+    /**
+     * Returns the number of minutes before expiration for a policy decision (after it is added to cache).
+     * @return expiration time, in minutes.  Defaults to 5 minutes.
+     */
+    @Key("decision.cache.expiration")
+    @DefaultValue("5")
+    public long getDecisionCacheExpirationInMinutes();
+    
+    /**
+     * Returns the number of minutes before expiration for a attribute value (after it is added to cache).
+     * @return expiration time, in minutes.  Defaults to 5 minutes.
+     */
+    @Key("atttribute.cache.expiration")
+    @DefaultValue("5")
+    public long getAttributeCacheExpirationInMinutes();
+    
 }

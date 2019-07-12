@@ -9,6 +9,8 @@ import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
 import org.bitbucket.fermenter.stout.page.json.FindByExampleCriteria;
 import org.bitbucket.fermenter.stout.page.PageWrapper;
 
+import java.util.Collection;
+
 #foreach( $import in $entity.idFieldImports )
 import $import;
 #end
@@ -44,4 +46,13 @@ public interface ${entity.name}MaintenanceResource {
     @RequestLine("POST /${entity.name}/findByExample")
     @Headers({"Content-Type: application/json"})
     ValueServiceResponse<PageWrapper<${entity.name}>> findByExample(FindByExampleCriteria<${entity.name}> criteria);
+    
+    @RequestLine("POST /${entity.name}/bulkSaveOrUpdate")
+    @Headers({"Content-Type: application/json"})
+    ValueServiceResponse<Collection<${entity.name}>> bulkSaveOrUpdate(Collection<${entity.name}> entities);
+
+    @RequestLine("DELETE /${entity.name}/bulkDelete")
+    @Headers({"Content-Type: application/json"})
+    VoidServiceResponse bulkDelete(Collection<${entity.name}> entities);
+    
 }

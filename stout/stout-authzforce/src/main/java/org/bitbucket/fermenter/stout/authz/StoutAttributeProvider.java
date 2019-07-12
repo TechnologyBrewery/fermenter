@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import org.aeonbits.owner.KrauseningConfigFactory;
 import org.apache.commons.io.FileUtils;
@@ -40,6 +41,8 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 
 import oasis.names.tc.xacml._3_0.core.schema.wd_17.AttributeDesignatorType;
 
@@ -70,6 +73,8 @@ public class StoutAttributeProvider extends BaseNamedAttributeProvider {
     protected Map<String, AttributeDesignatorType> supportedDesignatorTypes = new HashMap<>();
     protected Map<Class<StoutAttributePoint>, StoutAttributePoint> pointClassToInstanceMap = new HashMap<>();
     protected Map<String, StoutAttributePoint> idToAttributePointMap = new HashMap<>();
+
+    private Cache<String, Collection<org.bitbucket.fermenter.stout.authz.AttributeValue<?>>> attributeCache;
 
     private StoutAttributeProvider(StoutAttributeExtension conf) {
         super(conf.getId());
@@ -113,8 +118,7 @@ public class StoutAttributeProvider extends BaseNamedAttributeProvider {
         String id = attributeGUID.getId();
         String subject = findSubjectInEnvironmentContext(context);
 
-        // lookup the correct attribute point to use:
-        AttributeBag<AV> attrVals = null;
+        // lookup the correct attribute point to use:        
         Collection<AV> attributeCollection = new ArrayList<>();
         Collection<org.bitbucket.fermenter.stout.authz.AttributeValue<?>> retrievedValues = getStoutAttributeByIdAndSubject(
                 id, subject);
@@ -129,13 +133,11 @@ public class StoutAttributeProvider extends BaseNamedAttributeProvider {
             }
         }
 
-        if (attrVals == null) {
-            attrVals = Bags.newAttributeBag(attributeDatatype, attributeCollection);
-            if (logger.isDebugEnabled()) {
-                logger.debug("Retrieved attribute '{}' for subject '{}' with the values '{}'", id, subject,
-                        attributeCollection.toString());
+        AttributeBag<AV> attrVals = Bags.newAttributeBag(attributeDatatype, attributeCollection);
+        if (logger.isDebugEnabled()) {
+            logger.debug("Retrieved attribute '{}' for subject '{}' with the values '{}'", id, subject,
+                    attributeCollection);
 
-            }
         }
 
         if (attrVals == null || attrVals.getElementDatatype().equals(attributeDatatype)) {
@@ -159,9 +161,17 @@ public class StoutAttributeProvider extends BaseNamedAttributeProvider {
     public Collection<org.bitbucket.fermenter.stout.authz.AttributeValue<?>> getStoutAttributeByIdAndSubject(String id,
             String subject) {
 
-        StoutAttributePoint attributePoint = idToAttributePointMap.get(id);
-        Collection<org.bitbucket.fermenter.stout.authz.AttributeValue<?>> retrievedValues = attributePoint
-                .getValueForAttribute(id, subject);
+        StringBuilder builder = new StringBuilder();
+        String cacheKey = builder.append(subject).append(':').append(id).toString();
+
+        Collection<org.bitbucket.fermenter.stout.authz.AttributeValue<?>> retrievedValues;
+        retrievedValues = attributeCache.getIfPresent(cacheKey);
+        if (retrievedValues == null) {
+            StoutAttributePoint attributePoint = idToAttributePointMap.get(id);
+            retrievedValues = attributePoint.getValueForAttribute(id, subject);
+            
+            attributeCache.put(cacheKey, retrievedValues);
+        }
 
         return retrievedValues;
     }
@@ -290,6 +300,9 @@ public class StoutAttributeProvider extends BaseNamedAttributeProvider {
             logger.warn("\n");
 
         }
+
+        attributeCache = Caffeine.newBuilder()
+                .expireAfterWrite(config.getAttributeCacheExpirationInMinutes(), TimeUnit.MINUTES).build();
     }
 
     protected void addAttributeDefinition(StoutAttribute attribute) {

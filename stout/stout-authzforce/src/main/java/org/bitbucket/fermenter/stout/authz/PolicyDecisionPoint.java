@@ -6,6 +6,7 @@ import static org.ow2.authzforce.xacml.identifiers.XacmlAttributeCategory.XACML_
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import org.aeonbits.owner.KrauseningConfigFactory;
 import org.bitbucket.fermenter.stout.authz.config.AuthorizationConfig;
@@ -25,6 +26,9 @@ import org.ow2.authzforce.xacml.identifiers.XacmlAttributeId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+
 import oasis.names.tc.xacml._3_0.core.schema.wd_17.DecisionType;
 
 /**
@@ -34,11 +38,19 @@ public class PolicyDecisionPoint {
 
     private static final Logger logger = LoggerFactory.getLogger(PolicyDecisionPoint.class);
 
+    /**
+     * Example: Authz: PERMIT jsnow to GUARD on CastleBlack in 1000ms
+     */
+    private static final String DECISION_MESSAGE = "Authz: {} {} to {} on {} in {}ms";
+
     private BasePdpEngine pdpEngine;
 
     private static PolicyDecisionPoint instance = new PolicyDecisionPoint();
 
     private final AuthorizationConfig config = KrauseningConfigFactory.create(AuthorizationConfig.class);
+
+    private Cache<String, DecisionType> decisionCache = Caffeine.newBuilder()
+            .expireAfterWrite(config.getDecisionCacheExpirationInMinutes(), TimeUnit.MINUTES).build();
 
     protected PolicyDecisionPoint() {
         try {
@@ -81,24 +93,38 @@ public class PolicyDecisionPoint {
     public PolicyDecision isAuthorized(String subject, String resource, String action) {
         long start = System.currentTimeMillis();
 
-        DecisionRequestBuilder<?> requestBuilder = pdpEngine.newRequestBuilder(-1, -1);
+        StringBuilder cacheKeyBuilder = new StringBuilder();
+        cacheKeyBuilder.append(subject).append(':').append(resource).append(':').append(action);
+        String cacheKey = cacheKeyBuilder.toString();
+        
+        DecisionType decision = decisionCache.getIfPresent(cacheKey);
 
-        addSubjectAttribute(subject, requestBuilder);
-        addResourceAttribute(resource, requestBuilder);
-        addActionAttribute(action, requestBuilder);
+        if (decision == null) {
+            DecisionRequestBuilder<?> requestBuilder = pdpEngine.newRequestBuilder(-1, -1);
 
-        DecisionRequest decisionRequest = requestBuilder.build(false);
+            addSubjectAttribute(subject, requestBuilder);
+            addResourceAttribute(resource, requestBuilder);
+            addActionAttribute(action, requestBuilder);
 
-        DecisionResult result = pdpEngine.evaluate(decisionRequest);
-        DecisionType decision = result.getDecision();
+            DecisionRequest decisionRequest = requestBuilder.build(false);
+
+            DecisionResult result = pdpEngine.evaluate(decisionRequest);
+            decision = result.getDecision();
+            
+            decisionCache.put(cacheKey, decision);
+
+        }
 
         long stop = System.currentTimeMillis();
-        String message = "Authorization decision {} for subject={}, resource={} and action={} in {}ms";
         if (!DecisionType.PERMIT.equals(decision)) {
-            logger.warn(message, decision, subject, resource, action, stop - start);
+            if (logger.isWarnEnabled()) {
+                logger.warn(DECISION_MESSAGE, decision, subject, action, resource,  stop - start);
+            }
 
         } else {
-            logger.info(message, decision, subject, resource, action, stop - start);
+            if (logger.isInfoEnabled()) {
+                logger.warn(DECISION_MESSAGE, decision, subject, action, resource,  stop - start);
+            }
 
         }
 

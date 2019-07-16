@@ -8,9 +8,10 @@ import org.bitbucket.fermenter.stout.messages.MessageManager;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.commons.collections.CollectionUtils;
 import org.bitbucket.fermenter.stout.page.PageWrapper;
 import org.bitbucket.fermenter.stout.page.json.FindByExampleCriteria;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -85,16 +86,22 @@ public class ${entity.name}MaintenanceDelegateImpl implements ${entity.name}Main
 	 * {@inheritDoc}
 	 */
     public Collection<${entity.name}> bulkSaveOrUpdate(Collection<${entity.name}> entities) {
-        ValueServiceResponse<Collection<${entity.name}>> response = ${entity.name.toLowerCase()}Resource.bulkSaveOrUpdate(entities);
-        MessageManager.addMessages(response.getMessages());
-        return response.getValue();
+    	Collection<${entity.name}> values = null;
+    	if (CollectionUtils.isNotEmpty(entities)) {
+	        ValueServiceResponse<Collection<${entity.name}>> response = ${entity.name.toLowerCase()}Resource.bulkSaveOrUpdate(entities);
+	        MessageManager.addMessages(response.getMessages());
+	        values = response.getValue();
+        }
+        return values;
     }
     
     /**
 	 * {@inheritDoc}
 	 */
     public void bulkDelete(Collection<${entity.name}> entities) {
-        VoidServiceResponse response = ${entity.name.toLowerCase()}Resource.bulkDelete(entities);
-        MessageManager.addMessages(response.getMessages());
+    	if (CollectionUtils.isNotEmpty(entities)) {
+	        VoidServiceResponse response = ${entity.name.toLowerCase()}Resource.bulkDelete(entities);
+	        MessageManager.addMessages(response.getMessages());
+        }
     }
 }

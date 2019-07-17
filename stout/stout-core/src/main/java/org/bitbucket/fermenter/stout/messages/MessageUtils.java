@@ -108,6 +108,10 @@ public final class MessageUtils {
 		return getSummaryMessage(key, inserts, clazz, Locale.getDefault());
 	}
 	
+    public static String getSummaryMessage(Message message, Class<?> clazz) {
+        return getSummaryMessage(message.getKey(), message.getInserts(), clazz);
+    }	
+	
 	public static String getSummaryMessage(String key, Collection<Object> inserts, Class<?> clazz, Locale locale) {
 		return formatMessage(key + SUMMARY_SUFFIX, inserts, clazz, locale);
 	}

@@ -1,5 +1,36 @@
 package ${basePackage}.service.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.inject.Inject;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.BadRequestException;
+import javax.ws.rs.WebApplicationException;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.bitbucket.fermenter.stout.authz.Action;
+import org.bitbucket.fermenter.stout.messages.AbstractMsgMgrAwareService;
+import org.bitbucket.fermenter.stout.messages.CoreMessages;
+import org.bitbucket.fermenter.stout.messages.DefaultMessages;
+import org.bitbucket.fermenter.stout.messages.MessageManager;
+import org.bitbucket.fermenter.stout.messages.MessageUtils;
+import org.bitbucket.fermenter.stout.page.json.FindByExampleCriteria;
+import org.bitbucket.fermenter.stout.page.PageWrapper;
+import org.bitbucket.fermenter.stout.page.PageMapper;
+import org.bitbucket.fermenter.stout.page.SortMapper;
+import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
+import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
+
 #foreach( $import in $service.imports )
 import $import;
 #end
@@ -10,40 +41,6 @@ import $import;
 
 import ${basePackage}.bizobj.${entity.name}BO;
 import ${basePackage}.service.rest.${entity.name}MaintenanceService;
-
-import javax.inject.Inject;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.WebApplicationException;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
-
-import org.bitbucket.fermenter.stout.page.json.FindByExampleCriteria;
-import org.bitbucket.fermenter.stout.page.PageWrapper;
-import org.bitbucket.fermenter.stout.page.PageMapper;
-import org.bitbucket.fermenter.stout.page.SortMapper;
-
-import org.bitbucket.fermenter.stout.authz.Action;
-
-import org.bitbucket.fermenter.stout.messages.AbstractMsgMgrAwareService;
-import org.bitbucket.fermenter.stout.messages.CoreMessages;
-import org.bitbucket.fermenter.stout.messages.DefaultMessage;
-import org.bitbucket.fermenter.stout.messages.DefaultMessages;
-import org.bitbucket.fermenter.stout.messages.Message;
-import org.bitbucket.fermenter.stout.messages.MessageManager;
-import org.bitbucket.fermenter.stout.messages.MessageUtils;
-import org.bitbucket.fermenter.stout.messages.Severity;
-import org.apache.commons.collections.CollectionUtils;
-
-import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
-import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
-
-import java.util.Collection;
-import java.util.ArrayList;
-
 
 /**
  * Concrete implementation for create, retrieve, update, and delete (CRUD) functionality 
@@ -61,6 +58,8 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
   #set ($idFieldJavaType = 'String')
   #set ($idFieldName = 'id')
 #end  
+
+	private static final Logger logger = LoggerFactory.getLogger(${entity.name}MaintenanceServiceImpl.class);
 		
 	@Inject
 	private DefaultMessages messages;
@@ -83,6 +82,12 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 	public ValueServiceResponse<${entity.name}BO> saveOrUpdate(${entity.name}BO entity) {
 		initMsgMgr(messages);
 		assertAuthorization(PATH, Action.SAVE);
+		ValueServiceResponse<${entity.name}BO> response = performSaveOrUpdate(entity);
+		MessageManager.logMessages(logger, this.getClass());
+		return response;
+	}
+	
+	private ValueServiceResponse<${entity.name}BO> performSaveOrUpdate(${entity.name}BO entity) {
 		${entity.name}BO persistedEntity = entity.save();
 		ValueServiceResponse<${entity.name}BO> response = new ValueServiceResponse<>(persistedEntity);
 		addAllMsgMgrToResponse(response);
@@ -93,7 +98,7 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 		}
 		
 		return response;
-	}
+	}	
 	
 	/**
 	 * {@inheritDoc}
@@ -103,6 +108,12 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 	public VoidServiceResponse delete(${idFieldJavaType} ${idFieldName}) {
 		initMsgMgr(messages);
 		assertAuthorization(PATH, Action.DELETE);
+		VoidServiceResponse response = performDelete(${idFieldName});
+		MessageManager.logMessages(logger, this.getClass());
+		return response;
+	}
+	
+	private VoidServiceResponse performDelete(${idFieldJavaType} ${idFieldName}) {
 		${entity.name}BO entityToDelete = ${entity.name}BO.findByPrimaryKey(${idFieldName});
 		if (entityToDelete != null) {
 			entityToDelete.delete();
@@ -113,7 +124,7 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 		VoidServiceResponse response = new VoidServiceResponse();
 		addAllMsgMgrToResponse(response);
 		return response;
-	}	
+	}		
 	 	
 	/**
 	 * {@inheritDoc}
@@ -137,6 +148,8 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 		ValueServiceResponse<${entity.name}BO> response = new ValueServiceResponse<>(retrievedEntity);
 		addAllMsgMgrToResponse(response);
 		
+		MessageManager.logMessages(logger, this.getClass());
+		
 		if (response.getMessages().hasErrorMessages()) {
 		    Response statusResponse = Response.status(Response.Status.BAD_REQUEST).entity(response).build();
 			throw new WebApplicationException(statusResponse);
@@ -157,6 +170,9 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 		PageWrapper<${entity.name}BO> allEntities = (new PageMapper<${entity.name}BO>()).mapToPageWrapper(allEntitiesPage);
 		ValueServiceResponse<PageWrapper<${entity.name}BO>> response = new ValueServiceResponse<>(allEntities);
 		addAllMsgMgrToResponse(response);
+		
+		MessageManager.logMessages(logger, this.getClass());		
+		
 		return response;
 	}
 	
@@ -175,19 +191,21 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
         
 		for(${entity.name}BO entity : entities){
             try {
-                response = saveOrUpdate(entity);
+                response = performSaveOrUpdate(entity);
                 values.add(response.getValue());
                 MessageManager.addMessages(response.getMessages());
             } catch(Exception e) {
-                keyList = addToFailedKeys(keyList, entity);
+                keyList = addToFailedKeys(keyList, entity.getKey());
             }
         }
         
         if(keyList != null) {
             MessageManager.addMessage(MessageUtils.createErrorMessage(CoreMessages.BULK_OPERATION_FAILED,
                     new String[] { "Bulk Save failed" }, new Object[] { keyList }));
-            addAllMsgMgrToResponse(responses);
+            addAllMsgMgrToResponse(responses);            
         }
+        
+        MessageManager.logMessages(logger, this.getClass());
 		
 		if (responses.getMessages().hasErrorMessages() || CollectionUtils.isEmpty(entities)) {
 		    Response statusResponse = Response.status(Response.Status.BAD_REQUEST).entity(responses).build();
@@ -208,32 +226,40 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
         VoidServiceResponse responses = new VoidServiceResponse();
         String keyList = null;
         
+        Set<${idFieldJavaType}> keySet = new HashSet<>();        
         for (${entity.name}BO entity : entities) {
-            VoidServiceResponse response = delete(entity.getKey());
+            keySet.add(entity.getKey());
+        }
+        
+        
+        for (${idFieldJavaType} key : keySet) {
+            VoidServiceResponse response = performDelete(key);
             if (response.getMessages().hasErrorMessages()) {
-                keyList = addToFailedKeys(keyList, entity);
+                keyList = addToFailedKeys(keyList, key);
             }
         }
 
         if(keyList != null) {
             MessageManager.addMessage(MessageUtils.createErrorMessage(CoreMessages.BULK_OPERATION_FAILED,
                     new String[] { "Bulk Delete failed" }, new Object[] { keyList }));
-            addAllMsgMgrToResponse(responses);
+            addAllMsgMgrToResponse(responses);            
         }
+        
+        MessageManager.logMessages(logger, this.getClass());
         
         if (responses.getMessages().hasErrorMessages() || CollectionUtils.isEmpty(entities)) {
             Response statusResponse = Response.status(Response.Status.BAD_REQUEST).entity(responses).build();
-            throw new WebApplicationException(statusResponse);
+            throw new BadRequestException(statusResponse);
         }
         
         return responses;
     } 
     
-    private String addToFailedKeys(String keyList, ${entity.name}BO entity) {
+    private String addToFailedKeys(String keyList, ${idFieldJavaType} key) {
         if (keyList != null) {
             keyList += ", ";
         }
-        keyList += entity.getKey();
+        keyList += key;
         return keyList;
     }
 	

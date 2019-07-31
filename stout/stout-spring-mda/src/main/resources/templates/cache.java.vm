@@ -1,0 +1,99 @@
+package ${basePackage}.client.cache;
+
+import java.util.Collection;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+
+import ${basePackage}.transfer.${entity.name};
+
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import org.aeonbits.owner.KrauseningConfigFactory;
+import org.bitbucket.askllc.fermenter.cookbook.domain.client.config.CachePropertiesConfig;
+
+/**
+ * Rest client cache for ${entity.name}.
+ *
+ */
+public class ${entity.name}Cache {
+
+#if ( !$entity.idFields.isEmpty() )
+  #set ($idFieldJavaType = ${entity.idFields.values().iterator().next().javaType})
+#else
+  #set ($idFieldJavaType = 'String')
+#end
+
+    private static Cache<$idFieldJavaType, ${entity.name}> cache;
+    private static final CachePropertiesConfig cachePropertiesConfig = KrauseningConfigFactory.create(CachePropertiesConfig.class);
+
+    static {
+        cache = Caffeine.newBuilder()
+                .expireAfterAccess(cachePropertiesConfig.getCacheTimeoutMinutes(), TimeUnit.MINUTES)
+                .maximumSize(cachePropertiesConfig.getCacheMaxSizePerBO())
+                .build();
+    }
+
+    private ${entity.name}Cache() {
+        // prevent instantiation of all static classes
+    }
+
+    /**
+	 * Add the BO to the cache for faster future lookup.
+     * 
+	 * @param ${entity.name.toLowerCase()}
+	 */
+    public static void addToCache(${entity.name} ${entity.name.toLowerCase()}) {
+        if (${entity.name.toLowerCase()} != null && ${entity.name.toLowerCase()}.getId() != null) {
+            cache.put(${entity.name.toLowerCase()}.getId(), ${entity.name.toLowerCase()});
+        }
+    }
+
+    /**
+	 * Add multiple BOs to the cache for faster future lookup.
+     * 
+	 * @param ${entity.name.toLowerCase()}s
+	 */
+    public static void addToCache(Collection<${entity.name}> ${entity.name.toLowerCase()}s) {
+        for (${entity.name} ${entity.name.toLowerCase()} : ${entity.name.toLowerCase()}s) {
+            addToCache(${entity.name.toLowerCase()});
+        }
+    }
+
+    /**
+     * Get BO from cache by ID.
+     * 
+     * @param entityId
+     * @return BO from cache, returns null if not available
+     */
+    public static ${entity.name} getFromCache($idFieldJavaType entityId) {
+        return cache.getIfPresent(entityId);
+    }
+
+    /**
+     * Discards all BOs from cache.
+     */
+    public static void invalidateCache() {
+        cache.invalidateAll();
+    }
+    
+    /**
+     * Discards specific BO from cache based on ID.
+     * 
+     * @param ${entity.name.toLowerCase()}Id
+     */
+    public static void removeFromCache($idFieldJavaType ${entity.name.toLowerCase()}Id) {
+        cache.invalidate(${entity.name.toLowerCase()}Id);
+    }
+
+    /**
+     * Discards specific BO from cache based.
+     * 
+     * @param ${entity.name.toLowerCase()}
+     */
+    public static void removeFromCache(${entity.name} ${entity.name.toLowerCase()}) {
+        if (${entity.name.toLowerCase()} != null && ${entity.name.toLowerCase()}.getId() != null) {
+            removeFromCache(${entity.name.toLowerCase()}.getId());
+        }
+    }
+
+}

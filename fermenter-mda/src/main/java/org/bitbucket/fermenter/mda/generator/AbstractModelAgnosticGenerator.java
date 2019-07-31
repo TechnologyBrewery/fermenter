@@ -20,5 +20,4 @@ public abstract class AbstractModelAgnosticGenerator extends AbstractGenerator {
 
         generateFile(context, vc);
     }
-
 }

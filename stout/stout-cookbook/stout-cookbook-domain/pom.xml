@@ -86,6 +86,11 @@
 		<embedded.tomcat.version>8.0.1</embedded.tomcat.version>
 	</properties>
 	<dependencies>
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <version>2.7.0</version>
+        </dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>stout-spring</artifactId>

@@ -3,6 +3,9 @@ package ${basePackage}.client.service.impl;
 import ${basePackage}.client.resource.${entity.name}MaintenanceResource;
 import ${basePackage}.client.service.${entity.name}MaintenanceDelegate;
 import ${basePackage}.transfer.${entity.name};
+import ${basePackage}.client.cache.${entity.name}Cache;
+import ${basePackage}.client.config.CachePropertiesConfig;
+import org.aeonbits.owner.KrauseningConfigFactory;
 
 import org.bitbucket.fermenter.stout.messages.MessageManager;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
@@ -19,6 +22,7 @@ import java.util.Collection;
 #foreach( $import in $entity.idFieldImports )
 import $import;
 #end
+
 
 /**
  * Service implementation for ${entity.name} entity maintenance.
@@ -38,13 +42,25 @@ public class ${entity.name}MaintenanceDelegateImpl implements ${entity.name}Main
     @Autowired
     private ${entity.name}MaintenanceResource ${entity.name.toLowerCase()}Resource;
 
+    private static final CachePropertiesConfig cachePropertiesConfig = KrauseningConfigFactory.create(CachePropertiesConfig.class);
+    private static final boolean IS_CACHE_ENABLED = cachePropertiesConfig.is${entity.name}CachingEnabled();
+
 	/**
 	 * {@inheritDoc}
 	 */
     public ${entity.name} findByPrimaryKey(${idFieldJavaType} ${idFieldName}) {
-		ValueServiceResponse<${entity.name}> response = ${entity.name.toLowerCase()}Resource.findByPrimaryKey(${idFieldName});
-		MessageManager.addMessages(response.getMessages());
-		return response.getValue();
+        ${entity.name} cachedResult = null;
+        if(IS_CACHE_ENABLED) {
+            cachedResult = ${entity.name}Cache.getFromCache(${idFieldName});
+        }
+        if(cachedResult != null) {
+            return cachedResult;
+        } else {
+            ValueServiceResponse<${entity.name}> response = ${entity.name.toLowerCase()}Resource.findByPrimaryKey(${idFieldName});
+            MessageManager.addMessages(response.getMessages());
+            ${entity.name}Cache.addToCache(response.getValue());
+            return response.getValue();
+        }
     }
 
     /**
@@ -52,8 +68,12 @@ public class ${entity.name}MaintenanceDelegateImpl implements ${entity.name}Main
 	 */
     public ${entity.name} create(${entity.name} entity) {
 		ValueServiceResponse<${entity.name}> response = ${entity.name.toLowerCase()}Resource.create(entity);
+		${entity.name} created${entity.name} = response.getValue();
 		MessageManager.addMessages(response.getMessages());
-		return response.getValue();
+        if(!response.hasErrors()) {
+            ${entity.name}Cache.addToCache(created${entity.name});
+        }
+		return created${entity.name};
     }
 
 	/**
@@ -61,8 +81,14 @@ public class ${entity.name}MaintenanceDelegateImpl implements ${entity.name}Main
 	 */
     public ${entity.name} update(${idFieldJavaType} ${idFieldName}, ${entity.name} entity) {
 		ValueServiceResponse<${entity.name}> response = ${entity.name.toLowerCase()}Resource.update(${idFieldName}, entity);
+        ${entity.name} created${entity.name} = response.getValue();
 		MessageManager.addMessages(response.getMessages());
-		return response.getValue();
+        if(!response.hasErrors()) {
+            ${entity.name}Cache.addToCache(created${entity.name});
+        } else {
+            ${entity.name}Cache.removeFromCache(created${entity.name});
+        }
+        return created${entity.name};
     }
 
 	/**
@@ -70,6 +96,7 @@ public class ${entity.name}MaintenanceDelegateImpl implements ${entity.name}Main
 	 */
     public void delete(${idFieldJavaType} ${idFieldName}) {
 		VoidServiceResponse response = ${entity.name.toLowerCase()}Resource.delete(${idFieldName});
+        ${entity.name}Cache.removeFromCache(${idFieldName});
 		MessageManager.addMessages(response.getMessages());
     }
 
@@ -91,6 +118,11 @@ public class ${entity.name}MaintenanceDelegateImpl implements ${entity.name}Main
 	        ValueServiceResponse<Collection<${entity.name}>> response = ${entity.name.toLowerCase()}Resource.bulkSaveOrUpdate(entities);
 	        MessageManager.addMessages(response.getMessages());
 	        values = response.getValue();
+            if(!response.hasErrors()) {
+                ${entity.name}Cache.addToCache(values);
+            } else {
+                ${entity.name}Cache.invalidateCache();
+            }
         }
         return values;
     }
@@ -101,6 +133,9 @@ public class ${entity.name}MaintenanceDelegateImpl implements ${entity.name}Main
     public void bulkDelete(Collection<${entity.name}> entities) {
     	if (CollectionUtils.isNotEmpty(entities)) {
 	        VoidServiceResponse response = ${entity.name.toLowerCase()}Resource.bulkDelete(entities);
+	        for (${entity.name} ${entity.name.toLowerCase()} : entities) {
+	            ${entity.name}Cache.removeFromCache(${entity.name.toLowerCase()}.get${entity.idFields.values().iterator().next().capitalizedName}());
+	        }
 	        MessageManager.addMessages(response.getMessages());
         }
     }

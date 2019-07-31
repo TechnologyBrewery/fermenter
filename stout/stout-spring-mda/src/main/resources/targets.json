@@ -215,6 +215,22 @@
 		"metadataContext": "targeted",
 		"overwritable": true
 	},
+    {
+        "name": "caches",
+        "templateName": "templates/cache.java.vm",
+        "outputFile": "${basePackage}/client/cache/${entityName}Cache.java",
+        "generator": "org.bitbucket.fermenter.stout.mda.generator.entity.PersistentEntityJavaGenerator",
+        "metadataContext": "targeted",
+        "overwritable": true
+    },
+    {
+        "name": "cacheConfig",
+        "templateName": "templates/cache.properties.config.vm",
+        "outputFile": "${basePackage}/client/config/CachePropertiesConfig.java",
+        "generator": "org.bitbucket.fermenter.stout.mda.generator.entity.AllEntitiesAwareJavaGenerator",
+        "metadataContext": "targeted",
+        "overwritable": true
+    },
 	{
 		"name": "delegateServiceResource",
 		"templateName": "templates/delegate.service.resource.java.vm",
@@ -263,12 +279,12 @@
 		"metadataContext": "local",
 		"overwritable": false
 	},
-	{
-		"name": "pdpPolicy",
-		"templateName": "templates/pdp.policy.xml.vm",
-		"outputFile": "authorization/policies/policy.xml",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
-		"metadataContext": "local",
-		"overwritable": false
-	}
+    {
+        "name": "pdpPolicy",
+        "templateName": "templates/pdp.policy.xml.vm",
+        "outputFile": "authorization/policies/policy.xml",
+        "generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
+        "metadataContext": "local",
+        "overwritable": false
+    }
 ]

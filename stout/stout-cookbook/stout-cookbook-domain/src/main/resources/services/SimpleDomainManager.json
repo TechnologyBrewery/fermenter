@@ -236,5 +236,20 @@
       "type" : "SimpleDomain",
       "many" : true
     }
+  }, {
+	"name" : "UpdateAllSimpleDomainChildNames",
+	"transactionAttribute" : "Required",
+	"documentation" : "Sets the name of each lazily loaded SimpleDomainChild attached to the given to SimpleDomain to validate the ability to interact with lazily loaded objects using JTA-style simple accessors",
+	"parameters" : [ {
+      "name" : "simpleDomainId",
+      "type" : "string"
+    }, {
+      "name" : "childName",
+      "type" : "string"
+    } ],
+    "return" : {
+      "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+      "type" : "SimpleDomain"
+    }
   } ]
 }

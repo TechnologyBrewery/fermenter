@@ -24,6 +24,7 @@
 		<krausening.version>7</krausening.version>
 		<jackson.version>2.9.5</jackson.version>
 		<jjwt.version>0.10.5</jjwt.version>
+		<narayana.version>5.9.5.Final</narayana.version>
 		<spring.version>4.3.12.RELEASE</spring.version>
 		<spring.security.version>4.2.4.RELEASE</spring.security.version>
 		<jacoco.it.execution.data.file>${project.build.directory}/jacoco-it.exec</jacoco.it.execution.data.file>
@@ -268,6 +269,12 @@
 				<groupId>org.javassist</groupId>
 				<artifactId>javassist</artifactId>
 				<version>3.20.0-GA</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.jboss.narayana.jta</groupId>
+				<artifactId>narayana-jta</artifactId>
+				<version>${narayana.version}</version>
 			</dependency>
 
 			<dependency>

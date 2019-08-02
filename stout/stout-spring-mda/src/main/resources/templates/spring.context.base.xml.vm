@@ -18,16 +18,22 @@
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
     </context:component-scan>
     
-    <jpa:repositories entity-manager-factory-ref="emf" base-package="${basePackage}.persist"/>
+    <jpa:repositories transaction-manager-ref="transactionManager" entity-manager-factory-ref="emf" base-package="${basePackage}.persist"/>
     
 	<tx:annotation-driven transaction-manager="transactionManager"/>
 
-	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-		<property name="entityManagerFactory" ref="emf"/>
+	<!-- Configures Narayana as the underlying transaction manager implementation for full JTA support -->
+	<bean id="transactionManager" class="org.springframework.transaction.jta.JtaTransactionManager">
+		<property name="transactionManager">
+			<bean id="jbossTransactionManager" class="com.arjuna.ats.internal.jta.transaction.arjunacore.TransactionManagerImple" />
+		</property>
+		<property name="userTransaction">
+			<bean id="jbossUserTransaction" class="com.arjuna.ats.jta.UserTransaction" factory-method="userTransaction" />
+		</property>
 	</bean>
 	
 	<bean id="emf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-		<property name="dataSource" ref="krauseningDataSource"/>
+		<property name="jtaDataSource" ref="krauseningDataSource"/>
 		<property name="packagesToScan" value="${basePackage}.bizobj"/>
 		<property name="jpaVendorAdapter">
 			<bean id="hibernateJpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>

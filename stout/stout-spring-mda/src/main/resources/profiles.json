@@ -101,6 +101,12 @@
 			{
 				"name": "delegateMaintenanceImpl"
 			},
+            {
+                "name": "caches"
+            },
+            {
+                "name": "cacheConfig"
+            },
 			{
 				"name": "delegateServiceResource"
 			},

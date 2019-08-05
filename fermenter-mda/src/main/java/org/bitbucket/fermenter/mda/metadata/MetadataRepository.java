@@ -106,7 +106,7 @@ public class MetadataRepository extends AbstractMetadataRepository {
         Map<String, Entity> entityMap;
         if (ModelContext.useLocalModelInstancesOnly(context)) {
             entityMap = getAllEntities(currentApplication);
-        } else if (ModelContext.useTargetedModelInstances(context)) {
+        } else if (ModelContext.useTargetedModelInstances(context) && targetedArtifactIds != null) {
             entityMap = new HashMap<>();
             for (String artifactId : targetedArtifactIds) {
                 Map<String, Entity> targetedEntityMap = getAllEntities(artifactId);

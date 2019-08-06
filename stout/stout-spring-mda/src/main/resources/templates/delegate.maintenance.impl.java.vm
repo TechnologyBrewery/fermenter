@@ -86,7 +86,7 @@ public class ${entity.name}MaintenanceDelegateImpl implements ${entity.name}Main
         if(!response.hasErrors()) {
             ${entity.name}Cache.addToCache(created${entity.name});
         } else {
-            ${entity.name}Cache.removeFromCache(created${entity.name});
+            ${entity.name}Cache.removeFromCache(${idFieldName});
         }
         return created${entity.name};
     }

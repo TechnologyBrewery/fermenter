@@ -8,21 +8,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Business object for the CachedEntityExample entity.
- * @see org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.CachedEntityExampleBaseBO
+ * Business object for the GenerationTestEntity entity.
+ * @see org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.GenerationTestEntityBaseBO
  *
  * GENERATED STUB CODE - PLEASE *DO* MODIFY
  */
 @Entity
-@Table(name="CACHED_ENTITY_EXAMPLE")
-public class CachedEntityExampleBO extends CachedEntityExampleBaseBO {
+@Table(name="GEN_TEST_ENTITY")
+public class GenerationTestEntityBO extends GenerationTestEntityBaseBO {
 	
-	public CachedEntityExampleBO() {
+	public GenerationTestEntityBO() {
 		super();
 		SpringAutowiringUtil.autowireBizObj(this);
 	}
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(CachedEntityExampleBO.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(GenerationTestEntityBO.class);
 	
 	@Override
 	protected Logger getLogger() {
@@ -32,9 +32,5 @@ public class CachedEntityExampleBO extends CachedEntityExampleBaseBO {
 	@Override
 	protected void complexValidation() {
 
-	}
-	
-	public static CachedEntityExampleBO findByName(String name) {
-	    return getDefaultRepository().findByName(name);
 	}
 }

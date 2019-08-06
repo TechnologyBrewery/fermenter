@@ -1,0 +1,27 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<parent>
+		<groupId>org.bitbucket.askllc.fermenter.stout</groupId>
+		<artifactId>stout</artifactId>
+		<version>2.0.0.CR19-SNAPSHOT</version>
+	</parent>
+
+	<name>Fermenter::Stout::Spring::Util</name>
+	<description>Provides common Spring utlity functionality across service and client jars</description>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>stout-spring-util</artifactId>
+	<packaging>jar</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+		</dependency>
+	</dependencies>
+</project>

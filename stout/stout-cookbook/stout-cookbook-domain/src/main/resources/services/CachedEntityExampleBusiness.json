@@ -1,0 +1,15 @@
+{
+  "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "name" : "CachedEntityExampleBusiness",
+  "operations" : [{
+    "name" : "findByName",
+    "parameters" : [ {
+      "name" : "name",
+      "type" : "string",
+      "documentation" : "name value of the cached entity to retrieve"
+    } ],
+    "return" : {
+      "type" : "CachedEntityExample"
+    }
+  }]
+}

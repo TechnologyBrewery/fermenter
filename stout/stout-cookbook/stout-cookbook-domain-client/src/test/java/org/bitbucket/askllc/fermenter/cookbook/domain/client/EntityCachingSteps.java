@@ -13,7 +13,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
@@ -22,12 +21,11 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
 @ContextConfiguration({ "classpath:application-test-context.xml", "classpath:h2-spring-ds-context.xml" })
-@Transactional
 public class EntityCachingSteps {
 
     @Inject
     CachedEntityExampleMaintenanceDelegate maintenanceDelegate;
-    
+
     @Inject
     SimpleDomainMaintenanceDelegate simpleDomainMaintenanceDelegate;
 

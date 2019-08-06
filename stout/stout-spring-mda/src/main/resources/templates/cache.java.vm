@@ -9,7 +9,7 @@ import ${basePackage}.transfer.${entity.name};
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import org.aeonbits.owner.KrauseningConfigFactory;
-import org.bitbucket.askllc.fermenter.cookbook.domain.client.config.CachePropertiesConfig;
+import ${basePackage}.client.config.CachePropertiesConfig;
 
 /**
  * Rest client cache for ${entity.name}.
@@ -19,8 +19,10 @@ public class ${entity.name}Cache {
 
 #if ( !$entity.idFields.isEmpty() )
   #set ($idFieldJavaType = ${entity.idFields.values().iterator().next().javaType})
+  #set ($idField = ${entity.idFields.values().iterator().next().capitalizedName})
 #else
   #set ($idFieldJavaType = 'String')
+  #set ($idField = 'Id')
 #end
 
     private static Cache<$idFieldJavaType, ${entity.name}> cache;
@@ -43,8 +45,8 @@ public class ${entity.name}Cache {
 	 * @param ${entity.name.toLowerCase()}
 	 */
     public static void addToCache(${entity.name} ${entity.name.toLowerCase()}) {
-        if (${entity.name.toLowerCase()} != null && ${entity.name.toLowerCase()}.getId() != null) {
-            cache.put(${entity.name.toLowerCase()}.getId(), ${entity.name.toLowerCase()});
+        if (${entity.name.toLowerCase()} != null && ${entity.name.toLowerCase()}.get${idField}() != null) {
+            cache.put(${entity.name.toLowerCase()}.get${idField}(), ${entity.name.toLowerCase()});
         }
     }
 
@@ -91,8 +93,8 @@ public class ${entity.name}Cache {
      * @param ${entity.name.toLowerCase()}
      */
     public static void removeFromCache(${entity.name} ${entity.name.toLowerCase()}) {
-        if (${entity.name.toLowerCase()} != null && ${entity.name.toLowerCase()}.getId() != null) {
-            removeFromCache(${entity.name.toLowerCase()}.getId());
+        if (${entity.name.toLowerCase()} != null && ${entity.name.toLowerCase()}.get${idField}() != null) {
+            removeFromCache(${entity.name.toLowerCase()}.get${idField}());
         }
     }
 

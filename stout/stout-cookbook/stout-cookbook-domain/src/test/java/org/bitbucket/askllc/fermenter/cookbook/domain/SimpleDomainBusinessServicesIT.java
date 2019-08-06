@@ -8,10 +8,12 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainBO;
+import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainChildBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.SimpleDomainMaintenanceService;
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.SimpleDomainManagerService;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
@@ -204,6 +206,29 @@ public class SimpleDomainBusinessServicesIT extends RunTestsWithinArquillianWar 
 		
 		assertEquals(numSimpleDomainChildren, allSimpleDomains.iterator().next().getSimpleDomainEagerChilds().size());		
 	}	
+
+	@Test
+	@RunAsClient
+	public void testLazyLoadRelationViaAccessor(@ArquillianResteasyResource ResteasyWebTarget webTarget)
+			throws Exception {
+		SimpleDomainMaintenanceService maintenanceService = getMaintenanceService(webTarget);
+		int numChildrenToCreate = 5;
+		ValueServiceResponse<SimpleDomainBO> response = maintenanceService
+				.saveOrUpdate(TestUtils.createRandomSimpleDomain(numChildrenToCreate));
+
+		String updatedChildName = RandomStringUtils.randomAlphabetic(5);
+		SimpleDomainManagerService managerService = getService(webTarget);
+		ValueServiceResponse<SimpleDomainBO> postUpdateResponse = managerService
+				.updateAllSimpleDomainChildNames(response.getValue().getKey().toString(), updatedChildName);
+		TestUtils.assertNoErrorMessages(postUpdateResponse);
+		SimpleDomainBO updatedSimpleDomain = postUpdateResponse.getValue();
+		assertNotNull(updatedSimpleDomain);
+
+		Set<SimpleDomainChildBO> updatedChildren = updatedSimpleDomain.getSimpleDomainChilds();
+		assertNotNull(updatedChildren);
+		assertEquals(numChildrenToCreate, updatedChildren.size());
+		assertEquals(updatedChildName, updatedChildren.iterator().next().getName());
+	}
 
 	private SimpleDomainManagerService getService(ResteasyWebTarget webTarget) {
 		webTarget = initWebTarget(webTarget);

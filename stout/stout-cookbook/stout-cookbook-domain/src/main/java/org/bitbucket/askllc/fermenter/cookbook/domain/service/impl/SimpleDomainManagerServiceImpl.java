@@ -20,12 +20,11 @@ import javax.ws.rs.core.StreamingOutput;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainBO;
+import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainChildBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.enumeration.SimpleDomainEnumeration;
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.SimpleDomainManagerService;
 import org.bitbucket.fermenter.stout.messages.MessageManager;
 import org.bitbucket.fermenter.stout.messages.MessageUtils;
-import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
-import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -246,7 +245,13 @@ public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServi
         LOGGER.info("made a call for SimpleDomain with " + inputDate.toString());
     }
 
-
-
+	@Override
+	protected SimpleDomainBO updateAllSimpleDomainChildNamesImpl(String simpleDomainId, String childName) {
+		SimpleDomainBO simpleDomain = SimpleDomainBO.findByPrimaryKey(UUID.fromString(simpleDomainId), false);
+		for (SimpleDomainChildBO child : simpleDomain.getSimpleDomainChilds()) {
+			child.setName(childName);
+		}
+		return simpleDomain;
+	}
 
 }

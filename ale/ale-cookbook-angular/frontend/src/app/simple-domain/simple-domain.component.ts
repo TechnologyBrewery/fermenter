@@ -16,6 +16,7 @@ import { ValidationExampleMaintenanceService } from '../generated/service/mainte
   styleUrls: ['./simple-domain.component.css']
 })
 export class SimpleDomainComponent implements OnInit {
+  findByExampleContainsTestResults = 'PENDING';
   public simpleDomainAdding: SimpleDomain;
   public simpleDomainEditing: SimpleDomain;
   public simpleDomains = new Array<SimpleDomain>();
@@ -24,6 +25,7 @@ export class SimpleDomainComponent implements OnInit {
   private findAllCriteria = new FindByExampleCriteria<SimpleDomain>(
     new SortWrapper('name'),
     null,
+    false,
     0,
     10000
   );
@@ -151,11 +153,64 @@ export class SimpleDomainComponent implements OnInit {
     // make two calls to show how the popup can show multiple errors
     this.validationMaintService.post(validation).subscribe();
 
-    this.simpleDomainManagerService.createAndPropagateErrorMessages(3).subscribe(
-      data => {
+    this.simpleDomainManagerService
+      .createAndPropagateErrorMessages(3)
+      .subscribe(data => {
         // if there is a fermenter error or other error it should by default, be caught and handled by the global error handler.
         alert('YOU SHOULD NEVER SEE THIS ALERT');
-      }
+      });
+  }
+
+  runSimplifiedTests() {
+    this.runFindByExampleContainsTest();
+  }
+
+  runFindByExampleContainsTest() {
+    const testSimpleDomain = new SimpleDomain();
+    const name = 'runFindByExampleContainsTest';
+    testSimpleDomain.name = name + 'uniqueENDING';
+
+    const findProbe = new SimpleDomain();
+    findProbe.name = name;
+    findProbe.simpleDomainChilds = undefined;
+    findProbe.simpleDomainEagerChilds = undefined;
+
+    const findCriteria = new FindByExampleCriteria<SimpleDomain>(
+      new SortWrapper('name'),
+      findProbe,
+      true,
+      0,
+      10000
     );
+
+    const findByExampleRestCall = this.simpleDomainService.findByExample(
+      findCriteria
+    );
+    const postRestCallToSetupTestData = this.simpleDomainService.post(
+      testSimpleDomain
+    );
+
+    postRestCallToSetupTestData.subscribe(postResponse => {
+      findByExampleRestCall.subscribe(findResponse => {
+        const findByExampleContainsFoundTestSimpleDomain =
+          findResponse.content.length === 1 &&
+          findResponse.content[0].name.indexOf(name) >= 0;
+
+        if (findByExampleContainsFoundTestSimpleDomain) {
+          this.findByExampleContainsTestResults = 'PASSED';
+        } else {
+          this.findByExampleContainsTestResults = 'FAILED';
+          console.error(
+            'Failed to find ' +
+              name +
+              ' found (' +
+              findResponse.numberOfElements +
+              ') simple domains'
+          );
+        }
+        // delete test data once done
+        this.simpleDomainService.delete(postResponse.value.id).subscribe();
+      });
+    });
   }
 }

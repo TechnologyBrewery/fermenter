@@ -74,6 +74,14 @@ export class SimpleDomainPage {
     return element(by.id('simpleDomainCountByBusinessService')).getText();
   }
 
+  runSimplifiedTests() {
+    element(by.id('runSimplifiedTests')).click();
+  }
+
+  getFindByExampleContainsTestResult() {
+    return element(by.id('findByExampleContainsTestResults')).getText();
+  }
+
   refresh() {
     browser.refresh();
   }

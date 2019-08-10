@@ -12,16 +12,23 @@ public class FindByExampleCriteria<T> implements Serializable {
     private Integer page;
     private Integer size;
     private SortWrapper sortWrapper;
-
-    public FindByExampleCriteria(T probe, Integer page, Integer size, SortWrapper sortWrapper) {
-        this.probe = probe;
-        this.page = page;
-        this.size = size;
-        this.sortWrapper = sortWrapper;
+    private Boolean containsMatch = false;
+    
+    public FindByExampleCriteria(T probe, boolean containsMatch, int page, int size, SortWrapper sortWrapper) {
+        init(probe, containsMatch, page, size, sortWrapper);
     }
     
     public FindByExampleCriteria(T probe, int page, int size, SortWrapper sortWrapper) {
+        init(probe, false, page, size, sortWrapper);
+    }
+    
+    public FindByExampleCriteria(int page, int size, SortWrapper sortWrapper) {
+        init(null, false, page, size, sortWrapper);
+    }
+
+    private void init(T probe, boolean containsMatch, int page, int size, SortWrapper sortWrapper) {
         this.probe = probe;
+        this.containsMatch = containsMatch;
         this.page = new Integer(page);
         this.size = new Integer(size);
         this.sortWrapper = sortWrapper;
@@ -36,6 +43,14 @@ public class FindByExampleCriteria<T> implements Serializable {
 
     public void setProbe(T probe) {
         this.probe = probe;
+    }
+    
+    public Boolean getContainsMatch() {
+        return containsMatch;
+    }
+    
+    public void setContainsMatch(Boolean containsMatch) {
+        this.containsMatch = containsMatch;
     }
 
     public Integer getPage() {

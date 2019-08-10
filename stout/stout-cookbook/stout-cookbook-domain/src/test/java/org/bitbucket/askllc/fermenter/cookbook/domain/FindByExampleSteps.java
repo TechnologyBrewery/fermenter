@@ -1,10 +1,10 @@
 package org.bitbucket.askllc.fermenter.cookbook.domain;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
 import java.util.List;
-
 
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -20,6 +20,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import cucumber.api.java.After;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -128,7 +129,7 @@ public class FindByExampleSteps {
     @When("^I query for simple domains with no examples provided$")
     public void i_query_for_simple_domains_with_no_examples_provided() throws Throwable {
         probe = new SimpleDomainBO();
-        findByExampleResults = SimpleDomainBO.findByExample(probe, PAGE_DEFAULT, SIZE_DEFAULT, SORT_DEFAULT);
+        findByExampleResults = SimpleDomainBO.findByExample(probe, false, PAGE_DEFAULT, SIZE_DEFAULT, SORT_DEFAULT);
     }
 
     @When("^I find by the example$")
@@ -137,15 +138,37 @@ public class FindByExampleSteps {
         if (sort != null) {
             sortToUse = sort;
         }
-        findByExampleResults = SimpleDomainBO.findByExample(probe, PAGE_DEFAULT, SIZE_DEFAULT, sortToUse);
+        findByExampleResults = SimpleDomainBO.findByExample(probe, false, PAGE_DEFAULT, SIZE_DEFAULT, sortToUse);
     }
 
     @When("^I find by the example with a null sort$")
     public void i_find_by_the_example_with_a_null_sort() throws Throwable {
-        findByExampleResults = SimpleDomainBO.findByExample(probe, PAGE_DEFAULT, SIZE_DEFAULT, null);
+        findByExampleResults = SimpleDomainBO.findByExample(probe, false, PAGE_DEFAULT, SIZE_DEFAULT, null);
     }
 
-    @Then("^I should get \"([^\"]*)\" results$")
+    @When("^I find by example using contains matching$")
+    public void i_find_by_example_using_contains_matching() throws Throwable {
+        findByExampleResults = SimpleDomainBO.findByExample(probe, true, PAGE_DEFAULT, SIZE_DEFAULT, SORT_DEFAULT);
+    }
+
+    @Then("^I should get the following results back \"([^\"]*)\" where the attributes contains the search ignoring case$")
+    public void i_should_get_the_following_results_back_where_the_attributes_contains_the_search_ignoring_case(
+            List<String> names) throws Throwable {
+        assertEquals(names.size(), findByExampleResults.getContent().size());
+        for (String name : names) {
+            boolean foundInResults = false;
+            for (SimpleDomainBO simpleDomain : findByExampleResults.getContent()) {
+                if (simpleDomain.getName().equalsIgnoreCase(name)) {
+                    foundInResults = true;
+                    break;
+                }
+            }
+            assertTrue("Couldn't find " + name + " in results", foundInResults);
+        }
+    }
+    
+    @And("^I should get \"([^\"]*)\" results because null probe defaults to all$")
+    @Then("^I should get \"([^\"]*)\" results that match the probe inputs$")
     public void i_should_get_results(long countOfResults) throws Throwable {
         assertEquals(countOfResults, findByExampleResults.getTotalElements());
     }

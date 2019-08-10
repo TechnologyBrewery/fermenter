@@ -12,6 +12,7 @@ import { GlobalErrorHandler } from './shared/global-error-handler.service';
 import { SimpleDomainMaintenanceService } from './generated/service/maintenance/simple-domain-maintenance.service';
 import { GlobalErrorHandlerComponent } from './shared/global-error-handler/global-error-handler.component';
 import { ErrorDialogComponent } from './shared/error-dialog/error-dialog.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { ErrorDialogComponent } from './shared/error-dialog/error-dialog.compone
     BrowserAnimationsModule,
     MaterialModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    FlexLayoutModule
   ],
   providers: [SimpleDomainMaintenanceService, GlobalErrorHandler],
   bootstrap: [AppComponent],

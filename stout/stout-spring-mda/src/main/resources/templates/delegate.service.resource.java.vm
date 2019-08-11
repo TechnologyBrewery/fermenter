@@ -11,11 +11,13 @@ import $import;
 
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
+import org.bitbucket.fermenter.stout.page.PageWrapper;
 
 /**
  * Resource for ${service.name} client.
  *
  * Generated Code - DO NOT MODIFY
+ * Generated from delegate.service.resource.java.vm
  */
 public interface ${service.name}Resource {
 #foreach( $operation in $service.operations )
@@ -53,7 +55,9 @@ public interface ${service.name}Resource {
 	#if($operation.hasEntityParameters() || $operation.transactionAttribute != "SUPPORTS")
 	@Headers({"Content-Type: " + MediaType.APPLICATION_JSON })
 	#end
-	#if($operation.return.isMany())	 
+	#if($operation.return.isPagedResponse())
+	ValueServiceResponse<PageWrapper<${operation.return.javaType}>> ${operation.uncapitalizedName}(${operation.getSignatureParametersWithFeign()});
+    #elseif($operation.return.isMany())
 	ValueServiceResponse<Collection<${operation.return.javaType}>> ${operation.uncapitalizedName}(${operation.getSignatureParametersWithFeign()});
 	#elseif($operation.isResponseTypeVoid())
 	public VoidServiceResponse ${operation.uncapitalizedName}(${operation.getSignatureParametersWithFeign()});

@@ -251,7 +251,7 @@ describe('Ale Reference Domain Maintenance Service', () => {
         .findByExample(findByExampleCriteria)
         .subscribe((page: PageWrapper<LocalDomain>) => {
           expect(page).toBeTruthy();
-          expect(page.totalElements).toEqual(2);
+          expect(page.totalResults).toEqual(2);
           expect(page.content[0].id).toEqual(testId);
           expect(page.content[1].id).toEqual(testId2);
         });
@@ -278,13 +278,13 @@ describe('Ale Reference Domain Maintenance Service', () => {
 
       const pageWrapper = new PageWrapper<LocalDomain>();
       pageWrapper.content = [testLocalDomain, testLocalDomain2];
-      pageWrapper.first = true;
-      pageWrapper.first = true;
-      pageWrapper.size = pageWrapper.content.length;
-      pageWrapper.number = 0;
+      pageWrapper.isFirst = true;
+      pageWrapper.isLast = true;
+      pageWrapper.itemsPerPage = constants.DEFAULT_PAGE_SIZE;
+      pageWrapper.startPage = 0;
       pageWrapper.numberOfElements = pageWrapper.content.length;
       pageWrapper.totalPages = 1;
-      pageWrapper.totalElements = pageWrapper.content.length;
+      pageWrapper.totalResults = pageWrapper.content.length;
 
       const mockResponse = new FermenterResponse<PageWrapper<LocalDomain>>();
       mockResponse.value = pageWrapper;

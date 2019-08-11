@@ -75,4 +75,11 @@ public class BaseReturnDecorator implements Return {
         return wrapped.getResponseEncoding();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Boolean isPagedResponse() {
+        return wrapped.isPagedResponse();
+    }
 }

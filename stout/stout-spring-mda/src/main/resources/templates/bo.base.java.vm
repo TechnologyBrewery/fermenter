@@ -255,32 +255,24 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
 	}
 	#end
 
-	public static Page<${entity.name}BO> findByExample(${entity.name}BO probe, Boolean containsMatch, Integer page, Integer size, Sort sort) {
+	public static Page<${entity.name}BO> findByExample(${entity.name}BO probe, Boolean containsMatch, Integer startPage, Integer count, Sort sort) {
 		Page<${entity.name}BO> result = null;
 	    if(probe == null) {
 			// default to find all if no probe is specified
 	        probe = new ${entity.name}BO();
 	    }
-	    if(sort == null) {
-            Message msg = MessageFactory.createMessage();
-            msg.setKey("requiresSort" );
-            msg.setSeverity(Severity.ERROR);
-            msg.addProperty("When searching by example, a valid sort is required." );
+	    
+        if (startPage == null) {
+            Message msg = MessageUtils.createErrorMessage("find.by.example.requires.start.page", null, null);
             MessageManager.addMessage(msg);
-        } else if(page == null) {
-            Message pageMsg = MessageFactory.createMessage();
-            pageMsg.setKey("requiresPage");
-            pageMsg.setSeverity(Severity.ERROR);
-            pageMsg.addProperty("When searching by example, a valid page is required.");
-            MessageManager.addMessage(pageMsg);
-        } else if(size == null) {
-            Message sizeMsg = MessageFactory.createMessage();
-            sizeMsg.setKey("requiresSize");
-            sizeMsg.setSeverity(Severity.ERROR);
-            sizeMsg.addProperty("When searching by example, a valid size is required.");
-            MessageManager.addMessage(sizeMsg);
-	    } else {
-	        Pageable pageable = new PageRequest(page, size, sort);
+        } else if (count == null) {
+            Message msg = MessageUtils.createErrorMessage("find.by.example.requires.count", null, null);
+            MessageManager.addMessage(msg);
+	    } else if (sort == null) {
+            Message msg = MessageUtils.createErrorMessage("find.by.example.requires.sort", null, null);
+            MessageManager.addMessage(msg);
+        } else {
+	        Pageable pageable = new PageRequest(startPage, count, sort);
             Example<${entity.name}BO> example;
             if(containsMatch) {
                 ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreCase().withStringMatcher(StringMatcher.CONTAINING);

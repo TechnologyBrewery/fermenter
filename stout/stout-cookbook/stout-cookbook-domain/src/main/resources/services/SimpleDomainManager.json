@@ -262,6 +262,30 @@
     "return" : {
       "type" : "boolean"
     }
-  }
+  },
+  {
+    "name" : "getPagedSimpleDomains",
+    "transactionAttribute" : "Supports",
+    "parameters" : [],
+    "return" : {
+        "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+        "type" : "SimpleDomain",
+        "pagedResponse": true
+    }
+  },  {
+    "name" : "getPagedSimpleDomainsWithParameter",
+    "transactionAttribute" : "Supports",
+    "parameters" : [
+        {
+            "name": "nameFilter",
+            "type": "string"
+        }
+    ],
+    "return" : {
+        "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+        "type" : "SimpleDomain",
+        "pagedResponse": true
+    }
+   }
  ]
 }

@@ -1,6 +1,7 @@
 package ${basePackage}.service.impl;
 
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
 
 import ${basePackage}.bizobj.*;
 import ${basePackage}.service.rest.${service.name}Service;
@@ -14,6 +15,7 @@ import $import;
  * @see ${basePackage}.service.rest.${service.name}Service
  *
  * GENERATED STUB CODE - PLEASE *DO* MODIFY
+ * Genereated from service.impl.java.vm
  */
 @Service
 public class ${service.name}ServiceImpl extends ${service.name}BaseServiceImpl implements ${service.name}Service {
@@ -23,7 +25,9 @@ public class ${service.name}ServiceImpl extends ${service.name}BaseServiceImpl i
 	 * {@inheritDoc}
 	 */
 	@Override
-	#if($operation.return.isMany())	 
+	#if($operation.return.isPagedResponse())
+	protected Page<${operation.return.javaType}> ${operation.uncapitalizedName}Impl(${operation.signature}) {
+	#elseif($operation.return.isMany())	 
 	protected Collection<${operation.return.javaType}> ${operation.uncapitalizedName}Impl(${operation.signature}) {
 	#elseif($operation.isResponseTypeVoid())
 	protected void ${operation.uncapitalizedName}Impl(${operation.signature}) {

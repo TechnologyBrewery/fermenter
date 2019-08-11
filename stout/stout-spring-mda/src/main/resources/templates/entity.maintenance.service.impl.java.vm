@@ -166,7 +166,7 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 		initMsgMgr(messages);
         assertAuthorization(PATH, Action.RETRIEVE);
 		Sort sort = SortMapper.mapToSort(criteria.getSortWrapper());
-		Page<${entity.name}BO> allEntitiesPage = ${entity.name}BO.findByExample(criteria.getProbe(), criteria.getContainsMatch(), criteria.getPage(), criteria.getSize(), sort);
+		Page<${entity.name}BO> allEntitiesPage = ${entity.name}BO.findByExample(criteria.getProbe(), criteria.getContainsMatch(), criteria.getStartPage(), criteria.getCount(), sort);
 		PageWrapper<${entity.name}BO> allEntities = (new PageMapper<${entity.name}BO>()).mapToPageWrapper(allEntitiesPage);
 		ValueServiceResponse<PageWrapper<${entity.name}BO>> response = new ValueServiceResponse<>(allEntities);
 		addAllMsgMgrToResponse(response);

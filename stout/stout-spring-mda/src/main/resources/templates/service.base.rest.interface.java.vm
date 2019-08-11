@@ -19,11 +19,13 @@ import org.jboss.resteasy.annotations.cache.NoCache;
 
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
+import org.bitbucket.fermenter.stout.page.PageWrapper;
 
 /**
  * Interface for the ${service.name} service.
  *
  * Generated Code - DO NOT MODIFY
+ * Generated from service.base.rest.interface.java.vm
  */
 public interface ${service.name}BaseService {
 
@@ -45,7 +47,9 @@ public interface ${service.name}BaseService {
 			#end
 		#end
 	#end
-	#if($operation.return.isMany())	 
+    #if($operation.return.isPagedResponse())
+     * @return A service response-paged {@link Collection>} of {@link ${operation.return.javaType}}
+	#elseif($operation.return.isMany())
 	 * @return A service response-wrapped {@link Collection>} of {@link ${operation.return.javaType}}
 	#elseif(!$operation.isResponseTypeVoid())	 
 	 * @return A service response-wrapped instance of {@link ${operation.return.javaType}}
@@ -67,7 +71,9 @@ public interface ${service.name}BaseService {
 	#if($operation.hasEntityParameters())
 	@Consumes(MediaType.APPLICATION_JSON)
 	#end
-	#if($operation.return.isMany())	 
+	#if($operation.return.isPagedResponse())
+    ValueServiceResponse<PageWrapper<${operation.return.javaType}>> ${operation.uncapitalizedName}(${operation.getSignatureParametersWithJaxRS()});
+	#elseif($operation.return.isMany())
 	ValueServiceResponse<Collection<${operation.return.javaType}>> ${operation.uncapitalizedName}(${operation.getSignatureParametersWithJaxRS()});
 	#elseif($operation.isResponseTypeVoid())
 	public VoidServiceResponse ${operation.uncapitalizedName}(${operation.getSignatureParametersWithJaxRS()});

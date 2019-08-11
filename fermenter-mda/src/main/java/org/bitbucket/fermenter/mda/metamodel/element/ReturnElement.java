@@ -23,6 +23,9 @@ public class ReturnElement extends NamespacedMetamodelElement implements Return 
     @JsonInclude(Include.NON_NULL)
     protected String responseEncoding;
 
+    @JsonInclude(Include.NON_NULL)
+    private boolean pagedResponse;
+
     /**
      * Override to make optional (for base types) and not write if null.
      * 
@@ -60,6 +63,14 @@ public class ReturnElement extends NamespacedMetamodelElement implements Return 
     public String getResponseEncoding() {
         return responseEncoding;
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Boolean isPagedResponse() {
+        return pagedResponse;
+    }
 
     /**
      * {@inheritDoc}
@@ -76,6 +87,10 @@ public class ReturnElement extends NamespacedMetamodelElement implements Return 
             many = Boolean.FALSE;
         }
 
+        if(isPagedResponse() && "void".equals(getType())) {
+            messageTracker.addErrorMessage(
+                    "Conflict: Operation " + getName() + " is marked as a paged response but return type is void.");
+        }
     }
 
     /**
@@ -125,4 +140,13 @@ public class ReturnElement extends NamespacedMetamodelElement implements Return 
                 .toString();
     }
 
+    /**
+     * Sets whether or not this operation has a paged response.
+     * 
+     * @param pagedResponse
+     *            whether or not the response will be a page of objects
+     */
+    public void setPagedResponse(Boolean pagedResponse) {
+        this.pagedResponse = pagedResponse;
+    }
 }

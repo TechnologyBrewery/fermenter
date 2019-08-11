@@ -9,11 +9,13 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 import org.bitbucket.fermenter.mda.metamodel.element.BaseOperationDecorator;
 import org.bitbucket.fermenter.mda.metamodel.element.Operation;
 import org.bitbucket.fermenter.mda.metamodel.element.Parameter;
+import org.bitbucket.fermenter.mda.metamodel.element.ParameterElement;
 import org.bitbucket.fermenter.mda.metamodel.element.Return;
 import org.bitbucket.fermenter.mda.metamodel.element.Transaction;
 import org.jboss.resteasy.annotations.GZIP;
@@ -125,6 +127,7 @@ public class JavaOperation extends BaseOperationDecorator implements Operation, 
         if (signature == null) {
             signature = JavaElementUtils.createSignatureParameters(getParameters());
         }
+        
 
         return signature;
     }

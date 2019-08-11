@@ -88,7 +88,7 @@ public class SimpleDomainMaintenanceIT extends RunTestsWithinArquillianWar {
         ValueServiceResponse<PageWrapper<SimpleDomainBO>> results = simpleDomainService.findByExample(criteria);
 
         PageWrapper<SimpleDomainBO> value = results.getValue();
-        assertEquals("Total count of elements didn't match!", new Long(totalCount), value.getTotalElements());
+        assertEquals("Total count of elements didn't match!", new Long(totalCount), value.getTotalResults());
         assertEquals("Expected there to be two pages of 25!", new Integer(2), value.getTotalPages());
         assertEquals("Page size didn't match!", new Integer(size), value.getNumberOfElements());
     }
@@ -314,7 +314,7 @@ public class SimpleDomainMaintenanceIT extends RunTestsWithinArquillianWar {
         TestUtils.assertNoErrorMessages(searchResults);
 
         PageWrapper<SimpleDomainBO> value = searchResults.getValue();
-        assertEquals(new Long(2), value.getTotalElements());
+        assertEquals(new Long(2), value.getTotalResults());
     }
 
     @Test
@@ -342,9 +342,9 @@ public class SimpleDomainMaintenanceIT extends RunTestsWithinArquillianWar {
         TestUtils.assertNoErrorMessages(searchResults);
 
         PageWrapper<SimpleDomainBO> value = searchResults.getValue();
-        assertEquals(new Long(2), value.getTotalElements());
+        assertEquals(new Long(2), value.getTotalResults());
         assertEquals(new Integer(2), value.getTotalPages());
-        assertEquals(size, value.getSize());
+        assertEquals(size, value.getItemsPerPage());
     }
 
     @Test
@@ -369,7 +369,7 @@ public class SimpleDomainMaintenanceIT extends RunTestsWithinArquillianWar {
         TestUtils.assertNoErrorMessages(searchResults);
 
         PageWrapper<SimpleDomainBO> value = searchResults.getValue();
-        assertEquals(new Long(searchNames.length), value.getTotalElements());
+        assertEquals(new Long(searchNames.length), value.getTotalResults());
         assertEquals(searchNames[2], value.getContent().get(0).getName());
         assertEquals(searchNames[0], value.getContent().get(1).getName());
         assertEquals(searchNames[1], value.getContent().get(2).getName());

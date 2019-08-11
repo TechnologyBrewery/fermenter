@@ -30,6 +30,9 @@ public class OperationElement extends MetamodelElement implements Operation {
     @JsonInclude(Include.NON_NULL)
     protected Boolean compressedWithGZip;
 
+    @JsonInclude(Include.NON_NULL)
+    protected Boolean pagedResponse;
+
     /**
      * {@inheritDoc}
      */
@@ -75,6 +78,11 @@ public class OperationElement extends MetamodelElement implements Operation {
      */
     @Override
     public void validate() {
+        defaultTransactionAttribute();
+        defaultCompressedWithGZip();
+        defaultPagedResponse();
+        defaultPageIndexAndSizeParamForPagedResponse();
+
         if (returnElement != null) {
             returnElement.validate();
         }
@@ -82,16 +90,38 @@ public class OperationElement extends MetamodelElement implements Operation {
         for (Parameter parameter : parameters) {
             parameter.validate();
         }
-        
-        defaultTransactionAttribute();
-        validateTransactionAttribute();
-        
-        
-        //default:
-        if (compressedWithGZip == null) {
-           compressedWithGZip = Boolean.FALSE;
-        }
 
+        validateTransactionAttribute();
+    }
+
+    private void defaultPageIndexAndSizeParamForPagedResponse() {
+        if(getReturn().isPagedResponse()) {
+            ParameterElement pageIndexParam = new ParameterElement();
+            pageIndexParam.setName("startPage");
+            pageIndexParam.setType("integer");
+            pageIndexParam.setDocumentation("The index of the page being requested. Base zero. Must be a positive integer.");
+            pageIndexParam.setMany(false);
+            parameters.add(pageIndexParam);
+            
+            ParameterElement pageSizeParam = new ParameterElement();
+            pageSizeParam.setName("count");
+            pageSizeParam.setType("integer");
+            pageSizeParam.setMany(false);
+            pageSizeParam.setDocumentation("The number of elements being requested. Must be a positive integer.");
+            parameters.add(pageSizeParam);
+        }
+    }
+
+    private void defaultPagedResponse() {
+        if (pagedResponse == null) {
+            pagedResponse = Boolean.FALSE;
+        }
+    }
+
+    private void defaultCompressedWithGZip() {
+        if (compressedWithGZip == null) {
+            compressedWithGZip = Boolean.FALSE;
+        }
     }
 
     private void validateTransactionAttribute() {
@@ -152,5 +182,4 @@ public class OperationElement extends MetamodelElement implements Operation {
     public void setCompressedWithGZip(Boolean compress) {
         this.compressedWithGZip = compress;
     }
-
 }

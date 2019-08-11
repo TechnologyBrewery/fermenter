@@ -27,6 +27,7 @@ import org.bitbucket.fermenter.stout.messages.MessageManager;
 import org.bitbucket.fermenter.stout.messages.MessageUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -191,7 +192,7 @@ public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServi
      */
     @Override
     protected void doSomethingWithPrimitiveInputsImpl(String inputStr, Integer inputInt) {
-        LOGGER.info("did something with " + inputStr + " and " + inputInt);
+        LOGGER.info("did something with {} and {} ", inputStr, inputInt);
         
     }
     
@@ -242,7 +243,7 @@ public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServi
 
     @Override
     protected void returnVoidForDateInputImpl(Date inputDate) {
-        LOGGER.info("made a call for SimpleDomain with " + inputDate.toString());
+        LOGGER.info("made a call for SimpleDomain with {} ", inputDate);
     }
 
 	@Override
@@ -253,6 +254,17 @@ public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServi
 		}
 		return simpleDomain;
 	}
+
+    @Override
+    protected Page<SimpleDomainBO> getPagedSimpleDomainsImpl(Integer pageIndex, Integer pageSize) {
+        return SimpleDomainBO.findAllPaged(pageIndex, pageSize);
+    }
+
+    @Override
+    protected Page<SimpleDomainBO> getPagedSimpleDomainsWithParameterImpl(String nameFilter, Integer pageIndex,
+            Integer pageSize) {
+        return SimpleDomainBO.findByNamePaged(nameFilter, pageIndex, pageSize);
+    }
 
     @Override
     protected Boolean provideNullInputFromFrontendImpl(String expectingThisToBeNull) {

@@ -11,3 +11,4 @@ target
 .idea/
 
 ale/ale-cookbook-angular/frontend/src/app/generated
+package-lock.json

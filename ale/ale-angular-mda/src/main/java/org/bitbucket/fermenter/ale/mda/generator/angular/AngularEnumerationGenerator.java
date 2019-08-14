@@ -9,6 +9,7 @@ import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 import org.bitbucket.fermenter.mda.metamodel.element.BaseEnumertionDecorator;
 import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
+import com.google.common.base.CaseFormat;
 
 
 public class AngularEnumerationGenerator extends AbstractGenerator {
@@ -32,7 +33,7 @@ public class AngularEnumerationGenerator extends AbstractGenerator {
             vc.put("enumeration", angularEnumeration);
             vc.put("basePackage", context.getBasePackage());
 
-            fileName = replaceEnumerationName(basefileName, enumeration.getName());
+            fileName = replaceEnumerationName(basefileName, getNameLowerHyphen(enumeration.getName()));
             context.setOutputFile(fileName);
 
             generateFile(context, vc);
@@ -42,6 +43,10 @@ public class AngularEnumerationGenerator extends AbstractGenerator {
     @Override
     protected String getOutputSubFolder() {
         return AngularGeneratorUtil.ANGULAR_SRC_FOLDER_FOR_APP;
+    }
+
+    private String getNameLowerHyphen(String nameUpperCamel) {
+        return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_HYPHEN, nameUpperCamel);
     }
 
 }

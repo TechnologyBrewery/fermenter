@@ -18,7 +18,6 @@
     "templateName": "templates/model/enumeration.ts.vm",
     "outputFile": "generated/enum/${enumerationName}.model.ts",
     "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularEnumerationGenerator",
-    "metadataContext": "local",
     "overwritable": true
   },
   {

@@ -25,7 +25,7 @@ public class DefaultModelInstanceRepository extends AbstractModelInstanceReposit
     private EntityModelInstanceManager entityManager = EntityModelInstanceManager.getInstance();
     private ServiceModelInstanceManager serviceManager = ServiceModelInstanceManager.getInstance();
     private DictionaryModelInstanceManager dictionaryManager = DictionaryModelInstanceManager.getInstance();
-    
+
     /**
      * Creates a new instance w/ the base package of the current project. This package name will become the default
      * package where no other is specified.
@@ -57,8 +57,8 @@ public class DefaultModelInstanceRepository extends AbstractModelInstanceReposit
 
             if (log.isInfoEnabled()) {
                 long stop = System.currentTimeMillis();
-                log.info("Metamodel instances for artifactId '" + modelInstanceUrl.getArtifactId() + "' have been loaded - "
-                        + (stop - start) + "ms");
+                log.info("Metamodel instances for artifactId '" + modelInstanceUrl.getArtifactId()
+                        + "' have been loaded - " + (stop - start) + "ms");
             }
         }
     }
@@ -66,12 +66,12 @@ public class DefaultModelInstanceRepository extends AbstractModelInstanceReposit
     public Set<String> getArtifactIds() {
         Set<String> artifactIds = new HashSet<>();
         Collection<ModelInstanceUrl> urls = config.getMetamodelInstanceLocations().values();
-        for(ModelInstanceUrl url: urls) {
+        for (ModelInstanceUrl url : urls) {
             artifactIds.add(url.getArtifactId());
         }
         return artifactIds;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -85,21 +85,22 @@ public class DefaultModelInstanceRepository extends AbstractModelInstanceReposit
         for (DictionaryType dictionaryType : dictionaryManager.getMetadataElementByPackage(basePackage).values()) {
             dictionaryType.validate();
         }
-        
+
         for (Service service : serviceManager.getMetadataElementByPackage(basePackage).values()) {
             service.validate();
         }
-        
+
         for (Entity entity : entityManager.getMetadataElementByPackage(basePackage).values()) {
             entity.validate();
         }
-        
+
         MessageTracker messageTracker = MessageTracker.getInstance();
         messageTracker.emitMessages(log);
-        
+
         if (messageTracker.hasErrors()) {
-        	throw new GenerationException("Encountered one or more error!  Please check your Maven output for details.");
-        }        
+            throw new GenerationException(
+                    "Encountered one or more error!  Please check your Maven output for details.");
+        }
 
     }
 
@@ -150,7 +151,7 @@ public class DefaultModelInstanceRepository extends AbstractModelInstanceReposit
     public Map<String, Enumeration> getEnumerationsByArtifactId(String artifactId) {
         return enumerationManager.getMetadataByArtifactIdMap(artifactId);
     }
-    
+
     /**
      * Retrieves enumerations based on a generation context.
      * 
@@ -160,7 +161,7 @@ public class DefaultModelInstanceRepository extends AbstractModelInstanceReposit
      */
     public Map<String, Enumeration> getEnumerationsByContext(String context) {
         return enumerationManager.getMetadataElementByContext(context);
-    }    
+    }
 
     /**
      * Gets a dictionary type by name from the current package.
@@ -262,7 +263,7 @@ public class DefaultModelInstanceRepository extends AbstractModelInstanceReposit
     public Map<String, Service> getServicesByContext(String context) {
         return serviceManager.getMetadataElementByContext(context);
     }
-    
+
     /**
      * Gets an entity by name from the current package.
      * 
@@ -320,6 +321,16 @@ public class DefaultModelInstanceRepository extends AbstractModelInstanceReposit
      */
     public Map<String, Entity> getEntitiesByContext(String context) {
         return entityManager.getMetadataElementByContext(context);
-    }    
+    }
+
+    /**
+     * Gets all entities ordered by their intrinsic dependencies. References are upstream, relations downstream,
+     * otherwise they are equal.
+     * 
+     * @return all entities within the request package
+     */
+    public Set<Entity> getEntitiesByDependencyOrder() {
+        return entityManager.getNamesByDependencyOrder(config.getBasePackage());
+    }
 
 }

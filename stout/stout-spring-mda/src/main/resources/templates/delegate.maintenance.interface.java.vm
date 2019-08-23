@@ -49,4 +49,16 @@ public interface ${entity.name}MaintenanceDelegate {
      * @param entities The collection of ${entity.name} instances to delete
      */
     void bulkDelete(Collection<${entity.name}> entities);
+    
+     /**
+     * Flushes the transactionally-cached create, update associated with this delegate. Separate from delete as the
+     * often need to happen in reverse order for referential integrity.
+     */
+    void flushInsertsAndUpdates();
+
+    /**
+     * Flushes the deletes associated with this delegate. Separate from insert and update as the often need to happen in
+     * reverse order for referential integrity.
+     */
+    void flushDeletes();
 }

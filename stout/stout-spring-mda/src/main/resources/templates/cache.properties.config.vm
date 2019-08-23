@@ -17,13 +17,24 @@ public interface CachePropertiesConfig extends KrauseningConfig {
     @Key("cache.max.size.per.bo")
     @DefaultValue("1000")
     int getCacheMaxSizePerBO();
+    
+    /**
+     * Fully qualified class name that implements {@link org.bitbucket.fermenter.stout.client.service.CustomFlushOrderProvider}
+     * to customize the order in which entities are flushed by the level 1 rest client cache.  The values provided via
+     * this class will be prioritized and then blended with the generated flushed order.
+     *
+     * @return fully qualified class name
+     */
+    @Key("custom.flush.order.provider")
+    String getCustomFlushOrderProvider();
+    
 
 #foreach ($entity in $entities)
-    
+	#if (!$entity.isTransient() && !$entity.isNonPersistentParentEntity())
     @Key("${entity.name.toLowerCase()}.caching.enabled")
     @DefaultValue("false")
     boolean is${entity.name}CachingEnabled();
-
+	#end
 #end
 
 }

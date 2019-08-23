@@ -1,9 +1,12 @@
 package org.bitbucket.fermenter.mda.metadata;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -11,6 +14,7 @@ import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metadata.element.Composite;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.Enumeration;
+import org.bitbucket.fermenter.mda.metadata.element.Reference;
 import org.bitbucket.fermenter.mda.metadata.element.Service;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceUrl;
 import org.bitbucket.fermenter.mda.metamodel.ModelContext;
@@ -128,6 +132,29 @@ public class MetadataRepository extends AbstractMetadataRepository {
 
     public Map<String, Entity> getAllEntities(String applicationName) {
         return EntityMetadataManager.getEntities(applicationName);
+    }
+    
+    public Set<Entity> getEntitiesByDependencyOrder(String context, String applicationName) {
+        Map<String, List<String>> referencedObjects = new HashMap<>();
+        
+        Map<String, Entity> rawEntities = getEntitiesByMetadataContext(context, applicationName);
+
+        for (Entity rawEntity : rawEntities.values()) {
+            Map<String, Reference> references = rawEntity.getReferences();
+            for (Reference reference : references.values()) {
+                List<String> inboundReferences = referencedObjects.computeIfAbsent(reference.getType(), f -> new ArrayList<>());
+                inboundReferences.add(rawEntity.getName());
+            }
+        }               
+        
+        Set<Entity> dependencyOrderedEntities = new TreeSet<>(new LegacyEntityComparitor(referencedObjects));
+
+        for (Entity rawEntity : rawEntities.values()) {
+            dependencyOrderedEntities.add(rawEntity);
+            
+        }        
+
+        return dependencyOrderedEntities;
     }
 
     @Deprecated

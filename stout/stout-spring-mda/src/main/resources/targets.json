@@ -184,7 +184,7 @@
         "overwritable": true
     },
     {
-        "name": "RestClientBasePropertiesConfig",
+        "name": "restClientBasePropertiesConfig",
         "templateName": "templates/rest.client.base.properties.config.java.vm",
         "outputFile": "${basePackage}/client/config/RestClientBasePropertiesConfig.java",
         "generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticJavaGenerator",
@@ -212,6 +212,14 @@
 		"templateName": "templates/delegate.maintenance.impl.java.vm",
 		"outputFile": "${basePackage}/client/service/impl/${entityName}MaintenanceDelegateImpl.java",
 		"generator": "org.bitbucket.fermenter.stout.mda.generator.entity.PersistentEntityJavaGenerator",
+		"metadataContext": "targeted",
+		"overwritable": true
+	},
+	{
+		"name": "delegateMaintenanceTxSyncrhonization",
+		"templateName": "templates/delegate.maintenance.tx.synchronization.java.vm",
+		"outputFile": "${basePackage}/client/service/impl/DelegateMaintenanceTransactionSynchronization.java",
+		"generator": "org.bitbucket.fermenter.stout.mda.generator.entity.AllOrderedEntitiesAwareJavaGenerator",
 		"metadataContext": "targeted",
 		"overwritable": true
 	},

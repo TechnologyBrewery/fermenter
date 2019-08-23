@@ -2,20 +2,12 @@ package org.bitbucket.fermenter.mda.element;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.bitbucket.fermenter.mda.generator.GenerationException;
-import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
-import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
-import org.bitbucket.fermenter.mda.metamodel.ModelInstanceUrl;
-import org.bitbucket.fermenter.mda.metamodel.ModelRepositoryConfiguration;
 import org.bitbucket.fermenter.mda.metamodel.element.Entity;
 import org.bitbucket.fermenter.mda.metamodel.element.Entity.LockStrategy;
 import org.bitbucket.fermenter.mda.metamodel.element.EntityElement;
@@ -32,42 +24,25 @@ import org.bitbucket.fermenter.mda.metamodel.element.Relation.Multiplicity;
 import org.bitbucket.fermenter.mda.metamodel.element.RelationElement;
 import org.bitbucket.fermenter.mda.metamodel.element.Validation;
 import org.bitbucket.fermenter.mda.metamodel.element.ValidationElement;
-import org.bitbucket.fermenter.mda.util.MessageTracker;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cucumber.api.java.After;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
-public class EntitySteps {
+public class EntitySteps extends AbstractEntitySteps {
 
-	private static final Logger logger = LoggerFactory.getLogger(EntitySteps.class);
-
-	private ObjectMapper objectMapper = new ObjectMapper();
-	private MessageTracker messageTracker = MessageTracker.getInstance();
-	private File entitiesDirectory = new File("target/temp-metadata", "entities");
-
-	private String currentBasePackage;
-
-	private File entityFile;
 	private Entity loadedEntity;
-	protected GenerationException encounteredException;
-	protected DefaultModelInstanceRepository metadataRepo;
 
 	@After("@entity")
-	public void cleanUp() {
+	public void cleanUp() throws IOException {
+	    super.cleanUp();
+	    
 		loadedEntity = null;
-
-		messageTracker.clear();
-
-		currentBasePackage = null;
 
 	}
 
@@ -286,29 +261,6 @@ public class EntitySteps {
 		return newField;
 	}
 
-	private EntityElement createEntityElement(EntityElement entity)
-			throws IOException, JsonGenerationException, JsonMappingException, JsonProcessingException {
-
-		entityFile = new File(entitiesDirectory, entity.getName() + ".json");
-		objectMapper.writeValue(entityFile, entity);
-		logger.debug(objectMapper.writeValueAsString(entity));
-		assertTrue("Entities not written to file!", entityFile.exists());
-
-		currentBasePackage = entity.getPackage();
-
-		return entity;
-	}
-
-	private EntityElement createBaseEntity(String name, String packageName, String documentation) {
-		EntityElement entity = new EntityElement();
-		if (StringUtils.isNotBlank(name)) {
-			entity.setName(name);
-		}
-		entity.setPackage(packageName);
-		entity.setDocumentation(documentation);
-		return entity;
-	}
-
 	private EntityElement createEntityWithRelation(String name, String packageName, RelationInput relation)
 			throws IOException, JsonGenerationException, JsonMappingException, JsonProcessingException {
 		EntityElement entity = createBaseEntity(name, packageName, null);
@@ -328,27 +280,10 @@ public class EntitySteps {
 
 	@When("^entities are read$")
 	public void entities_are_read() throws Throwable {
-		encounteredException = null;
-
-		try {
-			ModelRepositoryConfiguration config = new ModelRepositoryConfiguration();
-			config.setCurrentApplicationName("fermenter-mda");
-			config.setBasePackage(currentBasePackage);
-			Map<String, ModelInstanceUrl> metadataUrlMap = config.getMetamodelInstanceLocations();
-			metadataUrlMap.put("fermenter-mda",
-					new ModelInstanceUrl("fermenter-mda", entitiesDirectory.getParentFile().toURI().toString()));
-
-			metadataRepo = new DefaultModelInstanceRepository(config);
-			ModelInstanceRepositoryManager.setRepository(metadataRepo);
-			metadataRepo.load();
-			metadataRepo.validate();
-
-		} catch (GenerationException e) {
-			encounteredException = e;
-		}
+		readEntities();
 	}
 
-	@Then("^an entity metamodel instance is returned for the name \"([^\"]*)\" in \"([^\"]*)\" with the documentation \"([^\"]*)\"$")
+    @Then("^an entity metamodel instance is returned for the name \"([^\"]*)\" in \"([^\"]*)\" with the documentation \"([^\"]*)\"$")
 	public void an_entity_metamodel_instance_is_returned_for_the_name_in_with_the_documentation(String expectedName,
 			String expectedPackage, String expectedDocumentation) throws Throwable {
 

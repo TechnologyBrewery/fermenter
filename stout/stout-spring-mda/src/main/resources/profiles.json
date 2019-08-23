@@ -101,6 +101,9 @@
 			{
 				"name": "delegateMaintenanceImpl"
 			},
+			{
+				"name": "delegateMaintenanceTxSyncrhonization"
+			},
             {
                 "name": "caches"
             },
@@ -120,7 +123,7 @@
                 "name": "restClientBaseConfig"
             },
             {
-                "name": "RestClientBasePropertiesConfig"
+                "name": "restClientBasePropertiesConfig"
             },
 			{
 				"name": "restClientAppConfig"

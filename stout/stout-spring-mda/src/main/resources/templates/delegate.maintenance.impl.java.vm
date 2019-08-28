@@ -92,7 +92,15 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
 		if (checkLevelOneCache()) {
 			// queue up for creation upon transaction commit (or flush):
 			LevelOneCache<${idFieldJavaType}, ${entity.name}> levelOneCache = levelOneCacheManager.getCacheForCurrentTransaction();
+			#if ( $idField.hasGenerator() )
+			// you will need to manually flush if you want this instance to be available for reselect via the cache 
+			// as the generated primary key will not be assigned until it is flushed.  If you want Stout to support an
+			// "insert on create" for generated keys, please enter an issue.  As of now, it does not support this option.
 			levelOneCache.create(entity);
+#else
+			// with a non-generated key, we can make this available for retrieval without flushing:
+			levelOneCache.createAndCache(entity.get${entity.idFields.values().iterator().next().capitalizedName}(), entity);
+#end			
 			synchronizeTransaction();
 			
 		} else {

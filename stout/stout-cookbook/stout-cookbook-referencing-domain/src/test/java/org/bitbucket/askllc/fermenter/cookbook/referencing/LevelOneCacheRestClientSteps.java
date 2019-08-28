@@ -14,7 +14,9 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.CachedEntityExampleBusinessDelegate;
 import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.CachedEntityExampleMaintenanceDelegate;
+import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.NonUUIDKeyEntityMaintenanceDelegate;
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.CachedEntityExample;
+import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.NonUUIDKeyEntity;
 import org.bitbucket.fermenter.stout.messages.MessageManagerInitializationDelegate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -38,6 +40,9 @@ public class LevelOneCacheRestClientSteps {
 
     @Inject
     private CachedEntityExampleBusinessDelegate businessDelegate;
+    
+    @Inject
+    private NonUUIDKeyEntityMaintenanceDelegate nonUuidKeyEntityDelegate;
 
     @Inject
     private JtaTransactionManager txManager;
@@ -45,6 +50,7 @@ public class LevelOneCacheRestClientSteps {
     private Collection<CachedEntityExample> entities = new HashSet<>();
     private Collection<String> entityNames = new HashSet<>();
     private CachedEntityExample retrievedEntity;
+    private NonUUIDKeyEntity businessKeyedEntity;
 
     @Before("@levelOneRestCache")
     public void setUp() {
@@ -59,7 +65,9 @@ public class LevelOneCacheRestClientSteps {
         entityMaintenanceDelegate.bulkDelete(entities);
         MessageManagerInitializationDelegate.cleanupMessageManager();
         entities.clear();
-        entityNames.clear();        
+        entityNames.clear();  
+        
+        businessKeyedEntity = null;
     }
 
     @Given("^a new entity created via a rest client within a transaction$")
@@ -177,6 +185,13 @@ public class LevelOneCacheRestClientSteps {
             assertNotNull("Entity should still exist outside the transaction!", retrievedEntity);
         }
     }
+    
+    @Given("^a new business keyed entity with a key of \"([^\"]*)\" is created via a rest client within a transaction$")
+    public void a_new_business_keyed_entity_with_a_key_of_is_created_via_a_rest_client_within_a_transaction(String businessKey) throws Throwable {
+        NonUUIDKeyEntity businessKeyedEntity = new NonUUIDKeyEntity();
+        businessKeyedEntity.setId(businessKey);
+        nonUuidKeyEntityDelegate.create(businessKeyedEntity);
+    } 
 
     @When("^the transaction completes$")
     public void the_transaction_completes_the_entity_is_flushed() throws Throwable {
@@ -188,6 +203,11 @@ public class LevelOneCacheRestClientSteps {
         CachedEntityExample entity = entities.iterator().next();
         retrievedEntity = entityMaintenanceDelegate.findByPrimaryKey(entity.getId());
     }
+    
+    @When("^the entity is requested by key \"([^\"]*)\" within the current transaction$")
+    public void the_entity_is_requirest_by_key_within_the_current_transaction(String businessKey) throws Throwable {
+        businessKeyedEntity = nonUuidKeyEntityDelegate.findByPrimaryKey(businessKey);
+    } 
 
     @Then("^the entity can be retrieved outside the original transaction$")
     public void the_instance_can_be_retrieved_outside_the_original_transaction() throws Throwable {
@@ -261,12 +281,17 @@ public class LevelOneCacheRestClientSteps {
         entities.clear();
         
     }
+    
+    @Then("^the new business keyed entity is returned$")
+    public void the_new_business_keyed_entity_is_returned() throws Throwable {
+        assertNotNull("A business keyed entity should be immediately available for reselect!", businessKeyedEntity);
+    }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public CachedEntityExample findOutsideCurrentTransaction(String name) {
         return businessDelegate.findByName(name);
     }
-
+    
     protected void assertNameShouldNotBeFoundOutsideTransaction(String name) {
         CachedEntityExample outsideCurrentTxResult = findOutsideCurrentTransaction(name);
         assertNull("Should NOT be found before the transaction has committed - read isolation broken!",

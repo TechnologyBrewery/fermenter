@@ -31,6 +31,19 @@ public class LevelOneCache<K, T> {
     public void create(T instance) {
         pendingInserts.add(instance);
     }
+    
+    /**
+     * Queue an entity for create. Entities WILL be available via the cache in this case.  NOTE: you CANNOT use generated
+     * keys without manually flushing.
+     * 
+     * @param instance
+     *            instance to create
+     */
+    public void createAndCache(K primaryKey, T instance) {
+        pendingInserts.add(instance);
+        lookupMap.put(primaryKey, instance);
+    }
+    
 
     /**
      * Retrieves an entity based on the passed primary key from the pending list of object maintained by this cache.

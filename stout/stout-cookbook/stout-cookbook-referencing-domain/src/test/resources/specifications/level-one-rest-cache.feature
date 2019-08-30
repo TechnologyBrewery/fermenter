@@ -6,6 +6,11 @@ Feature: REST Client -> Level One Cache
     And the entity is validated to not exist outside the current transaction
     When the transaction completes
     Then the entity can be retrieved outside the original transaction
+    
+  Scenario: Test that entities WITHOUT generated identifiers can be retrieved in the same transaction BEFORE flush via an individual call
+    Given a new business keyed entity with a key of "<businessValuedPrimaryKey>" is created via a rest client within a transaction
+    When the entity is requested by key "<businessValuedPrimaryKey>" within the current transaction
+    Then the new business keyed entity is returned  
 
   Scenario: Test that entities are UPDATED upon transaction completion via an INDIVIDUAL update call
     Given a existing entity that is updated within a transaction
@@ -33,7 +38,7 @@ Feature: REST Client -> Level One Cache
     Given multiple new entities created via a bulk rest client within a transaction
     And the entities are validated to not exist outside the current transaction
     When the transaction completes
-    Then the entities can be retrieved outside the original transaction
+    Then the entities can be retrieved outside the original transaction    
 
   Scenario: Test that entities are UPDATED upon transaction completion via a BULK save or update call
     Given multiple entities updated via a bulk rest client within a transaction
@@ -47,3 +52,4 @@ Feature: REST Client -> Level One Cache
     When the transaction completes
     Then the entities no longer exists outside the original transaction
   #Scenario: find by example
+  #Scenario: find by example WITHOUT generated identifiers can be retrieved in the same transaction BEFORE flush 

@@ -1,5 +1,6 @@
 package org.bitbucket.askllc.fermenter.cookbook.referencing;
 
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -9,12 +10,14 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import javax.inject.Inject;
+import javax.transaction.Status;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.CachedEntityExampleBusinessDelegate;
 import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.CachedEntityExampleMaintenanceDelegate;
 import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.NonUUIDKeyEntityMaintenanceDelegate;
+import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.impl.DelegateMaintenanceTransactionSynchronization;
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.CachedEntityExample;
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.NonUUIDKeyEntity;
 import org.bitbucket.fermenter.stout.messages.MessageManagerInitializationDelegate;
@@ -40,7 +43,7 @@ public class LevelOneCacheRestClientSteps {
 
     @Inject
     private CachedEntityExampleBusinessDelegate businessDelegate;
-    
+
     @Inject
     private NonUUIDKeyEntityMaintenanceDelegate nonUuidKeyEntityDelegate;
 
@@ -49,8 +52,11 @@ public class LevelOneCacheRestClientSteps {
 
     private Collection<CachedEntityExample> entities = new HashSet<>();
     private Collection<String> entityNames = new HashSet<>();
+    private Integer originalEntityCalculatedValue;
+    private Integer updateEntityCalculatedValue;
     private CachedEntityExample retrievedEntity;
     private NonUUIDKeyEntity businessKeyedEntity;
+    private boolean isBusinessKeyed;
 
     @Before("@levelOneRestCache")
     public void setUp() {
@@ -61,13 +67,15 @@ public class LevelOneCacheRestClientSteps {
     }
 
     @After("@levelOneRestCache")
-    public void cleanUp() throws Exception {
+    public void cleanUp() throws Exception {               
         entityMaintenanceDelegate.bulkDelete(entities);
         MessageManagerInitializationDelegate.cleanupMessageManager();
         entities.clear();
-        entityNames.clear();  
-        
+        entityNames.clear();
+        isBusinessKeyed = false;
+
         businessKeyedEntity = null;
+        
     }
 
     @Given("^a new entity created via a rest client within a transaction$")
@@ -87,6 +95,7 @@ public class LevelOneCacheRestClientSteps {
     @Given("^a existing entity that is updated within a transaction$")
     public void a_existing_entity_that_is_updated_within_a_transaction() throws Throwable {
         CachedEntityExample entity = createAndValidateKeyExistsForEntity();
+        originalEntityCalculatedValue = entity.getCalculatedField();
 
         txManager.getUserTransaction().begin();
         String newName = entity.getName() + "-updated";
@@ -185,29 +194,46 @@ public class LevelOneCacheRestClientSteps {
             assertNotNull("Entity should still exist outside the transaction!", retrievedEntity);
         }
     }
-    
+
     @Given("^a new business keyed entity with a key of \"([^\"]*)\" is created via a rest client within a transaction$")
-    public void a_new_business_keyed_entity_with_a_key_of_is_created_via_a_rest_client_within_a_transaction(String businessKey) throws Throwable {
+    public void a_new_business_keyed_entity_with_a_key_of_is_created_via_a_rest_client_within_a_transaction(
+            String businessKey) throws Throwable {
+        txManager.getUserTransaction().begin();
         NonUUIDKeyEntity businessKeyedEntity = new NonUUIDKeyEntity();
         businessKeyedEntity.setId(businessKey);
         nonUuidKeyEntityDelegate.create(businessKeyedEntity);
-    } 
+        
+        originalEntityCalculatedValue = businessKeyedEntity.getCalculatedField();
+        
+        isBusinessKeyed = true;
+        
+    }
 
     @When("^the transaction completes$")
-    public void the_transaction_completes_the_entity_is_flushed() throws Throwable {
+    public void the_transaction_completes() throws Throwable {
         txManager.getUserTransaction().commit();
     }
+    
+    @When("^the cache is flushed$")
+    public void the_cache_is_flushed() throws Throwable {
+        DelegateMaintenanceTransactionSynchronization sync = new DelegateMaintenanceTransactionSynchronization();
+        sync.flush();
+    }    
 
     @When("^a findByPrimary key is performed on that entity$")
     public void a_findByPrimary_key_is_performed_on_that_entity() throws Throwable {
         CachedEntityExample entity = entities.iterator().next();
         retrievedEntity = entityMaintenanceDelegate.findByPrimaryKey(entity.getId());
     }
-    
+
     @When("^the entity is requested by key \"([^\"]*)\" within the current transaction$")
     public void the_entity_is_requirest_by_key_within_the_current_transaction(String businessKey) throws Throwable {
         businessKeyedEntity = nonUuidKeyEntityDelegate.findByPrimaryKey(businessKey);
-    } 
+        
+        updateEntityCalculatedValue = businessKeyedEntity.getCalculatedField();
+        
+        txManager.getUserTransaction().commit();
+    }
 
     @Then("^the entity can be retrieved outside the original transaction$")
     public void the_instance_can_be_retrieved_outside_the_original_transaction() throws Throwable {
@@ -234,20 +260,34 @@ public class LevelOneCacheRestClientSteps {
     @Then("^the updated instance is returned$")
     public void the_updated_instance_is_returned() throws Throwable {
         CachedEntityExample updatedEntity = entities.iterator().next();
-        assertTrue("Should have received the SAME instance of the object!", updatedEntity == retrievedEntity);
+        assertTrue("Should have received the SAME instance of the object!", updatedEntity == retrievedEntity);       
+                
         txManager.getUserTransaction().commit();
 
     }
-    
+
+    @Then("^the calculated field update is included$")
+    public void the_calculated_field_update_is_included() throws Throwable {
+        if (!isBusinessKeyed) {
+            CachedEntityExample findByPkEntity = entityMaintenanceDelegate.findByPrimaryKey(retrievedEntity.getId());
+            updateEntityCalculatedValue = findByPkEntity.getCalculatedField();
+            txManager.getUserTransaction().commit();
+        }                         
+        
+        assertNotEquals("Field calculated DURING the service call not reflected in the L1 cache!",
+                originalEntityCalculatedValue, updateEntityCalculatedValue);
+
+    }  
+
     @Then("^no entity is returned$")
     public void no_entity_is_returned() throws Throwable {
         assertNull("No object should have been returned within the transaction!", retrievedEntity);
         txManager.getUserTransaction().commit();
-        
+
         // if we get this far, all entities have already been removed:
         entities.clear();
 
-    }    
+    }
 
     @Then("^the entities can be retrieved outside the original transaction$")
     public void the_entities_can_be_retrieved_outside_the_original_transaction() throws Throwable {
@@ -274,14 +314,14 @@ public class LevelOneCacheRestClientSteps {
         for (CachedEntityExample originalEntity : entities) {
             CachedEntityExample foundEntity = businessDelegate.findByName(originalEntity.getName());
             assertNull("Entity SHOULD have been deleted!", foundEntity);
-            
+
         }
-        
+
         // if we get this far, we have validated they are all already gone:
         entities.clear();
-        
+
     }
-    
+
     @Then("^the new business keyed entity is returned$")
     public void the_new_business_keyed_entity_is_returned() throws Throwable {
         assertNotNull("A business keyed entity should be immediately available for reselect!", businessKeyedEntity);
@@ -291,7 +331,7 @@ public class LevelOneCacheRestClientSteps {
     public CachedEntityExample findOutsideCurrentTransaction(String name) {
         return businessDelegate.findByName(name);
     }
-    
+
     protected void assertNameShouldNotBeFoundOutsideTransaction(String name) {
         CachedEntityExample outsideCurrentTxResult = findOutsideCurrentTransaction(name);
         assertNull("Should NOT be found before the transaction has committed - read isolation broken!",

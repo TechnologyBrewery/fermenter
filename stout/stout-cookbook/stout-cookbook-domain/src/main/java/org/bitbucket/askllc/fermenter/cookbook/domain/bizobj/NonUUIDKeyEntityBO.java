@@ -32,7 +32,7 @@ public class NonUUIDKeyEntityBO extends NonUUIDKeyEntityBaseBO {
 
     @Override
     protected void complexValidation() {
-
+        setCalculatedField(getCalculatedField() + 1);
     }
 
     public static void deleteAllNonUUIDKeyEntities() {

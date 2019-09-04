@@ -31,9 +31,9 @@ public class LevelOneCache<K, T> {
     public void create(T instance) {
         pendingInserts.add(instance);
     }
-    
+
     /**
-     * Queue an entity for create. Entities WILL be available via the cache in this case.  NOTE: you CANNOT use generated
+     * Queue an entity for create. Entities WILL be available via the cache in this case. NOTE: you CANNOT use generated
      * keys without manually flushing.
      * 
      * @param instance
@@ -43,7 +43,6 @@ public class LevelOneCache<K, T> {
         pendingInserts.add(instance);
         lookupMap.put(primaryKey, instance);
     }
-    
 
     /**
      * Retrieves an entity based on the passed primary key from the pending list of object maintained by this cache.
@@ -75,6 +74,18 @@ public class LevelOneCache<K, T> {
      */
     public void update(K primaryKey, T entity) {
         pendingUpdates.put(primaryKey, entity);
+        lookupMap.put(primaryKey, entity);
+    }
+
+    /**
+     * Allows the cache to be updated with a specific instance.
+     * 
+     * @param primaryKey
+     *            key of the entity to update
+     * @param entity
+     *            the entity to update
+     */
+    public void cache(K primaryKey, T entity) {
         lookupMap.put(primaryKey, entity);
     }
 
@@ -121,15 +132,15 @@ public class LevelOneCache<K, T> {
     public Collection<K> getPendingDeletes() {
         return pendingDeletes;
     }
-    
+
     /**
      * Removes pending inserts and updates.
      */
     public void clearPendingInsertsAndUpdates() {
         pendingInserts.clear();
         pendingUpdates.clear();
-    } 
-    
+    }
+
     /**
      * Removes pending deletes.
      */
@@ -137,14 +148,14 @@ public class LevelOneCache<K, T> {
         pendingInserts.clear();
         pendingUpdates.clear();
         pendingDeletes.clear();
-    }     
-    
+    }
+
     /**
      * Returns all pending actions.
      */
     public void clearPendingActions() {
         clearPendingInsertsAndUpdates();
         clearPendingDeletes();
-    }    
+    }
 
 }

@@ -31,8 +31,10 @@ public class CachedEntityExampleBO extends CachedEntityExampleBaseBO {
 
 	@Override
 	protected void complexValidation() {
-
+	    setCalculatedField(getCalculatedField() + 1);
 	}
+	
+	
 	
 	public static CachedEntityExampleBO findByName(String name) {
 	    return getDefaultRepository().findByName(name);

@@ -25,5 +25,12 @@
             <column>NAME</column>
             <defaultValue>Some Name</defaultValue>
         </field>
+        <field>
+        	<name>calculatedField</name>
+        	<documentation>A field that is calculated on each save call</documentation>
+            <type>integer</type>
+            <column>CALCULATED_FIELD</column>
+            <defaultValue>0</defaultValue>
+        </field>
     </fields>
 </entity>

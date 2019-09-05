@@ -116,6 +116,11 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
 		${entity.name} created${entity.name} = response.getValue();
 		MessageManager.addMessages(response.getMessages());
         if(!response.hasErrors()) {
+        	 if (checkLevelOneCache()) {        		
+				LevelOneCache<${idFieldJavaType}, ${entity.name}> levelOneCache = levelOneCacheManager.getCacheForCurrentTransaction();
+				levelOneCache.cache(created${entity.name}.get${entity.idFields.values().iterator().next().capitalizedName}(), created${entity.name});
+        	}
+        
             ${entity.name}Cache.addToCache(created${entity.name});
         }
 		return created${entity.name};
@@ -148,6 +153,11 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
         ${entity.name} created${entity.name} = response.getValue();
 		MessageManager.addMessages(response.getMessages());
         if(!response.hasErrors()) {
+        	if (checkLevelOneCache()) {        		
+				LevelOneCache<${idFieldJavaType}, ${entity.name}> levelOneCache = levelOneCacheManager.getCacheForCurrentTransaction();
+				levelOneCache.cache(${idFieldName}, entity);
+        	}
+        
             ${entity.name}Cache.addToCache(created${entity.name});
         } else {
             ${entity.name}Cache.removeFromCache(${idFieldName});
@@ -220,6 +230,13 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
 	        MessageManager.addMessages(response.getMessages());
 	        values = response.getValue();
             if(!response.hasErrors()) {
+	            if (checkLevelOneCache()) {        		
+					LevelOneCache<${idFieldJavaType}, ${entity.name}> levelOneCache = levelOneCacheManager.getCacheForCurrentTransaction();					
+					
+					for (${entity.name} update : values) {
+						levelOneCache.cache(update.get${entity.idFields.values().iterator().next().capitalizedName}(), update);
+					}
+	        	}
                 ${entity.name}Cache.addToCache(values);
             } else {
                 ${entity.name}Cache.invalidateCache();

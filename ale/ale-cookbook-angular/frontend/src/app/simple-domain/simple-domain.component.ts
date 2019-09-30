@@ -16,7 +16,8 @@ import { ValidationExampleMaintenanceService } from '../generated/service/mainte
   styleUrls: ['./simple-domain.component.css']
 })
 export class SimpleDomainComponent implements OnInit {
-  findByExampleContainsTestResults = 'PENDING';
+  findByExampleContainsTestResult = 'PENDING';
+  nullParamTestResult = 'PENDING';
   public simpleDomainAdding: SimpleDomain;
   public simpleDomainEditing: SimpleDomain;
   public simpleDomains = new Array<SimpleDomain>();
@@ -161,10 +162,6 @@ export class SimpleDomainComponent implements OnInit {
       });
   }
 
-  runSimplifiedTests() {
-    this.runFindByExampleContainsTest();
-  }
-
   runFindByExampleContainsTest() {
     const testSimpleDomain = new SimpleDomain();
     const name = 'runFindByExampleContainsTest';
@@ -197,9 +194,9 @@ export class SimpleDomainComponent implements OnInit {
           findResponse.content[0].name.indexOf(name) >= 0;
 
         if (findByExampleContainsFoundTestSimpleDomain) {
-          this.findByExampleContainsTestResults = 'PASSED';
+          this.findByExampleContainsTestResult = 'PASSED';
         } else {
-          this.findByExampleContainsTestResults = 'FAILED';
+          this.findByExampleContainsTestResult = 'FAILED';
           console.error(
             'Failed to find ' +
               name +
@@ -212,5 +209,15 @@ export class SimpleDomainComponent implements OnInit {
         this.simpleDomainService.delete(postResponse.value.id).subscribe();
       });
     });
+  }
+
+  runNullParamTest() {
+    this.simpleDomainManagerService.provideNullInputFromFrontend(null).subscribe(inputWasNull => {
+      if(inputWasNull) {
+        this.nullParamTestResult = 'PASSED';
+      } else {
+        this.nullParamTestResult = 'FAILED';
+      }
+    })
   }
 }

@@ -74,12 +74,32 @@ export class SimpleDomainPage {
     return element(by.id('simpleDomainCountByBusinessService')).getText();
   }
 
-  runSimplifiedTests() {
-    element(by.id('runSimplifiedTests')).click();
+  runFindByExampleContainsTest() {
+    element(by.id('runFindByExampleContainsTest')).click();
   }
 
   getFindByExampleContainsTestResult() {
-    return element(by.id('findByExampleContainsTestResults')).getText();
+    return element(by.id('findByExampleContainsTestResult')).getText();
+  }
+
+  runNullParamTest() {
+    browser
+      .actions()
+      .mouseMove(element(by.id('runNullParamTest')))
+      .click()
+      .perform();
+  }
+
+  getNullParamTestResult() {
+    browser.wait(() => {
+      return element(by.id('nullParamTestResult'))
+        .getText()
+        .then(value => {
+          console.log('value: ' + value);
+          return value !== 'PENDING';
+        });
+    }, 5000);
+    return element(by.id('nullParamTestResult')).getText();
   }
 
   refresh() {

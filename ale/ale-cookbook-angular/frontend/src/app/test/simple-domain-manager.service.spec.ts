@@ -201,6 +201,30 @@ describe('Ale: Business Service Generation', () => {
     }
   ));
 
+  it('should be able to support providing an entity as a request parameter', inject(
+    [SimpleDomainManagerService],
+    (simpleDomainManagerService: SimpleDomainManagerService) => {
+      const nullVariable: string = null;
+
+      simpleDomainManagerService
+        .provideNullInputFromFrontend(nullVariable)
+        .subscribe((responseValue: boolean) => {
+          expect(responseValue).toBeTruthy();
+        });
+
+      const req = httpTestingController.expectOne(
+        request => request.url === simpleDomainMgrUrl + '/provideNullInputFromFrontend'
+      );
+
+      expect(req.request.method).toEqual('GET');
+      expect(req.request.params.has('expectingThisToBeNull')).toBeFalsy();
+
+      const mockResponse = new FermenterResponse<boolean>();
+      mockResponse.value = true;
+      req.flush(mockResponse);
+    }
+  ));
+
   it('should be able to support providing array of inputs', inject(
     [SimpleDomainManagerService],
     (simpleDomainManagerService: SimpleDomainManagerService) => {

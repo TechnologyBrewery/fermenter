@@ -254,4 +254,9 @@ public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServi
 		return simpleDomain;
 	}
 
+    @Override
+    protected Boolean provideNullInputFromFrontendImpl(String expectingThisToBeNull) {
+        return expectingThisToBeNull == null;
+    }
+
 }

@@ -75,10 +75,14 @@ export class ${service.name}Service {
 #foreach( $param in $operation.parameters)
 #if($param.ismany())
         for(const ${param.name} of ${param.name}s) {
-            params = params.set('${param.name}', String(${param.name}));
+            if(${param.name} !== null && ${param.name} !== undefined) {
+                params = params.set('${param.name}', String(${param.name}));
+            }
         }
 #else
-        params = params.set('${param.name}', String(${param.name}));
+        if(${param.name} !== null && ${param.name} !== undefined) {
+            params = params.set('${param.name}', String(${param.name}));
+        }
 #end## end of if is many
 #end## end of for loop
 

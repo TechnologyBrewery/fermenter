@@ -251,5 +251,17 @@
       "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
       "type" : "SimpleDomain"
     }
-  } ]
+  }, {
+	"name" : "ProvideNullInputFromFrontend",
+	"transactionAttribute" : "Supports",
+	"documentation" : "Returns true if the input is provided as null",
+	"parameters" : [ {
+      "name" : "expectingThisToBeNull",
+      "type" : "string"
+    } ],
+    "return" : {
+      "type" : "boolean"
+    }
+  }
+ ]
 }

@@ -1,0 +1,55 @@
+<mat-card>
+  <mat-card-title id="title">Simplified UI E2E test setup</mat-card-title>
+  <mat-card-content>
+    <br/>
+    <div fxLayout="row" fxLayoutAlign="space-around">
+      <button type="button" mat-raised-button id="runAddSimpleDomainTest" (click)="runAddSimpleDomainTest()">Run Add Simple Domain Test</button>
+      <div>Add Simple Domain Test Result:</div>
+      <div id="addSimpleDomainTestResult">{{addSimpleDomainTestResult}}</div>
+    </div>
+    <br/>
+    <div fxLayout="row" fxLayoutAlign="space-around">
+      <button type="button" mat-raised-button id="runGetSimpleDomainTest" (click)="runGetSimpleDomainTest()">Run Get Simple Domain Test</button>
+      <div>Get Simple Domain Test Result:</div>
+      <div id="getSimpleDomainTestResult">{{getSimpleDomainTestResult}}</div>
+    </div>
+    <br/>
+    <div fxLayout="row" fxLayoutAlign="space-around">
+      <button type="button" mat-raised-button id="runUpdateSimpleDomainTest" (click)="runUpdateSimpleDomainTest()">Run Update Simple Domain Test</button>
+      <div>Update Simple Domain Test Result:</div>
+      <div id="updateSimpleDomainTestResult">{{updateSimpleDomainTestResult}}</div>
+    </div>
+    <br/>
+    <div fxLayout="row" fxLayoutAlign="space-around">
+      <button type="button" mat-raised-button id="runDeleteSimpleDomainTest" (click)="runDeleteSimpleDomainTest()">Run Delete Simple Domain Test</button>
+      <div>Delete Simple Domain Test Result:</div>
+      <div id="deleteSimpleDomainTestResult">{{deleteSimpleDomainTestResult}}</div>
+    </div>
+    <br/>
+    <div fxLayout="row" fxLayoutAlign="space-around">
+      <button type="button" mat-raised-button id="runCountSimpleDomainTest" (click)="runCountSimpleDomainTest()">Run Count Simple Domain Test</button>
+      <div>Count Simple Domain Test Result:</div>
+      <div id="countSimpleDomainTestResult">{{countSimpleDomainTestResult}}</div>
+    </div>
+    <br/>
+    <div fxLayout="row" fxLayoutAlign="space-around">
+      <button type="button" mat-raised-button id="runFindByExampleContainsTest" (click)="runFindByExampleContainsTest()">Run Find by Example Contains Test</button>
+      <div>Find By Example Contains Test Result:</div>
+      <div id="findByExampleContainsTestResult">{{findByExampleContainsTestResult}}</div>
+    </div>
+    <br/>
+    <div fxLayout="row" fxLayoutAlign="space-around">
+      <button type="button" mat-raised-button id="runNullParamTest" (click)="runNullParamTest()">Run Null Param Test</button>
+      <div>Null Param Test Result:</div>
+      <div id="nullParamTestResult">{{nullParamTestResult}}</div>
+    </div>
+    <br/>
+    <br/>
+    <br/>
+    <div fxLayout="row" fxLayoutAlign="space-around">
+      <button type="button" mat-raised-button color="warn" id="deleteAllSimpleDomains" (click)="deleteAllSimpleDomains()">Delete All Simple Domains</button>
+      <div>Delete all status:</div>
+      <div id="deletedAllSimpleDomainsStatus">{{deletedAllSimpleDomainsStatus}}</div>
+    </div>
+  </mat-card-content>
+</mat-card>

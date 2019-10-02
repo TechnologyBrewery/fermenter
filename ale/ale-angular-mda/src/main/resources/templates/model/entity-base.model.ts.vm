@@ -29,7 +29,7 @@ export class ${entity.name}Base {
 #if( $association.multiplicity == '1-M' )
   ${association.labelLowerCamel}s: ${association.type}[] = new Array<${association.type}>();
 #else
-  ${association.labelLowerCamel}: ${association.type} = new ${association.type}();
+  ${association.labelLowerCamel}: ${association.type};
 #end
 #end
 

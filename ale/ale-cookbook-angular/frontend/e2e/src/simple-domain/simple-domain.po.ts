@@ -2,76 +2,61 @@ import { browser, by, element } from 'protractor';
 
 export class SimpleDomainPage {
   navigateTo() {
-    return browser.get('/#/SimpleDomain');
-  }
-
-  getSuccessToast() {
-    element(by.className('toast-success')).isDisplayed();
-    return element(by.className('toast-success'));
+    return browser.get('/#/e2e-tests');
   }
 
   getTitleText() {
     return element(by.id('title')).getText();
   }
 
-  getListItems() {
-    browser.wait(result => {
-      return element.all(by.tagName('mat-list-item')).isPresent();
-    }, 3000);
-    return element.all(by.tagName('mat-list-item'));
-  }
-
-  addSimpleDomain(name: string): any {
-    element(by.id('simpleDomainName')).sendKeys(name);
-    element(by.id('addSimpleDomain')).click();
-    this.getSuccessToast();
-    return this.getListItems()
-      .last()
-      .getAttribute('id');
-  }
-
-  showListById(simpleDomainId: any): any {
-    element(by.id('filterListById')).sendKeys(simpleDomainId);
-    element(by.id('filterList')).click();
-  }
-
-  deleteSimpleDomainInList() {
-    this.getListItems()
-      .first()
-      .all(by.id('deleteSimpleDomain'))
-      .click();
-    return this.getSuccessToast().getText();
-  }
-
-  listOfSimpleDomainNames() {
-    return this.getListItems()
-      .all(by.tagName('span'))
-      .map(function(elm) {
-        return elm.getText();
-      });
-  }
-
   deleteAllSimpleDomains(): any {
     element(by.id('deleteAllSimpleDomains')).click();
+    this.waitUntilTextIsNotPending('deletedAllSimpleDomainsStatus');
   }
 
-  editSimpleDomain(newName: string): any {
-    const firstItemInList = this.getListItems().first();
-    firstItemInList.all(by.id('editSimpleDomain')).click();
-    const editField = firstItemInList.all(by.id('editField'));
-    editField.clear();
-    editField.sendKeys(newName);
-    firstItemInList.all(by.id('saveEdits')).click();
-    return this.getSuccessToast().getText();
+  runAddSimpleDomainTest() {
+    element(by.id('runAddSimpleDomainTest')).click();
   }
 
-  getAllSimpleDomains(): any {
-    element(by.id('getAllSimpleDomains')).click();
+  getAddSimpleDomainTestResult() {
+    this.waitUntilTextIsNotPending('addSimpleDomainTestResult');
+    return element(by.id('addSimpleDomainTestResult')).getText();
   }
 
-  getCountByBusinessService(): any {
-    element(by.id('getSimpleDomainCountButton')).click();
-    return element(by.id('simpleDomainCountByBusinessService')).getText();
+  runGetSimpleDomainTest() {
+    element(by.id('runGetSimpleDomainTest')).click();
+  }
+
+  getGetSimpleDomainTestResult() {
+    this.waitUntilTextIsNotPending('getSimpleDomainTestResult');
+    return element(by.id('getSimpleDomainTestResult')).getText();
+  }
+
+  runUpdateSimpleDomainTest() {
+    element(by.id('runUpdateSimpleDomainTest')).click();
+  }
+
+  getUpdateSimpleDomainTestResult() {
+    this.waitUntilTextIsNotPending('updateSimpleDomainTestResult');
+    return element(by.id('updateSimpleDomainTestResult')).getText();
+  }
+
+  runDeleteSimpleDomainTest() {
+    element(by.id('runDeleteSimpleDomainTest')).click();
+  }
+
+  getDeleteSimpleDomainTestResult() {
+    this.waitUntilTextIsNotPending('deleteSimpleDomainTestResult');
+    return element(by.id('deleteSimpleDomainTestResult')).getText();
+  }
+
+  runCountSimpleDomainTest() {
+    element(by.id('runCountSimpleDomainTest')).click();
+  }
+
+  getCountSimpleDomainTestResult() {
+    this.waitUntilTextIsNotPending('countSimpleDomainTestResult');
+    return element(by.id('countSimpleDomainTestResult')).getText();
   }
 
   runFindByExampleContainsTest() {
@@ -79,27 +64,27 @@ export class SimpleDomainPage {
   }
 
   getFindByExampleContainsTestResult() {
+    this.waitUntilTextIsNotPending('findByExampleContainsTestResult');
     return element(by.id('findByExampleContainsTestResult')).getText();
   }
 
   runNullParamTest() {
-    browser
-      .actions()
-      .mouseMove(element(by.id('runNullParamTest')))
-      .click()
-      .perform();
+      element(by.id('runNullParamTest')).click();
   }
 
   getNullParamTestResult() {
+    this.waitUntilTextIsNotPending('nullParamTestResult');
+    return element(by.id('nullParamTestResult')).getText();
+  }
+
+  waitUntilTextIsNotPending(elementId: string) {
     browser.wait(() => {
-      return element(by.id('nullParamTestResult'))
+      return element(by.id(elementId))
         .getText()
         .then(value => {
-          console.log('value: ' + value);
           return value !== 'PENDING';
         });
-    }, 5000);
-    return element(by.id('nullParamTestResult')).getText();
+    }, 1000);
   }
 
   refresh() {

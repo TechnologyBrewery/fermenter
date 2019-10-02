@@ -1,15 +1,20 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { SimpleDomainComponent } from './simple-domain/simple-domain.component';
+import { E2eTestsPageComponent } from './e2e-tests-page/e2e-tests-page.component';
 
 const routes: Routes = [
   {
-    path: 'SimpleDomain',
+    path: 'simple-domain',
     component: SimpleDomainComponent
   },
   {
+    path: 'e2e-tests',
+    component: E2eTestsPageComponent
+  },
+  {
     path: '',
-    redirectTo: 'SimpleDomain',
+    redirectTo: 'simple-domain',
     pathMatch: 'full'
   }
 ];

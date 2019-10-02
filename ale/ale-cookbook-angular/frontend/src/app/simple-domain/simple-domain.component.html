@@ -58,21 +58,3 @@
     </div>
   </mat-card-content>
 </mat-card>
-
-<mat-card>
-  <mat-card-title>Simplified UI E2E test setup</mat-card-title>
-  <mat-card-content>
-    <br/>
-    <div fxLayout="row" fxLayoutAlign="space-around">
-      <button type="button" mat-raised-button id="runFindByExampleContainsTest" (click)="runFindByExampleContainsTest(); $event.stopPropogation();">Run Find by Example Contains Test</button>
-      <div>Find By Example Contains Test Result:</div>
-      <div id="findByExampleContainsTestResult">{{findByExampleContainsTestResult}}</div>
-    </div>
-    <br/>
-    <div fxLayout="row" fxLayoutAlign="space-around">
-      <button type="button" mat-raised-button id="runNullParamTest" (click)="runNullParamTest(); $event.stopPropogation();">Run Null Param Test</button>
-      <div>Null Param Test Result:</div>
-      <div id="nullParamTestResult">{{nullParamTestResult}}</div>
-    </div>
-  </mat-card-content>
-</mat-card>

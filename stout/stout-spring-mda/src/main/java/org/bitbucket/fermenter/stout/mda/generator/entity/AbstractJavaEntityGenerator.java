@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.VelocityContext;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
 import org.bitbucket.fermenter.mda.generator.entity.AbstractEntityGenerator;
-import org.bitbucket.fermenter.mda.metadata.element.Entity;
+import org.bitbucket.fermenter.mda.metamodel.element.Entity;
 import org.bitbucket.fermenter.stout.mda.JavaEntity;
 import org.bitbucket.fermenter.stout.mda.java.JavaGeneratorUtil;
 

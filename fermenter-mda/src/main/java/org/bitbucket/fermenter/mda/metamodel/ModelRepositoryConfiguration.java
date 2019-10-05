@@ -10,7 +10,7 @@ import java.util.Map;
  */
 public class ModelRepositoryConfiguration {
 
-    private String currentApplicationName;
+    private String artifactId;
     private String basePackage;
     private List<String> targetModelInstances = new ArrayList<>();
     private Map<String, ModelInstanceUrl> metamodelInstanceLocations = new HashMap<>();
@@ -19,12 +19,12 @@ public class ModelRepositoryConfiguration {
      * The name (i.e., artifact id) of the current project.
      * @return artifact id
      */
-    public String getCurrentApplicationName() {
-        return currentApplicationName;
+    public String getArtifactId() {
+        return artifactId;
     }
     
-    public void setCurrentApplicationName(String currentApplicationName) {
-        this.currentApplicationName = currentApplicationName;
+    public void setArtifactId(String artifactId) {
+        this.artifactId = artifactId;
     }
     
     public String getBasePackage() {

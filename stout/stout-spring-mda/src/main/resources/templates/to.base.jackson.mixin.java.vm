@@ -47,19 +47,19 @@ public abstract class ${entity.name}BaseMixIn {
 	@JsonProperty
 	private ${idField.javaType} ${idField.name};
 #end
-#foreach ( $field in $entity.fields.values() )
+#foreach ( $field in $entity.fields )
 	@JsonProperty	
 	private ${field.javaType} ${field.name};
 	
 	@JsonProperty("${field.name}")
 	public abstract ${field.javaType} get${field.capitalizedName}();
 #end
-#foreach ($relation in $entity.relations.values())
+#foreach ($relation in $entity.relations)
 	@JsonManagedReference(value="${entity.name}-${relation.type}")
 	@JsonInclude(JsonInclude.Include.NON_EMPTY)
 	private Set<${relation.type}BO> ${relation.label}s;
 #end
-#foreach ($inverseRelation in $entity.inverseRelations.values())
+#foreach ($inverseRelation in $entity.inverseRelations)
 	@JsonBackReference(value="${inverseRelation.name}-${entity.name}")
 	private ${inverseRelation.name}BO parent${inverseRelation.name};
 	
@@ -70,7 +70,7 @@ public abstract class ${entity.name}BaseMixIn {
 	public abstract void set${inverseRelation.name}(${inverseRelation.name}BO parent);	
 #end
 
-#foreach ($reference in $entity.references.values())
+#foreach ($reference in $entity.references)
   #if (!$reference.isExternal())
 	@JsonProperty
 	private ${reference.type}BO ${reference.name};

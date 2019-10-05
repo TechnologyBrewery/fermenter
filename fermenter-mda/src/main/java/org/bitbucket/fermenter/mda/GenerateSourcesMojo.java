@@ -232,7 +232,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
 
     private ModelRepositoryConfiguration createMetadataConfiguration() throws MalformedURLException {
         ModelRepositoryConfiguration config = new ModelRepositoryConfiguration();
-        config.setCurrentApplicationName(project.getArtifactId());
+        config.setArtifactId(project.getArtifactId());
         config.setBasePackage(basePackage);
 
         List<String> targetedArtifactIds = new ArrayList<>();

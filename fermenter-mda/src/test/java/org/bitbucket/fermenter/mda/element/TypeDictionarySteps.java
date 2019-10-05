@@ -80,7 +80,7 @@ public class TypeDictionarySteps {
         encounteredException = null;
         try {
             ModelRepositoryConfiguration config = new ModelRepositoryConfiguration();
-            config.setCurrentApplicationName("fermenter-mda");
+            config.setArtifactId("fermenter-mda");
             Map<String, ModelInstanceUrl> metadataUrlMap = config.getMetamodelInstanceLocations();
 
             File sourceParentDirectory = dictionaryTypeDirectory.getParentFile();

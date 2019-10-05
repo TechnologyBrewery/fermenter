@@ -7,6 +7,11 @@
     "name" : "name",
     "type" : "string",
     "documentation" : "The friendly domain moniker"
+  }, {
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "name" : "anEnumeratedValue",
+    "type" : "SimpleDomainEnumeration",
+    "column" : "SIMPLE_DOMAIN_ENUM"
   } ],
   "references" : [ {
     "name" : "requiredReference",

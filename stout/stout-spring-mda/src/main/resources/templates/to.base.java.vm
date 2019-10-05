@@ -14,9 +14,6 @@ import ${import};
 import ${reference.importPrefix}.transfer.${reference.type};
 #end
 #end
-#foreach ($composite in $entity.composites)
-import ${basePackage}.transfer.${composite.type}Composite;
-#end
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -68,16 +65,13 @@ public class ${entity.name}Base implements TransferObject {
 #foreach ($reference in $entity.references)
 	private ${reference.type} ${reference.name};
 #end
-#foreach ($composite in $composites)
-	private ${composite.type}Composite ${composite.name}Composite;
-#end
 
 #foreach ( $idField in $entity.idFields )
 
 	/**
-	 * Get the ${idField.label}
+	 * Get the ${idField.name}
 	 *
-	 * @return The ${idField.label}
+	 * @return The ${idField.name}
 	 */
 	@JsonProperty("${idField.name}")
 	public ${idField.javaType} get${idField.capitalizedName}() {
@@ -85,9 +79,9 @@ public class ${entity.name}Base implements TransferObject {
 	}
 	
 	/**
-	 * Set the ${idField.label}
+	 * Set the ${idField.name}
 	 *
-	 * @param ${idField.type} The ${idField.label}
+	 * @param ${idField.type} The ${idField.name}
 	 */
 	public void set${idField.capitalizedName}(${idField.javaType} ${idField.name}) {
 		this.${idField.name} = ${idField.name};
@@ -119,10 +113,10 @@ public class ${entity.name}Base implements TransferObject {
 #if ($field.documentation)
 	 * Gets: ${field.documentation}
 #else
-	 * Get the ${field.label}
+	 * Get the ${field.name}
 #end
 	 *
-	 * @return The ${field.label}
+	 * @return The ${field.name}
 	 */
 	@JsonProperty("${field.name}")
 	public ${field.javaType} get${field.capitalizedName}() {
@@ -133,10 +127,10 @@ public class ${entity.name}Base implements TransferObject {
 #if ($field.documentation)
 	 * Sets: ${field.documentation}
 #else
-	 * Set the ${field.label}
+	 * Set the ${field.name}
 #end
 	 *
-	 * @param ${field.type} The ${field.label}
+	 * @param ${field.type} The ${field.name}
 	 */
 	public void set${field.capitalizedName}(${field.javaType} ${field.name}) {
 		this.${field.name} = ${field.name};
@@ -161,20 +155,6 @@ public class ${entity.name}Base implements TransferObject {
 	@JsonIgnore
 	public ${inverseRelation.name} get${inverseRelation.name}() {
 		return parent${inverseRelation.name};
-	}
-#end
-#foreach ($composite in $entity.composites)
-	/**
-	 * Get the ${composite.label} composite for this instance.
-	 *
-	 * @return The ${composite.label} composite
-	 */
-	public ${composite.type}Composite get${composite.capitalizedName}Composite() {
-		if (${composite.name}Composite == null) {
-			${composite.name}Composite = new ${composite.type}Composite();
-		}
-
-		return ${composite.name}Composite;
 	}
 #end
 #foreach ($relation in $entity.relations)

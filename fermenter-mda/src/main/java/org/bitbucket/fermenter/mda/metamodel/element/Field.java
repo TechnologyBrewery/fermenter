@@ -30,7 +30,7 @@ public interface Field extends Metamodel {
 	 * 
 	 * @return Returns the type.
 	 */
-	String getType();
+    String getType();
 
 	/**
 	 * Returns validation constraints for this field.
@@ -49,6 +49,12 @@ public interface Field extends Metamodel {
 	 */
 	Boolean isTransient();
 
+	/**
+     * @return Returns the default value.
+     */
+    String getDefaultValue();
+
+    
 	/**
 	 * @return Returns the generator.
 	 */

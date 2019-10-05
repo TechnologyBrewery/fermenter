@@ -1,0 +1,13 @@
+{
+  "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "name" : "StringKeyedEntity",
+  "documentation" : "Entity that demonstrates using a string as a primary key",
+  "table" : "STRING_KEYED_ENTITY",
+  "identifier" : {
+    "package" : null,
+    "name" : "id",
+    "type" : "string",
+    "column" : "STRING_KEYED_ENTITY_ID",
+    "required" : true
+  }
+}

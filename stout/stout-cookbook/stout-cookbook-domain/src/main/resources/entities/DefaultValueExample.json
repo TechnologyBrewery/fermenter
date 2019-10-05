@@ -15,8 +15,20 @@
     "package" : null,
     "name" : "bigDecimalValue",
     "type" : "big_decimal",
-    "column" : "BIG_DECIMAL_COLUMN",
-    "defaultValue" : 3.141592645
+    "column" : "BIG_DECIMAL",
+    "defaultValue" : "3.141592645"
+  }, {
+    "package" : null,
+    "name" : "someTimestamp",
+    "type" : "timestamp",
+    "column" : "SOME_TIMESTAMP",
+    "defaultValue" : "2022-07-16 04:26:19"
+  }, {
+    "package" : null,
+    "name" : "someInteger",
+    "type" : "integer",
+    "column" : "SOME_INTEGER",
+    "defaultValue" : "1"
   }, {
     "package" : null,
     "name" : "name",
@@ -30,7 +42,13 @@
     "type" : "long",
     "column" : "LONG1",
     "documentation" : "A relevant number for this domain",
-    "defaultValue" : 31415926
+    "defaultValue" : "31415926"
+  }, {
+    "package" : null,
+    "name" : "someDate",
+    "type" : "date",
+    "column" : "SOME_DATE",
+    "defaultValue" : "2022-07-16"
   }, {
     "package" : null,
     "name" : "aMESSYNameThatConfusesJson",
@@ -49,6 +67,6 @@
     "name" : "standardBoolean",
     "type" : "boolean",
     "column" : "STANDARD_BOOLEAN",
-    "defaultValue" : false
-  }]
+    "defaultValue" : "false"
+  } ]
 }

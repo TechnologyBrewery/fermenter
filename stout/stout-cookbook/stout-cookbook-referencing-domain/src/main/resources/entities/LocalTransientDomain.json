@@ -1,33 +1,23 @@
 {
   "package" : "org.bitbucket.askllc.fermenter.cookbook.referencing.domain",
-  "name" : "LocalDomain",
-  "documentation" : "A local persistent domain with external references to persistent and transient entities",
-  "table" : "LOCAL_DOMAIN",
-  "identifier" : {
-    "package" : null,
-    "name" : "id",
-    "type" : "uuid",
-    "column" : "LOCAL_DOMAIN_ID",
-    "required" : true,
-    "generator" : "uuid"
-  },
+  "name" : "LocalTransientDomain",
+  "documentation" : "A transient local domain entity with external reference to a persistent entity",
   "fields" : [ {
     "package" : null,
     "name" : "name",
     "type" : "string",
-    "column" : "NAME",
-    "documentation" : "The friendly domain moniker"
+    "documentation" : "The name of local domain"
   } ],
   "references" : [ {
     "name" : "externalReference",
     "type" : "ValidationReferencedObject",
     "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
-    "localColumn" : "VALIDATION_REF_OBJECT_VALIDATION_REF_OBJECT_ID",
-    "required" : true
+    "localColumn" : "VALIDATION_REF_OBJECT_VALIDATION_REF_OBJECT_ID"
   }, {
     "name" : "externalTransientReference",
     "type" : "ValidationTransientReferencedObject",
     "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
     "required" : true
-  } ]
+  } ],
+  "transient" : true
 }

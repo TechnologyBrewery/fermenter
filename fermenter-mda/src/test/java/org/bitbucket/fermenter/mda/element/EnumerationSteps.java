@@ -119,7 +119,7 @@ public class EnumerationSteps {
 
         try {
             ModelRepositoryConfiguration config = new ModelRepositoryConfiguration();
-            config.setCurrentApplicationName("fermenter-mda");
+            config.setArtifactId("fermenter-mda");
             config.setBasePackage(currentBasePackage);
             Map<String, ModelInstanceUrl> metadataUrlMap = config.getMetamodelInstanceLocations();
             metadataUrlMap.put("fermenter-mda", new ModelInstanceUrl("fermenter-mda", enumerationsDirectory.getParentFile().toURI().toString()));

@@ -1,17 +1,21 @@
 package org.bitbucket.fermenter.stout.mda;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.bitbucket.fermenter.mda.metamodel.element.Operation;
 import org.bitbucket.fermenter.mda.metamodel.element.Parameter;
 import org.bitbucket.fermenter.mda.metamodel.element.Return;
+import org.jboss.resteasy.annotations.GZIP;
 
 /**
- * Decorates a {@link Operation} with Java-specific capabilities that focus on treating the operation as a *remote*
- * Java class. For instance, one that references TransferObjects instead of BusinessObjects.
+ * Decorates a {@link Operation} with Java-specific capabilities that focus on treating the operation as a *remote* Java
+ * class. For instance, one that references TransferObjects instead of BusinessObjects.
  */
 public class RemoteJavaOperation extends JavaOperation {
 
@@ -49,7 +53,7 @@ public class RemoteJavaOperation extends JavaOperation {
 
         return decoratedParameterList;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -58,4 +62,22 @@ public class RemoteJavaOperation extends JavaOperation {
         return wrapped.getTransactionAttribute();
     }
 
+    /**
+     * All imports for this operation, inclusive of parameters and the return.
+     * 
+     * @return imports
+     */
+    public Set<String> getImports() {
+        Set<String> importSet = new HashSet<>();
+        Return returnElement = addGenericImports(importSet);
+        
+        if (!isResponseTypeVoid()) {
+            String returnImport = JavaElementUtils.getJavaImportByPackageAndType(returnElement.getPackage(),
+                    returnElement.getType(), false);
+            if (JavaElementUtils.checkImportAgainstDefaults(returnImport)) {
+                importSet.add(returnImport);
+            }
+        }
+        return importSet;
+    }
 }

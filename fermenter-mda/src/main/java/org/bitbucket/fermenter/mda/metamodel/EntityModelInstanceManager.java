@@ -1,16 +1,21 @@
 package org.bitbucket.fermenter.mda.metamodel;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metamodel.element.Entity;
 import org.bitbucket.fermenter.mda.metamodel.element.EntityElement;
 import org.bitbucket.fermenter.mda.metamodel.element.Reference;
+import org.bitbucket.fermenter.mda.metamodel.element.Relation;
+import org.bitbucket.fermenter.mda.metamodel.element.RelationElement;
 
 /**
  * Responsible for maintaining the list of entity model instances elements in the system.
@@ -58,26 +63,83 @@ class EntityModelInstanceManager extends AbstractMetamodelManager<Entity> {
      *            packageName of entities to retrieve
      * @return ordered entities
      */
-    public Set<Entity> getNamesByDependencyOrder(String packageName) {                
+    public Set<Entity> getNamesByDependencyOrder(String packageName) {
         Map<String, List<String>> referencedObjects = new HashMap<>();
-        
+
         Map<String, Entity> rawEntities = this.getMetadataElementByPackage(packageName);
 
         for (Entity rawEntity : rawEntities.values()) {
             List<Reference> references = rawEntity.getReferences();
             for (Reference reference : references) {
-                List<String> inboundReferences = referencedObjects.computeIfAbsent(reference.getType(), f -> new ArrayList<>());
+                List<String> inboundReferences = referencedObjects.computeIfAbsent(reference.getType(),
+                        f -> new ArrayList<>());
                 inboundReferences.add(rawEntity.getName());
             }
         }
-        
+
         Set<Entity> dependencyOrderedEntities = new TreeSet<>(new EntityComparator(referencedObjects));
-        
+
         for (Entity rawEntity : rawEntities.values()) {
             dependencyOrderedEntities.add(rawEntity);
         }
 
         return dependencyOrderedEntities;
     }
+
+    /**
+     * Iterate over loaded domains and register each relation on its parent. This enables bi-directional referencing of
+     * relations. It is also important to note that while referring to a parent from a child is very similar to a
+     * reference, it is typically not similar enough to assume that it will be implemented in this fashion. Seperating
+     * them into their own collection ensures that they can be dealt with as appropriate for the target implementation.
+     */
+
+    protected void postLoadMetamodel() {
+
+        super.postLoadMetamodel();
+
+        EntityElement entity;
+        EntityElement childEntity;
+        RelationElement relation;
+        String relationType;
+        List<Relation> relationMap;
+        Iterator<Entity> entityMapIterator;
+        Iterator<Relation> relationValueInterator;
+
+        // Get the complete metadata map - if I get only get current application, client transfer objects does not get
+        // generated with parent references
+        Map<String, Entity> entityMap = getTargetMetadataMap();
+        entityMapIterator = (entityMap != null) ? entityMap.values().iterator() : Collections.EMPTY_LIST.iterator();
+        while (entityMapIterator.hasNext()) {
+            entity = (EntityElement) entityMapIterator.next();
+            relationMap = entity.getRelations();
+
+            relationValueInterator = (relationMap != null) ? relationMap.iterator() : Collections.EMPTY_LIST.iterator();
+            while (relationValueInterator.hasNext()) {
+                relation = (RelationElement) relationValueInterator.next();
+                relationType = relation.getType();
+                // TODO: check 1-M and 1-1 only:
+                childEntity = (EntityElement) entityMap.get(relationType);
+                if (childEntity != null) {
+                    childEntity.addInverseRelation(entity);
+                } else {
+                    throw new GenerationException("Could not find a relation to entity: " + relationType);
+                }
+            }
+
+        }
+    }
+    private Map<String, Entity>  getTargetMetadataMap() {
+        Map<String, Entity> entityMap = new HashMap<>();
+    
+        List<String> targetedArtifactIds = repoConfiguration.getTargetModelInstances();
+        for (String artifactId : targetedArtifactIds) {
+            Map<String, Entity> targetedModelMap = getMetadataByArtifactIdMap(artifactId);
+            if (targetedModelMap!= null) {
+                entityMap.putAll(targetedModelMap);
+            }
+        }
+        return entityMap;
+    }
+    
 
 }

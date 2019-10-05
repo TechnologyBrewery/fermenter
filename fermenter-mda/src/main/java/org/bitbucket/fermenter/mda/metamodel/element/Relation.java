@@ -1,5 +1,7 @@
 package org.bitbucket.fermenter.mda.metamodel.element;
 
+import java.util.Collection;
+
 import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -172,6 +174,10 @@ public interface Relation extends Validatable {
 		public String toString() {
 			return value;
 		}
+		
+		public String toUpperCase() {
+		    return value.toUpperCase();
+		}
 
 		/**
 		 * A comma-separated list of valid options.
@@ -195,5 +201,11 @@ public interface Relation extends Validatable {
 		}
 		
 	}
+	
+	/**
+     * Gets the key fields that the child class will reference for this relation
+     * @return The key fields
+     */
+    public Field getParentIdentifier(String parentEntityName);
 
 }

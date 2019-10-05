@@ -1,7 +1,6 @@
 package org.bitbucket.fermenter.stout.mda;
 
-
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.bitbucket.fermenter.mda.metamodel.element.Field;
 import org.bitbucket.fermenter.mda.metamodel.element.Relation;
 

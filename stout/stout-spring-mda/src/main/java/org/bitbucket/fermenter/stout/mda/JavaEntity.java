@@ -1,25 +1,26 @@
 package org.bitbucket.fermenter.stout.mda;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.LogFactory;
+import org.bitbucket.fermenter.mda.metamodel.element.Entity;
+import org.bitbucket.fermenter.mda.metamodel.element.Field;
+import org.bitbucket.fermenter.mda.metamodel.element.Parent;
+import org.bitbucket.fermenter.mda.metamodel.element.Reference;
+import org.bitbucket.fermenter.mda.metamodel.element.Relation;
+import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
+import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
+import org.bitbucket.fermenter.stout.bizobj.BasePersistentSpringBO;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.LogFactory;
-import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
-import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
-import org.bitbucket.fermenter.mda.metamodel.element.Entity;
-import org.bitbucket.fermenter.mda.metamodel.element.Field;
-import org.bitbucket.fermenter.mda.metamodel.element.Parent;
-import org.bitbucket.fermenter.mda.metamodel.element.Reference;
-import org.bitbucket.fermenter.mda.metamodel.element.Relation;
-import org.bitbucket.fermenter.stout.bizobj.BasePersistentSpringBO;
 
 /**
  * An {@link Entity} that has been decorated for easier generation of Java files.

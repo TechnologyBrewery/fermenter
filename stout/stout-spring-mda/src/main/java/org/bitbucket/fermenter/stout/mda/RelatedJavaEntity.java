@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.bitbucket.fermenter.mda.metamodel.element.Entity;
 import org.bitbucket.fermenter.mda.metamodel.element.Field;
 import org.bitbucket.fermenter.mda.metamodel.element.Relation;
@@ -24,7 +24,7 @@ public class RelatedJavaEntity extends JavaEntity {
     }
 
     public String getLabel() {
-        return StringUtils.uncapitalize(entity.getName());
+        return StringUtils.uncapitalise(entity.getName());
     }
 
     public Map getIdFields() {
@@ -84,4 +84,5 @@ public class RelatedJavaEntity extends JavaEntity {
     public Boolean isSelfRelation() {
         return (entity.getName().equals(parentEntity.getName())) ? Boolean.TRUE : Boolean.FALSE;
     }
+
 }

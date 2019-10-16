@@ -73,10 +73,10 @@ export class ${service.name}Service {
 
         let params = new HttpParams();
 #foreach( $param in $operation.parameters)
-#if($param.ismany())
-        for(const ${param.name} of ${param.name}s) {
-            if(${param.name} !== null && ${param.name} !== undefined) {
-                params = params.set('${param.name}', String(${param.name}));
+#if($param.isMany())
+        for(const ${param.name}Single of ${param.name}) {
+            if(${param.name}Single !== null && ${param.name}Single !== undefined) {
+                params = params.append('${param.name}', String(${param.name}Single));
             }
         }
 #else
@@ -156,9 +156,9 @@ export class ${service.name}Service {
 #foreach( $param in $operation.angularParameters)
 #if( !$param.isEntity() )
 ## for post calls entities are passed in the body, other params are query params
-#if( $param.ismany() )
-        for(const ${param.name} of ${param.name}s) {
-            params = params.set('${param.name}', String(${param.name}));
+#if( $param.isMany() )
+        for(const ${param.name}Single of ${param.name}) {
+            params = params.append('${param.name}', String(${param.name}Single));
         }
 #else## else for if is many
         params = params.set('${param.name}', String(${param.name}));

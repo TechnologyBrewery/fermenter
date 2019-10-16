@@ -271,4 +271,9 @@ public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServi
         return expectingThisToBeNull == null;
     }
 
+    @Override
+    protected Boolean listAsParamFromFrontendImpl(List<String> genericList) {
+        return genericList.size() == 2;
+    }
+
 }

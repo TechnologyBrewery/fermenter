@@ -19,6 +19,7 @@ export class E2eTestsPageComponent implements OnInit {
   countSimpleDomainTestResult = 'PENDING';
   findByExampleContainsTestResult = 'PENDING';
   nullParamTestResult = 'PENDING';
+  listParamTestResult = 'PENDING';
   deletedAllSimpleDomainsStatus = 'PENDING';
   TEST_PASSED = 'PASSED';
   TEST_FAILED = 'FAILED';
@@ -158,6 +159,15 @@ export class E2eTestsPageComponent implements OnInit {
         } else {
           this.nullParamTestResult = this.TEST_FAILED;
         }
+      });
+  }
+
+  runListParamTest() {
+    let array = ['val1', 'val2'];
+    this.simpleDomainManagerService
+      .listAsParamFromFrontend(array)
+      .subscribe(inputWasList => {
+        this.listParamTestResult = inputWasList ? this.TEST_PASSED : this.TEST_FAILED;
       });
   }
 

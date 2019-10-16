@@ -286,6 +286,20 @@
         "type" : "SimpleDomain",
         "pagedResponse": true
     }
+   }, {
+    "name" : "listAsParamFromFrontend",
+    "transactionAttribute" : "Supports",
+    "parameters" : [
+        {
+            "name": "genericList",
+            "type": "string",
+            "many": true
+        }
+    ],
+    "return" : {
+        "name" : "expectingTrue",
+        "type" : "boolean"
+    }
    }
  ]
 }

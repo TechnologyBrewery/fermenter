@@ -254,6 +254,32 @@ describe('Ale: Business Service Generation', () => {
     }
   ));
 
+  it('should be able to support providing array of inputs as query parameters', inject(
+    [SimpleDomainManagerService],
+    (simpleDomainManagerService: SimpleDomainManagerService) => {
+      const arrayOfSimpleDomains = new Array<string>();
+      arrayOfSimpleDomains.push('val1');
+      arrayOfSimpleDomains.push('val2');
+
+      simpleDomainManagerService
+        .listAsParamFromFrontend(arrayOfSimpleDomains)
+        .subscribe((response: boolean) => {
+          expect(response).toEqual(true);
+        });
+
+      const req = httpTestingController.expectOne(
+        request => request.url === simpleDomainMgrUrl + '/listAsParamFromFrontend'
+      );
+
+      expect(req.request.method).toEqual('GET');
+      expect(req.request.params.getAll('genericList').length).toEqual(2);
+
+      const mockResponse = new FermenterResponse<boolean>();
+      mockResponse.value = true;
+      req.flush(mockResponse);
+    }
+  ));
+
   it('should be able to support returning array of results', inject(
     [SimpleDomainManagerService],
     (simpleDomainManagerService: SimpleDomainManagerService) => {

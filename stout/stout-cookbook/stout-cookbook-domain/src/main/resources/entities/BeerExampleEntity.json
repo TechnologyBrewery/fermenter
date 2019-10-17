@@ -1,0 +1,20 @@
+{
+  "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "name" : "BeerExampleEntity",
+  "documentation" : "Entity that demonstrates uses a long as a generated value primary key",
+  "table" : "BEER_ENTITY",
+  "identifier" : {
+    "name" : "primaryKey",
+    "type" : "uuid",
+    "column" : "BEER_ENTITY_ID",
+    "required" : true,
+    "generator" : "uuid"
+  },
+  "fields" : [ {
+    "package" : null,
+    "name" : "beerType",
+    "type" : "string",
+    "documentation" : "What kind of beer this is",
+    "column" : "BEER_TYPE"
+  }]
+}

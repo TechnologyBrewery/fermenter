@@ -13,13 +13,15 @@ import { SimpleDomainMaintenanceService } from './generated/service/maintenance/
 import { GlobalErrorHandlerComponent } from './shared/global-error-handler/global-error-handler.component';
 import { ErrorDialogComponent } from './shared/error-dialog/error-dialog.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { E2eTestsPageComponent } from './e2e-tests-page/e2e-tests-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SimpleDomainComponent,
     GlobalErrorHandlerComponent,
-    ErrorDialogComponent
+    ErrorDialogComponent,
+    E2eTestsPageComponent
   ],
   imports: [
     BrowserModule,

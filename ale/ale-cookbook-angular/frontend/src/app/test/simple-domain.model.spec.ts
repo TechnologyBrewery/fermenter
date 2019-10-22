@@ -2,6 +2,7 @@ import { TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SimpleDomain } from '../shared/model/simple-domain.model';
 import { ValidationReferenceExample } from '../shared/model/validation-reference-example.model';
+import { LocalDomain } from '../shared/model/local-domain.model';
 
 describe('Ale Simple Domain Model Generation Validation', () => {
   beforeEach(async(() => {
@@ -89,5 +90,28 @@ describe('Ale Simple Domain Model Generation Validation', () => {
 
     const validationRef = new ValidationReferenceExample(validationRefJson);
     expect(validationRef.requiredReference.id).toEqual(testUUID);
+  });
+
+  it(`should NOT initialize a reference object if not present in the json`, () => {
+    const testUUID = 'd3d062f8-b4fb-4ca6-a6e9-36db76a6f47a';
+    const localDomainInJson: any = new Object();
+    localDomainInJson.id = testUUID;
+
+    const localDomain = new LocalDomain(localDomainInJson);
+
+    expect(localDomain.externalReference).toBeUndefined();
+    expect(localDomain.externalTransientReference).toBeUndefined();
+  });
+
+  it(`should initialize array but not associated objects (when many relationship) if not present in the json`, () => {
+    const simpleDomainTestName = 'I am the parent';
+    const simpleDomainJson: any = new Object();
+    simpleDomainJson.name = simpleDomainTestName;
+
+    const simpleDomain = new SimpleDomain(simpleDomainJson);
+    expect(simpleDomain.simpleDomainChilds).toBeDefined();
+    expect(simpleDomain.simpleDomainChilds.length).toBe(0);
+    expect(simpleDomain.simpleDomainEagerChilds).toBeDefined();
+    expect(simpleDomain.simpleDomainEagerChilds.length).toBe(0);
   });
 });

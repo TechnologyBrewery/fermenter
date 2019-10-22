@@ -16,8 +16,7 @@ import { ValidationExampleMaintenanceService } from '../generated/service/mainte
   styleUrls: ['./simple-domain.component.css']
 })
 export class SimpleDomainComponent implements OnInit {
-  findByExampleContainsTestResult = 'PENDING';
-  nullParamTestResult = 'PENDING';
+
   public simpleDomainAdding: SimpleDomain;
   public simpleDomainEditing: SimpleDomain;
   public simpleDomains = new Array<SimpleDomain>();
@@ -162,62 +161,4 @@ export class SimpleDomainComponent implements OnInit {
       });
   }
 
-  runFindByExampleContainsTest() {
-    const testSimpleDomain = new SimpleDomain();
-    const name = 'runFindByExampleContainsTest';
-    testSimpleDomain.name = name + 'uniqueENDING';
-
-    const findProbe = new SimpleDomain();
-    findProbe.name = name;
-    findProbe.simpleDomainChilds = undefined;
-    findProbe.simpleDomainEagerChilds = undefined;
-
-    const findCriteria = new FindByExampleCriteria<SimpleDomain>(
-      new SortWrapper('name'),
-      findProbe,
-      true,
-      0,
-      10000
-    );
-
-    const findByExampleRestCall = this.simpleDomainService.findByExample(
-      findCriteria
-    );
-    const postRestCallToSetupTestData = this.simpleDomainService.post(
-      testSimpleDomain
-    );
-
-    postRestCallToSetupTestData.subscribe(postResponse => {
-      findByExampleRestCall.subscribe(findResponse => {
-        const findByExampleContainsFoundTestSimpleDomain =
-          findResponse.content.length === 1 &&
-          findResponse.content[0].name.indexOf(name) >= 0;
-
-        if (findByExampleContainsFoundTestSimpleDomain) {
-          this.findByExampleContainsTestResult = 'PASSED';
-        } else {
-          this.findByExampleContainsTestResult = 'FAILED';
-          console.error(
-            'Failed to find ' +
-              name +
-              ' found (' +
-              findResponse.numberOfElements +
-              ') simple domains'
-          );
-        }
-        // delete test data once done
-        this.simpleDomainService.delete(postResponse.value.id).subscribe();
-      });
-    });
-  }
-
-  runNullParamTest() {
-    this.simpleDomainManagerService.provideNullInputFromFrontend(null).subscribe(inputWasNull => {
-      if(inputWasNull) {
-        this.nullParamTestResult = 'PASSED';
-      } else {
-        this.nullParamTestResult = 'FAILED';
-      }
-    })
-  }
 }

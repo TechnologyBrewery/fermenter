@@ -14,6 +14,8 @@ import com.google.common.base.MoreObjects;
 @JsonPropertyOrder({ "package", "type" })
 public class ReturnElement extends NamespacedMetamodelElement implements Return {
 
+    private static final String VOID = "void";
+
     @JsonProperty(required = true)
     protected String type;
 
@@ -79,7 +81,7 @@ public class ReturnElement extends NamespacedMetamodelElement implements Return 
     public void validate() {
         // default return type when not specified:
         if (StringUtils.isBlank(getType())) {
-            type = "void";
+            type = VOID;
         }
         
         // default many when not specified:
@@ -87,7 +89,7 @@ public class ReturnElement extends NamespacedMetamodelElement implements Return 
             many = Boolean.FALSE;
         }
 
-        if(isPagedResponse() && "void".equals(getType())) {
+        if(isPagedResponse() && VOID.equals(getType())) {
             messageTracker.addErrorMessage(
                     "Conflict: Operation " + getName() + " is marked as a paged response but return type is void.");
         }

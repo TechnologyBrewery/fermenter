@@ -5,29 +5,29 @@ import java.util.List;
 
 public class PageWrapper<T> {
 
-    private List<T> content = new ArrayList<T>();
-    private Integer size;
-    private Integer number;
+    private List<T> content = new ArrayList<>();
+    private Integer itemsPerPage;
+    private Integer startPage;
     private Integer totalPages;
-    private Long totalElements;
+    private Long totalResults;
     private Boolean isFirst;
     private Boolean isLast;
     private Integer numberOfElements;
 
-    public Integer getSize() {
-        return size;
+    public Integer getStartPage() {
+        return startPage;
     }
 
-    public void setSize(Integer size) {
-        this.size = size;
+    public void setStartPage(Integer startPage) {
+        this.startPage = startPage;
     }
 
-    public Integer getNumber() {
-        return number;
+    public Integer getItemsPerPage() {
+        return itemsPerPage;
     }
 
-    public void setNumber(Integer number) {
-        this.number = number;
+    public void setItemsPerPage(Integer itemsPerPage) {
+        this.itemsPerPage = itemsPerPage;
     }
 
     public Integer getTotalPages() {
@@ -38,15 +38,15 @@ public class PageWrapper<T> {
         this.totalPages = totalPages;
     }
 
-    public Long getTotalElements() {
-        return totalElements;
+    public Long getTotalResults() {
+        return totalResults;
     }
 
-    public void setTotalElements(Long totalElements) {
-        this.totalElements = totalElements;
+    public void setTotalResults(Long totalResults) {
+        this.totalResults = totalResults;
     }
 
-    public Boolean getFirst() {
+    public Boolean isFirst() {
         return isFirst;
     }
 
@@ -54,7 +54,7 @@ public class PageWrapper<T> {
         isFirst = first;
     }
 
-    public Boolean getLast() {
+    public Boolean isLast() {
         return isLast;
     }
 
@@ -73,7 +73,7 @@ public class PageWrapper<T> {
     public void setNumberOfElements(Integer numberOfElements) {
         this.numberOfElements = numberOfElements;
     }
-    
+
     public Integer getNumberOfElements() {
         return numberOfElements;
     }

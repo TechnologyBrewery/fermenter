@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,9 +36,16 @@ import cucumber.api.java.en.When;
 
 public class ServiceSteps {
 
-	private static final String TX_REQUIRED = "Required";
-	private static final String TX_SUPPORTS = "Supports";
-	private ObjectMapper objectMapper = new ObjectMapper();
+    private static final String INTEGER = "integer";
+    private static final String FERMENTER_MDA = "fermenter-mda";
+    private static final boolean IS_PAGED_RESPONSE_DISABLED = false;
+    private static final String TX_REQUIRED = "Required";
+    private static final String TX_SUPPORTS = "Supports";
+    private static final String DEFAULT_NAME = "NamedService";
+    private static final String DEFAULT_PACKAGE = "org.example";
+    private static final String DEFAULT_OPERATION = "defaultOperation";
+    private static final boolean IS_PAGED_RESPONSE_ENABLED = true;
+    private ObjectMapper objectMapper = new ObjectMapper();
     private MessageTracker messageTracker = MessageTracker.getInstance();
     private File servicesDirectory = new File("target/temp-metadata", "services");
 
@@ -59,59 +67,94 @@ public class ServiceSteps {
 
     @Given("^a service named \"([^\"]*)\" in \"([^\"]*)\"$")
     public void a_service_named_in(String name, String packageValue) throws Throwable {
-        createServiceElement(name, packageValue, null, null, null, null, false, false, null);
+        createServiceElement(name, packageValue, null, null, null, null, false, false, null,
+                IS_PAGED_RESPONSE_DISABLED);
     }
 
     @Given("^a service named \"([^\"]*)\" in \"([^\"]*)\" with an operation \"([^\"]*)\" with no parameters$")
     public void a_service_named_in_with_an_operation_with_no_parameters(String name, String packageValue,
             String operationName) throws Throwable {
-        createServiceElement(name, packageValue, operationName, null, null, null, false, false, TX_SUPPORTS);
+        createServiceElement(name, packageValue, operationName, null, null, null, false, false, TX_SUPPORTS,
+                IS_PAGED_RESPONSE_DISABLED);
     }
 
     @Given("^a service named \"([^\"]*)\" in \"([^\"]*)\" with an operation \"([^\"]*)\" with a void return type$")
     public void a_service_named_in_with_an_operation_with_a_void_return_type(String name, String packageValue,
             String operationName) throws Throwable {
-        createServiceElement(name, packageValue, operationName, "void", null, null, false, false, TX_REQUIRED);
+        createServiceElement(name, packageValue, operationName, "void", null, null, false, false, TX_REQUIRED,
+                IS_PAGED_RESPONSE_DISABLED);
     }
 
     @Given("^a service named \"([^\"]*)\" in \"([^\"]*)\" with an operation \"([^\"]*)\" with parameters \"([^\"]*)\" of type \"([^\"]*)\"$")
     public void a_service_named_in_with_an_operation_with_parameters_of_type(String name, String packageValue,
             String operationName, List<String> paramNames, List<String> paramValues) throws Throwable {
-        createServiceElement(name, packageValue, operationName, null, paramNames, paramValues, false, false, TX_SUPPORTS);
+        createServiceElement(name, packageValue, operationName, null, paramNames, paramValues, false, false,
+                TX_SUPPORTS, IS_PAGED_RESPONSE_DISABLED);
     }
 
     @Given("^a service named \"([^\"]*)\" in \"([^\"]*)\" with an operation \"([^\"]*)\" with the return type \"([^\"]*)\"$")
     public void a_service_named_in_with_an_operation_with_the_return_type(String name, String packageValue,
             String operationName, String returnType) throws Throwable {
-        createServiceElement(name, packageValue, operationName, returnType, null, null, false, false, TX_SUPPORTS);
+        createServiceElement(name, packageValue, operationName, returnType, null, null, false, false, TX_SUPPORTS,
+                IS_PAGED_RESPONSE_DISABLED);
     }
 
     @Given("^a service named \"([^\"]*)\" in \"([^\"]*)\" with an operation \"([^\"]*)\" with many parameters \"([^\"]*)\" of type \"([^\"]*)\"$")
     public void a_service_named_in_with_an_operation_with_many_parameters_of_type(String name, String packageValue,
             String operationName, List<String> paramNames, List<String> paramValues) throws Throwable {
-        createServiceElement(name, packageValue, operationName, null, paramNames, paramValues, false, true, TX_SUPPORTS);
+        createServiceElement(name, packageValue, operationName, null, paramNames, paramValues, false, true, TX_SUPPORTS,
+                IS_PAGED_RESPONSE_DISABLED);
     }
 
     @Given("^a service named \"([^\"]*)\" in \"([^\"]*)\" with an operation \"([^\"]*)\" with the many return type \"([^\"]*)\"$")
     public void a_service_named_in_with_an_operation_with_the_many_return_type(String name, String packageValue,
             String operationName, String returnType) throws Throwable {
-        createServiceElement(name, packageValue, operationName, returnType, null, null, true, false, TX_REQUIRED);
+        createServiceElement(name, packageValue, operationName, returnType, null, null, true, false, TX_REQUIRED,
+                IS_PAGED_RESPONSE_DISABLED);
     }
 
     @Given("^a service named \"([^\"]*)\" in \"([^\"]*)\" with an operation \"([^\"]*)\" with the transaction attribute \"([^\"]*)\"$")
     public void a_service_named_in_with_an_operation_with_the_transaction_attribute(String name, String packageValue,
             String operationName, String transactionAttribute) throws Throwable {
-        createServiceElement(name, packageValue, operationName, "void", null, null, false, false, transactionAttribute);
+        createServiceElement(name, packageValue, operationName, "void", null, null, false, false, transactionAttribute,
+                IS_PAGED_RESPONSE_DISABLED);
     }
-    
+
     @Given("^a service named \"([^\"]*)\" in \"([^\"]*)\" with an operation \"([^\"]*)\" with a void return type in default$")
-    public void a_service_named_in_with_an_operation_with_a_void_return_type_in_default(String name, String packageValue, String operationName) throws Throwable {
-    	createServiceElement(name, packageValue, operationName, "void", null, null, false, false, null);
+    public void a_service_named_in_with_an_operation_with_a_void_return_type_in_default(String name,
+            String packageValue, String operationName) throws Throwable {
+        createServiceElement(name, packageValue, operationName, "void", null, null, false, false, null,
+                IS_PAGED_RESPONSE_DISABLED);
+    }
+
+    @Given("^a service with an operation named \"([^\"]*)\" with paged response \"([^\"]*)\"$")
+    public void a_service_with_an_operation_named_with_paged_response(String operationName, String isEnabled)
+            throws Throwable {
+        boolean isPagedResponseEnabled = "enabled".equals(isEnabled);
+        createServiceElement(DEFAULT_NAME, DEFAULT_PACKAGE, operationName, INTEGER, null, null, true, false, null,
+                isPagedResponseEnabled);
+    }
+
+    @Given("^a service with an operation named \"([^\"]*)\" with pagedResponse enabled and return type is void$")
+    public void a_service_with_an_operation_named_with_pagedResponse_enabled_and_return_type_is_void(String arg1)
+            throws Throwable {
+        createServiceElement(DEFAULT_NAME, DEFAULT_PACKAGE, DEFAULT_OPERATION, "void", null, null, true, false, null,
+                IS_PAGED_RESPONSE_ENABLED);
+    }
+
+    @Given("^a service with with a paged operation with \"([^\"]*)\" parameters$")
+    public void the_operation_has_as_parameters(List<String> parameters) throws Throwable {
+        List<String> parameterTypes = new ArrayList<>();
+        for (int i = 0; i < parameters.size(); i++) {
+            parameterTypes.add(INTEGER);
+        }
+        createServiceElement(DEFAULT_NAME, DEFAULT_PACKAGE, DEFAULT_OPERATION, INTEGER, parameters, parameterTypes,
+                true, false, null, IS_PAGED_RESPONSE_ENABLED);
     }
 
     private void createServiceElement(String name, String packageValue, String operationName, String returnType,
             List<String> paramNames, List<String> paramTypes, boolean useManyResponse, boolean useManyParams,
-            String transaction) throws Throwable {
+            String transaction, boolean isPagedResponse) throws Throwable {
         ServiceElement service = new ServiceElement();
         if (StringUtils.isNotBlank(name)) {
             service.setName(name);
@@ -138,8 +181,9 @@ public class ServiceSteps {
                     i++;
                 }
 
-                if (paramNames.size() == 0 && paramTypes.size() > 0) {
-                    // for testing, allow a parameter with no name in this situation:
+                if (paramNames.isEmpty() && !paramTypes.isEmpty()) {
+                    // for testing, allow a parameter with no name in this
+                    // situation:
                     ParameterElement noNameParameter = new ParameterElement();
                     noNameParameter.setType(paramTypes.iterator().next());
                     operation.getParameters().add(noNameParameter);
@@ -147,16 +191,13 @@ public class ServiceSteps {
 
             }
 
-            ReturnElement returnElement = createReturnElementForOperation(returnType, useManyResponse);
+            ReturnElement returnElement = createReturnElementForOperation(returnType, useManyResponse, isPagedResponse);
 
             operation.setReturn(returnElement);
-
         }
 
         serviceFile = new File(servicesDirectory, name + ".json");
         objectMapper.writeValue(serviceFile, service);
-        // TODO: remove
-        System.out.println(objectMapper.writeValueAsString(service));
         assertTrue("Services not written to file!", serviceFile.exists());
 
         currentBasePackage = packageValue;
@@ -166,7 +207,7 @@ public class ServiceSteps {
             String paramName) {
         ParameterElement parameter = new ParameterElement();
         parameter.setName(paramName);
-        String type = paramTypes != null && paramTypes.size() > 0 ? paramTypes.get(i) : null;
+        String type = paramTypes != null && !paramTypes.isEmpty() ? paramTypes.get(i) : null;
         parameter.setType(type);
         if (useManyParams) {
             parameter.setMany(true);
@@ -174,7 +215,8 @@ public class ServiceSteps {
         return parameter;
     }
 
-    private ReturnElement createReturnElementForOperation(String returnType, boolean useManyResponse) {
+    private ReturnElement createReturnElementForOperation(String returnType, boolean useManyResponse,
+            boolean isPagedResponse) {
         ReturnElement returnElement = new ReturnElement();
         if (returnType == null) {
             returnElement.setType("void");
@@ -187,6 +229,8 @@ public class ServiceSteps {
         if (useManyResponse) {
             returnElement.setMany(true);
         }
+
+        returnElement.setPagedResponse(isPagedResponse);
         return returnElement;
     }
 
@@ -196,11 +240,11 @@ public class ServiceSteps {
 
         try {
             ModelRepositoryConfiguration config = new ModelRepositoryConfiguration();
-            config.setCurrentApplicationName("fermenter-mda");
+            config.setCurrentApplicationName(FERMENTER_MDA);
             config.setBasePackage(currentBasePackage);
             Map<String, ModelInstanceUrl> metadataUrlMap = config.getMetamodelInstanceLocations();
-            metadataUrlMap.put("fermenter-mda",
-                    new ModelInstanceUrl("fermenter-mda", servicesDirectory.getParentFile().toURI().toString()));
+            metadataUrlMap.put(FERMENTER_MDA,
+                    new ModelInstanceUrl(FERMENTER_MDA, servicesDirectory.getParentFile().toURI().toString()));
 
             metadataRepo = new DefaultModelInstanceRepository(config);
             metadataRepo.load();
@@ -268,15 +312,48 @@ public class ServiceSteps {
             String packageValue, String expectedReturnType) throws Throwable {
         validateReturnType(operationName, name, packageValue, expectedReturnType, true);
     }
-    
+
     @Then("^an operation \"([^\"]*)\" is found on service \"([^\"]*)\" in \"([^\"]*)\" with the transaction attribute \"([^\"]*)\"$")
     public void an_operation_is_found_on_service_in_with_the_transaction_attribute(String operationName, String name,
             String packageValue, String expectedTransactionAttribute) throws Throwable {
         validateLoadedServices(name, packageValue, null, null, null, null, false);
         Operation foundOperation = getOperationFromLoadedService(operationName);
         String foundTransactionAttribute = foundOperation.getTransactionAttribute();
-        assertEquals("Unexpected transaction attribute value!", expectedTransactionAttribute, foundTransactionAttribute);
-    }    
+        assertEquals("Unexpected transaction attribute value!", expectedTransactionAttribute,
+                foundTransactionAttribute);
+    }
+
+    @Then("^a service metamodel instance is returned with operation \"([^\"]*)\" with paged response \"([^\"]*)\"$")
+    public void a_service_metamodel_instance_is_returned_with_operation_with_paged_response(String operationName,
+            String expectedIsPagedResponse) throws Throwable {
+        validateLoadedServices(DEFAULT_NAME, DEFAULT_PACKAGE, null, null, null, null, false);
+        Operation foundOperation = getOperationFromLoadedService(operationName);
+        assertNotNull("Failed to find the expected operation!", foundOperation);
+        boolean expectedIsPagedResponseAsBoolean = "enabled".equals(expectedIsPagedResponse);
+        assertEquals("Unexpected isPagedResponse value!", expectedIsPagedResponseAsBoolean,
+                foundOperation.getReturn().isPagedResponse());
+    }
+
+    @Then("^an error is thrown for \"([^\"]*)\" because you cannot have pagedResponse enabled and return type is void$")
+    public void an_error_is_thrown_for_because_you_cannot_have_pagedResponse_enabled_and_return_type_is_void(
+            String arg1) throws Throwable {
+        assertNotNull("Expected to have encountered an error!", encounteredException);
+    }
+
+    @Then("^the operation has \"([^\"]*)\" parameters which now included as the last two parameters$")
+    public void the_operation_has_parameters_which_now_included_as_parameters(List<String> expectedParameters)
+            throws Throwable {
+        validateLoadedServices(DEFAULT_NAME, DEFAULT_PACKAGE, null, null, null, null, false);
+        Operation foundOperation = getOperationFromLoadedService(DEFAULT_OPERATION);
+        List<Parameter> actualParameters = foundOperation.getParameters();
+        assertEquals("The number of parameters didn't match!", expectedParameters.size(), actualParameters.size());
+
+        for (int i = 0; i < expectedParameters.size(); i++) {
+            String expectedParameter = expectedParameters.get(i);
+            Parameter actualParameter = actualParameters.get(i);
+            assertEquals(expectedParameter, actualParameter.getName());
+        }
+    }
 
     private void validateParameters(String operationName, String name, String packageValue,
             List<String> expectedParamNames, List<String> expectedParamValues, boolean expectedManyValue) {

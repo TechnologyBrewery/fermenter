@@ -6,22 +6,22 @@
  *******************************************************/
 export class PageWrapperBase<T> {
   public content: Array<T>;
-  public size: number;
-  public number: number;
+  public itemsPerPage: number;
+  public startPage: number;
   public totalPages: number;
-  public totalElements: number;
-  public first: boolean;
-  public last: boolean;
+  public totalResults: number;
+  public isFirst: boolean;
+  public isLast: boolean;
   public numberOfElements: number;
 
   constructor(pageWrapperBase?: PageWrapperBase<T>) {
     if (pageWrapperBase) {
-      this.size = pageWrapperBase.size;
-      this.number = pageWrapperBase.number;
+      this.itemsPerPage = pageWrapperBase.itemsPerPage;
+      this.startPage = pageWrapperBase.startPage;
       this.totalPages = pageWrapperBase.totalPages;
-      this.totalElements = pageWrapperBase.totalElements;
-      this.first = pageWrapperBase.first;
-      this.last = pageWrapperBase.last;
+      this.totalResults = pageWrapperBase.totalResults;
+      this.isFirst = pageWrapperBase.isFirst;
+      this.isLast = pageWrapperBase.isLast;
       this.numberOfElements = pageWrapperBase.numberOfElements;
 
       // NOTE: we do not parse the content here as we can't effectively create new abstract objects of type T

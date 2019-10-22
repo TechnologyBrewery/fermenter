@@ -10,14 +10,16 @@
       "documentation" : "enumeration value"
     } ],
     "return" : {
-      "type" : "void"
+      "type" : "void",
+      "pagedResponse" : false
     }
   }, {
     "name" : "ReturnSingleEnumeratedValue",
     "transactionAttribute" : "Supports",
     "parameters" : [ ],
     "return" : {
-      "type" : "SimpleDomainEnumeration"
+      "type" : "SimpleDomainEnumeration",
+      "pagedResponse" : false
     }
   }, {
     "name" : "ReturnMultipleEnumeratedValue",
@@ -25,7 +27,8 @@
     "parameters" : [ ],
     "return" : {
       "type" : "SimpleDomainEnumeration",
-      "many" : true
+      "many" : true,
+      "pagedResponse" : false
     }
   }, {
     "name" : "PassInMultipleEnumeratedValues",
@@ -36,7 +39,8 @@
       "documentation" : "enumeration value"
     } ],
     "return" : {
-      "type" : "void"
+      "type" : "void",
+      "pagedResponse" : false
     }
   } ]
 }

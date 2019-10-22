@@ -10,12 +10,20 @@ import org.bitbucket.fermenter.stout.authz.Action;
 
 import org.bitbucket.fermenter.stout.messages.AbstractMsgMgrAwareService;
 import org.bitbucket.fermenter.stout.messages.DefaultMessages;
+import org.bitbucket.fermenter.stout.messages.Message;
+import org.bitbucket.fermenter.stout.messages.MessageFactory;
+import org.bitbucket.fermenter.stout.messages.MessageManager;
+import org.bitbucket.fermenter.stout.messages.Severity;
+import org.bitbucket.fermenter.stout.messages.MessageUtils;
 
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
+import org.bitbucket.fermenter.stout.page.PageWrapper;
+import org.bitbucket.fermenter.stout.page.PageMapper;
 
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
 
 import java.math.BigDecimal;
 
@@ -24,6 +32,8 @@ import ${basePackage}.service.rest.${service.name}Service;
 /**
  * Service implementation class for the ${service.name} service
  * @see ${basePackage}.service.rest.${service.name}Service
+ * 
+ * Generated from service.base.impl.java.vm
  */ 
 public abstract class ${service.name}BaseServiceImpl extends AbstractMsgMgrAwareService implements ${service.name}Service {
 
@@ -36,7 +46,9 @@ public abstract class ${service.name}BaseServiceImpl extends AbstractMsgMgrAware
 	 */
 	@Transactional(propagation=Propagation.${operation.transactionAttribute})
 	@Override
-	#if($operation.return.isMany())	 
+	#if($operation.return.isPagedResponse())
+	public ValueServiceResponse<PageWrapper<${operation.return.javaType}>> ${operation.uncapitalizedName}(${operation.signature}) {
+	#elseif($operation.return.isMany())	 
 	public ValueServiceResponse<Collection<${operation.return.javaType}>> ${operation.uncapitalizedName}(${operation.signature}) {
 	#elseif($operation.isResponseTypeVoid())
 	public VoidServiceResponse ${operation.uncapitalizedName}(${operation.signature}) {
@@ -47,7 +59,19 @@ public abstract class ${service.name}BaseServiceImpl extends AbstractMsgMgrAware
 		assertAuthorization(PATH + "/${operation.uncapitalizedName}", Action.EXECUTE);
 	
 		
-	#if( $operation.return.isMany() )
+	#if( $operation.return.isPagedResponse() )
+        ValueServiceResponse<PageWrapper<${operation.return.javaType}>> response = null;
+        if(startPage == null || startPage < 0) {
+            Message msg = MessageUtils.createErrorMessage("service.paged.requires.start.page", null, null);
+            MessageManager.addMessage(msg);
+		}
+		if(count == null || count < 0) {
+            Message msg = MessageUtils.createErrorMessage("service.paged.requires.count", null, null);
+            MessageManager.addMessage(msg);
+        }
+        if(!MessageManager.hasErrorMessages()) {
+		Page<${operation.return.javaType}> result =
+	#elseif( $operation.return.isMany() )
 		Collection<${operation.return.javaType}> result =
 	#elseif( $operation.isResponseTypeVoid() )
 	#else
@@ -59,7 +83,13 @@ public abstract class ${service.name}BaseServiceImpl extends AbstractMsgMgrAware
 	#end
 		);
 		
-	#if($operation.return.isMany())
+	#if($operation.return.isPagedResponse())
+        PageWrapper<${operation.return.javaType}> resultMappedToPageWrapper = (new PageMapper<${operation.return.javaType}>()).mapToPageWrapper(result);
+		response = new ValueServiceResponse<>(resultMappedToPageWrapper);
+        } else {
+            response = new ValueServiceResponse<>(null);
+        }
+	#elseif($operation.return.isMany())
 		ValueServiceResponse<Collection<${operation.return.javaType}>> response = new ValueServiceResponse<>(result);
 	#elseif( $operation.isResponseTypeVoid() )
 		VoidServiceResponse response = new VoidServiceResponse();
@@ -82,13 +112,17 @@ public abstract class ${service.name}BaseServiceImpl extends AbstractMsgMgrAware
 			#end
 		#end
 	#end
-	#if($operation.return.isMany())	 
+	#if($operation.return.isPagedResponse())	 
+	 * @return A page of {@link ${operation.returnManyTypeAsBO}}
+	#elseif($operation.return.isMany())	 
 	 * @return A {@link Collection} of {@link ${operation.returnManyTypeAsBO}}
 	#elseif($operation.isResponseTypeVoid()) 	 
 	 * @return A instance of {@link ${operation.returnManyTypeAsBO}}
 	#end
 	 */
-	#if($operation.return.isMany())	 
+	#if($operation.return.isPagedResponse())	 
+	protected abstract Page<${operation.return.javaType}> ${operation.uncapitalizedName}Impl(${operation.signature});
+	#elseif($operation.return.isMany())	 
 	protected abstract Collection<${operation.return.javaType}> ${operation.uncapitalizedName}Impl(${operation.signature});
 	#elseif($operation.isResponseTypeVoid())
 	protected abstract void ${operation.uncapitalizedName}Impl(${operation.signature});

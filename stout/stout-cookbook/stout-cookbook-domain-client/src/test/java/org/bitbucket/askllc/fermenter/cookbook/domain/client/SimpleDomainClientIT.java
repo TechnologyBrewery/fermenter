@@ -198,7 +198,7 @@ public class SimpleDomainClientIT extends RunTestsWithinArquillianWar {
         PageWrapper<SimpleDomain> allSimpleDomains = simpleDomainMaintenanceDelagte.findByExample(criteria);
         MessageTestUtils.assertNoErrorMessages();
 
-        assertEquals(new Long(numSimpleDomains), allSimpleDomains.getTotalElements());
+        assertEquals(new Long(numSimpleDomains), allSimpleDomains.getTotalResults());
         boolean responseContainsLastCreatedSimpleDomain = false;
         for(SimpleDomain simpleDomain : allSimpleDomains.getContent()) {
             if(simpleDomain.getName().equals(lastCreatedSimpleDomain.getName())) {

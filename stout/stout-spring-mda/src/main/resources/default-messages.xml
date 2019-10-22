@@ -95,4 +95,24 @@
 	<message key="bulk.operation.failed">
 		<summary>The operation failed for the following ids {0}</summary>
 	</message>
+    
+    <message key="find.by.example.requires.sort">
+        <summary>When searching by example, a valid sort is required.</summary>
+    </message>
+    
+    <message key="find.by.example.requires.start.page">
+        <summary>When searching by example, a valid startPage is required.</summary>
+    </message>
+    
+    <message key="find.by.example.requires.count">
+        <summary>When searching by example, a valid count is required.</summary>
+    </message>
+    
+    <message key="service.paged.requires.start.page">
+        <summary>When using a paged service, startPage must be a positive integer.</summary>
+    </message>
+    
+    <message key="service.paged.requires.count">
+        <summary>When using a paged service, count must be a positive integer.</summary>
+    </message>
 </messages>

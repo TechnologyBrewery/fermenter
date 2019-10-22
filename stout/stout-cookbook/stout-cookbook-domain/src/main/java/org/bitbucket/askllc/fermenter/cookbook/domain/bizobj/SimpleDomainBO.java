@@ -17,7 +17,9 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.json.SimpleDomain
 import org.bitbucket.fermenter.stout.util.SpringAutowiringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 /**
  * Business object for the SimpleDomain entity.
@@ -30,109 +32,118 @@ import org.springframework.data.domain.PageRequest;
 @Table(name = "SIMPLE_DOMAIN")
 public class SimpleDomainBO extends SimpleDomainBaseBO {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(SimpleDomainBO.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SimpleDomainBO.class);
 
-	/**
-	 * Developers may create additional persistent properties and/or relationships as needed if native support for the
-	 * desired type/relation isn't immediately supported by Fermenter. This property's serialization logic is defined in
-	 * {@link SimpleDomainMixIn}
-	 */
-	@Lob
-	@Column(name = "LARGE_STRING")
-	private String largeString;
+    /**
+     * Developers may create additional persistent properties and/or
+     * relationships as needed if native support for the desired type/relation
+     * isn't immediately supported by Fermenter. This property's serialization
+     * logic is defined in {@link SimpleDomainMixIn}
+     */
+    @Lob
+    @Column(name = "LARGE_STRING")
+    private String largeString;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "UPDATED_AT")
-	@NotNull
-	private Date updatedAt;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "UPDATED_AT")
+    @NotNull
+    private Date updatedAt;
 
-	public SimpleDomainBO() {
-		super();
-		SpringAutowiringUtil.autowireBizObj(this);
-	}
+    public SimpleDomainBO() {
+        super();
+        SpringAutowiringUtil.autowireBizObj(this);
+    }
 
-	public static void deleteAllSimpleDomain() {
-		getDefaultRepository().deleteAllInBatch();
-	}
-	
-	@Override
-	protected Logger getLogger() {
-		return LOGGER;
-	}
+    public static void deleteAllSimpleDomain() {
+        getDefaultRepository().deleteAllInBatch();
+    }
 
-	@Override
-	protected void complexValidation() {
+    @Override
+    protected Logger getLogger() {
+        return LOGGER;
+    }
 
-	}
-	
-	public static List<SimpleDomainBO> findAllLazyLoadSimpleDomainChild() {
-		return getDefaultRepository().findAll();
-	}
+    @Override
+    protected void complexValidation() {
 
-	public static List<SimpleDomainBO> findAll() {
-		return getDefaultRepository().findAll(eagerFetchRelations());
-	}
+    }
 
-	public static List<SimpleDomainBO> findAll(int startPage, int pageSize) {
-		return getDefaultRepository().findAllEagerFetchRelations(new PageRequest(startPage, pageSize)).getContent();
-	}
+    public static List<SimpleDomainBO> findAllLazyLoadSimpleDomainChild() {
+        return getDefaultRepository().findAll();
+    }
 
-	public static void deleteAll() {
-		getDefaultRepository().deleteAll();
-	}
+    public static List<SimpleDomainBO> findAll() {
+        return getDefaultRepository().findAll(eagerFetchRelations());
+    }
 
-	public static List<SimpleDomainBO> findByType(String type) {
-		return getDefaultRepository().findByType(type);
-	}
+    public static List<SimpleDomainBO> findAll(int pageIndex, int pageSize) {
+        return getDefaultRepository().findAllEagerFetchRelations(new PageRequest(pageIndex, pageSize)).getContent();
+    }
 
-	public String getLargeString() {
-		return largeString;
-	}
+    public static Page<SimpleDomainBO> findAllPaged(int pageIndex, int pageSize) {
+        return getDefaultRepository().findAll(new PageRequest(pageIndex, pageSize));
+    }
 
-	public void setLargeString(String largeString) {
-		this.largeString = largeString;
-	}
+    public static void deleteAll() {
+        getDefaultRepository().deleteAll();
+    }
 
-	public Date getUpdatedAt() {
-		return this.updatedAt;
-	}
+    public static List<SimpleDomainBO> findByType(String type) {
+        return getDefaultRepository().findByType(type);
+    }
 
-	@Override
-	protected void defaultComplexValues() {
-		
-		if (StringUtils.isBlank(getType())) {
-			setType(RandomStringUtils.randomAlphabetic(3));
-		}
-		
-		if (StringUtils.isBlank(getLargeString())) {
-		    setLargeString(RandomStringUtils.randomAlphanumeric(50));
-		}
-	}
+    public String getLargeString() {
+        return largeString;
+    }
 
-	@Override
-	protected void preValidate() {
-		setUpdatedAt(new Date());		
-	}
+    public void setLargeString(String largeString) {
+        this.largeString = largeString;
+    }
 
-	protected void setUpdatedAt(Date updatedAt) {
-		this.updatedAt = updatedAt;
-	}
-	
-	public static List<SimpleDomainBO> findAllBefore(Date date){
-	    return getDefaultRepository().findByTheDate1Before(date);
-	}
-	
-	public static List<SimpleDomainBO> findAllAfter(Date date){
-	        return getDefaultRepository().findByTheDate1After(date);
-	}
-    
-    public static List<SimpleDomainBO> findAllByDate(Date date){
+    public Date getUpdatedAt() {
+        return this.updatedAt;
+    }
+
+    @Override
+    protected void defaultComplexValues() {
+
+        if (StringUtils.isBlank(getType())) {
+            setType(RandomStringUtils.randomAlphabetic(3));
+        }
+
+        if (StringUtils.isBlank(getLargeString())) {
+            setLargeString(RandomStringUtils.randomAlphanumeric(50));
+        }
+    }
+
+    @Override
+    protected void preValidate() {
+        setUpdatedAt(new Date());
+    }
+
+    protected void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public static List<SimpleDomainBO> findAllBefore(Date date) {
+        return getDefaultRepository().findByTheDate1Before(date);
+    }
+
+    public static List<SimpleDomainBO> findAllAfter(Date date) {
+        return getDefaultRepository().findByTheDate1After(date);
+    }
+
+    public static List<SimpleDomainBO> findAllByDate(Date date) {
         return getDefaultRepository().findByTheDate1(date);
     }
 
-    
     public static Integer getSimpleDomainCount(Date date) {
         return findAllByDate(date) != null ? findAllByDate(date).size() : 0;
     }
-    
+
+    public static Page<SimpleDomainBO> findByNamePaged(String nameFilter, Integer pageIndex, Integer pageSize) {
+        Pageable pageable = new PageRequest(pageIndex, pageSize);
+        return getDefaultRepository().findByNameContains(nameFilter, pageable);
+    }
+
 }

@@ -10,6 +10,7 @@ import $import;
 import org.bitbucket.fermenter.stout.messages.MessageManager;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
+import org.bitbucket.fermenter.stout.page.PageWrapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
  * Service implementation for ${service.name} entity maintenance.
  *
  * Generated Code - DO NOT MODIFY
+ * Generated from delegate.service.imple.java.vm
  */
 @Service
 public class ${service.name}DelegateImpl implements ${service.name}Delegate {
@@ -30,14 +32,18 @@ public class ${service.name}DelegateImpl implements ${service.name}Delegate {
 	/**
 	 * {@inheritDoc}
 	 */
-	#if($operation.return.isMany())
+    #if($operation.return.isPagedResponse())
+    public PageWrapper<${operation.return.javaType}> ${operation.uncapitalizedName}(${operation.signature}) {
+	#elseif($operation.return.isMany())
 	public Collection<${operation.return.javaType}> ${operation.uncapitalizedName}(${operation.signature}) {
 	#elseif($operation.isResponseTypeVoid())
 	public void ${operation.uncapitalizedName}(${operation.signature}) {
 	#else
 	public ${operation.return.javaType} ${operation.uncapitalizedName}(${operation.signature}) {
 	#end
-	#if($operation.return.isMany())
+    #if($operation.return.isPagedResponse())
+        ValueServiceResponse<PageWrapper<${operation.return.javaType}>> response;
+	#elseif($operation.return.isMany())
 		ValueServiceResponse<Collection<${operation.return.javaType}>> response;
 	#elseif($operation.isResponseTypeVoid())
 		VoidServiceResponse

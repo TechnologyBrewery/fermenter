@@ -53,4 +53,6 @@ public interface SimpleDomainRepository
 	List<SimpleDomainBO> findByTheDate1After(Date date);
 	
 	List<SimpleDomainBO> findByTheDate1(Date date);
+
+    Page<SimpleDomainBO> findByNameContains(String nameFilter, Pageable pageable);
 }

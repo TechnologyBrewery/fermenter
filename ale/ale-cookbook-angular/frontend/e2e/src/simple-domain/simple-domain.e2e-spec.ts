@@ -50,6 +50,11 @@ describe('Simple Domain e2e Test Page', () => {
     expect(page.getNullParamTestResult()).toEqual(RESULT_PASSED);
   });
 
+  it('should be able to send lists as parameters to the backend', () => {
+    page.runListParamTest();
+    expect(page.getListParamTestResult()).toEqual(RESULT_PASSED)
+  });
+
   afterEach(() => {
     page.deleteAllSimpleDomains();
   });

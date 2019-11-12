@@ -77,6 +77,15 @@ export class SimpleDomainPage {
     return element(by.id('nullParamTestResult')).getText();
   }
 
+  runListParamTest() {
+    element(by.id('runListParamTest')).click();
+  }
+
+  getListParamTestResult() {
+    this.waitUntilTextIsNotPending('listParamTestResult');
+    return element(by.id('listParamTestResult')).getText();
+  }
+
   waitUntilTextIsNotPending(elementId: string) {
     browser.wait(() => {
       return element(by.id(elementId))

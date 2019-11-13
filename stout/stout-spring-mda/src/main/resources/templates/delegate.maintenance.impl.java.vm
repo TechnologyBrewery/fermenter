@@ -11,6 +11,9 @@ import org.bitbucket.fermenter.stout.messages.MessageManager;
 import org.bitbucket.fermenter.stout.client.service.AbstractMaintenanceServiceDelegate;
 import org.bitbucket.fermenter.stout.client.service.LevelOneCache;
 import org.bitbucket.fermenter.stout.client.service.LevelOneCacheManager;
+import org.bitbucket.fermenter.stout.client.service.LocalOptimizationUtil;
+import org.bitbucket.fermenter.stout.client.service.LocalOptimizationServiceWrapper;
+import org.bitbucket.fermenter.stout.exception.UnrecoverableException;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
 
@@ -18,6 +21,8 @@ import org.apache.commons.collections.CollectionUtils;
 import org.bitbucket.fermenter.stout.page.PageWrapper;
 import org.bitbucket.fermenter.stout.page.json.FindByExampleCriteria;
 import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -44,6 +49,15 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
         #set ($idFieldName = 'id')
     #end
 
+	/** Fully qualified name of the domain service to check for and potentially use to locally optimized delegate calls. */
+	private static final String LOCAL_SERVICE_NAME = "${basePackage}.service.rest.${entity.name}MaintenanceService";
+	/** Fully qualified name of the domain object mapper to check for and potentially use to locally optimized delegate calls for BO marshalling. */
+	private static final String LOCAL_OBJECT_MAPPER = "${basePackage}.transfer.json.ObjectMapperManager";
+	private static Boolean localOptionPresent;
+	private static LocalOptimizationServiceWrapper localServiceWrapper;
+	private static Class<?> businessObjectClass;
+	private static ObjectMapper objectMapper;
+
 	private static final LevelOneCacheManager<${idFieldJavaType}, ${entity.name}> levelOneCacheManager = new LevelOneCacheManager<>();
     private static final CachePropertiesConfig cachePropertiesConfig = KrauseningConfigFactory.create(CachePropertiesConfig.class);
     private static final boolean IS_CACHE_ENABLED = cachePropertiesConfig.is${entity.name}CachingEnabled();
@@ -57,6 +71,10 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
 	 * {@inheritDoc}
 	 */
     public ${entity.name} findByPrimaryKey(${idFieldJavaType} ${idFieldName}) {
+    	if (${idFieldName} == null) {
+    		throw new UnrecoverableException("Cannot lookup an instance with a null primary key!");
+    	}
+    
     	boolean skipLookupDueToInTransactionDelete = false;
         ${entity.name} retrievedInstance = null;
 	    if (checkLevelOneCache()) {
@@ -74,7 +92,14 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
         } 
         
         if (retrievedInstance == null && !skipLookupDueToInTransactionDelete) {
-            ValueServiceResponse<${entity.name}> response = ${entity.name.toLowerCase()}Resource.findByPrimaryKey(${idFieldName});
+            ValueServiceResponse<${entity.name}> response;
+            if (isLocalInvocationAvailable()) {
+	    		Object[] params = {${idFieldName}};
+	    		Object rawResponse = localServiceWrapper.invokeLocalService("findByPrimaryKey", params);
+	    		response = (ValueServiceResponse<${entity.name}>)LocalOptimizationUtil.convertResponseToTransferObjectViaJson(rawResponse, ${entity.name}.class, objectMapper);    		
+    		} else {
+            	response = ${entity.name.toLowerCase()}Resource.findByPrimaryKey(${idFieldName});
+            }
             MessageManager.addMessages(response.getMessages());
             ${entity.name}Cache.addToCache(response.getValue());
             retrievedInstance = response.getValue();
@@ -111,8 +136,20 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
 		return created${entity.name};
     }
     
+    @SuppressWarnings("unchecked")
     private ${entity.name} performCreate(${entity.name} entity) {
-		ValueServiceResponse<${entity.name}> response = ${entity.name.toLowerCase()}Resource.create(entity);
+    	ValueServiceResponse<${entity.name}> response = null;
+    	if (isLocalInvocationAvailable()) {
+    		Class<?>[] paramTypes = {businessObjectClass};
+    		Object[] params = {LocalOptimizationUtil.convertToBusinessObjectViaJson(entity, objectMapper)};
+    		Object rawResponse = localServiceWrapper.invokeLocalService("saveOrUpdate", paramTypes, params);
+    		response = (ValueServiceResponse<${entity.name}>)LocalOptimizationUtil.convertResponseToTransferObjectViaJson(rawResponse, ${entity.name}.class, objectMapper);
+    		
+    	} else {
+    		response = ${entity.name.toLowerCase()}Resource.create(entity);
+    		
+    	}	
+    		
 		${entity.name} created${entity.name} = response.getValue();
 		MessageManager.addMessages(response.getMessages());
         if(!response.hasErrors()) {
@@ -181,7 +218,14 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
     }
 
 	private void performDelete(${idFieldJavaType} ${idFieldName}) {
-		VoidServiceResponse response = ${entity.name.toLowerCase()}Resource.delete(${idFieldName});
+		VoidServiceResponse response = null;
+		if (isLocalInvocationAvailable()) {
+    		Object[] params = {${idFieldName}};
+    		Object rawResponse = localServiceWrapper.invokeLocalService("delete", params);
+    		response = (VoidServiceResponse)rawResponse;    		
+		} else {
+        	response = ${entity.name.toLowerCase()}Resource.delete(${idFieldName});
+        }
         ${entity.name}Cache.removeFromCache(${idFieldName});
 		MessageManager.addMessages(response.getMessages());
     }
@@ -190,7 +234,15 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
 	 * {@inheritDoc}
 	 */
     public PageWrapper<${entity.name}> findByExample(FindByExampleCriteria<${entity.name}> criteria) {
-		ValueServiceResponse<PageWrapper<${entity.name}>> response = ${entity.name.toLowerCase()}Resource.findByExample(criteria);
+    	ValueServiceResponse<PageWrapper<${entity.name}>> response = null;
+    	if (isLocalInvocationAvailable()) {
+    		Object[] params = {LocalOptimizationUtil.convertToBusinessObjectViaJson(criteria, objectMapper)};
+    		Object rawResponse = localServiceWrapper.invokeLocalService("findByExample", params);
+    		response = (ValueServiceResponse<PageWrapper<${entity.name}>>)LocalOptimizationUtil.convertResponseToTransferObjectPageWrapperViaJson(rawResponse, ${entity.name}.class, objectMapper);
+		
+		} else {
+			response = ${entity.name.toLowerCase()}Resource.findByExample(criteria);
+		}		
 		MessageManager.addMessages(response.getMessages());
 		return response.getValue();
     }
@@ -226,7 +278,15 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
     private Collection<${entity.name}> performBulkSaveOrUpdate(Collection<${entity.name}> entities) {
     	Collection<${entity.name}> values = null;
     	if (CollectionUtils.isNotEmpty(entities)) {
-	        ValueServiceResponse<Collection<${entity.name}>> response = ${entity.name.toLowerCase()}Resource.bulkSaveOrUpdate(entities);
+	        ValueServiceResponse<Collection<${entity.name}>> response;
+	        if (isLocalInvocationAvailable()) {
+	    		Object[] params = {LocalOptimizationUtil.convertToBusinessObjectViaJson(entities, objectMapper)};
+	    		Object rawResponse = localServiceWrapper.invokeLocalService("bulkSaveOrUpdate", params);
+	    		response = (ValueServiceResponse<Collection<${entity.name}>>)LocalOptimizationUtil.convertResponseToTransferObjectListViaJson(rawResponse, ${entity.name}.class, objectMapper);
+    		
+    		} else {
+	        	response = ${entity.name.toLowerCase()}Resource.bulkSaveOrUpdate(entities);
+	        }
 	        MessageManager.addMessages(response.getMessages());
 	        values = response.getValue();
             if(!response.hasErrors()) {
@@ -263,10 +323,20 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
     
 	private void performBulkDelete(Collection<${entity.name}> entities) {
     	if (CollectionUtils.isNotEmpty(entities)) {
-	        VoidServiceResponse response = ${entity.name.toLowerCase()}Resource.bulkDelete(entities);
+	        VoidServiceResponse response = null;
+	        if (isLocalInvocationAvailable()) {
+	        	Object[] params = {LocalOptimizationUtil.convertToBusinessObjectViaJson(entities, objectMapper)};
+	    		Object rawResponse = localServiceWrapper.invokeLocalService("bulkDelete", params);
+	    		response = (VoidServiceResponse)rawResponse;
+	    		//response = (VoidServiceResponse)LocalOptimizationUtil.convertResponseToTransferObjectViaJson(rawResponse, ${entity.name}.class, objectMapper); 
+	        } else {
+	        	response = ${entity.name.toLowerCase()}Resource.bulkDelete(entities);
+        	}
+        	
 	        for (${entity.name} ${entity.name.toLowerCase()} : entities) {
 	            ${entity.name}Cache.removeFromCache(${entity.name.toLowerCase()}.get${entity.idFields.values().iterator().next().capitalizedName}());
 	        }
+	        
 	        MessageManager.addMessages(response.getMessages());
         }
     }
@@ -323,6 +393,23 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
     private void synchronizeTransaction() { 
         delegateMaintenanceTransactionSynchronization.synchronizeTransaction("${entity.name}", this);
         
-    }   
+    }
+    
+	/** 
+	 * Check for and then cache decision on whether the delegate should make RESTful call or locally optimized Java calls.
+	 */ 
+	private static boolean isLocalInvocationAvailable() {
+		if (localOptionPresent == null) {
+			localOptionPresent = LocalOptimizationUtil.isLocalServicePresent(LOCAL_SERVICE_NAME);
+			if (localOptionPresent) {
+				localServiceWrapper = new LocalOptimizationServiceWrapper(LOCAL_SERVICE_NAME);
+				objectMapper = LocalOptimizationUtil.getObjectMapper(LOCAL_OBJECT_MAPPER);
+				businessObjectClass = LocalOptimizationUtil.lookupBusinessObjectClassByTransferObject(${entity.name}.class);
+			}
+			
+		}
+		
+		return localOptionPresent;
+	}
     
 }

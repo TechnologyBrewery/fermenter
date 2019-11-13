@@ -88,9 +88,7 @@
             </build>
         </profile>
     </profiles>
-    <properties>
-        <embedded.tomcat.version>8.0.1</embedded.tomcat.version>
-    </properties>
+
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>

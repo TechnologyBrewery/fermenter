@@ -9,15 +9,11 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.enumeration.SimpleDomainEn
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.SimpleDomain;
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.SimpleDomainChild;
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.SimpleDomainEagerChild;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Contains common integration test logic for this project.
  */
 public final class TestUtils {
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(TestUtils.class);
 
 	private TestUtils() {
 		// prevent instantiation

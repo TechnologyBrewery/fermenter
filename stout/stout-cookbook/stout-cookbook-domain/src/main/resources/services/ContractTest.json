@@ -1,0 +1,169 @@
+{
+	"package": "org.bitbucket.askllc.fermenter.cookbook.domain",
+	"name": "ContractTest",
+	"documentation": "Operations to help test various generation permutations for generation test coverage",
+	"operations": [
+		{
+			"name": "voidResponseMethod",
+			"parameters": [],
+			"return": {
+				"type": "void"
+			}
+		},
+		{
+			"name": "stringResponseMethod",
+			"parameters": [],
+			"return": {
+				"type": "string"
+			}
+		},
+		{
+			"name": "entityResponseMethod",
+			"parameters": [],
+			"return": {
+				"type": "SimpleDomain"
+			}
+		},
+		{
+			"name": "enumerationResponseMethod",
+			"parameters": [],
+			"return": {
+				"type": "SimpleDomainEnumeration"
+			}
+		},
+		{
+			"name": "multipleStringsResponseMethod",
+			"parameters": [],
+			"return": {
+				"type": "string",
+				"many": true
+			}
+		},
+		{
+			"name": "multipleEntitiesResponseMethod",
+			"parameters": [],
+			"return": {
+				"type": "SimpleDomain",
+				"many": true
+			}
+		},
+		{
+			"name": "multipleStringsPagedResponseMethod",
+			"parameters": [],
+			"return": {
+				"type": "string",
+				"many": true,
+				"pagedResponse": true
+			}
+		},
+		{
+			"name": "multipleEntitiesPagedResponseMethod",
+			"parameters": [],
+			"return": {
+				"type": "SimpleDomain",
+				"many": true,
+				"pagedResponse": true
+			}
+		},
+		{
+			"name": "noParameterMethod",
+			"parameters": [],
+			"return": {
+				"type": "void"
+			}
+		},
+		{
+			"name": "stringParameterMethod",
+			"parameters": [
+				{
+					"name": "inputStr",
+					"type": "string"
+				}
+			],
+			"return": {
+				"type": "void"
+			}
+		},
+		{
+			"name": "entityParameterMethod",
+			"parameters": [
+				{
+					"name": "entity",
+					"package": "org.bitbucket.askllc.fermenter.cookbook.domain",
+					"type": "SimpleDomain",
+					"documentation": "An entity parameter"
+				}
+			],
+			"return": {
+				"type": "void"
+			}
+		},
+		{
+			"name": "enumerationParameterMethod",
+			"parameters": [
+				{
+					"name": "enumeration",
+					"package": "org.bitbucket.askllc.fermenter.cookbook.domain",
+					"type": "SimpleDomainEnumeration",
+					"documentation": "An object that is a parameter"
+				}
+			],
+			"return": {
+				"type": "void"
+			}
+		},
+		{
+			"name": "entityAndStringParametersMethod",
+			"parameters": [
+				{
+					"name": "inputStr",
+					"type": "string"
+				},
+				{
+					"name": "entity",
+					"package": "org.bitbucket.askllc.fermenter.cookbook.domain",
+					"type": "SimpleDomain",
+					"documentation": "An entity parameter"
+				}
+			],
+			"return": {
+				"type": "void"
+			}
+		},
+		{
+			"name": "multipleStringParametersMethod",
+			"parameters": [
+				{
+					"name": "inputStr",
+					"type": "string",
+					"many": true
+				}
+			],
+			"return": {
+				"type": "void"
+			}
+		},
+		{
+			"name": "multipleEntitiesParameterMethod",
+			"parameters": [
+				{
+					"name": "entity",
+					"package": "org.bitbucket.askllc.fermenter.cookbook.domain",
+					"type": "SimpleDomain",
+					"documentation": "An entity parameter",
+					"many": true
+				}
+			],
+			"return": {
+				"type": "void"
+			}
+		},
+		{
+			"name": "errorMessagesReturnedMethod",
+			"parameters": [],
+			"return": {
+				"type": "void"
+			}
+		}
+	]
+}

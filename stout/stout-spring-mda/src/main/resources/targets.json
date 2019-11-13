@@ -56,6 +56,14 @@
 		"overwritable": true
 	},
 	{
+		"name": "jpaSpringConfiguration",
+		"templateName": "templates/jpa.spring.configuration.java.vm",
+		"outputFile": "${basePackage}/persist/${capitalizedCamelCasedArtifactId}JpaConfiguration.java",
+		"generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticJavaGenerator",
+		"metadataContext": "local",
+		"overwritable": true
+	},
+	{
 		"name": "jpaProperties",
 		"templateName": "templates/jpa.properties.vm",
 		"outputFile": "krausening/jpa.properties",
@@ -138,7 +146,7 @@
 	{
 		"name": "jacksonObjectMapperResteasyProvider",
 		"templateName": "templates/jackson.object.mapper.resteasy.provider.java.vm",
-		"outputFile": "${basePackage}/service/rest/JacksonObjectMapperResteasyProvider.java",
+		"outputFile": "${basePackage}/service/rest/${capitalizedCamelCasedArtifactId}ResteasyProvider.java",
 		"generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticJavaGenerator",
 		"metadataContext": "local",
 		"overwritable": true

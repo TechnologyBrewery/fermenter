@@ -10,12 +10,16 @@ import org.apache.commons.lang3.text.WordUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 
+/**
+ * Provides common generator functionality - specifically around writing files, substituting file name variables, and
+ * common VelocityContext setup.
+ */
 public abstract class AbstractGenerator implements Generator {
 
     protected static final String VERSION = "version";
     protected static final String ARTIFACT_ID = "artifactId";
     protected static final String GROUP_ID = "groupId";
-    
+
     protected static final String CAPITALIZED_CAMEL_CASED_ARTIFACT_ID = "capitalizedCamelCasedArtifactId";
     protected static final String CAMEL_CASED_ARTIFACT_ID = "camelCasedArtifactId";
 
@@ -25,12 +29,7 @@ public abstract class AbstractGenerator implements Generator {
         try {
             Template template = gc.getEngine().getTemplate(gc.getTemplateName());
             long templateLastModified = template.getLastModified();
-            File baseFile = null;
-            if (gc.isOverwritable()) {
-                baseFile = gc.getGeneratedSourceDirectory();
-            } else {
-                baseFile = gc.getMainSourceDirectory();
-            }
+            File baseFile = getBaseFile(gc);
 
             String baseFileName = getOutputSubFolder() + gc.getOutputFile();
             String tempFileName = baseFileName + ".tmp";
@@ -65,7 +64,7 @@ public abstract class AbstractGenerator implements Generator {
                     return;
                 }
                 boolean isContentEqual = FileUtils.contentEquals(destinationFile, tempFile);
-                if (!isContentEqual) {                    
+                if (!isContentEqual) {
                     destinationFile.delete();
                     tempFile.renameTo(destinationFile);
                 } else {
@@ -76,6 +75,16 @@ public abstract class AbstractGenerator implements Generator {
         } catch (Exception ex) {
             throw new GenerationException("Unable to generate file", ex);
         }
+    }
+
+    private File getBaseFile(GenerationContext gc) {
+        File baseFile;
+        if (gc.isOverwritable()) {
+            baseFile = gc.getGeneratedSourceDirectory();
+        } else {
+            baseFile = gc.getMainSourceDirectory();
+        }
+        return baseFile;
     }
 
     /**
@@ -91,7 +100,7 @@ public abstract class AbstractGenerator implements Generator {
         vc.put(GROUP_ID, gc.getGroupId());
         vc.put(ARTIFACT_ID, gc.getArtifactId());
         vc.put(VERSION, gc.getVersion());
-        
+
         String camelCasedArtifactId = getCamelCasedArtifactId(gc);
         vc.put(CAMEL_CASED_ARTIFACT_ID, camelCasedArtifactId);
         vc.put(CAPITALIZED_CAMEL_CASED_ARTIFACT_ID, StringUtils.capitalize(camelCasedArtifactId));
@@ -99,12 +108,6 @@ public abstract class AbstractGenerator implements Generator {
         return vc;
 
     }
-    
-    private String getCamelCasedArtifactId(GenerationContext gc) {
-        String upperCaseSubsequentWords = WordUtils.capitalizeFully(gc.getArtifactId(), '-');
-        String lowerCaseFirstLetter = WordUtils.uncapitalize(upperCaseSubsequentWords);        
-        return lowerCaseFirstLetter.replace("-", "");
-    }    
 
     /**
      * {@inheritDoc}
@@ -114,8 +117,14 @@ public abstract class AbstractGenerator implements Generator {
         this.metadataContext = metadataContext;
     }
 
+    private String getCamelCasedArtifactId(GenerationContext gc) {
+        String upperCaseSubsequentWords = WordUtils.capitalizeFully(gc.getArtifactId(), '-');
+        String lowerCaseFirstLetter = WordUtils.uncapitalize(upperCaseSubsequentWords);
+        return lowerCaseFirstLetter.replace("-", "");
+    }
+
     protected abstract String getOutputSubFolder();
-    
+
     protected final String replaceBasePackage(String original, String basePackage) {
         return StringUtils.replace(original, "${basePackage}", basePackage);
     }
@@ -134,10 +143,12 @@ public abstract class AbstractGenerator implements Generator {
 
     protected final String replaceArtifactId(String original, String artifactId) {
         return StringUtils.replace(original, "${" + ARTIFACT_ID + "}", artifactId);
-    }   
-    
-    protected final String replaceCapitalizedCamelCasedArtifactId(String original, String capitalizedCamelCaseArtifactId) {
-        return StringUtils.replace(original, "${" + CAPITALIZED_CAMEL_CASED_ARTIFACT_ID + "}", capitalizedCamelCaseArtifactId);
-    }    
-    
+    }
+
+    protected final String replaceCapitalizedCamelCasedArtifactId(String original,
+            String capitalizedCamelCaseArtifactId) {
+        return StringUtils.replace(original, "${" + CAPITALIZED_CAMEL_CASED_ARTIFACT_ID + "}",
+                capitalizedCamelCaseArtifactId);
+    }
+
 }

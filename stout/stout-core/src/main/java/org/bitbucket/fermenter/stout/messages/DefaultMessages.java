@@ -2,9 +2,8 @@ package org.bitbucket.fermenter.stout.messages;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
@@ -16,7 +15,8 @@ public class DefaultMessages implements Messages {
 
 	private static final long serialVersionUID = 7211778261488081187L;
 
-	private Map<Severity, Set<Message>> messages;
+	// TODO: replace this with two sets, one for errors, one for infos for simplicity:
+	private EnumMap<Severity, Set<Message>> messages;
 
 	/**
 	 * Create a new instance.
@@ -24,7 +24,7 @@ public class DefaultMessages implements Messages {
 	public DefaultMessages() {
 		super();
 
-		messages = new HashMap<Severity, Set<Message>>();
+		messages = new EnumMap<>(Severity.class);
 		for (Severity s : Severity.values()) {
 			messages.put(s, new HashSet<>());
 
@@ -194,5 +194,16 @@ public class DefaultMessages implements Messages {
 			addMessage(message);
 		}
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getErrorMessageCount()).append(" errors, ");
+        sb.append(getInformationalMessageCount()).append(" infos");
+        return sb.toString();
+    }
 
 }

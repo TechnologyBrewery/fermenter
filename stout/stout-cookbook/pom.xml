@@ -19,9 +19,14 @@
 		<module>stout-cookbook-domain-client</module>
 		<module>stout-cookbook-referencing-domain</module>
 		<module>stout-cookbook-referencing-domain-client</module>
+		<module>stout-cookbook-local-referencing-domain</module>
 		<module>stout-cookbook-domain-webapp</module>
 	</modules>
-    
+
+	<properties>
+		<embedded.tomcat.version>8.0.1</embedded.tomcat.version>
+	</properties>
+
 	<build>
 		<pluginManagement>
 			<plugins>

@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE entity PUBLIC "-//FERMENTER//DTD ENTITY//EN" "https://bitbucket.org/cpointe/fermenter/downloads/fermenter-2-entity.dtd">
+
+<entity>
+	<name>BusinessKeyedExample</name>
+	<namespace>org.bitbucket.askllc.fermenter.cookbook.domain</namespace>
+	<documentation>Entity to help with the business key patterns that
+		coordinate with a programmatic primary key</documentation>
+	<table>BUSINESS_KEYED_EXAMPLE</table>
+
+	<id>
+		<field>
+			<name>primaryKey</name>
+			<type>uuid</type>
+			<column>BUSINESS_KEYED_EXAMPLE_ID</column>
+			<required>true</required>
+			<generator>uuid</generator>
+		</field>
+	</id>
+
+	<fields>
+		<field>
+			<name>businessKey</name>
+			<documentation>A business key that is required</documentation>
+			<type>string</type>
+			<column>BUSINESS_KEY</column>
+			<required>true</required>
+		</field>
+		<field>
+			<name>selector</name>
+			<documentation>A field that can be used for easy find by example queries</documentation>
+			<type>string</type>
+			<column>SELECTOR</column>
+		</field>
+	</fields>
+
+</entity>

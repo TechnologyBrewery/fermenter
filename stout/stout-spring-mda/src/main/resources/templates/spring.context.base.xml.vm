@@ -18,29 +18,13 @@
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
     </context:component-scan>
     
-    <jpa:repositories transaction-manager-ref="transactionManager" entity-manager-factory-ref="emf" base-package="${basePackage}.persist"/>
+ 	<context:component-scan base-package="${basePackage}.persist">
+        <context:include-filter type="annotation" expression="org.springframework.context.annotation.Configuration"/>
+    </context:component-scan>
     
-	<tx:annotation-driven transaction-manager="transactionManager"/>
-
-	<!-- Configures Narayana as the underlying transaction manager implementation for full JTA support -->
-	<bean id="transactionManager" class="org.springframework.transaction.jta.JtaTransactionManager">
-		<property name="transactionManager">
-			<bean id="jbossTransactionManager" class="com.arjuna.ats.internal.jta.transaction.arjunacore.TransactionManagerImple" />
-		</property>
-		<property name="userTransaction">
-			<bean id="jbossUserTransaction" class="com.arjuna.ats.jta.UserTransaction" factory-method="userTransaction" />
-		</property>
-	</bean>
-	
-	<bean id="emf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-		<property name="jtaDataSource" ref="krauseningDataSource"/>
-		<property name="packagesToScan" value="${basePackage}.bizobj"/>
-		<property name="jpaVendorAdapter">
-			<bean id="hibernateJpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
-		</property>
-		<property name="jpaProperties" ref="krauseningJpaProperties"/>
-		<property name="validationMode" value="NONE"/>
-	</bean>
+ 	<context:component-scan base-package="org.bitbucket.fermenter.stout.config">
+        <context:include-filter type="annotation" expression="org.springframework.context.annotation.Configuration"/>
+    </context:component-scan>      
 	
 	<!-- Spring beans that are instantiated in KrauseningBasedSpringConfig may be referred to and utilized
 		 in this application context. For example, the entity manager factory relies on krauseningDataSource

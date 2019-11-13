@@ -110,6 +110,9 @@ public class DelegateMaintenanceTransactionSynchronization implements Synchroniz
      * deletes.  This allows referential integrity to be respected in both scenarios.
      */
 	public void flush() {
+		if (logger.isTraceEnabled()) {
+			logger.trace("START: flush maintenance operations for tx {}", getCurrentTransaction());
+		}
 	    Transaction transaction = getCurrentTransaction();
 	    Map<String, AbstractMaintenanceServiceDelegate> delegates = delegatesByTransaction.get(transaction);
 	    
@@ -119,6 +122,7 @@ public class DelegateMaintenanceTransactionSynchronization implements Synchroniz
     	    for (String entityToFlush: flushOrder) {
     	        AbstractMaintenanceServiceDelegate delegate = delegates.get(entityToFlush);
     	        if (delegate != null) {
+    	        	logger.trace("Flushing inserts and updates for entity: {}", entityToFlush);
     	        	delegate.flushInsertsAndUpdates();
     	        }
     	    }
@@ -127,12 +131,15 @@ public class DelegateMaintenanceTransactionSynchronization implements Synchroniz
             for (String entityToFlush : flushReverseOrder) {
                 AbstractMaintenanceServiceDelegate delegate = delegates.get(entityToFlush);
                 if (delegate != null) {
+                	logger.trace("Flushing deletes for entity: {}", entityToFlush);
                     delegate.flushDeletes();
                 }
             }
             
             // now that we have cleared things, remove the delegate from our collection of delegates waiting for a flush:
             delegates.clear();   
+            
+            logger.trace("STOP: flush maintenance operations completed");
 	    }
 	    
 		
@@ -158,8 +165,9 @@ public class DelegateMaintenanceTransactionSynchronization implements Synchroniz
      * {@inheritDoc}
      */
 	@Override
-	public void beforeCompletion() {
-		// do nothing, must override from interface
+	public void beforeCompletion() {		
+		flush();
+		removeTransaction();
 
 	}
 
@@ -171,9 +179,9 @@ public class DelegateMaintenanceTransactionSynchronization implements Synchroniz
      */
 	@Override
 	public void afterCompletion(int status) {
-		flush();
-		removeTransaction();
-
+		if (logger.isTraceEnabled()) {
+			logger.trace("Transaction completed for tx {}", getCurrentTransaction());
+		}
 	}
 
 	private Transaction getCurrentTransaction() {

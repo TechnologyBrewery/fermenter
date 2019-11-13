@@ -14,10 +14,6 @@
 	<artifactId>stout-cookbook-domain-client</artifactId>
 	<packaging>jar</packaging>
 
-	<properties>
-		<embedded.tomcat.version>8.0.1</embedded.tomcat.version>
-	</properties>
-
 	<build>
 		<resources>
 			<resource>

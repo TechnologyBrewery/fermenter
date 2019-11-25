@@ -1,10 +1,13 @@
 package ${basePackage}.client.cache;
 
 import java.util.Collection;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import ${basePackage}.transfer.${entity.name};
+
+#foreach ($import in $entity.imports )
+import ${import};
+#end
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;

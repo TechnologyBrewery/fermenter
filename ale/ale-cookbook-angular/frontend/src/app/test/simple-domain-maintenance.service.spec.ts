@@ -16,8 +16,6 @@ import { FindByExampleCriteria } from '../shared/model/find-by-example-criteria.
 import { SortWrapper } from '../shared/model/sort-wrapper.model';
 import { PageWrapper } from '../shared/model/page-wrapper.model';
 
-const testUrl = '/SimpleDomain';
-
 describe('Ale Simple Domain Maintenance Service', () => {
   let httpTestingController: HttpTestingController;
   const constants = new Constants();
@@ -267,8 +265,8 @@ describe('Ale Simple Domain Maintenance Service', () => {
 
       const pageWrapper = new PageWrapper<SimpleDomain>();
       pageWrapper.content = [testSimpleDomain, testSimpleDomain2];
-      pageWrapper.isFirst = true;
-      pageWrapper.isLast = true;
+      pageWrapper.first = true;
+      pageWrapper.last = true;
       pageWrapper.itemsPerPage = constants.DEFAULT_PAGE_SIZE;
       pageWrapper.startPage = 0;
       pageWrapper.numberOfElements = pageWrapper.content.length;

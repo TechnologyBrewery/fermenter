@@ -20,6 +20,7 @@ export class E2eTestsPageComponent implements OnInit {
   findByExampleContainsTestResult = 'PENDING';
   nullParamTestResult = 'PENDING';
   listParamTestResult = 'PENDING';
+  getPagedResponseTestResult = 'PENDING';
   deletedAllSimpleDomainsStatus = 'PENDING';
   TEST_PASSED = 'PASSED';
   TEST_FAILED = 'FAILED';
@@ -96,6 +97,8 @@ export class E2eTestsPageComponent implements OnInit {
         .subscribe(countResponse => {
           if (countResponse === 1) {
             this.countSimpleDomainTestResult = this.TEST_PASSED;
+          } else {
+            this.countSimpleDomainTestResult = this.TEST_FAILED;
           }
         });
     });
@@ -163,12 +166,38 @@ export class E2eTestsPageComponent implements OnInit {
   }
 
   runListParamTest() {
-    let array = ['val1', 'val2'];
+    const array = ['val1', 'val2'];
     this.simpleDomainManagerService
       .listAsParamFromFrontend(array)
       .subscribe(inputWasList => {
         this.listParamTestResult = inputWasList ? this.TEST_PASSED : this.TEST_FAILED;
       });
+  }
+
+  runGetPagedResponseTest() {
+    const testSimpleDomain = new SimpleDomain();
+    testSimpleDomain.name = this.getRandomString();
+    const pageSizeRequested = 100;
+    this.simpleDomainService.post(testSimpleDomain).subscribe(postResponse => {
+
+      this.simpleDomainManagerService
+        .getPagedSimpleDomains(0, pageSizeRequested)
+        .subscribe(pagedResponse => {
+          if(pagedResponse.content[0].name !== testSimpleDomain.name) {
+            this.getPagedResponseTestResult = this.TEST_FAILED;
+          } else if (!pagedResponse.first) {
+            this.getPagedResponseTestResult = this.TEST_FAILED;
+          } else if (pagedResponse.itemsPerPage !== pageSizeRequested) {
+            this.getPagedResponseTestResult = this.TEST_FAILED;
+          } else if (pagedResponse.numberOfElements !== 1) {
+            this.getPagedResponseTestResult = this.TEST_FAILED;
+          } else if (pagedResponse.totalResults !== 1) {
+            this.getPagedResponseTestResult = this.TEST_FAILED;
+          } else {
+            this.getPagedResponseTestResult = this.TEST_PASSED;
+          }
+        });
+    });
   }
 
   deleteAllSimpleDomains() {

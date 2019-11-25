@@ -272,7 +272,8 @@
         "type" : "SimpleDomain",
         "pagedResponse": true
     }
-  },  {
+  },
+  {
     "name" : "getPagedSimpleDomainsWithParameter",
     "transactionAttribute" : "Supports",
     "parameters" : [
@@ -286,7 +287,29 @@
         "type" : "SimpleDomain",
         "pagedResponse": true
     }
-   }, {
+   },
+   {
+    "name" : "getPagedSimpleDomainsAsPost",
+    "transactionAttribute" : "Required",
+    "parameters" : [
+        {
+            "name" : "simpleDomain",
+            "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+            "type" : "SimpleDomain",
+            "documentation" : "An object that is a parameter"
+        },
+        {
+            "name": "nameFilter",
+            "type": "string"
+        }
+    ],
+    "return" : {
+        "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+        "type" : "SimpleDomain",
+        "pagedResponse": true
+    }
+   },
+   {
     "name" : "listAsParamFromFrontend",
     "transactionAttribute" : "Supports",
     "parameters" : [

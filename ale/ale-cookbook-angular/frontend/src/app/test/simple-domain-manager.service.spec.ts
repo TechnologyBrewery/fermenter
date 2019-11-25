@@ -13,6 +13,7 @@ import { SimpleDomainManagerService } from '../generated/service/business/simple
 import { HeartbeatService } from '../generated/service/business/heartbeat.service';
 import { FermenterMessage } from '../shared/model/fermenter-message.model';
 import { FermenterMessages } from '../shared/model/fermenter-messages.model';
+import { PageWrapper } from '../shared/model/page-wrapper.model';
 
 describe('Ale: Business Service Generation', () => {
   let httpTestingController: HttpTestingController;
@@ -94,19 +95,15 @@ describe('Ale: Business Service Generation', () => {
     }
   ));
 
-  it('should be able to support returning a void response', inject(
+  it('should be able to support returning a void response from a GET call', inject(
     [HeartbeatService],
     (heartbeatService: HeartbeatService) => {
       const messageKey = 'heartbeat';
 
       heartbeatService
         .heartbeat()
-        .subscribe((response: FermenterResponse<undefined>) => {
-          expect(response).toBeTruthy();
-          expect(response.value).toBeUndefined();
-          expect(response.messages.hasErrorMessages()).toBeFalsy();
-          expect(response.messages.hasMessages()).toBeTruthy();
-          expect(response.messages.messages[0].key).toEqual(messageKey);
+        .subscribe(() => {
+          expect().nothing();
         });
 
       const req = httpTestingController.expectOne(
@@ -151,14 +148,14 @@ describe('Ale: Business Service Generation', () => {
     }
   ));
 
-  it('should be able to support returning void', inject(
+  it('should be able to support returning void from a POST call', inject(
     [SimpleDomainManagerService],
     (simpleDomainManagerService: SimpleDomainManagerService) => {
       simpleDomainManagerService
         .returnVoid()
-        .subscribe((response: FermenterResponse<undefined>) => {
+        .subscribe((response: FermenterResponse<{}>) => {
           expect(response).toBeTruthy();
-          expect(response.value).toBeUndefined();
+          expect(response.value).toBeFalsy();
         });
 
       const req = httpTestingController.expectOne(
@@ -305,6 +302,44 @@ describe('Ale: Business Service Generation', () => {
       for (let i = 0; i < returnListSize; i++) {
         mockResponse.value.push(input);
       }
+      req.flush(mockResponse);
+    }
+  ));
+
+  it('should be able to support returning a paged response', inject(
+    [SimpleDomainManagerService],
+    (simpleDomainManagerService: SimpleDomainManagerService) => {
+      const startPage = 0;
+      const count = 100;
+      const returnListSize = Math.floor(Math.random() * 100) + 100;
+
+      const exampleSimpleDomainName = 'testName';
+
+      simpleDomainManagerService
+        .getPagedSimpleDomains(startPage, count)
+        .subscribe((response) => {
+          expect(response).toBeTruthy();
+          expect(response.content).toBeTruthy();
+          expect(response.totalResults).toEqual(returnListSize);
+          expect(response.content[0].name).toEqual(exampleSimpleDomainName);
+        });
+
+      const req = httpTestingController.expectOne(
+        request => request.url === simpleDomainMgrUrl + '/getPagedSimpleDomains'
+      );
+
+      expect(req.request.method).toEqual('GET');
+
+      const mockResponse = new FermenterResponse<PageWrapper<SimpleDomain>>();
+      mockResponse.value = new PageWrapper<SimpleDomain>();
+      mockResponse.value.content = new Array<SimpleDomain>();
+      for (let i = 0; i < count; i++) {
+        // only add the number of objects requested
+        const simpleDomain = new SimpleDomain();
+        simpleDomain.name = exampleSimpleDomainName;
+        mockResponse.value.content.push(simpleDomain);
+      }
+      mockResponse.value.totalResults = returnListSize;
       req.flush(mockResponse);
     }
   ));

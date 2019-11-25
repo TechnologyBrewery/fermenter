@@ -5,14 +5,31 @@
  * Template = page-wrapper-base.model.ts.vm
  *******************************************************/
 export class PageWrapperBase<T> {
+
+  /** The objects being requested. */
   public content: Array<T>;
+
+  /** The page size that was requested. This may be different from the number of elements returned (numberOfElements). */
   public itemsPerPage: number;
-  public startPage: number;
-  public totalPages: number;
-  public totalResults: number;
-  public isFirst: boolean;
-  public isLast: boolean;
+
+  /** The number of elements returned. This may be different from the number of elements requested (itemsPerPage). */
   public numberOfElements: number;
+
+  /** The page number. I.e. this is page X out of 100. */
+  public startPage: number;
+
+  /** The total number of pages. */
+  public totalPages: number;
+
+  /** The total number of elements in the entire dataset. */
+  public totalResults: number;
+
+  /** Whether or not this is the first page. */
+  public first: boolean;
+
+  /** Whether or not this is the last page. */
+  public last: boolean;
+
 
   constructor(pageWrapperBase?: PageWrapperBase<T>) {
     if (pageWrapperBase) {
@@ -20,8 +37,8 @@ export class PageWrapperBase<T> {
       this.startPage = pageWrapperBase.startPage;
       this.totalPages = pageWrapperBase.totalPages;
       this.totalResults = pageWrapperBase.totalResults;
-      this.isFirst = pageWrapperBase.isFirst;
-      this.isLast = pageWrapperBase.isLast;
+      this.first = pageWrapperBase.first;
+      this.last = pageWrapperBase.last;
       this.numberOfElements = pageWrapperBase.numberOfElements;
 
       // NOTE: we do not parse the content here as we can't effectively create new abstract objects of type T

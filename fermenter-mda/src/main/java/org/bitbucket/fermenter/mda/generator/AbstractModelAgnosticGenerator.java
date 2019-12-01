@@ -8,14 +8,14 @@ import org.apache.velocity.VelocityContext;
 public abstract class AbstractModelAgnosticGenerator extends AbstractGenerator {
 
     @Override
-    public void generate(GenerationContext context) throws GenerationException {
-        VelocityContext vc = new VelocityContext();
+    public void generate(GenerationContext context) {
+        VelocityContext vc = getNewVelocityContext(context);
         vc.put("basePackage", context.getBasePackage());
-        vc.put("artifactId", context.getArtifactId());
 
         String fileName = context.getOutputFile();
         fileName = replaceBasePackage(fileName, context.getBasePackageAsPath());
         fileName = replaceArtifactId(fileName, context.getArtifactId());
+        fileName = replaceCapitalizedCamelCasedArtifactId(fileName, (String)vc.get(CAPITALIZED_CAMEL_CASED_ARTIFACT_ID));
         context.setOutputFile(fileName);
 
         generateFile(context, vc);

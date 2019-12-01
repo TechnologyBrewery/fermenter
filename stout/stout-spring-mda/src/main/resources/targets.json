@@ -266,7 +266,7 @@
 	{
 		"name": "pdpXml",
 		"templateName": "templates/pdp.xml.vm",
-		"outputFile": "authorization/pdp.xml",
+		"outputFile": "authorization/${artifactId}-pdp.xml",
 		"generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
 		"metadataContext": "local",
 		"overwritable": false
@@ -290,7 +290,7 @@
     {
         "name": "pdpPolicy",
         "templateName": "templates/pdp.policy.xml.vm",
-        "outputFile": "authorization/policies/policy.xml",
+        "outputFile": "authorization/policies/${artifactId}-policy.xml",
         "generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
         "metadataContext": "local",
         "overwritable": false

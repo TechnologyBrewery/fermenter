@@ -170,6 +170,13 @@ public class LocalMaintenanceInvocationSteps {
         assertEquals("Unexpected record count returned!", numberOfBulkItems, results.getTotalResults().intValue());
         assertEquals("Unexpected number of results returned!", numberOfBulkItems, results.getContent().size());
     }
+    
+    @Then("^the newly created instances can be retrieved via find by example CONTAINS call$")
+    public void the_newly_created_instances_can_be_retrieved_via_find_by_example_CONTAINS_call() throws Throwable {
+        Collection<BusinessKeyedExample> results = maintenanceDelegate.findByExampleContains(null);
+
+        assertEquals("Unexpected number of results returned!", numberOfBulkItems, results.size());
+    }
 
     @Then("^the updates can be retrieved$")
     public void the_updates_can_be_retrieved() throws Throwable {
@@ -219,7 +226,7 @@ public class LocalMaintenanceInvocationSteps {
         BusinessKeyedExample probe = new BusinessKeyedExample();
         probe.setSelector(SELECTOR);
 
-        FindByExampleCriteria<BusinessKeyedExample> criteria = new FindByExampleCriteria<BusinessKeyedExample>();
+        FindByExampleCriteria<BusinessKeyedExample> criteria = new FindByExampleCriteria<>();
         criteria.setProbe(probe);
         criteria.setContainsMatch(Boolean.FALSE);
         SortWrapper sort = new SortWrapper(OrderWrapper.ASC, "businessKey");

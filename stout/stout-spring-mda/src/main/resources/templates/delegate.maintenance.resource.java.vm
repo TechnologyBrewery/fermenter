@@ -19,6 +19,7 @@ import $import;
  * Resource for ${entity.name} entity maintenance.
  *
  * Generated Code - DO NOT MODIFY
+ * Generated from delegate.maintenance.resource.java.vm
  */
 public interface ${entity.name}MaintenanceResource {
     #if ( !$entity.idFields.isEmpty() )
@@ -46,6 +47,22 @@ public interface ${entity.name}MaintenanceResource {
     @RequestLine("POST /${entity.name}/findByExample")
     @Headers({"Content-Type: application/json"})
     ValueServiceResponse<PageWrapper<${entity.name}>> findByExample(FindByExampleCriteria<${entity.name}> criteria);
+	
+    @RequestLine("POST /${entity.name}/findByExampleContains")
+    @Headers({"Content-Type: application/json"})
+    ValueServiceResponse<Collection<${entity.name}>> findByExampleContains(${entity.name} probe);
+	
+    @RequestLine("POST /${entity.name}/findByExampleContainsPaged")
+    @Headers({"Content-Type: application/json"})
+    ValueServiceResponse<PageWrapper<${entity.name}>> findByExampleContainsPaged(${entity.name} probe, @Param("startPage") int startPage, @Param("count") int count);
+	
+    @RequestLine("POST /${entity.name}/findByExampleMatches")
+    @Headers({"Content-Type: application/json"})
+    ValueServiceResponse<Collection<${entity.name}>> findByExampleMatches(${entity.name} probe);
+	
+    @RequestLine("POST /${entity.name}/findByExampleMatchesPaged")
+    @Headers({"Content-Type: application/json"})
+    ValueServiceResponse<PageWrapper<${entity.name}>> findByExampleMatchesPaged(${entity.name} probe, @Param("startPage") int startPage, @Param("count") int count);
     
     @RequestLine("POST /${entity.name}/bulkSaveOrUpdate")
     @Headers({"Content-Type: application/json"})

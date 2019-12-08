@@ -1,6 +1,7 @@
 package ${basePackage}.bizobj;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.HashSet;
 import java.util.Set;
 import static java.lang.Math.floor;
@@ -37,6 +38,7 @@ import org.bitbucket.fermenter.stout.messages.MessageFactory;
 import org.bitbucket.fermenter.stout.messages.MessageManager;
 import org.bitbucket.fermenter.stout.messages.Severity;
 import org.bitbucket.fermenter.stout.util.MetamodelInstanceUtil;
+import org.bitbucket.fermenter.stout.util.QueryUtils;
 import org.bitbucket.fermenter.stout.messages.CoreMessages;
 import org.bitbucket.fermenter.stout.messages.MessageUtils;
 
@@ -71,14 +73,14 @@ import org.springframework.data.domain.Sort;
 
 import org.hibernate.annotations.Type;
 
-	#if (!$entity.isNonPersistentParentEntity())
+    #if (!$entity.isNonPersistentParentEntity())
 import ${basePackage}.persist.${entity.name}Repository;
-	#end
+    #end
 #end
 
 #if ($entity.hasNamedEnumeration())
-    import javax.persistence.Enumerated;
-    import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.EnumType;
 #end
 
 #foreach ($import in $entity.imports )
@@ -103,9 +105,10 @@ import ${reference.importPrefix}.client.service.${reference.type}MaintenanceDele
 #end
  *
  * Generated Code - DO NOT MODIFY
+ * Generated from base.bo.java.vm
  */
 #if ( $entity.isTransient())
-	#if ($entity.hasParent())
+    #if ($entity.hasParent())
 public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityParentJavaType} implements BusinessObject<${entity.persistentEntityParentJavaType}> {
     #else    
 public abstract class ${entity.name}BaseBO extends BaseSpringBO<${entity.name}BO> implements BusinessObject<${entity.name}BO> {
@@ -117,80 +120,80 @@ public abstract class ${entity.name}BaseBO<PK extends Serializable, BO, JPA exte
 @MappedSuperclass
 public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityParentJavaType}<${idFieldJavaType}, ${entity.name}BO, ${entity.name}Repository> implements PersistentBusinessObject<${idFieldJavaType}, ${entity.name}BO> {
 
-	@Inject
-	@Transient
-	private ${entity.name}Repository repository;
-	
-	private static boolean hasCheckedTableMismatch;
+    @Inject
+    @Transient
+    private ${entity.name}Repository repository;
+
+    private static boolean hasCheckedTableMismatch;
 #end
 
 #foreach ( $idField in $entity.idFields.values() )
-	#if ( !$entity.isTransient() )
-	@Id
-	#if ($idField.type == 'uuid')
-  	@Type(type = "org.hibernate.type.UUIDCharType")
-  	#end 
-	#if ( $idField.hasGenerator() )
-		#if ( $idField.generator == 'identity')
-	@GeneratedValue(strategy=GenerationType.IDENTITY)	
-		#else 
-	@GeneratedValue
-		#end
-	#end
-	@Column(name="${idField.column}")
-	#end
-	private ${idField.javaType}	${idField.name};
-	
+    #if ( !$entity.isTransient() )
+    @Id
+    #if ($idField.type == 'uuid')
+    @Type(type = "org.hibernate.type.UUIDCharType")
+    #end 
+    #if ( $idField.hasGenerator() )
+        #if ( $idField.generator == 'identity')
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+        #else 
+    @GeneratedValue
+        #end
+    #end
+    @Column(name="${idField.column}")
+    #end
+    private ${idField.javaType}    ${idField.name};
+
 #end
 
 #foreach ( $field in $entity.fields.values() )
-  #if ( !$entity.isTransient() )
-  #set ( $isRequired = $field.isRequired() )
-	@Column(name="${field.column}" #if($isRequired), nullable=false#end #if($field.javaType == 'BigDecimal'), scale=$field.getScale()#end
-	)
-  #end
-  #if ( $field.hasMinLength() || $field.hasMaxLength() && !$field.isEnumerationType())
-  	@Size(#if($field.hasMinLength())min=${field.minLength}#if($field.hasMaxLength()),#end#end #if($field.hasMaxLength())max=${field.maxLength}#end)
-  #end
-  #if ( $field.hasMaxValue() )
-  	#if ($field.javaType == 'BigDecimal')
-  	@DecimalMax("${field.maxValue}")
-  	#else
-  	@Max(${field.maxValue})
-  	#end
-  #end
-  	#if ($field.javaType == 'BigDecimal')
+    #if ( !$entity.isTransient() )
+    #set ( $isRequired = $field.isRequired() )
+        @Column(name="${field.column}" #if($isRequired), nullable=false#end #if($field.javaType == 'BigDecimal'), scale=$field.getScale()#end
+    )
+    #end
+    #if ( $field.hasMinLength() || $field.hasMaxLength() && !$field.isEnumerationType())
+    @Size(#if($field.hasMinLength())min=${field.minLength}#if($field.hasMaxLength()),#end#end #if($field.hasMaxLength())max=${field.maxLength}#end)
+    #end
+    #if ( $field.hasMaxValue() )
+        #if ($field.javaType == 'BigDecimal')
+    @DecimalMax("${field.maxValue}")
+        #else
+    @Max(${field.maxValue})
+          #end
+    #end
+    #if ($field.javaType == 'BigDecimal')
     @Digits(integer= #if($field.hasMaxValue())
             $field.maxValue.split('\.')[0].length()
-	#else Integer.MAX_VALUE
-	#end, fraction=$field.getScale())
-  	#end
-  #if ( $field.hasMinValue() )
-  	#if ($field.javaType == 'BigDecimal')
-  	@DecimalMin("${field.minValue}")
-  	#else
-  	@Min(${field.minValue})
-  	#end
-  #end
-  #if ( $field.hasFormat() )
-    @Pattern(regexp=${field.patterns})
-  #end
-  #if ($field.type == 'numeric_boolean')
-  	@Type(type = "org.hibernate.type.NumericBooleanType")
-  #end 
-  #if ($field.type == 'uuid')
-  	@Type(type = "org.hibernate.type.UUIDCharType")
-  #end   
-  #if ($field.isEnumerationType())
-    #if (!$field.getEnumeration().isValued())
-        @Enumerated(EnumType.STRING)
+    #else Integer.MAX_VALUE
+    #end, fraction=$field.getScale())
     #end
-  #end
-  #if ( $field.isRequired() )
-	@NotNull
-  #end
-	private ${field.javaType} ${field.name};
-	
+    #if ( $field.hasMinValue() )
+        #if ($field.javaType == 'BigDecimal')
+    @DecimalMin("${field.minValue}")
+        #else
+    @Min(${field.minValue})
+        #end
+    #end
+    #if ( $field.hasFormat() )
+    @Pattern(regexp=${field.patterns})
+    #end
+    #if ($field.type == 'numeric_boolean')
+    @Type(type = "org.hibernate.type.NumericBooleanType")
+    #end 
+    #if ($field.type == 'uuid')
+    @Type(type = "org.hibernate.type.UUIDCharType")
+    #end   
+    #if ($field.isEnumerationType())
+        #if (!$field.getEnumeration().isValued())
+    @Enumerated(EnumType.STRING)
+        #end
+    #end
+    #if ( $field.isRequired() )
+    @NotNull
+    #end
+    private ${field.javaType} ${field.name};
+
 #end
 
 #if ( !$entity.isTransient() && !$entity.isNonPersistentParentEntity() )
@@ -201,491 +204,678 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
      * some cases, this just results in a straightforward error.  In others, it can be a pain to track down, so this
      * compromise is justified as worth the labor/frustration savings.
      */
-	protected ${entity.name}BaseBO() {
-		if (!hasCheckedTableMismatch) {
-	    	String leafClassName = "${basePackage}.bizobj.${entity.name}BO";
-	    	MetamodelInstanceUtil.checkTableNameForMismatch(leafClassName, "${entity.table}");
-	    	hasCheckedTableMismatch = true;
-	    }
-	}
+    protected ${entity.name}BaseBO() {
+        if (!hasCheckedTableMismatch) {
+            String leafClassName = "${basePackage}.bizobj.${entity.name}BO";
+            MetamodelInstanceUtil.checkTableNameForMismatch(leafClassName, "${entity.table}");
+            hasCheckedTableMismatch = true;
+        }
+    }
 #end
 
 
 #if ( !$entity.idFields.isEmpty() )
-  #set ($idField = ${entity.idFields.values().iterator().next()})
-	
-	#if ( !$entity.isTransient() )
-	@Override
-	public ${idField.javaType} getKey() {
-		return ${idField.name}; 
-	}
-	
-	@Override
-	public void setKey(${idField.javaType} ${idField.name}) {
-		set${idField.capitalizedName}(${idField.name});
-	}
-	#end
-#end
-	
-#if ( !$entity.isTransient() && !$entity.isNonPersistentParentEntity() )
-	#if (!$entity.relations.isEmpty())
-  		#set ($idField = ${entity.idFields.values().iterator().next()})
-	public static ${entity.name}BO findByPrimaryKey(${idFieldJavaType} key) {
-		${entity.name}BO foundBO = ${entity.name}BO.findByPrimaryKey(key, false);
-		if (foundBO != null) {
-			foundBO.postFindByPrimaryKey();
-		}
-		return foundBO;
-	}
-	
-	public static ${entity.name}BO findByPrimaryKey(${idFieldJavaType} key, boolean eagerFetchRelations) {
-		${entity.name}BO foundBO = eagerFetchRelations ? getDefaultRepository().findOne(where(keyEquals(key)).and(eagerFetchRelations())) : getDefaultRepository().findOne(key);
-		if (foundBO != null) {
-			foundBO.postFindByPrimaryKey();
-		}
-		return foundBO;
-	}
-	#else
-	public static ${entity.name}BO findByPrimaryKey(${idFieldJavaType} key) {
-		${entity.name}BO foundBO = getDefaultRepository().findOne(key);
-		if (foundBO != null) {
-			foundBO.postFindByPrimaryKey();
-		}
-		return foundBO;
-	}
-	#end
+    #set ($idField = ${entity.idFields.values().iterator().next()})
 
-	public static Page<${entity.name}BO> findByExample(${entity.name}BO probe, Boolean containsMatch, Integer startPage, Integer count, Sort sort) {
-		Page<${entity.name}BO> result = null;
-	    if(probe == null) {
-			// default to find all if no probe is specified
-	        probe = new ${entity.name}BO();
-	    }
-	    
+    #if ( !$entity.isTransient() )
+    @Override
+    public ${idField.javaType} getKey() {
+        return ${idField.name}; 
+    }
+
+    @Override
+    public void setKey(${idField.javaType} ${idField.name}) {
+        set${idField.capitalizedName}(${idField.name});
+    }
+    #end
+#end
+    
+#if ( !$entity.isTransient() && !$entity.isNonPersistentParentEntity() )
+    #if (!$entity.relations.isEmpty())
+        #set ($idField = ${entity.idFields.values().iterator().next()})
+    public static ${entity.name}BO findByPrimaryKey(${idFieldJavaType} key) {
+        ${entity.name}BO foundBO = ${entity.name}BO.findByPrimaryKey(key, false);
+        if (foundBO != null) {
+            foundBO.postFindByPrimaryKey();
+        }
+        return foundBO;
+    }
+
+    public static ${entity.name}BO findByPrimaryKey(${idFieldJavaType} key, boolean eagerFetchRelations) {
+        ${entity.name}BO foundBO = eagerFetchRelations ? getDefaultRepository().findOne(where(keyEquals(key)).and(eagerFetchRelations())) : getDefaultRepository().findOne(key);
+        if (foundBO != null) {
+            foundBO.postFindByPrimaryKey();
+        }
+        return foundBO;
+    }
+    #else
+    public static ${entity.name}BO findByPrimaryKey(${idFieldJavaType} key) {
+        ${entity.name}BO foundBO = getDefaultRepository().findOne(key);
+        if (foundBO != null) {
+            foundBO.postFindByPrimaryKey();
+        }
+        return foundBO;
+    }
+    #end
+    
+    /**
+     * Method that does a findByExample looking for any objects that contain the
+     * same data as the probe that is passed in (ie. If the string "AN" is set
+     * on a field in the probe, and an object has "CAN" or "AND" or "WAND" --
+     * any string that contains the string "AN", then that object will be added
+     * to the result set.
+     * 
+     * The result set will be sorted by ascending primary key by default,
+     * returning page 0 and the default query limit set in QueryUtils
+     * (configurable via properties).
+     * 
+     * Passing in a null probe will result in the equivalent of a findAll() that
+     * starts on page 0 and is limited to the default query limit.
+     *
+     * @param probe
+     * @return List<${entity.name}BO> results that contains data that matches the
+     *         example passed in
+     */
+    public static List<${entity.name}BO> findByExampleContains(${entity.name}BO probe) {
+        return findByExampleWithDefaultSort(probe, true, QueryUtils.DEFAULT_PAGE, QueryUtils.QUERY_LIMIT).getContent();  
+    }
+
+    /**
+     * Method that does a findByExample looking for any objects that contain the
+     * same data as the probe that is passed in (ie. If the string "AN" is set
+     * on a field in the probe, and an object has "CAN" or "AND" or "WAND" --
+     * any string that contains the string "AN", then that object will be added
+     * to the result set.
+     * 
+     * The result set will be sorted by ascending primary key by default,
+     * returning the page and count of objects specified in the params.
+     * 
+     * Passing in a null probe will result in the equivalent of a findAll() that
+     * starts on page 0 and is limited to the default query limit.
+     * 
+     * @param probe
+     *            the example object
+     * @param startPage
+     *            the page to start
+     * @param count
+     *            maximum number of results to return
+     * @return List<EmployeeBO> results that contains data that matches the
+     *         example passed in
+     */
+    public static Page<${entity.name}BO> findByExampleContainsPaged(${entity.name}BO probe, Integer startPage, Integer count) {
+        return findByExampleWithDefaultSort(probe, true, startPage, count);  
+    }
+    
+    /**
+     * Method that does a findByExample looking for any objects that match the
+     * same data as the probe that is passed in (ie. If the string "AN" is set
+     * on a field in the probe, only objects that have exactly "AN" in the same
+     * field will be added to the result set.
+     * 
+     * The result set will be sorted by ascending primary key by default,
+     * returning page 0 and the default query limit set in QueryUtils
+     * (configurable via properties).
+     *
+     * Passing in a null probe will result in the equivalent of a findAll() that
+     * starts on page 0 and is limited to the default query limit.
+     * 
+     * @param probe
+     * @return List<${entity.name}BO> results that contains data that matches
+     *         the example passed in
+     */
+    public static List<${entity.name}BO> findByExampleMatches(${entity.name}BO probe) {
+        return findByExampleWithDefaultSort(probe, false, QueryUtils.DEFAULT_PAGE, QueryUtils.QUERY_LIMIT).getContent();
+    }
+
+    /**
+     * Method that does a findByExample looking for any objects that match the
+     * same data as the probe that is passed in (ie. If the string "AN" is set
+     * on a field in the probe, only objects that have exactly "AN" in the same
+     * field will be added to the result set.
+     * 
+     * The result set will be sorted by ascending primary key by default,
+     * returning the page and count of objects specified in the params.
+     * 
+     * Passing in a null probe will result in the equivalent of a findAll() that
+     * starts on page 0 and is limited to the default query limit.
+     * 
+     * @param probe
+     *            the example object
+     * @param startPage
+     *            the page to start
+     * @param count
+     *            maximum number of results to return
+     * @return Page<EmployeeBO> results that contains data that matches the
+     *         example passed in
+     */
+    public static Page<${entity.name}BO> findByExampleMatchesPaged(${entity.name}BO probe, Integer startPage, Integer count) {
+        return findByExampleWithDefaultSort(probe, false, startPage, count);
+    }
+
+    /**
+     * Method that does a findByExample using the params passed in.
+     * 
+     * The result set will be sorted by ascending primary key by default,
+     * returning the page and count of objects specified in the params.
+     * 
+     * Passing in a null probe will result in the equivalent of a findAll().
+     * 
+     * @param probe
+     *            the example object
+     * @param containsMatch
+     *            whether to match exactly or match if it contains
+     * @param startPage
+     *            the page to start
+     * @param count
+     *            maximum number of results to return
+     * @return List<${entity.name}BO> matching results
+     */
+    public static Page<${entity.name}BO> findByExampleWithDefaultSort(${entity.name}BO probe, Boolean containsMatch, Integer startPage, Integer count){
+        
+        if(probe == null) {
+            // default to find all if no probe is specified
+            probe = new ${entity.name}BO();
+        }
+        
+        // Set some defaults
+        if (startPage == null || startPage < 0){
+            startPage = QueryUtils.DEFAULT_PAGE;
+        }
+        
+        if (count == null || count <=0) {
+            count = QueryUtils.QUERY_LIMIT;
+            MessageUtils.createInformationalMessage("find.by.example.count.override", null, null);
+        }
+        
+        // Figure out if there is a default sort that can be used
+        #set($idList ="")
+        #set($separator="")
+        #foreach ( $idField in $entity.idFields.values() )
+            #if ( !$entity.isTransient() )
+                #set( $idList = $idList + $separator + '"' + "${idField.name}" + '"' )
+                #set($separator = ", ")
+            #end 
+        #end
+        
+        #if (!$idList)
+        Pageable pageable = QueryUtils.getDefaultPageRequest();
+        #else
+        Sort sort = new Sort(Sort.Direction.ASC, $idList);
+        Pageable pageable = new PageRequest(startPage, count, sort);
+        #end
+        
+        Page<${entity.name}BO> results = findByExample(probe, containsMatch, pageable);
+        return results;     
+    }
+
+    /**
+     * Method that does a findByExample using the params passed in.
+     * 
+     * Passing in a null probe will result in the equivalent of a findAll().
+     * 
+     * @param probe
+     *            the example object
+     * @param containsMatch
+     *            whether to match exactly or match if it contains
+     * @param startPage
+     *            the page to start
+     * @param count
+     *            maximum number of results to return
+     * @param sort
+     *            how the results will be sorted on returned and for paging
+     * @return List<${entity.name}BO> matching results
+     */
+    public static Page<${entity.name}BO> findByExample(${entity.name}BO probe, Boolean containsMatch, Integer startPage, Integer count, Sort sort) {
+        Page<${entity.name}BO> result = null;
+        if(probe == null) {
+            // default to find all if no probe is specified
+            probe = new ${entity.name}BO();
+        }
+        
         if (startPage == null) {
             Message msg = MessageUtils.createErrorMessage("find.by.example.requires.start.page", null, null);
             MessageManager.addMessage(msg);
         } else if (count == null) {
             Message msg = MessageUtils.createErrorMessage("find.by.example.requires.count", null, null);
             MessageManager.addMessage(msg);
-	    } else if (sort == null) {
+        } else if (sort == null) {
             Message msg = MessageUtils.createErrorMessage("find.by.example.requires.sort", null, null);
             MessageManager.addMessage(msg);
         } else {
-	        Pageable pageable = new PageRequest(startPage, count, sort);
-            Example<${entity.name}BO> example;
-            if(containsMatch) {
-                ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreCase().withStringMatcher(StringMatcher.CONTAINING);
-                example = Example.of(probe, matcher);
-            } else {
-                example = Example.of(probe);
-            }
-	        result = getDefaultRepository().findAll(example, pageable);	        
-	    }
-	    return result;
+            Pageable pageable = new PageRequest(startPage, count, sort);
+            result = findByExample(probe, containsMatch, pageable);    
+        }
+        return result;
+    }
+
+    /**
+     * Method that does a findByExample using the params passed in.
+     * 
+     * The result set will be sorted by ascending primary key by default,
+     * returning the page and count of objects specified in the {@link Pageable}.
+     * 
+     * Passing in a null probe will result in the equivalent of a findAll().
+     * 
+     * @param probe
+     *            the example object
+     * @param containsMatch
+     *            whether to match exactly or match if it contains
+     * @param pageable
+     *            paging information for the query
+     * @return List<${entity.name}BO> matching results
+     */
+    public static Page<${entity.name}BO> findByExample(${entity.name}BO probe, Boolean containsMatch, Pageable pageable) {
+        Example<${entity.name}BO> example;
+        if(containsMatch) {
+            ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreCase().withStringMatcher(StringMatcher.CONTAINING);
+            example = Example.of(probe, matcher);
+        } else {
+            example = Example.of(probe);
+        }
+        return getDefaultRepository().findAll(example, pageable);
     }
 #end
 
-	/**
-	 * Provide an opportunity to interact with the object after it is found, but before it is 
-	 * returned by {@link ${entity.name}BO#findByPrimaryKey(${idFieldJavaType})} and other 
-	 * primary key based retrieval methods.
-	 */
-	protected void postFindByPrimaryKey() {
-	}
+    /**
+     * Provide an opportunity to interact with the object after it is found, but before it is 
+     * returned by {@link ${entity.name}BO#findByPrimaryKey(${idFieldJavaType})} and other 
+     * primary key based retrieval methods.
+     */
+    protected void postFindByPrimaryKey() {
+    }
 
-#if ( !$entity.isTransient() && !$entity.isNonPersistentParentEntity() )	
-	@Override
-	protected ${entity.name}Repository getRepository() {
-		return repository;
-	}
-	
-	protected static ${entity.name}Repository getDefaultRepository() {
-		${entity.name}BO unusedBizObj = new ${entity.name}BO();
-		return unusedBizObj.getRepository();
-	}
+#if ( !$entity.isTransient() && !$entity.isNonPersistentParentEntity() )
+    @Override
+    protected ${entity.name}Repository getRepository() {
+        return repository;
+    }
+
+    protected static ${entity.name}Repository getDefaultRepository() {
+        ${entity.name}BO unusedBizObj = new ${entity.name}BO();
+        return unusedBizObj.getRepository();
+    }
 #end
 
 
 #foreach ($relation in $entity.relations.values())
-#if ( !$entity.isTransient() && !$relation.idFields.isEmpty() )
- @OneToMany(mappedBy="parent${entity.name}", cascade=CascadeType.ALL, fetch=FetchType.${relation.fetchMode.toUpperCase()}, orphanRemoval=true)
-#end
-	private Set<${relation.type}BO> ${relation.label}s;
+    #if ( !$entity.isTransient() && !$relation.idFields.isEmpty() )
+    @OneToMany(mappedBy="parent${entity.name}", cascade=CascadeType.ALL, fetch=FetchType.${relation.fetchMode.toUpperCase()}, orphanRemoval=true)
+    #end
+    private Set<${relation.type}BO> ${relation.label}s;
 #end
 #foreach ($inverseRelation in $entity.inverseRelations.values())
-	#if ( !$entity.isTransient() )		
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name=#if(!$inverseRelation.idFields.isEmpty())#set($inverseRelationKey = ${inverseRelation.idFields.values().iterator().next()}) "${inverseRelationKey.column}", referencedColumnName="${inverseRelationKey.parentColumn}#else"${inverseRelation.Name}_ID#end", nullable=false)
-	#end
-	private ${inverseRelation.name}BO parent${inverseRelation.name};
+    #if ( !$entity.isTransient() )
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name=#if(!$inverseRelation.idFields.isEmpty())#set($inverseRelationKey = ${inverseRelation.idFields.values().iterator().next()}) "${inverseRelationKey.column}", referencedColumnName="${inverseRelationKey.parentColumn}#else"${inverseRelation.Name}_ID#end", nullable=false)
+    #end
+    private ${inverseRelation.name}BO parent${inverseRelation.name};
 #end
 #foreach ($reference in $entity.references.values())
-  #if ( !$entity.isTransient() && !$reference.isExternal())
-    #if($reference.foreignKeyFields.iterator().hasNext()) 
-	@ManyToOne(fetch=FetchType.EAGER #if($reference.isRequired()), optional=false#end) 
-	@JoinColumn(name="${reference.foreignKeyFields.iterator().next().column}")	
+    #if ( !$entity.isTransient() && !$reference.isExternal())
+        #if($reference.foreignKeyFields.iterator().hasNext()) 
+    @ManyToOne(fetch=FetchType.EAGER #if($reference.isRequired()), optional=false#end) 
+    @JoinColumn(name="${reference.foreignKeyFields.iterator().next().column}")    
+        #end
+        #if ( $reference.isRequired() )
+    @NotNull
+        #end
     #end
-    #if ( $reference.isRequired() )
-	@NotNull
-    #end
-  #end 
-  #if (!$reference.isExternal())
-    #if(!$reference.foreignKeyFields.iterator().hasNext()) 
+    #if (!$reference.isExternal())
+        #if(!$reference.foreignKeyFields.iterator().hasNext()) 
     @Transient
+        #end
+    private ${reference.type}BO ${reference.name};
+    #else
+    @Transient
+    private ${reference.type} ${reference.name};
     #end
-	private ${reference.type}BO ${reference.name};
-  #else
-  	@Transient
-  	private ${reference.type} ${reference.name};
-  #end
-  #if ($reference.isExternal() )
-    #if($reference.foreignKeyFields.iterator().hasNext()) 
-  	@Inject
-  	@Transient
-	private ${reference.type}MaintenanceDelegate ${reference.name}Delegate;
-	#end
-  	#if($reference.foreignKeyFields.iterator().hasNext()) 
+    #if ($reference.isExternal() )
+        #if($reference.foreignKeyFields.iterator().hasNext()) 
+    @Inject
+    @Transient
+    private ${reference.type}MaintenanceDelegate ${reference.name}Delegate;
+        #end
+        #if($reference.foreignKeyFields.iterator().hasNext()) 
     @Column(name="${reference.foreignKeyFields.iterator().next().column}")
-    #if ( $reference.isRequired() )
-	@NotNull
-  	#end 
-    private ${reference.foreignKeyFields.iterator().next().javaType}	${reference.name}Key;
-    #end	
-  #end
+            #if ( $reference.isRequired() )
+    @NotNull
+            #end
+    private ${reference.foreignKeyFields.iterator().next().javaType}    ${reference.name}Key;
+        #end
+    #end
 #end
 
 #foreach ( $idField in $entity.idFields.values() )
 
-	/**
-	 * Get the ${idField.label}.
-	 *
-	 * @return The ${idField.label}
-	 */
-	protected ${idField.javaType} get${idField.capitalizedName}() {
-		return ${idField.name};
-	}
-	
-	/**
-	 * Set the ${idField.label}.
-	 *
-	 * @param The ${idField.label}
-	 */
-	protected void set${idField.capitalizedName}(${idField.javaType} ${idField.name}) {
-		this.${idField.name} = ${idField.name};
-	}
+    /**
+     * Get the ${idField.label}.
+     *
+     * @return The ${idField.label}
+     */
+    protected ${idField.javaType} get${idField.capitalizedName}() {
+        return ${idField.name};
+    }
+
+    /**
+     * Set the ${idField.label}.
+     *
+     * @param The ${idField.label}
+     */
+    protected void set${idField.capitalizedName}(${idField.javaType} ${idField.name}) {
+        this.${idField.name} = ${idField.name};
+    }
 #end
 
 #foreach ( $field in $entity.fields.values() )
 
 #if ( $field.hasDefaultValue() )
-	protected void setDefault${field.capitalizedName}() {
+    protected void setDefault${field.capitalizedName}() {
 #if ($field.javaType == 'String')
-		if (StringUtils.isEmpty(${field.name})) {
-			set${field.capitalizedName}("${field.defaultValue}");
-		}
+        if (StringUtils.isEmpty(${field.name})) {
+            set${field.capitalizedName}("${field.defaultValue}");
+        }
 #elseif ($field.javaType == 'BigDecimal')
-		if (${field.name} == null) {
-			BigDecimal defaultBigDecimal = new BigDecimal(${field.defaultValue});
-			set${field.capitalizedName}(defaultBigDecimal);
-		}
+        if (${field.name} == null) {
+            BigDecimal defaultBigDecimal = new BigDecimal(${field.defaultValue});
+            set${field.capitalizedName}(defaultBigDecimal);
+        }
 #elseif ($field.javaType == 'Long')
-		if (${field.name} == null) {
-			long defaultLong = ${field.defaultValue}L;
-			set${field.capitalizedName}(defaultLong);
-		}
+        if (${field.name} == null) {
+            long defaultLong = ${field.defaultValue}L;
+            set${field.capitalizedName}(defaultLong);
+        }
 #elseif ($field.javaType == 'Timestamp')
-		if (${field.name} == null) {
-			Timestamp defaultTimestamp = Timestamp.valueOf("${field.defaultValue}");
-			set${field.capitalizedName}(defaultTimestamp);
-		}
+        if (${field.name} == null) {
+            Timestamp defaultTimestamp = Timestamp.valueOf("${field.defaultValue}");
+            set${field.capitalizedName}(defaultTimestamp);
+        }
 #elseif ($field.javaType == 'Date')
-		if (${field.name} == null) {
-			DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-			Date defaultDate = null;
-			try {
-				defaultDate = formatter.parse("${field.defaultValue}");
-			} catch (ParseException e) {
-				throw new UnrecoverableException();
-			}
-			set${field.capitalizedName}(defaultDate);
-		}
+        if (${field.name} == null) {
+            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            Date defaultDate = null;
+            try {
+                defaultDate = formatter.parse("${field.defaultValue}");
+            } catch (ParseException e) {
+                throw new UnrecoverableException();
+            }
+            set${field.capitalizedName}(defaultDate);
+        }
 #else
-		if (${field.name} == null) {
-			set${field.capitalizedName}(${field.defaultValue});
-		}
+        if (${field.name} == null) {
+            set${field.capitalizedName}(${field.defaultValue});
+        }
 #end
-	}
+    }
 #end
-	
-	/**
+    
+    /**
   #if ($field.documentation)
-	 * Gets: ${field.documentation}.
+     * Gets: ${field.documentation}.
   #else
-	 * Get the ${field.label}.
+     * Get the ${field.label}.
   #end
-	 *
-	 * @return The ${field.label}
-	 */
-	public ${field.javaType} get${field.capitalizedName}() {
-		return ${field.name};
-	}
-	
-	/**
+     *
+     * @return The ${field.label}
+     */
+    public ${field.javaType} get${field.capitalizedName}() {
+        return ${field.name};
+    }
+    
+    /**
   #if ($field.documentation)
-	 * Sets: ${field.documentation}.
+     * Sets: ${field.documentation}.
   #else
-	 * Set the ${field.label}.
+     * Set the ${field.label}.
   #end
-	 *
-	 * @param The ${field.label}
-	 */
-	public void set${field.capitalizedName}(${field.javaType} ${field.name}) {		
-		#if($field.javaType == 'BigDecimal')
-		if( ${field.name} == null ) {
-			this.${field.name} = ${field.name};
-		}else {
-			this.${field.name} = ${field.name}.setScale($field.getScale(), RoundingMode.HALF_EVEN);
-		}
-		#else
-		this.${field.name} = ${field.name};
-		#end
-	}
+     *
+     * @param The ${field.label}
+     */
+    public void set${field.capitalizedName}(${field.javaType} ${field.name}) {
+        #if($field.javaType == 'BigDecimal')
+        if( ${field.name} == null ) {
+            this.${field.name} = ${field.name};
+        }else {
+            this.${field.name} = ${field.name}.setScale($field.getScale(), RoundingMode.HALF_EVEN);
+        }
+        #else
+        this.${field.name} = ${field.name};
+        #end
+    }
 #end
 
 #foreach ($inverseRelation in $entity.inverseRelations.values())
 
-	/**
-	 * Set the parent ${inverseRelation.name} onto this instance.
-	 * @param parent The parent instance to set
-	 */
-	public void set${inverseRelation.name}(${inverseRelation.name}BO parent) {
-		parent${inverseRelation.name} = parent;
-	}
-	
-	/**
-	 * Returns the parent of the type for this instance.
-	 * @return The parent instance or null if no parent of this type exists
-	 */
-	public ${inverseRelation.name}BO get${inverseRelation.name}() {
-		return parent${inverseRelation.name};
-	}	
+    /**
+     * Set the parent ${inverseRelation.name} onto this instance.
+     * @param parent The parent instance to set
+     */
+    public void set${inverseRelation.name}(${inverseRelation.name}BO parent) {
+        parent${inverseRelation.name} = parent;
+    }
+    
+    /**
+     * Returns the parent of the type for this instance.
+     * @return The parent instance or null if no parent of this type exists
+     */
+    public ${inverseRelation.name}BO get${inverseRelation.name}() {
+        return parent${inverseRelation.name};
+    }    
 #end
 
 #foreach ($relation in $entity.relations.values()) 
 
-	/**
+    /**
   #if ($relation.documentation)
-	 * Sets: ${relation.documentation}.
+     * Sets: ${relation.documentation}.
   #else
-	 * Set the ${relation.label} relation.
+     * Set the ${relation.label} relation.
   #end
-	 * 
-	 * @param Set - The ${relation.label}s
-	 */
-	public void set${relation.type}s(Set<${relation.type}BO> ${relation.label}s) {
-		this.${relation.label}s = ${relation.label}s;
-	} 
+     * 
+     * @param Set - The ${relation.label}s
+     */
+    public void set${relation.type}s(Set<${relation.type}BO> ${relation.label}s) {
+        this.${relation.label}s = ${relation.label}s;
+    } 
 
-	/**
+    /**
   #if ($relation.documentation)
-	 * Gets: ${relation.documentation}.
+     * Gets: ${relation.documentation}.
   #else
-	 * Get the ${relation.label} relation.
+     * Get the ${relation.label} relation.
   #end
-	 * 
-	 * @return Set - The ${relation.label}s
-	 */
-	public Set<${relation.type}BO> get${relation.type}s() {
-		if( ${relation.label}s == null ) {
-			${relation.label}s = new HashSet<${relation.type}BO>();
-		}
-		
-		return ${relation.label}s;
-	}
-	 
-	/**
+     * 
+     * @return Set - The ${relation.label}s
+     */
+    public Set<${relation.type}BO> get${relation.type}s() {
+        if( ${relation.label}s == null ) {
+            ${relation.label}s = new HashSet<${relation.type}BO>();
+        }
+        
+        return ${relation.label}s;
+    }
+     
+    /**
   #if ($relation.documentation)
-	 * Adds: ${relation.documentation}.
+     * Adds: ${relation.documentation}.
   #else
-	 * Add a ${relation.label}.
+     * Add a ${relation.label}.
   #end
-	 *
-	 * @param The ${relation.label} to add
-	 */
-	public void add${relation.type}(${relation.type}BO ${relation.label}) {
-		Set<${relation.type}BO> childSet = get${relation.type}s();
-		if (childSet == null) {
-			childSet = new HashSet<${relation.type}BO>();
-			set${relation.type}s(childSet);
-		}
-		
-		${relation.label}.set${entity.name}( (${entity.name}BO) this );
-		childSet.add( ${relation.label} );
-	}
-	 
-	/**
+     *
+     * @param The ${relation.label} to add
+     */
+    public void add${relation.type}(${relation.type}BO ${relation.label}) {
+        Set<${relation.type}BO> childSet = get${relation.type}s();
+        if (childSet == null) {
+            childSet = new HashSet<${relation.type}BO>();
+            set${relation.type}s(childSet);
+        }
+        
+        ${relation.label}.set${entity.name}( (${entity.name}BO) this );
+        childSet.add( ${relation.label} );
+    }
+     
+    /**
   #if ($relation.documentation)
-	 * Removes: ${relation.documentation}.
+     * Removes: ${relation.documentation}.
   #else
-	 * Remove a ${relation.label}.
+     * Remove a ${relation.label}.
   #end
-	 *
-	 * @param The ${relation.label} to remove
-	 */
-	public ${relation.type}BO remove${relation.type}(${relation.type}BO ${relation.label}) {
-		if( get${relation.type}s().remove( ${relation.label} ) ) {
-			${relation.label}.set${entity.name}(null);
-			
-		} else {
-			getLogger().error("Could not remove ${relation.label} instance with key " + ${relation.label}.getKey());
-			
-		}
-	    
-		return ${relation.label};
-	}
+     *
+     * @param The ${relation.label} to remove
+     */
+    public ${relation.type}BO remove${relation.type}(${relation.type}BO ${relation.label}) {
+        if( get${relation.type}s().remove( ${relation.label} ) ) {
+            ${relation.label}.set${entity.name}(null);
+            
+        } else {
+            getLogger().error("Could not remove ${relation.label} instance with key " + ${relation.label}.getKey());
+            
+        }
+        
+        return ${relation.label};
+    }
 #end
 #if (!$entity.relations.isEmpty() && !$entity.isTransient())
-	/**
-	 * Creates a {@link Specification} that eagerly fetches all 1-M relations that are 
-	 * present in {@link ${entity.name}BO}. 
-	 */
-	protected static Specification<${entity.name}BO> eagerFetchRelations() {
-		return new Specification<${entity.name}BO>() {
+    /**
+     * Creates a {@link Specification} that eagerly fetches all 1-M relations that are 
+     * present in {@link ${entity.name}BO}. 
+     */
+    protected static Specification<${entity.name}BO> eagerFetchRelations() {
+        return new Specification<${entity.name}BO>() {
 
-			@Override
-			public Predicate toPredicate(Root<${entity.name}BO> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				for (PluralAttribute<? super ${entity.name}BO, ?, ?> fetch : root.getModel().getPluralAttributes()) {
-					root.fetch(fetch, JoinType.LEFT);
-				}
-				query.distinct(true);
-				return null;
-			}
+            @Override
+            public Predicate toPredicate(Root<${entity.name}BO> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                for (PluralAttribute<? super ${entity.name}BO, ?, ?> fetch : root.getModel().getPluralAttributes()) {
+                    root.fetch(fetch, JoinType.LEFT);
+                }
+                query.distinct(true);
+                return null;
+            }
 
-		};
-	}
-	
-	/**
-	 * Creates a {@link Specification} that filters {@link ${entity.name}BO}s that have an ${idField.name} that 
-	 * matches the given key. 
-	 */
-	protected static Specification<${entity.name}BO> keyEquals(final ${idFieldJavaType} key) {
-		return new Specification<${entity.name}BO>() {
+        };
+    }
+    
+    /**
+     * Creates a {@link Specification} that filters {@link ${entity.name}BO}s that have an ${idField.name} that 
+     * matches the given key. 
+     */
+    protected static Specification<${entity.name}BO> keyEquals(final ${idFieldJavaType} key) {
+        return new Specification<${entity.name}BO>() {
 
-			@Override
-			public Predicate toPredicate(Root<${entity.name}BO> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				return cb.equal(root.get("${idField.name}"), key);
-			}
+            @Override
+            public Predicate toPredicate(Root<${entity.name}BO> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                return cb.equal(root.get("${idField.name}"), key);
+            }
 
-		};
-	}
+        };
+    }
 #end
 #foreach ($reference in $entity.references.values())
   #if ( !$reference.isExternal() )
 
-	/**
-	 * Get the ${reference.label} reference.
-	 *
-	 * @return ${reference.type}BO - The ${reference.label}
-	 */
-	public ${reference.type}BO get${reference.capitalizedName}() {
-		return ${reference.name};
-	}
-	 
-	/**
-	 * Set the ${reference.label} reference.
-	 *
-	 * @param The ${reference.label}
-	 */
-	public void set${reference.capitalizedName}(${reference.type}BO ${reference.name}) {
-		this.${reference.name} = ${reference.name};
-	}
+    /**
+     * Get the ${reference.label} reference.
+     *
+     * @return ${reference.type}BO - The ${reference.label}
+     */
+    public ${reference.type}BO get${reference.capitalizedName}() {
+        return ${reference.name};
+    }
+     
+    /**
+     * Set the ${reference.label} reference.
+     *
+     * @param The ${reference.label}
+     */
+    public void set${reference.capitalizedName}(${reference.type}BO ${reference.name}) {
+        this.${reference.name} = ${reference.name};
+    }
 
   #else
-	
-	/**
-	 * Get the ${reference.label} reference.
-	 *
-	 * @return ${reference.type} - The ${reference.label}
-	 */
-	public ${reference.type} get${reference.capitalizedName}() {
-	    #if ($reference.foreignKeyFields.iterator().hasNext())
-		if ((${reference.name} == null) && (${reference.name}Key != null)) {
-			this.${reference.name} = ${reference.name}Delegate.findByPrimaryKey(${reference.name}Key);
-		}
-		#end
-		return ${reference.name};
-	}
-	 
-	/**
-	 * Set the ${reference.label} reference.
-	 *
-	 * @param The ${reference.label}
-	 */
-	public void set${reference.capitalizedName}(${reference.type} ${reference.name}) {
-		this.${reference.name} = ${reference.name};
-		#if ($reference.foreignKeyFields.iterator().hasNext())
-		this.${reference.name}Key = ${reference.name} != null ? ${reference.name}.get${reference.foreignKeyFields.iterator().next().getCapitalizedName()}() : null;
-		#end
-	}
+    
+    /**
+     * Get the ${reference.label} reference.
+     *
+     * @return ${reference.type} - The ${reference.label}
+     */
+    public ${reference.type} get${reference.capitalizedName}() {
+        #if ($reference.foreignKeyFields.iterator().hasNext())
+        if ((${reference.name} == null) && (${reference.name}Key != null)) {
+            this.${reference.name} = ${reference.name}Delegate.findByPrimaryKey(${reference.name}Key);
+        }
+        #end
+        return ${reference.name};
+    }
+     
+    /**
+     * Set the ${reference.label} reference.
+     *
+     * @param The ${reference.label}
+     */
+    public void set${reference.capitalizedName}(${reference.type} ${reference.name}) {
+        this.${reference.name} = ${reference.name};
+        #if ($reference.foreignKeyFields.iterator().hasNext())
+        this.${reference.name}Key = ${reference.name} != null ? ${reference.name}.get${reference.foreignKeyFields.iterator().next().getCapitalizedName()}() : null;
+        #end
+    }
   #end
-				
+                
 #end
-	
-	/**
-	 * Executes field-level validations on all child relations.
-	 */
-	@Override 
-	protected void validateRelations() {		
+    
+    /**
+     * Executes field-level validations on all child relations.
+     */
+    @Override 
+    protected void validateRelations() {
 #if( !$entity.relations.isEmpty() )
-		//call field validation on children:
+        //call field validation on children:
   #foreach ($relation in $entity.relations.values())
-		Set<${relation.type}BO> ${relation.label}Set = get${relation.type}s();
-		if (${relation.label}Set != null && !${relation.label}Set.isEmpty()) {
-			for (${relation.type}BO child : ${relation.label}Set) {
-				child.validateFields();
-			}
-		}
+        Set<${relation.type}BO> ${relation.label}Set = get${relation.type}s();
+        if (${relation.label}Set != null && !${relation.label}Set.isEmpty()) {
+            for (${relation.type}BO child : ${relation.label}Set) {
+                child.validateFields();
+            }
+        }
 
-  #end		
+  #end        
 #end
-	}	
-	
+    }    
+    
     /**
      * Lifecycle method that is invoked before this business object's pre-save validation occurs to support
      * defaulting of field values that have been set in the entity metamodel.
      */
-	 #if( !$entity.isTransient() )
-	       @Override
-	 #end
+     #if( !$entity.isTransient() )
+           @Override
+     #end
      protected void defaultFieldValues() {
-     	#foreach ( $field in $entity.fields.values() )
-     		#if ($field.hasDefaultValue())
-     			setDefault${field.capitalizedName}();
-     		#end
-     	#end
+         #foreach ( $field in $entity.fields.values() )
+             #if ($field.hasDefaultValue())
+                 setDefault${field.capitalizedName}();
+             #end
+         #end
      }
      
-	/**
-	 * Executes all complex validation on child relations.
-	 */
-	@Override 
-	protected void complexValidationOnRelations() {
+    /**
+     * Executes all complex validation on child relations.
+     */
+    @Override 
+    protected void complexValidationOnRelations() {
 #if( !$entity.relations.isEmpty() )
-		//call complex validation on children:
+        //call complex validation on children:
   #foreach ($relation in $entity.relations.values())
-		Set<${relation.type}BO> ${relation.label}Set = get${relation.type}s();
-		if (${relation.label}Set != null && !${relation.label}Set.isEmpty()) {
-			for (${relation.type}BO child : ${relation.label}Set) {
-				child.complexValidation();
-			}
-		}
+        Set<${relation.type}BO> ${relation.label}Set = get${relation.type}s();
+        if (${relation.label}Set != null && !${relation.label}Set.isEmpty()) {
+            for (${relation.type}BO child : ${relation.label}Set) {
+                child.complexValidation();
+            }
+        }
 
-  #end		
+  #end        
 #end
-	}
+    }
 
-	/**
+    /**
       * {@inheritDoc}
       */
       public String toString(){
@@ -697,41 +887,41 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
       */
       @Override 
       protected void validateReferences() {
-		#foreach ($reference in $entity.references.values())
-		  #if ( !$reference.isExternal() )
-		    #if( !$entity.references.isEmpty() ) 
-				${reference.type}BO ${reference.name}Ref = get${reference.capitalizedName}();
-				#if ($reference.foreignKeyFields.iterator().hasNext())				
-				if ((${reference.name}Ref != null && ${reference.name}Ref.getKey() != null)) {
-					${reference.type}BO found${reference.type}Ref = ${reference.type}BO.findByPrimaryKey(${reference.name}Ref.getKey());
-				    this.checkIfReferenceExists(found${reference.type}Ref);
-				}
-				#elseif ($reference.isRequired() )
-				this.checkIfReferenceExists(${reference.name}Ref);
-				#else
-				if (${reference.name}Ref != null) {
-					this.checkIfReferenceExists(${reference.name}Ref);
-				}
-				#end
-			#end
-		  #else
-		    #if( !$entity.references.isEmpty() ) 
-				${reference.type} ${reference.name}Ref = get${reference.capitalizedName}();	
-				#if ($reference.foreignKeyFields.iterator().hasNext())				
-				if ((${reference.name}Ref != null && ${reference.name}Key != null)) {
-					${reference.type} found${reference.type}Ref = ${reference.name}Delegate.findByPrimaryKey(${reference.name}Key);
-				    this.checkIfReferenceExists(found${reference.type}Ref);
-				}
-				#elseif ($reference.isRequired() )
-				this.checkIfReferenceExists(${reference.name}Ref);
-				#else
-				if (${reference.name}Ref != null) {
-					this.checkIfReferenceExists(${reference.name}Ref);
-				}
-				#end
-			#end
-		  #end				
-		#end
+        #foreach ($reference in $entity.references.values())
+          #if ( !$reference.isExternal() )
+            #if( !$entity.references.isEmpty() ) 
+                ${reference.type}BO ${reference.name}Ref = get${reference.capitalizedName}();
+                #if ($reference.foreignKeyFields.iterator().hasNext())
+                if ((${reference.name}Ref != null && ${reference.name}Ref.getKey() != null)) {
+                    ${reference.type}BO found${reference.type}Ref = ${reference.type}BO.findByPrimaryKey(${reference.name}Ref.getKey());
+                    this.checkIfReferenceExists(found${reference.type}Ref);
+                }
+                #elseif ($reference.isRequired() )
+                this.checkIfReferenceExists(${reference.name}Ref);
+                #else
+                if (${reference.name}Ref != null) {
+                    this.checkIfReferenceExists(${reference.name}Ref);
+                }
+                #end
+            #end
+          #else
+            #if( !$entity.references.isEmpty() ) 
+                ${reference.type} ${reference.name}Ref = get${reference.capitalizedName}();
+                #if ($reference.foreignKeyFields.iterator().hasNext())
+                if ((${reference.name}Ref != null && ${reference.name}Key != null)) {
+                    ${reference.type} found${reference.type}Ref = ${reference.name}Delegate.findByPrimaryKey(${reference.name}Key);
+                    this.checkIfReferenceExists(found${reference.type}Ref);
+                }
+                #elseif ($reference.isRequired() )
+                this.checkIfReferenceExists(${reference.name}Ref);
+                #else
+                if (${reference.name}Ref != null) {
+                    this.checkIfReferenceExists(${reference.name}Ref);
+                }
+                #end
+            #end
+          #end
+        #end
       }
       
 }

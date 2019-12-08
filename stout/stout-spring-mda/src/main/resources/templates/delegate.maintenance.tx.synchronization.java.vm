@@ -31,6 +31,7 @@ import ${basePackage}.client.config.CachePropertiesConfig;
  * needed to persist references and relations in an order that will not produce constraint violations.
  *
  * Generated Code - DO NOT MODIFY
+ * Generated from delegate.maintenance.tx.synchronization.java.vm
  */
 public class DelegateMaintenanceTransactionSynchronization implements Synchronization {
     

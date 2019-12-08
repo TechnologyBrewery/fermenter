@@ -121,7 +121,8 @@ public final class MessageTestUtils {
      * Method used to validate error messages in a {@link Response}, returned by
      * a ({@link WebApplicationException}.
      * 
-     * @param valueServiceResponse the value service response
+     * @param valueServiceResponse
+     *            the value service response
      * @param messageKey
      *            the message key of the expected error message returned
      * @param messageSummary
@@ -132,8 +133,8 @@ public final class MessageTestUtils {
      *            message summary
      */
     @SuppressWarnings("rawtypes")
-    public static void assertErrorMessageInResponse(ValueServiceResponse valueServiceResponse,
-            String messageKey, String messageSummary, Class clazz) {
+    public static void assertErrorMessageInResponse(ValueServiceResponse valueServiceResponse, String messageKey,
+            String messageSummary, Class clazz) {
 
         assertTrue("Response was unexpectedly error-free", valueServiceResponse.hasErrors());
         assertErrorMessagesInResponse(valueServiceResponse, 1);
@@ -143,6 +144,34 @@ public final class MessageTestUtils {
         assertEquals("Message key did not match expected value", messageKey, message.getKey());
         String actualSummaryMessage = MessageUtils.getSummaryMessage(messageKey, message.getInserts(), clazz);
         assertEquals("Error messages were unexpectedly not the same", messageSummary, actualSummaryMessage);
+    }
+
+    /**
+     * Method used to validate informational messages in a {@link Response},
+     * returned by a ({@link WebApplicationException}.
+     * 
+     * @param valueServiceResponse
+     *            the value service response
+     * @param messageKey
+     *            the message key of the expected error message returned
+     * @param messageSummary
+     *            the message summary of the expected error message summary
+     *            returned
+     * @param clazz
+     *            the class that inserted the message, for looking up the
+     *            message summary
+     */
+    @SuppressWarnings("rawtypes")
+    public static void assertInformationalMessageInResponse(ValueServiceResponse valueServiceResponse,
+            String messageKey, String messageSummary, Class clazz) {
+
+        assertInfoMessagesInResponse(valueServiceResponse, 1);
+        Messages messages = valueServiceResponse.getMessages();
+        Message message = messages.getErrorMessages().iterator().next();
+
+        assertEquals("Message key did not match expected value", messageKey, message.getKey());
+        String actualSummaryMessage = MessageUtils.getSummaryMessage(messageKey, message.getInserts(), clazz);
+        assertEquals("Info messages were unexpectedly not the same", messageSummary, actualSummaryMessage);
     }
 
     /**
@@ -159,6 +188,22 @@ public final class MessageTestUtils {
         assertNotNull("Messages object on service response wrapper was unexpected null", messages);
         assertEquals("An unexpected number of error messages were found", expectedNumErrorMessages,
                 messages.getErrorMessageCount());
+    }
+
+    /**
+     * Checks that the expected number of error messages were found.
+     * 
+     * @param response
+     *            the response instance to check for errors
+     * @param expectedNumErrorMessages
+     *            the expected number of error messages
+     */
+    public static void assertInfoMessagesInResponse(ServiceResponse response, int expectedNumInfoMessages) {
+        assertNotNull("Service response wrapper was unexpectedly null", response);
+        Messages messages = response.getMessages();
+        assertNotNull("Messages object on service response wrapper was unexpected null", messages);
+        assertEquals("An unexpected number of info messages were found", expectedNumInfoMessages,
+                messages.getInformationalMessageCount());
     }
 
     /**

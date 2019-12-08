@@ -48,6 +48,7 @@ import ${basePackage}.service.rest.${entity.name}MaintenanceService;
  * for ${entity.name} business objects.
  *
  * Generated Code - DO NOT MODIFY
+ * Generated from entity.maintenance.service.impl.java.vm
  */
 @Service 
 public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareService implements ${entity.name}MaintenanceService {
@@ -170,10 +171,80 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 		messageManagerAwareService.initializeMessageManager(messages);
         assertAuthorization(PATH, Action.RETRIEVE);
 		Sort sort = SortMapper.mapToSort(criteria.getSortWrapper());
-		Page<${entity.name}BO> allEntitiesPage = ${entity.name}BO.findByExample(criteria.getProbe(), criteria.getContainsMatch(), criteria.getStartPage(), criteria.getCount(), sort);
-		PageWrapper<${entity.name}BO> allEntities = (new PageMapper<${entity.name}BO>()).mapToPageWrapper(allEntitiesPage);
-		ValueServiceResponse<PageWrapper<${entity.name}BO>> response = new ValueServiceResponse<>(allEntities);
+		Page<${entity.name}BO> resultsAsPage = ${entity.name}BO.findByExample(criteria.getProbe(), criteria.getContainsMatch(), criteria.getStartPage(), criteria.getCount(), sort);
+		PageWrapper<${entity.name}BO> resultsAsPageWrapper = (new PageMapper<${entity.name}BO>()).mapToPageWrapper(resultsAsPage);
+		ValueServiceResponse<PageWrapper<${entity.name}BO>> response = new ValueServiceResponse<>(resultsAsPageWrapper);
 		messageManagerAwareService.addAllMessagesToResponse(response);
+		
+		MessageManager.logMessages(logger, this.getClass());		
+		
+		return response;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Transactional(propagation = Propagation.SUPPORTS)
+	@Override
+	public ValueServiceResponse<Collection<${entity.name}BO>> findByExampleContains(${entity.name}BO probe) {
+		messageManagerAwareService.initializeMessageManager(messages);
+        assertAuthorization(PATH, Action.RETRIEVE);
+		Collection<${entity.name}BO> results = ${entity.name}BO.findByExampleContains(probe);
+		ValueServiceResponse<Collection<${entity.name}BO>> response = new ValueServiceResponse<>(results);
+		messageManagerAwareService.addAllMessagesToResponse(response);
+		
+		MessageManager.logMessages(logger, this.getClass());		
+		
+		return response;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Transactional(propagation = Propagation.SUPPORTS)
+	@Override
+	public ValueServiceResponse<PageWrapper<${entity.name}BO>> findByExampleContainsPaged(${entity.name}BO probe, int startPage, int count) {
+		messageManagerAwareService.initializeMessageManager(messages);
+        assertAuthorization(PATH, Action.RETRIEVE);
+		Page<${entity.name}BO> resultsAsPage = ${entity.name}BO.findByExampleContainsPaged(probe, startPage, count);
+        PageWrapper<${entity.name}BO> resultsAsPageWrapper = (new PageMapper<${entity.name}BO>()).mapToPageWrapper(resultsAsPage);
+		ValueServiceResponse<PageWrapper<${entity.name}BO>> response = new ValueServiceResponse<>(resultsAsPageWrapper);
+		messageManagerAwareService.addAllMessagesToResponse(response);
+		
+		MessageManager.logMessages(logger, this.getClass());		
+		
+		return response;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Transactional(propagation = Propagation.SUPPORTS)
+	@Override
+	public ValueServiceResponse<Collection<${entity.name}BO>> findByExampleMatches(${entity.name}BO probe) {
+		messageManagerAwareService.initializeMessageManager(messages);
+        assertAuthorization(PATH, Action.RETRIEVE);
+		Collection<${entity.name}BO> results = ${entity.name}BO.findByExampleMatches(probe);
+		ValueServiceResponse<Collection<${entity.name}BO>> response = new ValueServiceResponse<>(results);
+		messageManagerAwareService.addAllMessagesToResponse(response);
+		
+		MessageManager.logMessages(logger, this.getClass());		
+		
+		return response;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Transactional(propagation = Propagation.SUPPORTS)
+	@Override
+	public ValueServiceResponse<PageWrapper<${entity.name}BO>> findByExampleMatchesPaged(${entity.name}BO probe, int startPage, int count) {
+        messageManagerAwareService.initializeMessageManager(messages);
+        assertAuthorization(PATH, Action.RETRIEVE);
+        Page<${entity.name}BO> resultsAsPage = ${entity.name}BO.findByExampleMatchesPaged(probe, startPage, count);
+        PageWrapper<${entity.name}BO> resultsAsPageWrapper = (new PageMapper<${entity.name}BO>()).mapToPageWrapper(resultsAsPage);
+        ValueServiceResponse<PageWrapper<${entity.name}BO>> response = new ValueServiceResponse<>(resultsAsPageWrapper);
+        messageManagerAwareService.addAllMessagesToResponse(response);
 		
 		MessageManager.logMessages(logger, this.getClass());		
 		
@@ -186,14 +257,14 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
 	public ValueServiceResponse<Collection<${entity.name}BO>> bulkSaveOrUpdate(Collection<${entity.name}BO> entities) {
-		messageManagerAwareService.initializeMessageManager(messages);
-	    assertAuthorization(PATH, Action.SAVE);
-		Collection<${entity.name}BO> values = new ArrayList<>();
-		ValueServiceResponse<${entity.name}BO> response = null;
+        messageManagerAwareService.initializeMessageManager(messages);
+        assertAuthorization(PATH, Action.SAVE);
+        Collection<${entity.name}BO> values = new ArrayList<>();
+        ValueServiceResponse<${entity.name}BO> response = null;
         ValueServiceResponse<Collection<${entity.name}BO>> responses = new ValueServiceResponse<>(values);
         String keyList = null;
         
-		for(${entity.name}BO entity : entities){
+        for(${entity.name}BO entity : entities){
             try {
                 response = performSaveOrUpdate(entity);
                 values.add(response.getValue());
@@ -210,11 +281,11 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
         }
         
         MessageManager.logMessages(logger, this.getClass());
-		
-		if (responses.getMessages().hasErrorMessages() || CollectionUtils.isEmpty(entities)) {
-		    Response statusResponse = Response.status(Response.Status.BAD_REQUEST).entity(responses).build();
-			throw new WebApplicationException(statusResponse);
-		}
+
+        if (responses.getMessages().hasErrorMessages() || CollectionUtils.isEmpty(entities)) {
+            Response statusResponse = Response.status(Response.Status.BAD_REQUEST).entity(responses).build();
+            throw new WebApplicationException(statusResponse);
+        }
         
 		return responses;
 	}

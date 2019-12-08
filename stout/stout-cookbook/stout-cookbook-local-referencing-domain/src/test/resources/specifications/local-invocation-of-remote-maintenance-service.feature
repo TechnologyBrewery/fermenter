@@ -23,6 +23,10 @@ Feature: Local Invocation of Remote Maintenance Service
     When a bulk create service is invoked
     Then the newly created instances can be retrieved via find by example
 
+  Scenario: test local optimization of a bulk create and find by example CONTAINS call
+    When a bulk create service is invoked
+    Then the newly created instances can be retrieved via find by example CONTAINS call
+
   Scenario: test local optimization of a bulk update
     Given existing instances of an entity
     When the entities are updated via the bulk maintainence service

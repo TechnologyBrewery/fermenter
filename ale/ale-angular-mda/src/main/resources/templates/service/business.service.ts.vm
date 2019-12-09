@@ -6,6 +6,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { BusinessError } from '../../../generated/business-error.model';
+import { PageWrapper } from '../../../shared/model/page-wrapper.model';
 
 #foreach( $import in $service.imports )
 #if( !$import.isEnumeration() )
@@ -37,40 +38,16 @@ export class ${service.name}Service {
       ) {}
 
 #foreach( $operation in $service.angularOperations )
-#if( !$operation.usesEnumerations() && !$operation.usesPaging() )## pending support for enums and paging
-#if($operation.transactionAttribute == "Supports")
-##
-## Get calls
-##
-##
+#if( !$operation.usesEnumerations() )## pending support for enums
     /**
     * Call the ${operation.nameLowerCamel} operation on ${service.name}Service
     * ${operation.documentation}
     */
-#if( $operation.return.type == 'void' )
-## void responses return a fermenter response so we have something to return
-#if( $operation.parameters.isEmpty() )
-    public ${operation.nameLowerCamel}(skipGlobalErrorHandler = false): Observable<FermenterResponse<${operation.return.signature}>> {
-#else
-    public ${operation.nameLowerCamel}(${operation.getSignatureParametersForAngular()}, skipGlobalErrorHandler = false): Observable<FermenterResponse<${operation.return.signature}>> {
-#end## end of if there are multiple params
-#else
-## non void responses return the item we are trying to get
-## we don't return the fermenter response as we don't expect any fermenter messages for get calls
-## if there is a fermenter error message then it will call the global error handler to handle the exception
-#if( $operation.parameters.isEmpty() )
-    public ${operation.nameLowerCamel}(skipGlobalErrorHandler = false): Observable<${operation.return.signature}> {
-#else
-    public ${operation.nameLowerCamel}(${operation.getSignatureParametersForAngular()}, skipGlobalErrorHandler = false): Observable<${operation.return.signature}> {
-#end## end of if there are multiple params
-#end## end of if return is void
-##
-##
-##
-##
+    public ${operation.getAngularMethodSignature()} {
+        // is paged response: $operation.return.isPagedResponse()
         const url = this.${service.name}ServiceURL + '/${operation.nameLowerCamel}' ;
-#if( !$operation.parameters.isEmpty() )
 
+#if(!$operation.parameters.isEmpty() )
         let params = new HttpParams();
 #foreach( $param in $operation.parameters)
 #if($param.isMany())
@@ -79,139 +56,83 @@ export class ${service.name}Service {
                 params = params.append('${param.name}', String(${param.name}Single));
             }
         }
-#else
+#elseif (!$param.isEntity())
         if(${param.name} !== null && ${param.name} !== undefined) {
             params = params.set('${param.name}', String(${param.name}));
         }
 #end## end of if is many
 #end## end of for loop
-
-        return this.http.get<FermenterResponse<${operation.return.signature}>>(url, {params}).pipe(
-#else## else for if params is empty
-
-        return this.http.get<FermenterResponse<${operation.return.signature}>>(url).pipe(
 #end## end for if params is empty
+
+##
+#if($operation.isGETRestCall())
+#if(!$operation.parameters.isEmpty())
+        return this.http.get<FermenterResponse<${operation.return.signature}>>(url, {params}).pipe(
+#else
+        return this.http.get<FermenterResponse<${operation.return.signature}>>(url).pipe(
+#end## end of if has params
+#else## else of isGETRestCall
+#if(!$operation.parameters.isEmpty())
+        return this.http.post<FermenterResponse<${operation.return.signature}>>(url, ${operation.postBodyParameterName}, {params}).pipe(
+#else## else for if params is empty
+        return this.http.post<FermenterResponse<${operation.return.signature}>>(url, ${operation.postBodyParameterName}).pipe(
+#end## end of if has params
+#end## end of isGETRestCall
+##
             map((response: FermenterResponse<${operation.return.signature}>) => {
                 const fermenterResponse = new FermenterResponse<${operation.return.signature}>(response);
                 this.checkFermenterResponseIsInitialized(fermenterResponse);
 
-#if( $operation.return.isBaseType() && $operation.return.angularTypeBase != 'Date')
-#if( !$operation.return.isMany() )
+#if(!$operation.return.isMany() && !$operation.return.isPagedResponse())
+##
+#if($operation.return.isBaseType() && $operation.return.angularTypeBase != 'Date')
                 fermenterResponse.value = response.value;
 #else
                 if (response.value) {
-                    fermenterResponse.value = new Array<${operation.return.angularType}>();
-                    for (const element of response.value) {
-                        fermenterResponse.value.push(element);
-                    }
-                }
-#end## end of isMany
-#else
-#if( !$operation.return.isMany() )
-                if (response.value) {
                     fermenterResponse.value = new ${operation.return.angularType}(response.value);
                 }
+#end
+#else## else of is many / paged response
+##
+#if($operation.return.isPagedResponse())
+                const responseArray = response.value.content;
 #else
+                const responseArray = response.value;
+#end## end of if is paged response
+                const arrayOfElements = new Array<${operation.return.angularType}>();
                 if (response.value) {
-                    fermenterResponse.value = new Array<${operation.return.angularType}>();
-                    for (const element of response.value) {
-                        fermenterResponse.value.push(new ${operation.return.angularType}(element));
+                    for (const element of responseArray) {
+#if($operation.return.isBaseType() && $operation.return.angularTypeBase != 'Date')
+                        arrayOfElements.push(element);
+#else
+                        arrayOfElements.push(new ${operation.return.angularType}(element));
+#end
                     }
                 }
-#end## end of isMany
-#end## end for if isBaseType()
+#if($operation.return.isPagedResponse())
+                fermenterResponse.value = new PageWrapper<${operation.return.angularType}>(response.value);
+                fermenterResponse.value.content = arrayOfElements;
+#elseif($operation.return.isMany())
+                fermenterResponse.value = arrayOfElements;
+#end## end of if is paged response
+##
+#end## end of isMany / paged response
 
                 if (fermenterResponse.messages.hasErrorMessages() && !skipGlobalErrorHandler) {
                     throw new BusinessError(fermenterResponse.messages);
                 }
-#if( $operation.return.type == 'void' )
-                return fermenterResponse;
-#else
+#if( $operation.isGETRestCall() )
                 return fermenterResponse.value;
+#else
+                return fermenterResponse;
 #end## end of return type void
             }),
             catchError(error => this.errorHandler.handleServiceCallError(error))
         );
     }
 #else
-##
-## Post calls
-##
-##
     /**
-    * Call the ${operation.nameLowerCamel} operation on ${service.name}Service
-    * ${operation.documentation}
-    */
-#if( $operation.parameters.isEmpty() )
-    public ${operation.nameLowerCamel}(skipGlobalErrorHandler = false):
-                Observable<FermenterResponse<${operation.return.signature}>> {
-#else
-    public ${operation.nameLowerCamel}(${operation.getSignatureParametersForAngular()}, skipGlobalErrorHandler = false):
-                Observable<FermenterResponse<${operation.return.signature}>> {
-#end## end of if there are multiple params
-        const url = this.${service.name}ServiceURL + '/${operation.nameLowerCamel}' ;
-
-#if( $operation.hasUrlParams() )
-        let params = new HttpParams();
-#foreach( $param in $operation.angularParameters)
-#if( !$param.isEntity() )
-## for post calls entities are passed in the body, other params are query params
-#if( $param.isMany() )
-        for(const ${param.name}Single of ${param.name}) {
-            params = params.append('${param.name}', String(${param.name}Single));
-        }
-#else## else for if is many
-        params = params.set('${param.name}', String(${param.name}));
-#end## end of if is many
-#end## end of if is entity
-#end## end of for param loop
-
-        return this.http.post<FermenterResponse<${operation.return.signature}>>(url, ${operation.postBodyParameterName}, {params}).pipe(
-#else## else for if params is empty
-        return this.http.post<FermenterResponse<${operation.return.signature}>>(url, ${operation.postBodyParameterName}).pipe(
-#end## end for if params is empty
-            map((response: FermenterResponse<${operation.return.signature}>) => {
-                const fermenterResponse = new FermenterResponse<${operation.return.signature}>(response);
-                this.checkFermenterResponseIsInitialized(fermenterResponse);
-
-#if( $operation.return.isBaseType() && $operation.return.angularTypeBase != 'Date')
-#if( !$operation.return.isMany() )
-                fermenterResponse.value = response.value;
-#else
-                if (response.value) {
-                    fermenterResponse.value = new Array<${operation.return.angularType}>();
-                    for (const element of response.value) {
-                        fermenterResponse.value.push(element);
-                    }
-                }
-#end## end of isMany
-#else
-#if( !$operation.return.isMany() )
-                if (response.value) {
-                    fermenterResponse.value = new ${operation.return.angularType}(response.value);
-                }
-#else
-                if (response.value) {
-                    fermenterResponse.value = new Array<${operation.return.angularType}>();
-                    for (const element of response.value) {
-                        fermenterResponse.value.push(new ${operation.return.angularType}(element));
-                    }
-                }
-#end## end of isMany
-#end## end for if isBaseType()
-
-                if (fermenterResponse.messages.hasErrorMessages() && !skipGlobalErrorHandler) {
-                    throw new BusinessError(fermenterResponse.messages);
-                }
-                return fermenterResponse;
-            }),
-            catchError(error => this.errorHandler.handleServiceCallError(error))
-        );
-    }
-#end## end of post vs get if block
-#else
-    /**
-    * ${operation.nameLowerCamel} is not implemeneted because support for enums and paging is pending
+    * ${operation.nameLowerCamel} is not implemeneted because support for enums is pending
     */
     public ${operation.nameLowerCamel}_PENDING(NOT_SUPPORTED: string) {
         throw new Error('${operation.nameLowerCamel} is not implemeneted because support for enums and paging is pending');

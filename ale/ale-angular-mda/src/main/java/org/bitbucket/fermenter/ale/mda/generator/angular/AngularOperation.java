@@ -23,7 +23,18 @@ public class AngularOperation extends BaseOperationDecorator implements AngularN
         return angularParams;
     }
 
-    public String getSignatureParametersForAngular() {
+    public String getAngularMethodSignature() {
+        String name = getNameLowerCamel();
+        String parameters = getAngularParameterSignature();
+        String returnType = getAngularReturn().getSignature();
+
+        if (!isGETRestCall()) {
+            returnType = "FermenterResponse<" + returnType + ">";
+        }
+        return name + "(" + parameters + "): Observable<" + returnType + ">";
+    }
+
+    public String getAngularParameterSignature() {
         String signature = "";
         for (AngularParameter parameter : getAngularParameters()) {
             String angularType = parameter.getAngularType();
@@ -32,6 +43,8 @@ public class AngularOperation extends BaseOperationDecorator implements AngularN
             }
             signature += ", " + parameter.getName() + ": " + angularType;
         }
+
+        signature += ", skipGlobalErrorHandler = false";
         // drop the first comma space
         if (signature.length() > 2) {
             signature = signature.substring(2);
@@ -39,9 +52,13 @@ public class AngularOperation extends BaseOperationDecorator implements AngularN
         return signature;
     }
 
+    private AngularReturn getAngularReturn() {
+        return new AngularReturn(wrapped.getReturn());
+    }
+
     @Override
     public Return getReturn() {
-        return new AngularReturn(wrapped.getReturn());
+        return getAngularReturn();
     }
 
     public List<AngularImport> getImports() {
@@ -53,29 +70,27 @@ public class AngularOperation extends BaseOperationDecorator implements AngularN
             }
         }
 
-        if (!isResponseTypeVoid()) {
-            if (!AngularGeneratorUtil.isBaseType(getReturn().getType())) {
-                imports.add(new AngularImport(getReturn().getType(), getReturn().getPackage()));
-            }
+        if (!isResponseTypeVoid() && !AngularGeneratorUtil.isBaseType(getReturn().getType())) {
+            imports.add(new AngularImport(getReturn().getType(), getReturn().getPackage()));
         }
 
         return imports;
     }
-    
+
     public boolean usesEnumerations() {
         boolean usesEnumerations = false;
-        for(AngularImport angularImport : getImports()) {
-            if(angularImport.isEnumeration()) {
+        for (AngularImport angularImport : getImports()) {
+            if (angularImport.isEnumeration()) {
                 usesEnumerations = true;
             }
         }
         return usesEnumerations;
     }
-    
+
     public boolean usesPaging() {
         boolean usesPaging = false;
-        for(AngularImport angularImport : getImports()) {
-            if("PageWrapper".equals(angularImport.getType())) {
+        for (AngularImport angularImport : getImports()) {
+            if ("PageWrapper".equals(angularImport.getType())) {
                 usesPaging = true;
             }
         }
@@ -88,7 +103,7 @@ public class AngularOperation extends BaseOperationDecorator implements AngularN
 
     public boolean hasUrlParams() {
         boolean hasUrlParams = false;
-        if (Transaction.SUPPORTS.equals(getTransactionAttribute()) && !getParameters().isEmpty()) {
+        if (isGETRestCall() && !getParameters().isEmpty()) {
             hasUrlParams = true;
         } else {
             for (AngularParameter param : getAngularParameters()) {
@@ -100,6 +115,10 @@ public class AngularOperation extends BaseOperationDecorator implements AngularN
         return hasUrlParams;
     }
 
+    public boolean isGETRestCall() {
+        return Transaction.SUPPORTS.toString().equals(getTransactionAttribute());
+    }
+
     public String getPostBodyParameterName() {
         String postBodyParameterName = "null";
         for (AngularParameter param : getAngularParameters()) {
@@ -109,7 +128,7 @@ public class AngularOperation extends BaseOperationDecorator implements AngularN
         }
         return postBodyParameterName;
     }
-    
+
     @Override
     public String getDocumentation() {
         return wrapped.getDocumentation() == null ? "NO DOCUMENTATION PROVIDED" : wrapped.getDocumentation();

@@ -278,8 +278,8 @@ describe('Ale Reference Domain Maintenance Service', () => {
 
       const pageWrapper = new PageWrapper<LocalDomain>();
       pageWrapper.content = [testLocalDomain, testLocalDomain2];
-      pageWrapper.isFirst = true;
-      pageWrapper.isLast = true;
+      pageWrapper.first = true;
+      pageWrapper.last = true;
       pageWrapper.itemsPerPage = constants.DEFAULT_PAGE_SIZE;
       pageWrapper.startPage = 0;
       pageWrapper.numberOfElements = pageWrapper.content.length;

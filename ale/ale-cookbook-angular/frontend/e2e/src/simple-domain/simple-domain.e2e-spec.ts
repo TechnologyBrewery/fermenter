@@ -52,7 +52,12 @@ describe('Simple Domain e2e Test Page', () => {
 
   it('should be able to send lists as parameters to the backend', () => {
     page.runListParamTest();
-    expect(page.getListParamTestResult()).toEqual(RESULT_PASSED)
+    expect(page.getListParamTestResult()).toEqual(RESULT_PASSED);
+  });
+
+  it('should be able to get a paged response from the backend', () => {
+    page.runGetPagedResponseTest();
+    expect(page.getGetPagedResponseTestResult()).toEqual(RESULT_PASSED);
   });
 
   afterEach(() => {

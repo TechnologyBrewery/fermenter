@@ -22,30 +22,35 @@ public class AngularReturn extends BaseReturnDecorator implements Return {
         }
         return type;
     }
-    
+
     public Boolean isBaseType() {
         return AngularGeneratorUtil.isBaseType(getType());
     }
-    
+
     @Override
     public Boolean isMany() {
         return wrapped.isMany() != null && wrapped.isMany();
     }
-    
+
     public String getSignature() {
         String signature;
-        if(isMany()) {
-            signature = "Array<"+getAngularType()+">";
+        if (isMany() && !isPagedResponse()) {
+            signature = "Array<" + getAngularType() + ">";
+        } else if (isPagedResponse()) {
+            signature = "PageWrapper<" + getAngularType() + ">";
+        } else if (getType().equals("void")) {
+            signature = "{}";
         } else {
             signature = getAngularType();
         }
+
         return signature;
     }
-    
+
     public String getSignatureBase() {
         String signature;
-        if(isMany()) {
-            signature = "Array<"+getAngularTypeBase()+">";
+        if (isMany()) {
+            signature = "Array<" + getAngularTypeBase() + ">";
         } else {
             signature = getAngularTypeBase();
         }

@@ -3,6 +3,7 @@
 
 <entity>
 	<name>BeerExampleEntity</name>
+	<namespace>org.bitbucket.askllc.fermenter.cookbook.domain</namespace>
 	<documentation>Entity to help with the Getting Started Guide</documentation>
 	<table>BEER_ENTITY</table>
 

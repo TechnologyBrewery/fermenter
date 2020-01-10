@@ -1,0 +1,16 @@
+{
+  "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "name" : "BeerServiceExample",
+  "operations" : [{
+    "name" : "brewMeABeer",
+    "documentation" : "generates a new beer for you",
+    "parameters" : [ {
+      "name" : "type",
+      "type" : "string"
+    } ],
+    "return" : {
+      "type" : "BeerExampleEntity"
+    }
+  }
+]
+}

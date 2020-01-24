@@ -59,6 +59,9 @@
 				"name": "springContextImpl"
 			},
 			{
+				"name": "jpaSpringConfiguration"
+			},
+			{
 				"name": "jpaProperties"
 			},
 			{

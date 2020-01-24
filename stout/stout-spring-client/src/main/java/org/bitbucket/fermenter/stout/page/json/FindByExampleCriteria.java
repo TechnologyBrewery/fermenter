@@ -29,8 +29,8 @@ public class FindByExampleCriteria<T> implements Serializable {
     private void init(T probe, boolean containsMatch, int startPage, int count, SortWrapper sortWrapper) {
         this.probe = probe;
         this.containsMatch = containsMatch;
-        this.startPage = new Integer(startPage);
-        this.count = new Integer(count);
+        this.startPage = Integer.valueOf(startPage);
+        this.count = Integer.valueOf(count);
         this.sortWrapper = sortWrapper;
     }
 

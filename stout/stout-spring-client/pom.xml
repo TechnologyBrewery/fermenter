@@ -86,7 +86,11 @@
 			<artifactId>feign-core</artifactId>
 			<version>9.4.0</version>
 		</dependency>
-
+		<dependency>
+		    <groupId>net.sf.jsignature.io-tools</groupId>
+		    <artifactId>easystream</artifactId>
+		    <version>1.2.15</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.jboss.narayana.jta</groupId>

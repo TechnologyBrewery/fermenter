@@ -4,7 +4,7 @@
 <!-- This entity uses a custom H2 SQL DDL script in test - ensure changes 
 	are propagate to that file! (FER-129) -->
 <entity>
-	<name>ValidationExample</name>
+	<name>ValidationExample</name>	
 	<table>VALIDATION_EXAMPLE</table>
 	<id>
 		<field>

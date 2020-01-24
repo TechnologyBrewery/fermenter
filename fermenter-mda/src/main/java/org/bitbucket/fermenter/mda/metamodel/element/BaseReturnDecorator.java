@@ -66,6 +66,24 @@ public class BaseReturnDecorator implements Return {
     public Boolean isMany() {
         return wrapped.isMany();
     }
+    
+    /**
+     * Determines whether or not the return value is an entity.
+     * 
+     * @return is entity?
+     */
+    public boolean isEntity() {
+        return MetamodelType.ENTITY.equals(MetamodelType.getMetamodelType(getPackage(), getType()));
+    }
+
+    /**
+     * Determines whether or not the return value is an enumeration.
+     * 
+     * @return is enumeration?
+     */
+    public boolean isEnumeration() {
+        return MetamodelType.ENUMERATION.equals(MetamodelType.getMetamodelType(getPackage(), getType()));
+    }    
 
     /**
      * {@inheritDoc}

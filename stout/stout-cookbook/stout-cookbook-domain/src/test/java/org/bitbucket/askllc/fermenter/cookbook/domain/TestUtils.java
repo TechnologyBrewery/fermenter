@@ -3,7 +3,6 @@ package org.bitbucket.askllc.fermenter.cookbook.domain;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -37,13 +36,14 @@ public final class TestUtils {
 		// prevent instantiation
 	}
 
-	public static List<SimpleDomainBO> createAndPersistRandomSimpleDomains(int numEntitiesToCreate) {
-		List<SimpleDomainBO> simpleDomains = new ArrayList<SimpleDomainBO>(numEntitiesToCreate);
-		for (int iter = 0; iter < numEntitiesToCreate; iter++) {
-			simpleDomains.add(createRandomSimpleDomain().save());
-		}
-		return simpleDomains;
-	}
+    public static List<SimpleDomainBO> createAndPersistRandomSimpleDomains(int numEntitiesToCreate) {
+        List<SimpleDomainBO> simpleDomains = new ArrayList<SimpleDomainBO>(numEntitiesToCreate);
+        for (int iter = 0; iter < numEntitiesToCreate; iter++) {
+            SimpleDomainBO newInstance = createRandomSimpleDomain().save();
+            simpleDomains.add(newInstance);
+        }
+        return simpleDomains;
+    }
 
 	public static SimpleDomainBO createRandomSimpleDomain() {
 		SimpleDomainBO domain = new SimpleDomainBO();

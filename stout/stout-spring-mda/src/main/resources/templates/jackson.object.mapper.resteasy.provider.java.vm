@@ -16,7 +16,7 @@ import ${basePackage}.transfer.json.ObjectMapperManager;
 @Provider
 @Consumes({MediaType.APPLICATION_JSON, "application/*+json", "text/json"})
 @Produces({MediaType.APPLICATION_JSON, "application/*+json", "text/json"})
-public class JacksonObjectMapperResteasyProvider extends ResteasyJackson2Provider {
+public class ${capitalizedCamelCasedArtifactId}ResteasyProvider extends ResteasyJackson2Provider {
 
 	private ObjectMapper objectMapper = ObjectMapperManager.getObjectMapper();
 

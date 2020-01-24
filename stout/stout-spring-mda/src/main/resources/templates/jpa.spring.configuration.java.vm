@@ -1,0 +1,40 @@
+package ${basePackage}.persist;
+
+import javax.persistence.ValidationMode;
+import javax.transaction.UserTransaction;
+
+import org.bitbucket.fermenter.stout.util.KrauseningBasedSpringConfig;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.orm.jpa.JpaVendorAdapter;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.jta.JtaTransactionManager;
+
+import com.arjuna.ats.internal.jta.transaction.arjunacore.TransactionManagerImple;
+
+@Configuration
+@EnableJpaRepositories(
+    basePackages = "${basePackage}.persist", 
+    entityManagerFactoryRef = "${camelCasedArtifactId}EntityManager", 
+    transactionManagerRef = "transactionManager"
+)
+public class ${capitalizedCamelCasedArtifactId}JpaConfiguration {
+
+    @Bean
+    public static LocalContainerEntityManagerFactoryBean ${camelCasedArtifactId}EntityManager(KrauseningBasedSpringConfig krauseningBasedSpringConfig) {
+        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        em.setJtaDataSource(krauseningBasedSpringConfig.krauseningDataSource());
+        em.setPackagesToScan("${basePackage}.bizobj");
+
+        JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        em.setJpaVendorAdapter(vendorAdapter);
+        em.setJpaProperties(krauseningBasedSpringConfig.krauseningJpaProperties());
+        em.setValidationMode(ValidationMode.NONE);
+
+        return em;
+    }
+
+}

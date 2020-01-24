@@ -15,7 +15,8 @@ public abstract class AbstractModelAgnosticGenerator extends AbstractGenerator {
         String fileName = context.getOutputFile();
         fileName = replaceBasePackage(fileName, context.getBasePackageAsPath());
         fileName = replaceArtifactId(fileName, context.getArtifactId());
-        fileName = replaceCapitalizedCamelCasedArtifactId(fileName, (String)vc.get(CAPITALIZED_CAMEL_CASED_ARTIFACT_ID));
+        fileName = replaceCapitalizedCamelCasedArtifactId(fileName,
+                (String) vc.get(CAPITALIZED_CAMEL_CASED_ARTIFACT_ID));
         context.setOutputFile(fileName);
 
         generateFile(context, vc);

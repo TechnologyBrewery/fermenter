@@ -38,4 +38,9 @@
     <message key="bulk.operation.failed">
         <summary>The bulk save failed because at least one object could not be saved. The object IDs in question are: {0}</summary>
     </message>
+    
+    <message key="contract.test">
+        <summary>This message can be used to convey information or error messages in support of general service contract testing.  Contract test method {0}</summary>
+    </message> 
+       
 </messages>

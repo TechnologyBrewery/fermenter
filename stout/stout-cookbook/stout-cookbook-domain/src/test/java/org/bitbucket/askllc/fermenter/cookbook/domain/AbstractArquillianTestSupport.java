@@ -4,7 +4,7 @@ import java.io.File;
 
 import javax.ws.rs.client.WebTarget;
 
-import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.JacksonObjectMapperResteasyProvider;
+import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.StoutCookbookDomainResteasyProvider;
 import org.jboss.arquillian.extension.rest.client.ArquillianResteasyResource;
 import org.jboss.shrinkwrap.api.Filters;
 import org.jboss.shrinkwrap.api.GenericArchive;
@@ -40,7 +40,7 @@ public abstract class AbstractArquillianTestSupport {
 
 	/**
 	 * Registers the given JAX-RS {@link WebTarget} (typically injected into a test via
-	 * {@link ArquillianResteasyResource}) with the generated {@link JacksonObjectMapperResteasyProvider} such that the
+	 * {@link ArquillianResteasyResource}) with the generated {@link StoutCookbookDomainResteasyProvider} such that the
 	 * (de)serialization of generated business objects is transparently supported.
 	 * 
 	 * @param webTarget
@@ -48,6 +48,6 @@ public abstract class AbstractArquillianTestSupport {
 	 */
 	protected <T extends WebTarget> T initWebTarget(T webTarget) {
 	    webTarget.register(new AddHeadersRequestFilter("testUser"));
-		return (T) webTarget.register(JacksonObjectMapperResteasyProvider.class);
+		return (T) webTarget.register(StoutCookbookDomainResteasyProvider.class);
 	}
 }

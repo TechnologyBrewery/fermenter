@@ -1,0 +1,14 @@
+{
+	"package": "org.bitbucket.askllc.fermenter.cookbook.local.referencing.domain",
+	"name": "LocalBusiness",
+	"documentation": "Operations to help with compile-test testing",
+	"operations": [
+		{
+			"name": "localMethod",
+			"parameters": [],
+			"return": {
+				"type": "void"
+			}
+		}
+	]
+}

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!ELEMENT documentation (#PCDATA)>
 <!ELEMENT name (#PCDATA)>
-<!ELEMENT operation (name, documentation?, (return|return-many),parameters?, transaction-attribute?, view-type?, transmission-method?, responseEncoding?, compressedWithGzip?)>
+<!ELEMENT operation (name, documentation?, (return|return-many),parameters?, transaction-attribute?, view-type?, transmission-method?, compressedWithGzip?)>
 <!ELEMENT operations (operation+)>
 <!ELEMENT parameter (name, documentation?, type,project?,many?)>
 <!ELEMENT parameters (parameter*)>

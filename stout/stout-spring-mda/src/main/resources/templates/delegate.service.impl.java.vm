@@ -8,6 +8,8 @@ import $import;
 #end
 
 import org.bitbucket.fermenter.stout.messages.MessageManager;
+import org.bitbucket.fermenter.stout.client.service.LocalOptimizationUtil;
+import org.bitbucket.fermenter.stout.client.service.LocalOptimizationServiceWrapper;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
 import org.bitbucket.fermenter.stout.page.PageWrapper;
@@ -15,6 +17,7 @@ import org.bitbucket.fermenter.stout.page.PageWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Service implementation for ${service.name} entity maintenance.
@@ -24,9 +27,34 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ${service.name}DelegateImpl implements ${service.name}Delegate {
+	
+	/** Fully qualified name of the domain service to check for and potentially use to locally optimized delegate calls. */
+	private static final String LOCAL_SERVICE_NAME = "${basePackage}.service.rest.${service.name}Service";
+	/** Fully qualified name of the domain object mapper to check for and potentially use to locally optimized delegate calls for BO marshalling. */
+	private static final String LOCAL_OBJECT_MAPPER = "${basePackage}.transfer.json.ObjectMapperManager";
+	private static Boolean localOptionPresent;
+	private static LocalOptimizationServiceWrapper localServiceWrapper;
+	private static ObjectMapper objectMapper;
 
     @Autowired
     private ${service.name}Resource ${service.name.toLowerCase()}Resource;
+	
+	/** 
+	 * Check for and then cache decision on whether the delegate should make RESTful call or locally optimized Java calls.
+	 */ 
+	private static boolean isLocalInvocationAvailable() {
+		if (localOptionPresent == null) {
+			localOptionPresent = LocalOptimizationUtil.isLocalServicePresent(LOCAL_SERVICE_NAME);
+			if (localOptionPresent) {
+				localServiceWrapper = new LocalOptimizationServiceWrapper(LOCAL_SERVICE_NAME);
+				objectMapper = LocalOptimizationUtil.getObjectMapper(LOCAL_OBJECT_MAPPER);
+			}
+			
+		}
+		
+		return localOptionPresent;
+	}
+	
 
 #foreach( $operation in $service.operations )
 	/**
@@ -40,22 +68,54 @@ public class ${service.name}DelegateImpl implements ${service.name}Delegate {
 	public void ${operation.uncapitalizedName}(${operation.signature}) {
 	#else
 	public ${operation.return.javaType} ${operation.uncapitalizedName}(${operation.signature}) {
-	#end
+	#end	
+	
     #if($operation.return.isPagedResponse())
         ValueServiceResponse<PageWrapper<${operation.return.javaType}>> response;
 	#elseif($operation.return.isMany())
 		ValueServiceResponse<Collection<${operation.return.javaType}>> response;
 	#elseif($operation.isResponseTypeVoid())
-		VoidServiceResponse
+		VoidServiceResponse response;
 	#else
 		ValueServiceResponse<${operation.return.javaType}> response;
 	#end
-	response = ${service.name.toLowerCase()}Resource.${operation.uncapitalizedName}(
-	#foreach( $parameter in $operation.parameters )
-				${parameter.name}			
-		#if( $foreach.hasNext ),#end
-	#end
-		);
+	if (isLocalInvocationAvailable()) {
+		Object[] params = {
+		#foreach( $parameter in $operation.parameters )
+			#if ($parameter.isEntity())
+				LocalOptimizationUtil.convertToBusinessObjectViaJson(${parameter.name}, objectMapper)
+			#else
+				${parameter.name}
+			#end 					
+			#if( $foreach.hasNext ),#end
+		#end};
+		Object rawResponse = localServiceWrapper.invokeLocalService("${operation.uncapitalizedName}", params);
+		
+	#if($operation.return.isPagedResponse())
+        response = (ValueServiceResponse<PageWrapper<${operation.return.javaType}>>)rawResponse;
+	#elseif($operation.return.isMany())
+		#if($operation.return.isEntity())
+		response = (ValueServiceResponse<Collection<${operation.return.javaType}>>)LocalOptimizationUtil.convertResponseToTransferObjectListViaJson(rawResponse, ${operation.return.javaType}.class, objectMapper);
+		#else
+		response = (ValueServiceResponse<Collection<${operation.return.javaType}>>)rawResponse;
+		#end
+	#elseif($operation.isResponseTypeVoid())
+		response = (VoidServiceResponse)rawResponse;
+	#else
+		#if($operation.return.isEntity())
+		response = (ValueServiceResponse<${operation.return.javaType}>)LocalOptimizationUtil.convertResponseToTransferObjectViaJson(rawResponse, ${operation.return.javaType}.class, objectMapper);
+		#else
+		response = (ValueServiceResponse<${operation.return.javaType}>)rawResponse;
+		#end		
+	#end		
+	} else {
+		response = ${service.name.toLowerCase()}Resource.${operation.uncapitalizedName}(
+		#foreach( $parameter in $operation.parameters )
+					${parameter.name}			
+			#if( $foreach.hasNext ),#end
+		#end
+			);
+	}
 		
 		MessageManager.addMessages(response.getMessages());
 	#if(!$operation.isResponseTypeVoid())		

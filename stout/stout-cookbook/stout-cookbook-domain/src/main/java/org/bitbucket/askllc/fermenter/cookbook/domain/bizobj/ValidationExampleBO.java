@@ -20,34 +20,33 @@ import org.slf4j.LoggerFactory;
 @Table(name = "VALIDATION_EXAMPLE")
 public class ValidationExampleBO extends ValidationExampleBaseBO {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ValidationExampleBO.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ValidationExampleBO.class);
 
-	public ValidationExampleBO() {
-		super();
-		SpringAutowiringUtil.autowireBizObj(this);
-	}
+    public ValidationExampleBO() {
+        super();
+        SpringAutowiringUtil.autowireBizObj(this);
+    }
 
-	public static void deleteAllValidationExamples() {
-		getDefaultRepository().deleteAllInBatch();
-	}
+    public static void deleteAllValidationExamples() {
+        getDefaultRepository().deleteAllInBatch();
+    }
 
-	@Override
-	protected Logger getLogger() {
-		return LOGGER;
-	}
+    @Override
+    protected Logger getLogger() {
+        return LOGGER;
+    }
 
-	@Override
-	protected void complexValidation() {
+    @Override
+    protected void complexValidation() {
 
-	}
-	
+    }
+
     public static List<ValidationExampleBO> getAllValidationExamples() {
         return getDefaultRepository().findAll();
     }
 
-	
-	public static List<ValidationExampleBO> grabAllWithRequiredField() {
-	    return getDefaultRepository().findByRequiredFieldNotNull();
-	}
+    public static List<ValidationExampleBO> grabAllWithRequiredField() {
+        return getDefaultRepository().findByRequiredFieldNotNull();
+    }
 
 }

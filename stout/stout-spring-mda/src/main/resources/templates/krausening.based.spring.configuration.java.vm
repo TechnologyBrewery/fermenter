@@ -1,0 +1,59 @@
+package ${basePackage}.persist;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.Properties;
+
+import javax.sql.DataSource;
+
+import org.aeonbits.owner.KrauseningConfigFactory;
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.dbcp2.BasicDataSource;
+import org.bitbucket.fermenter.stout.exception.UnrecoverableException;
+import org.bitbucket.fermenter.stout.util.DataSourceConfig;
+import org.bitbucket.fermenter.stout.util.KrauseningBasedSpringConfig;
+import org.bitbucket.krausening.Krausening;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+/**
+ * Exposes several beans that are wired up and initialized with the help of {@link Krausening} properties for usage
+ * within Spring's application context.
+ * 
+ * *** GENERATED CODE - DO NOT MODIFY! ***
+ */
+@Configuration
+public class ${capitalizedCamelCasedArtifactId}KrauseningBasedSpringConfig extends KrauseningBasedSpringConfig {
+	
+	/**
+	 * {@inheritDoc}
+	 */
+    public ${capitalizedCamelCasedArtifactId}KrauseningBasedSpringConfig() {
+        super();
+    }
+
+	/**
+	 * {@inheritDoc}
+	 */
+    public ${capitalizedCamelCasedArtifactId}KrauseningBasedSpringConfig(String jpaPropertiesFileName, String dataSourcePropertiesFileName) {
+        super(jpaPropertiesFileName, dataSourcePropertiesFileName);
+    }
+    
+	/**
+	 * {@inheritDoc}
+	 */
+    @Bean
+    public DataSource ${camelCasedArtifactId}KrauseningDataSource() {
+        return krauseningDataSource();
+    }
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Bean
+    public Properties ${camelCasedArtifactId}KrauseningJpaProperties() {
+        return krauseningJpaProperties();
+    }
+
+}

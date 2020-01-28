@@ -1,20 +1,19 @@
 package ${basePackage}.persist;
 
 import javax.persistence.ValidationMode;
-import javax.transaction.UserTransaction;
 
-import org.bitbucket.fermenter.stout.util.KrauseningBasedSpringConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.jta.JtaTransactionManager;
 
-import com.arjuna.ats.internal.jta.transaction.arjunacore.TransactionManagerImple;
-
+/**
+ * Creates all the needed JPA configuration for this domain.
+ * 
+ * *** GENERATED CODE - DO NOT MODIFY! ***
+ */ 
 @Configuration
 @EnableJpaRepositories(
     basePackages = "${basePackage}.persist", 
@@ -22,16 +21,19 @@ import com.arjuna.ats.internal.jta.transaction.arjunacore.TransactionManagerImpl
     transactionManagerRef = "transactionManager"
 )
 public class ${capitalizedCamelCasedArtifactId}JpaConfiguration {
-
+	
+	/**
+	 * Create the entity manager for this domain project.
+	 */
     @Bean
-    public static LocalContainerEntityManagerFactoryBean ${camelCasedArtifactId}EntityManager(KrauseningBasedSpringConfig krauseningBasedSpringConfig) {
+    public static LocalContainerEntityManagerFactoryBean ${camelCasedArtifactId}EntityManager(${capitalizedCamelCasedArtifactId}KrauseningBasedSpringConfig krauseningBasedSpringConfig) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-        em.setJtaDataSource(krauseningBasedSpringConfig.krauseningDataSource());
+        em.setJtaDataSource(krauseningBasedSpringConfig.${camelCasedArtifactId}KrauseningDataSource());
         em.setPackagesToScan("${basePackage}.bizobj");
 
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
-        em.setJpaProperties(krauseningBasedSpringConfig.krauseningJpaProperties());
+        em.setJpaProperties(krauseningBasedSpringConfig.${camelCasedArtifactId}KrauseningJpaProperties());
         em.setValidationMode(ValidationMode.NONE);
 
         return em;

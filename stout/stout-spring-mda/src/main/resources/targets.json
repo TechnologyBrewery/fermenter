@@ -56,6 +56,14 @@
 		"overwritable": true
 	},
 	{
+		"name": "krauseningBasedSpringConfiguration",
+		"templateName": "templates/krausening.based.spring.configuration.java.vm",
+		"outputFile": "${basePackage}/persist/${capitalizedCamelCasedArtifactId}KrauseningBasedSpringConfig.java",
+		"generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticJavaGenerator",
+		"metadataContext": "local",
+		"overwritable": true
+	},
+	{
 		"name": "jpaSpringConfiguration",
 		"templateName": "templates/jpa.spring.configuration.java.vm",
 		"outputFile": "${basePackage}/persist/${capitalizedCamelCasedArtifactId}JpaConfiguration.java",

@@ -29,7 +29,7 @@
 
 	<bean id="contentRepository"
 		class="org.bitbucket.fermenter.stout.content.ContentRepository">
-		<constructor-arg index="0" ref="krauseningProps" />
+		<constructor-arg index="0" ref="stoutCookbookDomainKrauseningProps" />
 	</bean>
 
 </beans>

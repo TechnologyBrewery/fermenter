@@ -19,11 +19,9 @@ import org.bitbucket.fermenter.stout.messages.Severity;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
 import org.bitbucket.fermenter.stout.page.PageWrapper;
-import org.bitbucket.fermenter.stout.page.PageMapper;
 
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.data.domain.Page;
 
 import java.math.BigDecimal;
 
@@ -77,7 +75,7 @@ public abstract class ${service.name}BaseServiceImpl extends AbstractMessageMana
         }
         
         if(!MessageManager.hasErrorMessages()) {
-		Page<${operation.return.javaType}> result =
+		PageWrapper<${operation.return.javaType}> result =
 	#elseif( $operation.return.isMany() )
 		Collection<${operation.return.javaType}> result =
 	#elseif( $operation.isResponseTypeVoid() )
@@ -91,8 +89,7 @@ public abstract class ${service.name}BaseServiceImpl extends AbstractMessageMana
 		);
 		
 	#if($operation.return.isPagedResponse())
-        PageWrapper<${operation.return.javaType}> resultMappedToPageWrapper = (new PageMapper<${operation.return.javaType}>()).mapToPageWrapper(result);
-		response = new ValueServiceResponse<>(resultMappedToPageWrapper);
+		    response = new ValueServiceResponse<>(result);
         } else {
             response = new ValueServiceResponse<>(null);
         }
@@ -128,7 +125,7 @@ public abstract class ${service.name}BaseServiceImpl extends AbstractMessageMana
 	#end
 	 */
 	#if($operation.return.isPagedResponse())	 
-	protected abstract Page<${operation.return.javaType}> ${operation.uncapitalizedName}Impl(${operation.signature});
+	protected abstract PageWrapper<${operation.return.javaType}> ${operation.uncapitalizedName}Impl(${operation.signature});
 	#elseif($operation.return.isMany())	 
 	protected abstract Collection<${operation.return.javaType}> ${operation.uncapitalizedName}Impl(${operation.signature});
 	#elseif($operation.isResponseTypeVoid())

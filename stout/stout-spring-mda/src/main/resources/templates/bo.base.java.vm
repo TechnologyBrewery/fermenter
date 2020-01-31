@@ -71,6 +71,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.bitbucket.fermenter.stout.page.PageWrapper;
+import org.bitbucket.fermenter.stout.page.PageConverter;
 
 import org.hibernate.annotations.Type;
 
@@ -103,7 +105,7 @@ import ${reference.importPrefix}.client.service.${reference.type}MaintenanceDele
 #end
  *
  * Generated Code - DO NOT MODIFY
- * Generated from base.bo.java.vm
+ * Generated from bo.base.java.vm
  */
 #if ( $entity.isTransient())
     #if ($entity.hasParent())
@@ -300,10 +302,10 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
      *            the page to start
      * @param count
      *            maximum number of results to return
-     * @return List<EmployeeBO> results that contains data that matches the
+     * @return PageWrapper<${entity.name}BO> results that contains data that matches the
      *         example passed in
      */
-    public static Page<${entity.name}BO> findByExampleContainsPaged(${entity.name}BO probe, Integer startPage, Integer count) {
+    public static PageWrapper<${entity.name}BO> findByExampleContainsPaged(${entity.name}BO probe, Integer startPage, Integer count) {
         return findByExampleWithDefaultSort(probe, true, startPage, count);  
     }
     
@@ -346,10 +348,10 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
      *            the page to start
      * @param count
      *            maximum number of results to return
-     * @return Page<EmployeeBO> results that contains data that matches the
+     * @return PageWrapper<${entity.name}BO> results that contains data that matches the
      *         example passed in
      */
-    public static Page<${entity.name}BO> findByExampleMatchesPaged(${entity.name}BO probe, Integer startPage, Integer count) {
+    public static PageWrapper<${entity.name}BO> findByExampleMatchesPaged(${entity.name}BO probe, Integer startPage, Integer count) {
         return findByExampleWithDefaultSort(probe, false, startPage, count);
     }
 
@@ -371,7 +373,7 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
      *            maximum number of results to return
      * @return List<${entity.name}BO> matching results
      */
-    public static Page<${entity.name}BO> findByExampleWithDefaultSort(${entity.name}BO probe, Boolean containsMatch, Integer startPage, Integer count){
+    public static PageWrapper<${entity.name}BO> findByExampleWithDefaultSort(${entity.name}BO probe, Boolean containsMatch, Integer startPage, Integer count){
         
         if(probe == null) {
             // default to find all if no probe is specified
@@ -404,8 +406,8 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
         Pageable pageable = PageRequest.of(startPage, count, sort);
         #end
         
-        Page<${entity.name}BO> results = findByExample(probe, containsMatch, pageable);
-        return results;     
+        PageWrapper<${entity.name}BO> results = findByExample(probe, containsMatch, pageable);
+        return results;
     }
 
     /**
@@ -423,10 +425,10 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
      *            maximum number of results to return
      * @param sort
      *            how the results will be sorted on returned and for paging
-     * @return List<${entity.name}BO> matching results
+     * @return PageWrapper<${entity.name}BO> matching results
      */
-    public static Page<${entity.name}BO> findByExample(${entity.name}BO probe, Boolean containsMatch, Integer startPage, Integer count, Sort sort) {
-        Page<${entity.name}BO> result = null;
+    public static PageWrapper<${entity.name}BO> findByExample(${entity.name}BO probe, Boolean containsMatch, Integer startPage, Integer count, Sort sort) {
+        PageWrapper<${entity.name}BO> result = null;
         if(probe == null) {
             // default to find all if no probe is specified
             probe = new ${entity.name}BO();
@@ -448,7 +450,7 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
         } else {
             Pageable pageable = PageRequest.of(startPage, count, sort);
             result = findByExample(probe, containsMatch, pageable);
-                
+
         }
         
         return result;
@@ -470,7 +472,7 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
      *            paging information for the query
      * @return List<${entity.name}BO> matching results
      */
-    public static Page<${entity.name}BO> findByExample(${entity.name}BO probe, Boolean containsMatch, Pageable pageable) {
+    public static PageWrapper<${entity.name}BO> findByExample(${entity.name}BO probe, Boolean containsMatch, Pageable pageable) {
         Example<${entity.name}BO> example;
         if(containsMatch) {
             ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreCase().withStringMatcher(StringMatcher.CONTAINING);
@@ -478,7 +480,10 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
         } else {
             example = Example.of(probe);
         }
-        return getDefaultRepository().findAll(example, pageable);
+
+        Page<${entity.name}BO> entitiesPage = getDefaultRepository().findAll(example, pageable);
+		PageWrapper<${entity.name}BO> result = (new PageConverter<${entity.name}BO>()).convertToPageWrapper(entitiesPage);
+        return result;
     }
 #end
 

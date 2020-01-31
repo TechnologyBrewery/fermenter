@@ -12,6 +12,8 @@ import org.bitbucket.fermenter.stout.messages.Message;
 import org.bitbucket.fermenter.stout.messages.MessageManager;
 import org.bitbucket.fermenter.stout.messages.MetaMessage;
 import org.bitbucket.fermenter.stout.messages.Severity;
+import org.bitbucket.fermenter.stout.page.PageConverter;
+import org.bitbucket.fermenter.stout.page.PageWrapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
@@ -99,10 +101,12 @@ public class ContractTestServiceImpl extends ContractTestBaseServiceImpl impleme
      * {@inheritDoc}
      */
     @Override
-    protected Page<String> multipleStringsPagedResponseMethodImpl(Integer startPage, Integer count) {
+    protected PageWrapper<String> multipleStringsPagedResponseMethodImpl(Integer startPage, Integer count) {
         addMessageToReponse(Severity.INFO, "multipleStringsPagedResponseMethod");
         List<String> responseCollection = returnMultipleStrings();
-        return new PageImpl<>(responseCollection);
+        PageConverter<String> stringPageMapper = new PageConverter<>();
+        Page<String> entities = new PageImpl<>(responseCollection);
+        return stringPageMapper.convertToPageWrapper(entities);
 
     }
 
@@ -110,10 +114,12 @@ public class ContractTestServiceImpl extends ContractTestBaseServiceImpl impleme
      * {@inheritDoc}
      */
     @Override
-    protected Page<SimpleDomainBO> multipleEntitiesPagedResponseMethodImpl(Integer startPage, Integer count) {
+    protected PageWrapper<SimpleDomainBO> multipleEntitiesPagedResponseMethodImpl(Integer startPage, Integer count) {
         addMessageToReponse(Severity.INFO, "multipleEntitiesPagedResponseMethod");
         List<SimpleDomainBO> responseCollection = returnMultipleEntities();
-        return new PageImpl<>(responseCollection);
+        PageConverter<SimpleDomainBO> simpleDomainBOPageMapper = new PageConverter<>();
+        Page<SimpleDomainBO> entities = new PageImpl<>(responseCollection);
+        return simpleDomainBOPageMapper.convertToPageWrapper(entities);
     }
 
     /**

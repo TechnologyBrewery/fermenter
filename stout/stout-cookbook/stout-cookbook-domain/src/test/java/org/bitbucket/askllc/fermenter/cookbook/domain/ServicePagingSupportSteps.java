@@ -42,6 +42,7 @@ public class ServicePagingSupportSteps {
 
     private PageWrapper<SimpleDomainBO> responseValue;
     private ValueServiceResponse<PageWrapper<SimpleDomainBO>> response;
+    private int numberOfItemsInList;
 
     @Before("@pagingSupport")
     public void setup() {
@@ -53,6 +54,11 @@ public class ServicePagingSupportSteps {
         simpleDomainManagerService.deleteAllSimpleDomains();
         
         AuthenticationTestUtils.logout();
+    }
+
+    @Given("^a list of (\\d+) random items that are not stored in the database$")
+    public void a_list_of_random_items_that_are_not_stored_in_the_database(int numberOfItemsInList) throws Throwable {
+        this.numberOfItemsInList = numberOfItemsInList;
     }
 
     @Given("^there are (\\d+) simple domain BOs in the system$")
@@ -93,16 +99,28 @@ public class ServicePagingSupportSteps {
         response = simpleDomainMaintenanceService.findByExample(findAllCriteria);
         responseValue = response.getValue();
     }
-    
+
     @When("^I request a paged service for a negative page index$")
     public void i_request_a_paged_service_for_a_negative_page_index() throws Throwable {
         response = simpleDomainManagerService.getPagedSimpleDomains(NEGATIVE_PAGE_INDEX, DEFAULT_PAGE_SIZE);
     }
+
     @When("^I request a paged service for a negative page size$")
     public void i_request_a_paged_service_for_a_negative_page_size() throws Throwable {
         response = simpleDomainManagerService.getPagedSimpleDomains(FIRST_PAGE, NEGATIVE_PAGE_SIZE);
     }
 
+    @When("^I ask for page (\\d+) of (\\d+) items$")
+    public void i_ask_for_page_of_items(int pageIndex, int pageSize) throws Throwable {
+        response = simpleDomainManagerService.getPagedResponseWithoutSpringPage(numberOfItemsInList, pageIndex, pageSize);
+    }
+
+    @Then("^I get back the first (\\d+) in the list as a PageWrapper object without depending on spring paging$")
+    public void i_get_back_the_first_items_in_the_list_without_needing_to_depend_on_spring_paging(int numberOfItemsExpected)
+            throws Throwable {
+        assertEquals(numberOfItemsExpected, response.getValue().getContent().size());
+        assertEquals(numberOfItemsInList, response.getValue().getTotalResults().intValue());
+    }
 
     @Then("^the paged response indicates \"([^\"]*)\" as the number of simple domains requested$")
     public void the_paged_response_indicates_as_the_number_of_simple_domains_requested(Integer expectedSize)
@@ -158,16 +176,17 @@ public class ServicePagingSupportSteps {
 
     @Then("^I get an error message back indicating that the page index is required$")
     public void i_an_error_message_back_indicating_that_the_page_index_is_required() throws Throwable {
-         TestUtils.assertErrorMessagesInResponse(response, 1);
+        TestUtils.assertErrorMessagesInResponse(response, 1);
     }
 
     @Then("^I get an error message back indicating that the page size is required$")
     public void i_an_error_message_back_indicating_that_the_page_size_is_required() throws Throwable {
         TestUtils.assertErrorMessagesInResponse(response, 1);
     }
-    
+
     @Then("^I get an error message back indicating that the page index must be a positive number$")
-    public void i_get_an_error_message_back_indicating_that_the_page_index_must_be_a_positive_number() throws Throwable {
+    public void i_get_an_error_message_back_indicating_that_the_page_index_must_be_a_positive_number()
+            throws Throwable {
         TestUtils.assertErrorMessagesInResponse(response, 1);
     }
 
@@ -175,7 +194,6 @@ public class ServicePagingSupportSteps {
     public void i_get_an_error_message_back_indicating_that_the_page_size_must_be_a_positive_number() throws Throwable {
         TestUtils.assertErrorMessagesInResponse(response, 1);
     }
-
 
     @Then("^I get back a response that contains a page$")
     public void i_get_back_a_response_that_contains_a_page() throws Throwable {

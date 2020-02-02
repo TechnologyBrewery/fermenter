@@ -328,7 +328,7 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
 	        	Object[] params = {LocalOptimizationUtil.convertToBusinessObjectViaJson(entities, objectMapper)};
 	    		Object rawResponse = localServiceWrapper.invokeLocalService("bulkDelete", params);
 	    		response = (VoidServiceResponse)rawResponse;
-	    		//response = (VoidServiceResponse)LocalOptimizationUtil.convertResponseToTransferObjectViaJson(rawResponse, ${entity.name}.class, objectMapper); 
+ 
 	        } else {
 	        	response = ${entity.name.toLowerCase()}Resource.bulkDelete(entities);
         	}

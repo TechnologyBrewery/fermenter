@@ -36,6 +36,12 @@ public class LocalOptimizationServiceWrapper {
         }
 
         this.serviceClass = LocalOptimizationUtil.lookupClassByName(serviceClassName);
+        
+        if (this.serviceClass == null) {
+            throw new UnrecoverableException("Clazz " + serviceClassName + "could not be found in classpath!");
+        }
+        
+        
         indexClassForLocalOptimization();
     }
 
@@ -84,10 +90,11 @@ public class LocalOptimizationServiceWrapper {
                 response = method.invoke(localService, params);
 
             } catch (SecurityException | IllegalAccessException | IllegalArgumentException
-                    | InvocationTargetException e) {
-                logger.error("Could not invoke: {}.{} with the parameters types {}", serviceClass.getName(), methodName,
+                    | InvocationTargetException e) {                
+                String message = String.format("Could not invoke: %s.%s with the parameters types %s", serviceClass.getName(), methodName,
                         method.getParameterTypes());
-                logger.error("Specific exception encountered:", e);
+                throw new UnrecoverableException(message, e);
+                
             }
         }
 

@@ -12,19 +12,16 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationExampleBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.ValidationExampleMaintenanceService;
-import org.bitbucket.fermenter.stout.mock.MockRequestScope;
-import org.bitbucket.fermenter.stout.messages.DefaultMessage;
 import org.bitbucket.fermenter.stout.messages.Message;
-import org.bitbucket.fermenter.stout.messages.MessageManagerInitializationDelegate;
 import org.bitbucket.fermenter.stout.messages.MessageUtils;
 import org.bitbucket.fermenter.stout.messages.Messages;
 import org.bitbucket.fermenter.stout.messages.MessagesSet;
+import org.bitbucket.fermenter.stout.mock.MockRequestScope;
 import org.bitbucket.fermenter.stout.service.ServiceResponse;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;

@@ -331,12 +331,16 @@ public final class LocalOptimizationUtil {
      * @return the Class for that lookup value (or an UnrecoverableException, if not found)
      */
     public static Class<?> lookupClassByName(String className) {
+        Class<?> clazz = null;
         try {
-            return Class.forName(className);
+            clazz = Class.forName(className);
 
         } catch (ClassNotFoundException e) {
-            throw new UnrecoverableException("Could not find the following class in the classpath", e);
+            // do nothing - this is a convenience method.  If you can about it not being found, then you can deal that yourself 
+            // when this returns null
         }
+        
+        return clazz;
     }
 
     /**
@@ -349,6 +353,11 @@ public final class LocalOptimizationUtil {
     public static ObjectMapper getObjectMapper(String objectMapperManagerClassName) {
         if (objectMapper == null) {
             Class<?> objectMapperManagerClass = lookupClassByName(objectMapperManagerClassName);
+            
+            if (objectMapperManagerClass == null) {
+                throw new UnrecoverableException("Could not find Object Mapper Manager class " + objectMapperManagerClassName);
+            }
+            
             try {
                 Method method = objectMapperManagerClass.getMethod("getObjectMapper");
                 objectMapper = (ObjectMapper) method.invoke(null);
@@ -392,6 +401,11 @@ public final class LocalOptimizationUtil {
         @Override
         protected Object doRead(InputStream istream) throws Exception {
             Class<?> targetClass = lookupBusinessObjectClassByTransferObject(transferObjectClass);
+            
+            if (targetClass == null) {
+                throw new UnrecoverableException("Can not find TransferObejct class to map to: " + transferObjectClass);
+            }
+            
             return objectMapper.readValue(istream, targetClass);
         }
 

@@ -14,6 +14,7 @@ import { GlobalErrorHandlerComponent } from './shared/global-error-handler/globa
 import { ErrorDialogComponent } from './shared/error-dialog/error-dialog.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { E2eTestsPageComponent } from './e2e-tests-page/e2e-tests-page.component';
+import { BeerExampleComponent } from './beer-example-page/beer-example-page.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { E2eTestsPageComponent } from './e2e-tests-page/e2e-tests-page.component
     SimpleDomainComponent,
     GlobalErrorHandlerComponent,
     ErrorDialogComponent,
-    E2eTestsPageComponent
+    E2eTestsPageComponent,
+    BeerExampleComponent
   ],
   imports: [
     BrowserModule,

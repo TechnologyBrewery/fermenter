@@ -44,9 +44,18 @@ public abstract class ${entity.name}BO<PK extends Serializable, BO, JPA extends 
 	protected Logger getLogger() {
 		return LOGGER;
 	}
-
+    
+    /**
+    * Lifecycle method that is invoked when saving ${entity.name} via a creation or update, 
+    * only if the entity's fields were validated successfully. 
+    * 
+    * If ${entity.name} requires additional business logic in order to validate its data prior to saving, 
+    * implement that logic here.
+    * 
+    * @see <a href="https://fermenter.atlassian.net/wiki/spaces/FER/pages/62128129/Stout#Stout-Savelifecycle">Stout: Save Lifecycle</a>
+    */
 	@Override
 	protected void complexValidation() {
-
+        /* add complex validation logic here */
 	}
 }

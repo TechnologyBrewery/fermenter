@@ -13,6 +13,7 @@ import javax.ws.rs.WebApplicationException;
 import org.apache.commons.collections.CollectionUtils;
 import org.bitbucket.fermenter.stout.authz.Action;
 import org.bitbucket.fermenter.stout.messages.AbstractMsgMgrAwareService;
+import org.bitbucket.fermenter.stout.messages.MessageManagerAwareService;
 import org.bitbucket.fermenter.stout.messages.CoreMessages;
 import org.bitbucket.fermenter.stout.messages.DefaultMessages;
 import org.bitbucket.fermenter.stout.messages.MessageManager;
@@ -63,6 +64,9 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 		
 	@Inject
 	private DefaultMessages messages;
+	
+	@Inject
+	private MessageManagerAwareService messageManagerAwareService;
 		
 	/**
 	 * {@inheritDoc}
@@ -80,7 +84,7 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
 	public ValueServiceResponse<${entity.name}BO> saveOrUpdate(${entity.name}BO entity) {
-		initMsgMgr(messages);
+		messageManagerAwareService.initializeMessageManager(messages);
 		assertAuthorization(PATH, Action.SAVE);
 		ValueServiceResponse<${entity.name}BO> response = performSaveOrUpdate(entity);
 		MessageManager.logMessages(logger, this.getClass());
@@ -90,7 +94,7 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 	private ValueServiceResponse<${entity.name}BO> performSaveOrUpdate(${entity.name}BO entity) {
 		${entity.name}BO persistedEntity = entity.save();
 		ValueServiceResponse<${entity.name}BO> response = new ValueServiceResponse<>(persistedEntity);
-		addAllMsgMgrToResponse(response);
+		messageManagerAwareService.addAllMessagesToResponse(response);
 		
 		if (response.getMessages().hasErrorMessages()) {
 		    Response statusResponse = Response.status(Response.Status.BAD_REQUEST).entity(response).build();
@@ -106,7 +110,7 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
 	public VoidServiceResponse delete(${idFieldJavaType} ${idFieldName}) {
-		initMsgMgr(messages);
+		messageManagerAwareService.initializeMessageManager(messages);
 		assertAuthorization(PATH, Action.DELETE);
 		VoidServiceResponse response = performDelete(${idFieldName});
 		MessageManager.logMessages(logger, this.getClass());
@@ -122,7 +126,7 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 	                    new String[] { ${idFieldName}.toString() }, new Object[] { ${idFieldName}, "a record with this key does not exist" }));
 		}
 		VoidServiceResponse response = new VoidServiceResponse();
-		addAllMsgMgrToResponse(response);
+		messageManagerAwareService.addAllMessagesToResponse(response);
 		return response;
 	}		
 	 	
@@ -132,7 +136,7 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 	@Transactional(propagation=Propagation.SUPPORTS)
 	@Override
 	public ValueServiceResponse<${entity.name}BO> findByPrimaryKey(${idFieldJavaType} ${idFieldName}) {
-		initMsgMgr(messages);
+		messageManagerAwareService.initializeMessageManager(messages);
 		assertAuthorization(PATH, Action.RETRIEVE);
 		${entity.name}BO retrievedEntity = null;
 		if (${idFieldName} == null) {
@@ -146,7 +150,7 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 			}
 		}
 		ValueServiceResponse<${entity.name}BO> response = new ValueServiceResponse<>(retrievedEntity);
-		addAllMsgMgrToResponse(response);
+		messageManagerAwareService.addAllMessagesToResponse(response);
 		
 		MessageManager.logMessages(logger, this.getClass());
 		
@@ -163,13 +167,13 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 	@Transactional(propagation = Propagation.SUPPORTS)
 	@Override
 	public ValueServiceResponse<PageWrapper<${entity.name}BO>> findByExample(FindByExampleCriteria<${entity.name}BO> criteria) {
-		initMsgMgr(messages);
+		messageManagerAwareService.initializeMessageManager(messages);
         assertAuthorization(PATH, Action.RETRIEVE);
 		Sort sort = SortMapper.mapToSort(criteria.getSortWrapper());
 		Page<${entity.name}BO> allEntitiesPage = ${entity.name}BO.findByExample(criteria.getProbe(), criteria.getContainsMatch(), criteria.getStartPage(), criteria.getCount(), sort);
 		PageWrapper<${entity.name}BO> allEntities = (new PageMapper<${entity.name}BO>()).mapToPageWrapper(allEntitiesPage);
 		ValueServiceResponse<PageWrapper<${entity.name}BO>> response = new ValueServiceResponse<>(allEntities);
-		addAllMsgMgrToResponse(response);
+		messageManagerAwareService.addAllMessagesToResponse(response);
 		
 		MessageManager.logMessages(logger, this.getClass());		
 		
@@ -182,7 +186,7 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
 	public ValueServiceResponse<Collection<${entity.name}BO>> bulkSaveOrUpdate(Collection<${entity.name}BO> entities) {
-		initMsgMgr(messages);
+		messageManagerAwareService.initializeMessageManager(messages);
 	    assertAuthorization(PATH, Action.SAVE);
 		Collection<${entity.name}BO> values = new ArrayList<>();
 		ValueServiceResponse<${entity.name}BO> response = null;
@@ -202,7 +206,7 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
         if(keyList != null) {
             MessageManager.addMessage(MessageUtils.createErrorMessage(CoreMessages.BULK_OPERATION_FAILED,
                     new String[] { "Bulk Save failed" }, new Object[] { keyList }));
-            addAllMsgMgrToResponse(responses);            
+            messageManagerAwareService.addAllMessagesToResponse(responses);            
         }
         
         MessageManager.logMessages(logger, this.getClass());
@@ -221,7 +225,7 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
     @Transactional(propagation=Propagation.REQUIRED)
     @Override
     public VoidServiceResponse bulkDelete(Collection<${entity.name}BO> entities) {
-        initMsgMgr(messages);
+        messageManagerAwareService.initializeMessageManager(messages);
         assertAuthorization(PATH, Action.DELETE);
         VoidServiceResponse responses = new VoidServiceResponse();
         String keyList = null;
@@ -242,7 +246,7 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractMsgMgrAwareSer
         if(keyList != null) {
             MessageManager.addMessage(MessageUtils.createErrorMessage(CoreMessages.BULK_OPERATION_FAILED,
                     new String[] { "Bulk Delete failed" }, new Object[] { keyList }));
-            addAllMsgMgrToResponse(responses);            
+            messageManagerAwareService.addAllMessagesToResponse(responses);            
         }
         
         MessageManager.logMessages(logger, this.getClass());

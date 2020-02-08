@@ -27,7 +27,6 @@
 
     <properties>
         <embedded.tomcat.version>8.0.1</embedded.tomcat.version>
-        <aspectj.version>1.8.9</aspectj.version>
     </properties>
 
     <build>

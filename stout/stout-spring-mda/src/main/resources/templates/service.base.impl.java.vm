@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import org.bitbucket.fermenter.stout.authz.Action;
 
 import org.bitbucket.fermenter.stout.messages.AbstractMsgMgrAwareService;
+import org.bitbucket.fermenter.stout.messages.MessageManagerAwareService;
 import org.bitbucket.fermenter.stout.messages.DefaultMessages;
 import org.bitbucket.fermenter.stout.messages.Message;
 import org.bitbucket.fermenter.stout.messages.MessageFactory;
@@ -40,6 +41,9 @@ public abstract class ${service.name}BaseServiceImpl extends AbstractMsgMgrAware
 	@Inject
 	protected DefaultMessages messages;
 	
+	@Inject
+	private MessageManagerAwareService messageManagerAwareService;
+	
 #foreach( $operation in $service.operations )
 	/**
 	 * {@inheritDoc}
@@ -55,7 +59,7 @@ public abstract class ${service.name}BaseServiceImpl extends AbstractMsgMgrAware
 	#else 
 	public ValueServiceResponse<${operation.return.javaType}> ${operation.uncapitalizedName}(${operation.signature}) {
 	#end
-		initMsgMgr(messages);
+		messageManagerAwareService.initializeMessageManager(messages);
 		assertAuthorization(PATH + "/${operation.uncapitalizedName}", Action.EXECUTE);
 	
 		
@@ -97,7 +101,7 @@ public abstract class ${service.name}BaseServiceImpl extends AbstractMsgMgrAware
 		ValueServiceResponse<${operation.return.javaType}> response = new ValueServiceResponse<>(result);
 	#end
 	
-		addAllMsgMgrToResponse(response);
+		messageManagerAwareService.addAllMessagesToResponse(response);
 		return response;
 	}
 	

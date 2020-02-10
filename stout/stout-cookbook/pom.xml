@@ -1,57 +1,59 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-	<modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.bitbucket.askllc.fermenter.stout</groupId>
-		<artifactId>stout</artifactId>
-		<version>2.0.0.RC21-SNAPSHOT</version>
-	</parent>
+    <parent>
+        <groupId>org.bitbucket.askllc.fermenter.stout</groupId>
+        <artifactId>stout</artifactId>
+        <version>2.0.0.RC21-SNAPSHOT</version>
+    </parent>
 
-	<name>Fermenter::Stout::Cookbook</name>
-	<description>Parent POM containing a cookbook of Stout patterns</description>
+    <name>Fermenter::Stout::Cookbook</name>
+    <description>Parent POM containing a cookbook of Stout patterns</description>
 
-	<artifactId>stout-cookbook-parent</artifactId>
-	<packaging>pom</packaging>
+    <artifactId>stout-cookbook-parent</artifactId>
+    <packaging>pom</packaging>
 
-	<modules>
-		<module>stout-cookbook-domain</module>
-		<module>stout-cookbook-domain-client</module>
-		<module>stout-cookbook-referencing-domain</module>
-		<module>stout-cookbook-referencing-domain-client</module>
-		<module>stout-cookbook-local-referencing-domain</module>
-		<module>stout-cookbook-domain-webapp</module>
-	</modules>
+    <modules>
+        <module>stout-cookbook-domain</module>
+        <module>stout-cookbook-domain-client</module>
+        <module>stout-cookbook-referencing-domain</module>
+        <module>stout-cookbook-referencing-domain-client</module>
+        <module>stout-cookbook-local-referencing-domain</module>
+        <module>stout-cookbook-domain-webapp</module>
+    </modules>
 
-	<properties>
-		<embedded.tomcat.version>8.0.1</embedded.tomcat.version>
-	</properties>
+    <properties>
+        <embedded.tomcat.version>8.0.1</embedded.tomcat.version>
+    </properties>
 
-	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.bitbucket.askllc.fermenter</groupId>
-					<artifactId>fermenter-mda</artifactId>
-					<executions>
-						<execution>
-							<id>generate-sources</id>
-							<phase>generate-sources</phase>
-							<goals>
-								<goal>generate-sources</goal>
-							</goals>
-						</execution>
-						<execution>
-							<id>clean</id>
-							<phase>clean</phase>
-							<goals>
-								<goal>clean</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.bitbucket.askllc.fermenter</groupId>
+                    <artifactId>fermenter-mda</artifactId>
+                    <executions>
+                        <execution>
+                            <id>generate-sources</id>
+                            <phase>generate-sources</phase>
+                            <goals>
+                                <goal>generate-sources</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>clean</id>
+                            <phase>clean</phase>
+                            <goals>
+                                <goal>clean</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 
 </project>

@@ -28,6 +28,7 @@
 		<narayana.version>5.9.5.Final</narayana.version>
 		<spring.version>4.3.12.RELEASE</spring.version>
 		<spring.security.version>4.2.4.RELEASE</spring.security.version>
+        <aspectj.version>1.8.9</aspectj.version>
 		<jacoco.it.execution.data.file>${project.build.directory}/jacoco-it.exec</jacoco.it.execution.data.file>
 		<jacoco.test.execution.data.file>${project.build.directory}/jacoco.exec</jacoco.test.execution.data.file>
 		<jacoco.version>0.7.7.201606060606</jacoco.version>
@@ -220,6 +221,11 @@
 				<version>${spring.version}</version>
 				<scope>compile</scope>
 			</dependency>
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjtools</artifactId>
+                <version>${aspectj.version}</version>
+            </dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-web</artifactId>
@@ -313,7 +319,13 @@
 				<version>${jjwt.version}</version>
 				<scope>runtime</scope>
 			</dependency>
-
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjrt</artifactId>
+                <version>${aspectj.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+            
 			<dependency>
 				<groupId>org.jboss.arquillian</groupId>
 				<artifactId>arquillian-bom</artifactId>

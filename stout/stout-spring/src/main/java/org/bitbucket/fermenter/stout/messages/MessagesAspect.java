@@ -23,7 +23,7 @@ public class MessagesAspect {
         // trigger our aspect
     }
 
-    @Around("publicMethod() && execution(* org.bitbucket.fermenter.stout.messages.MessageManagerAwareService.initializeMessageManager(*)) && args(messages)")
+    @Around("execution(* org.bitbucket.fermenter.stout.messages.MessageManagerAwareService.initializeMessageManager(*)) && args(messages) && publicMethod()")
     public void publicMethodCallingInitializeMessageManager(ProceedingJoinPoint proceedingJoinPoint,
             Messages messages) {
 
@@ -40,7 +40,7 @@ public class MessagesAspect {
         }
     }
 
-    @Before("publicMethod() && execution(* org.bitbucket.fermenter.stout.messages.MessageManagerAwareService.addAllMessagesToResponse(*))")
+    @Before("execution(* org.bitbucket.fermenter.stout.messages.MessageManagerAwareService.addAllMessagesToResponse(*)) && publicMethod()")
     public void interceptAddMessagesToResponse(JoinPoint joinPoint) {
 
         if (!isRequestScopeAvailable() && !MessageManager.isCreatedLocally()) {

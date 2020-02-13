@@ -60,25 +60,25 @@ public class EntityCachingSteps {
         firstLookUp = maintenanceDelegate.findByPrimaryKey(exampleEntity.getId());
     }
 
+    @When("^I look up the same reference again with the maintenance rest client$")
+    public void iLookUpTheSameReferenceAgainWithTheMaintenanceRestClient() {
+        secondLookUp = maintenanceDelegate.findByPrimaryKey(exampleEntity.getId());
+    }
+
+    @When("^I delete an existing entity through the maintenance rest client$")
+    public void iDeleteAnExistingEntityThroughTheMaintenanceRestClient() {
+        maintenanceDelegate.delete(exampleEntity.getId());
+    }
+
     @Then("^the reference is cached for later calls$")
     public void theReferenceIsCachedForLaterCalls() {
         CachedEntityExample cachedValue = CachedEntityExampleCache.getFromCache(firstLookUp.getId());
         assertEquals("Cached value didn't equal lookup value", firstLookUp, cachedValue);
     }
 
-    @When("^I look up the same reference again with the maintenance rest client$")
-    public void iLookUpTheSameReferenceAgainWithTheMaintenanceRestClient() {
-        secondLookUp = maintenanceDelegate.findByPrimaryKey(exampleEntity.getId());
-    }
-
     @Then("^the cached referenced is used$")
     public void theCachedReferencedIsUsed() {
         assertEquals("Entity didn't match looked up value", exampleEntity, secondLookUp);
-    }
-
-    @When("^I delete an existing entity through the maintenance rest client$")
-    public void iDeleteAnExistingEntityThroughTheMaintenanceRestClient() {
-        maintenanceDelegate.delete(exampleEntity.getId());
     }
 
     @Then("^the cached entity is removed$")

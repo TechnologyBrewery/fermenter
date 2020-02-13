@@ -9,6 +9,7 @@ import ${basePackage}.transfer.${entity.name};
 import ${import};
 #end
 
+import org.apache.commons.lang3.StringUtils;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import org.aeonbits.owner.KrauseningConfigFactory;
@@ -48,9 +49,16 @@ public class ${entity.name}Cache {
 	 * @param ${entity.name.toLowerCase()}
 	 */
     public static void addToCache(${entity.name} ${entity.name.toLowerCase()}) {
+		#if ( $idFieldJavaType == 'String' )
+		String trimmedId = (${entity.name.toLowerCase()} != null) ? StringUtils.trimToNull(${entity.name.toLowerCase()}.get${idField}()) : null;
+        if (trimmedId != null) {
+            cache.put(trimmedId, ${entity.name.toLowerCase()});
+        }
+		#else
         if (${entity.name.toLowerCase()} != null && ${entity.name.toLowerCase()}.get${idField}() != null) {
             cache.put(${entity.name.toLowerCase()}.get${idField}(), ${entity.name.toLowerCase()});
         }
+		#end
     }
 
     /**
@@ -71,7 +79,16 @@ public class ${entity.name}Cache {
      * @return BO from cache, returns null if not available
      */
     public static ${entity.name} getFromCache($idFieldJavaType entityId) {
-        return cache.getIfPresent(entityId);
+	  #if ( $idFieldJavaType == 'String' )
+	    String trimmedId = StringUtils.trimToNull(entityId);
+	    ${entity.name} ${entity.name.toLowerCase()} = null;
+		if (trimmedId != null) {
+			${entity.name.toLowerCase()} = cache.getIfPresent(trimmedId);
+		} 
+		return ${entity.name.toLowerCase()};
+	  #else
+		return cache.getIfPresent(entityId);
+	  #end
     }
 
     /**
@@ -87,7 +104,14 @@ public class ${entity.name}Cache {
      * @param ${entity.name.toLowerCase()}Id
      */
     public static void removeFromCache($idFieldJavaType ${entity.name.toLowerCase()}Id) {
-        cache.invalidate(${entity.name.toLowerCase()}Id);
+	  #if ( $idFieldJavaType == 'String' )
+        String trimmedId = StringUtils.trimToNull(${entity.name.toLowerCase()}Id);
+        if (trimmedId != null){ 
+		    cache.invalidate(trimmedId);
+		}
+	  #else
+		cache.invalidate(${entity.name.toLowerCase()}Id);
+	  #end
     }
 
     /**
@@ -96,9 +120,16 @@ public class ${entity.name}Cache {
      * @param ${entity.name.toLowerCase()}
      */
     public static void removeFromCache(${entity.name} ${entity.name.toLowerCase()}) {
+	  #if ( $idFieldJavaType == 'String' )
+	    String trimmedId = (${entity.name.toLowerCase()} != null) ? StringUtils.trimToNull(${entity.name.toLowerCase()}.get${idField}()) : null;
+        if (trimmedId != null) {
+            removeFromCache(trimmedId);
+        }
+	  #else
         if (${entity.name.toLowerCase()} != null && ${entity.name.toLowerCase()}.get${idField}() != null) {
             removeFromCache(${entity.name.toLowerCase()}.get${idField}());
         }
+	  #end
     }
 
 }

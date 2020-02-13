@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE entity PUBLIC "-//FERMENTER//DTD ENTITY//EN" "https://bitbucket.org/cpointe/fermenter/downloads/fermenter-2-entity.dtd">
+
+<entity>
+    <name>StringKeyedEntity</name>
+    <documentation>Entity that demonstrates using a string as a primary key</documentation>
+    <table>STRING_KEYED_ENTITY</table>
+
+    <id>
+        <field>
+            <name>id</name>
+            <type>string</type>
+            <column>STRING_KEYED_ENTITY_ID</column>
+            <required>true</required>
+        </field>
+    </id>
+
+</entity>

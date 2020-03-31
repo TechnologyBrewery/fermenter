@@ -9,7 +9,7 @@ export enum ${enumeration.name} {
 #if($enumeration.isValued())
     ${enum.name} = ${enum.value},
 #else
-    ${enum.name} = "${enum.name}",
+    ${enum.name} = '${enum.name}',
 #end
 #end
 }

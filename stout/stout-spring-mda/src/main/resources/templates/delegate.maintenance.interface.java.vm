@@ -15,6 +15,7 @@ import $import;
  * Service delegate interface for ${entity.name} entity maintenance.
  *
  * Generated Code - DO NOT MODIFY
+ * Generated from delegate.maintenance.interface.java.vm
  */
 public interface ${entity.name}MaintenanceDelegate {
     #if ( !$entity.idFields.isEmpty() )
@@ -25,14 +26,72 @@ public interface ${entity.name}MaintenanceDelegate {
         #set ($idFieldName = 'id')
     #end
 
+    /**
+     * Find the ${entity.name} by primary key
+     *
+     * @param ${id.name} The primary key value ${id.name} for the ${entity.name} to retrieve
+     * @return a service response containing the retrieved entity and/or any collected messages
+     */
     ${entity.name} findByPrimaryKey(@Param("id") ${idFieldJavaType} ${idFieldName});
 
+    /**
+     * Create the provided instance.
+     *
+     * @param entity The ${entity.name} instance to save
+     * @return a service response containing the saved entity and/or any collected messages
+     */
     ${entity.name} create(${entity.name} entity);
 
+    /**
+     * Save or update the provided instance.
+     *
+     * @param ${idFieldName} The primary key value ${idFieldName} for the ${entity.name}
+     * @param entity The ${entity.name} instance to save
+     * @return a service response containing the saved entity and/or any collected messages
+     */
     ${entity.name} update(@Param("id") ${idFieldJavaType} ${idFieldName}, ${entity.name} entity);
 
+    /**
+     * Find by example
+     *
+     * @return a service response containing entities from search and/or any collected messages
+     */
     PageWrapper<${entity.name}> findByExample(FindByExampleCriteria<${entity.name}> criteria);
+    
+    /**
+     * Find by example contains
+     *
+     * @return a service response containing entities from search and/or any collected messages
+     */
+    Collection<${entity.name}>  findByExampleContains(${entity.name} probe);
+    
+    /**
+     * Find by example contains that starts on a specific page with count
+     *
+     * @return a service response containing entities from search and/or any collected messages
+     */
+    PageWrapper<${entity.name}>  findByExampleContainsPaged(${entity.name} probe, @Param("startPage") int startPage, @Param("count") int count);
+    
+    /**
+     * Find by example matches
+     *
+     * @return a service response containing entities from search and/or any collected messages
+     */
+    Collection<${entity.name}>  findByExampleMatches(${entity.name} probe);
+    
+    /**
+     * Find by example matches that starts on a specific page with count
+     *
+     * @return a service response containing entities from search and/or any collected messages
+     */
+    PageWrapper<${entity.name}>  findByExampleMatchesPaged(${entity.name} probe, @Param("startPage") int startPage, @Param("count") int count);
 
+    /**
+     * Deletes the ${entity.name} entity with the provided primary key value.
+     *
+     * @param ${idFieldName} The primary key value ${idFieldName} for the ${entity.name} to delete
+     * @return response wrapper containing any collected messages
+     */
     void delete(@Param("id") ${idFieldJavaType} ${idFieldName});
     
     /**

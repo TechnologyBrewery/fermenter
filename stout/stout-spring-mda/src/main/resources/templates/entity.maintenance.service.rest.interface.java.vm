@@ -38,6 +38,7 @@ import java.util.Collection;
  * invocation.
  *
  * Generated Code - DO NOT MODIFY
+ * Generated from entity.maintenance.service.rest.interface.java.vm
  */
 @Path(${entity.name}MaintenanceService.PATH)
 public interface ${entity.name}MaintenanceService {
@@ -111,12 +112,60 @@ public interface ${entity.name}MaintenanceService {
      * @return a service response containing entities from search and/or any collected messages
      */
     @PreAuthorize("hasPermission(authentication, 'read')")
-	@POST
+    @POST
     @Path("findByExample")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	ValueServiceResponse<PageWrapper<${entity.name}BO>> findByExample(FindByExampleCriteria<${entity.name}BO> criteria);
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    ValueServiceResponse<PageWrapper<${entity.name}BO>> findByExample(FindByExampleCriteria<${entity.name}BO> criteria);
     
+    /**
+     * Find by example contains
+     *
+     * @return a service response containing entities from search and/or any collected messages
+     */
+    @PreAuthorize("hasPermission(authentication, 'read')")
+    @POST
+    @Path("findByExampleContains")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    ValueServiceResponse<Collection<${entity.name}BO>> findByExampleContains(${entity.name}BO probe);
+    
+    /**
+     * Find by example contains that starts on a specific page with count
+     *
+     * @return a service response containing entities from search and/or any collected messages
+     */
+    @PreAuthorize("hasPermission(authentication, 'read')")
+    @POST
+    @Path("findByExampleContainsPaged")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    ValueServiceResponse<PageWrapper<${entity.name}BO>> findByExampleContainsPaged(${entity.name}BO probe, int startPage, int count);
+    
+    /**
+     * Find by example matches
+     *
+     * @return a service response containing entities from search and/or any collected messages
+     */
+    @PreAuthorize("hasPermission(authentication, 'read')")
+    @POST
+    @Path("findByExampleMatches")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    ValueServiceResponse<Collection<${entity.name}BO>> findByExampleMatches(${entity.name}BO probe);
+    
+    /**
+     * Find by example matches that starts on a specific page with count
+     *
+     * @return a service response containing entities from search and/or any collected messages
+     */
+    @PreAuthorize("hasPermission(authentication, 'read')")
+    @POST
+    @Path("findByExampleMatchesPaged")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    ValueServiceResponse<PageWrapper<${entity.name}BO>> findByExampleMatchesPaged(${entity.name}BO probe, int startPage, int count);
+        
     /**
      * Create a collection of ${entity.name} instances.
      *
@@ -139,7 +188,7 @@ public interface ${entity.name}MaintenanceService {
     @PreAuthorize("hasPermission(authentication, 'write')")
     @DELETE
     @Path("bulkDelete")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     VoidServiceResponse bulkDelete(Collection<${entity.name}BO> entities);
 }

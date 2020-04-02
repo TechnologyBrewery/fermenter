@@ -108,6 +108,10 @@
         <summary>When searching by example, a valid count is required.</summary>
     </message>
     
+    <message key="find.by.example.count.override">
+        <summary>When searching by example, the count has been overridden to use the base count.</summary>
+    </message>
+    
     <message key="service.paged.requires.start.page">
         <summary>When using a paged service, startPage must be a positive integer.</summary>
     </message>

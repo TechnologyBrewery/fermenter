@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
  * @see ${basePackage}.bizobj.${entity.name}BaseBO
  *
  * GENERATED STUB CODE - PLEASE *DO* MODIFY
+ * Generated from bo.java.vm
  */
 #if ( !$entity.isTransient() && !$entity.isNonPersistentParentEntity() )
 @Entity

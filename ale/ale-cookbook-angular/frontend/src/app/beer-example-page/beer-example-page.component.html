@@ -1,0 +1,19 @@
+<mat-card>
+  <mat-card-title id="title">Simple Beer Example Page</mat-card-title>
+  <mat-card-content>
+    <div>
+      <button mat-raised-button (click)="onBrewSomething(newBeerName)" color="primary">Brew me something good</button>
+    </div>
+    <div>
+        <h2>Your Fresh Beer</h2>
+        <mat-list>
+            <mat-list-item *ngFor="let beer of brewedBeers">
+              <div class="center">
+                <span class="small-padding line-item">Type of Beer: {{beer.beerType}}</span>
+                  <button mat-stroked-button color="primary" (click)="onDrink(beer)" class="small-padding">Drink</button>
+              </div>
+            </mat-list-item>
+          </mat-list>
+    </div>
+  </mat-card-content>
+</mat-card>

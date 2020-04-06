@@ -36,6 +36,7 @@ public class BeerServiceExampleServiceImpl extends BeerServiceExampleBaseService
 		else {
 			exampleBeer.setBeerType(type);
 		}
+		exampleBeer.save();
 		return exampleBeer;
 	}
 

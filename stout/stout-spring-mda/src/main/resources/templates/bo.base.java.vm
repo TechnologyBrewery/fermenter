@@ -146,7 +146,7 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
 
 #end
 
-#foreach ( $field in $entity.fields.values() )
+#foreach ( $field in $entity.fields)
     #if ( !$entity.isTransient() )
     
     #if ($field.isTransient())
@@ -504,20 +504,20 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
 #end
 
 
-#foreach ($relation in $entity.relations.values())
+#foreach ($relation in $entity.relations)
     #if ( !$entity.isTransient() && !$relation.idFields.isEmpty() )
     @OneToMany(mappedBy="parent${entity.name}", cascade=CascadeType.ALL, fetch=FetchType.${relation.fetchMode.toUpperCase()}, orphanRemoval=true)
     #end
     private Set<${relation.type}BO> ${relation.label}s;
 #end
-#foreach ($inverseRelation in $entity.inverseRelations.values())
+#foreach ($inverseRelation in $entity.inverseRelations)
     #if ( !$entity.isTransient() )
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name=#if(!$inverseRelation.idFields.isEmpty())#set($inverseRelationKey = ${inverseRelation.idFields.values().iterator().next()}) "${inverseRelationKey.column}", referencedColumnName="${inverseRelationKey.parentColumn}#else"${inverseRelation.Name}_ID#end", nullable=false)
     #end
     private ${inverseRelation.name}BO parent${inverseRelation.name};
 #end
-#foreach ($reference in $entity.references.values())
+#foreach ($reference in $entity.references)
     #if ( !$entity.isTransient() && !$reference.isExternal())
         #if($reference.foreignKeyFields.iterator().hasNext()) 
     @ManyToOne(fetch=FetchType.EAGER #if($reference.isRequired()), optional=false#end) 
@@ -552,28 +552,28 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
     #end
 #end
 
-#foreach ( $idField in $entity.idFields.values() )
+#foreach ( $idField in $entity.idFields.values())
 
     /**
-     * Get the ${idField.label}.
+     * Get the ${idField.name}.
      *
-     * @return The ${idField.label}
+     * @return The ${idField.name}
      */
     protected ${idField.javaType} get${idField.capitalizedName}() {
         return ${idField.name};
     }
 
     /**
-     * Set the ${idField.label}.
+     * Set the ${idField.name}.
      *
-     * @param The ${idField.label}
+     * @param The ${idField.name}
      */
     protected void set${idField.capitalizedName}(${idField.javaType} ${idField.name}) {
         this.${idField.name} = ${idField.name};
     }
 #end
 
-#foreach ( $field in $entity.fields.values() )
+#foreach ( $field in $entity.fields)
 
 #if ( $field.hasDefaultValue() )
     protected void setDefault${field.capitalizedName}() {
@@ -619,10 +619,10 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
   #if ($field.documentation)
      * Gets: ${field.documentation}.
   #else
-     * Get the ${field.label}.
+     * Get the ${field.name}.
   #end
      *
-     * @return The ${field.label}
+     * @return The ${field.name}
      */
     public ${field.javaType} get${field.capitalizedName}() {
         return ${field.name};
@@ -632,10 +632,10 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
   #if ($field.documentation)
      * Sets: ${field.documentation}.
   #else
-     * Set the ${field.label}.
+     * Set the ${field.name}.
   #end
      *
-     * @param The ${field.label}
+     * @param The ${field.name}
      */
     public void set${field.capitalizedName}(${field.javaType} ${field.name}) {
         #if($field.javaType == 'BigDecimal')
@@ -650,7 +650,7 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
     }
 #end
 
-#foreach ($inverseRelation in $entity.inverseRelations.values())
+#foreach ($inverseRelation in $entity.inverseRelations)
 
     /**
      * Set the parent ${inverseRelation.name} onto this instance.
@@ -669,7 +669,7 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
     }    
 #end
 
-#foreach ($relation in $entity.relations.values()) 
+#foreach ($relation in $entity.relations) 
 
     /**
   #if ($relation.documentation)
@@ -777,22 +777,22 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
         };
     }
 #end
-#foreach ($reference in $entity.references.values())
+#foreach ($reference in $entity.references)
   #if ( !$reference.isExternal() )
 
     /**
-     * Get the ${reference.label} reference.
+     * Get the ${reference.name} reference.
      *
-     * @return ${reference.type}BO - The ${reference.label}
+     * @return ${reference.type}BO - The ${reference.name}
      */
     public ${reference.type}BO get${reference.capitalizedName}() {
         return ${reference.name};
     }
      
     /**
-     * Set the ${reference.label} reference.
+     * Set the ${reference.name} reference.
      *
-     * @param The ${reference.label}
+     * @param The ${reference.name}
      */
     public void set${reference.capitalizedName}(${reference.type}BO ${reference.name}) {
         this.${reference.name} = ${reference.name};
@@ -801,9 +801,9 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
   #else
     
     /**
-     * Get the ${reference.label} reference.
+     * Get the ${reference.name} reference.
      *
-     * @return ${reference.type} - The ${reference.label}
+     * @return ${reference.type} - The ${reference.name}
      */
     public ${reference.type} get${reference.capitalizedName}() {
         #if ($reference.foreignKeyFields.iterator().hasNext())
@@ -815,9 +815,9 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
     }
      
     /**
-     * Set the ${reference.label} reference.
+     * Set the ${reference.name} reference.
      *
-     * @param The ${reference.label}
+     * @param The ${reference.name}
      */
     public void set${reference.capitalizedName}(${reference.type} ${reference.name}) {
         this.${reference.name} = ${reference.name};
@@ -836,7 +836,7 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
     protected void validateRelations() {
 #if( !$entity.relations.isEmpty() )
         //call field validation on children:
-  #foreach ($relation in $entity.relations.values())
+  #foreach ($relation in $entity.relations)
         Set<${relation.type}BO> ${relation.label}Set = get${relation.type}s();
         if (${relation.label}Set != null && !${relation.label}Set.isEmpty()) {
             for (${relation.type}BO child : ${relation.label}Set) {
@@ -856,7 +856,7 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
            @Override
      #end
      protected void defaultFieldValues() {
-         #foreach ( $field in $entity.fields.values() )
+         #foreach ( $field in $entity.fields )
              #if ($field.hasDefaultValue())
                  setDefault${field.capitalizedName}();
              #end
@@ -870,7 +870,7 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
     protected void complexValidationOnRelations() {
 #if( !$entity.relations.isEmpty() )
         //call complex validation on children:
-  #foreach ($relation in $entity.relations.values())
+  #foreach ($relation in $entity.relations)
         Set<${relation.type}BO> ${relation.label}Set = get${relation.type}s();
         if (${relation.label}Set != null && !${relation.label}Set.isEmpty()) {
             for (${relation.type}BO child : ${relation.label}Set) {
@@ -894,7 +894,7 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
       */
       @Override 
       protected void validateReferences() {
-        #foreach ($reference in $entity.references.values())
+        #foreach ($reference in $entity.references)
           #if ( !$reference.isExternal() )
             #if( !$entity.references.isEmpty() ) 
                 ${reference.type}BO ${reference.name}Ref = get${reference.capitalizedName}();

@@ -476,6 +476,7 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
     }
 #end
 
+#if ( !$entity.isTransient() && !$entity.isNonPersistentParentEntity() )
     /**
      * Provide an opportunity to interact with the object after it is found, but before it is 
      * returned by {@link ${entity.name}BO#findByPrimaryKey(${idFieldJavaType})} and other 
@@ -483,6 +484,7 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
      */
     protected void postFindByPrimaryKey() {
     }
+#end
 
 #if ( !$entity.isTransient() && !$entity.isNonPersistentParentEntity() )
     @Override
@@ -728,7 +730,7 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
             ${relation.label}.set${entity.name}(null);
             
         } else {
-            getLogger().error("Could not remove ${relation.label} instance with key " + ${relation.label}.getKey());
+            getLogger().error("Could not remove ${relation.label} instance: " + ${relation.label}.toString());
             
         }
         

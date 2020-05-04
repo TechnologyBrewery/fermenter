@@ -18,7 +18,7 @@
 		</field>
 	</fields>		
 
-	<associations>
+	<associations>	
 		<reference>
 			<name>requiredReference</name>
 			<type>ValidationReferencedObject</type>
@@ -28,6 +28,10 @@
 			</fk>
 			<required>true</required>
 		</reference>
+		<relation>
+			<type>TransientChildEntity</type>
+			<multiplicity>1-M</multiplicity>
+		</relation>
 	</associations>
 
 </entity>

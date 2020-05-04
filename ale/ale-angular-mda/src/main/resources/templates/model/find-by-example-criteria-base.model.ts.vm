@@ -9,10 +9,20 @@ import { Constants } from '../../constants';
  * Template = find-by-example-criteria-base.model.ts.vm
  *******************************************************/
 export class FindByExampleCriteriaBase<T> {
+
+  /** The example element used as the example to match/find against. */
   public probe: T;
+
+  /** Whether or not match exactly, or use contains when searching. */
   public containsMatch: boolean;
+
+  /** Zero based page index (i.e. page 0 out of 100). */
   public startPage: number;
+
+  /** The number of elements to search for. */
   public count: number;
+
+  /** How the results will be sorted. */
   public sortWrapper: SortWrapper;
 
   // NOTE that this is never constructed from a http call response, 

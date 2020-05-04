@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { Constants } from '../../../constants';
@@ -137,11 +137,123 @@ export class ${entity.name}MaintenanceService {
   ): Observable<PageWrapper<${entity.name}>> {
     const url = this.${entity.name}URL + '/findByExample';
 
-    return this.http
-      .post<FermenterResponse<PageWrapper<${entity.name}>>>(url, findByExampleCriteria)
+    const restCall = this.http
+      .post<FermenterResponse<PageWrapper<${entity.name}>>>(url, findByExampleCriteria);
+    return this.pipeResponseToPageWrapper(restCall, skipGlobalErrorHandler);
+  }
+
+  /**
+   * Will find entities based on the example provided using a contains matcher. Returns an array response.
+   *
+   * @param probe - an instance of the entity that should be used for the search
+   */
+  public findByExampleContains(
+    probe: ${entity.name},
+    skipGlobalErrorHandler = false
+  ): Observable<Array<${entity.name}>> {
+    const url = this.${entity.name}URL + '/findByExampleContains';
+
+    const restCall = this.http.post<FermenterResponse<Array<${entity.name}>>>(url, probe);
+    return this.pipeResponseToArray(restCall, skipGlobalErrorHandler);
+  }
+
+  /**
+   * Will find entities based on the example probe provided using a contains matcher. Returns a paged response.
+   *
+   * @param probe - an instance of the entity that should be used for the search
+   * @param startPage - the point where to start reading from (i.e. element 101 out of 100,000)
+   * @param count - the number of elements to read
+   */
+  public findByExampleContainsPaged(
+    probe: ${entity.name},
+    startPage: number,
+    count: number,
+    skipGlobalErrorHandler = false
+  ): Observable<PageWrapper<${entity.name}>> {
+    const url = this.${entity.name}URL + '/findByExampleContainsPaged';
+
+    let params = new HttpParams();
+    if (startPage !== null && startPage !== undefined) {
+        params = params.set('startPage', String(startPage));
+    }
+    if (count !== null && count !== undefined) {
+        params = params.set('count', String(count));
+    }
+
+    const restCall = this.http
+      .post<FermenterResponse<PageWrapper<${entity.name}>>>(url, probe, {params});
+    return this.pipeResponseToPageWrapper(restCall, skipGlobalErrorHandler);
+  }
+
+  /**
+   * Find by example matches. Returns an array response.
+   *
+   * @param probe - an instance of the entity that should be used for the search
+   */
+  public findByExampleMatches(
+    probe: ${entity.name},
+    skipGlobalErrorHandler = false
+  ): Observable<Array<${entity.name}>> {
+    const url = this.${entity.name}URL + '/findByExampleMatches';
+
+    const restCall = this.http.post<FermenterResponse<Array<${entity.name}>>>(url, probe);
+    return this.pipeResponseToArray(restCall, skipGlobalErrorHandler);
+  }
+
+  /**
+   * Find by example matches that starts on a specific page with count. Returns a paged response.
+   *
+   * @param probe - an instance of the entity that should be used for the search
+   * @param startPage - the point where to start reading from (i.e. element 101 out of 100,000)
+   * @param count - the number of elements to read
+   */
+  public findByExampleMatchesPaged(
+    probe: ${entity.name},
+    startPage: number,
+    count: number,
+    skipGlobalErrorHandler = false
+  ): Observable<PageWrapper<${entity.name}>> {
+    const url = this.${entity.name}URL + '/findByExampleMatchesPaged';
+
+    let params = new HttpParams();
+    if (startPage !== null && startPage !== undefined) {
+        params = params.set('startPage', String(startPage));
+    }
+    if (count !== null && count !== undefined) {
+        params = params.set('count', String(count));
+    }
+
+    const restCall = this.http
+      .post<FermenterResponse<PageWrapper<${entity.name}>>>(url, probe, {params});
+    return this.pipeResponseToPageWrapper(restCall, skipGlobalErrorHandler);
+  }
+
+
+
+  protected pipeResponseToPageWrapper(
+      restCall: Observable<FermenterResponse<PageWrapper<${entity.name}>>>, skipGlobalErrorHandler: boolean
+    ): Observable<PageWrapper<${entity.name}>> {
+
+    return restCall
       .pipe(
         map((response: FermenterResponse<PageWrapper<${entity.name}>>) => {
           const fermenterResponse = this.parseResponseToPageWrapper(response);
+          if (fermenterResponse.messages.hasErrorMessages() && !skipGlobalErrorHandler) {
+            throw new BusinessError(fermenterResponse.messages);
+          }
+          return fermenterResponse.value;
+        }),
+        catchError(error => this.errorHandler.handleServiceCallError(error))
+      );
+  }
+
+  protected pipeResponseToArray(
+      restCall: Observable<FermenterResponse<Array<${entity.name}>>>, skipGlobalErrorHandler: boolean
+      ): Observable<Array<${entity.name}>> {
+
+      return restCall.pipe(
+        map((response: FermenterResponse<Array<${entity.name}>>) => {
+          const fermenterResponse = this.parseResponseToArray(response);
           if (fermenterResponse.messages.hasErrorMessages() && !skipGlobalErrorHandler) {
             throw new BusinessError(fermenterResponse.messages);
           }
@@ -166,6 +278,22 @@ export class ${entity.name}MaintenanceService {
 
     pageWrapper.content = ${entity.nameLowerCamel}s;
     fermenterResponse.value = pageWrapper;
+
+    return fermenterResponse;
+  }
+
+  protected parseResponseToArray(
+    response: FermenterResponse<Array<${entity.name}>>
+  ): FermenterResponse<Array<${entity.name}>> {
+    const fermenterResponse = new FermenterResponse<Array<${entity.name}>>(response);
+    this.checkFermenterResponseIsInitialized(response);
+
+    const ${entity.nameLowerCamel}s = new Array<${entity.name}>();
+    for (const ${entity.nameLowerCamel} of response.value) {
+      ${entity.nameLowerCamel}s.push(new ${entity.name}(${entity.nameLowerCamel}));
+    }
+
+    fermenterResponse.value = ${entity.nameLowerCamel}s;
 
     return fermenterResponse;
   }

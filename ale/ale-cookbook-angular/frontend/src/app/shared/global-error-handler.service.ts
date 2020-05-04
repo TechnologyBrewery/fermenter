@@ -32,15 +32,15 @@ export class GlobalErrorHandler implements ErrorHandlerApi {
     // HTTP errors
     } else if (error instanceof HttpErrorResponse) {
       error = <HttpErrorResponse>error;
-      if (error.code === 404) {
+      if (error.status === 404) {
         msg =
           'This is embarassing, it looks like the resource you were trying to access is incorrect.';
-      } else if (error.code === 403) {
+      } else if (error.status === 403) {
         msg =
           'It looks like you are trying to access a resource you are not authorized for.';
-      } else if (error.code === 401) {
-        msg = 'It looks like you may not be logged in correctly.';
-      } else if (error.code === 408 || error.code === 504) {
+      } else if (error.status === 401) {
+        msg = 'It looks like you may not be logged in correctly or trying to access something you are not authorized for.';
+      } else if (error.status === 408 || error.status === 504) {
         msg =
           'It looks like your request has timed out. Please try again later or contact the helpdesk.';
       }

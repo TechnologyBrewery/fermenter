@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.bitbucket.fermenter.mda.metamodel.element.Operation;
 import org.bitbucket.fermenter.mda.metamodel.element.Parameter;
 import org.bitbucket.fermenter.mda.metamodel.element.Return;

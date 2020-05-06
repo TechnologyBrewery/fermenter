@@ -7,7 +7,7 @@ import java.util.Iterator;
 
 import javax.persistence.FetchType;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.bitbucket.fermenter.mda.metadata.element.Field;
 import org.bitbucket.fermenter.mda.metadata.element.Relation;
 

@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import org.bitbucket.fermenter.mda.PackageManager;
 import org.bitbucket.fermenter.mda.metadata.AbstractMetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;

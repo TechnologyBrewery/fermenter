@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
+import org.bitbucket.fermenter.mda.GenerateSourcesHelper.LoggerDelegate;
+import org.bitbucket.fermenter.mda.GenerateSourcesHelper.LoggerDelegate.LogLevel;
 
 /**
  * Simple tracking class to allow bulk collection and reporting of error messages during the generation
@@ -64,7 +66,12 @@ public class MessageTracker {
     }
     
     /**
-     * Logs all messages that have been encountered. 
+     * Logs all messages that have been encountered to the provided
+     * commons-logging {@link Log}.
+     *
+     * @param log
+     *            commons-logging {@link Log} to use for logging collected
+     *            messages.
      */
     public void emitMessages(Log log) {
         for (Message message : orderedMessages) {
@@ -72,40 +79,67 @@ public class MessageTracker {
         }
     }
     
+    /**
+     * Logs all messages that have been encountered to the provided
+     * {@link LoggerDelegate}, which further delegates logging to the build tool
+     * specific logger.
+     *
+     * @param loggerDelegate
+     *            build tool specific logging implementation to which logging
+     *            will be delegated.
+     */
+    public void emitMessages(LoggerDelegate loggerDelegate) {
+        for (Message message : orderedMessages) {
+            message.log(loggerDelegate);
+        }
+    }
+
     abstract class Message {
-        
+
         protected String value;
-        
+
         public Message(String value) {
             this.value = value;
         }
-        
+
         abstract void log(Log log);
-        
+
+        abstract void log(LoggerDelegate log);
     }
-    
+
     class WarningMessage extends Message {
-        
+
         public WarningMessage(String value) {
             super(value);
         }
-        
-       void log(Log log) {
-           log.warn(value);
-       }
-        
+
+        @Override
+        void log(Log log) {
+            log.warn(value);
+        }
+
+        @Override
+        void log(LoggerDelegate log) {
+            log.log(LogLevel.WARN, value);
+        }
+
     }
     
     class ErrorMessage extends Message {
-        
+
         public ErrorMessage(String value) {
             super(value);
         }
-        
-       void log(Log log) {
-           log.error(value);
-       }
-        
-    }    
+
+        @Override
+        void log(Log log) {
+            log.error(value);
+        }
+
+        @Override
+        void log(LoggerDelegate log) {
+            log.log(LogLevel.ERROR, value);
+        }
+    }
     
 }

@@ -5,7 +5,7 @@ import java.io.FileWriter;
 import java.io.Writer;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;

@@ -1,6 +1,6 @@
 package org.bitbucket.fermenter.mda.metadata.element;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Implementation of the Enum metadata concept.

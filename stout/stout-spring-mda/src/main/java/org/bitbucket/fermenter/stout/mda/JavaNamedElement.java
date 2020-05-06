@@ -1,6 +1,6 @@
 package org.bitbucket.fermenter.stout.mda;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Defines the common interface for a Java named element with default utility methods to handle common variations of the

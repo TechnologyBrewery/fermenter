@@ -1,23 +1,17 @@
 package org.bitbucket.fermenter.mda;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.LogFactory;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.AbstractMojo;
@@ -30,25 +24,19 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
+import org.bitbucket.fermenter.mda.GenerateSourcesHelper.LoggerDelegate;
 import org.bitbucket.fermenter.mda.element.ExpandedProfile;
-import org.bitbucket.fermenter.mda.element.Profile;
 import org.bitbucket.fermenter.mda.element.Target;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
-import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.generator.Generator;
 import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
 import org.bitbucket.fermenter.mda.metamodel.LegacyMetadataConverter;
-import org.bitbucket.fermenter.mda.metamodel.ModelInstanceUrl;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
+import org.bitbucket.fermenter.mda.metamodel.ModelInstanceUrl;
 import org.bitbucket.fermenter.mda.metamodel.ModelRepositoryConfiguration;
-import org.bitbucket.fermenter.mda.util.MessageTracker;
-import org.bitbucket.krausening.Krausening;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.io.Files;
 
 /**
  * Executes the Fermenter MDA process.
@@ -56,15 +44,11 @@ import com.google.common.io.Files;
 @Mojo(name = "generate-sources", defaultPhase = LifecyclePhase.GENERATE_SOURCES, requiresDependencyResolution = ResolutionScope.COMPILE)
 public class GenerateSourcesMojo extends AbstractMojo {
 
-    private static final String METAMODEL_PROPERTIES = "metamodel.properties";
-
     private static final org.apache.commons.logging.Log LOG = LogFactory.getLog(GenerateSourcesMojo.class);
 
-    private final Map<String, ExpandedProfile> profiles = new HashMap<>();
+    private Map<String, ExpandedProfile> profiles = new HashMap<>();
 
-    private ObjectMapper objectMapper = new ObjectMapper();
-
-    private final Map<String, Target> targets = new HashMap<>();
+    private Map<String, Target> targets = new HashMap<>();
 
     @Parameter(required = true, readonly = true, defaultValue = "${project}")
     private MavenProject project;
@@ -82,7 +66,8 @@ public class GenerateSourcesMojo extends AbstractMojo {
     private String basePackage;
 
     /**
-     * Represents the artifactIds that will be targeted for generation if the metadataContext equals 'targeted'.
+     * Represents the artifactIds that will be targeted for generation if the
+     * metadataContext equals 'targeted'.
      */
     @Parameter(required = false)
     private List<String> targetModelInstances;
@@ -97,15 +82,44 @@ public class GenerateSourcesMojo extends AbstractMojo {
     private File generatedSourceRoot;
 
     @Parameter(required = true, readonly = true, defaultValue = "org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository")
-    private String metadataRespositoryImpl;
+    private String metadataRepositoryImpl;
 
     private VelocityEngine engine;
 
-    private MessageTracker messageTracker = MessageTracker.getInstance();
+    /**
+     * Creates a {@link LoggerDelegate} implementation for use with
+     * {@link GenerateSourcesHelper} that delegates to the {@link Log} that has
+     * been injected into this mojo.
+     */
+    protected LoggerDelegate mavenLoggerDelegate = new LoggerDelegate() {
 
-    public void execute() throws MojoExecutionException {  
-        suppressKrauseningWarnings();
-        
+        @Override
+        public void log(LogLevel level, String message) {
+            Log log = getLog();
+            switch (level) {
+            case TRACE:
+            case DEBUG:
+                log.debug(message);
+                break;
+            case INFO:
+                log.info(message);
+                break;
+            case WARN:
+                log.warn(message);
+                break;
+            case ERROR:
+                log.error(message);
+                break;
+            default:
+                log.info(message);
+                break;
+            }
+        }
+    };
+
+    public void execute() throws MojoExecutionException {
+        GenerateSourcesHelper.suppressKrauseningWarnings();
+
         try {
             setup();
         } catch (Exception ex) {
@@ -115,7 +129,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
         generateSources();
 
     }
-    
+
     private void setup() throws Exception {
         if (metadataDependencies == null) {
             metadataDependencies = new ArrayList<>();
@@ -130,11 +144,9 @@ public class GenerateSourcesMojo extends AbstractMojo {
             initializeMetadata();
 
             engine = new VelocityEngine();
-            Properties props = new Properties();
-            String className = ClasspathResourceLoader.class.getName();
-            props.setProperty("classpath." + VelocityEngine.RESOURCE_LOADER + ".class", className);
-            props.setProperty(VelocityEngine.RESOURCE_LOADER, "classpath");
-            engine.init(props);
+            engine.setProperty(RuntimeConstants.RESOURCE_LOADERS, "classpath");
+            engine.setProperty("resource.loader.classpath.class", ClasspathResourceLoader.class.getName());
+            engine.init();
         } catch (Exception ex) {
             String errMsg = "Unable to setup code generator";
             getLog().error(errMsg, ex);
@@ -143,9 +155,6 @@ public class GenerateSourcesMojo extends AbstractMojo {
     }
 
     private void loadTargets() throws MojoExecutionException {
-        InputStream stream = null;
-
-        URL resource = null;
         Enumeration<URL> targetEnumeration = null;
         try {
             targetEnumeration = getClass().getClassLoader().getResources("targets.json");
@@ -153,29 +162,20 @@ public class GenerateSourcesMojo extends AbstractMojo {
             throw new MojoExecutionException("Unable to find targets", ioe);
         }
 
+        URL targetsResource;
         while (targetEnumeration.hasMoreElements()) {
-            resource = targetEnumeration.nextElement();
-            getLog().info("Loading targets from: " + resource.toString());
-            try {
-                stream = resource.openStream();
-                List<Target> loadedTargets = objectMapper.readValue(stream, new TypeReference<List<Target>>() {
-                });
-                for (Target t : loadedTargets) {
-                    targets.put(t.getName(), t);
-                }
+            targetsResource = targetEnumeration.nextElement();
+            getLog().info(String.format("Loading targets from: %s", targetsResource.toString()));
 
+            try (InputStream targetsStream = targetsResource.openStream()) {
+                targets = GenerateSourcesHelper.loadTargets(targetsStream, targets);
             } catch (IOException e) {
-                throw new MojoExecutionException("Unable to parse target: " + resource.toString(), e);
-            } finally {
-                IOUtils.closeQuietly(stream);
+                throw new MojoExecutionException("Unable to parse targets.json", e);
             }
         }
     }
 
     private void loadProfiles() throws MojoExecutionException {
-        InputStream stream = null;
-
-        URL resource = null;
         Enumeration<URL> profileEnumeration = null;
         try {
             profileEnumeration = getClass().getClassLoader().getResources("profiles.json");
@@ -183,21 +183,15 @@ public class GenerateSourcesMojo extends AbstractMojo {
             throw new MojoExecutionException("Unable to find profiles", ioe);
         }
 
+        URL profilesResource;
         while (profileEnumeration.hasMoreElements()) {
-            resource = profileEnumeration.nextElement();
-            getLog().info("Loading profiles from: " + resource.toString());
-            try {
-                stream = resource.openStream();
-                List<Profile> loadedProfiles = objectMapper.readValue(stream, new TypeReference<List<Profile>>() {
-                });
-                for (Profile p : loadedProfiles) {
-                    profiles.put(p.getName(), new ExpandedProfile(p));
-                }
+            profilesResource = profileEnumeration.nextElement();
+            getLog().info(String.format("Loading profiles from: %s", profilesResource.toString()));
 
+            try (InputStream profilesStream = profilesResource.openStream()) {
+                profiles = GenerateSourcesHelper.loadProfiles(profilesStream, profiles);
             } catch (IOException e) {
-                throw new MojoExecutionException("Unable to parse profile: " + resource.toString(), e);
-            } finally {
-                IOUtils.closeQuietly(stream);
+                throw new MojoExecutionException("Unable to parse profiles.json", e);
             }
         }
 
@@ -210,17 +204,20 @@ public class GenerateSourcesMojo extends AbstractMojo {
         ModelRepositoryConfiguration config = createMetadataConfiguration();
 
         // first load the legacy repository:
-        ModelInstanceRepository legacyRepository = loadMetadataRepository(config, true);
+        ModelInstanceRepository legacyRepository = GenerateSourcesHelper.loadLegacyMetadataRepository(config,
+                mavenLoggerDelegate);
 
-		// This is a stand-in to prevent NPEs for some optional functionality that we want in the end product,
-		// but doesn't matter for the conversion:
-		ModelInstanceRepositoryManager.setRepository(new DefaultModelInstanceRepository(config));
-		
+        // This is a stand-in to prevent NPEs for some optional functionality
+        // that we want in the end product,
+        // but doesn't matter for the conversion:
+        ModelInstanceRepositoryManager.setRepository(new DefaultModelInstanceRepository(config));
+
         LegacyMetadataConverter converter = new LegacyMetadataConverter();
         converter.convert(project.getArtifactId(), basePackage, mainSourceRoot);
 
         // then load the new repository:
-        ModelInstanceRepository newRepository = loadMetadataRepository(config, false);
+        ModelInstanceRepository newRepository = GenerateSourcesHelper.loadMetadataRepository(config,
+                metadataRepositoryImpl, mavenLoggerDelegate);
 
         long start = System.currentTimeMillis();
         LOG.info("START: validating legacy and new metadata repository implementation...");
@@ -260,13 +257,6 @@ public class GenerateSourcesMojo extends AbstractMojo {
 
         if (metadataDependencies != null) {
             metadataDependencies.add(project.getArtifactId());
-            StringBuilder buff = new StringBuilder();
-            for (Iterator<String> i = metadataDependencies.iterator(); i.hasNext();) {
-                buff.append(i.next());
-                if (i.hasNext()) {
-                    buff.append(";");
-                }
-            }
 
             List<Artifact> artifacts = plugin.getArtifacts();
             for (Artifact a : artifacts) {
@@ -280,51 +270,6 @@ public class GenerateSourcesMojo extends AbstractMojo {
 
         }
         return config;
-    }
-
-    private ModelInstanceRepository loadMetadataRepository(ModelRepositoryConfiguration config, boolean isLegacy)
-            throws ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException,
-            InvocationTargetException {
-
-        String repositoryType = isLegacy ? "**LEGACY** " : "";
-        String repositoryImpl = isLegacy ? "org.bitbucket.fermenter.mda.metadata.MetadataRepository"
-                : metadataRespositoryImpl;
-
-        long start = System.currentTimeMillis();
-        LOG.info("START: loading " + repositoryType + "metadata repository implementation: " + repositoryImpl + "...");
-
-        ModelInstanceRepository repository;
-        Class<?> repoImplClass = Class.forName(repositoryImpl);
-        Class<?>[] constructorParamTypes = { ModelRepositoryConfiguration.class };
-        Constructor<?> constructor = repoImplClass.getConstructor(constructorParamTypes);
-        Object[] params = { config };
-        repository = (ModelInstanceRepository) constructor.newInstance(params);
-
-        ModelInstanceRepositoryManager.setRepository(repository);
-        repository.load();
-
-        // TODO: move validation back here once the legacy repo is retired. Until then, this can only happen once
-        // metadata across
-        // both repositories is available:
-        // repository.validate(props);
-
-        messageTracker.emitMessages(LOG);
-        if (messageTracker.hasErrors()) {
-            throw new GenerationException("Errors encountered!");
-        }
-
-        long stop = System.currentTimeMillis();
-        LOG.info("COMPLETE: " + repositoryType + "metadata repository loading in " + (stop - start) + "ms");
-
-        return repository;
-    }
-
-    public void addTarget(Target target) {
-        Log log = getLog();
-        if (log.isDebugEnabled()) {
-            log.debug("\t    + " + target.getName());
-        }
-        targets.put(target.getName(), target);
     }
 
     private void generateSources() throws MojoExecutionException {
@@ -355,9 +300,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
             context.setBasePackage(basePackage);
             context.setGeneratedSourceDirectory(generatedSourceRoot);
             context.setMainSourceDirectory(mainSourceRoot);
-            context.setBasedir(project.getBasedir());
             context.setEngine(engine);
-            context.setProjectName(project.getName());
             context.setGroupId(project.getGroupId());
             context.setArtifactId(project.getArtifactId());
             context.setVersion(project.getVersion());
@@ -375,36 +318,6 @@ public class GenerateSourcesMojo extends AbstractMojo {
         if (LOG.isInfoEnabled()) {
             long stop = System.currentTimeMillis();
             LOG.info("Generation completed in " + (stop - start) + "ms");
-        }
-    }
-    
-    /**
-     * We don't have great fine-grained control of logging inside the plugin, so default some Krausening values when they aren't specified so warnings
-     * don't pollute the Maven output.
-     */
-    private void suppressKrauseningWarnings() {
-        if (System.getProperty(Krausening.BASE_LOCATION) == null) {
-            File tempKrauseningLocation = Files.createTempDir();
-            File tempBaseLocation = new File(tempKrauseningLocation, "base");
-            tempBaseLocation.mkdir();
-            File tempExtLocation = new File(tempKrauseningLocation, "ext");
-            tempExtLocation.mkdir();
-            try {
-                Properties p = new Properties();
-                String comments = "default file to suppress warnings";
-                p.store(new FileWriter(new File(tempBaseLocation, METAMODEL_PROPERTIES)), comments);
-                p.store(new FileWriter(new File(tempExtLocation, METAMODEL_PROPERTIES)), comments);
-                
-            } catch (IOException e) {
-                // do nothing, this is just to suppress some warnings...
-            }
-            
-            System.setProperty(Krausening.BASE_LOCATION, tempBaseLocation.getAbsolutePath());
-            System.setProperty(Krausening.EXTENSIONS_LOCATION, tempExtLocation.getAbsolutePath());
-        }
-        
-        if (System.getProperty(Krausening.KRAUSENING_PASSWORD) == null) {
-            System.setProperty(Krausening.KRAUSENING_PASSWORD, "stub");
         }
     }
 

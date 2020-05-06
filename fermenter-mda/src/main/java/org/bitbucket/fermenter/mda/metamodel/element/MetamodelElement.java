@@ -1,16 +1,16 @@
 package org.bitbucket.fermenter.mda.metamodel.element;
 
-import java.io.File;
+import java.net.URL;
 import java.util.Objects;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 //import org.apache.commons.collections4.CollectionUtils;
 import org.bitbucket.fermenter.mda.util.MessageTracker;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
 
 /**
@@ -25,7 +25,7 @@ public abstract class MetamodelElement implements Metamodel {
 	protected String name;
 
 	@JsonIgnore
-	protected String fileName;
+	protected URL fileUrl;
 
 	/**
 	 * {@inheritDoc}
@@ -45,32 +45,38 @@ public abstract class MetamodelElement implements Metamodel {
 	}
 
 	/**
-	 * Sets the filename used for this root element, if one exists (e.g., an
+	 * Sets the URL of the file used for this root element, if one exists (e.g., an
 	 * Enumeration will have one, but an Operation will not because it doesn't sit
 	 * in the root of a model file).
 	 * 
-	 * @param fileName name of the file containing this root instance
+	 * @param file {@link URL} of the file containing this root instance
 	 */
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
+	public void setFileUrl(URL file) {
+		this.fileUrl = file;
 	}
 
+	/**
+	 * Returns the name of the file used for this root element as a valid URL.
+	 */
+	@JsonIgnore
 	public String getFileName() {
-		return fileName;
+		return fileUrl != null ? fileUrl.getFile() : null;
 	}
 
 	@Override
 	public void validate() {
+		String localFileName;
 		if (StringUtils.isBlank(getName())) {
 			messageTracker.addErrorMessage("Name is a required attribute!");
 
-		} else if (getFileName() != null) {
-			String localFileName = getFileName();
-			String stippedFileName = getFileName().substring(localFileName.lastIndexOf(File.separatorChar) + 1,
+		} else if ((localFileName = getFileName()) != null) {
+			// NB localFileName is represented as a URL and will only have '/' path
+			// separators regardless of the underlying OS
+			String strippedFileName = localFileName.substring(localFileName.lastIndexOf("/") + 1,
 					localFileName.lastIndexOf('.'));
-			if (!getName().equals(stippedFileName)) {
-				messageTracker.addErrorMessage("The file name must match the element name!  Excepted: '" + getName()
-						+ "', but found: '**" + stippedFileName + "**.json' (file: " + localFileName + ")");
+			if (!getName().equals(strippedFileName)) {
+				messageTracker.addErrorMessage("The file name must match the element name!  Expected: '" + getName()
+						+ "', but found: '**" + strippedFileName + "**.json' (file: " + localFileName + ")");
 			}
 		}
 	}

@@ -1,14 +1,6 @@
 package org.bitbucket.fermenter.mda.metadata;
 
 
-import org.apache.commons.digester.Digester;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.bitbucket.fermenter.mda.metadata.element.MetadataElement;
-import org.bitbucket.fermenter.mda.xml.TrackErrorsErrorHandler;
-import org.bitbucket.fermenter.mda.xml.XmlUtils;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,6 +17,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+
+import org.apache.commons.digester.Digester;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.bitbucket.fermenter.mda.metadata.element.MetadataElement;
+import org.bitbucket.fermenter.mda.xml.TrackErrorsErrorHandler;
+import org.bitbucket.fermenter.mda.xml.XmlUtils;
 
 /**
  * Base class for metadata loading and management across applications

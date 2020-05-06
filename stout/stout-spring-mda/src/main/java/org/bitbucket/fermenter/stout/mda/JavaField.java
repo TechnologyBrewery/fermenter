@@ -1,9 +1,7 @@
 package org.bitbucket.fermenter.stout.mda;
 
-import java.util.Iterator;
-
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bitbucket.fermenter.mda.metadata.AbstractMetadataRepository;

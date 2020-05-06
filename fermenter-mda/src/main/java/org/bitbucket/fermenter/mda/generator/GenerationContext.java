@@ -14,7 +14,6 @@ public final class GenerationContext {
 	private String basePackage;
 	private String projectName;
 	private String metadataContext;
-	private File basedir;
 	private File mainSourceDirectory;
 	private File generatedSourceDirectory;
 	private VelocityEngine engine;
@@ -93,30 +92,6 @@ public final class GenerationContext {
 	public void setBasePackage(String basePackage) {
 		this.basePackage = basePackage;
 	}
-
-	public File getBasedir() {
-		return basedir;
-	}
-
-	public void setBasedir(File basedir) {
-		this.basedir = basedir;
-	}
-
-	public String getProjectName() {
-		return projectName;
-	}
-
-	public void setProjectName(String projectName) {
-		this.projectName = projectName;
-	}
-	
-	public String getMetadataContext() {
-        return metadataContext;
-    }
-
-    public void setMetadataContext(String metadataContext) {
-        this.metadataContext = metadataContext;
-    }
 
     public String getArtifactId() {
 		return artifactId;

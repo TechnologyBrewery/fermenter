@@ -1,6 +1,5 @@
 package org.bitbucket.fermenter.stout.mda;
 
-
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -13,6 +12,7 @@ import org.bitbucket.fermenter.mda.metadata.element.Format;
 import org.bitbucket.fermenter.mda.metadata.element.Pattern;
 import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
+import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
 import org.bitbucket.fermenter.mda.metamodel.element.Field;
 import org.bitbucket.fermenter.mda.metamodel.element.MetamodelType;
 import org.bitbucket.fermenter.mda.metamodel.element.Validation;
@@ -25,6 +25,9 @@ public class JavaField implements Field {
     private Field field;
     private String importName;
 
+    private DefaultModelInstanceRepository repository = ModelInstanceRepositoryManager
+            .getMetadataRepostory(DefaultModelInstanceRepository.class);
+    
     /**
      * Create a new instance of {@link Field} with the correct functionality set to generate Java code.
      * 
@@ -198,7 +201,8 @@ public class JavaField implements Field {
 
         DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
                 .getMetadataRepostory(DefaultModelInstanceRepository.class);
-       
+
+        // TODO Refactor to not use deprecated methods
         return JavaElementUtils.getJavaType(metadataRepository.getArtifactId(), getType());
     }
 
@@ -239,6 +243,16 @@ public class JavaField implements Field {
 
         return sb.toString();
 
+    }
+    
+    /**
+     * Helper method that returns if this field models a named {@link Enumeration}.
+     * 
+     * @return if this field is a named {@link Enumeration}.
+     */
+    public boolean isNamedEnumeration() {
+        Enumeration enumeration = repository.getEnumeration(getPackage(), getType());
+        return enumeration != null && enumeration.isNamed();
     }
 
 }

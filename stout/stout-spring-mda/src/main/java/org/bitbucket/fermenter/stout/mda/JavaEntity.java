@@ -397,4 +397,14 @@ public class JavaEntity implements Entity {
         return prefixes;
     }
 
+    /**
+     * Returns if any of the {@link JavaField}s that are modeled by this entity are named
+     * enumerations.
+     * 
+     * @return if any of this entity's fields are named enumerations.
+     */
+    public boolean hasNamedEnumeration() {
+        return getFields().stream().anyMatch(field -> ((JavaField) field).isNamedEnumeration());
+    }
+
 }

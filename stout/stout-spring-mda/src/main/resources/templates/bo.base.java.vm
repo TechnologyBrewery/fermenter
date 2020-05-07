@@ -157,7 +157,7 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
     )
     #end 
     #end
-    #if ( $field.hasMinLength() || $field.hasMaxLength() && !$field.isEnumerationType())
+    #if ( $field.hasMinLength() || $field.hasMaxLength())
     @Size(#if($field.hasMinLength())min=${field.minLength}#if($field.hasMaxLength()),#end#end #if($field.hasMaxLength())max=${field.maxLength}#end)
     #end
     #if ( $field.hasMaxValue() )
@@ -189,10 +189,8 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
     #if ($field.type == 'uuid')
     @Type(type = "org.hibernate.type.UUIDCharType")
     #end   
-    #if ($field.isEnumerationType())
-        #if (!$field.getEnumeration().isValued())
+    #if ($field.isNamedEnumeration())
     @Enumerated(EnumType.STRING)
-        #end
     #end
     #if ( $field.isRequired() )
     @NotNull

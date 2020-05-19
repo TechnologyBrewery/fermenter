@@ -48,10 +48,6 @@ public class PackageManager {
 	
 	public static void addMapping(String applicationName, String basePackage) {
 		INSTANCE.applicationToBasePackage.put(applicationName, basePackage);
-	}
-	
-	public static String getPackageForApplicationName(String applicationName) {
-		return INSTANCE.applicationToBasePackage.get(applicationName);
 	}	
 	
 	private static InputStream processURL(URL url) throws IOException{

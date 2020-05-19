@@ -21,7 +21,7 @@ import org.aeonbits.owner.KrauseningConfigFactory;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bitbucket.fermenter.mda.exception.FermenterException;
@@ -117,7 +117,7 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
                 InputStream is = null; 
                 try {
                 	is = resource.openStream();
-                    loadMetamodelFile(is, modelInstanceUrl.getArtifactId(), resource.getFile());
+                    loadMetamodelFile(is, modelInstanceUrl.getArtifactId(), resource);
 	
 	            } catch (IOException | GenerationException e) {
 	                log.error("Problem encountered loading model instance " + resource.toExternalForm(), e);
@@ -190,11 +190,11 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
 	 */
 	protected abstract String getMetadataLocation();
 
-	private void loadMetamodelFile(InputStream stream, String artifactId, String resourceName) {
+	private void loadMetamodelFile(InputStream stream, String artifactId, URL resource) {
 		ObjectMapper objectMapper = JsonUtils.getObjectMapper();
 		try {
 			T instance = objectMapper.readValue(stream, getMetamodelClass());
-			((MetamodelElement) instance).setFileName(resourceName);
+			((MetamodelElement) instance).setFileUrl(resource);
 			addMetadataElement(instance, artifactId);
 
 		} catch (IOException e) {

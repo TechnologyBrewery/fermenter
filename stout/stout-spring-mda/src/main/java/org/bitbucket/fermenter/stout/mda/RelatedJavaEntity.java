@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.Field;
 import org.bitbucket.fermenter.mda.metadata.element.Relation;
@@ -26,7 +26,7 @@ public class RelatedJavaEntity extends JavaEntity {
 	}
 	
 	public String getLabel() {
-		return StringUtils.uncapitalise(entity.getName());
+		return StringUtils.uncapitalize(entity.getName());
 	}
 	
 	public Map getIdFields() {

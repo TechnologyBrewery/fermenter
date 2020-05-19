@@ -1,6 +1,6 @@
 package org.bitbucket.fermenter.mda.metamodel;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.bitbucket.fermenter.mda.util.MessageTracker;
 
 /**

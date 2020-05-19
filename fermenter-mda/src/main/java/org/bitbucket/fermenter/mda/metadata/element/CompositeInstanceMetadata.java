@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 @Deprecated
 public class CompositeInstanceMetadata extends MetadataElement implements Composite {

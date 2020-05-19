@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+import org.bitbucket.fermenter.mda.PackageManager;
 import org.bitbucket.fermenter.mda.metadata.AbstractMetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
@@ -14,7 +16,6 @@ import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
 import org.bitbucket.fermenter.mda.metamodel.element.MetamodelType;
 import org.bitbucket.fermenter.mda.metamodel.element.Parameter;
 import org.bitbucket.fermenter.stout.mda.java.JavaTypeManager;
-import org.codehaus.plexus.util.StringUtils;
 
 public final class JavaElementUtils {
 

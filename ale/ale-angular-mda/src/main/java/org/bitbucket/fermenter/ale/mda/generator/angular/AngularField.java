@@ -2,8 +2,8 @@ package org.bitbucket.fermenter.ale.mda.generator.angular;
 
 import java.util.Iterator;
 
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.bitbucket.fermenter.mda.metadata.FormatMetadataManager;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.element.Field;

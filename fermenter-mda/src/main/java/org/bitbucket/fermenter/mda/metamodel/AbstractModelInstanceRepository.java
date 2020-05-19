@@ -1,8 +1,5 @@
 package org.bitbucket.fermenter.mda.metamodel;
 
-import org.apache.commons.lang.StringUtils;
-import org.bitbucket.fermenter.mda.util.MessageTracker;
-
 /**
  * Provides common methods needed for exposing model instances
  */

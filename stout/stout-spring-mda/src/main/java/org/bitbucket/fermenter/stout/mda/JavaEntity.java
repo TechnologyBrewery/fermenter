@@ -1,6 +1,6 @@
 package org.bitbucket.fermenter.stout.mda;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.LogFactory;
 import org.bitbucket.fermenter.mda.metamodel.element.Entity;
 import org.bitbucket.fermenter.mda.metamodel.element.Field;

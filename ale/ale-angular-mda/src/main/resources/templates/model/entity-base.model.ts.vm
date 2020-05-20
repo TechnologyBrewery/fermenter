@@ -1,5 +1,10 @@
 #foreach ( $association in $entity.associations.values() )
-import { ${association.type} } from '../../shared/model/${association.typeLowerHypen}.model';
+import { ${association.type} } from '../../shared/model/${association.typeLowerHyphen}.model';
+#end
+#foreach ( $field in $entity.allFields)
+#if($field.isEnumeration())
+import { $field.type } from '../enum/${field.typeLowerHyphen}.model';
+#end
 #end
 
 /*******************************************************
@@ -16,7 +21,7 @@ import { ${association.type} } from '../../shared/model/${association.typeLowerH
 export class ${entity.name}Base {
 
   // Fields
-#foreach ( $field in $entity.allFields.values() )
+#foreach ( $field in $entity.allFields)
 #if( $field.isEnumerationType() )
   ${field.name}: string;
 #else
@@ -35,7 +40,7 @@ export class ${entity.name}Base {
 
   constructor(${entity.nameLowerCamel}Base?: ${entity.name}Base) {
     if (${entity.nameLowerCamel}Base) {
-#foreach ( $field in $entity.allFields.values() )
+#foreach ( $field in $entity.allFields )
 #if( $field.angularType == "Date" )
       if (${entity.nameLowerCamel}Base.${field.name}) {
         this.${field.name} = new Date(${entity.nameLowerCamel}Base.${field.name});

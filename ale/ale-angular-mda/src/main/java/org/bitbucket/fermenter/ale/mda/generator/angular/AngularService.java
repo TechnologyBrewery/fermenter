@@ -9,25 +9,13 @@ import org.bitbucket.fermenter.mda.metamodel.element.BaseServiceDecorator;
 import org.bitbucket.fermenter.mda.metamodel.element.Operation;
 import org.bitbucket.fermenter.mda.metamodel.element.Service;
 
-import com.google.common.base.CaseFormat;
-
 public class AngularService extends BaseServiceDecorator implements Service, AngularNamedElement {
 
-    private String artifactId;
 
-    public AngularService(Service service, String artifactId) {
+    public AngularService(Service service) {
         super(service);
-        this.artifactId = artifactId;
     }
-
-    public String getNameLowerHypen() {
-        return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_HYPHEN, getName());
-    }
-    
-    public String getArtifactIdUpperUnderscore() {
-        return CaseFormat.LOWER_HYPHEN.to(CaseFormat.UPPER_UNDERSCORE, artifactId);
-    }
-    
+        
     public List<AngularOperation> getAngularOperations() {
         List<AngularOperation> wrappedOperations = new ArrayList<>();
         for (Operation operation : wrapped.getOperations()) {

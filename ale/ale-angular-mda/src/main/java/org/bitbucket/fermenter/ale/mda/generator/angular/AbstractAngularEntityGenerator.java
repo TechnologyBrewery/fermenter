@@ -1,57 +1,49 @@
 package org.bitbucket.fermenter.ale.mda.generator.angular;
 
-import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.VelocityContext;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
 import org.bitbucket.fermenter.mda.generator.entity.AbstractEntityGenerator;
-import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
-import org.bitbucket.fermenter.mda.metadata.element.Entity;
+import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
+import org.bitbucket.fermenter.mda.metamodel.element.Entity;
 
 public abstract class AbstractAngularEntityGenerator extends AbstractEntityGenerator {
 
     @Override
     public void generate(GenerationContext context) {
-        String currentApplication = context.getArtifactId();
+        DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
+                .getMetadataRepostory(DefaultModelInstanceRepository.class);
+        String baseFileName = context.getOutputFile();
 
-        MetadataRepository metadataRepository = ModelInstanceRepositoryManager
-                .getMetadataRepostory(MetadataRepository.class);
-        Map<String, Entity> entityMap = metadataRepository.getEntitiesByMetadataContext(metadataContext,
-                currentApplication);
-        Iterator<Entity> entities = entityMap.values().iterator();
+        // Key piece - need to generate for all artifacts and WITHOUT having a
+        // local set of entities.
+        for (String artifactId : metadataRepository.getArtifactIds()) {
+            Map<String, Entity> entityMap = metadataRepository.getEntitiesByArtifactId(artifactId);
+            if (entityMap != null && !entityMap.isEmpty()) {
+                for (Entity baseEntity : entityMap.values()) {
+                    AngularEntity entity = new AngularEntity(baseEntity);
 
-        String fileName;
-        String basefileName = context.getOutputFile();
-        basefileName = replaceBasePackage(basefileName, context.getBasePackageAsPath());
-        while (entities.hasNext()) {
+                    boolean generateAllEntities = !generatePersistentEntitiesOnly();
+                    boolean isRegularPersistentEntity = !entity.isTransient() && !entity.isNonPersistentParentEntity();
+                    if (generateAllEntities || isRegularPersistentEntity) {
+                        context.setArtifactId(artifactId);
+                        VelocityContext vc = getNewVelocityContext(context);
+                        populateVelocityContext(vc, entity, context);
 
-            // key piece that is needed for this generate method is that the
-            // entities need to be passed into the velocity context as Angular
-            // entities in order to have access to the angular entity methods
-            // like getting the name in lower case camel
-            AngularEntity entity = new AngularEntity(entities.next());
+                        // KEY piece - need to set the entity name to be
+                        // lower-hyphen for the file name
+                        String fileName = replaceEntityName(baseFileName, entity.getNameLowerHyphen());
+                        context.setOutputFile(fileName);
 
-            if (!generatePersistentEntitiesOnly() || (generatePersistentEntitiesOnly() && !entity.isTransient()
-                    && !entity.isNonPersistentParentEntity())) {
-                VelocityContext vc = new VelocityContext();
-                populateVelocityContext(vc, entity, context);
-
-                fileName = replaceEntityName(basefileName, entity.getNameLowerHyphen());
-                context.setOutputFile(fileName);
-
-                generateFile(context, vc);
+                        generateFile(context, vc);
+                    }
+                }
             }
         }
-    }
 
-    @Override
-    protected void populateVelocityContext(VelocityContext vc, Entity entity, GenerationContext generationContext) {
-        AngularEntity angularEntity = new AngularEntity(entity);
-        vc.put("entity", angularEntity);
-        vc.put("StringUtils", StringUtils.class);
     }
 
     @Override
@@ -59,4 +51,10 @@ public abstract class AbstractAngularEntityGenerator extends AbstractEntityGener
         return AngularGeneratorUtil.ANGULAR_SRC_FOLDER_FOR_APP;
     }
 
+    @Override
+    protected void populateVelocityContext(VelocityContext vc, Entity entity, GenerationContext generationContext) {
+        AngularEntity angularEntity = (AngularEntity) entity;
+        vc.put("entity", angularEntity);
+        vc.put("StringUtils", StringUtils.class);
+    }
 }

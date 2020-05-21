@@ -24,7 +24,7 @@ public class RelatedJavaEntity extends JavaEntity {
     }
 
     public String getLabel() {
-        return StringUtils.uncapitalise(entity.getName());
+        return StringUtils.uncapitalize(entity.getName());
     }
 
     public Map getIdFields() {

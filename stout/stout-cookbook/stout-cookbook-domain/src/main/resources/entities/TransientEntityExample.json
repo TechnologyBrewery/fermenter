@@ -19,5 +19,10 @@
     "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
     "required" : true
   } ],
+  "relations" : [ {
+    "type" : "TransientChildEntity",
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "multiplicity" : "1-M"
+  } ],
   "transient" : true
 }

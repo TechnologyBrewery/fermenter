@@ -1,7 +1,9 @@
 package org.bitbucket.askllc.fermenter.cookbook.domain.bizobj;
 
 
-import org.bitbucket.fermenter.stout.util.SpringAutowiringUtil;
+import java.io.Serializable;
+import javax.persistence.MappedSuperclass;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,24 +12,30 @@ import org.slf4j.LoggerFactory;
  * @see org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.TransientEntityExampleBaseBO
  *
  * GENERATED STUB CODE - PLEASE *DO* MODIFY
+ * Generated from bo.java.vm
  */
 public class TransientEntityExampleBO extends TransientEntityExampleBaseBO {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(TransientEntityExampleBO.class);
+	
+	private static final Logger logger = LoggerFactory.getLogger(TransientEntityExampleBO.class);
 
-	public TransientEntityExampleBO() {
-		super();
-		SpringAutowiringUtil.autowireBizObj(this);
-	}
-
+	
 	@Override
 	protected Logger getLogger() {
-		return LOGGER;
+		return logger;
 	}
-
+    
+    /**
+    * Lifecycle method that is invoked when saving TransientEntityExample via a creation or update, 
+    * only if the entity's fields were validated successfully. 
+    * 
+    * If TransientEntityExample requires additional business logic in order to validate its data prior to saving, 
+    * implement that logic here.
+    * 
+    * @see <a href="https://fermenter.atlassian.net/wiki/spaces/FER/pages/62128129/Stout#Stout-Savelifecycle">Stout: Save Lifecycle</a>
+    */
 	@Override
 	protected void complexValidation() {
-		//insert code
+        /* add complex validation logic here */
 	}
-	
 }

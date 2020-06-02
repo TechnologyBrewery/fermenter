@@ -27,23 +27,30 @@ import org.slf4j.LoggerFactory;
 @Table(name="${entity.table}")
 #end
 #if (!$entity.isNonPersistentParentEntity())
+	#if ($entity.isTransient())
+public abstract class ${entity.name}BO extends ${entity.name}BaseBO {
+	#else 
 public class ${entity.name}BO extends ${entity.name}BaseBO {
-	
-	public ${entity.name}BO() {
-		super();
-		SpringAutowiringUtil.autowireBizObj(this);
-	}
+	#end
+
 #else
 @MappedSuperclass
 public abstract class ${entity.name}BO<PK extends Serializable, BO, JPA extends JpaRepository<BO, PK>> 
 		extends ${entity.name}BaseBO<PK, BO, JPA> {
 #end	
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(${entity.name}BO.class);
+	private static final Logger logger = LoggerFactory.getLogger(${entity.name}BO.class);
+
+#if (!$entity.isNonPersistentParentEntity())	
+	public ${entity.name}BO() {
+		super();
+		SpringAutowiringUtil.autowireBizObj(this);
+	}
+#end
 	
 	@Override
 	protected Logger getLogger() {
-		return LOGGER;
+		return logger;
 	}
     
     /**

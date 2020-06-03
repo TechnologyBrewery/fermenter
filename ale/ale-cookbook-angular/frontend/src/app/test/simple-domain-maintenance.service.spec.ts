@@ -174,7 +174,7 @@ describe('Ale Simple Domain Maintenance Service', () => {
         simpleDomainMaintUrl
       );
 
-      // Assert that the request is a PUT.
+      // Assert that the request is a POST.
       expect(req.request.method).toEqual('POST');
 
       // Respond with mock data, causing Observable to resolve.
@@ -207,7 +207,7 @@ describe('Ale Simple Domain Maintenance Service', () => {
         simpleDomainMaintUrl + '/' + testId
       );
 
-      // Assert that the request is a PUT.
+      // Assert that the request is a DELETE.
       expect(req.request.method).toEqual('DELETE');
 
       // Respond with mock data, causing Observable to resolve.
@@ -250,7 +250,8 @@ describe('Ale Simple Domain Maintenance Service', () => {
         simpleDomainMaintUrl + '/findByExample'
       );
 
-      // Assert that the request is a PUT.
+
+      // Assert that the request is a POST.
       expect(req.request.method).toEqual('POST');
 
       // Respond with mock data, causing Observable to resolve.
@@ -268,6 +269,200 @@ describe('Ale Simple Domain Maintenance Service', () => {
       pageWrapper.first = true;
       pageWrapper.last = true;
       pageWrapper.itemsPerPage = constants.DEFAULT_PAGE_SIZE;
+      pageWrapper.startPage = 0;
+      pageWrapper.numberOfElements = pageWrapper.content.length;
+      pageWrapper.totalPages = 1;
+      pageWrapper.totalResults = pageWrapper.content.length;
+
+      const mockResponse = new FermenterResponse<PageWrapper<SimpleDomain>>();
+      mockResponse.value = pageWrapper;
+      req.flush(mockResponse);
+
+      // Finally, assert that there are no outstanding requests.
+      httpTestingController.verify();
+    }
+  ));
+
+  it('should be able to FIND a simple domain by example (using contains)', inject(
+    [SimpleDomainMaintenanceService],
+    (simpleDomainService: SimpleDomainMaintenanceService) => {
+      const testName = 'Test Name';
+      const simpleDomainProbe = new SimpleDomain();
+      simpleDomainProbe.name = testName;
+
+      simpleDomainService
+        .findByExampleContains(simpleDomainProbe)
+        .subscribe((simpleDomains: Array<SimpleDomain>) => {
+          expect(simpleDomains).toBeTruthy();
+          expect(simpleDomains.length).toEqual(1);
+          expect(simpleDomains[0].name).toEqual(testName);
+        });
+
+      // The following `expectOne()` will match the request's URL.
+      // If no requests or multiple requests matched that URL
+      // `expectOne()` would throw.
+      const req = httpTestingController.expectOne(
+        simpleDomainMaintUrl + '/findByExampleContains'
+      );
+
+      // Assert that the request is a POST.
+      expect(req.request.method).toEqual('POST');
+
+      // Respond with mock data, causing Observable to resolve.
+      // Subscribe callback asserts that correct data was returned.
+      const testSimpleDomain = new SimpleDomain();
+      testSimpleDomain.name = testName;
+      testSimpleDomain.id = Math.random().toString(36).substring(7);
+
+      const mockResponse = new FermenterResponse<Array<SimpleDomain>>();
+      mockResponse.value =  new Array<SimpleDomain>();
+      mockResponse.value.push(testSimpleDomain);
+      req.flush(mockResponse);
+
+      // Finally, assert that there are no outstanding requests.
+      httpTestingController.verify();
+    }
+  ));
+
+  it('should be able to FIND a simple domain by example (using contains paged)', inject(
+    [SimpleDomainMaintenanceService],
+    (simpleDomainService: SimpleDomainMaintenanceService) => {
+      const pageSize = constants.DEFAULT_PAGE_SIZE;
+      const pageIndex = 0;
+
+      const testName = 'Test Name';
+      const testName2 = 'Test Name 2';
+      const simpleDomainProbe = new SimpleDomain();
+      simpleDomainProbe.name = testName.substr(0, 4);
+
+      simpleDomainService
+        .findByExampleContainsPaged(simpleDomainProbe, pageIndex, pageSize)
+        .subscribe((page: PageWrapper<SimpleDomain>) => {
+          expect(page).toBeTruthy();
+          expect(page.totalResults).toEqual(2);
+          expect(page.content[0].name).toEqual(testName);
+          expect(page.content[1].name).toEqual(testName2);
+        });
+
+      // The following `expectOne()` will match the request's URL.
+      // If no requests or multiple requests matched that URL
+      // `expectOne()` would throw.
+      const req = httpTestingController.expectOne(
+        request => request.url === simpleDomainMaintUrl + '/findByExampleContainsPaged'
+      );
+
+      // Assert that the request is a POST.
+      expect(req.request.method).toEqual('POST');
+
+      // Respond with mock data, causing Observable to resolve.
+      // Subscribe callback asserts that correct data was returned.
+      const testSimpleDomain = new SimpleDomain();
+      testSimpleDomain.name = testName;
+      testSimpleDomain.id = Math.random().toString(36).substring(7);
+
+      const testSimpleDomain2 = new SimpleDomain();
+      testSimpleDomain2.name = testName2;
+      testSimpleDomain2.id = Math.random().toString(36).substring(7);
+
+      const pageWrapper = new PageWrapper<SimpleDomain>();
+      pageWrapper.content = [testSimpleDomain, testSimpleDomain2];
+      pageWrapper.first = true;
+      pageWrapper.last = true;
+      pageWrapper.itemsPerPage = pageSize;
+      pageWrapper.startPage = 0;
+      pageWrapper.numberOfElements = pageWrapper.content.length;
+      pageWrapper.totalPages = 1;
+      pageWrapper.totalResults = pageWrapper.content.length;
+
+      const mockResponse = new FermenterResponse<PageWrapper<SimpleDomain>>();
+      mockResponse.value = pageWrapper;
+      req.flush(mockResponse);
+
+      // Finally, assert that there are no outstanding requests.
+      httpTestingController.verify();
+    }
+  ));
+
+  it('should be able to FIND a simple domain by example (using matches)', inject(
+    [SimpleDomainMaintenanceService],
+    (simpleDomainService: SimpleDomainMaintenanceService) => {
+      const testName = 'Test Name';
+      const simpleDomainProbe = new SimpleDomain();
+      simpleDomainProbe.name = testName;
+
+      simpleDomainService
+        .findByExampleMatches(simpleDomainProbe)
+        .subscribe((simpleDomains: Array<SimpleDomain>) => {
+          expect(simpleDomains).toBeTruthy();
+          expect(simpleDomains.length).toEqual(1);
+          expect(simpleDomains[0].name).toEqual(testName);
+        });
+
+      // The following `expectOne()` will match the request's URL.
+      // If no requests or multiple requests matched that URL
+      // `expectOne()` would throw.
+      const req = httpTestingController.expectOne(
+        simpleDomainMaintUrl + '/findByExampleMatches'
+      );
+
+      // Assert that the request is a POST.
+      expect(req.request.method).toEqual('POST');
+
+      // Respond with mock data, causing Observable to resolve.
+      // Subscribe callback asserts that correct data was returned.
+      const testSimpleDomain = new SimpleDomain();
+      testSimpleDomain.name = testName;
+      testSimpleDomain.id = Math.random().toString(36).substring(7);
+
+      const mockResponse = new FermenterResponse<Array<SimpleDomain>>();
+      mockResponse.value =  new Array<SimpleDomain>();
+      mockResponse.value.push(testSimpleDomain);
+      req.flush(mockResponse);
+
+      // Finally, assert that there are no outstanding requests.
+      httpTestingController.verify();
+    }
+  ));
+
+  it('should be able to FIND a simple domain by example (using matches paged)', inject(
+    [SimpleDomainMaintenanceService],
+    (simpleDomainService: SimpleDomainMaintenanceService) => {
+      const pageSize = constants.DEFAULT_PAGE_SIZE;
+      const pageIndex = 0;
+
+      const testName = 'Test Name';
+      const simpleDomainProbe = new SimpleDomain();
+      simpleDomainProbe.name = testName;
+
+      simpleDomainService
+        .findByExampleMatchesPaged(simpleDomainProbe, pageIndex, pageSize)
+        .subscribe((page: PageWrapper<SimpleDomain>) => {
+          expect(page).toBeTruthy();
+          expect(page.totalResults).toEqual(1);
+          expect(page.content[0].name).toEqual(testName);
+        });
+
+      // The following `expectOne()` will match the request's URL.
+      // If no requests or multiple requests matched that URL
+      // `expectOne()` would throw.
+      const req = httpTestingController.expectOne(
+        request => request.url === simpleDomainMaintUrl + '/findByExampleMatchesPaged'
+      );
+
+      // Assert that the request is a POST.
+      expect(req.request.method).toEqual('POST');
+
+      // Respond with mock data, causing Observable to resolve.
+      // Subscribe callback asserts that correct data was returned.
+      const testSimpleDomain = new SimpleDomain();
+      testSimpleDomain.name = testName;
+      testSimpleDomain.id = Math.random().toString(36).substring(7);
+
+      const pageWrapper = new PageWrapper<SimpleDomain>();
+      pageWrapper.content = [testSimpleDomain];
+      pageWrapper.first = true;
+      pageWrapper.last = true;
+      pageWrapper.itemsPerPage = pageSize;
       pageWrapper.startPage = 0;
       pageWrapper.numberOfElements = pageWrapper.content.length;
       pageWrapper.totalPages = 1;

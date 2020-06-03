@@ -22,4 +22,12 @@ public class AngularParameter extends BaseParameterDecorator {
         return wrapped.isMany() != null && wrapped.isMany();
     }
 
+    public String getAngularDocumentation() {
+        if (wrapped.getDocumentation() != null) {
+            return "@param " + getName() + " " + wrapped.getDocumentation();
+        } else {
+            return null;
+        }
+    }
+
 }

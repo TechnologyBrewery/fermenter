@@ -131,6 +131,18 @@ public class AngularOperation extends BaseOperationDecorator implements AngularN
 
     @Override
     public String getDocumentation() {
-        return wrapped.getDocumentation() == null ? "NO DOCUMENTATION PROVIDED" : wrapped.getDocumentation();
+        String newLine = "\n    * ";
+        String methodDocumenation = wrapped.getDocumentation() == null ? "NO METHOD DOCUMENTATION PROVIDED"
+                : wrapped.getDocumentation();
+
+        StringBuilder parametersDocumentation = new StringBuilder();
+        for (AngularParameter parameter : getAngularParameters()) {
+            String parameterDocumentation = parameter.getAngularDocumentation();
+            if(parameterDocumentation != null) {
+                parametersDocumentation.append(newLine + parameterDocumentation);                
+            }
+        }
+
+        return methodDocumenation + parametersDocumentation;
     }
 }

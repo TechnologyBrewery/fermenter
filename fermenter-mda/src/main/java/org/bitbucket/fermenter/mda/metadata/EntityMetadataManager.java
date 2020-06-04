@@ -142,6 +142,7 @@ class EntityMetadataManager extends MetadataManager {
 		digester.addCallMethod	( 	"entity/fields/field/label"		, 	"setLabel"		, 	0 );
 		digester.addCallMethod	( 	"entity/fields/field/column"	, 	"setColumn"		, 	0 );
 		digester.addCallMethod	( 	"entity/fields/field/required"	,	"setRequired"	, 	0 );
+		digester.addCallMethod	( 	"entity/fields/field/transient"	,	"setTransient"	, 	0 );
 		digester.addCallMethod	( 	"entity/fields/field/maxLength"	, 	"setMaxLength"	, 	0 );
 		digester.addCallMethod	( 	"entity/fields/field/minLength"	,	"setMinLength"	, 	0 );
 		digester.addCallMethod	( 	"entity/fields/field/maxValue"	, 	"setMaxValue"	, 	0 );

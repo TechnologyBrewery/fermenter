@@ -43,6 +43,11 @@ public interface Field extends Metamodel {
 	 * @return Returns the required.
 	 */
 	Boolean isRequired();
+	
+	/**
+	 * @return Returns the transientValue.
+	 */
+	Boolean isTransient();
 
 	/**
 	 * @return Returns the generator.

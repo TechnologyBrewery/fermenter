@@ -255,6 +255,7 @@ public class EntitySteps extends AbstractEntitySteps {
 		newField.setName(field.name);
 		newField.setDocumentation(field.documentation);
 		newField.setColumn(field.column);
+		newField.setTransient(field.transientValue);
 		ValidationElement type = new ValidationElement();
 		type.setName(field.type);
 		newField.setType(type);
@@ -365,7 +366,9 @@ public class EntitySteps extends AbstractEntitySteps {
 		for (Field loadedEntityField : loadedEntityFields) {
 			if (loadedEntityField.getName().equals(expectedField.name)) {
 				foundField = loadedEntityField;
+				Boolean expectedTransientDefaultIsFalse = expectedField.transientValue != null ? expectedField.transientValue : Boolean.FALSE;
 				assertEquals("Field name did not match!", expectedField.name, foundField.getName());
+				assertEquals("Field transient property did not match!", expectedTransientDefaultIsFalse, foundField.isTransient()); 
 				assertEquals("Column name did not match!", expectedField.column, foundField.getColumn());
 				assertEquals("Documentation did not match!", expectedField.documentation,
 						foundField.getDocumentation());
@@ -467,6 +470,7 @@ public class EntitySteps extends AbstractEntitySteps {
 		public String column;
 		public String generator;
 		public Boolean required;
+		public Boolean transientValue;
 	}
 
 	/**

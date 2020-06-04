@@ -39,6 +39,10 @@ public class FieldElement extends MetamodelElement implements Field {
     @JsonInclude(Include.NON_NULL)
     protected String defaultValue;
 
+    @JsonInclude(Include.NON_NULL)
+    @JsonProperty(value = "transient")
+    protected Boolean isTransient;
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -96,6 +100,14 @@ public class FieldElement extends MetamodelElement implements Field {
         return generator;
     }    
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Boolean isTransient() {
+        return this.isTransient;
+    }
+    
     /**
      * {@inheritDoc}
      */
@@ -162,6 +174,16 @@ public class FieldElement extends MetamodelElement implements Field {
     public void setRequired(Boolean required) {
         this.required = required;
     }    
+
+    /**
+     * Sets the transientValue.
+     * 
+     * @param transientValue
+     *            transient value
+     */
+    public void setTransient(Boolean transientValue) {
+        this.isTransient = transientValue != null ? transientValue : Boolean.FALSE;
+    }
 
     /**
      * Sets the generator.

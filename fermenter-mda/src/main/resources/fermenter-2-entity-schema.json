@@ -111,6 +111,9 @@
 					},
 					"required": {
 						"type": "boolean"
+					},
+					"transient": {
+						"type": "boolean"
 					}
 				},
 				"required": [

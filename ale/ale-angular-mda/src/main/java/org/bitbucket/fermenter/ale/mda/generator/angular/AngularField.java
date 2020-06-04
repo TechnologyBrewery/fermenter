@@ -191,6 +191,13 @@ public class AngularField implements Field {
     /**
      * {@inheritDoc}
      */
+    public boolean isTransient() {
+        return field.isTransient();
+    }
+ 
+    /**
+     * {@inheritDoc}
+     */
     public String getSourceName() {
         return field.getSourceName();
     }

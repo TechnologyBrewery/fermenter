@@ -108,6 +108,8 @@ public interface Field {
 
 	public boolean isRequired();
 
+	public boolean isTransient();
+
 	/**
 	 * Used when overriding referenced entity field names
 	 * 

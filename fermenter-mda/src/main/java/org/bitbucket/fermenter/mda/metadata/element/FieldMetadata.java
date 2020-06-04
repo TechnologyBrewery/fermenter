@@ -28,6 +28,7 @@ public class FieldMetadata extends MetadataElement implements Field {
     private String minValue;
     private String scale;
     private String required;
+    private String transientValue;
     private String sourceName;
     private String project;
     private Boolean isSimpleType;
@@ -328,6 +329,21 @@ public class FieldMetadata extends MetadataElement implements Field {
     /**
      * {@inheritDoc}
      */
+    public String getTransient() {
+        return transientValue;
+    }
+
+    /**
+     * @param transient
+     *            The transient to set.
+     */
+    public void setTransient(String transientValue) {
+        this.transientValue = transientValue;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public boolean isRequired() {
         if (required == null) {
             return false;
@@ -336,6 +352,17 @@ public class FieldMetadata extends MetadataElement implements Field {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isTransient() {
+        if (transientValue == null) {
+            return false;
+        } else {
+            return transientValue.equalsIgnoreCase(Boolean.TRUE.toString());
+        }
+    }
+ 
     /**
      * {@inheritDoc}
      */

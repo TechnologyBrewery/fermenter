@@ -148,9 +148,14 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
 
 #foreach ( $field in $entity.fields.values() )
     #if ( !$entity.isTransient() )
+    
+    #if ($field.isTransient())
+    @Transient
+    #else
     #set ( $isRequired = $field.isRequired() )
         @Column(name="${field.column}" #if($isRequired), nullable=false#end #if($field.javaType == 'BigDecimal'), scale=$field.getScale()#end
     )
+    #end 
     #end
     #if ( $field.hasMinLength() || $field.hasMaxLength() && !$field.isEnumerationType())
     @Size(#if($field.hasMinLength())min=${field.minLength}#if($field.hasMaxLength()),#end#end #if($field.hasMaxLength())max=${field.maxLength}#end)

@@ -183,6 +183,13 @@ public class JavaField implements Field {
 		return field.isRequired();
 	}
 
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isTransient() {
+        return field.isTransient();
+    }
+ 
 	/**
 	 * {@inheritDoc}
 	 */

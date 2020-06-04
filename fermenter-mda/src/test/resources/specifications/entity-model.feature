@@ -63,7 +63,7 @@ Feature: Specify entities for use in model-driven file generation
       | Foo  | test.lock.default |              | optimistic           |
       | Bar  | test.default.alt  |              | optimistic           |
 
-  Scenario Outline: specify a transient entity with defaulting via a JSON metamodel
+  Scenario Outline: specify a transient entity via a JSON metamodel
     Given an entity named "<name>" in "<package>" with transient flag "<transient>"
     When entities are read
     Then an entity metamodel instance is returned for the name "<name>" in "<package>" with a transient flag of "<transient>"
@@ -73,7 +73,7 @@ Feature: Specify entities for use in model-driven file generation
       | Foo  | test.entity     | true      |
       | Bar  | test.entity.alt | false     |
 
-  Scenario Outline: default a transient entity with defaulting via a JSON metamodel
+  Scenario Outline: default the transient state of an entity
     Given an entity named "<name>" in "<package>" with transient flag "<transient>"
     When entities are read
     Then an entity metamodel instance is returned for the name "<name>" in "<package>" with a transient flag of "<expectedTransient>"
@@ -110,6 +110,32 @@ Feature: Specify entities for use in model-driven file generation
       | name | package         | fieldName | documentation  | type    | column  |
       | Bar  | test.entity.alt | summary   | Summary of Bar | string  | SUMMARY |
       | Blah | test.entity.alt | stuff     | Stuff of Blah  | integer | STUFF   |
+
+  Scenario Outline: explicitly specify that a field is transient
+    Given an entity named "<name>" in "<package>" with a field:
+      | name        | transientValue |
+      | <fieldName> | <transient>    |
+    When entities are read
+    Then an entity metamodel instance is returned for the name "<name>" in "<package>" with the following field:
+      | name        | transientValue |
+      | <fieldName> | <transient>    |
+
+    Examples: 
+      | name | package         | fieldName            | transient |
+      | Bar  | test.entity.alt | isPersistentField    | true      |
+      | Blah | test.entity.alt | isNotPersistentField | false     |
+
+  Scenario Outline: validate that fields default to persistent if not explicitly specified
+    Given an entity named "<name>" in "<package>" with "<fieldName>" that has no transient value specified
+    When entities are read
+    Then an entity metamodel instance is returned for the name "<name>" in "<package>" with the following field:
+      | fieldName   | transientValue      |
+      | <fieldName> | <expectedTransient> |
+
+    Examples: 
+      | name | package         | fieldName            | expectedTransient |
+      | Bar  | test.entity.alt | isPersistentField    | false             |
+      | Blah | test.entity.alt | isNotPersistentField | false             |
 
   Scenario Outline: specify a field via a JSON metamodel that has an enumeration type
     Given an entity named "<name>" in "<package>" with a field:

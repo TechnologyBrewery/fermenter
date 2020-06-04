@@ -41,6 +41,7 @@ export class ${service.name}Service {
 #if( !$operation.usesEnumerations() )## pending support for enums
     /**
     * Call the ${operation.nameLowerCamel} operation on ${service.name}Service
+    *
     * ${operation.documentation}
     */
     public ${operation.getAngularMethodSignature()} {

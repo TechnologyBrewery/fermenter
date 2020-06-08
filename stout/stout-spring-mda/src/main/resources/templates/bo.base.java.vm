@@ -4,6 +4,7 @@ package ${basePackage}.bizobj;
 import java.io.Serializable;
 #end
 import java.util.List;
+import java.util.Optional;
 import java.util.HashSet;
 import java.util.Set;
 import static java.lang.Math.floor;
@@ -62,7 +63,7 @@ import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.PluralAttribute;
 
 import org.springframework.data.jpa.domain.Specification;
-import static org.springframework.data.jpa.domain.Specifications.where;
+import static org.springframework.data.jpa.domain.Specification.where;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.ExampleMatcher.StringMatcher;
@@ -240,7 +241,8 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
     }
 
     public static ${entity.name}BO findByPrimaryKey(${entity.identifier.javaType} key, boolean eagerFetchRelations) {
-        ${entity.name}BO foundBO = eagerFetchRelations ? getDefaultRepository().findOne(where(keyEquals(key)).and(eagerFetchRelations())) : getDefaultRepository().findOne(key);
+        Optional<${entity.name}BO> optionalFoundBO = eagerFetchRelations ? getDefaultRepository().findOne(where(keyEquals(key)).and(eagerFetchRelations())) : getDefaultRepository().findById(key);
+        ${entity.name}BO foundBO = optionalFoundBO.isPresent() ? optionalFoundBO.get() : null;
         if (foundBO != null) {
             foundBO.postFindByPrimaryKey();
         }
@@ -248,7 +250,8 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
     }
     #else
     public static ${entity.name}BO findByPrimaryKey(${entity.identifier.javaType} key) {
-        ${entity.name}BO foundBO = getDefaultRepository().findOne(key);
+        Optional<${entity.name}BO> optionalFoundBO = getDefaultRepository().findById(key);
+        ${entity.name}BO foundBO = optionalFoundBO.isPresent() ? optionalFoundBO.get() : null;
         if (foundBO != null) {
             foundBO.postFindByPrimaryKey();
         }
@@ -397,8 +400,8 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
         #if (!$idList)
         Pageable pageable = QueryUtils.getDefaultPageRequest();
         #else
-        Sort sort = new Sort(Sort.Direction.ASC, $idList);
-        Pageable pageable = new PageRequest(startPage, count, sort);
+        Sort sort = Sort.by(Sort.Direction.ASC, $idList);
+        Pageable pageable = PageRequest.of(startPage, count, sort);
         #end
         
         Page<${entity.name}BO> results = findByExample(probe, containsMatch, pageable);
@@ -443,7 +446,7 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
             MessageManager.addMessage(requiresSort);
             
         } else {
-            Pageable pageable = new PageRequest(startPage, count, sort);
+            Pageable pageable = PageRequest.of(startPage, count, sort);
             result = findByExample(probe, containsMatch, pageable);
                 
         }

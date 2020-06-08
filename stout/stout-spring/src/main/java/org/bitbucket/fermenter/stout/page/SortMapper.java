@@ -16,6 +16,6 @@ public class SortMapper {
         for (OrderWrapper orderWrapper : sortWrapper.getOrders()) {
             orders.add(OrderMapper.mapToOrder(orderWrapper));
         }
-        return new Sort(orders);
+        return Sort.by(orders);
     }
 }

@@ -6,6 +6,7 @@
     "name" : "PassInSingleEnumeratedValue",
     "parameters" : [ {
       "name" : "enumeratedValue",
+      "package": "org.bitbucket.askllc.fermenter.cookbook.domain",
       "type" : "SimpleDomainEnumeration",
       "documentation" : "enumeration value"
     } ],
@@ -18,6 +19,7 @@
     "transactionAttribute" : "Supports",
     "parameters" : [ ],
     "return" : {
+      "package": "org.bitbucket.askllc.fermenter.cookbook.domain",
       "type" : "SimpleDomainEnumeration",
       "pagedResponse" : false
     }
@@ -26,6 +28,7 @@
     "transactionAttribute" : "Supports",
     "parameters" : [ ],
     "return" : {
+      "package": "org.bitbucket.askllc.fermenter.cookbook.domain",
       "type" : "SimpleDomainEnumeration",
       "many" : true,
       "pagedResponse" : false
@@ -34,6 +37,7 @@
     "name" : "PassInMultipleEnumeratedValues",
     "parameters" : [ {
       "name" : "enumeratedValue",
+      "package": "org.bitbucket.askllc.fermenter.cookbook.domain",
       "type" : "SimpleDomainEnumeration",
       "many" : true,
       "documentation" : "enumeration value"

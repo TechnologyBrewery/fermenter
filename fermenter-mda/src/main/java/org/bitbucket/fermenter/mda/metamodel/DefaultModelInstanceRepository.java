@@ -77,20 +77,19 @@ public class DefaultModelInstanceRepository extends AbstractModelInstanceReposit
      */
     @Override
     public void validate() {
-        String basePackage = config.getBasePackage();
-        for (Enumeration enumeration : enumerationManager.getMetadataElementByPackage(basePackage).values()) {
+        for (Enumeration enumeration : enumerationManager.getMetadataElementWithoutPackage().values()) {
             enumeration.validate();
         }
 
-        for (DictionaryType dictionaryType : dictionaryManager.getMetadataElementByPackage(basePackage).values()) {
+        for (DictionaryType dictionaryType : dictionaryManager.getMetadataElementWithoutPackage().values()) {
             dictionaryType.validate();
         }
 
-        for (Service service : serviceManager.getMetadataElementByPackage(basePackage).values()) {
+        for (Service service : serviceManager.getMetadataElementWithoutPackage().values()) {
             service.validate();
         }
 
-        for (Entity entity : entityManager.getMetadataElementByPackage(basePackage).values()) {
+        for (Entity entity : entityManager.getMetadataElementWithoutPackage().values()) {
             entity.validate();
         }
 

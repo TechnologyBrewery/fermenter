@@ -111,39 +111,42 @@ public class DelegateMaintenanceTransactionSynchronization implements Synchroniz
      * deletes.  This allows referential integrity to be respected in both scenarios.
      */
 	public void flush() {
-		if (logger.isTraceEnabled()) {
-			logger.trace("START: flush maintenance operations for tx {}", getCurrentTransaction());
-		}
-	    Transaction transaction = getCurrentTransaction();
-	    Map<String, AbstractMaintenanceServiceDelegate> delegates = delegatesByTransaction.get(transaction);
+		Transaction transaction = getCurrentTransaction();
 	    
-		// flush each delegate in order such that referential integrity is respected:
-	    if (delegates != null) {
-		    // first process inserts and updates:
-    	    for (String entityToFlush: flushOrder) {
-    	        AbstractMaintenanceServiceDelegate delegate = delegates.get(entityToFlush);
-    	        if (delegate != null) {
-    	        	logger.trace("Flushing inserts and updates for entity: {}", entityToFlush);
-    	        	delegate.flushInsertsAndUpdates();
-    	        }
-    	    }
-    	    
-            // then reverse the order and process deletes:
-            for (String entityToFlush : flushReverseOrder) {
-                AbstractMaintenanceServiceDelegate delegate = delegates.get(entityToFlush);
-                if (delegate != null) {
-                	logger.trace("Flushing deletes for entity: {}", entityToFlush);
-                    delegate.flushDeletes();
-                }
-            }
-            
-            // now that we have cleared things, remove the delegate from our collection of delegates waiting for a flush:
-            delegates.clear();   
-            
-            logger.trace("STOP: flush maintenance operations completed");
+	    if (transaction != null) {	   
+			logger.trace("START: flush maintenance operations for tx {}", transaction);
+		    Map<String, AbstractMaintenanceServiceDelegate> delegates = delegatesByTransaction.get(transaction);
+		    
+			// flush each delegate in order such that referential integrity is respected:
+		    if (delegates != null) {
+			    // first process inserts and updates:
+	    	    for (String entityToFlush: flushOrder) {
+	    	        AbstractMaintenanceServiceDelegate delegate = delegates.get(entityToFlush);
+	    	        if (delegate != null) {
+	    	        	logger.trace("Flushing inserts and updates for entity: {}", entityToFlush);
+	    	        	delegate.flushInsertsAndUpdates();
+	    	        }
+	    	    }
+	    	    
+	            // then reverse the order and process deletes:
+	            for (String entityToFlush : flushReverseOrder) {
+	                AbstractMaintenanceServiceDelegate delegate = delegates.get(entityToFlush);
+	                if (delegate != null) {
+	                	logger.trace("Flushing deletes for entity: {}", entityToFlush);
+	                    delegate.flushDeletes();
+	                }
+	            }
+	            
+	            // now that we have cleared things, remove the delegate from our collection of delegates waiting for a flush:
+	            delegates.clear();   
+	            
+	            logger.trace("STOP: flush maintenance operations completed");
+		    }
+		    
+		} else {
+	        logger.warn("No active transaction - flush is only active within a transaction!");
+	        
 	    }
-	    
-		
     	   
 	}
 
@@ -192,8 +195,14 @@ public class DelegateMaintenanceTransactionSynchronization implements Synchroniz
 				SpringAutowiringUtil.autowireBizObj(this);
 
 			}
-			TransactionManager transactionManager = springTxManager.getTransactionManager();
-			currentTransaction = transactionManager.getTransaction();
+			
+			if (springTxManager == null) {
+			    logger.debug("Transaction manager is not available!");
+			    
+			} else {
+				TransactionManager transactionManager = springTxManager.getTransactionManager();
+				currentTransaction = transactionManager.getTransaction();
+			}
 
 		} catch (SystemException e) {
 			throw new UnrecoverableException("Could not get transaction for current thread!", e);

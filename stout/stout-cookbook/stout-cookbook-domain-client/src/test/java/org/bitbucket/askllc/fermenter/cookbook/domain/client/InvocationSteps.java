@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.ContractTestDelegate;
+import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.impl.DelegateMaintenanceTransactionSynchronization;
 import org.bitbucket.askllc.fermenter.cookbook.domain.enumeration.SimpleDomainEnumeration;
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.SimpleDomain;
 import org.bitbucket.fermenter.stout.messages.Message;
@@ -78,6 +79,7 @@ public class InvocationSteps {
     @When("^a service with a void return type is invoked$")
     public void a_service_with_a_void_return_type_is_invoked() throws Throwable {
         delegate.voidResponseMethod();
+        
         storeMessagesForFinalCheck();
     }
 
@@ -174,6 +176,16 @@ public class InvocationSteps {
         delegate.errorMessagesReturnedMethod();
         storeMessagesForFinalCheck();
     }
+    
+    @When("^a flush is called while outside a transaction$")
+    public void a_flush_is_called_while_outside_a_transaction() throws Throwable {
+        DelegateMaintenanceTransactionSynchronization sync = new DelegateMaintenanceTransactionSynchronization();
+        sync.flush();
+        
+        delegate.voidResponseMethod();
+        
+        storeMessagesForFinalCheck();
+    }    
 
     @Then("^a valid standard type is returned$")
     public void a_valid_standard_type_is_returned() throws Throwable {
@@ -231,6 +243,11 @@ public class InvocationSteps {
     public void a_single_error_messages_is_returned_indicating_a_busines_logic_troubled_invocation() throws Throwable {
         assertEquals("Expected one error message to indicate success!", 1, messages.getErrorMessageCount());
     }
+    
+    @Then("^no errors result$")
+    public void no_errors_result() throws Throwable {
+        assertEquals("No error messages expected!", 0, messages.getErrorMessageCount());
+    }    
 
     private void storeMessagesForFinalCheck() {
         messages = MessageManager.getMessages();

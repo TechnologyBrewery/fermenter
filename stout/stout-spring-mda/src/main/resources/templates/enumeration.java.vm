@@ -29,7 +29,7 @@ public enum ${enumeration.name} {
 	${enumeration.name}(Integer value) {
 		this.value = value;
 	}
- 
+
    	/**
    	 * Gets the underlying value associated with this ${enumeration.name} enum instance.
    	 * 
@@ -38,7 +38,41 @@ public enum ${enumeration.name} {
    	public Integer getValue() {
    		return value;
    	}
-   	
+
+    /**
+     * Retrieves the underlying value associated with the enumerated value that
+     * matches the input value
+     *
+     * @param value The value that should represent an enumerated value
+     * @return The underlying value associated with the enum that matches the value
+     */
+    public static Integer toIntegerValue(String value) {
+        ${enumeration.name} matchingEnum = valueOfIgnoresCase(value);
+        return (matchingEnum != null) ? matchingEnum.getValue() : null;
+    }
+
+    /**
+     * Retrieves the name of the enumerated value whose associated underlying
+     * value is equal to the input value
+     *
+     * @param value The search value that should match an enum instance's
+     * associated underlying value
+     * @return The name of the matching enum instance
+     */
+    public static String toTextString(Integer value) {
+        String enumName;
+        switch (value) {
+        #foreach ($enum in $enumeration.enums)
+        case ${enum.value}:
+            enumName = "${enum.uppercasedName}";
+            break;
+        #end
+        default:
+            enumName = null;
+            break;
+        }
+        return enumName;
+    }
 #end
 
     /**

@@ -1,5 +1,5 @@
 @referenceCaching
-Feature: Caching -> Reference Caching in Maintence rest client
+Feature: Caching -> Reference Caching in Maintenance rest client
 
   Scenario: Reference entities are cached when using the maintenance rest client
     Given a referenced entity exists in the foreign domain

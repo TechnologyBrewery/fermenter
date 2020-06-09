@@ -64,3 +64,7 @@ Feature: Invocation of Remote Service
   Scenario: test error messages are converyed across local calls
     When a service that generates an single error message is invoked
     Then a single error messages is returned indicating a busines-logic troubled invocation
+    
+	Scenario: test that a flush outside a transaction does not negatively impact restful client
+    When a flush is called while outside a transaction
+    Then no errors result        

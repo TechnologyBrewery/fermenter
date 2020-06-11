@@ -330,12 +330,11 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
 			List<String> targetedArtifactIds = repoConfiguration.getTargetModelInstances();
 			for (String artifactId : targetedArtifactIds) {
 				Map<String, T> targetedModelMap = getMetadataByArtifactIdMap(artifactId);
-				metamodelInstanceMap.putAll(targetedModelMap);
-				if (targetedModelMap.size() == 0) {
-					log.warn("No instances were found for targeted artifactId '" + artifactId + "'!");
-
+				if (targetedModelMap == null || targetedModelMap.size() == 0) {
+					log.debug("No instances were found for targeted artifactId '" + artifactId + "'");
+				} else {
+				    metamodelInstanceMap.putAll(targetedModelMap);    
 				}
-
 			}
 
 		} else {

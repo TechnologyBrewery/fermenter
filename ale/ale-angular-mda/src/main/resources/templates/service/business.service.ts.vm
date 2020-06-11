@@ -11,6 +11,8 @@ import { PageWrapper } from '../../../shared/model/page-wrapper.model';
 #foreach( $import in $service.imports )
 #if( !$import.isEnumeration() )
 import { ${import.type} } from '../../../shared/model/${import.typeLowerHyphen}.model';
+#else
+import { ${import.type} } from '../../enum/${import.typeLowerHyphen}.model';
 #end## end if enum
 #end## end for imports
 

@@ -18,7 +18,8 @@ public class AngularEnumerationGenerator extends AbstractGenerator {
     public void generate(GenerationContext context) {
         DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
                 .getMetadataRepostory(DefaultModelInstanceRepository.class);
-        Map<String, Enumeration> enumerations = metadataRepository.getEnumerations(metadataRepository.getBasePackage());
+        Map<String, Enumeration> enumerations = metadataRepository.getEnumerationsByContext(metadataContext);
+        
 
         BaseEnumertionDecorator angularEnumeration;
         VelocityContext vc;

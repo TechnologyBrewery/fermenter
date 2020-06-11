@@ -62,7 +62,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <basePackage>org.bitbucket.askllc.fermenter.cookbook.domain</basePackage>
+                    <basePackage>org.bitbucket.askllc.fermenter.cookbook.ale</basePackage>
                     <profile>angular</profile>
                     <mainSourceRoot>frontend</mainSourceRoot>
                     <generatedBasedir>frontend/src/app/generated</generatedBasedir>
@@ -71,6 +71,10 @@
                         <metadataDependency>stout-cookbook-domain</metadataDependency>
                         <metadataDependency>stout-cookbook-referencing-domain</metadataDependency>
                     </metadataDependencies>
+                    <targetModelInstances>
+                        <targetModelInstance>stout-cookbook-domain</targetModelInstance>
+                        <targetModelInstance>stout-cookbook-referencing-domain</targetModelInstance>
+                    </targetModelInstances>
                 </configuration>
                 <dependencies>
                     <dependency>

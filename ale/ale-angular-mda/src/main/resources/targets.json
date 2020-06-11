@@ -4,6 +4,7 @@
     "templateName": "templates/model/entity-base.model.ts.vm",
     "outputFile": "generated/model-base/${entityName}-base.model.ts",
     "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularEntityGenerator",
+    "metadataContext": "targeted",
     "overwritable": true
   },
   {
@@ -11,6 +12,7 @@
     "templateName": "templates/model/entity.model.ts.vm",
     "outputFile": "shared/model/${entityName}.model.ts",
     "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularEntityGenerator",
+    "metadataContext": "targeted",
     "overwritable": false
   },
   {
@@ -18,6 +20,7 @@
     "templateName": "templates/model/enumeration.ts.vm",
     "outputFile": "generated/enum/${enumerationName}.model.ts",
     "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularEnumerationGenerator",
+    "metadataContext": "targeted",
     "overwritable": true
   },
   {
@@ -25,6 +28,7 @@
     "templateName": "templates/service/maintenance.service.ts.vm",
     "outputFile": "generated/service/maintenance/${entityName}-maintenance.service.ts",
     "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularMaintServiceGenerator",
+    "metadataContext": "targeted",
     "overwritable": true
   },
   {
@@ -32,6 +36,7 @@
     "templateName": "templates/service/business.service.ts.vm",
     "outputFile": "generated/service/business/${serviceName}.service.ts",
     "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBusinessServiceGenerator",
+    "metadataContext": "targeted",
     "overwritable": true
   },
   {

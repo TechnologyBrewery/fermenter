@@ -414,6 +414,8 @@ public class EntityMetadata extends MetadataElement implements Entity {
 					if (checkPersistentFieldForColumn(f)) {
 						transientIssuesFound = true;
 					}
+					
+					checkTransientFieldForColumn(f);
 				}
 			}
 
@@ -443,7 +445,7 @@ public class EntityMetadata extends MetadataElement implements Entity {
 
 	protected boolean checkPersistentFieldForColumn(Field f) {
 		boolean persistentFieldIssuesFound = false;
-		if (StringUtils.isBlank(f.getColumn())) {
+		if (!f.isTransient() && StringUtils.isBlank(f.getColumn())) {
 			persistentFieldIssuesFound = true;
 			LOG.error("persistent entity " + getName() + "." + f.getName() + "' requires a column to be specified!");
 		}
@@ -451,7 +453,7 @@ public class EntityMetadata extends MetadataElement implements Entity {
 	}
 
 	protected void checkTransientFieldForColumn(Field f) {
-		if (!StringUtils.isBlank(f.getColumn())) {
+		if (f.isTransient() && !StringUtils.isBlank(f.getColumn())) {
 			LOG.error(TRANSIENT_ENTITY + getName() + "." + f.getName() + "' specifies a column which will be ignored");
 		}
 	}

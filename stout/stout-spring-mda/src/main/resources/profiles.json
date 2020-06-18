@@ -139,6 +139,9 @@
 			},
 			{
 				"name": "transferObjects"
+			},
+			{
+				"name": "clientEnumerations"
 			}
 		]
 	}

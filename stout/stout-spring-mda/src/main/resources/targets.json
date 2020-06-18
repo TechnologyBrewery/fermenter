@@ -32,6 +32,14 @@
 		"overwritable": true
 	},
 	{
+		"name": "clientEnumerations",
+		"templateName": "templates/enumeration.java.vm",
+		"outputFile": "${basePackage}/enumeration/${enumerationName}.java",
+		"generator": "org.bitbucket.fermenter.stout.mda.generator.enumeration.EnumerationJavaGenerator",
+		"metadataContext": "targeted",
+		"overwritable": true
+	},
+	{
 		"name": "baseRestServiceInterfaces",
 		"templateName": "templates/service.base.rest.interface.java.vm",
 		"outputFile": "${basePackage}/service/rest/${serviceName}BaseService.java",

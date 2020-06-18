@@ -9,6 +9,7 @@
     "type" : "integer",
     "column" : "NEW_TABLE_NAME_ID",
     "required" : true,
-    "generator" : "identity"
+    "generator" : "identity",
+    "transient" : false
   }
 }

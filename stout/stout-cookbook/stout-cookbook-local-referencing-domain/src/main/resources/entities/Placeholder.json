@@ -9,6 +9,7 @@
     "type" : "uuid",
     "column" : "PLACEHOLDER_ID",
     "required" : true,
-    "generator" : "uuid"
+    "generator" : "uuid",
+    "transient" : false
   }
 }

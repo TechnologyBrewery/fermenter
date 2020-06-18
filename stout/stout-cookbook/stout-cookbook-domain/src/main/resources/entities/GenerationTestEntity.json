@@ -9,6 +9,7 @@
     "type" : "uuid",
     "column" : "GEN_TEST_ENTITY_ID",
     "required" : true,
-    "generator" : "identity"
+    "generator" : "identity",
+    "transient" : false
   }
 }

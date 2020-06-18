@@ -8,7 +8,8 @@
     "name" : "id",
     "type" : "string",
     "column" : "NON_UUID_KEY_ENTITY_ID",
-    "required" : true
+    "required" : true,
+    "transient" : false
   },
   "fields" : [ {
     "package" : null,
@@ -16,6 +17,7 @@
     "type" : "integer",
     "column" : "CALCULATED_FIELD",
     "documentation" : "A field that is calculated on each save call",
-    "defaultValue" : "0"
+    "defaultValue" : "0",
+    "transient" : false
   } ]
 }

@@ -9,14 +9,16 @@
     "type" : "uuid",
     "column" : "LOCAL_DOMAIN_ID",
     "required" : true,
-    "generator" : "uuid"
+    "generator" : "uuid",
+    "transient" : false
   },
   "fields" : [ {
     "package" : null,
     "name" : "name",
     "type" : "string",
     "column" : "NAME",
-    "documentation" : "The friendly domain moniker"
+    "documentation" : "The friendly domain moniker",
+    "transient" : false
   } ],
   "references" : [ {
     "name" : "externalReference",

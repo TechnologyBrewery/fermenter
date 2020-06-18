@@ -331,7 +331,7 @@ public class LegacyMetadataConverter {
 		if(legacyField.getDefaultValue() != null) {
 		    newField.setDefaultValue(legacyField.getDefaultValue().toString());
 		}
-
+		newField.setTransient(legacyField.isTransient());
 		return newField;
 	}
 

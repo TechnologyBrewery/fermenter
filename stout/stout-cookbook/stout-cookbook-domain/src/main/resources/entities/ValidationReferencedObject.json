@@ -8,12 +8,14 @@
     "type" : "uuid",
     "column" : "VALIDATION_REF_OBJECT_ID",
     "required" : true,
-    "generator" : "uuid"
+    "generator" : "uuid",
+    "transient" : false
   },
   "fields" : [ {
     "package" : null,
     "name" : "someDataField",
     "type" : "string",
-    "column" : "SOME_DATA_FIELD"
+    "column" : "SOME_DATA_FIELD",
+    "transient" : false
   } ]
 }

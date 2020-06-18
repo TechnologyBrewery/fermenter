@@ -8,13 +8,15 @@
     "type" : "uuid",
     "column" : "LOCAL_TRANSIENT_VALIDATION_REF_EXAMPLE_ID",
     "required" : true,
-    "generator" : "uuid"
+    "generator" : "uuid",
+    "transient" : false
   },
   "fields" : [ {
     "package" : null,
     "name" : "someDataField",
     "type" : "string",
-    "column" : "SOME_DATA_FIELD"
+    "column" : "SOME_DATA_FIELD",
+    "transient" : false
   } ],
   "references" : [ {
     "name" : "transientReference",

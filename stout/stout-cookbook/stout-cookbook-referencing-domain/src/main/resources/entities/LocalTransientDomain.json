@@ -6,7 +6,8 @@
     "package" : null,
     "name" : "name",
     "type" : "string",
-    "documentation" : "The name of local domain"
+    "documentation" : "The name of local domain",
+    "transient" : false
   } ],
   "references" : [ {
     "name" : "externalReference",

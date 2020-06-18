@@ -9,7 +9,8 @@
     "type" : "uuid",
     "column" : "BUSINESS_KEYED_EXAMPLE_ID",
     "required" : true,
-    "generator" : "uuid"
+    "generator" : "uuid",
+    "transient" : false
   },
   "fields" : [ {
     "package" : null,
@@ -17,12 +18,14 @@
     "type" : "string",
     "column" : "BUSINESS_KEY",
     "documentation" : "A business key that is required",
-    "required" : true
+    "required" : true,
+    "transient" : false
   }, {
     "package" : null,
     "name" : "selector",
     "type" : "string",
     "column" : "SELECTOR",
-    "documentation" : "A field that can be used for easy find by example queries"
+    "documentation" : "A field that can be used for easy find by example queries",
+    "transient" : false
   } ]
 }

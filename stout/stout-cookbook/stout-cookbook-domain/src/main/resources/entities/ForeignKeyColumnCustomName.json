@@ -8,6 +8,7 @@
     "type" : "uuid",
     "column" : "FK_CUSTOM_NAME",
     "required" : true,
-    "generator" : "uuid"
+    "generator" : "uuid",
+    "transient" : false
   }
 }

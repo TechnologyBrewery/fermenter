@@ -9,6 +9,7 @@
     "type" : "integer",
     "column" : "INT_KEYED_ENTITY_ID",
     "required" : true,
-    "generator" : "auto"
+    "generator" : "auto",
+    "transient" : false
   }
 }

@@ -8,14 +8,16 @@
     "type" : "uuid",
     "column" : "FK_COLUMN_CONVENTIONS_ID",
     "required" : true,
-    "generator" : "uuid"
+    "generator" : "uuid",
+    "transient" : false
   },
   "fields" : [ {
     "package" : null,
     "name" : "requiredField",
     "type" : "string",
     "column" : "REQUIRED_FIELD",
-    "required" : true
+    "required" : true,
+    "transient" : false
   } ],
   "references" : [ {
     "name" : "withoutFKDef",

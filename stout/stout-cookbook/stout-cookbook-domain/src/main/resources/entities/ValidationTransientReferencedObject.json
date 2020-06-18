@@ -6,7 +6,8 @@
     "package" : null,
     "name" : "name",
     "type" : "string",
-    "documentation" : "The name of the entity"
+    "documentation" : "The name of the entity",
+    "transient" : false
   } ],
   "transient" : true
 }

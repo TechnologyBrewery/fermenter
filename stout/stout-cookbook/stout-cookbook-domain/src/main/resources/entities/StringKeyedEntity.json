@@ -8,6 +8,7 @@
     "name" : "id",
     "type" : "string",
     "column" : "STRING_KEYED_ENTITY_ID",
-    "required" : true
+    "required" : true,
+    "transient" : false
   }
 }

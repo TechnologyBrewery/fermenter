@@ -82,6 +82,7 @@ public class JavaField implements Field {
     public String getType() {
         return field.getType();
     }
+    
 
     public String getCapitalizedName() {
         return StringUtils.capitalize(getName());
@@ -158,6 +159,13 @@ public class JavaField implements Field {
      */
     public Boolean isRequired() {
         return field.isRequired() != null ? field.isRequired() : false;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public Boolean isTransient() {
+        return field.isTransient();
     }
 
     Field getFieldObject() {

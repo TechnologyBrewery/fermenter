@@ -6,7 +6,8 @@
     "package" : null,
     "name" : "name",
     "type" : "string",
-    "documentation" : "The friendly domain moniker"
+    "documentation" : "The friendly domain moniker",
+    "transient" : false
   } ],
   "transient" : true
 }

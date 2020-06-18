@@ -6,12 +6,14 @@
     "package" : null,
     "name" : "name",
     "type" : "string",
-    "documentation" : "The friendly domain moniker"
+    "documentation" : "The friendly domain moniker",
+    "transient" : false
   }, {
     "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
     "name" : "anEnumeratedValue",
     "type" : "SimpleDomainEnumeration",
-    "column" : "SIMPLE_DOMAIN_ENUM"
+    "column" : "SIMPLE_DOMAIN_ENUM",
+    "transient" : false
   } ],
   "references" : [ {
     "name" : "requiredReference",

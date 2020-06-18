@@ -9,6 +9,7 @@
     "type" : "uuid",
     "column" : "SERVICE_ENTITY_EXAMPLE_ID",
     "required" : true,
-    "generator" : "uuid"
+    "generator" : "uuid",
+    "transient" : false
   }
 }

@@ -87,6 +87,12 @@ public class AngularField implements Field {
         return field.getType();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public Boolean isTransient() {
+        return field.isTransient();
+    }
     public String getCapitalizedName() {
         return StringUtils.capitalize(getName());
     }
@@ -105,7 +111,12 @@ public class AngularField implements Field {
     public Boolean isEnumeration() {
         DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
                 .getMetadataRepostory(DefaultModelInstanceRepository.class);
-        return metadataRepository.getEnumeration(field.getType()) != null;
+        boolean enumeration = metadataRepository.getEnumeration(field.getType()) != null;
+        if (enumeration) 
+                System.out.print("Enumeration ----> "+ field.getType() );
+        
+        return enumeration;
+        
     }
     
     public String getTypeLowerHyphen() {

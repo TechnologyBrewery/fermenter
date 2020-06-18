@@ -9,13 +9,15 @@
     "type" : "uuid",
     "column" : "SIMPLE_DOMAIN_CHILD_ID",
     "required" : true,
-    "generator" : "uuid"
+    "generator" : "uuid",
+    "transient" : false
   },
   "fields" : [ {
     "package" : null,
     "name" : "name",
     "type" : "string",
     "column" : "NAME",
-    "documentation" : "Name of the child entity"
+    "documentation" : "Name of the child entity",
+    "transient" : false
   } ]
 }

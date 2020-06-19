@@ -111,12 +111,7 @@ public class AngularField implements Field {
     public Boolean isEnumeration() {
         DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
                 .getMetadataRepostory(DefaultModelInstanceRepository.class);
-        boolean enumeration = metadataRepository.getEnumeration(field.getType()) != null;
-        if (enumeration) 
-                System.out.print("Enumeration ----> "+ field.getType() );
-        
-        return enumeration;
-        
+        return metadataRepository.getEnumeration(field.getPackage(), field.getType()) != null;    
     }
     
     public String getTypeLowerHyphen() {

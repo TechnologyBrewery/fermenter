@@ -10,28 +10,28 @@ import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 import org.bitbucket.fermenter.mda.metamodel.element.Service;
 
 public class AngularBusinessServiceGenerator extends AbstractServiceGenerator {
-    private static final String BASE_PACKAGE = "basePackage";
-    protected static final String SERVICE = "service";
 
     @Override
     public void generate(GenerationContext context) {
         DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
                 .getMetadataRepostory(DefaultModelInstanceRepository.class);
 
-        String fileName;
         String baseFileName = context.getOutputFile();
-        baseFileName = replaceBasePackage(baseFileName, context.getBasePackageAsPath());
 
+        // Key piece - need to generate for all artifacts and WITHOUT having a
+        // local set of entities.
         for (String artifactId : metadataRepository.getArtifactIds()) {
             Map<String, Service> services = metadataRepository.getServicesByArtifactId(artifactId);
             if (services != null) {
                 for (Service service : services.values()) {
-                    AngularService angularService = new AngularService(service, artifactId);
-                    VelocityContext vc = new VelocityContext();
-                    vc.put(SERVICE, angularService);
-                    vc.put(BASE_PACKAGE, context.getBasePackage());
+                    AngularService angularService = new AngularService(service);
+                    context.setArtifactId(artifactId);
+                    VelocityContext vc = getNewVelocityContext(context);
+                    populateVelocityContext(vc, angularService, context);
 
-                    fileName = replaceServiceName(baseFileName, angularService.getNameLowerHypen());
+                    // KEY piece - need to set the entity name to be
+                    // lower-hyphen for the file name
+                    String fileName = replaceServiceName(baseFileName, angularService.getNameLowerHyphen());
                     context.setOutputFile(fileName);
 
                     generateFile(context, vc);
@@ -47,7 +47,8 @@ public class AngularBusinessServiceGenerator extends AbstractServiceGenerator {
 
     @Override
     protected void populateVelocityContext(VelocityContext vc, Service service, GenerationContext generationContext) {
-        // nothing to do as this is just done in the generate method for simplicity.
+        AngularService angularService = (AngularService) service;
+        vc.put("service", angularService);
     }
 
 }

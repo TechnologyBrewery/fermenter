@@ -7,7 +7,8 @@
     "name" : "commonStringValue",
     "type" : "string",
     "column" : "COMMON_STRING_VALUE",
-    "documentation" : "Persistent string value that is shared across subclasses"
+    "documentation" : "Persistent string value that is shared across subclasses",
+    "transient" : false
   } ],
   "references" : [ {
     "name" : "refToSimpleDomain",

@@ -1,6 +1,5 @@
 package org.bitbucket.fermenter.mda.metamodel.element;
 
-import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 
@@ -14,8 +13,6 @@ public enum MetamodelType {
 
     private static DefaultModelInstanceRepository modelInstanceRepository = ModelInstanceRepositoryManager
             .getMetadataRepostory(DefaultModelInstanceRepository.class);
-    private static MetadataRepository legacyMetadataRepository = ModelInstanceRepositoryManager
-            .getMetadataRepostory(MetadataRepository.class);
 
     /**
      * Returns the metamodel type for the passed package and name combination.
@@ -37,8 +34,7 @@ public enum MetamodelType {
         } else if (modelInstanceRepository.getEnumeration(lookupPackageName, name) != null) {
             metamodelType = MetamodelType.ENUMERATION;
 
-            // TODO: update w/ package once entities are migrated:
-        } else if (legacyMetadataRepository.getEntity(name) != null) {
+        } else if (modelInstanceRepository.getEntity(lookupPackageName, name) != null) {
             metamodelType = MetamodelType.ENTITY;
 
         } else if (!"void".equals(name)) {

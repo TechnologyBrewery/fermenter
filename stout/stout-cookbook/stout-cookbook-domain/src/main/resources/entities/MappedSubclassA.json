@@ -14,14 +14,16 @@
     "type" : "uuid",
     "column" : "CHILD_A_ID",
     "required" : true,
-    "generator" : "uuid"
+    "generator" : "uuid",
+    "transient" : false
   },
   "fields" : [ {
     "package" : null,
     "name" : "childAType",
     "type" : "string",
     "column" : "CHILD_A_TYPE",
-    "documentation" : "String value specific to this subclass"
+    "documentation" : "String value specific to this subclass",
+    "transient" : false
   } ],
   "references" : [ {
     "name" : "refToIntKeyedEntity",

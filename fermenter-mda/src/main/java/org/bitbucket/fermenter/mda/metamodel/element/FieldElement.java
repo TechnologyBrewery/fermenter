@@ -17,10 +17,10 @@ public class FieldElement extends MetamodelElement implements Field {
     @JsonInclude(Include.NON_NULL)
     @JsonProperty(value = NamespacedMetamodelElement.PACKAGE)
     protected String packageName;
-    
+
     @JsonInclude(Include.NON_NULL)
     protected String type;
-	
+
     @JsonInclude(Include.NON_NULL)
     protected String column;
 
@@ -34,8 +34,8 @@ public class FieldElement extends MetamodelElement implements Field {
     protected Boolean required;
 
     @JsonInclude(Include.NON_NULL)
-    protected Generator generator;   
-    
+    protected Generator generator;
+
     @JsonInclude(Include.NON_NULL)
     protected String defaultValue;
 
@@ -51,6 +51,7 @@ public class FieldElement extends MetamodelElement implements Field {
 		return type;
 	}
 
+
     /**
      * {@inheritDoc}
      */
@@ -58,7 +59,7 @@ public class FieldElement extends MetamodelElement implements Field {
     public String getPackage() {
         return packageName;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -91,14 +92,14 @@ public class FieldElement extends MetamodelElement implements Field {
     public String getDocumentation() {
         return documentation;
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
     public Generator getGenerator() {
         return generator;
-    }    
+    }
 
     /**
      * {@inheritDoc}
@@ -113,7 +114,7 @@ public class FieldElement extends MetamodelElement implements Field {
      */
     @Override
     public void validate() {
-    	//TODO: validate this refers to a valid type (once type dictionary is present) 
+        // TODO: validate this refers to a valid type (once type dictionary is present)
     }
 
     /**
@@ -126,15 +127,16 @@ public class FieldElement extends MetamodelElement implements Field {
         this.packageName = packageName;
     }
 
-	/**
-	 * Sets the type of the metadata element.
-	 * 
-	 * @param type type to set
-	 */
-	public void setType(String type) {
-		this.type = type;
-	}    
-    
+    /**
+     * Sets the type of the metadata element.
+     * 
+     * @param type
+     *            type to set
+     */
+    public void setType(String type) {
+        this.type = type;
+    }
+
     /**
      * Sets the column value.
      * 
@@ -144,7 +146,7 @@ public class FieldElement extends MetamodelElement implements Field {
     public void setColumn(String column) {
         this.column = column;
     }
-    
+
     /**
      * Sets the field validation constraints.
      * 
@@ -153,7 +155,7 @@ public class FieldElement extends MetamodelElement implements Field {
      */
     public void setType(Validation validation) {
         this.validation = validation;
-    }    
+    }
 
     /**
      * Sets the documentation value.
@@ -164,7 +166,7 @@ public class FieldElement extends MetamodelElement implements Field {
     public void setDocumentation(String documentation) {
         this.documentation = documentation;
     }
-    
+
     /**
      * Sets the required value.
      * 
@@ -173,7 +175,17 @@ public class FieldElement extends MetamodelElement implements Field {
      */
     public void setRequired(Boolean required) {
         this.required = required;
-    }    
+    }
+    
+    /**
+     * Sets the Validation .
+     * 
+     * @param validation
+     *            validation value
+     */
+    public void setValidation(Validation validation) {
+        this.validation = validation;
+    }
 
     /**
      * Sets the transientValue.
@@ -198,16 +210,21 @@ public class FieldElement extends MetamodelElement implements Field {
             messageTracker.addErrorMessage("Could not map generator '" + generator
                     + "' to one of the known generator types! (" + Generator.options() + ") ");
         }
-    }    
-    
-	public String getDefaultValue() {
-		return defaultValue;
-	}
+    }
 
-	public void setDefaultValue(String defaultValue) {
-		this.defaultValue = defaultValue;
-	}
-    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getDefaultValue() {
+        return defaultValue;
+    }
+
+    public void setDefaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
+    }
+
+   
     /**
      * {@inheritDoc}
      */

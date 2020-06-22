@@ -292,6 +292,20 @@ public class JavaOperation extends BaseOperationDecorator implements Operation, 
      */
     public Set<String> getImports() {
         Set<String> importSet = new HashSet<>();
+        Return returnElement = addGenericImports(importSet);
+
+        // how return types are handled is very messy in general - will cleanup when we update the metamodel
+        if (!isResponseTypeVoid()) {
+            String returnImport = JavaElementUtils.getJavaImportByPackageAndType(returnElement.getPackage(), returnElement.getType());
+            if (JavaElementUtils.checkImportAgainstDefaults(returnImport)) {
+                importSet.add(returnImport);
+            }
+        }
+
+        return importSet;
+    }
+
+    protected Return addGenericImports(Set<String> importSet) {
         importSet.addAll(getParameterImports());
         Return returnElement = getReturn();
         if (returnElement.isMany()) {
@@ -300,17 +314,7 @@ public class JavaOperation extends BaseOperationDecorator implements Operation, 
         if (isCompressedWithGZip()) {
             importSet.add(GZIP.class.getName());
         }
-
-        // how return types are handled is very messy in general - will cleanup when we update the metamodel
-        if (!isResponseTypeVoid()) {
-            String currentAppName = metadataRepository.getApplicationName();
-            String returnImport = JavaElementUtils.getJavaImportType(currentAppName, returnElement.getType());
-            if (JavaElementUtils.checkImportAgainstDefaults(returnImport)) {
-                importSet.add(returnImport);
-            }
-        }
-
-        return importSet;
+        return returnElement;
     }
 
     /**

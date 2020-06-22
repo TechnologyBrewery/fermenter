@@ -74,7 +74,7 @@ public class AbstractEntitySteps {
     
     	try {
     		ModelRepositoryConfiguration config = new ModelRepositoryConfiguration();
-    		config.setCurrentApplicationName("fermenter-mda");
+    		config.setArtifactId("fermenter-mda");
     		config.setBasePackage(currentBasePackage);
     		Map<String, ModelInstanceUrl> metadataUrlMap = config.getMetamodelInstanceLocations();
     		metadataUrlMap.put("fermenter-mda",

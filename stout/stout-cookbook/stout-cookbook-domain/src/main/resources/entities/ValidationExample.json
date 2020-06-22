@@ -8,7 +8,8 @@
     "type" : "uuid",
     "column" : "VALIDATION_EXAMPLE_ID",
     "required" : true,
-    "generator" : "uuid"
+    "generator" : "uuid",
+    "transient" : false
   },
   "fields" : [ {
     "package" : null,
@@ -18,7 +19,8 @@
     "validation" : {
       "maxValue" : "1192839128.2231231321",
       "scale" : 2
-    }
+    },
+    "transient" : false
   }, {
     "package" : null,
     "name" : "integerExample",
@@ -27,7 +29,8 @@
     "validation" : {
       "maxValue" : "12345",
       "minValue" : "-12345"
-    }
+    },
+    "transient" : false
   }, {
     "package" : null,
     "name" : "bigDecimalExampleWithScale",
@@ -35,13 +38,15 @@
     "column" : "BIG_DECIMAL_SCALE",
     "validation" : {
       "scale" : 3
-    }
+    },
+    "transient" : false
   }, {
     "package" : null,
     "name" : "requiredField",
     "type" : "string",
     "column" : "REQUIRED_FIELD",
-    "required" : true
+    "required" : true,
+    "transient" : false
   }, {
     "package" : null,
     "name" : "bigDecimalExample",
@@ -50,7 +55,8 @@
     "validation" : {
       "maxValue" : "123456789.123456789",
       "minValue" : "-123456789.123456789"
-    }
+    },
+    "transient" : false
   }, {
     "package" : null,
     "name" : "regexZipcodeExample",
@@ -58,12 +64,14 @@
     "column" : "REGEX_ZIPCODE_EXAMPLE",
     "validation" : {
       "format" : "zipCode"
-    }
+    },
+    "transient" : false
   }, {
     "package" : null,
     "name" : "characterExample",
     "type" : "character",
-    "column" : "CHAR_EXAMPLE"
+    "column" : "CHAR_EXAMPLE",
+    "transient" : false
   }, {
     "package" : null,
     "name" : "stringExample",
@@ -72,12 +80,14 @@
     "validation" : {
       "maxLength" : 20,
       "minLength" : 2
-    }
+    },
+    "transient" : false
   }, {
     "package" : null,
     "name" : "dateExample",
     "type" : "date",
-    "column" : "DATE_EXAMPLE"
+    "column" : "DATE_EXAMPLE",
+    "transient" : false
   }, {
     "package" : null,
     "name" : "bigDecimalExampleWithLargeScale",
@@ -85,7 +95,8 @@
     "column" : "BIG_DECIMAL_SCALE_LARGE",
     "validation" : {
       "scale" : 10
-    }
+    },
+    "transient" : false
   }, {
     "package" : null,
     "name" : "regexExample",
@@ -93,7 +104,8 @@
     "column" : "REGEX_EXAMPLE",
     "validation" : {
       "format" : "email"
-    }
+    },
+    "transient" : false
   }, {
     "package" : null,
     "name" : "longExample",
@@ -102,7 +114,8 @@
     "validation" : {
       "maxValue" : "123456789",
       "minValue" : "-123456789"
-    }
+    },
+    "transient" : false
   } ],
   "relations" : [ {
     "type" : "ValidationExampleChild",

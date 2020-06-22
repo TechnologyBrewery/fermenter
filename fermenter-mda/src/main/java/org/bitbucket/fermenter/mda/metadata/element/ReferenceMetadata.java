@@ -182,7 +182,7 @@ public class ReferenceMetadata extends MetadataElement implements Reference {
 	public String getProject() {
 	    AbstractMetadataRepository metadataRepository = 
                 ModelInstanceRepositoryManager.getMetadataRepostory(MetadataRepository.class);
-		return (StringUtils.isNotBlank(project)) ? project : metadataRepository.getApplicationName();
+		return (StringUtils.isNotBlank(project)) ? project : metadataRepository.getArtifactId();
 	}
 
 	public void setProject(String project) {

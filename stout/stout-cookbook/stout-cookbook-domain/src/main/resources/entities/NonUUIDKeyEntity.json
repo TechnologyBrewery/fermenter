@@ -1,13 +1,23 @@
 {
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
-    "name" : "NonUUIDKeyEntity",
-    "documentation" : "Entity that demonstrates uses of an IDENTITY as a non-generated value primary key",
-    "table" : "NON_UUID_KEY_ENTITY",
-    "identifier" : {
-      "package" : null,
-      "name" : "id",
-      "type" : "string",
-      "column" : "NON_UUID_KEY_ENTITY",
-      "required" : true    
-    }
+  "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "name" : "NonUUIDKeyEntity",
+  "documentation" : "Entity that uses a non-generated value primary key",
+  "table" : "NON_UUID_KEY_ENTITY",
+  "identifier" : {
+    "package" : null,
+    "name" : "id",
+    "type" : "string",
+    "column" : "NON_UUID_KEY_ENTITY_ID",
+    "required" : true,
+    "transient" : false
+  },
+  "fields" : [ {
+    "package" : null,
+    "name" : "calculatedField",
+    "type" : "integer",
+    "column" : "CALCULATED_FIELD",
+    "documentation" : "A field that is calculated on each save call",
+    "defaultValue" : "0",
+    "transient" : false
+  } ]
 }

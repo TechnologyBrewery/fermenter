@@ -29,7 +29,7 @@
             <name>withFKDef</name>
             <type>ForeignKeyWithColumnDefinition</type>
             <fk>
-                <name>withoutFKDef</name>
+                <name>withFKDef</name>
                 <source>id</source>
                 <column>FK_WITH_COLUMN_DEFINITION_ID</column>
             </fk>

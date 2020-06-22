@@ -64,8 +64,7 @@ public class LegacyMetadataConverter {
 		try {
 			convertLegacyEnumerations(applicationName, basePackage, sourceMain);
 			convertLegacyServices(applicationName, basePackage, sourceMain);
-			// TODO: uncomment when we are actually ready  for migration (post FER-116):
-//			convertLegacyEntities(applicationName, basePackage, sourceMain);
+			convertLegacyEntities(applicationName, basePackage, sourceMain);
 
 		} catch (Exception e) {
 			throw new GenerationException("Could not convert legacy metadata!", e);
@@ -329,7 +328,10 @@ public class LegacyMetadataConverter {
 		if (StringUtils.isNotBlank(legacyField.getGenerator())) {
 			newField.setGenerator(legacyField.getGenerator());
 		}
-
+		if(legacyField.getDefaultValue() != null) {
+		    newField.setDefaultValue(legacyField.getDefaultValue().toString());
+		}
+		newField.setTransient(legacyField.isTransient());
 		return newField;
 	}
 
@@ -355,9 +357,10 @@ public class LegacyMetadataConverter {
             Entity childEntity = metadataRepository.getEntity(type);
             while(i.hasNext()) {
                 FieldMetadata fkField = (FieldMetadata) i.next();
-                    if(!(childEntity.getTable() + "_ID").equalsIgnoreCase(fkField.getColumn())) {
+                if(!(childEntity.getTable() + "_ID").equalsIgnoreCase(fkField.getColumn())) {
                     newReference.setLocalColumn(fkField.getColumn());
                 }
+        
             }
         }
 

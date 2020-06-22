@@ -31,7 +31,7 @@ export class ${entity.name}MaintenanceService {
   ) {
     // be sure to define the applicaiton endpoint in the constants.ts file
     this.${entity.name}URL =
-      this.constants.${entity.applicationNameUpperUnderscore}_END_POINT + '/${entity.name}';
+      this.constants.${upperUnderscoreArtifactId}_END_POINT + '/${entity.name}';
   }
 
   /**

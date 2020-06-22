@@ -1,32 +1,29 @@
 package org.bitbucket.fermenter.stout.mda;
 
-import java.util.ArrayList;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.LogFactory;
+import org.bitbucket.fermenter.mda.metamodel.element.Entity;
+import org.bitbucket.fermenter.mda.metamodel.element.Field;
+import org.bitbucket.fermenter.mda.metamodel.element.Parent;
+import org.bitbucket.fermenter.mda.metamodel.element.Reference;
+import org.bitbucket.fermenter.mda.metamodel.element.Relation;
+import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
+import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
+import org.bitbucket.fermenter.stout.bizobj.BasePersistentSpringBO;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.LogFactory;
-import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
-import org.bitbucket.fermenter.mda.metadata.element.Composite;
-import org.bitbucket.fermenter.mda.metadata.element.Entity;
-import org.bitbucket.fermenter.mda.metadata.element.Field;
-import org.bitbucket.fermenter.mda.metadata.element.Parent;
-import org.bitbucket.fermenter.mda.metadata.element.Query;
-import org.bitbucket.fermenter.mda.metadata.element.Reference;
-import org.bitbucket.fermenter.mda.metadata.element.Relation;
-import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
-import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
-import org.bitbucket.fermenter.stout.bizobj.BasePersistentSpringBO;
+import java.util.stream.Collectors;
 
 /**
- * An {@link Entity} that has been decorated for easier generation of Java
- * files.
+ * An {@link Entity} that has been decorated for easier generation of Java files.
  */
 public class JavaEntity implements Entity {
 
@@ -34,20 +31,13 @@ public class JavaEntity implements Entity {
 
     private Entity entity;
     private Map<String, Field> decoratedFieldMap;
-    private Map<String, Field> decoratedIdFieldMap;
-    private Map<String, Composite> decoratedCompositeMap;
     private Map<String, Relation> decoratedRelationMap;
     private Map<String, Entity> decoratedInverseRelationMap;
     private Map<String, Reference> decoratedReferenceMap;
-    private Map<String, Query> decoratedQueryMap;
     private Set<String> imports;
 
-    private String keySignature;
-    private String keySignatureParams;
-
     /**
-     * Create a new instance of {@link Entity} with the correct functionality
-     * set to generate Java code
+     * Create a new instance of {@link Entity} with the correct functionality set to generate Java code
      * 
      * @param entityToDecorate
      *            The {@link Entity} to decorate
@@ -57,6 +47,8 @@ public class JavaEntity implements Entity {
             throw new IllegalArgumentException("JavaEntity must be instatiated with a non-null entity!");
         }
         entity = entityToDecorate;
+        loadFields();
+        loadRelations();
     }
 
     /**
@@ -67,8 +59,8 @@ public class JavaEntity implements Entity {
     }
 
     @Override
-    public String getNamespace() {
-        return entity.getNamespace();
+    public String getPackage() {
+        return entity.getPackage();
     }
 
     /**
@@ -81,13 +73,6 @@ public class JavaEntity implements Entity {
     /**
      * {@inheritDoc}
      */
-    public String getApplicationName() {
-        return entity.getApplicationName();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public String getTable() {
         return entity.getTable();
     }
@@ -95,160 +80,73 @@ public class JavaEntity implements Entity {
     /**
      * {@inheritDoc}
      */
-    public Map<String, Field> getFields() {
+    public List<Field> getFields() {
         if (decoratedFieldMap == null) {
-            Map<String, Field> entityFieldMap = entity.getFields();
-            if ((entityFieldMap == null) || (entityFieldMap.isEmpty())) {
-                decoratedFieldMap = Collections.<String, Field> emptyMap();
+            loadFields();
+        }
+        return decoratedFieldMap.values().stream().collect(Collectors.toList());
+    }
 
-            } else {
-                decoratedFieldMap = new HashMap<>((int) (entityFieldMap.size() * 1.25));
-                for (Field f : entityFieldMap.values()) {
-                    JavaField jField = new JavaField(f);
-                    decoratedFieldMap.put(f.getName(), jField);
-                }
+    private void loadFields() {
 
+        List<Field> entityFields = entity.getFields();
+        if ((entityFields == null) || (entityFields.isEmpty())) {
+            decoratedFieldMap = Collections.<String, Field> emptyMap();
+
+        } else {
+            decoratedFieldMap = new HashMap<>((int) (entityFields.size() * 1.25));
+            for (Field f : entityFields) {
+                JavaField jField = new JavaField(f);
+                decoratedFieldMap.put(f.getName(), jField);
             }
         }
 
-        return decoratedFieldMap;
     }
 
     /**
      * {@inheritDoc}
      */
-    public Field getField(String name) {
-        return getFields().get(name);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Map<String, Field> getIdFields() {
-        if (decoratedIdFieldMap == null) {
-            Map<String, Field> entityIdFieldMap = entity.getIdFields();
-            if ((entityIdFieldMap == null) || (entityIdFieldMap.isEmpty())) {
-                decoratedIdFieldMap = Collections.<String, Field> emptyMap();
-
-            } else {
-                decoratedIdFieldMap = new HashMap<>((int) (entityIdFieldMap.size() * 1.25));
-                for (Field f : entityIdFieldMap.values()) {
-                    decoratedIdFieldMap.put(f.getName(), new JavaField(f));
-
-                }
-
-            }
-        }
-
-        return decoratedIdFieldMap;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Field getIdField(String name) {
-        return getIdFields().get(name);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Map<String, Composite> getComposites() {
-        if (decoratedCompositeMap == null) {
-            Map<String, Composite> entityCompositeMap = entity.getComposites();
-            if ((entityCompositeMap == null) || (entityCompositeMap.isEmpty())) {
-                decoratedCompositeMap = Collections.<String, Composite> emptyMap();
-
-            } else {
-                decoratedCompositeMap = new HashMap<>((int) (entityCompositeMap.size() * 1.25));
-                for (Composite c : entityCompositeMap.values()) {
-                    decoratedCompositeMap.put(c.getName(), new JavaComposite(c));
-
-                }
-
-            }
-        }
-
-        return decoratedCompositeMap;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Composite getComposite(String name) {
-        return getComposites().get(name);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Map<String, Relation> getRelations() {
+    public List<Relation> getRelations() {
         if (decoratedRelationMap == null) {
-            Map<String, Relation> entityRelationMap = entity.getRelations();
-            if ((entityRelationMap == null) || (entityRelationMap.isEmpty())) {
-                decoratedRelationMap = Collections.<String, Relation> emptyMap();
+            loadRelations();
+        }
+        return decoratedRelationMap.values().stream().collect(Collectors.toList());
+    }
 
-            } else {
-                decoratedRelationMap = new HashMap<>((int) (entityRelationMap.size() * 1.25));
-                for (Relation r : entityRelationMap.values()) {
-                    decoratedRelationMap.put(r.getType(), new JavaRelation(r));
+    private void loadRelations() {
+        List<Relation> entityRelations = entity.getRelations();
+        if ((entityRelations == null) || (entityRelations.isEmpty())) {
+            decoratedRelationMap = Collections.<String, Relation> emptyMap();
 
-                }
+        } else {
+            decoratedRelationMap = new HashMap<>((int) (entityRelations.size() * 1.25));
+            for (Relation r : entityRelations) {
+                decoratedRelationMap.put(r.getType(), new JavaRelation(r));
 
             }
-        }
 
-        return decoratedRelationMap;
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     public Relation getRelation(String type) {
-        return getRelations().get(type);
+        return decoratedRelationMap.get(type);
     }
 
     /**
      * {@inheritDoc}
      */
-    public Map<String, Entity> getInverseRelations() {
-        if (decoratedInverseRelationMap == null) {
-            Map<String, Entity> entityInverseRelationMap = entity.getInverseRelations();
-            if ((entityInverseRelationMap == null) || (entityInverseRelationMap.isEmpty())) {
-                decoratedInverseRelationMap = Collections.<String, Entity> emptyMap();
-
-            } else {
-                decoratedInverseRelationMap = new HashMap<>((int) (entityInverseRelationMap.size() * 1.25));
-                for (Entity r : entityInverseRelationMap.values()) {
-                    decoratedInverseRelationMap.put(r.getName(), new RelatedJavaEntity(r, this));
-
-                }
-
-            }
-        }
-
-        return decoratedInverseRelationMap;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Relation getInverseRelation(String type) {
-        return (Relation) getInverseRelations().get(type);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Map<String, Reference> getReferences() {
+    public List<Reference> getReferences() {
         if (decoratedReferenceMap == null) {
-            Map<String, Reference> entityReferenceMap = entity.getReferences();
-            if ((entityReferenceMap == null) || (entityReferenceMap.isEmpty())) {
+            List<Reference> entityReferences = entity.getReferences();
+            if ((entityReferences == null) || (entityReferences.isEmpty())) {
                 decoratedReferenceMap = Collections.<String, Reference> emptyMap();
 
             } else {
-                decoratedReferenceMap = new HashMap<>((int) (entityReferenceMap.size() * 1.25));
-                for (Reference reference : entityReferenceMap.values()) {
+                decoratedReferenceMap = new HashMap<>((int) (entityReferences.size() * 1.25));
+                for (Reference reference : entityReferences) {
                     decoratedReferenceMap.put(reference.getName(), new JavaReference(reference));
 
                 }
@@ -256,14 +154,14 @@ public class JavaEntity implements Entity {
             }
         }
 
-        return decoratedReferenceMap;
+        return decoratedReferenceMap.values().stream().collect(Collectors.toList());
     }
 
     /**
      * {@inheritDoc}
      */
     public Reference getReference(String type) {
-        return getReferences().get(type);
+        return decoratedReferenceMap.get(type);
     }
 
     /**
@@ -283,7 +181,7 @@ public class JavaEntity implements Entity {
     /**
      * {@inheritDoc}
      */
-    public boolean isChildOfNonPersistentParentEntity() {
+    public Boolean isChildOfNonPersistentParentEntity() {
         return entity.isChildOfNonPersistentParentEntity();
     }
 
@@ -291,21 +189,21 @@ public class JavaEntity implements Entity {
      * {@inheritDoc}
      */
     @Override
-    public boolean isNonPersistentParentEntity() {
+    public Boolean isNonPersistentParentEntity() {
         return entity.isNonPersistentParentEntity();
     }
 
     /**
-     * Generates the appropriate super class for this entity if this entity is
-     * non-transient and not a non-persistent parent entity.
+     * Generates the appropriate super class for this entity if this entity is non-transient and not a non-persistent
+     * parent entity.
      * 
      * @return
      */
     public String getPersistentEntityParentJavaType() {
         Parent parent = getParent();
         if (parent != null) {
-            Entity parentEntity = ModelInstanceRepositoryManager.getMetadataRepostory(MetadataRepository.class)
-                    .getEntity(parent.getType());
+            Entity parentEntity = ModelInstanceRepositoryManager
+                    .getMetadataRepostory(DefaultModelInstanceRepository.class).getEntity(parent.getType());
             return parentEntity.getName() + "BO";
         } else {
             return BasePersistentSpringBO.class.getSimpleName();
@@ -315,44 +213,79 @@ public class JavaEntity implements Entity {
     /**
      * {@inheritDoc}
      */
-    public Map<String, Query> getQueries() {
-        if (decoratedQueryMap == null) {
-            Map<String, Query> entityQueryMap = entity.getQueries();
-            if ((entityQueryMap == null) || (entityQueryMap.isEmpty())) {
-                decoratedQueryMap = Collections.<String, Query> emptyMap();
-
-            } else {
-                decoratedQueryMap = new HashMap<>((int) (entityQueryMap.size() * 1.25));
-                for (Query q : entityQueryMap.values()) {
-                    decoratedQueryMap.put(q.getName(), new JavaQuery(q));
-
-                }
-
-            }
-        }
-
-        return decoratedQueryMap;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Query getQuery(String name) {
-        return getQueries().get(name);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getLockStrategy() {
+    public LockStrategy getLockStrategy() {
         return entity.getLockStrategy();
     }
 
     /**
      * {@inheritDoc}
      */
-    public boolean useOptimisticLocking() {
-        return entity.useOptimisticLocking();
+    public List<Entity> getInverseRelations() {
+        if (decoratedInverseRelationMap == null) {
+            List<Entity> entityInverseRelationMap = entity.getInverseRelations();
+            if ((entityInverseRelationMap == null) || (entityInverseRelationMap.isEmpty())) {
+                decoratedInverseRelationMap = Collections.<String, Entity> emptyMap();
+
+            } else {
+                decoratedInverseRelationMap = new HashMap<>((int) (entityInverseRelationMap.size() * 1.25));
+                for (Entity r : entityInverseRelationMap) {
+                    decoratedInverseRelationMap.put(r.getName(), new RelatedJavaEntity(r, this));
+
+                }
+
+            }
+        }
+
+        return decoratedInverseRelationMap.values().stream().collect(Collectors.toList());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Relation getInverseRelation(String type) {
+        return (Relation) decoratedInverseRelationMap.get(type);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Boolean isTransient() {
+        return entity.isTransient() != null ? entity.isTransient() : false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getFileName() {
+        return entity.getFileName();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void validate() {
+        entity.validate();
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Field getIdentifier() {
+        return entity.getIdentifier();
+    }
+
+    public Map<String, Field> getIdFields() {
+        Field idField = getIdentifier();
+        Map<String, Field> decoratedIdFieldMap = new HashMap<>();
+
+        if (idField != null) {
+            JavaField jField = new JavaField(getIdentifier());
+            decoratedIdFieldMap.put(getIdentifier().getName(), jField);
+        }
+        return decoratedIdFieldMap;
+
     }
 
     // java-specific generation methods:
@@ -403,9 +336,12 @@ public class JavaEntity implements Entity {
         Set<String> importSet = new HashSet<>();
 
         Map<String, Field> fieldCollection = new HashMap<>();
-        fieldCollection.putAll(getIdFields());
+        Field idField = getIdentifier();
+        if (idField != null) { // identifier can be null for transient entities
+            fieldCollection.put(idField.getName(), new JavaField(idField));
+        }
         if (includeNonIdFields) {
-            fieldCollection.putAll(getFields());
+            fieldCollection.putAll(decoratedFieldMap);
         }
 
         JavaField javaField;
@@ -431,7 +367,7 @@ public class JavaEntity implements Entity {
         Set<String> fkSet;
 
         JavaReference javaReference;
-        for (Reference reference : getReferences().values()) {
+        for (Reference reference : getReferences()) {
             javaReference = (JavaReference) reference;
             fkSet = javaReference.getFkImports();
             if (fkSet != null) {
@@ -447,52 +383,14 @@ public class JavaEntity implements Entity {
     }
 
     /**
-     * Returns a Java method's signature based on this instance's key fields.
-     * 
-     * @return The key signature
-     */
-    public String getKeySignature() {
-        if (keySignature == null) {
-            Map<String, Field> idFieldMap = getIdFields();
-            if (idFieldMap != null) {
-                List<Field> keyList = new ArrayList<>(idFieldMap.values());
-                keySignature = JavaElementUtils.createSignatureFields(keyList);
-
-            }
-        }
-
-        return keySignature;
-    }
-
-    /**
-     * Returns a Java signature's parameters based on this instance's key
-     * fields.
-     * 
-     * @return The key signature params
-     */
-    public String getKeySignatureParams() {
-        if (keySignatureParams == null) {
-            Map<String, Field> idFieldMap = getIdFields();
-            if (idFieldMap != null) {
-                List<Field> keyList = new ArrayList<>(idFieldMap.values());
-                keySignatureParams = JavaElementUtils.createSignatureFieldParams(keyList);
-
-            }
-        }
-
-        return keySignatureParams;
-    }
-
-    /**
-     * Returns the prefixes for all references (e.g., org.blah versus
-     * org.blah.Foo).
+     * Returns the prefixes for all references (e.g., org.blah versus org.blah.Foo).
      * 
      * @return collection of import prefixes
      */
     public Collection<String> getImportPrefixes() {
         Collection<String> prefixes = new TreeSet<>();
 
-        for (Reference reference : getReferences().values()) {
+        for (Reference reference : getReferences()) {
             JavaReference ref = (JavaReference) reference;
             prefixes.add(ref.getImportPrefix());
         }
@@ -501,40 +399,13 @@ public class JavaEntity implements Entity {
     }
 
     /**
-     * {@inheritDoc}
+     * Returns if any of the {@link JavaField}s that are modeled by this entity are named
+     * enumerations.
+     * 
+     * @return if any of this entity's fields are named enumerations.
      */
-    @Override
-    public void setTransient(boolean transientEntity) {
-        entity.setTransient(transientEntity);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean isTransient() {
-        return entity.isTransient();
-    }
-
     public boolean hasNamedEnumeration() {
-        boolean result = false;
-        Map<String, Field> fields = getFields();
-        if (!fields.isEmpty()) {
-            for (Field field : fields.values()) {
-                if (field.isEnumerationType()) {
-                    Enumeration enumeration = field.getEnumeration();
-                    if (enumeration == null) {
-                        LOG.error("Field type is most likely set incorrectly "
-                                + "or you have an entity set as a field type instead of as an "
-                                + "association or reference for: \n\tEntity: " + getName() + "\n\tField: " + field.getName());
-                    } else if (!enumeration.isValued()) {
-                        result = true;
-                        break;
-                    }
-                }
-            }
-        }
-        return result;
+        return getFields().stream().anyMatch(field -> ((JavaField) field).isNamedEnumeration());
     }
 
 }

@@ -26,6 +26,15 @@ public abstract class AbstractModelInstanceRepository implements ModelInstanceRe
     public String getBasePackage() {
         return config.getBasePackage();
 
+    }   
+
+    /**
+     * Returns the application name.
+     * 
+     * @return application name
+     */
+    public String getArtifactId() {
+      return config.getArtifactId();
     }
 
 }

@@ -14,13 +14,15 @@
     "type" : "uuid",
     "column" : "MAPPED_SUPERCLASS_CHILD_ID",
     "required" : true,
-    "generator" : "uuid"
+    "generator" : "uuid",
+    "transient" : false
   },
   "fields" : [ {
     "package" : null,
     "name" : "someValue",
     "type" : "string",
     "column" : "SOME_VALUE",
-    "documentation" : "String value specific to this subclass"
+    "documentation" : "String value specific to this subclass",
+    "transient" : false
   } ]
 }

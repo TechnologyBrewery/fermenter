@@ -1,5 +1,7 @@
 package org.bitbucket.fermenter.mda.metamodel.element;
 
+import java.util.List;
+
 /**
  * Defines the contract for an entity referencing another entity.
  */
@@ -30,5 +32,12 @@ public interface Reference extends NamespacedMetamodel {
      * @return local column name
      */
     String getLocalColumn();
+    
+    /**
+     * Gets the foreign keys associated with this reference plus all parent references
+     * @return List of foreign key fields
+     */
+    List<Field> getForeignKeyFields();
+
     
 }

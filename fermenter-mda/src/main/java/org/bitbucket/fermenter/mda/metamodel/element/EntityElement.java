@@ -2,9 +2,15 @@ package org.bitbucket.fermenter.mda.metamodel.element;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
+import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
+import org.bitbucket.fermenter.mda.metamodel.element.Parent.InheritanceStrategy;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -17,243 +23,316 @@ import com.google.common.base.MoreObjects;
 @JsonPropertyOrder({ "package", "name" })
 public class EntityElement extends NamespacedMetamodelElement implements Entity {
 
-	@JsonInclude(Include.NON_NULL)
-	protected String documentation;
+    @JsonInclude(Include.NON_NULL)
+    protected String documentation;
 
-	@JsonInclude(Include.NON_NULL)
-	protected String table;
+    @JsonInclude(Include.NON_NULL)
+    protected String table;
 
-	@JsonInclude(Include.NON_NULL)
-	protected LockStrategy lockStrategy;
+    @JsonInclude(Include.NON_NULL)
+    protected LockStrategy lockStrategy;
 
-	@JsonInclude(Include.NON_NULL)
-	@JsonProperty(value = "transient")
-	protected Boolean transientEntity;
+    @JsonInclude(Include.NON_NULL)
+    @JsonProperty(value = "transient")
+    protected Boolean transientEntity;  
 
-	@JsonInclude(Include.NON_NULL)
-	protected Parent parent;
+    @JsonInclude(Include.NON_NULL)
+    protected Parent parent;
 
-	@JsonInclude(Include.NON_NULL)
-	protected Field identifier;
+    @JsonInclude(Include.NON_NULL)
+    protected Field identifier;
 
-	@JsonInclude(Include.NON_EMPTY)
-	protected List<Field> fields = new ArrayList<>();
+    @JsonInclude(Include.NON_EMPTY)
+    protected List<Field> fields = new ArrayList<>();
 
-	@JsonInclude(Include.NON_EMPTY)
-	protected List<Reference> references = new ArrayList<>();
+    @JsonInclude(Include.NON_EMPTY)
+    protected List<Reference> references = new ArrayList<>();
 
-	@JsonInclude(Include.NON_EMPTY)
-	protected List<Relation> relations = new ArrayList<>();
+    @JsonInclude(Include.NON_EMPTY)
+    protected List<Relation> relations = new ArrayList<>();
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getDocumentation() {
-		return documentation;
-	}
+    @JsonIgnore
+    protected List<Entity> inverseRelations = new ArrayList<>();
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getTable() {
-		return table;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getDocumentation() {
+        return documentation;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public LockStrategy getLockStrategy() {
-		return lockStrategy;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getTable() {
+        return table;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	@JsonInclude(Include.NON_NULL)
-	public Boolean isTransient() {
-		return transientEntity;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public LockStrategy getLockStrategy() {
+        return lockStrategy;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Parent getParent() {
-		return parent;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @JsonInclude(Include.NON_NULL)
+    public Boolean isTransient() {
+        return transientEntity;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Field getIdentifier() {
-		return identifier;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @JsonIgnore
+    public Boolean isNonPersistentParentEntity() {
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<Field> getFields() {
-		return fields;
-	}
+        DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
+                .getMetadataRepostory(DefaultModelInstanceRepository.class);
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<Reference> getReferences() {
-		return references;
-	}
+        // TODO should we get all the entities or entities within a package
+        Set<Entity> allEntities = metadataRepository.getEntitiesByDependencyOrder();
+        for (Entity entity : allEntities) {
+            Parent parent = entity.getParent();
+            if (parent != null && getName().equals(parent.getType())
+                    && InheritanceStrategy.MAPPED_SUPERCLASS.equals(parent.getInheritanceStrategy())) {
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<Relation> getRelations() {
-		return relations;
-	}
+                return Boolean.TRUE;
+            }
+        }
+        return Boolean.FALSE;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void validate() {
-		if (StringUtils.isBlank(getName())) {
-			messageTracker.addErrorMessage("A service has been specified without a name!");
+    /**
+     * {@inheritDoc}
+     */
+    @JsonIgnore
+    public Boolean isChildOfNonPersistentParentEntity() {
+        return (getParent() == null) ? false
+                : Parent.InheritanceStrategy.MAPPED_SUPERCLASS.equals(getParent().getInheritanceStrategy());
+    }
 
-		}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Parent getParent() {
+        return parent;
+    }
 
-		if (lockStrategy == null) {
-			lockStrategy = LockStrategy.OPTIMISTIC;
-		}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Field getIdentifier() {
+        return identifier;
+    }
 
-		if (transientEntity == null) {
-			transientEntity = Boolean.FALSE;
-		}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Field> getFields() {
+        return fields;
+    }
 
-		if (parent != null) {
-			parent.validate();
-		}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Reference> getReferences() {
+        return references;
+    }
 
-		for (Field field : fields) {
-			field.validate();
-		}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Relation> getRelations() {
+        return relations;
+    }
 
-		for (Reference reference : references) {
-			reference.validate();
-		}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void validate() {
+        if (StringUtils.isBlank(getName())) {
+            messageTracker.addErrorMessage("A service has been specified without a name!");
 
-		for (Relation relation : relations) {
-			relation.validate();
-		}
+        }
 
-	}
+        if (lockStrategy == null) {
+            lockStrategy = LockStrategy.OPTIMISTIC;
+        }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getSchemaFileName() {
-		return "fermenter-2-entity-schema.json";
-	}
+        if (transientEntity == null) {
+            transientEntity = Boolean.FALSE;
+        }
 
-	/**
-	 * Sets the documentation value.
-	 * 
-	 * @param documentation documentation text
-	 */
-	public void setDocumentation(String documentation) {
-		this.documentation = documentation;
-	}
+        if (parent != null) {
+            parent.validate();
+        }
 
-	/**
-	 * Sets the table value.
-	 * 
-	 * @param table table text
-	 */
-	public void setTable(String table) {
-		this.table = table;
-	}
+        for (Field field : fields) {
+            field.validate();
+        }
 
-	/**
-	 * Sets the lock strategy for this instance.
-	 * 
-	 * @param strategy strategy
-	 */
-	public void setLockStrategy(String strategy) {
-		this.lockStrategy = LockStrategy.fromString(strategy);
+        for (Reference reference : references) {
+            reference.validate();
+        }
 
-		if (StringUtils.isNoneBlank(strategy) && this.lockStrategy == null) {
-			messageTracker.addErrorMessage("Could not map lock strategy '" + strategy
-					+ "' to one of the known lock strategy types! (" + LockStrategy.options() + ") ");
-		}
-	}
+        for (Relation relation : relations) {
+            relation.validate();
+        }
 
-	/**
-	 * Sets the transient value.
-	 * 
-	 * @param tranientEntity transient setting object
-	 */
-	public void setTransient(Boolean tranientEntity) {
-		this.transientEntity = tranientEntity;
-	}
+    }
 
-	/**
-	 * Sets the parent value.
-	 * 
-	 * @param parent parent object
-	 */
-	public void setParent(Parent parent) {
-		this.parent = parent;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getSchemaFileName() {
+        return "fermenter-2-entity-schema.json";
+    }
 
-	/**
-	 * Sets the identifier value.
-	 * 
-	 * @param identifier identifier object
-	 */
-	public void setIdentifier(Field identifier) {
-		this.identifier = identifier;
-	}
+    /**
+     * Sets the documentation value.
+     * 
+     * @param documentation
+     *            documentation text
+     */
+    public void setDocumentation(String documentation) {
+        this.documentation = documentation;
+    }
 
-	/**
-	 * Adds a field to this entity.
-	 * 
-	 * @param field field to add
-	 */
-	public void addField(Field field) {
-		fields.add(field);
-	}
+    /**
+     * Sets the table value.
+     * 
+     * @param table
+     *            table text
+     */
+    public void setTable(String table) {
+        this.table = table;
+    }
 
-	/**
-	 * Adds a reference to this entity.
-	 * 
-	 * @param reference reference to add
-	 */
-	public void addReference(Reference reference) {
-		references.add(reference);
-	}
+    /**
+     * Sets the lock strategy for this instance.
+     * 
+     * @param strategy
+     *            strategy
+     */
+    public void setLockStrategy(String strategy) {
+        this.lockStrategy = LockStrategy.fromString(strategy);
 
-	/**
-	 * Adds a relation to this entity.
-	 * 
-	 * @param relation relation to add
-	 */
-	public void addRelation(Relation relation) {
-		relations.add(relation);
-	}
+        if (StringUtils.isNoneBlank(strategy) && this.lockStrategy == null) {
+            messageTracker.addErrorMessage("Could not map lock strategy '" + strategy
+                    + "' to one of the known lock strategy types! (" + LockStrategy.options() + ") ");
+        }
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String toString() {
-		return MoreObjects.toStringHelper(this).add("package", getPackage()).add("name", name).toString();
-	}
+    /**
+     * Sets the transient value.
+     * 
+     * @param tranientEntity
+     *            transient setting object
+     */
+    public void setTransient(Boolean tranientEntity) {
+        this.transientEntity = tranientEntity;
+    }
+
+    /**
+     * Sets the parent value.
+     * 
+     * @param parent
+     *            parent object
+     */
+    public void setParent(Parent parent) {
+        this.parent = parent;
+    }
+
+    /**
+     * Sets the identifier value.
+     * 
+     * @param identifier
+     *            identifier object
+     */
+    public void setIdentifier(Field identifier) {
+        this.identifier = identifier;
+    }
+
+    /**
+     * Adds a field to this entity.
+     * 
+     * @param field
+     *            field to add
+     */
+    public void addField(Field field) {
+        fields.add(field);
+    }
+
+    /**
+     * Adds a reference to this entity.
+     * 
+     * @param reference
+     *            reference to add
+     */
+    public void addReference(Reference reference) {
+        references.add(reference);
+    }
+
+    /**
+     * Adds a relation to this entity.
+     * 
+     * @param relation
+     *            relation to add
+     */
+    public void addRelation(Relation relation) {
+        relations.add(relation);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Entity> getInverseRelations() {
+        if (inverseRelations == null) {
+            inverseRelations = new ArrayList<>();
+        }
+        return inverseRelations;
+    }
+
+
+    public void addInverseRelation(Entity reverseRelation) {
+        getInverseRelations().add(reverseRelation);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Relation getRelation(String type) {
+        for (Relation relation : getRelations()) {
+            if (relation.getType().equals(type)) {
+                return relation;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this).add("package", getPackage()).add("name", name).toString();
+    }
 
 }

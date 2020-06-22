@@ -6,5 +6,4 @@ public class AngularMaintServiceGenerator extends AbstractAngularEntityGenerator
     protected boolean generatePersistentEntitiesOnly() {
         return true;
     }
-
 }

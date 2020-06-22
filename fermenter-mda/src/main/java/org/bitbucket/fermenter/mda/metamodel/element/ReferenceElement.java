@@ -1,5 +1,14 @@
 package org.bitbucket.fermenter.mda.metamodel.element;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
+import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -19,9 +28,14 @@ public class ReferenceElement extends NamespacedMetamodelElement implements Refe
 
     @JsonInclude(Include.NON_NULL)
     protected Boolean required;
-    
+
     @JsonInclude(Include.NON_NULL)
-    protected String localColumn; 
+    protected String localColumn;
+
+    @JsonIgnore
+    private List<Field> foreignKeys;
+    @JsonIgnore
+    private Map<String, Field> fkOverrides = new HashMap<>();
 
     /**
      * {@inheritDoc}
@@ -47,23 +61,23 @@ public class ReferenceElement extends NamespacedMetamodelElement implements Refe
     public String getDocumentation() {
         return documentation;
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
     public String getLocalColumn() {
         return localColumn;
-    }    
+    }
 
     /**
      * {@inheritDoc}
      */
     @Override
     public void validate() {
-    	//TODO: validate this refers to a valid entity
+        // TODO: validate this refers to a valid entity
     }
-    
+
     /**
      * Sets the field type.
      * 
@@ -72,7 +86,7 @@ public class ReferenceElement extends NamespacedMetamodelElement implements Refe
      */
     public void setType(String type) {
         this.type = type;
-    }    
+    }
 
     /**
      * Sets the documentation value.
@@ -83,7 +97,7 @@ public class ReferenceElement extends NamespacedMetamodelElement implements Refe
     public void setDocumentation(String documentation) {
         this.documentation = documentation;
     }
-    
+
     /**
      * Sets the required value.
      * 
@@ -92,7 +106,7 @@ public class ReferenceElement extends NamespacedMetamodelElement implements Refe
      */
     public void setRequired(Boolean required) {
         this.required = required;
-    }    
+    }
 
     /**
      * Sets the local column value.
@@ -103,7 +117,7 @@ public class ReferenceElement extends NamespacedMetamodelElement implements Refe
     public void setLocalColumn(String localColumn) {
         this.localColumn = localColumn;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -112,9 +126,64 @@ public class ReferenceElement extends NamespacedMetamodelElement implements Refe
         return MoreObjects.toStringHelper(this).add("name", name).toString();
     }
 
-	@Override
-	public String getSchemaFileName() {
-		return "fermenter-2-service-schema.json";
-	}
+    @Override
+    public String getSchemaFileName() {
+        return "fermenter-2-service-schema.json";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @JsonIgnore
+    public List<Field> getForeignKeyFields() {
+        if (foreignKeys == null) {
+            foreignKeys = new ArrayList<>();
+            DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
+                    .getMetadataRepostory(DefaultModelInstanceRepository.class);
+            
+            Map<String, Entity> referenceEntities = metadataRepository.getEntities(getPackage());
+            Entity entity = referenceEntities.get(getType());
+            if (entity == null) {
+                throw new NullPointerException("Reference to '" + type + "' not found!");
+            }
+
+            Field fkidentifier = entity.getIdentifier();
+            if (fkidentifier != null) { // can be null for transient
+                if (fkOverrides.size() == 0) {
+
+                    FieldElement newId = new FieldElement();
+                    newId.setType(fkidentifier.getType());
+                    newId.setName(fkidentifier.getName());
+
+                    if (entity.isTransient() == null || !entity.isTransient()) {
+                        newId.setColumn(this.localColumn != null ? this.localColumn : fkidentifier.getColumn());
+                    }
+                    foreignKeys.add(newId);
+
+                } else {
+                    // Apply overrides
+
+                    FieldElement newId = new FieldElement();
+                    Field override = (Field) fkOverrides.get(fkidentifier.getName());
+                    newId.setType(fkidentifier.getType());
+
+                    newId.setName(override.getName());
+                    if (entity.isTransient() == null || !entity.isTransient()) {
+                        newId.setColumn(override.getColumn());
+                    }
+                    newId.setValidation(fkidentifier.getValidation());
+                    foreignKeys.add(newId);
+
+                }
+            } else {
+                if (entity.isTransient() == null || !entity.isTransient()) {
+                    throw new NullPointerException("Reference to '" + type + "' does not have a Identifier!");
+                }
+            }
+
+        }
+        return foreignKeys;
+    }
 
 }

@@ -10,6 +10,8 @@ import org.apache.commons.lang3.text.WordUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 
+import com.google.common.base.CaseFormat;
+
 /**
  * Provides common generator functionality - specifically around writing files, substituting file name variables, and
  * common VelocityContext setup.
@@ -22,6 +24,7 @@ public abstract class AbstractGenerator implements Generator {
 
     protected static final String CAPITALIZED_CAMEL_CASED_ARTIFACT_ID = "capitalizedCamelCasedArtifactId";
     protected static final String CAMEL_CASED_ARTIFACT_ID = "camelCasedArtifactId";
+    private static final String UPPER_UNDERSCORE_ARTIFACT_ID = "upperUnderscoreArtifactId";
 
     protected String metadataContext;
 
@@ -104,7 +107,7 @@ public abstract class AbstractGenerator implements Generator {
         String camelCasedArtifactId = getCamelCasedArtifactId(gc);
         vc.put(CAMEL_CASED_ARTIFACT_ID, camelCasedArtifactId);
         vc.put(CAPITALIZED_CAMEL_CASED_ARTIFACT_ID, StringUtils.capitalize(camelCasedArtifactId));
-
+        vc.put(UPPER_UNDERSCORE_ARTIFACT_ID, CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, camelCasedArtifactId));
         return vc;
 
     }

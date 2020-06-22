@@ -1,13 +1,13 @@
 {
   "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
-  "name" : "BeerExampleEntity",
-  "documentation" : "Entity to help with the Getting Started Guide",
-  "table" : "BEER_ENTITY",
+  "name" : "TransientFieldExample",
+  "documentation" : "Entity that demonstrates the use of a transient field",
+  "table" : "TRANSIENT_FIELD_ENTITY",
   "identifier" : {
     "package" : null,
     "name" : "primaryKey",
     "type" : "uuid",
-    "column" : "BEER_ENTITY_ID",
+    "column" : "TRANSIENT_FIELD_ID",
     "required" : true,
     "generator" : "uuid",
     "transient" : false
@@ -19,5 +19,12 @@
     "column" : "BEER_TYPE",
     "documentation" : "What kind of beer this is",
     "transient" : false
+  }, {
+    "package" : null,
+    "name" : "transientField",
+    "type" : "string",
+    "column" : "NONE_NEEDED",
+    "documentation" : "Testing transient field property",
+    "transient" : true
   } ]
 }

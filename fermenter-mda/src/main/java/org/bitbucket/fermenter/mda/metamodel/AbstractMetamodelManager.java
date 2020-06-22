@@ -221,7 +221,7 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
 	protected void postLoadMetamodel() {
 		if (log.isInfoEnabled()) {
 			log.info("Loaded " + completeMetadataMap.size() + " " + getMetamodelDescription() + "(s)");
-		}
+		} 
 	}
 
 	protected Map<String, T> getMetadataMap(String packageName) {
@@ -323,7 +323,7 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
 	public Map<String, T> getMetadataElementByContext(String context) {
 		Map<String, T> metamodelInstanceMap;
 		if (ModelContext.useLocalModelInstancesOnly(context)) {
-			metamodelInstanceMap = getMetadataByArtifactIdMap(repoConfiguration.getCurrentApplicationName());
+			metamodelInstanceMap = getMetadataByArtifactIdMap(repoConfiguration.getArtifactId());
 
 		} else if (ModelContext.useTargetedModelInstances(context)) {
 			metamodelInstanceMap = new HashMap<>();

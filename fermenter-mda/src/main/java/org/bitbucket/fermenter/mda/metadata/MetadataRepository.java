@@ -16,8 +16,8 @@ import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.Enumeration;
 import org.bitbucket.fermenter.mda.metadata.element.Reference;
 import org.bitbucket.fermenter.mda.metadata.element.Service;
-import org.bitbucket.fermenter.mda.metamodel.ModelInstanceUrl;
 import org.bitbucket.fermenter.mda.metamodel.ModelContext;
+import org.bitbucket.fermenter.mda.metamodel.ModelInstanceUrl;
 import org.bitbucket.fermenter.mda.metamodel.ModelRepositoryConfiguration;
 
 public class MetadataRepository extends AbstractMetadataRepository {
@@ -38,7 +38,7 @@ public class MetadataRepository extends AbstractMetadataRepository {
 
         } catch (Exception ex) {
             throw new GenerationException(
-                    "Unable to load metadata for application " + config.getCurrentApplicationName(), ex);
+                    "Unable to load metadata for application " + config.getArtifactId(), ex);
         }
 
     }
@@ -89,7 +89,7 @@ public class MetadataRepository extends AbstractMetadataRepository {
      * @return Map of entities keyed by name
      */
     public Map<String, Entity> getEntitiesByMetadataContext(String context) {
-        return getEntitiesByMetadataContext(context, config.getCurrentApplicationName(), config.getTargetModelInstances());
+        return getEntitiesByMetadataContext(context, config.getArtifactId(), config.getTargetModelInstances());
     }
 
     /**
@@ -192,7 +192,7 @@ public class MetadataRepository extends AbstractMetadataRepository {
                 // Load format information for the current project only                
                 formatManager.loadMetadata(url.getUrl());
 
-                if (config.getCurrentApplicationName().equals(url.getArtifactId())) {
+                if (config.getArtifactId().equals(url.getArtifactId())) {
                     // Messages metadata only needs to be loaded for the current project
                     MessagesMetadataManager messagesManager = MessagesMetadataManager.getInstance();
                     messagesManager.reset();
@@ -270,7 +270,7 @@ public class MetadataRepository extends AbstractMetadataRepository {
      */
     @Deprecated
     public Map<String, Service> getServicesByMetadataContext(String context) {
-        return getServicesByMetadataContext(context, config.getCurrentApplicationName(), config.getTargetModelInstances());
+        return getServicesByMetadataContext(context, config.getArtifactId(), config.getTargetModelInstances());
     }
 
     /**

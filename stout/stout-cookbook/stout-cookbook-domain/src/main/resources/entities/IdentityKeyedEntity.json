@@ -9,6 +9,7 @@
     "type" : "integer",
     "column" : "IDENTITY_KEYED_ENTITY_ID",
     "required" : true,
-    "generator" : "identity"
+    "generator" : "identity",
+    "transient" : false
   }
 }

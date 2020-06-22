@@ -207,7 +207,7 @@ public class FieldMetadata extends MetadataElement implements Field {
     protected String getDefaultProject() {
         AbstractMetadataRepository metadataRepository = ModelInstanceRepositoryManager
                 .getMetadataRepostory(MetadataRepository.class);
-        return metadataRepository.getApplicationName();
+        return metadataRepository.getArtifactId();
     }
 
     /**

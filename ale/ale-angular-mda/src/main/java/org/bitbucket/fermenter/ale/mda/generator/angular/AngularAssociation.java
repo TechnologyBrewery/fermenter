@@ -2,8 +2,9 @@ package org.bitbucket.fermenter.ale.mda.generator.angular;
 
 import java.util.Collection;
 
-import org.bitbucket.fermenter.mda.metadata.element.Reference;
-import org.bitbucket.fermenter.mda.metadata.element.Relation;
+import org.bitbucket.fermenter.mda.metamodel.element.Field;
+import org.bitbucket.fermenter.mda.metamodel.element.Reference;
+import org.bitbucket.fermenter.mda.metamodel.element.Relation;
 
 import com.google.common.base.CaseFormat;
 
@@ -27,7 +28,7 @@ public class AngularAssociation implements Relation {
         reference = referenceToDecorate;
     }
 
-    public String getTypeLowerHypen() {
+    public String getTypeLowerHyphen() {
         return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_HYPHEN, getType());
     }
 
@@ -39,16 +40,16 @@ public class AngularAssociation implements Relation {
         }
     }
 
-    public String getMultiplicity() {
+    public Multiplicity getMultiplicity() {
         if (reference != null) {
-            return "1-1";
+            return Multiplicity.ONE_TO_ONE;
         } else {
             return relation.getMultiplicity();
         }
     }
 
     @Override
-    public String getFetchMode() {
+    public FetchMode getFetchMode() {
         throw new UnsupportedOperationException();
     }
 
@@ -57,18 +58,6 @@ public class AngularAssociation implements Relation {
             return reference.getType();
         } else {
             return relation.getType();
-        }
-    }
-
-    public String getLabelLowerCamel() {
-        return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, getLabel());
-    }
-
-    public String getLabel() {
-        if (reference != null) {
-            return reference.getLabel();
-        } else {
-            return relation.getLabel();
         }
     }
 
@@ -81,8 +70,47 @@ public class AngularAssociation implements Relation {
     }
 
     @Override
-    public Collection getChildRelations() {
-        throw new UnsupportedOperationException();
+    public void validate() {
+        if (reference != null) {
+            reference.validate();
+        } else {
+            relation.validate();
+        }
+
+    }
+
+    @Override
+    public String getPackage() {
+        if (reference != null) {
+            return reference.getPackage();
+        } else {
+            return relation.getPackage();
+        }
+    }
+
+    @Override
+    public String getLocalColumn() {
+        if (reference != null) {
+            return reference.getLocalColumn();
+        } else {
+            return relation.getLocalColumn();
+        }
+    }
+
+    @Override
+    public Field getParentIdentifier(String parentEntityName) {
+        if (relation != null) {
+            return relation.getParentIdentifier(relation.getType());
+        }
+        return null;
+    }
+
+    public String getLabelLowerCamel() {
+        if (reference != null) {
+            return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, reference.getName());
+        } else {
+            return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, relation.getType());
+        }
     }
 
 }

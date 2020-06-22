@@ -240,7 +240,7 @@ public class ServiceSteps {
 
         try {
             ModelRepositoryConfiguration config = new ModelRepositoryConfiguration();
-            config.setCurrentApplicationName(FERMENTER_MDA);
+            config.setArtifactId(FERMENTER_MDA);
             config.setBasePackage(currentBasePackage);
             Map<String, ModelInstanceUrl> metadataUrlMap = config.getMetamodelInstanceLocations();
             metadataUrlMap.put(FERMENTER_MDA,

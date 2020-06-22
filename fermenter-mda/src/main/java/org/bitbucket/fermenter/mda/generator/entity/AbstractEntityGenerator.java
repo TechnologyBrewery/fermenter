@@ -7,19 +7,22 @@ import org.apache.velocity.VelocityContext;
 import org.bitbucket.fermenter.mda.generator.AbstractGenerator;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
-import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
-import org.bitbucket.fermenter.mda.metadata.element.Entity;
+import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
+import org.bitbucket.fermenter.mda.metamodel.element.Entity;
 
 /**
- * Iterates through each entity in the meta-model and enables the generation of a single file for each entity.
+ * Iterates through each entity in the meta-model and enables the generation of
+ * a single file for each entity.
  */
 public abstract class AbstractEntityGenerator extends AbstractGenerator {
 
     public void generate(GenerationContext context) throws GenerationException {
-        MetadataRepository metadataRepository = ModelInstanceRepositoryManager
-                .getMetadataRepostory(MetadataRepository.class);
-        Map<String, Entity> entityMap = metadataRepository.getEntitiesByMetadataContext(metadataContext);
+
+        DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
+                .getMetadataRepostory(DefaultModelInstanceRepository.class);
+
+        Map<String, Entity> entityMap = metadataRepository.getEntitiesByContext(metadataContext);
         Iterator<Entity> entities = entityMap.values().iterator();
 
         String fileName;
@@ -28,7 +31,9 @@ public abstract class AbstractEntityGenerator extends AbstractGenerator {
         while (entities.hasNext()) {
             Entity entity = (Entity) entities.next();
 
-            if (!generatePersistentEntitiesOnly() || (generatePersistentEntitiesOnly() && !entity.isTransient() && !entity.isNonPersistentParentEntity())) {
+            if (!generatePersistentEntitiesOnly() || (generatePersistentEntitiesOnly() && !entity.isTransient()
+            && !entity.isNonPersistentParentEntity()
+            )) {
                 VelocityContext vc = new VelocityContext();
                 populateVelocityContext(vc, entity, context);
 
@@ -56,7 +61,8 @@ public abstract class AbstractEntityGenerator extends AbstractGenerator {
     /**
      * If true, will trigger generation of persistent entities only.
      * 
-     * @return true to generate only peristent entities, false to generate persistent and transient entities
+     * @return true to generate only peristent entities, false to generate
+     *         persistent and transient entities
      */
     protected abstract boolean generatePersistentEntitiesOnly();
 

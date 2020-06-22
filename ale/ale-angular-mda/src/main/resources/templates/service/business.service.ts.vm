@@ -29,10 +29,10 @@ export class ${service.name}Service {
 
     protected constants = new Constants();
 
-    // make sure that the ${service.artifactIdUpperUnderscore}_END_POINT is
+    // make sure that the ${upperUnderscoreArtifactId}_END_POINT is
     //    defined in the constants.ts file so that we know where the rest service is located
     protected ${service.name}ServiceURL =
-      this.constants.${service.artifactIdUpperUnderscore}_END_POINT + '/${service.name}Service';
+      this.constants.${upperUnderscoreArtifactId}_END_POINT + '/${service.name}Service';
 
     constructor(
       protected http: HttpClient,

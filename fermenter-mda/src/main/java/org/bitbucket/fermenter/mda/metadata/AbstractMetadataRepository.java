@@ -22,12 +22,12 @@ public abstract class AbstractMetadataRepository implements ModelInstanceReposit
     }
 
     /**
-     * Returns the application name.
+     * Returns the project artifact Id .
      * 
-     * @return application name
+     * @return artifact Id .
      */
-    public String getApplicationName() {
-        return config.getCurrentApplicationName();
+    public String getArtifactId() {
+        return config.getArtifactId();
     }
 
 }

@@ -1,12 +1,12 @@
 {
   "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
-  "name" : "ValidationReferencedObject",
-  "table" : "VALIDATION_REF_OBJECT",
+  "name" : "LocalTransientReferenceExample",
+  "table" : "LOCAL_TRANSIENT_VALIDATION_REF_EXAMPLE",
   "identifier" : {
     "package" : null,
     "name" : "id",
     "type" : "uuid",
-    "column" : "VALIDATION_REF_OBJECT_ID",
+    "column" : "LOCAL_TRANSIENT_VALIDATION_REF_EXAMPLE_ID",
     "required" : true,
     "generator" : "uuid",
     "transient" : false
@@ -17,5 +17,11 @@
     "type" : "string",
     "column" : "SOME_DATA_FIELD",
     "transient" : false
+  } ],
+  "references" : [ {
+    "name" : "transientReference",
+    "type" : "ValidationTransientReferencedObject",
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "required" : true
   } ]
 }

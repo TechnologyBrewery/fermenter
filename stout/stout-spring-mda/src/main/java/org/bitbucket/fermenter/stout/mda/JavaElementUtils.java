@@ -8,11 +8,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.bitbucket.fermenter.mda.PackageManager;
 import org.bitbucket.fermenter.mda.metadata.AbstractMetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
-import org.bitbucket.fermenter.mda.metadata.element.Entity;
-import org.bitbucket.fermenter.mda.metadata.element.Field;
 import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
+import org.bitbucket.fermenter.mda.metamodel.element.Entity;
 import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
+import org.bitbucket.fermenter.mda.metamodel.element.Field;
 import org.bitbucket.fermenter.mda.metamodel.element.MetamodelType;
 import org.bitbucket.fermenter.mda.metamodel.element.Parameter;
 import org.bitbucket.fermenter.stout.mda.java.JavaTypeManager;
@@ -29,7 +29,7 @@ public final class JavaElementUtils {
     static final String PARAM_COLLECTION_TYPE = "List";
 
     private JavaElementUtils() {
-        // prevent instantiation of all static class        
+        // prevent instantiation of all static class
     }
 
     /**
@@ -66,23 +66,21 @@ public final class JavaElementUtils {
 
         DefaultModelInstanceRepository modelInstanceRepository = ModelInstanceRepositoryManager
                 .getMetadataRepostory(DefaultModelInstanceRepository.class);
-        
+
         String javaImportType = null;
         if (metamodelType == null) {
             javaImportType = VOID;
 
-        } else if (MetamodelType.ENTITY.equals(metamodelType)) {            
-            MetadataRepository legacyMetadataRepository = ModelInstanceRepositoryManager.getMetadataRepostory(MetadataRepository.class);
-            
+        } else if (MetamodelType.ENTITY.equals(metamodelType)) {
+
             String basePackage = modelInstanceRepository.getBasePackage();
-            Entity entity = legacyMetadataRepository.getEntity(type);
             String entityPackage = StringUtils.isBlank(packageName) ? basePackage : packageName;
             if (basePackage.equals(entityPackage) && basePackageLocal) {
                 // this is a local reference, so use the business object:
                 javaImportType = entityPackage + ".bizobj." + type + "BO";
             } else {
                 // this is a remote reference, so use the transfer object:
-                javaImportType = entity.getNamespace() + ".transfer." + type;
+                javaImportType = entityPackage + ".transfer." + type;
 
             }
 
@@ -144,8 +142,8 @@ public final class JavaElementUtils {
 
             if (javaImportType == null) {
                 // Assume it's an application entity or enumeration at this point
-                MetadataRepository metadataRepository = ModelInstanceRepositoryManager
-                        .getMetadataRepostory(MetadataRepository.class);
+                DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
+                        .getMetadataRepostory(DefaultModelInstanceRepository.class);
                 Entity e = metadataRepository.getEntity(appName, type);
                 if (e != null) {
                     javaImportType = createFullyQualifiedName(type + "BO", ".bizobj.", appName);
@@ -161,8 +159,8 @@ public final class JavaElementUtils {
                         }
                     } else {
                         e = metadataRepository.getEntity(type);
-                        if ((e != null) && (StringUtils.isNotBlank(e.getNamespace()))) {
-                            javaImportType = e.getNamespace() + ".transfer." + type;
+                        if ((e != null) && (StringUtils.isNotBlank(e.getPackage()))) {
+                            javaImportType = e.getPackage() + ".transfer." + type;
                         } else {
                             javaImportType = type;
                         }
@@ -178,12 +176,13 @@ public final class JavaElementUtils {
     static String createFullyQualifiedName(String type, String nestedPackage) {
         AbstractMetadataRepository metadataRepository = ModelInstanceRepositoryManager
                 .getMetadataRepostory(MetadataRepository.class);
-        return createFullyQualifiedName(type, nestedPackage, metadataRepository.getApplicationName());
+        return createFullyQualifiedName(type, nestedPackage, metadataRepository.getArtifactId());
     }
 
-    static String createFullyQualifiedName(String type, String nestedPackage, String applicationName) {
+    static String createFullyQualifiedName(String type, String nestedPackage, String packageName) {
         StringBuilder sb = new StringBuilder();
-        sb.append(PackageManager.getBasePackage(applicationName));
+        // sb.append(PackageManager.getBasePackage(applicationName));
+        sb.append(packageName);
         sb.append(nestedPackage).append(type);
         return sb.toString();
     }
@@ -317,11 +316,13 @@ public final class JavaElementUtils {
             for (Iterator<Field> i = fieldList.iterator(); i.hasNext();) {
                 JavaField field = (JavaField) i.next();
                 fields.append(field.getJavaType());
+
                 if ((hasFieldTypeSuffix) && (field.isEntity())) {
                     fields.append(fieldTypeSuffix);
                 }
                 fields.append(" ");
                 fields.append(field.getName());
+
                 if ((hasFieldNameSuffix) && (field.isEntity())) {
                     fields.append(fieldNameSuffix);
                 }
@@ -407,6 +408,6 @@ public final class JavaElementUtils {
      * @return whether or not to include
      */
     static boolean checkImportAgainstDefaults(String importValue) {
-        return (!importValue.startsWith("java.lang."));
+        return (importValue != null && !importValue.startsWith("java.lang."));
     }
 }

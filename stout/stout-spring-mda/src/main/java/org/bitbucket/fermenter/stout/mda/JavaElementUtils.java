@@ -408,6 +408,6 @@ public final class JavaElementUtils {
      * @return whether or not to include
      */
     static boolean checkImportAgainstDefaults(String importValue) {
-        return (!importValue.startsWith("java.lang."));
+        return (importValue != null && !importValue.startsWith("java.lang."));
     }
 }

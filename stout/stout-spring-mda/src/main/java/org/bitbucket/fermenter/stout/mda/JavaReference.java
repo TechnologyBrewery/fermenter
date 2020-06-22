@@ -122,7 +122,7 @@ public class JavaReference implements Reference {
         Map<String, Entity> referenceEntities = metadataRepository.getEntities(getPackage());
         Entity referenceEntity = referenceEntities.get(getType());
 
-        String currentPackage = referenceEntity.getPackage();
+        String currentPackage = referenceEntity != null ? referenceEntity.getPackage() : null;
         return !StringUtils.isBlank(currentPackage) && !currentPackage.equals(basePackage);
     }
 

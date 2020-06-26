@@ -3,12 +3,10 @@
   "name" : "ForeignKeyWithoutColumnDefinition",
   "table" : "FK_WITHOUT_COLUMN_DEFINITION",
   "identifier" : {
-    "package" : null,
     "name" : "id",
     "type" : "uuid",
     "column" : "FK_WITHOUT_COLUMN_DEFINITION_ID",
     "required" : true,
-    "generator" : "uuid",
-    "transient" : false
+    "generator" : "uuid"
   }
 }

@@ -3,20 +3,16 @@
   "name" : "LocalTransientReferenceExample",
   "table" : "LOCAL_TRANSIENT_VALIDATION_REF_EXAMPLE",
   "identifier" : {
-    "package" : null,
     "name" : "id",
     "type" : "uuid",
     "column" : "LOCAL_TRANSIENT_VALIDATION_REF_EXAMPLE_ID",
     "required" : true,
-    "generator" : "uuid",
-    "transient" : false
+    "generator" : "uuid"
   },
   "fields" : [ {
-    "package" : null,
     "name" : "someDataField",
     "type" : "string",
-    "column" : "SOME_DATA_FIELD",
-    "transient" : false
+    "column" : "SOME_DATA_FIELD"
   } ],
   "references" : [ {
     "name" : "transientReference",

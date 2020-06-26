@@ -1,23 +1,19 @@
 {
   "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
   "name" : "BeerExampleEntity",
-  "documentation" : "Entity to help with the Getting Started Guide",
   "table" : "BEER_ENTITY",
+  "documentation" : "Entity to help with the Getting Started Guide",
   "identifier" : {
-    "package" : null,
     "name" : "primaryKey",
     "type" : "uuid",
     "column" : "BEER_ENTITY_ID",
     "required" : true,
-    "generator" : "uuid",
-    "transient" : false
+    "generator" : "uuid"
   },
   "fields" : [ {
-    "package" : null,
     "name" : "beerType",
-    "type" : "string",
-    "column" : "BEER_TYPE",
     "documentation" : "What kind of beer this is",
-    "transient" : false
+    "type" : "string",
+    "column" : "BEER_TYPE"
   } ]
 }

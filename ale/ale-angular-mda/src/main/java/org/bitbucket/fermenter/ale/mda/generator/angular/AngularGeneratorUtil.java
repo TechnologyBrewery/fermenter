@@ -6,12 +6,14 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class AngularGeneratorUtil {
+public final class AngularGeneratorUtil {
 
     public static final String ANGULAR_SRC_FOLDER_FOR_APP = "src/app/";
     
     public static final String TYPE_NOT_FOUND = "TYPE_NOT_FOUND";
+    
     private static final Map<String, String> fermenterTypeToAngularTypeMap;
+    
     static {
         Map<String, String> map = new HashMap<>();
         map.put("date", "Date");
@@ -28,6 +30,10 @@ public class AngularGeneratorUtil {
         map.put("blob", "string");
         map.put("void", "undefined");
         fermenterTypeToAngularTypeMap = Collections.unmodifiableMap(map);
+    }
+    
+    private AngularGeneratorUtil() {
+        // private constructor to prevent instantiation of all static class
     }
 
     public static final String getAngularType(String fermenterType) {

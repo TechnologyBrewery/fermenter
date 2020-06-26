@@ -1,24 +1,20 @@
 {
   "package" : "org.bitbucket.askllc.fermenter.cookbook.referencing.domain",
   "name" : "DoubleIndirectionDomain",
-  "documentation" : "A domain that reference an external domain that in turn references another external domain",
   "table" : "DOUBLE_INDIRECTION",
+  "documentation" : "A domain that reference an external domain that in turn references another external domain",
   "identifier" : {
-    "package" : null,
     "name" : "id",
     "type" : "uuid",
     "column" : "DOUBLE_INDIRECTION_ID",
     "required" : true,
-    "generator" : "uuid",
-    "transient" : false
+    "generator" : "uuid"
   },
   "fields" : [ {
-    "package" : null,
     "name" : "name",
-    "type" : "string",
-    "column" : "NAME",
     "documentation" : "The friendly domain moniker",
-    "transient" : false
+    "type" : "string",
+    "column" : "NAME"
   } ],
   "references" : [ {
     "name" : "externalDomain",

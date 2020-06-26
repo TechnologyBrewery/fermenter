@@ -1,15 +1,13 @@
 {
   "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
   "name" : "GenerationTestEntity",
-  "documentation" : "Entity to help with some generation edge cases",
   "table" : "GEN_TEST_ENTITY",
+  "documentation" : "Entity to help with some generation edge cases",
   "identifier" : {
-    "package" : null,
     "name" : "primaryKey",
     "type" : "uuid",
     "column" : "GEN_TEST_ENTITY_ID",
     "required" : true,
-    "generator" : "identity",
-    "transient" : false
+    "generator" : "identity"
   }
 }

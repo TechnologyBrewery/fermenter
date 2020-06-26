@@ -1,7 +1,5 @@
 package org.bitbucket.fermenter.mda.metamodel.element;
 
-import java.util.Collection;
-
 import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonValue;

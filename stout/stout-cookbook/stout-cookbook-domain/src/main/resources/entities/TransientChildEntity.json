@@ -1,13 +1,11 @@
 {
   "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
   "name" : "TransientChildEntity",
+  "transient" : true,
   "documentation" : "A non-persistent child entity",
   "fields" : [ {
-    "package" : null,
     "name" : "name",
-    "type" : "string",
     "documentation" : "The friendly domain moniker",
-    "transient" : false
-  } ],
-  "transient" : true
+    "type" : "string"
+  } ]
 }

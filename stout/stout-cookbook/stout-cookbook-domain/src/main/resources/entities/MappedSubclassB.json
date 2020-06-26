@@ -1,28 +1,24 @@
 {
   "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
   "name" : "MappedSubclassB",
-  "documentation" : "Sub entity of MappedSuperclassParent demonstrating an inheritance hierarchy with a mapped superclass strategy",
   "table" : "MAPPED_SUBCLASS_B",
+  "documentation" : "Sub entity of MappedSuperclassParent demonstrating an inheritance hierarchy with a mapped superclass strategy",
   "parent" : {
     "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
     "type" : "MappedSuperclassParent",
     "inheritanceStrategy" : "mapped-superclass"
   },
   "identifier" : {
-    "package" : null,
     "name" : "id",
     "type" : "uuid",
     "column" : "CHILD_B_ID",
     "required" : true,
-    "generator" : "uuid",
-    "transient" : false
+    "generator" : "uuid"
   },
   "fields" : [ {
-    "package" : null,
     "name" : "childBType",
-    "type" : "string",
-    "column" : "CHILD_B_TYPE",
     "documentation" : "String value specific to this subclass",
-    "transient" : false
+    "type" : "string",
+    "column" : "CHILD_B_TYPE"
   } ]
 }

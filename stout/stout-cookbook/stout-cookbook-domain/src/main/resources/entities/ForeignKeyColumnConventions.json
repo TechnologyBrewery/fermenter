@@ -3,21 +3,17 @@
   "name" : "ForeignKeyColumnConventions",
   "table" : "FK_COLUMN_CONVENTIONS",
   "identifier" : {
-    "package" : null,
     "name" : "id",
     "type" : "uuid",
     "column" : "FK_COLUMN_CONVENTIONS_ID",
     "required" : true,
-    "generator" : "uuid",
-    "transient" : false
+    "generator" : "uuid"
   },
   "fields" : [ {
-    "package" : null,
     "name" : "requiredField",
     "type" : "string",
     "column" : "REQUIRED_FIELD",
-    "required" : true,
-    "transient" : false
+    "required" : true
   } ],
   "references" : [ {
     "name" : "withoutFKDef",

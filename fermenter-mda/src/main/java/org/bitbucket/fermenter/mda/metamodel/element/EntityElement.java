@@ -3,7 +3,6 @@ package org.bitbucket.fermenter.mda.metamodel.element;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
@@ -12,15 +11,16 @@ import org.bitbucket.fermenter.mda.metamodel.element.Parent.InheritanceStrategy;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.google.common.base.MoreObjects;
 
 /**
  * Represents a entity contains at least one operation.
  */
-@JsonPropertyOrder({ "package", "name" })
+@JsonPropertyOrder({ "package", "name", "transient", "table", "lockStrategy", "documentation", "parent", "identifier",
+        "fields", "references", "relations" })
 public class EntityElement extends NamespacedMetamodelElement implements Entity {
 
     @JsonInclude(Include.NON_NULL)
@@ -34,7 +34,7 @@ public class EntityElement extends NamespacedMetamodelElement implements Entity 
 
     @JsonInclude(Include.NON_NULL)
     @JsonProperty(value = "transient")
-    protected Boolean transientEntity;  
+    protected Boolean transientEntity;
 
     @JsonInclude(Include.NON_NULL)
     protected Parent parent;
@@ -97,14 +97,17 @@ public class EntityElement extends NamespacedMetamodelElement implements Entity 
         DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
                 .getMetadataRepostory(DefaultModelInstanceRepository.class);
 
-        // TODO should we get all the entities or entities within a package
-        Set<Entity> allEntities = metadataRepository.getEntitiesByDependencyOrder();
-        for (Entity entity : allEntities) {
-            Parent parent = entity.getParent();
-            if (parent != null && getName().equals(parent.getType())
-                    && InheritanceStrategy.MAPPED_SUPERCLASS.equals(parent.getInheritanceStrategy())) {
-
-                return Boolean.TRUE;
+        for (String artifactId : metadataRepository.getArtifactIds()) {
+            Map<String, Entity> allEntities = metadataRepository.getEntitiesByArtifactId(artifactId);
+            if (allEntities != null) {
+                for (Entity entity : allEntities.values()) {
+                    Parent foundParent = entity.getParent();
+                    if (foundParent != null && getName().equals(foundParent.getType())
+                            && InheritanceStrategy.MAPPED_SUPERCLASS.equals(foundParent.getInheritanceStrategy())) {
+                        // any one match is enough to know this is used as a non-persistent parent entity:
+                        return Boolean.TRUE;
+                    }
+                }
             }
         }
         return Boolean.FALSE;
@@ -115,7 +118,7 @@ public class EntityElement extends NamespacedMetamodelElement implements Entity 
      */
     @JsonIgnore
     public Boolean isChildOfNonPersistentParentEntity() {
-        return (getParent() == null) ? false
+        return (getParent() == null) ? Boolean.FALSE
                 : Parent.InheritanceStrategy.MAPPED_SUPERCLASS.equals(getParent().getInheritanceStrategy());
     }
 
@@ -308,7 +311,6 @@ public class EntityElement extends NamespacedMetamodelElement implements Entity 
         }
         return inverseRelations;
     }
-
 
     public void addInverseRelation(Entity reverseRelation) {
         getInverseRelations().add(reverseRelation);

@@ -1,31 +1,25 @@
 {
   "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
   "name" : "BusinessKeyedExample",
-  "documentation" : "Entity to help with the business key patterns that\n\t\tcoordinate with a programmatic primary key",
   "table" : "BUSINESS_KEYED_EXAMPLE",
+  "documentation" : "Entity to help with the business key patterns that\n\t\tcoordinate with a programmatic primary key",
   "identifier" : {
-    "package" : null,
     "name" : "primaryKey",
     "type" : "uuid",
     "column" : "BUSINESS_KEYED_EXAMPLE_ID",
     "required" : true,
-    "generator" : "uuid",
-    "transient" : false
+    "generator" : "uuid"
   },
   "fields" : [ {
-    "package" : null,
     "name" : "businessKey",
+    "documentation" : "A business key that is required",
     "type" : "string",
     "column" : "BUSINESS_KEY",
-    "documentation" : "A business key that is required",
-    "required" : true,
-    "transient" : false
+    "required" : true
   }, {
-    "package" : null,
     "name" : "selector",
-    "type" : "string",
-    "column" : "SELECTOR",
     "documentation" : "A field that can be used for easy find by example queries",
-    "transient" : false
+    "type" : "string",
+    "column" : "SELECTOR"
   } ]
 }

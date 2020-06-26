@@ -11,11 +11,11 @@ import com.google.common.base.MoreObjects;
 /**
  * Represents a field on an entity.
  */
-@JsonPropertyOrder({ "package", "name" })
+@JsonPropertyOrder({ "package", "name", "type", "transient" })
 public class FieldElement extends MetamodelElement implements Field {
-
+        
     @JsonInclude(Include.NON_NULL)
-    @JsonProperty(value = NamespacedMetamodelElement.PACKAGE)
+    @JsonProperty(value = NamespacedMetamodelElement.PACKAGE, required = false)
     protected String packageName;
 
     @JsonInclude(Include.NON_NULL)
@@ -38,9 +38,9 @@ public class FieldElement extends MetamodelElement implements Field {
 
     @JsonInclude(Include.NON_NULL)
     protected String defaultValue;
-
+    
     @JsonInclude(Include.NON_NULL)
-    @JsonProperty(value = "transient")
+    @JsonProperty(value = "transient", required = false)
     protected Boolean isTransient;
 
 	/**

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<!ELEMENT validators (validator*)>
-
-<!ELEMENT validator EMPTY>
-<!ATTLIST validator name CDATA #REQUIRED>
-<!ATTLIST validator class CDATA #REQUIRED>

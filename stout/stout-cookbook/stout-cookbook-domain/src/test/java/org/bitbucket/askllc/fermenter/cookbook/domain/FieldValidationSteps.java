@@ -308,7 +308,7 @@ public class FieldValidationSteps {
     public void the_regEx_Zipcode_validation_returns_no_errors() throws Throwable {
 
         MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), FieldValidationSteps.class);
-        assertFalse("Should not have encountered messages!", MessageManager.hasErrorMessages());
+        assertFalse("Should NOT have encountered messages!", MessageManager.hasErrorMessages());
         cleanUpMessages();
     }
 

@@ -1,8 +1,6 @@
 package ${basePackage}.persist;
 
-#if ( !$entity.idFields.isEmpty() )
-import ${entity.idFields.values().iterator().next().import};
-#end
+import ${entity.identifier.import};
 
 import ${basePackage}.bizobj.${entity.name}BO;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,12 +11,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * 
  * GENERATED STUB CODE - PLEASE *DO* MODIFY
  */ 
-#if ( !$entity.idFields.isEmpty() )
-  #set ($idFieldJavaType = ${entity.idFields.values().iterator().next().javaType})
-#else
-  #set ($idFieldJavaType = 'String')
-#end  
-public interface ${entity.name}Repository extends JpaRepository<${entity.name}BO, ${idFieldJavaType}>, JpaSpecificationExecutor<${entity.name}BO> {
+public interface ${entity.name}Repository extends JpaRepository<${entity.name}BO, ${entity.identifier.javaType}>, JpaSpecificationExecutor<${entity.name}BO> {
 	
 	/**
 	 * Developers should leverage this interface to define any query logic

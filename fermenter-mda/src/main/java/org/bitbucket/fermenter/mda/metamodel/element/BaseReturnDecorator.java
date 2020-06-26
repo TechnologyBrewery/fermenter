@@ -4,8 +4,8 @@ package org.bitbucket.fermenter.mda.metamodel.element;
  * Provides baseline decorator functionality for {@link Return}.
  * 
  * The goal is to make it easier to apply the decorator pattern in various implementations of generators (e.g., Java,
- * Typescript, Dart) so that each concrete decorate does only has to decorate those aspects of the class that are
- * needed, not all the pass-through methods that each decorate requires by default.
+ * Typescript, Dart) so that each concrete decorator only has to decorate those aspects of the class that are
+ * needed, not all the pass-through methods that each decorator would otherwise need to implement (that add no real value).
  */
 public class BaseReturnDecorator implements Return {
 

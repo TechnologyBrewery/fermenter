@@ -1,7 +1,7 @@
 package org.bitbucket.fermenter.mda.metamodel;
 
 /**
- * Provides common methods needed for exposing model instances
+ * Provides common methods needed for exposing model instances.
  */
 public abstract class AbstractModelInstanceRepository implements ModelInstanceRepository {
 
@@ -26,15 +26,15 @@ public abstract class AbstractModelInstanceRepository implements ModelInstanceRe
     public String getBasePackage() {
         return config.getBasePackage();
 
-    }   
+    }
 
     /**
-     * Returns the application name.
+     * Returns the artifact id.
      * 
-     * @return application name
+     * @return artifact id
      */
     public String getArtifactId() {
-      return config.getArtifactId();
+        return config.getArtifactId();
     }
 
 }

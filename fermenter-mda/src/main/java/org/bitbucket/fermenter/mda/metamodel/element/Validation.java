@@ -1,5 +1,7 @@
 package org.bitbucket.fermenter.mda.metamodel.element;
 
+import java.util.Collection;
+
 import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -32,7 +34,7 @@ public interface Validation extends NamespacedMetamodel {
 
 	Integer getScale();
 
-	String getFormat();
+	Collection<String> getFormats();
 
 	enum BaseType {
 		STRING("string"), FLOAT("float"), DATE("date"), TIMESTAMP("timestamp"), LONG("long"), DOUBLE("double"),

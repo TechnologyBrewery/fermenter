@@ -22,15 +22,7 @@ import ${basePackage}.client.config.CachePropertiesConfig;
  */
 public class ${entity.name}Cache {
 
-#if ( !$entity.idFields.isEmpty() )
-  #set ($idFieldJavaType = ${entity.idFields.values().iterator().next().javaType})
-  #set ($idField = ${entity.idFields.values().iterator().next().capitalizedName})
-#else
-  #set ($idFieldJavaType = 'String')
-  #set ($idField = 'Id')
-#end
-
-    private static Cache<$idFieldJavaType, ${entity.name}> cache;
+    private static Cache<${entity.identifier.javaType}, ${entity.name}> cache;
     private static final CachePropertiesConfig cachePropertiesConfig = KrauseningConfigFactory.create(CachePropertiesConfig.class);
 
     static {
@@ -50,14 +42,14 @@ public class ${entity.name}Cache {
 	 * @param ${entity.name.toLowerCase()}
 	 */
     public static void addToCache(${entity.name} ${entity.name.toLowerCase()}) {
-		#if ( $idFieldJavaType == 'String' )
-		String trimmedId = (${entity.name.toLowerCase()} != null) ? StringUtils.trimToNull(${entity.name.toLowerCase()}.get${idField}()) : null;
+		#if ( $entity.identifier.javaType == 'String' )
+		String trimmedId = (${entity.name.toLowerCase()} != null) ? StringUtils.trimToNull(${entity.name.toLowerCase()}.get${entity.identifier.capitalizedName}()) : null;
         if (trimmedId != null) {
             cache.put(trimmedId, ${entity.name.toLowerCase()});
         }
 		#else
-        if (${entity.name.toLowerCase()} != null && ${entity.name.toLowerCase()}.get${idField}() != null) {
-            cache.put(${entity.name.toLowerCase()}.get${idField}(), ${entity.name.toLowerCase()});
+        if (${entity.name.toLowerCase()} != null && ${entity.name.toLowerCase()}.get${entity.identifier.capitalizedName}() != null) {
+            cache.put(${entity.name.toLowerCase()}.get${entity.identifier.capitalizedName}(), ${entity.name.toLowerCase()});
         }
 		#end
     }
@@ -79,8 +71,8 @@ public class ${entity.name}Cache {
      * @param entityId
      * @return BO from cache, returns null if not available
      */
-    public static ${entity.name} getFromCache($idFieldJavaType entityId) {
-	  #if ( $idFieldJavaType == 'String' )
+    public static ${entity.name} getFromCache(${entity.identifier.javaType} entityId) {
+	  #if ( ${entity.identifier.javaType} == 'String' )
 	    String trimmedId = StringUtils.trimToNull(entityId);
 	    ${entity.name} ${entity.name.toLowerCase()} = null;
 		if (trimmedId != null) {
@@ -104,8 +96,8 @@ public class ${entity.name}Cache {
      * 
      * @param ${entity.name.toLowerCase()}Id
      */
-    public static void removeFromCache($idFieldJavaType ${entity.name.toLowerCase()}Id) {
-	  #if ( $idFieldJavaType == 'String' )
+    public static void removeFromCache(${entity.identifier.javaType} ${entity.name.toLowerCase()}Id) {
+	  #if ( ${entity.identifier.javaType} == 'String' )
         String trimmedId = StringUtils.trimToNull(${entity.name.toLowerCase()}Id);
         if (trimmedId != null){ 
 		    cache.invalidate(trimmedId);
@@ -121,14 +113,14 @@ public class ${entity.name}Cache {
      * @param ${entity.name.toLowerCase()}
      */
     public static void removeFromCache(${entity.name} ${entity.name.toLowerCase()}) {
-	  #if ( $idFieldJavaType == 'String' )
-	    String trimmedId = (${entity.name.toLowerCase()} != null) ? StringUtils.trimToNull(${entity.name.toLowerCase()}.get${idField}()) : null;
+	  #if ( ${entity.identifier.javaType} == 'String' )
+	    String trimmedId = (${entity.name.toLowerCase()} != null) ? StringUtils.trimToNull(${entity.name.toLowerCase()}.get${entity.identifier.capitalizedName}()) : null;
         if (trimmedId != null) {
             removeFromCache(trimmedId);
         }
 	  #else
-        if (${entity.name.toLowerCase()} != null && ${entity.name.toLowerCase()}.get${idField}() != null) {
-            removeFromCache(${entity.name.toLowerCase()}.get${idField}());
+        if (${entity.name.toLowerCase()} != null && ${entity.name.toLowerCase()}.get${entity.identifier.capitalizedName}() != null) {
+            removeFromCache(${entity.name.toLowerCase()}.get${entity.identifier.capitalizedName}());
         }
 	  #end
     }

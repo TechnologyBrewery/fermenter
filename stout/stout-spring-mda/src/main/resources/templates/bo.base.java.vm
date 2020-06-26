@@ -63,7 +63,6 @@ import javax.persistence.metamodel.PluralAttribute;
 
 import org.springframework.data.jpa.domain.Specification;
 import static org.springframework.data.jpa.domain.Specifications.where;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.ExampleMatcher.StringMatcher;
@@ -76,7 +75,8 @@ import org.hibernate.annotations.Type;
 
     #if (!$entity.isNonPersistentParentEntity())
 import ${basePackage}.persist.${entity.name}Repository;
-
+	#else
+import org.springframework.data.jpa.repository.JpaRepository;
     #end
 #end
 
@@ -95,11 +95,6 @@ import ${reference.importPrefix}.client.service.${reference.type}MaintenanceDele
   #end
 #end
 
-#if ( !$entity.idFields.isEmpty() )
-  #set ($idFieldJavaType = ${entity.idFields.values().iterator().next().javaType})
-#else
-  #set ($idFieldJavaType = 'String')
-#end  
 /**
  * Business object for the ${entity.name} application entity.
 #if ($entity.documentation)
@@ -120,7 +115,7 @@ public abstract class ${entity.name}BaseBO extends BaseSpringBO<${entity.name}BO
 public abstract class ${entity.name}BaseBO<PK extends Serializable, BO, JPA extends JpaRepository<BO, PK>> extends BasePersistentSpringBO<PK, BO, JPA> implements PersistentBusinessObject<PK, BO> {
 #else 
 @MappedSuperclass
-public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityParentJavaType}<${idFieldJavaType}, ${entity.name}BO, ${entity.name}Repository> implements PersistentBusinessObject<${idFieldJavaType}, ${entity.name}BO> {
+public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityParentJavaType}<${entity.identifier.javaType}, ${entity.name}BO, ${entity.name}Repository> implements PersistentBusinessObject<${entity.identifier.javaType}, ${entity.name}BO> {
 
     @Inject
     @Transient
@@ -129,22 +124,22 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
     private static boolean hasCheckedTableMismatch;
 #end
 
-#foreach ( $idField in $entity.idFields.values() )
+#if ($entity.hasIdentifier())
     #if ( !$entity.isTransient() )
     @Id
-    #if ($idField.type == 'uuid')
+    #if ($entity.identifier.type == 'uuid')
     @Type(type = "org.hibernate.type.UUIDCharType")
     #end 
-    #if ( $idField.hasGenerator() )
-        #if ( $idField.generator == 'identity')
+    #if ( $entity.identifier.hasGenerator() )
+        #if ( $entity.identifier.generator == 'identity')
     @GeneratedValue(strategy=GenerationType.IDENTITY)
         #else 
     @GeneratedValue
         #end
     #end
-    @Column(name="${idField.column}")
+    @Column(name="${entity.identifier.column}")
     #end
-    private ${idField.javaType}    ${idField.name};
+    private ${entity.identifier.javaType} ${entity.identifier.name};
 
 #end
 
@@ -182,8 +177,8 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
     @Min(${field.minValue})
         #end
     #end
-    #if ( $field.hasFormat() )
-    @Pattern(regexp=${field.patterns})
+    #if ( $field.hasFormats() )
+    ${field.patternsAsValidationString}	
     #end
     #if ($field.type == 'numeric_boolean')
     @Type(type = "org.hibernate.type.NumericBooleanType")
@@ -219,26 +214,24 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
 #end
 
 
-#if ( !$entity.idFields.isEmpty() )
-    #set ($idField = ${entity.idFields.values().iterator().next()})
+#if ( $entity.hasIdentifier() )
 
     #if ( !$entity.isTransient() )
     @Override
-    public ${idField.javaType} getKey() {
-        return ${idField.name}; 
+    public ${entity.identifier.javaType} getKey() {
+        return ${entity.identifier.name}; 
     }
 
     @Override
-    public void setKey(${idField.javaType} ${idField.name}) {
-        set${idField.capitalizedName}(${idField.name});
+    public void setKey(${entity.identifier.javaType} ${entity.identifier.name}) {
+        set${entity.identifier.capitalizedName}(${entity.identifier.name});
     }
     #end
 #end
     
 #if ( !$entity.isTransient() && !$entity.isNonPersistentParentEntity() )
     #if (!$entity.relations.isEmpty())
-        #set ($idField = ${entity.idFields.values().iterator().next()})
-    public static ${entity.name}BO findByPrimaryKey(${idFieldJavaType} key) {
+    public static ${entity.name}BO findByPrimaryKey(${entity.identifier.javaType} key) {
         ${entity.name}BO foundBO = ${entity.name}BO.findByPrimaryKey(key, false);
         if (foundBO != null) {
             foundBO.postFindByPrimaryKey();
@@ -246,7 +239,7 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
         return foundBO;
     }
 
-    public static ${entity.name}BO findByPrimaryKey(${idFieldJavaType} key, boolean eagerFetchRelations) {
+    public static ${entity.name}BO findByPrimaryKey(${entity.identifier.javaType} key, boolean eagerFetchRelations) {
         ${entity.name}BO foundBO = eagerFetchRelations ? getDefaultRepository().findOne(where(keyEquals(key)).and(eagerFetchRelations())) : getDefaultRepository().findOne(key);
         if (foundBO != null) {
             foundBO.postFindByPrimaryKey();
@@ -254,7 +247,7 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
         return foundBO;
     }
     #else
-    public static ${entity.name}BO findByPrimaryKey(${idFieldJavaType} key) {
+    public static ${entity.name}BO findByPrimaryKey(${entity.identifier.javaType} key) {
         ${entity.name}BO foundBO = getDefaultRepository().findOne(key);
         if (foundBO != null) {
             foundBO.postFindByPrimaryKey();
@@ -395,11 +388,9 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
         
         // Figure out if there is a default sort that can be used
         #set($idList ="")
-        #set($separator="")
-        #foreach ( $idField in $entity.idFields.values() )
+        #if ( $entity.hasIdentifier() )
             #if ( !$entity.isTransient() )
-                #set( $idList = $idList + $separator + '"' + "${idField.name}" + '"' )
-                #set($separator = ", ")
+                #set( $idList = '"' + "${entity.identifier.name}" + '"' )
             #end 
         #end
         
@@ -491,7 +482,7 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
 #if ( !$entity.isTransient() && !$entity.isNonPersistentParentEntity() )
     /**
      * Provide an opportunity to interact with the object after it is found, but before it is 
-     * returned by {@link ${entity.name}BO#findByPrimaryKey(${idFieldJavaType})} and other 
+     * returned by {@link ${entity.name}BO#findByPrimaryKey(${entity.identifier.javaType})} and other 
      * primary key based retrieval methods.
      */
     protected void postFindByPrimaryKey() {
@@ -512,15 +503,15 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
 
 
 #foreach ($relation in $entity.relations)
-    #if ( !$entity.isTransient() && !$relation.idFields.isEmpty() )
+    #if ( !$entity.isTransient() )
     @OneToMany(mappedBy="parent${entity.name}", cascade=CascadeType.ALL, fetch=FetchType.${relation.fetchMode.toUpperCase()}, orphanRemoval=true)
     #end
-    private Set<${relation.type}BO> ${relation.label}s;
+    private Set<${relation.type}BO> ${relation.uncapitalizedType}s;
 #end
 #foreach ($inverseRelation in $entity.inverseRelations)
     #if ( !$entity.isTransient() )
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name=#if(!$inverseRelation.idFields.isEmpty())#set($inverseRelationKey = ${inverseRelation.idFields.values().iterator().next()}) "${inverseRelationKey.column}", referencedColumnName="${inverseRelationKey.parentColumn}#else"${inverseRelation.Name}_ID#end", nullable=false)
+    @JoinColumn(name="${inverseRelation.identifier.column}", referencedColumnName="${inverseRelation.identifier.parentColumn}", nullable=false)
     #end
     private ${inverseRelation.name}BO parent${inverseRelation.name};
 #end
@@ -559,24 +550,24 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
     #end
 #end
 
-#foreach ( $idField in $entity.idFields.values())
+#if ( $entity.hasIdentifier())
 
     /**
-     * Get the ${idField.name}.
+     * Get the ${entity.identifier.name}.
      *
-     * @return The ${idField.name}
+     * @return The ${entity.identifier.name}
      */
-    protected ${idField.javaType} get${idField.capitalizedName}() {
-        return ${idField.name};
+    protected ${entity.identifier.javaType} get${entity.identifier.capitalizedName}() {
+        return ${entity.identifier.name};
     }
 
     /**
-     * Set the ${idField.name}.
+     * Set the ${entity.identifier.name}.
      *
-     * @param The ${idField.name}
+     * @param The ${entity.identifier.name}
      */
-    protected void set${idField.capitalizedName}(${idField.javaType} ${idField.name}) {
-        this.${idField.name} = ${idField.name};
+    protected void set${entity.identifier.capitalizedName}(${entity.identifier.javaType} ${entity.identifier.name}) {
+        this.${entity.identifier.name} = ${entity.identifier.name};
     }
 #end
 
@@ -682,71 +673,71 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
   #if ($relation.documentation)
      * Sets: ${relation.documentation}.
   #else
-     * Set the ${relation.label} relation.
+     * Set the ${relation.uncapitalizedType} relation.
   #end
      * 
-     * @param Set - The ${relation.label}s
+     * @param Set - The ${relation.uncapitalizedType}s
      */
-    public void set${relation.type}s(Set<${relation.type}BO> ${relation.label}s) {
-        this.${relation.label}s = ${relation.label}s;
+    public void set${relation.type}s(Set<${relation.type}BO> ${relation.uncapitalizedType}s) {
+        this.${relation.uncapitalizedType}s = ${relation.uncapitalizedType}s;
     } 
 
     /**
   #if ($relation.documentation)
      * Gets: ${relation.documentation}.
   #else
-     * Get the ${relation.label} relation.
+     * Get the ${relation.uncapitalizedType} relation.
   #end
      * 
-     * @return Set - The ${relation.label}s
+     * @return Set - The ${relation.uncapitalizedType}s
      */
     public Set<${relation.type}BO> get${relation.type}s() {
-        if( ${relation.label}s == null ) {
-            ${relation.label}s = new HashSet<${relation.type}BO>();
+        if( ${relation.uncapitalizedType}s == null ) {
+            ${relation.uncapitalizedType}s = new HashSet<${relation.type}BO>();
         }
         
-        return ${relation.label}s;
+        return ${relation.uncapitalizedType}s;
     }
      
     /**
   #if ($relation.documentation)
      * Adds: ${relation.documentation}.
   #else
-     * Add a ${relation.label}.
+     * Add a ${relation.uncapitalizedType}.
   #end
      *
-     * @param The ${relation.label} to add
+     * @param The ${relation.uncapitalizedType} to add
      */
-    public void add${relation.type}(${relation.type}BO ${relation.label}) {
+    public void add${relation.type}(${relation.type}BO ${relation.uncapitalizedType}) {
         Set<${relation.type}BO> childSet = get${relation.type}s();
         if (childSet == null) {
             childSet = new HashSet<${relation.type}BO>();
             set${relation.type}s(childSet);
         }
         
-        ${relation.label}.set${entity.name}( (${entity.name}BO) this );
-        childSet.add( ${relation.label} );
+        ${relation.uncapitalizedType}.set${entity.name}( (${entity.name}BO) this );
+        childSet.add( ${relation.uncapitalizedType} );
     }
      
     /**
   #if ($relation.documentation)
      * Removes: ${relation.documentation}.
   #else
-     * Remove a ${relation.label}.
+     * Remove a ${relation.uncapitalizedType}.
   #end
      *
-     * @param The ${relation.label} to remove
+     * @param The ${relation.uncapitalizedType} to remove
      */
-    public ${relation.type}BO remove${relation.type}(${relation.type}BO ${relation.label}) {
-        if( get${relation.type}s().remove( ${relation.label} ) ) {
-            ${relation.label}.set${entity.name}(null);
+    public ${relation.type}BO remove${relation.type}(${relation.type}BO ${relation.uncapitalizedType}) {
+        if( get${relation.type}s().remove( ${relation.uncapitalizedType} ) ) {
+            ${relation.uncapitalizedType}.set${entity.name}(null);
             
         } else {
-            getLogger().error("Could not remove ${relation.label} instance: " + ${relation.label}.toString());
+            getLogger().error("Could not remove ${relation.uncapitalizedType} instance: " + ${relation.uncapitalizedType}.toString());
             
         }
         
-        return ${relation.label};
+        return ${relation.uncapitalizedType};
     }
 #end
 #if (!$entity.relations.isEmpty() && !$entity.isTransient())
@@ -770,15 +761,15 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
     }
     
     /**
-     * Creates a {@link Specification} that filters {@link ${entity.name}BO}s that have an ${idField.name} that 
+     * Creates a {@link Specification} that filters {@link ${entity.name}BO}s that have an ${entity.identifier.name} that 
      * matches the given key. 
      */
-    protected static Specification<${entity.name}BO> keyEquals(final ${idFieldJavaType} key) {
+    protected static Specification<${entity.name}BO> keyEquals(final ${entity.identifier.javaType} key) {
         return new Specification<${entity.name}BO>() {
 
             @Override
             public Predicate toPredicate(Root<${entity.name}BO> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                return cb.equal(root.get("${idField.name}"), key);
+                return cb.equal(root.get("${entity.identifier.name}"), key);
             }
 
         };
@@ -844,9 +835,9 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
 #if( !$entity.relations.isEmpty() )
         //call field validation on children:
   #foreach ($relation in $entity.relations)
-        Set<${relation.type}BO> ${relation.label}Set = get${relation.type}s();
-        if (${relation.label}Set != null && !${relation.label}Set.isEmpty()) {
-            for (${relation.type}BO child : ${relation.label}Set) {
+        Set<${relation.type}BO> ${relation.uncapitalizedType}Set = get${relation.type}s();
+        if (${relation.uncapitalizedType}Set != null && !${relation.uncapitalizedType}Set.isEmpty()) {
+            for (${relation.type}BO child : ${relation.uncapitalizedType}Set) {
                 child.validateFields();
             }
         }
@@ -878,9 +869,9 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
 #if( !$entity.relations.isEmpty() )
         //call complex validation on children:
   #foreach ($relation in $entity.relations)
-        Set<${relation.type}BO> ${relation.label}Set = get${relation.type}s();
-        if (${relation.label}Set != null && !${relation.label}Set.isEmpty()) {
-            for (${relation.type}BO child : ${relation.label}Set) {
+        Set<${relation.type}BO> ${relation.uncapitalizedType}Set = get${relation.type}s();
+        if (${relation.uncapitalizedType}Set != null && !${relation.uncapitalizedType}Set.isEmpty()) {
+            for (${relation.type}BO child : ${relation.uncapitalizedType}Set) {
                 child.complexValidation();
             }
         }

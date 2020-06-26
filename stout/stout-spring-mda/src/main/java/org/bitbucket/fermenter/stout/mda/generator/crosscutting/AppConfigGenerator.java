@@ -24,11 +24,11 @@ public class AppConfigGenerator extends AbstractGenerator {
     public void generate(GenerationContext context) {
         // only generate those concepts that are part of the targeted generation run (vice all model instances):
         DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
-                .getMetadataRepostory(DefaultModelInstanceRepository.class);
+                .getMetamodelRepository(DefaultModelInstanceRepository.class);
         Map<String, Service> services = metadataRepository.getServicesByContext(metadataContext);        
         
         DefaultModelInstanceRepository metamodelRepository = ModelInstanceRepositoryManager
-                .getMetadataRepostory(DefaultModelInstanceRepository.class);
+                .getMetamodelRepository(DefaultModelInstanceRepository.class);
 
         Map<String, Entity> entities = metamodelRepository.getEntitiesByContext(metadataContext);
         

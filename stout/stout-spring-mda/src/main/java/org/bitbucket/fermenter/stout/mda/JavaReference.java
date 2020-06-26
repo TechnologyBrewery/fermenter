@@ -1,185 +1,120 @@
 package org.bitbucket.fermenter.stout.mda;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.commons.lang3.StringUtils;
 import org.bitbucket.fermenter.mda.PackageManager;
 import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
+import org.bitbucket.fermenter.mda.metamodel.element.BaseReferenceDecorator;
 import org.bitbucket.fermenter.mda.metamodel.element.Entity;
 import org.bitbucket.fermenter.mda.metamodel.element.Field;
 import org.bitbucket.fermenter.mda.metamodel.element.Reference;
 
-public class JavaReference implements Reference {
+/**
+ * Decorates a {@link Reference} with convenience methods for Java code
+ * generation.
+ */
+public class JavaReference extends BaseReferenceDecorator implements Reference, JavaNamedElement {
 
-    private Reference reference;
-    private List<Field> decoratedForeignKeyFieldList;
+	private DefaultModelInstanceRepository modelInstanceRepository = ModelInstanceRepositoryManager
+			.getMetamodelRepository(DefaultModelInstanceRepository.class);
 
-    /**
-     * Create a new instance of <tt>Reference</tt> with the correct functionality set to generate Java code
-     * 
-     * @param referenceToDecorate
-     *            The <tt>Reference</tt> to decorate
-     */
-    public JavaReference(Reference referenceToDecorate) {
-        if (referenceToDecorate == null) {
-            throw new IllegalArgumentException("JavaReferences must be instatiated with a non-null reference!");
-        }
-        reference = referenceToDecorate;
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	public JavaReference(Reference wrapped) {
+		super(wrapped);
+	}
 
-    public String getType() {
-        return reference.getType();
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	public List<Field> getForeignKeyFields() {
+		List<Field> wrappedFields = new ArrayList<>();
+		for (Field foreignKeyField : wrapped.getForeignKeyFields()) {
+			Field wrappedForeignKeyField = new JavaField(foreignKeyField);
+			wrappedFields.add(wrappedForeignKeyField);
+		}
 
-    public String getName() {
-        return reference.getName();
-    }
+		return wrappedFields;
+	}
 
-    public String getDocumentation() {
-        return reference.getDocumentation();
-    }
+	public String getImport() {
+		if (isExternal()) {
+			return JavaElementUtils.getJavaImportByPackageAndType(getPackage(), getType(), false);
+		} else {
+			return JavaElementUtils.getJavaImportByPackageAndType("", getType());
+		}
+	}
 
-    public String getCapitalizedName() {
-        return StringUtils.capitalize(reference.getName());
-    }
+	public boolean isExternal() {
+		String currentProject = modelInstanceRepository.getArtifactId();
+		String basePackage = PackageManager.getBasePackage(currentProject);
+		Map<String, Entity> referenceEntities = modelInstanceRepository.getEntities(getPackage());
+		Entity referenceEntity = referenceEntities.get(getType());
 
-    public Boolean isRequired() {
-        return reference.isRequired();
-    }
+		String currentPackage = referenceEntity != null ? referenceEntity.getPackage() : null;
+		return !StringUtils.isBlank(currentPackage) && !currentPackage.equals(basePackage);
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    public String getPackage() {
-        return reference.getPackage();
-    }
+	public String getImportPrefix() {
+		Map<String, Entity> referenceEntities = modelInstanceRepository.getEntities(getPackage());
+		Entity referenceEntity = referenceEntities.get(getType());
+		String currentPackage = referenceEntity.getPackage();
+		return StringUtils.isBlank(currentPackage) ? PackageManager.getBasePackage(modelInstanceRepository.getArtifactId())
+				: currentPackage;
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    public String getFileName() {
-        return reference.getFileName();
-    }
+	/**
+	 * Returns the Java imports needed for foreign keys.
+	 * 
+	 * @return imports
+	 */
+	public Set<String> getForeignKeyImports() {
+		Set<String> importSet = new TreeSet<>();
 
-    /**
-     * {@inheritDoc}
-     */
-    public void validate() {
-        reference.validate();
-    }
+		if (isExternal()) {
+			for (Field foreignKeyField : getForeignKeyFields()) {
+				JavaField javaForeignKeyField = (JavaField) foreignKeyField;
+				importSet.add(javaForeignKeyField.getImport());
+			}
+		}
 
-    /**
-     * {@inheritDoc}
-     */
-    public String getLocalColumn() {
-        return reference.getLocalColumn();
-    }
+		return importSet;
+	}
 
-    public String getUncapitalizedType() {
-        return StringUtils.uncapitalize(getType());
-    }
+	/**
+	 * Returns the condition block for checking if foreign keys exist.
+	 * 
+	 * @return condition block
+	 */
+	public String getForeignKeyCondition() {
+		String condition = null;
+		if (!isExternal()) {
 
-    public List<Field> getForeignKeyFields() {
-        if (decoratedForeignKeyFieldList == null) {
-            List<Field> referenceForeignKeyFieldList = reference.getForeignKeyFields();
-            if ((referenceForeignKeyFieldList == null) || (referenceForeignKeyFieldList.size() == 0)) {
-                decoratedForeignKeyFieldList = Collections.emptyList();
+			StringBuilder sb = new StringBuilder();
+			Iterator<Field> foreignKeyFieldIterator = getForeignKeyFields().iterator();
+			while (foreignKeyFieldIterator.hasNext()) {
+				JavaField javaForeignKeyField = (JavaField) foreignKeyFieldIterator.next();
+				sb.append("get");
+				sb.append(getCapitalizedName());
+				sb.append(javaForeignKeyField.getCapitalizedName());
+				sb.append("() == null");
+				if (foreignKeyFieldIterator.hasNext()) {
+					sb.append(" && ");
+				}
+			}
 
-            } else {
-                Field f;
-                decoratedForeignKeyFieldList = new ArrayList<>((int) (referenceForeignKeyFieldList.size()));
-                Iterator<Field> i = referenceForeignKeyFieldList.iterator();
-                while (i.hasNext()) {
-                    f = (Field) i.next();
-                    decoratedForeignKeyFieldList.add(new JavaField(f));
-                }
-            }
-        }
+			condition = sb.toString();
+		}
 
-        return decoratedForeignKeyFieldList;
-    }
-
-    public String getImport() {
-        if (isExternal()) {
-            return JavaElementUtils.getJavaImportByPackageAndType(getPackage(), getType(), false);
-        } else {
-            return JavaElementUtils.getJavaImportByPackageAndType("", getType());
-        }
-    }
-
-    public boolean isExternal() {
-        DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
-                .getMetadataRepostory(DefaultModelInstanceRepository.class);
-        String currentProject = metadataRepository.getArtifactId();
-        String basePackage = PackageManager.getBasePackage(currentProject);
-        Map<String, Entity> referenceEntities = metadataRepository.getEntities(getPackage());
-        Entity referenceEntity = referenceEntities.get(getType());
-
-        String currentPackage = referenceEntity != null ? referenceEntity.getPackage() : null;
-        return !StringUtils.isBlank(currentPackage) && !currentPackage.equals(basePackage);
-    }
-
-    public String getImportPrefix() {
-        DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
-                .getMetadataRepostory(DefaultModelInstanceRepository.class);
-
-        Map<String, Entity> referenceEntities = metadataRepository.getEntities(getPackage());
-        Entity referenceEntity = referenceEntities.get(getType());
-        String currentPackage = referenceEntity.getPackage();
-        return StringUtils.isBlank(currentPackage)
-                ? PackageManager.getBasePackage(metadataRepository.getArtifactId())
-                : currentPackage;
-    }
-
-    /**
-     * 
-     * 
-     * @return
-     */
-    public Set getFkImports() {
-        Set importSet = new HashSet();
-
-        if (!isExternal()) {
-            return importSet;
-        }
-
-        JavaField fk;
-        Iterator fks = getForeignKeyFields().iterator();
-        while (fks.hasNext()) {
-            fk = (JavaField) fks.next();
-            importSet.add(fk.getImport());
-        }
-
-        return importSet;
-    }
-
-    public String getFkCondition() {
-        if (!isExternal()) {
-            return null;
-        }
-
-        StringBuffer sb = new StringBuffer(100);
-        JavaField fk;
-        Iterator fks = getForeignKeyFields().iterator();
-        while (fks.hasNext()) {
-            fk = (JavaField) fks.next();
-            sb.append("get");
-            sb.append(getCapitalizedName());
-            sb.append(fk.getCapitalizedName());
-            sb.append("() == null");
-            if (fks.hasNext()) {
-                sb.append("&&");
-            }
-        }
-
-        return sb.toString();
-    }
+		return condition;
+	}
 
 }

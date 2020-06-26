@@ -20,7 +20,7 @@ public abstract class AbstractEntityGenerator extends AbstractGenerator {
     public void generate(GenerationContext context) throws GenerationException {
 
         DefaultModelInstanceRepository metamodelRepository = ModelInstanceRepositoryManager
-                .getMetadataRepostory(DefaultModelInstanceRepository.class);
+                .getMetamodelRepository(DefaultModelInstanceRepository.class);
 
         Map<String, Entity> entityMap = metamodelRepository.getEntitiesByContext(metadataContext);
         Iterator<Entity> entities = entityMap.values().iterator();

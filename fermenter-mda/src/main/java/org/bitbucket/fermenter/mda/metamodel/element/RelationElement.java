@@ -182,7 +182,7 @@ public class RelationElement implements Relation {
     @Override
     public Field getParentIdentifier(String parentEntityName) {
         DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
-                .getMetadataRepostory(DefaultModelInstanceRepository.class);
+                .getMetamodelRepository(DefaultModelInstanceRepository.class);
         Map<String, Entity> entities = metadataRepository.getEntities(getPackage());
         Entity parentEntity = entities.get(parentEntityName);
 

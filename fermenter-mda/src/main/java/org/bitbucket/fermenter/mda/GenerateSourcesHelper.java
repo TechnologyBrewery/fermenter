@@ -15,7 +15,6 @@ import org.bitbucket.fermenter.mda.element.ExpandedProfile;
 import org.bitbucket.fermenter.mda.element.Profile;
 import org.bitbucket.fermenter.mda.element.Target;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
-import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 import org.bitbucket.fermenter.mda.metamodel.ModelRepositoryConfiguration;
@@ -44,12 +43,12 @@ public final class GenerateSourcesHelper {
     /**
      * Enables the delegation of logging to build tool specific mechanisms.
      */
-    public static abstract class LoggerDelegate {
-        public static enum LogLevel {
+    public interface LoggerDelegate {
+        public enum LogLevel {
             TRACE, DEBUG, INFO, WARN, ERROR
         }
 
-        abstract public void log(LogLevel level, String message);
+        void log(LogLevel level, String message);
     }
 
     /**
@@ -104,63 +103,6 @@ public final class GenerateSourcesHelper {
 
     /**
      * Loads all metamodels defined by the given
-     * {@link ModelRepositoryConfiguration} using the legacy repository
-     * implementation. <b>NOTE:</b> This method will eventually be deprecated
-     * and removed.
-     * 
-     * @param config
-     *            configures the {@link ModelInstanceRepository} that will be
-     *            used to load metamodels.
-     * @param logger
-     *            build tool specific logging implementation to which logging
-     *            will be delegated.
-     * @return {@link ModelInstanceRepository} of the specified type which has
-     *         been loaded with all configured metamodels. <b>NOTE:</b>
-     *         Metamodels have <b>*not*</b> yet been validated.
-     * @throws ClassNotFoundException
-     * @throws NoSuchMethodException
-     * @throws InstantiationException
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException
-     */
-    public static ModelInstanceRepository loadLegacyMetadataRepository(ModelRepositoryConfiguration config,
-            LoggerDelegate logger) throws ClassNotFoundException, NoSuchMethodException, InstantiationException,
-            IllegalAccessException, InvocationTargetException {
-        return loadMetadataRepository(config, true, MetadataRepository.class.getCanonicalName(), logger);
-    }
-
-    /**
-     * Loads all metamodels defined by the given
-     * {@link ModelRepositoryConfiguration} using the specified repository
-     * implementation.
-     * 
-     * @param config
-     *            configures the {@link ModelInstanceRepository} that will be
-     *            used to load metamodels.
-     * @param modelInstanceRepositoryImplClazz
-     *            fully qualified class name of the desired
-     *            {@link ModelInstanceRepository} to use to load metamodels
-     *            specified by the given {@link ModelRepositoryConfiguration}.
-     * @param logger
-     *            build tool specific logging implementation to which logging
-     *            will be delegated.
-     * @return {@link ModelInstanceRepository} of the specified type which has
-     *         been loaded with all configured metamodels. <b>NOTE:</b>
-     *         Metamodels have <b>*not*</b> yet been validated.
-     * @throws ClassNotFoundException
-     * @throws NoSuchMethodException
-     * @throws InstantiationException
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException
-     */
-    public static ModelInstanceRepository loadMetadataRepository(ModelRepositoryConfiguration config,
-            String modelInstanceRepositoryImplClazz, LoggerDelegate logger) throws ClassNotFoundException,
-            NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        return loadMetadataRepository(config, false, modelInstanceRepositoryImplClazz, logger);
-    }
-
-    /**
-     * Loads all metamodels defined by the given
      * {@link ModelRepositoryConfiguration} using the specified repository
      * implementation class. If any errors have been collected by the
      * {@link MessageTracker}, a {@link GenerationException} will be thrown.
@@ -168,11 +110,6 @@ public final class GenerateSourcesHelper {
      * @param config
      *            configures the {@link ModelInstanceRepository} that will be
      *            used to load metamodels.
-     * @param isLegacy
-     *            indicates whether the specified
-     *            {@link ModelInstanceRepository} is the legacy metamodel
-     *            loading mechanism; this parameter will be eventually
-     *            deprecated.
      * @param modelInstanceRepositoryImplClazz
      *            fully qualified class name of the desired
      *            {@link ModelInstanceRepository} to use to load metamodels
@@ -189,15 +126,13 @@ public final class GenerateSourcesHelper {
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
-    private static ModelInstanceRepository loadMetadataRepository(ModelRepositoryConfiguration config, boolean isLegacy,
+    public static ModelInstanceRepository loadMetamodelRepository(ModelRepositoryConfiguration config,
             String modelInstanceRepositoryImplClazz, LoggerDelegate logger) throws ClassNotFoundException,
             NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
 
-        String legacyIndicator = isLegacy ? "**LEGACY** " : "";
-
         long start = System.currentTimeMillis();
-        logger.log(LogLevel.INFO, String.format("START: loading %s metadata repository implementation: %s ...",
-                legacyIndicator, modelInstanceRepositoryImplClazz));
+        logger.log(LogLevel.INFO, String.format("START: loading metamodel repository implementation: %s ...",
+                modelInstanceRepositoryImplClazz));
 
         ModelInstanceRepository repository;
         Class<?> repoImplClass = Class.forName(modelInstanceRepositoryImplClazz);
@@ -209,11 +144,6 @@ public final class GenerateSourcesHelper {
         ModelInstanceRepositoryManager.setRepository(repository);
         repository.load();
 
-        // TODO: move validation back here once the legacy repo is retired.
-        // Until then, this can only happen once metadata across both
-        // repositories is available:
-        // repository.validate(props);
-
         MessageTracker.getInstance().emitMessages(logger);
         if (MessageTracker.getInstance().hasErrors()) {
             throw new GenerationException("Errors encountered!");
@@ -221,7 +151,7 @@ public final class GenerateSourcesHelper {
 
         long stop = System.currentTimeMillis();
         logger.log(LogLevel.INFO,
-                String.format("COMPLETE: %s metadata repository loading in %d ms", legacyIndicator, (stop - start)));
+                String.format("COMPLETE: metamodel repository loading in %d ms", (stop - start)));
 
         return repository;
     }

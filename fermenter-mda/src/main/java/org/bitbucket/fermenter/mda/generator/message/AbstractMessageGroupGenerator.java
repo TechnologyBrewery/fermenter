@@ -21,7 +21,7 @@ public abstract class AbstractMessageGroupGenerator extends AbstractGenerator {
 	@Override
 	public void generate(GenerationContext context) {
 		DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
-				.getMetadataRepostory(DefaultModelInstanceRepository.class);
+				.getMetamodelRepository(DefaultModelInstanceRepository.class);
 
 		Map<String, MessageGroup> messageGroups = metadataRepository.getMessageGroupsByContext(metadataContext);
 

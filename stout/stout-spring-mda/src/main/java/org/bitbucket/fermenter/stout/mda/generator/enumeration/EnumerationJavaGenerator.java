@@ -15,7 +15,7 @@ public class EnumerationJavaGenerator extends AbstractGenerator {
 
     public void generate(GenerationContext context) {
         DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
-                .getMetadataRepostory(DefaultModelInstanceRepository.class);
+                .getMetamodelRepository(DefaultModelInstanceRepository.class);
         Map<String, Enumeration> enumerations = metadataRepository.getEnumerations(metadataRepository.getBasePackage());
 
         JavaEnumeration javaEnumeration;

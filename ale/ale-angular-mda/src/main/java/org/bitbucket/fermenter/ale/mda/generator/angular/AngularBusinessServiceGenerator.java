@@ -14,7 +14,7 @@ public class AngularBusinessServiceGenerator extends AbstractServiceGenerator {
     @Override
     public void generate(GenerationContext context) {
         DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
-                .getMetadataRepostory(DefaultModelInstanceRepository.class);
+                .getMetamodelRepository(DefaultModelInstanceRepository.class);
 
         String baseFileName = context.getOutputFile();
 

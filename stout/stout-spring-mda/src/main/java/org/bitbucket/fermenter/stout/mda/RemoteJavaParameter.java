@@ -3,11 +3,11 @@ package org.bitbucket.fermenter.stout.mda;
 import org.bitbucket.fermenter.mda.metamodel.element.Parameter;
 
 /**
- * Decorates a {@link Parameter} with Java-specific capabilities that focus on treating the operation as a *remote*
- * Java class. For instance, one that references TransferObjects instead of BusinessObjects.
+ * Decorates a {@link Parameter} with Java-specific capabilities that focus on treating the operation as a *remote* Java
+ * class. For instance, one that references TransferObjects instead of BusinessObjects.
  */
 public class RemoteJavaParameter extends JavaParameter {
-    
+
     public RemoteJavaParameter(Parameter parameterToDecorate) {
         super(parameterToDecorate);
     }
@@ -18,7 +18,7 @@ public class RemoteJavaParameter extends JavaParameter {
     @Override
     public String getImport() {
         return JavaElementUtils.getJavaImportByPackageAndType(getPackage(), getType(), false);
-        
+
     }
 
 }

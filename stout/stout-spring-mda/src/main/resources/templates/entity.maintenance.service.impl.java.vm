@@ -51,14 +51,6 @@ import ${basePackage}.service.rest.${entity.name}MaintenanceService;
 @Service 
 public class ${entity.name}MaintenanceServiceImpl extends AbstractEntityMaintenanceService implements ${entity.name}MaintenanceService {
 
-#if ( !$entity.idFields.isEmpty() )
-  #set ($idFieldJavaType = ${entity.idFields.values().iterator().next().javaType})
-  #set ($idFieldName = ${entity.idFields.values().iterator().next().name})
-#else
-  #set ($idFieldJavaType = 'String')
-  #set ($idFieldName = 'id')
-#end  
-
 	private static final Logger logger = LoggerFactory.getLogger(${entity.name}MaintenanceServiceImpl.class);
 		
 	@Inject
@@ -72,8 +64,8 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractEntityMaintena
 	 */
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
-	public ValueServiceResponse<${entity.name}BO> saveOrUpdate(${idFieldJavaType} ${idFieldName}, ${entity.name}BO entity) {
-		entity.setKey($idFieldName);
+	public ValueServiceResponse<${entity.name}BO> saveOrUpdate(${entity.identifier.javaType} ${entity.identifier.name}, ${entity.name}BO entity) {
+		entity.setKey($entity.identifier.name);
 		return saveOrUpdate(entity);
 	}
 	
@@ -108,21 +100,21 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractEntityMaintena
 	 */
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
-	public VoidServiceResponse delete(${idFieldJavaType} ${idFieldName}) {
+	public VoidServiceResponse delete(${entity.identifier.javaType} ${entity.identifier.name}) {
 		messageManagerAwareService.initializeMessageManager(messages);
 		assertAuthorization(PATH, Action.DELETE);
-		VoidServiceResponse response = performDelete(${idFieldName});
+		VoidServiceResponse response = performDelete(${entity.identifier.name});
 		MessageManager.logMessages(logger, this.getClass());
 		return response;
 	}
 	
-	private VoidServiceResponse performDelete(${idFieldJavaType} ${idFieldName}) {
-		${entity.name}BO entityToDelete = ${entity.name}BO.findByPrimaryKey(${idFieldName});
+	private VoidServiceResponse performDelete(${entity.identifier.javaType} ${entity.identifier.name}) {
+		${entity.name}BO entityToDelete = ${entity.name}BO.findByPrimaryKey(${entity.identifier.name});
 		if (entityToDelete != null) {
 			entityToDelete.delete();
 			
 		} else {
-		    addInvalidKeyErrorMessage(${idFieldName});
+		    addInvalidKeyErrorMessage(${entity.identifier.name});
 			
 		}
 		
@@ -136,17 +128,17 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractEntityMaintena
 	 */
 	@Transactional(propagation=Propagation.SUPPORTS)
 	@Override
-	public ValueServiceResponse<${entity.name}BO> findByPrimaryKey(${idFieldJavaType} ${idFieldName}) {
+	public ValueServiceResponse<${entity.name}BO> findByPrimaryKey(${entity.identifier.javaType} ${entity.identifier.name}) {
 		messageManagerAwareService.initializeMessageManager(messages);
 		assertAuthorization(PATH, Action.RETRIEVE);
 		${entity.name}BO retrievedEntity = null;
-		if (${idFieldName} == null) {
+		if (${entity.identifier.name} == null) {
 			addInvalidKeyErrorMessage("null");
 		    
 		} else {
-			retrievedEntity = ${entity.name}BO.findByPrimaryKey(${idFieldName} #if (!$entity.relations.isEmpty()), true#end);
+			retrievedEntity = ${entity.name}BO.findByPrimaryKey(${entity.identifier.name} #if (!$entity.relations.isEmpty()), true#end);
 			if (retrievedEntity == null && shouldCreateMessageOnNonexistentFindByPrimaryKey) {
-				addInvalidKeyErrorMessage(${idFieldName});
+				addInvalidKeyErrorMessage(${entity.identifier.name});
 
 			}
 		}
@@ -303,13 +295,13 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractEntityMaintena
         VoidServiceResponse responses = new VoidServiceResponse();
         String keyList = null;
         
-        Set<${idFieldJavaType}> keySet = new HashSet<>();        
+        Set<${entity.identifier.javaType}> keySet = new HashSet<>();        
         for (${entity.name}BO entity : entities) {
             keySet.add(entity.getKey());
         }
         
         
-        for (${idFieldJavaType} key : keySet) {
+        for (${entity.identifier.javaType} key : keySet) {
             VoidServiceResponse response = performDelete(key);
             if (response.getMessages().hasErrors()) {
                 keyList = addToFailedKeys(keyList, key);
@@ -331,7 +323,7 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractEntityMaintena
         return responses;
     } 
     
-    private String addToFailedKeys(String keyList, ${idFieldJavaType} key) {
+    private String addToFailedKeys(String keyList, ${entity.identifier.javaType} key) {
         if (keyList != null) {
             keyList += ", ";
         }

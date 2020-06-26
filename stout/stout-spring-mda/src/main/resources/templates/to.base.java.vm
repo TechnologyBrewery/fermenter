@@ -44,8 +44,8 @@ public abstract class ${entity.name}Base extends ${entity.getParent().getType()}
 public class ${entity.name}Base implements TransferObject {
 #end
 
-#foreach ( $idField in $entity.idFields )
-	private ${idField.javaType} ${idField.name};
+#if ($entity.hasIdentifier())
+	private ${entity.identifier.javaType} ${entity.identifier.name};
 #end
 #if ($useOptimisticLocking)	 
 	private Integer oplock;
@@ -56,7 +56,7 @@ public class ${entity.name}Base implements TransferObject {
 #foreach ($relation in $entity.relations)
 	@JsonManagedReference(value="${entity.name}-${relation.type}")
 	@JsonInclude(JsonInclude.Include.NON_EMPTY)
-	private Set<${relation.type}> ${relation.label}s;
+	private Set<${relation.type}> ${relation.uncapitalizedType}s;
 #end
 #foreach ($inverseRelation in $entity.inverseRelations)
 	@JsonBackReference(value="${inverseRelation.name}-${entity.name}")
@@ -66,25 +66,25 @@ public class ${entity.name}Base implements TransferObject {
 	private ${reference.type} ${reference.name};
 #end
 
-#foreach ( $idField in $entity.idFields )
+#if ( $entity.hasIdentifier() )
 
 	/**
-	 * Get the ${idField.name}
+	 * Get the ${entity.identifier.name}
 	 *
-	 * @return The ${idField.name}
+	 * @return The ${entity.identifier.name}
 	 */
-	@JsonProperty("${idField.name}")
-	public ${idField.javaType} get${idField.capitalizedName}() {
-		return ${idField.name};
+	@JsonProperty("${entity.identifier.name}")
+	public ${entity.identifier.javaType} get${entity.identifier.capitalizedName}() {
+		return ${entity.identifier.name};
 	}
 	
 	/**
-	 * Set the ${idField.name}
+	 * Set the ${entity.identifier.name}
 	 *
-	 * @param ${idField.type} The ${idField.name}
+	 * @param ${entity.identifier.name} The ${entity.identifier.name}
 	 */
-	public void set${idField.capitalizedName}(${idField.javaType} ${idField.name}) {
-		this.${idField.name} = ${idField.name};
+	public void set${entity.identifier.capitalizedName}(${entity.identifier.javaType} ${entity.identifier.name}) {
+		this.${entity.identifier.name} = ${entity.identifier.name};
 	}
 	
 #end
@@ -163,65 +163,65 @@ public class ${entity.name}Base implements TransferObject {
 #if ($relation.documentation)
 	 * Sets: ${relation.documentation}
 #else
-	 * Set the ${relation.label} relation.
+	 * Set the ${relation.uncapitalizedType} relation.
 #end
 	 * 
-	 * @param Set - The ${relation.label}s
+	 * @param Set - The ${relation.uncapitalizedType}s
 	 */
-	public void set${relation.type}s(Set<${relation.type}> ${relation.label}s) {
-		this.${relation.label}s = ${relation.label}s;
+	public void set${relation.type}s(Set<${relation.type}> ${relation.uncapitalizedType}s) {
+		this.${relation.uncapitalizedType}s = ${relation.uncapitalizedType}s;
 	} 
 
 	/**
 #if ($relation.documentation)
 	 * Gets: ${relation.documentation}
 #else
-	 * Get the ${relation.label} relation.
+	 * Get the ${relation.uncapitalizedType} relation.
 #end
 	 * 
-	 * @return Set - The ${relation.label}s
+	 * @return Set - The ${relation.uncapitalizedType}s
 	 */
 	public Set<${relation.type}> get${relation.type}s() {
-		if( ${relation.label}s == null ) {
-			${relation.label}s = new HashSet<>();
+		if( ${relation.uncapitalizedType}s == null ) {
+			${relation.uncapitalizedType}s = new HashSet<>();
 		}
 		
-		return ${relation.label}s;
+		return ${relation.uncapitalizedType}s;
 	}
 	 
 	/**
 #if ($relation.documentation)
 	 * Adds: ${relation.documentation}
 #else
-	 * Add a ${relation.label}.
+	 * Add a ${relation.uncapitalizedType}.
 #end
 	 *
-	 * @param The ${relation.label} to add
+	 * @param The ${relation.uncapitalizedType} to add
 	 */
-	public void add${relation.type}(${relation.type} ${relation.label}) {
-		if( get${relation.type}s().contains( ${relation.label} ) ) {
-			get${relation.type}s().remove( ${relation.label} );
+	public void add${relation.type}(${relation.type} ${relation.uncapitalizedType}) {
+		if( get${relation.type}s().contains( ${relation.uncapitalizedType} ) ) {
+			get${relation.type}s().remove( ${relation.uncapitalizedType} );
 		}
 		
-		${relation.label}.set${entity.name}( (${entity.name})this );
-		get${relation.type}s().add( ${relation.label} );
+		${relation.uncapitalizedType}.set${entity.name}( (${entity.name})this );
+		get${relation.type}s().add( ${relation.uncapitalizedType} );
 	}
 	 
 	/**
 #if ($relation.documentation)
 	 * Removes: ${relation.documentation}
 #else
-	 * Remove a ${relation.label}.
+	 * Remove a ${relation.uncapitalizedType}.
 #end
 	 *
-	 * @param The ${relation.label} to remove
+	 * @param The ${relation.uncapitalizedType} to remove
 	 */
-	public ${relation.type} remove${relation.type}(${relation.type} ${relation.label}) {
-		if( get${relation.type}s().remove( ${relation.label} ) ) {
-			${relation.label}.set${entity.name}(null);
+	public ${relation.type} remove${relation.type}(${relation.type} ${relation.uncapitalizedType}) {
+		if( get${relation.type}s().remove( ${relation.uncapitalizedType} ) ) {
+			${relation.uncapitalizedType}.set${entity.name}(null);
 		}
 	    
-		return ${relation.label};
+		return ${relation.uncapitalizedType};
 	}
 #end
 #foreach ($reference in $entity.references)

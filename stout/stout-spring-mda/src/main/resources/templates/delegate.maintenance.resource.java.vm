@@ -22,16 +22,9 @@ import $import;
  * Generated from delegate.maintenance.resource.java.vm
  */
 public interface ${entity.name}MaintenanceResource {
-    #if ( !$entity.idFields.isEmpty() )
-        #set ($idFieldJavaType = ${entity.idFields.values().iterator().next().javaType})
-        #set ($idFieldName = ${entity.idFields.values().iterator().next().name})
-    #else
-        #set ($idFieldJavaType = 'String')
-        #set ($idFieldName = 'id')
-    #end
 
     @RequestLine("GET /${entity.name}/{id}")
-    ValueServiceResponse<${entity.name}> findByPrimaryKey(@Param("id") ${idFieldJavaType} ${idFieldName});
+    ValueServiceResponse<${entity.name}> findByPrimaryKey(@Param("id") ${entity.identifier.javaType} ${entity.identifier.name});
 
 	@RequestLine("POST /${entity.name}")
 	@Headers({"Content-Type: application/json"})
@@ -39,10 +32,10 @@ public interface ${entity.name}MaintenanceResource {
 
 	@RequestLine("PUT /${entity.name}/{id}")
 	@Headers({"Content-Type: application/json"})
-    ValueServiceResponse<${entity.name}> update(@Param("id") ${idFieldJavaType} ${idFieldName}, ${entity.name} entity);
+    ValueServiceResponse<${entity.name}> update(@Param("id") ${entity.identifier.javaType} ${entity.identifier.name}, ${entity.name} entity);
 
     @RequestLine("DELETE /${entity.name}/{id}")
-    VoidServiceResponse delete(@Param("id") ${idFieldJavaType} ${idFieldName});
+    VoidServiceResponse delete(@Param("id") ${entity.identifier.javaType} ${entity.identifier.name});
 
     @RequestLine("POST /${entity.name}/findByExample")
     @Headers({"Content-Type: application/json"})

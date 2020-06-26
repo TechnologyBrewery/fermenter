@@ -1,7 +1,6 @@
 package org.bitbucket.fermenter.stout.mda;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -11,7 +10,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.bitbucket.fermenter.mda.metamodel.element.Operation;
 import org.bitbucket.fermenter.mda.metamodel.element.Parameter;
 import org.bitbucket.fermenter.mda.metamodel.element.Return;
-import org.jboss.resteasy.annotations.GZIP;
 
 /**
  * Decorates a {@link Operation} with Java-specific capabilities that focus on treating the operation as a *remote* Java
@@ -42,7 +40,7 @@ public class RemoteJavaOperation extends JavaOperation {
                 decoratedParameterList = Collections.emptyList();
 
             } else {
-                decoratedParameterList = new ArrayList<>((int) (operationParameterList.size()));
+                decoratedParameterList = new ArrayList<>(operationParameterList.size());
                 for (Parameter p : operationParameterList) {
                     decoratedParameterList.add(new RemoteJavaParameter(p));
 
@@ -67,10 +65,11 @@ public class RemoteJavaOperation extends JavaOperation {
      * 
      * @return imports
      */
+    @Override
     public Set<String> getImports() {
         Set<String> importSet = new HashSet<>();
         Return returnElement = addGenericImports(importSet);
-        
+
         if (!isResponseTypeVoid()) {
             String returnImport = JavaElementUtils.getJavaImportByPackageAndType(returnElement.getPackage(),
                     returnElement.getType(), false);

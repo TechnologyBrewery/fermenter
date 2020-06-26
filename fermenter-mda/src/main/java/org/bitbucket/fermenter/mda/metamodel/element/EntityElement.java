@@ -95,7 +95,7 @@ public class EntityElement extends NamespacedMetamodelElement implements Entity 
     public Boolean isNonPersistentParentEntity() {
 
         DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
-                .getMetadataRepostory(DefaultModelInstanceRepository.class);
+                .getMetamodelRepository(DefaultModelInstanceRepository.class);
 
         for (String artifactId : metadataRepository.getArtifactIds()) {
             Map<String, Entity> allEntities = metadataRepository.getEntitiesByArtifactId(artifactId);

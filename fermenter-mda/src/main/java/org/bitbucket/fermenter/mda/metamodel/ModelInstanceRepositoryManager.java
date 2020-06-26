@@ -27,7 +27,7 @@ public final class ModelInstanceRepositoryManager {
      * @param type class to lookup
      * @return instance of that class
      */
-    public static <V> V getMetadataRepostory(Class<V> type) {
+    public static <V> V getMetamodelRepository(Class<V> type) {
         return type.cast(instanceMap.get(type.toString()));
     }
 

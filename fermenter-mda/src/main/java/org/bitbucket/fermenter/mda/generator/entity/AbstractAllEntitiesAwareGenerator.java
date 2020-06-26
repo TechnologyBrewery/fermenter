@@ -27,7 +27,7 @@ public abstract class AbstractAllEntitiesAwareGenerator extends AbstractGenerato
         vc.put("basePackage", context.getBasePackage());
 
         DefaultModelInstanceRepository metamodelRepository = ModelInstanceRepositoryManager
-                .getMetadataRepostory(DefaultModelInstanceRepository.class);
+                .getMetamodelRepository(DefaultModelInstanceRepository.class);
 
         Map<String, Entity> entityMap = metamodelRepository.getEntitiesByContext(metadataContext);
         Collection<Entity> entities = entityMap.values();

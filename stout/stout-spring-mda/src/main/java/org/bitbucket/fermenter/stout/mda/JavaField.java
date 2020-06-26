@@ -1,266 +1,95 @@
 package org.bitbucket.fermenter.stout.mda;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import org.bitbucket.fermenter.mda.metadata.AbstractMetadataRepository;
-import org.bitbucket.fermenter.mda.metadata.FormatMetadataManager;
-import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
-import org.bitbucket.fermenter.mda.metadata.element.Format;
-import org.bitbucket.fermenter.mda.metadata.element.Pattern;
-import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
-import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
-import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
+import org.bitbucket.fermenter.mda.metamodel.element.BaseFieldDecorator;
 import org.bitbucket.fermenter.mda.metamodel.element.Field;
-import org.bitbucket.fermenter.mda.metamodel.element.MetamodelType;
-import org.bitbucket.fermenter.mda.metamodel.element.Validation;
 
-public class JavaField implements Field {
+/**
+ * Decorates a {@link Field} with convenience methods for Java code generation.
+ */
+public class JavaField extends BaseFieldDecorator implements Field, JavaNamedElement {
 
-    private static Log log = LogFactory.getLog(Field.class);
-    private static Integer DEFAULT_SCALE = 5;
-
-    private Field field;
     private String importName;
 
-    private DefaultModelInstanceRepository repository = ModelInstanceRepositoryManager
-            .getMetadataRepostory(DefaultModelInstanceRepository.class);
-    
     /**
-     * Create a new instance of {@link Field} with the correct functionality set to generate Java code.
+     * {@inheritDoc}
+     */
+    public JavaField(Field wrapped) {
+        super(wrapped);
+
+    }
+
+    /**
+     * Returns the Field's generator name that has been upper cased.
      * 
-     * @param fieldToDecorate
-     *            The {@link Field} to decorate
-     */
-    public JavaField(Field fieldToDecorate) {
-        if (fieldToDecorate == null) {
-            throw new IllegalArgumentException("JavaFields must be instantiated with a non-null field!");
-        }
-        field = fieldToDecorate;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getColumn() {
-        return field.getColumn();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Generator getGenerator() {
-        return field.getGenerator();
-    }
-
-    /**
-     * {@inheritDoc}
+     * @return upper cased generator name
      */
     public String getUppercasedGenerator() {
-        return field.getGenerator().toString().toUpperCase();
+        return wrapped.getGenerator().toString().toUpperCase();
     }
 
     /**
-     * {@inheritDoc}
+     * Returns the Java short name for this field (e.g., String).
+     * 
+     * @return Java short name
      */
-    public String getName() {
-        return field.getName();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getDocumentation() {
-        return field.getDocumentation();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getType() {
-        return field.getType();
-    }
-    
-
-    public String getCapitalizedName() {
-        return StringUtils.capitalize(getName());
-    }
-
-    public String getUppercasedName() {
-        return field.getName().toUpperCase();
-    }
-
-    public String getUppercasedType() {
-        return field.getType().toUpperCase();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getPackage() {
-        return field.getPackage();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Validation getValidation() {
-        return field.getValidation();
-    }
-
-    public Integer getMaxLength() {
-        return (getValidation() != null) ? getValidation().getMaxLength() : null;
-    }
-
-    public boolean hasMaxLength() {
-        return getMaxLength() != null ? true : false;
-    }
-
-    public Integer getMinLength() {
-        return (getValidation() != null) ? getValidation().getMinLength() : null;
-    }
-
-    public boolean hasMinLength() {
-        return getMinLength() != null ? true : false;
-    }
-
-    public String getMaxValue() {
-        return (getValidation() != null) ? getValidation().getMaxValue() : null;
-    }
-
-    public boolean hasMaxValue() {
-        return getMaxValue() != null ? true : false;
-    }
-
-    public String getMinValue() {
-        return (getValidation() != null) ? getValidation().getMinValue() : null;
-    }
-
-    public boolean hasMinValue() {
-        return getMinValue() != null ? true : false;
-    }
-
-    public Integer getScale() {
-        return (hasScale()) ? getValidation().getScale() : DEFAULT_SCALE;
-    }
-
-    public boolean hasScale() {
-        return getValidation() != null && getValidation().getScale() != null;
-    }
-
-    public boolean hasFormat() {
-        return getValidation() != null && getValidation().getFormat() != null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Boolean isRequired() {
-        return field.isRequired() != null ? field.isRequired() : false;
-    }
-    
-    /**
-     * {@inheritDoc}
-     */
-    public Boolean isTransient() {
-        return field.isTransient();
-    }
-
-    Field getFieldObject() {
-        return field;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public boolean hasGenerator() {
-        if (log.isDebugEnabled()) {
-            log.debug("Field " + field.getName() + " has a generator value of " + field.getGenerator());
-        }
-        return (field.getGenerator() != null) ? true : false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getDefaultValue() {
-        return field.getDefaultValue();
-    }
-
-    public boolean hasDefaultValue() {
-        return field.getDefaultValue() != null;
-    }
-
-    @Override
-    public String getFileName() {
-        return field.getFileName();
-    }
-
-    @Override
-    public void validate() {
-        field.validate();
-    }
-
-    // java-specific generation methods:
-
     public String getJavaType() {
-
-        DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
-                .getMetadataRepostory(DefaultModelInstanceRepository.class);
-
-        // TODO Refactor to not use deprecated methods
-        return JavaElementUtils.getJavaType(metadataRepository.getArtifactId(), getType());
+        return JavaElementUtils.getJavaShortNameByPackageAndType(getPackage(), getType());
     }
 
+    /**
+     * Returns the Java import for this field (e.g., java.lang.String).
+     * 
+     * @return Java short name
+     */
     public String getImport() {
         if (importName == null) {
-
-            AbstractMetadataRepository metadataRepository = ModelInstanceRepositoryManager
-                    .getMetadataRepostory(MetadataRepository.class);
-            importName = JavaElementUtils.getJavaImportType(metadataRepository.getArtifactId(), getType());
-
+            importName = JavaElementUtils.getJavaImportByPackageAndType(getPackage(), getType());
         }
 
         return importName;
     }
 
-    public boolean isEntity() {
-        return MetamodelType.ENTITY.equals(MetamodelType.getMetamodelType(getPackage(), getType()));
+    /**
+     * Escapes values in provided regex values (e.g., "\d" becomes "\\d").
+     * 
+     * {@inheritDoc}
+     */
+    @Override
+    public Collection<String> getFormats() {
+        Collection<String> escapedFormats = new ArrayList<>();
+        for (String rawFormat : super.getFormats()) {
+            String escapedFormat = StringEscapeUtils.escapeJava(rawFormat);
+            escapedFormats.add(escapedFormat);
+        }
+        return escapedFormats;
     }
 
-    // TODO FormatMetadataManager needs to to be replaced by metamodel when this is implemented
-    public String getPatterns() {
-        StringBuilder sb = new StringBuilder();
-        if (hasFormat()) {
-            Format format = FormatMetadataManager.getInstance().getFormat(field.getValidation().getFormat());
-            int current = 0;
-            int length = format.getPatterns().size();
-            sb.append("\"");
-            for (Pattern pattern : format.getPatterns()) {
-                current++;
-                sb.append(StringEscapeUtils.escapeJava(pattern.getText()));
+    /**
+     * Returns the patterns as a pre-formatted Java validation string.
+     * 
+     * @return pre-formatted Pattern or Pattern.List
+     */
+    public String getPatternsAsValidationString() {
+        StringBuilder patternString = new StringBuilder();
+        patternString.append("@Pattern(regexp=\"");
 
-                if (current < length) {
-                    sb.append("|");
-                }
+        boolean isFirst = true;
+        for (String format : getFormats()) {
+            if (!isFirst) {
+                patternString.append("|");
             }
-            sb.append("\"");
+            patternString.append(format);
+            isFirst = false;
+
         }
 
-        return sb.toString();
+        patternString.append("\")");
 
-    }
-    
-    /**
-     * Helper method that returns if this field models a named {@link Enumeration}.
-     * 
-     * @return if this field is a named {@link Enumeration}.
-     */
-    public boolean isNamedEnumeration() {
-        Enumeration enumeration = repository.getEnumeration(getPackage(), getType());
-        return enumeration != null && enumeration.isNamed();
+        return patternString.toString();
     }
 
 }

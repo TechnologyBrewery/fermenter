@@ -140,7 +140,7 @@ public class ReferenceElement extends NamespacedMetamodelElement implements Refe
         if (foreignKeys == null) {
             foreignKeys = new ArrayList<>();
             DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
-                    .getMetadataRepostory(DefaultModelInstanceRepository.class);
+                    .getMetamodelRepository(DefaultModelInstanceRepository.class);
             
             Map<String, Entity> referenceEntities = metadataRepository.getEntities(getPackage());
             Entity entity = referenceEntities.get(getType());

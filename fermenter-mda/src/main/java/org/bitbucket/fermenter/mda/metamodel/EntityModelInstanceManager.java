@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.bitbucket.fermenter.mda.generator.GenerationException;
@@ -59,20 +58,20 @@ class EntityModelInstanceManager extends AbstractMetamodelManager<Entity> {
      * Returns the set of dependencies in a manner that is ordered by references and relations such that referential
      * integrity will be respected.
      * 
-     * @param packageName
-     *            packageName of entities to retrieve
+     * @param context
+     *            type of generation target context being used
      * @return ordered entities
      */
-    public Set<Entity> getNamesByDependencyOrder(String packageName) {
+    public Set<Entity> getNamesByDependencyOrder(String context) {
         Map<String, List<String>> referencedObjects = new HashMap<>();
 
-        Map<String, Entity> rawEntities = this.getMetadataElementByPackage(packageName);
+        Map<String, Entity> rawEntities = this.getMetadataElementByContext(context);
 
         for (Entity rawEntity : rawEntities.values()) {
             List<Reference> references = rawEntity.getReferences();
             for (Reference reference : references) {
-                List<String> inboundReferences = referencedObjects.computeIfAbsent(reference.getType(),
-                        f -> new ArrayList<>());
+                String type = reference.getType();
+                List<String> inboundReferences = referencedObjects.computeIfAbsent(type, f -> new ArrayList<>());
                 inboundReferences.add(rawEntity.getName());
             }
         }
@@ -89,7 +88,7 @@ class EntityModelInstanceManager extends AbstractMetamodelManager<Entity> {
     /**
      * Iterate over loaded domains and register each relation on its parent. This enables bi-directional referencing of
      * relations. It is also important to note that while referring to a parent from a child is very similar to a
-     * reference, it is typically not similar enough to assume that it will be implemented in this fashion. Seperating
+     * reference, it is typically not similar enough to assume that it will be implemented in this fashion. Separating
      * them into their own collection ensures that they can be dealt with as appropriate for the target implementation.
      */
 
@@ -108,12 +107,12 @@ class EntityModelInstanceManager extends AbstractMetamodelManager<Entity> {
         // Get the complete metadata map - if I get only get current application, client transfer objects does not get
         // generated with parent references
         Map<String, Entity> entityMap = getTargetMetadataMap();
-        entityMapIterator = (entityMap != null) ? entityMap.values().iterator() : Collections.EMPTY_LIST.iterator();
+        entityMapIterator = (entityMap != null) ? entityMap.values().iterator() : Collections.emptyIterator();
         while (entityMapIterator.hasNext()) {
             entity = (EntityElement) entityMapIterator.next();
             relationMap = entity.getRelations();
 
-            relationValueInterator = (relationMap != null) ? relationMap.iterator() : Collections.EMPTY_LIST.iterator();
+            relationValueInterator = (relationMap != null) ? relationMap.iterator() : Collections.emptyIterator();
             while (relationValueInterator.hasNext()) {
                 relation = (RelationElement) relationValueInterator.next();
                 relationType = relation.getType();
@@ -128,18 +127,18 @@ class EntityModelInstanceManager extends AbstractMetamodelManager<Entity> {
 
         }
     }
-    private Map<String, Entity>  getTargetMetadataMap() {
+
+    private Map<String, Entity> getTargetMetadataMap() {
         Map<String, Entity> entityMap = new HashMap<>();
-    
+
         List<String> targetedArtifactIds = repoConfiguration.getTargetModelInstances();
         for (String artifactId : targetedArtifactIds) {
             Map<String, Entity> targetedModelMap = getMetadataByArtifactIdMap(artifactId);
-            if (targetedModelMap!= null) {
+            if (targetedModelMap != null) {
                 entityMap.putAll(targetedModelMap);
             }
         }
         return entityMap;
     }
-    
 
 }

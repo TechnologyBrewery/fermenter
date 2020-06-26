@@ -5,11 +5,10 @@ import java.util.Map;
 import org.apache.velocity.VelocityContext;
 import org.bitbucket.fermenter.mda.generator.AbstractGenerator;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
-import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
-import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelContext;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
+import org.bitbucket.fermenter.mda.metamodel.element.Entity;
 import org.bitbucket.fermenter.mda.metamodel.element.Service;
 import org.bitbucket.fermenter.stout.mda.java.JavaGeneratorUtil;
 import org.codehaus.plexus.util.StringUtils;
@@ -19,8 +18,6 @@ import org.codehaus.plexus.util.StringUtils;
  */
 public class AppConfigGenerator extends AbstractGenerator {
 
-    private static final String SPACE = " ";
-
     /**
      * {@inheritDoc}
      */
@@ -28,11 +25,12 @@ public class AppConfigGenerator extends AbstractGenerator {
         // only generate those concepts that are part of the targeted generation run (vice all model instances):
         DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
                 .getMetadataRepostory(DefaultModelInstanceRepository.class);
-        Map<String, Service> services = metadataRepository.getServicesByContext(ModelContext.TARGETED.name());        
+        Map<String, Service> services = metadataRepository.getServicesByContext(metadataContext);        
         
-        MetadataRepository legacyMetadataRepository = ModelInstanceRepositoryManager
-                .getMetadataRepostory(MetadataRepository.class);        
-        Map<String, Entity> entities = legacyMetadataRepository.getEntitiesByMetadataContext(ModelContext.TARGETED.name());
+        DefaultModelInstanceRepository metamodelRepository = ModelInstanceRepositoryManager
+                .getMetadataRepostory(DefaultModelInstanceRepository.class);
+
+        Map<String, Entity> entities = metamodelRepository.getEntitiesByContext(metadataContext);
         
         VelocityContext vc;
         String fileName;
@@ -55,9 +53,9 @@ public class AppConfigGenerator extends AbstractGenerator {
     }
 
     private String artifactIdInCamelCase(GenerationContext context) {
-        String artifactIdAsWords = context.getArtifactId().replaceAll("-", SPACE);
+        String artifactIdAsWords = context.getArtifactId().replace("-", org.apache.commons.lang3.StringUtils.SPACE);
         String artifactIdWithCamelCasedWords = StringUtils.capitaliseAllWords(artifactIdAsWords);
-        return artifactIdWithCamelCasedWords.replace(SPACE, "");
+        return artifactIdWithCamelCasedWords.replace(org.apache.commons.lang3.StringUtils.SPACE, "");
     }
     
     

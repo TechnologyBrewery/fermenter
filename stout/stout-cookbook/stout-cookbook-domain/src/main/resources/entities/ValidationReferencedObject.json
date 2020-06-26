@@ -3,19 +3,15 @@
   "name" : "ValidationReferencedObject",
   "table" : "VALIDATION_REF_OBJECT",
   "identifier" : {
-    "package" : null,
     "name" : "id",
     "type" : "uuid",
     "column" : "VALIDATION_REF_OBJECT_ID",
     "required" : true,
-    "generator" : "uuid",
-    "transient" : false
+    "generator" : "uuid"
   },
   "fields" : [ {
-    "package" : null,
     "name" : "someDataField",
     "type" : "string",
-    "column" : "SOME_DATA_FIELD",
-    "transient" : false
+    "column" : "SOME_DATA_FIELD"
   } ]
 }

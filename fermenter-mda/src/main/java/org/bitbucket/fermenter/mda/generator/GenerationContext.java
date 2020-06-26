@@ -12,8 +12,6 @@ public final class GenerationContext {
 	private boolean overwritable;
 	private boolean append;
 	private String basePackage;
-	private String projectName;
-	private String metadataContext;
 	private File mainSourceDirectory;
 	private File generatedSourceDirectory;
 	private VelocityEngine engine;

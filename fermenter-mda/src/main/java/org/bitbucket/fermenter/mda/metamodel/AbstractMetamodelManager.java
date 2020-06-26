@@ -223,7 +223,7 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
 			log.info("Loaded " + completeMetadataMap.size() + " " + getMetamodelDescription() + "(s)");
 		} 
 	}
-
+	
 	protected Map<String, T> getMetadataMap(String packageName) {
 		return metadataByPackageMap.get(packageName);
 	}

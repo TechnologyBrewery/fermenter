@@ -1,15 +1,13 @@
 {
   "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
   "name" : "IntegerKeyedEntity",
-  "documentation" : "Entity that demonstrates uses a integer as a generated value primary key",
   "table" : "INT_KEYED_ENTITY",
+  "documentation" : "Entity that demonstrates uses a integer as a generated value primary key",
   "identifier" : {
-    "package" : null,
     "name" : "id",
     "type" : "integer",
     "column" : "INT_KEYED_ENTITY_ID",
     "required" : true,
-    "generator" : "auto",
-    "transient" : false
+    "generator" : "auto"
   }
 }

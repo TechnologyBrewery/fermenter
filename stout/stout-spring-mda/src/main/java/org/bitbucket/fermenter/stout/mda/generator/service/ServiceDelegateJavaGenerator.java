@@ -4,7 +4,6 @@ import org.apache.velocity.VelocityContext;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
 import org.bitbucket.fermenter.mda.generator.service.AbstractServiceGenerator;
 import org.bitbucket.fermenter.mda.metamodel.element.Service;
-import org.bitbucket.fermenter.stout.mda.JavaService;
 import org.bitbucket.fermenter.stout.mda.RemoteJavaService;
 import org.bitbucket.fermenter.stout.mda.java.JavaGeneratorUtil;
 

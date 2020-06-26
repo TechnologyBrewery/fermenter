@@ -5,19 +5,16 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.bitbucket.fermenter.mda.PackageManager;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metadata.element.Entity;
 import org.bitbucket.fermenter.mda.metadata.element.FieldMetadata;
-import org.bitbucket.fermenter.mda.metadata.element.ForeignKeyFieldMetadata;
 import org.bitbucket.fermenter.mda.metamodel.element.EntityElement;
 import org.bitbucket.fermenter.mda.metamodel.element.EnumElement;
 import org.bitbucket.fermenter.mda.metamodel.element.EnumerationElement;
@@ -26,7 +23,6 @@ import org.bitbucket.fermenter.mda.metamodel.element.OperationElement;
 import org.bitbucket.fermenter.mda.metamodel.element.ParameterElement;
 import org.bitbucket.fermenter.mda.metamodel.element.ParentElement;
 import org.bitbucket.fermenter.mda.metamodel.element.ReferenceElement;
-import org.bitbucket.fermenter.mda.metamodel.element.Relation.Multiplicity;
 import org.bitbucket.fermenter.mda.metamodel.element.RelationElement;
 import org.bitbucket.fermenter.mda.metamodel.element.ReturnElement;
 import org.bitbucket.fermenter.mda.metamodel.element.ServiceElement;
@@ -219,8 +215,8 @@ public class LegacyMetadataConverter {
 				newEntity.setLockStrategy(legacyEntity.getLockStrategy());
 			}
 
-			if (legacyEntity.isTransient()) {
-				newEntity.setTransient(true);
+			if (getUndefaultedValue(legacyEntity, "transientEntity") != null && legacyEntity.isTransient()) {
+				newEntity.setTransient(legacyEntity.isTransient());
 			}
 
 			if (legacyEntity.getParent() != null) {
@@ -328,10 +324,15 @@ public class LegacyMetadataConverter {
 		if (StringUtils.isNotBlank(legacyField.getGenerator())) {
 			newField.setGenerator(legacyField.getGenerator());
 		}
+		
 		if(legacyField.getDefaultValue() != null) {
 		    newField.setDefaultValue(legacyField.getDefaultValue().toString());
 		}
-		newField.setTransient(legacyField.isTransient());
+		
+		if (getUndefaultedValue(legacyField, "transientValue") != null) {
+            newField.setTransient(legacyField.isTransient());
+        }
+		
 		return newField;
 	}
 

@@ -180,7 +180,7 @@
 		"templateName": "templates/rest.client.app.config.java.vm",
 		"outputFile": "${basePackage}/client/config/App${artifactId}Config.java",
 		"generator": "org.bitbucket.fermenter.stout.mda.generator.crosscutting.AppConfigGenerator",
-		"metadataContext": null,
+		"metadataContext": "targeted",
 		"overwritable": true
 	},
 	{
@@ -204,7 +204,7 @@
         "templateName": "templates/rest.client.base.config.java.vm",
         "outputFile": "${basePackage}/client/config/RestClient${artifactId}BaseConfig.java",
         "generator": "org.bitbucket.fermenter.stout.mda.generator.crosscutting.AppConfigGenerator",
-        "metadataContext": null,
+        "metadataContext": "targeted",
         "overwritable": true
     },
     {
@@ -212,7 +212,7 @@
         "templateName": "templates/rest.client.base.properties.config.java.vm",
         "outputFile": "${basePackage}/client/config/RestClientBasePropertiesConfig.java",
         "generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticJavaGenerator",
-        "metadataContext": null,
+        "metadataContext": "targeted",
         "overwritable": true
     },
 	{

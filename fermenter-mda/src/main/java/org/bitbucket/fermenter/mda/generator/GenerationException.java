@@ -2,7 +2,9 @@ package org.bitbucket.fermenter.mda.generator;
 
 public class GenerationException extends RuntimeException {
 
-	public GenerationException() {
+    private static final long serialVersionUID = -3898544317651420802L;
+
+    public GenerationException() {
 		super();
 	}
 

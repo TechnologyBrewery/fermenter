@@ -11,11 +11,11 @@ import com.google.common.base.MoreObjects;
 /**
  * Represents a field on an entity.
  */
-@JsonPropertyOrder({ "package", "name", "type", "transient" })
+@JsonPropertyOrder({ "package", "name", "documentation", "type", "transient" })
 public class FieldElement extends MetamodelElement implements Field {
-        
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty(value = NamespacedMetamodelElement.PACKAGE, required = false)
+
+    // see getter for JSON configuration 
+    // (internal field name does not match the external API name due to keyword collision):
     protected String packageName;
 
     @JsonInclude(Include.NON_NULL)
@@ -38,23 +38,24 @@ public class FieldElement extends MetamodelElement implements Field {
 
     @JsonInclude(Include.NON_NULL)
     protected String defaultValue;
-    
-    @JsonInclude(Include.NON_NULL)
-    @JsonProperty(value = "transient", required = false)
+
+    // see getter for JSON configuration 
+    // (internal field name does not match the external API name due to keyword collision):
     protected Boolean isTransient;
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getType() {
-		return type;
-	}
-
 
     /**
      * {@inheritDoc}
      */
+    @Override
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @JsonInclude(Include.NON_NULL)
+    @JsonProperty(value = NamespacedMetamodelElement.PACKAGE, required = false)
     @Override
     public String getPackage() {
         return packageName;
@@ -104,11 +105,13 @@ public class FieldElement extends MetamodelElement implements Field {
     /**
      * {@inheritDoc}
      */
+    @JsonInclude(Include.NON_NULL)
+    @JsonProperty(value = "transient", required = false)
     @Override
     public Boolean isTransient() {
         return this.isTransient;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -176,7 +179,7 @@ public class FieldElement extends MetamodelElement implements Field {
     public void setRequired(Boolean required) {
         this.required = required;
     }
-    
+
     /**
      * Sets the Validation .
      * 
@@ -224,7 +227,6 @@ public class FieldElement extends MetamodelElement implements Field {
         this.defaultValue = defaultValue;
     }
 
-   
     /**
      * {@inheritDoc}
      */

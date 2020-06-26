@@ -1,19 +1,17 @@
 {
   "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
   "name" : "TransientEntityExample",
+  "transient" : true,
   "documentation" : "A non-persistent entity",
   "fields" : [ {
-    "package" : null,
     "name" : "name",
-    "type" : "string",
     "documentation" : "The friendly domain moniker",
-    "transient" : false
+    "type" : "string"
   }, {
     "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
     "name" : "anEnumeratedValue",
     "type" : "SimpleDomainEnumeration",
-    "column" : "SIMPLE_DOMAIN_ENUM",
-    "transient" : false
+    "column" : "SIMPLE_DOMAIN_ENUM"
   } ],
   "references" : [ {
     "name" : "requiredReference",
@@ -25,6 +23,5 @@
     "type" : "TransientChildEntity",
     "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
     "multiplicity" : "1-M"
-  } ],
-  "transient" : true
+  } ]
 }

@@ -1,15 +1,13 @@
 {
   "package" : "org.bitbucket.askllc.fermenter.cookbook.local.referencing.domain",
   "name" : "Placeholder",
-  "documentation" : "Generate an entity so we can not only test local call\n\t\toptimization",
   "table" : "PLACEHOLDER",
+  "documentation" : "Generate an entity so we can not only test local call\n\t\toptimization",
   "identifier" : {
-    "package" : null,
     "name" : "id",
     "type" : "uuid",
     "column" : "PLACEHOLDER_ID",
     "required" : true,
-    "generator" : "uuid",
-    "transient" : false
+    "generator" : "uuid"
   }
 }

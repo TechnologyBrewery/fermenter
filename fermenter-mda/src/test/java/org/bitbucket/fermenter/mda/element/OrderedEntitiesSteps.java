@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.apache.commons.lang3.StringUtils;
+import org.bitbucket.fermenter.mda.metamodel.ModelContext;
 import org.bitbucket.fermenter.mda.metamodel.element.Entity;
 import org.bitbucket.fermenter.mda.metamodel.element.EntityElement;
 import org.bitbucket.fermenter.mda.metamodel.element.ReferenceElement;
@@ -59,14 +60,12 @@ public class OrderedEntitiesSteps extends AbstractEntitySteps {
     public void the_entities_are_loaded() throws Throwable {
         this.readEntities();
 
-        Set<Entity> entitiesByDependency = metadataRepo.getEntitiesByDependencyOrder();
+        Set<Entity> entitiesByDependency = metadataRepo.getEntitiesByDependencyOrder(ModelContext.LOCAL.toString());
 
         orderedEntityNames = new ArrayList<>();
         for (Entity entity : entitiesByDependency) {
             orderedEntityNames.add(entity.getName());
-            System.out.print(entity.getName() + " ");
         }
-        System.out.print("\n");
 
     }
 

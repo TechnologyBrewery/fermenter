@@ -1,32 +1,26 @@
 {
   "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
   "name" : "CachedEntityExample",
-  "documentation" : "Cached Entity Example used for testing caching in rest client.",
   "table" : "CACHED_ENTITY_EXAMPLE",
+  "documentation" : "Cached Entity Example used for testing caching in rest client.",
   "identifier" : {
-    "package" : null,
     "name" : "id",
     "type" : "uuid",
     "column" : "CACHED_ENTITY_ID",
     "required" : true,
-    "generator" : "uuid",
-    "transient" : false
+    "generator" : "uuid"
   },
   "fields" : [ {
-    "package" : null,
     "name" : "calculatedField",
+    "documentation" : "A field that is calculated on each save call",
     "type" : "integer",
     "column" : "CALCULATED_FIELD",
-    "documentation" : "A field that is calculated on each save call",
-    "defaultValue" : "0",
-    "transient" : false
+    "defaultValue" : "0"
   }, {
-    "package" : null,
     "name" : "name",
+    "documentation" : "Name for the cached entity.",
     "type" : "string",
     "column" : "NAME",
-    "documentation" : "Name for the cached entity.",
-    "defaultValue" : "Some Name",
-    "transient" : false
+    "defaultValue" : "Some Name"
   } ]
 }

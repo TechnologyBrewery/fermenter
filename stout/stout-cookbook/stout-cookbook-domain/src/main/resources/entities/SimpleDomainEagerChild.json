@@ -1,23 +1,19 @@
 {
   "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
   "name" : "SimpleDomainEagerChild",
-  "documentation" : "Eagerly fetched (by default) child end of the 1-M relationship with SimpleDomain",
   "table" : "SIMPLE_DOMAIN_EAGER_CHILD",
+  "documentation" : "Eagerly fetched (by default) child end of the 1-M relationship with SimpleDomain",
   "identifier" : {
-    "package" : null,
     "name" : "id",
     "type" : "uuid",
     "column" : "SIMPLE_DOMAIN_EAGER_CHILD_ID",
     "required" : true,
-    "generator" : "uuid",
-    "transient" : false
+    "generator" : "uuid"
   },
   "fields" : [ {
-    "package" : null,
     "name" : "name",
-    "type" : "string",
-    "column" : "NAME",
     "documentation" : "Name of the child entity",
-    "transient" : false
+    "type" : "string",
+    "column" : "NAME"
   } ]
 }

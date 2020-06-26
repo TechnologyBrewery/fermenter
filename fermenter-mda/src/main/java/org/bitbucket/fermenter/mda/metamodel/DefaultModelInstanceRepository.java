@@ -326,10 +326,12 @@ public class DefaultModelInstanceRepository extends AbstractModelInstanceReposit
      * Gets all entities ordered by their intrinsic dependencies. References are upstream, relations downstream,
      * otherwise they are equal.
      * 
+     * @param context
+     *            type of generation target context being used
      * @return all entities within the request package
      */
-    public Set<Entity> getEntitiesByDependencyOrder() {
-        return entityManager.getNamesByDependencyOrder(config.getBasePackage());
+    public Set<Entity> getEntitiesByDependencyOrder(String context) {
+        return entityManager.getNamesByDependencyOrder(context);
     }
 
 }

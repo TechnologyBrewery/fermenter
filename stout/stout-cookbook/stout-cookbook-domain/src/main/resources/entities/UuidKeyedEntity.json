@@ -1,15 +1,13 @@
 {
   "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
   "name" : "UuidKeyedEntity",
-  "documentation" : "Entity that demonstrates uses a UUID as a generated value primary key",
   "table" : "UUID_KEYED_ENTITY",
+  "documentation" : "Entity that demonstrates uses a UUID as a generated value primary key",
   "identifier" : {
-    "package" : null,
     "name" : "id",
     "type" : "uuid",
     "column" : "UUID_KEYED_ENTITY_ID",
     "required" : true,
-    "generator" : "uuid",
-    "transient" : false
+    "generator" : "uuid"
   }
 }

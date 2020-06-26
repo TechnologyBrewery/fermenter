@@ -7,7 +7,8 @@ import org.bitbucket.fermenter.stout.mda.java.JavaGeneratorUtil;
  * transient or persistent.
  */
 public class EntityJavaGenerator extends AbstractJavaEntityGenerator {
-
+    
+    @Override
     protected String getOutputSubFolder() {
         return JavaGeneratorUtil.OUTPUT_SUB_FOLDER_JAVA;
     }

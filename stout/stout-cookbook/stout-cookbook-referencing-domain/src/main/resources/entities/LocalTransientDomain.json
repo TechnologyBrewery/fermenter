@@ -1,13 +1,12 @@
 {
   "package" : "org.bitbucket.askllc.fermenter.cookbook.referencing.domain",
   "name" : "LocalTransientDomain",
+  "transient" : true,
   "documentation" : "A transient local domain entity with external reference to a persistent entity",
   "fields" : [ {
-    "package" : null,
     "name" : "name",
-    "type" : "string",
     "documentation" : "The name of local domain",
-    "transient" : false
+    "type" : "string"
   } ],
   "references" : [ {
     "name" : "externalReference",
@@ -19,6 +18,5 @@
     "type" : "ValidationTransientReferencedObject",
     "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
     "required" : true
-  } ],
-  "transient" : true
+  } ]
 }

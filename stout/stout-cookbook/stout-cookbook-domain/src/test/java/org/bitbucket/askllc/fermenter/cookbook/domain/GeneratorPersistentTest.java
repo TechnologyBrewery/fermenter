@@ -35,7 +35,7 @@ public class GeneratorPersistentTest extends AbstractMsgMgrAwareTestSupport {
 
 		bizObj = bizObj.save();
 
-		assertEquals(0, MessageManager.getMessages().getErrorMessageCount());
+		assertEquals(0, MessageManager.getMessages().getErrorCount());
 		assertNotNull("PK should have been set to a valid UUID!", bizObj.getKey());
 		UuidKeyedEntityBO retrievedBizObj = UuidKeyedEntityBO.findByPrimaryKey(bizObj.getKey());
 		assertNotNull("Could not find a instance with PK: " + bizObj.getKey(), retrievedBizObj);
@@ -47,7 +47,7 @@ public class GeneratorPersistentTest extends AbstractMsgMgrAwareTestSupport {
 
         bizObj = bizObj.save();
 
-        assertEquals(0, MessageManager.getMessages().getErrorMessageCount());
+        assertEquals(0, MessageManager.getMessages().getErrorCount());
         assertNotNull("PK should have been set to a valid integer!", bizObj.getKey());
         IntegerKeyedEntityBO retrievedBizObj = IntegerKeyedEntityBO.findByPrimaryKey(bizObj.getKey());
         assertNotNull("Could not find a instance with PK: " + bizObj.getKey(), retrievedBizObj);
@@ -59,7 +59,7 @@ public class GeneratorPersistentTest extends AbstractMsgMgrAwareTestSupport {
 
         bizObj = bizObj.save();
 
-        assertEquals(0, MessageManager.getMessages().getErrorMessageCount());
+        assertEquals(0, MessageManager.getMessages().getErrorCount());
         assertNotNull("PK should have been set to a valid integer!", bizObj.getKey());
         LongKeyedEntityBO retrievedBizObj = LongKeyedEntityBO.findByPrimaryKey(bizObj.getKey());
         assertNotNull("Could not find a instance with PK: " + bizObj.getKey(), retrievedBizObj);

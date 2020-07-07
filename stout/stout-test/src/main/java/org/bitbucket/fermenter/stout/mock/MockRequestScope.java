@@ -35,11 +35,12 @@ public class MockRequestScope extends SimpleThreadScope {
     public Object remove(String name) {
         Object removedObject = super.remove(name);
         if (removedObject != null) {
-            LOGGER.debug("MessageManager cleaned up within " + this.getClass().getSimpleName());
+            LOGGER.debug("MessageManager cleaned up within {}", this.getClass().getSimpleName());
 
         } else {
-            LOGGER.warn("Expecting MessageManager to be cleaned up within " + this.getClass().getSimpleName()
-                    + ", but it was either not found or not in the correct scope!");
+            LOGGER.warn(
+                    "Expecting MessageManager to be cleaned up within {}, but it was either not found or not in the correct scope!",
+                    this.getClass().getSimpleName());
 
         }
         return removedObject;

@@ -21,9 +21,7 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.ValidationExample
 import org.bitbucket.fermenter.stout.messages.Message;
 import org.bitbucket.fermenter.stout.messages.MessageManager;
 import org.bitbucket.fermenter.stout.messages.MessageManagerInitializationDelegate;
-import org.bitbucket.fermenter.stout.messages.MessageUtils;
 import org.bitbucket.fermenter.stout.messages.Messages;
-import org.bitbucket.fermenter.stout.messages.MessagesSet;
 import org.bitbucket.fermenter.stout.service.ServiceResponse;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
@@ -337,7 +335,7 @@ public class ClientBulkDataloadSteps {
     public void each_data_value_is_not_saved_and_an_error_is_thrown() throws Throwable {
         assertFalse("Bulk create or update did not fail for invalid data", bulkCreateOrUpdateSuccess);
         assertTrue("Response should come with error messages, but it didnt.",
-                errorServiceResponse.getMessages().hasErrorMessages());
+                errorServiceResponse.getMessages().hasErrors());
         MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ClientBulkDataloadSteps.class);
 
     }
@@ -346,7 +344,7 @@ public class ClientBulkDataloadSteps {
     public void each_data_value_is_not_updated_and_an_error_is_thrown() throws Throwable {
         assertFalse("Bulk create or update did not fail for invalid data", bulkCreateOrUpdateSuccess);
         assertTrue("Response should come with error messages, but it didnt.",
-                errorServiceResponse.getMessages().hasErrorMessages());
+                errorServiceResponse.getMessages().hasErrors());
 
         MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ClientBulkDataloadSteps.class);
     }
@@ -355,7 +353,7 @@ public class ClientBulkDataloadSteps {
     public void each_data_value_is_not_deleted_and_an_error_is_thrown() throws Throwable {
         assertFalse("Bulk delete is successful when expecting failure", bulkDeleteSuccess);
         assertTrue("Response should come with error messages, but it didnt.",
-                errorServiceResponse.getMessages().hasErrorMessages());
+                errorServiceResponse.getMessages().hasErrors());
 
         MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ClientBulkDataloadSteps.class);
 
@@ -371,7 +369,7 @@ public class ClientBulkDataloadSteps {
         assertTrue("An error was not thrown when attempting to pass invalid data", errorCaught);
         Collection<Message> errors = getErrorMessages(errorServiceResponse);
         for (Message error : errors) {
-            String errorText = MessageUtils.getSummaryMessage(error.getKey(), error.getInserts(), this.getClass());
+            String errorText = error.getDisplayText();
             assertTrue("Bulk error did not contain the primary key: " + exampleTest.getId(),
                     errorText.contains(exampleTest.getId().toString()));
         }
@@ -382,7 +380,7 @@ public class ClientBulkDataloadSteps {
         assertTrue("An error was not thrown when attempting to pass invalid data", errorCaught);
         Collection<Message> errors = getErrorMessages(errorServiceResponse);
         for (Message error : errors) {
-            String errorText = MessageUtils.getSummaryMessage(error.getKey(), error.getInserts(), this.getClass());
+            String errorText = error.getDisplayText();
             for (ValidationExample object : invalidExamplesForErrorValidation) {
                 if (object.getRequiredField() == null) {
                     assertTrue("Bulk update error did not contain the primary key: " + object.getId(),
@@ -406,13 +404,13 @@ public class ClientBulkDataloadSteps {
     }
 
     private Collection<Message> getErrorMessages(ServiceResponse serviceResponse) {
-        Messages messages = new MessagesSet();
-        if (serviceResponse.getMessages().getErrorMessageCount() > 0) {
+        Messages messages = new Messages();
+        if (serviceResponse.getMessages().getErrorCount() > 0) {
             messages = serviceResponse.getMessages();
         } else {
             fail("No error messages found");
         }
-        return messages.getErrorMessages();
+        return messages.getErrors();
         
     }
 

@@ -12,7 +12,7 @@ import org.slf4j.Logger;
  */
 public final class MessageManager {
 
-    private static final ThreadLocal<Messages> MESSAGES = ThreadLocal.withInitial(DefaultMessages::new);
+    private static final ThreadLocal<Messages> MESSAGES = ThreadLocal.withInitial(Messages::new);
 
     // This one we want to be per thread, so we create one set of unmanaged
     // default messages per thread.
@@ -47,7 +47,7 @@ public final class MessageManager {
     }
 
     public static boolean hasErrorMessages() {
-        return MESSAGES.get().hasErrorMessages();
+        return MESSAGES.get().hasErrors();
     }
 
     public static void addMessage(Message message) {
@@ -71,21 +71,21 @@ public final class MessageManager {
      */
     public static void logMessages(Logger logger, Class<?> classpathRoot) {
         Messages messages = getMessages();
-        if (logger.isErrorEnabled() && messages.hasErrorMessages()) {
+        if (logger.isErrorEnabled() && messages.hasErrors()) {
             StringBuilder logOutput = new StringBuilder();
-            logOutput.append("Encountered " + messages.getErrorMessageCount() + " errors:");
-            for (Message message : getMessages().getErrorMessages()) {
-                logOutput.append("\n\t" + MessageUtils.getSummaryMessage(message, classpathRoot));
+            logOutput.append("Encountered " + messages.getErrorCount() + " errors:");
+            for (Message message : getMessages().getErrors()) {
+                logOutput.append("\n\t" + message.getDisplayText());
             }
 
             logger.error(logOutput.toString());
         }
 
-        if (logger.isInfoEnabled() && messages.hasInformationalMessages()) {
+        if (logger.isInfoEnabled() && messages.hasInfos()) {
             StringBuilder logOutput = new StringBuilder();
-            logOutput.append("Encountered " + messages.getErrorMessageCount() + " informational messages:");
-            for (Message message : getMessages().getInformationalMessages()) {
-                logOutput.append("\n\t" + MessageUtils.getSummaryMessage(message, classpathRoot));
+            logOutput.append("Encountered " + messages.getErrorCount() + " informational messages:");
+            for (Message message : getMessages().getInfos()) {
+                logOutput.append("\n\t" + message.getDisplayText());
             }
 
             logger.info(logOutput.toString());

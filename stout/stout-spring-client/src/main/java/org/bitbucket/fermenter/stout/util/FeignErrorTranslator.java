@@ -3,20 +3,13 @@ package org.bitbucket.fermenter.stout.util;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.WebApplicationException;
 
-import org.bitbucket.fermenter.stout.messages.Message;
-import org.bitbucket.fermenter.stout.messages.Messages;
 import org.bitbucket.fermenter.stout.service.ServiceResponse;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
-
-import com.fasterxml.jackson.core.type.TypeReference;
 
 import feign.Response;
 import feign.codec.ErrorDecoder;

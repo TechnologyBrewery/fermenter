@@ -109,6 +109,6 @@ Feature: Find By Example
 
     Scenario: query with no sort
         When I find by the example with a null sort
-        Then I should get an error message saying "When searching by example, a valid sort is required."
+        Then I should get an error message saying "When searching by example, a valid sort is required"
 
 

@@ -23,8 +23,10 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainChildBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.enumeration.SimpleDomainEnumeration;
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.SimpleDomainManagerService;
+import org.bitbucket.fermenter.stout.messages.CoreMessages;
+import org.bitbucket.fermenter.stout.messages.Message;
 import org.bitbucket.fermenter.stout.messages.MessageManager;
-import org.bitbucket.fermenter.stout.messages.MessageUtils;
+import org.bitbucket.fermenter.stout.messages.Severity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -85,8 +87,9 @@ public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServi
     @Override
     protected void createAndPropagateErrorMessagesImpl(Integer numErrorMessagesToGenerate) {
         for (int iter = 0; iter < numErrorMessagesToGenerate; iter++) {
-            MessageManager.addMessage(MessageUtils.createErrorMessage(RandomStringUtils.randomAlphabetic(5),
-                    new String[] {}, new Object[] {}));
+            Message message = new Message(CoreMessages.UNKNOWN_EXCEPTION_OCCURRED, Severity.ERROR);
+            message.addInsert("differentiateFromOtherInstances", RandomStringUtils.random(10));
+            MessageManager.addMessage(message);
         }
     }
 

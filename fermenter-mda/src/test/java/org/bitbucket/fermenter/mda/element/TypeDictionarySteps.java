@@ -10,10 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.aeonbits.owner.KrauseningConfigFactory;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
+import org.bitbucket.fermenter.mda.metamodel.MetamodelConfig;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceUrl;
 import org.bitbucket.fermenter.mda.metamodel.ModelRepositoryConfiguration;
 import org.bitbucket.fermenter.mda.metamodel.element.DictionaryType;
@@ -28,14 +30,18 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
 public class TypeDictionarySteps {
-
+    
+    private static final MetamodelConfig config = KrauseningConfigFactory.create(MetamodelConfig.class);
+    
     private MessageTracker messageTracker = MessageTracker.getInstance();
     private ObjectMapper objectMapper = new ObjectMapper();
     private File typeDictionaryFile;
     private GenerationException encounteredException;
     private DefaultModelInstanceRepository metadataRepo;
-    private File dictionaryTypeDirectory = new File("target/temp-metadata", "dictionaryTypes");
+    private File dictionaryTypeDirectory = new File("target/temp-metadata", config.getDictionaryTypesRelativePath());
 
+    // Also uses CommonSteps for setup and tear down    
+    
     @After("@typeDictionary")
     public void cleanUp() {
         typeDictionaryFile = null;

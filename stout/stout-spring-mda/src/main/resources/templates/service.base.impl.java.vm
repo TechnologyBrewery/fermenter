@@ -8,14 +8,13 @@ import javax.inject.Inject;
 
 import org.bitbucket.fermenter.stout.authz.Action;
 
-import org.bitbucket.fermenter.stout.messages.AbstractMsgMgrAwareService;
+import org.bitbucket.fermenter.stout.messages.AbstractMessageManagerAwareService;
 import org.bitbucket.fermenter.stout.messages.MessageManagerAwareService;
-import org.bitbucket.fermenter.stout.messages.DefaultMessages;
 import org.bitbucket.fermenter.stout.messages.Message;
-import org.bitbucket.fermenter.stout.messages.MessageFactory;
+import org.bitbucket.fermenter.stout.messages.Messages;
 import org.bitbucket.fermenter.stout.messages.MessageManager;
+import org.bitbucket.fermenter.stout.messages.ServiceMessages;
 import org.bitbucket.fermenter.stout.messages.Severity;
-import org.bitbucket.fermenter.stout.messages.MessageUtils;
 
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
@@ -36,10 +35,10 @@ import ${basePackage}.service.rest.${service.name}Service;
  * 
  * Generated from service.base.impl.java.vm
  */ 
-public abstract class ${service.name}BaseServiceImpl extends AbstractMsgMgrAwareService implements ${service.name}Service {
+public abstract class ${service.name}BaseServiceImpl extends AbstractMessageManagerAwareService implements ${service.name}Service {
 
 	@Inject
-	protected DefaultMessages messages;
+	protected Messages messages;
 	
 	@Inject
 	private MessageManagerAwareService messageManagerAwareService;
@@ -66,13 +65,17 @@ public abstract class ${service.name}BaseServiceImpl extends AbstractMsgMgrAware
 	#if( $operation.return.isPagedResponse() )
         ValueServiceResponse<PageWrapper<${operation.return.javaType}>> response = null;
         if(startPage == null || startPage < 0) {
-            Message msg = MessageUtils.createErrorMessage("service.paged.requires.start.page", null, null);
-            MessageManager.addMessage(msg);
+            Message requiresStartPage = new Message(ServiceMessages.PAGING_REQUIRES_START_PAGE, Severity.ERROR);
+			MessageManager.addMessage(requiresStartPage);
+            
 		}
+		
 		if(count == null || count < 0) {
-            Message msg = MessageUtils.createErrorMessage("service.paged.requires.count", null, null);
-            MessageManager.addMessage(msg);
+            Message requiresCount = new Message(ServiceMessages.PAGING_REQUIRES_COUNT, Severity.ERROR);
+			MessageManager.addMessage(requiresCount);
+            
         }
+        
         if(!MessageManager.hasErrorMessages()) {
 		Page<${operation.return.javaType}> result =
 	#elseif( $operation.return.isMany() )

@@ -4,13 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
-import org.bitbucket.fermenter.stout.messages.DefaultMessage;
-import org.bitbucket.fermenter.stout.messages.DefaultMessages;
 import org.bitbucket.fermenter.stout.messages.Message;
 import org.bitbucket.fermenter.stout.messages.Messages;
 import org.bitbucket.fermenter.stout.messages.json.MessageDeserializer;
@@ -24,8 +19,6 @@ import ${basePackage}.transfer.json.*;
  * Manages and customizes the Jackson {@link ObjectMapper} instance for this project.
  */
 public final class ObjectMapperManager {
-
-	private final static Logger LOGGER = LoggerFactory.getLogger(ObjectMapperManager.class);
 	
 	private static ObjectMapper objectMapper;
 	
@@ -46,12 +39,10 @@ public final class ObjectMapperManager {
 #foreach( $entity in $entities )		
 		module.setMixInAnnotation(${entity.name}BO.class, ${entity.name}MixIn.class);
 #end
-
-		module.addAbstractTypeMapping(Messages.class, DefaultMessages.class);
-		module.setMixInAnnotation(Messages.class, MessagesMixIn.class);
-		module.setMixInAnnotation(DefaultMessages.class, MessagesMixIn.class);
-		module.addSerializer(Message.class, new MessageSerializer(ObjectMapperManager.class));
-		module.addDeserializer(Message.class, new MessageDeserializer());
+		
+		module.setMixInAnnotation(Messages.class, MessagesMixIn.class);	
+        module.addSerializer(Message.class, new MessageSerializer());
+        module.addDeserializer(Message.class, new MessageDeserializer());		
 		
 		objectMapper.registerModule(module);
 		objectMapper.registerModule(new Hibernate5Module());

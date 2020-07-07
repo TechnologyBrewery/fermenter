@@ -1,87 +1,164 @@
 package org.bitbucket.fermenter.stout.messages;
 
-import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Message interface definition.  A message is an object that consists of
- * a key (used to somehow identify the message's text) and a severity 
- * (e.g. 'Error', 'Info').  Optionally, messages be associated with
- * one or more properties, and may contain insert values used to dynamically
- * populate the message text identified by the message's key.
- * 
- * @see org.bitbucket.fermenter.stout.messages.DefaultMessage
- * @see org.bitbucket.fermenter.stout.messages.Severity
+ * A message is an object that consists of a name (used to somehow identify the message's text) and a severity (e.g.
+ * 'Error', 'Info'). Messages can have properties in the text to make them more meaningful, but cannot be associated
+ * with a specific field without extending the class.
  */
-public interface Message extends Serializable {
+public class Message {
 
+    private static final Logger logger = LoggerFactory.getLogger(Message.class);
 
-	/**
-	 * Get the key for this message.
-	 *
-	 * @return The message's key - the value used to identify the text
-	 *         for this message
-	 */
-	String getKey();
+    private MetaMessage metaMessage;
+    private Severity severity;
+    private Map<String, String> inserts = new HashMap<>();
 
-	/**
-	 * Get the severity for this message.
-	 *
-	 * @return The <code>Severity</code> enumeration value for this message
-	 * @see Severity
-	 */
-	Severity getSeverity();
+    public Message(MetaMessage metaMessage) {
+        this.metaMessage = metaMessage;
+    }
 
-	/**
-	 * Get the collection of properties for this message.
-	 *
-	 * @return A non-modifiable, non-null collection of strings containing the
-	 *         properties associated with this messages.  Might contain 0..n
-	 *         properties
-	 */
-	Collection<String> getProperties();
+    public Message(MetaMessage metaMessage, Severity severity) {
+        this.metaMessage = metaMessage;
+        this.severity = severity;
+    }
 
-	/**
-	 * Get the inserts for this message.
-	 *
-	 * @return A non-modifiable, non-null collection of objects representing
-	 *         the inserts to be used in association with the message key when
-	 *         constructing the full message text
-	 */
-	Collection<Object> getInserts();
+    public Message(MetaMessage metaMessage, Severity severity, Map<String, Object> inserts) {
+        this.metaMessage = metaMessage;
+        this.severity = severity;
+        if (inserts != null) {
+            for (Map.Entry<String, Object> insert : inserts.entrySet()) {
+                addInsert(insert.getKey(), insert.getValue());
+            }
+        }
+    }
 
-	/**
-	 * Update the value of the message's key.
-	 *
-	 * @param key The key value to be set
-	 */
-	void setKey(String key);
+    /**
+     * Get the meta information for this message as represented by an instance of {@link MetaMessage}.
+     *
+     * @return The message's meta information - the value used to identify the text for this message
+     */
+    public MetaMessage getMetaMessage() {
+        return metaMessage;
+    }
 
-	/**
-	 * Update the value of the message's severity.
-	 *
-	 * @param severity The severity (enumerated type) value
-	 * @see Severity
-	 */
-	void setSeverity(Severity severity);
+    /**
+     * Get the severity for this message.
+     *
+     * @return The {@link Severity} enumeration value for this message
+     * @see Severity
+     */
+    public Severity getSeverity() {
+        return severity;
+    }
 
-	/**
-	 * Add a property name to the message.  This method can be used by objects
-	 * that create messages to associate messages with one or properties of
-	 * the raising object.  A message can only be associated with an single
-	 * property once; multiple calls to <code>addProperty</code> with the same
-	 * value should only add the property once.
-	 *
-	 * @param property The property name to be added to the message
-	 */
-	void addProperty(String property);
+    /**
+     * Get the *formatted* insert for the passed insert name
+     *
+     * @return formatted insert
+     */
+    public String getInsert(String insertName) {
+        return inserts.get(insertName);
+    }
 
-	/**
-	 * Add an insert value to the messages.  Inserts will be used along with the
-	 * message key to formulate the full message text.
-	 *
-	 * @param insert The insert value to be added
-	 */
-	void addInsert(Object insert);
+    /**
+     * Returns all inserts. This can be useful when you have many similar messages and want to differentiate them based
+     * on which objects / values they are representing.
+     * 
+     * @return all inserts or an empty collection if none exist
+     */
+    public Collection<Entry<String, String>> getAllInserts() {
+        return inserts.entrySet();
+    }
+
+    /**
+     * Update the value of the message's severity.
+     *
+     * @param severity
+     *            The severity (enumerated type) value
+     * @see Severity
+     */
+    public void setSeverity(Severity severity) {
+        this.severity = severity;
+    }
+
+    /**
+     * Adds a insert value for a given insert name. For instance name: 'today', value: new Date().
+     * 
+     * @param insertName
+     *            the named parameter in a message's text (e.g., 'Something went wrong on ${today}')
+     * @param insertValue
+     *            the value to insert
+     */
+    public void addInsert(String insertName, Object insertValue) {
+        if (insertName == null) {
+            // We could fail hard here and throw an exception, but that seems disproportionate for inserts in a message:
+            logger.error("Adding an insert without a name means it cannot be retrieved!");
+        }
+
+        if (insertValue != null) {
+            this.inserts.put(insertName, insertValue.toString());
+        }
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean equals(Object o) {
+        return EqualsBuilder.reflectionEquals(this, o, true);
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this, true);
+    }
+
+    /**
+     * Return a more friendly representation of the message.
+     * 
+     * @return The string representation of this message
+     */
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
+
+    /**
+     * Returns a "displayable" version of the message with inserts formatted and included, where appropriate.
+     */
+    public String getDisplayText() {
+        String displayText = metaMessage.getText();
+        for (String insertName : inserts.keySet()) {
+            String searchString = "${" + insertName + "}";
+            if (displayText.contains(searchString)) {
+                String formattedInsert = getInsert(insertName);
+                displayText = StringUtils.replace(displayText, searchString, formattedInsert);
+
+            } else {
+                logger.debug("Trying no insert value for {} exists in MetaMessage {}!", searchString, metaMessage);
+
+            }
+        }
+
+        return displayText;
+
+    }
+
+    // TODO: allow formats to also be passed for a given insert name - until then,
+    // we'll go with some defaults
 
 }

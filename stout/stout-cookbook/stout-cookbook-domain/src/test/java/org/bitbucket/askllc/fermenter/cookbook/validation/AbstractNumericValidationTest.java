@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map.Entry;
 
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationExampleBO;
 import org.bitbucket.fermenter.stout.messages.Message;
@@ -27,11 +28,10 @@ public abstract class AbstractNumericValidationTest extends AbstractValidationTe
 		verifyNumberOfErrors(fieldLevelList, 1);
 
 		// ensure that error is well formed
-		Message e = messages.getErrorMessages(getExpectedMessagePropertyKey(fieldIndicator)).iterator().next();
-		Iterator<Object> i = e.getInserts().iterator();
-		assertEquals("value.must.be.lt.max", e.getKey());
-		assertEquals(fieldIndicator, i.next());
-		assertEquals(value, i.next());
+		Message e = messages.getErrors().iterator().next();
+		Iterator<Entry<String, String>> i = e.getAllInserts().iterator();
+		assertEquals("value.must.be.lt.max", e.getMetaMessage().toString());
+		assertEquals(value, i.next().getValue());
 		assertTrue(((Comparable) maxLength).compareTo(i.next()) == 0);
 	}
 
@@ -49,11 +49,10 @@ public abstract class AbstractNumericValidationTest extends AbstractValidationTe
 		verifyNumberOfErrors(fieldLevelList, 1);
 
 		// ensure that error is well formed
-		Message e = messages.getErrorMessages(getExpectedMessagePropertyKey(fieldIndicator)).iterator().next();
-		assertEquals("value.must.be.gt.min", e.getKey());
-		Iterator<Object> i = e.getInserts().iterator();
-		assertEquals(fieldIndicator, i.next());
-		assertEquals(value, i.next());
+		Message e = messages.getErrors().iterator().next();
+		assertEquals("value.must.be.gt.min", e.getMetaMessage().toString());
+		Iterator<Entry<String, String>> i = e.getAllInserts().iterator();		
+		assertEquals(value, i.next().getValue());
 		assertTrue(((Comparable) minLength).compareTo(i.next()) == 0);
 	}
 
@@ -63,7 +62,7 @@ public abstract class AbstractNumericValidationTest extends AbstractValidationTe
 
 		ve.validate();
 		Messages messages = verifyMessages();
-		assertFalse("No errrors should have been returned!", messages.hasErrorMessages());
+		assertFalse("No errrors should have been returned!", messages.hasErrors());
 	}
 
 	protected void performNumericAtOrOverMinTest(ValidationExampleBO ve, Comparable value, Object maxLength) {
@@ -72,7 +71,7 @@ public abstract class AbstractNumericValidationTest extends AbstractValidationTe
 
 		ve.validate();
 		Messages messages = verifyMessages();
-		assertFalse("No errrors should have been returned!", messages.hasErrorMessages());
+		assertFalse("No errrors should have been returned!", messages.hasErrors());
 	}
 
 	protected void verifyInvalidMaxData(Comparable c, Object limit) {

@@ -12,9 +12,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.aeonbits.owner.KrauseningConfigFactory;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
+import org.bitbucket.fermenter.mda.metamodel.MetamodelConfig;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceUrl;
 import org.bitbucket.fermenter.mda.metamodel.ModelRepositoryConfiguration;
 import org.bitbucket.fermenter.mda.metamodel.element.Enum;
@@ -33,10 +35,11 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
 public class EnumerationSteps {
-
+    
+    private static final MetamodelConfig config = KrauseningConfigFactory.create(MetamodelConfig.class);
     private ObjectMapper objectMapper = new ObjectMapper();
     private MessageTracker messageTracker = MessageTracker.getInstance();
-    private File enumerationsDirectory = new File("target/temp-metadata", "enumerations");
+    private File enumerationsDirectory = new File("target/temp-metadata", config.getEnumerationsRelativePath());
 
     private String currentBasePackage;
     
@@ -45,9 +48,10 @@ public class EnumerationSteps {
     protected GenerationException encounteredException;
     protected DefaultModelInstanceRepository metadataRepo;
 
+    // Also uses CommonSteps for setup and tear down    
+    
     @After("@enumeration,@service")
     public void cleanUp() {
-
         loadedEnumeration = null;
 
         messageTracker.clear();

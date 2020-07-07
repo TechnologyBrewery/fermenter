@@ -5,21 +5,20 @@
 * Template = fermenter-message-base.model.ts.vm
 *******************************************************/
 export class FermenterMessageBase {
-  public detailMessage: string;
-  public inserts: Array<string>;
-  public key: string;
-  public properties: Array<string>;
+  public displayText: string;
+  public inserts: Map<string, string>;
+  public name: string;
   public severity: string;
-  public summaryMessage: string;
+  public rawText: string;
+ 
 
   constructor(message?: FermenterMessageBase) {
     if (message) {
-      this.detailMessage = message.detailMessage;
+      this.displayText = message.displayText;
       this.inserts = message.inserts;
-      this.key = message.key;
-      this.properties = message.properties;
+      this.name = message.name;
       this.severity = message.severity;
-      this.summaryMessage = message.summaryMessage;
+      this.rawText = message.rawText;
     }
   }
 }

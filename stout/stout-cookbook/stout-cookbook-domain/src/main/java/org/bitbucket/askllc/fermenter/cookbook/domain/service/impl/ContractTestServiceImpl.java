@@ -10,7 +10,7 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.enumeration.SimpleDomainEn
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.ContractTestService;
 import org.bitbucket.fermenter.stout.messages.Message;
 import org.bitbucket.fermenter.stout.messages.MessageManager;
-import org.bitbucket.fermenter.stout.messages.MessageUtils;
+import org.bitbucket.fermenter.stout.messages.MetaMessage;
 import org.bitbucket.fermenter.stout.messages.Severity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -26,22 +26,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class ContractTestServiceImpl extends ContractTestBaseServiceImpl implements ContractTestService {
 
-    private static final String CONTRACT_TEST = "contract.test";
-
     private void addMessageToReponse(Severity severity, String methodName) {
-        String[] properties = { "testMethodName" };
-        Object[] inserts = { methodName };
-
-        Message message = null;
-        if (Severity.INFO.equals(severity)) {
-            message = MessageUtils.createInformationalMessage(CONTRACT_TEST, properties, inserts);
-
-        } else {
-            message = MessageUtils.createErrorMessage(CONTRACT_TEST, properties, inserts);
-
-        }
-
+        Message message = new Message (new ContractTestMessage(), severity);
+        message.addInsert("testMethodName", methodName);
         MessageManager.addMessage(message);
+        
     }
 
     /**
@@ -217,6 +206,20 @@ public class ContractTestServiceImpl extends ContractTestBaseServiceImpl impleme
         strings.add(RandomStringUtils.randomAlphanumeric(10));
         strings.add(RandomStringUtils.randomAlphanumeric(10));
         return strings;
+    }
+    
+    private class ContractTestMessage implements MetaMessage {
+        
+        @Override
+        public String toString() {
+            return "contract.test";
+        }
+
+        @Override
+        public String getText() {
+            return "This is a test. This station is conducting a test of the Service Contract options. This is only a test.";
+        }
+        
     }
 
 }

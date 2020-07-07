@@ -135,10 +135,10 @@ export class ${service.name}Service {
     }
 #else
     /**
-    * ${operation.nameLowerCamel} is not implemeneted because support for enums is pending
+    * ${operation.nameLowerCamel} is not implemented because support for enums is pending
     */
     public ${operation.nameLowerCamel}_PENDING(NOT_SUPPORTED: string) {
-        throw new Error('${operation.nameLowerCamel} is not implemeneted because support for enums and paging is pending');
+        throw new Error('${operation.nameLowerCamel} is not implemented because support for enums and paging is pending');
     }
 #end## end of if usesEnumerations
 #end## end of for operation

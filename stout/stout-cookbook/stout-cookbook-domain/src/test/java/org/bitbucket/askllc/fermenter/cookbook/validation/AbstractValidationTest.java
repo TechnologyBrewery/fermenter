@@ -35,7 +35,7 @@ public abstract class AbstractValidationTest {
 	}
 
 	protected Collection<Message> verifyFieldLevelList(Messages messages, String fieldIndicator) {
-		Collection<Message> fieldLevelList = messages.getErrorMessages(fieldIndicator);
+		Collection<Message> fieldLevelList = messages.getErrors();
 		assertNotNull("No field level errors available!", fieldLevelList);
 		return fieldLevelList;
 	}

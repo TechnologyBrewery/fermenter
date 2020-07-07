@@ -7,8 +7,10 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
 import org.bitbucket.fermenter.stout.messages.CoreMessages;
+import org.bitbucket.fermenter.stout.messages.FieldValidationMessages;
+import org.bitbucket.fermenter.stout.messages.Message;
 import org.bitbucket.fermenter.stout.messages.MessageManager;
-import org.bitbucket.fermenter.stout.messages.MessageUtils;
+import org.bitbucket.fermenter.stout.messages.Severity;
 import org.slf4j.Logger;
 
 /**
@@ -71,31 +73,32 @@ public abstract class BaseSpringBO<BO> implements BusinessObject<BO> {
             addConstraintViolationToMsgMgr(violation);
         }
     }
-    
 
-	/**
-	 * Adds the given {@link ConstraintViolation} as an error message to the {@link MessageManager}.
-	 *
-	 * @param violation
-	 *            JSR-303 violation to record in the {@link MessageManager}.
-	 */
-	protected void addConstraintViolationToMsgMgr(ConstraintViolation<BO> violation) {
-		String invalidPropertyName = violation.getPropertyPath().toString();
-		MessageManager.addMessage(MessageUtils.createErrorMessage(CoreMessages.INVALID_FIELD,
-				new String[] { invalidPropertyName }, new Object[] { invalidPropertyName, violation.getMessage() }));
+    /**
+     * Adds the given {@link ConstraintViolation} as an error message to the {@link MessageManager}.
+     *
+     * @param violation
+     *            JSR-303 violation to record in the {@link MessageManager}.
+     */
+    protected void addConstraintViolationToMsgMgr(ConstraintViolation<BO> violation) {
+        String invalidPropertyName = violation.getPropertyPath().toString();
+        Message message = new Message(FieldValidationMessages.INVALID_FIELD, Severity.ERROR);
+        message.addInsert("fieldName", invalidPropertyName);
+        message.addInsert("constraintViolation", violation.getMessage());
+        MessageManager.addMessage(message);
 
-	}
-	
-	protected void checkIfReferenceExists(Object reference) {
-		if(reference == null) {
-	    		MessageManager.addMessage(MessageUtils.createErrorMessage(CoreMessages.INVALID_REFERENCE,
-			new String[] { "Invalid reference" }, 
-	         new Object[] { "Invalid reference" , "Invalid reference, the reference does not exist"  }));
-		}
-	}
-	
-	protected abstract void validateReferences();
-	
+    }
+
+    protected void checkIfReferenceExists(String referenceName, Object reference) {
+        if (reference == null) {
+            Message message = new Message(CoreMessages.INVALID_REFERENCE, Severity.ERROR);
+            message.addInsert("referenceName", referenceName);
+            MessageManager.addMessage(message);
+        }
+    }
+
+    protected abstract void validateReferences();
+
     protected abstract void validateRelations();
 
     protected abstract void complexValidation();
@@ -105,5 +108,5 @@ public abstract class BaseSpringBO<BO> implements BusinessObject<BO> {
     protected Validator getValidator() {
         return this.validator;
     }
-    
+
 }

@@ -1,0 +1,35 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"id": "#messageGroup",
+	"title": "MessageGroup",
+	"type": "object",
+	"additionalProperties": false,
+	"properties": {
+		"name": {
+			"type": "string"
+		},
+		"package": {
+			"type": "string"
+		},
+		"messages": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"key": {
+						"type": "string"
+					},
+					"text": {
+						"type": "string"
+					}
+				}
+			},
+			"required": [
+				"key", "text"
+			]
+		}
+	},
+	"required": [
+		"name", "package"
+	]
+}

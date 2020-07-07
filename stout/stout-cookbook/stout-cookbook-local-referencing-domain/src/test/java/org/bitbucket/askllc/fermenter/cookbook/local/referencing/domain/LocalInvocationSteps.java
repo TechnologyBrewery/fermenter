@@ -17,8 +17,8 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.enumeration.SimpleDomainEn
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.SimpleDomain;
 import org.bitbucket.fermenter.stout.messages.Message;
 import org.bitbucket.fermenter.stout.messages.MessageManager;
+import org.bitbucket.fermenter.stout.messages.MessageManagerInitializationDelegate;
 import org.bitbucket.fermenter.stout.messages.Messages;
-import org.bitbucket.fermenter.stout.mock.MockRequestScope;
 import org.bitbucket.fermenter.stout.page.PageWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,9 +42,6 @@ public class LocalInvocationSteps {
     @Inject
     private ContractTestDelegate delegate;
 
-    @Inject
-    private MockRequestScope mockRequestScope;
-
     private Messages messages;
     private String standardTypeResponseValue;
     private SimpleDomainEnumeration enumerationTypeResponseValue;
@@ -64,14 +61,19 @@ public class LocalInvocationSteps {
 
         assertNotNull("Could not access service delegate!", delegate);
 
+        MessageManagerInitializationDelegate.initializeMessageManager();
+
         startInvocationTimer();
+
     }
 
     @After("@localInvocationOfRemoteService")
     public void cleanUp() {
         stopAndLogInvocationTimer();
 
-        mockRequestScope.cleanMessageManager();
+        MessageManagerInitializationDelegate.cleanupMessageManager();
+        
+        this.messages = null;
     }
 
     @When("^a service with a void return type is invoked$")
@@ -223,12 +225,12 @@ public class LocalInvocationSteps {
 
     @Then("^a single informational messages is returned indicating successful invocation$")
     public void a_single_informational_messages_is_returned_indicating_successful_invocation() throws Throwable {
-        assertEquals("Expected one info message to indicate success!", 1, messages.getInformationalMessageCount());
+        assertEquals("Expected one info message to indicate success!", 1, messages.getInfoCount());
     }
 
     @Then("^a single error messages is returned indicating a busines-logic troubled invocation$")
     public void a_single_error_messages_is_returned_indicating_a_busines_logic_troubled_invocation() throws Throwable {
-        assertEquals("Expected one error message to indicate success!", 1, messages.getErrorMessageCount());
+        assertEquals("Expected one error message to indicate success!", 1, messages.getErrorCount());
     }
 
     private void storeMessagesForFinalCheck() {
@@ -248,7 +250,7 @@ public class LocalInvocationSteps {
     private void stopAndLogInvocationTimer() {
         stop = System.currentTimeMillis();
         Message message = messages.getAllMessages().iterator().next();
-        logger.info("**LOCAL** Invocation of {} took {}ms", message.getInserts().iterator().next(), (stop - start));
+        logger.info("**LOCAL** Invocation of {} took {}ms", message.getAllInserts().iterator().next(), (stop - start));
     }
 
 }

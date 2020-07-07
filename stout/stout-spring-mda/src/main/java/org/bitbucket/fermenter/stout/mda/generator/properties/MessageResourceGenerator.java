@@ -1,42 +1,34 @@
 package org.bitbucket.fermenter.stout.mda.generator.properties;
 
-import java.util.Collection;
+import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
 import org.bitbucket.fermenter.mda.generator.AbstractGenerator;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
-import org.bitbucket.fermenter.mda.metadata.MessagesMetadataManager;
-import org.bitbucket.fermenter.mda.metadata.element.Message;
+import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
+import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
+import org.bitbucket.fermenter.mda.metamodel.element.MessageGroup;
 import org.bitbucket.fermenter.stout.mda.java.JavaGeneratorUtil;
 
 public class MessageResourceGenerator extends AbstractGenerator {
 
-    private static final String LOCAL_VARIABLE = "${locale}";
-    private static final Log LOG = LogFactory.getLog(MessageResourceGenerator.class);
-
     public void generate(GenerationContext context) {
+        DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
+                .getMetadataRepostory(DefaultModelInstanceRepository.class);
 
-        Collection<String> locales = MessagesMetadataManager.getInstance().getAllLocales();
-        String baseFileName = context.getOutputFile();
-        for (String locale : locales) {
-            String fileName = null;
-            if (locale.equals(Message.DEFAULT_LOCALE)) {
-                fileName = StringUtils.replace(baseFileName, LOCAL_VARIABLE, "");
-            } else {
-                fileName = StringUtils.replace(baseFileName, LOCAL_VARIABLE, "_" + locale);
-            }
-            fileName = replaceBasePackage(fileName, context.getBasePackageAsPath());
+        String fileName;
+        String basefileName = context.getOutputFile();
+        basefileName = replaceBasePackage(basefileName, context.getBasePackageAsPath());
 
-            LOG.debug("Writing properties for locale " + locale + " to file " + fileName);
-
+        String basePackage = metadataRepository.getBasePackage();
+        Map<String, MessageGroup> messageGroups = metadataRepository.getMessageGroups(basePackage);
+        for (MessageGroup messageGroup : messageGroups.values()) {
+            fileName = replaceBasePackage(basefileName, context.getBasePackageAsPath());
+            fileName = replaceMessageGroupName(fileName, messageGroup.getName());
             context.setOutputFile(fileName);
 
             VelocityContext vc = new VelocityContext();
-            vc.put("locale", locale);
-            vc.put("messages", MessagesMetadataManager.getInstance().getAllMessages());
+            vc.put("messages", messageGroup);
             generateFile(context, vc);
         }
     }

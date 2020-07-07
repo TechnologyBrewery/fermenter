@@ -11,6 +11,7 @@ import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metamodel.element.DictionaryType;
 import org.bitbucket.fermenter.mda.metamodel.element.Entity;
 import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
+import org.bitbucket.fermenter.mda.metamodel.element.MessageGroup;
 import org.bitbucket.fermenter.mda.metamodel.element.Service;
 import org.bitbucket.fermenter.mda.util.MessageTracker;
 
@@ -25,6 +26,7 @@ public class DefaultModelInstanceRepository extends AbstractModelInstanceReposit
     private EntityModelInstanceManager entityManager = EntityModelInstanceManager.getInstance();
     private ServiceModelInstanceManager serviceManager = ServiceModelInstanceManager.getInstance();
     private DictionaryModelInstanceManager dictionaryManager = DictionaryModelInstanceManager.getInstance();
+    private MessageGroupModelInstanceManager messageGroupManager = MessageGroupModelInstanceManager.getInstance();
 
     /**
      * Creates a new instance w/ the base package of the current project. This package name will become the default
@@ -47,6 +49,8 @@ public class DefaultModelInstanceRepository extends AbstractModelInstanceReposit
         dictionaryManager.reset();
         serviceManager.reset();
         entityManager.reset();
+        messageGroupManager.reset();
+        
         Collection<ModelInstanceUrl> modelInstanceUrls = config.getMetamodelInstanceLocations().values();
         for (ModelInstanceUrl modelInstanceUrl : modelInstanceUrls) {
             long start = System.currentTimeMillis();
@@ -54,6 +58,7 @@ public class DefaultModelInstanceRepository extends AbstractModelInstanceReposit
             dictionaryManager.loadMetadata(modelInstanceUrl, config);
             serviceManager.loadMetadata(modelInstanceUrl, config);
             entityManager.loadMetadata(modelInstanceUrl, config);
+            messageGroupManager.loadMetadata(modelInstanceUrl, config);
 
             if (log.isInfoEnabled()) {
                 long stop = System.currentTimeMillis();
@@ -91,6 +96,10 @@ public class DefaultModelInstanceRepository extends AbstractModelInstanceReposit
 
         for (Entity entity : entityManager.getMetadataElementWithoutPackage().values()) {
             entity.validate();
+        }
+        
+        for (MessageGroup messageGroup : messageGroupManager.getMetadataElementWithoutPackage().values()) {
+            messageGroup.validate();
         }
 
         MessageTracker messageTracker = MessageTracker.getInstance();
@@ -333,5 +342,64 @@ public class DefaultModelInstanceRepository extends AbstractModelInstanceReposit
     public Set<Entity> getEntitiesByDependencyOrder(String context) {
         return entityManager.getNamesByDependencyOrder(context);
     }
+    
+    /**
+     * Gets an message group by name from the current package.
+     * 
+     * @param name
+     *            name of the message group to look up
+     * @return instance of the {@link MessageGroup} or null if none is found with the request name
+     */
+    public MessageGroup getMessageGroup(String name) {
+        return messageGroupManager.getMetadataElementByPackageAndName(config.getBasePackage(), name);
+
+    }
+
+    /**
+     * Gets an message group by name from the passed package.
+     * 
+     * @param name
+     *            name of the message group to look up
+     * @param packageName
+     *            the package in which to look for the request element
+     * @return instance of the {@link MessageGroup} or null if none is found with the request name
+     */
+    public MessageGroup getMessageGroup(String packageName, String name) {
+        return messageGroupManager.getMetadataElementByPackageAndName(packageName, name);
+
+    }
+
+    /**
+     * Gets all message groups from the specified package.
+     * 
+     * @param packageName
+     *            the requested package
+     * @return all message groups within the request package, keyed by name
+     */
+    public Map<String, MessageGroup> getMessageGroups(String packageName) {
+        return messageGroupManager.getMetadataElementByPackage(packageName);
+    }
+
+    /**
+     * Gets all message groups from the specified artifact id.
+     * 
+     * @param artifactId
+     *            the requested artifact id
+     * @return all message groups within the request artifact id, keyed by name
+     */
+    public Map<String, MessageGroup> getMessageGroupsByArtifactId(String artifactId) {
+        return messageGroupManager.getMetadataByArtifactIdMap(artifactId);
+    }
+
+    /**
+     * Retrieves message groups based on a generation context.
+     * 
+     * @param context
+     *            type of generation target context being used
+     * @return map of message groups
+     */
+    public Map<String, MessageGroup> getMessageGroupsByContext(String context) {
+        return messageGroupManager.getMetadataElementByContext(context);
+    }    
 
 }

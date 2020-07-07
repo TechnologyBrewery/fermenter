@@ -115,10 +115,9 @@ describe('Ale: Business Service Generation', () => {
       const mockResponse = new FermenterResponse<undefined>();
       mockResponse.messages = new FermenterMessages();
       const mockMessage = new FermenterMessage();
-      mockMessage.key = messageKey;
+      mockMessage.name = messageKey;
       mockMessage.severity = 'INFO';
-      mockMessage.summaryMessage = 'Server is responsive.';
-      mockMessage.detailMessage = mockMessage.summaryMessage;
+      mockMessage.displayText = 'Server is responsive.';
       mockResponse.messages.messages = [mockMessage];
       req.flush(mockResponse);
     }

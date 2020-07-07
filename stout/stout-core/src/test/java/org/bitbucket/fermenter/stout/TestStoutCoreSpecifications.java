@@ -1,4 +1,4 @@
-package org.bitbucket.fermenter.stout.exception;
+package org.bitbucket.fermenter.stout;
 
 import org.junit.runner.RunWith;
 
@@ -10,6 +10,6 @@ import cucumber.api.junit.Cucumber;
  */
 @RunWith(Cucumber.class)
 @CucumberOptions(features = "src/test/resources/specifications", plugin = "json:target/cucumber-html-reports/cucumber.json")
-public class ExceptionHandlerTestSpecifications {
+public class TestStoutCoreSpecifications {
 
 }

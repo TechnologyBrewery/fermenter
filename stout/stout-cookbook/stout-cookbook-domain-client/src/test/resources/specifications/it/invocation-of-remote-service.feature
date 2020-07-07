@@ -4,7 +4,7 @@ Feature: Invocation of Remote Service
   Tests the ability invoke a service via the delegate pattern (over REST)
 
   # Most, if not all, scenarios in this file should also be added to stout-cookbook-local-referencing-domain's local-invocation-of-remote-service.feature
-  
+    
   Scenario: test invocation of a method with a void return type
     When a service with a void return type is invoked
     Then a single informational messages is returned indicating successful invocation
@@ -61,7 +61,7 @@ Feature: Invocation of Remote Service
     When a service with both a standard type and entity parameter is invoked
     Then a single informational messages is returned indicating successful invocation
 
-  Scenario: test error messages are converyed across local calls
+  Scenario: test error messages are conveyed across remote calls
     When a service that generates an single error message is invoked
     Then a single error messages is returned indicating a busines-logic troubled invocation
     

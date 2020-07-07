@@ -10,7 +10,7 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationExampleBO;
 import org.bitbucket.fermenter.stout.messages.AbstractMsgMgrAwareTestSupport;
-import org.bitbucket.fermenter.stout.messages.CoreMessages;
+import org.bitbucket.fermenter.stout.messages.FieldValidationMessages;
 import org.bitbucket.fermenter.stout.messages.Message;
 import org.bitbucket.fermenter.stout.messages.MessageManager;
 import org.junit.After;
@@ -53,7 +53,7 @@ public class ValidationExampleTest extends AbstractMsgMgrAwareTestSupport {
 		bizObj.setBigDecimalExampleWithLargeScale(randomBigDecimal);
 		bizObj = bizObj.save();	
 
-		assertEquals(0, MessageManager.getMessages().getErrorMessageCount());
+		assertEquals(0, MessageManager.getMessages().getErrorCount());
 		ValidationExampleBO retrievedBizObj = ValidationExampleBO.findByPrimaryKey(bizObj.getKey());
 		
 		int bizObjScale1 = bizObj.getBigDecimalExampleWithScale().scale();
@@ -72,11 +72,11 @@ public class ValidationExampleTest extends AbstractMsgMgrAwareTestSupport {
 		bizObj.setIntegerExample(RandomUtils.nextInt(20000, 30000));
 		bizObj = bizObj.save();
 
-		assertEquals(3, MessageManager.getMessages().getErrorMessageCount());
-		for (Message message : MessageManager.getMessages().getErrorMessages()) {
-			assertEquals(CoreMessages.INVALID_FIELD, message.getKey());
+		assertEquals(3, MessageManager.getMessages().getErrorCount());
+		for (Message message : MessageManager.getMessages().getErrors()) {
+			assertEquals(FieldValidationMessages.INVALID_FIELD, message.getMetaMessage());
 
-			String invalidPropertyName = message.getProperties().iterator().next();
+			String invalidPropertyName = message.getInsert("fieldName");
 			assertTrue("requiredField".equals(invalidPropertyName) || "stringExample".equals(invalidPropertyName)
 					|| "integerExample".equals(invalidPropertyName));
 		}

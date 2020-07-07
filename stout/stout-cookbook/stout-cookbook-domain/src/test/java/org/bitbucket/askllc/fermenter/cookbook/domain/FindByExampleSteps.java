@@ -13,7 +13,6 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.enumeration.SimpleDomainEn
 import org.bitbucket.fermenter.stout.messages.Message;
 import org.bitbucket.fermenter.stout.messages.MessageManager;
 import org.bitbucket.fermenter.stout.messages.MessageManagerInitializationDelegate;
-import org.bitbucket.fermenter.stout.messages.MessageUtils;
 import org.bitbucket.fermenter.stout.messages.Messages;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -177,10 +176,10 @@ public class FindByExampleSteps {
     @Then("^I should get an error message saying \"([^\"]*)\"$")
     public void i_should_get_an_error_message_saying(String expectedMessage) throws Throwable {
         Messages messages = MessageManager.getMessages();
-        Collection<Message> errorMessages = messages.getErrorMessages();
+        Collection<Message> errorMessages = messages.getErrors();
         Message firstMessage = errorMessages.iterator().next();
-        String summary = MessageUtils.getSummaryMessage(firstMessage.getKey(), firstMessage.getInserts(), this.getClass());
-        assertEquals(expectedMessage, summary);
+        String foundMessage = firstMessage.getDisplayText();
+        assertEquals(expectedMessage, foundMessage);
     }
 
     @Then("^all simple domains are returned$")

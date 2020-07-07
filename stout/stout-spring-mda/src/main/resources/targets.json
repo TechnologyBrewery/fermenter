@@ -104,10 +104,10 @@
 		"overwritable": true
 	},
 	{
-		"name": "messageProperties",
-		"templateName": "templates/messages.properties.vm",
-		"outputFile": "${basePackage}/messages${locale}.properties",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.properties.MessageResourceGenerator",
+		"name": "messageGroups",
+		"templateName": "templates/message.group.java.vm",
+		"outputFile": "${basePackage}/message/${messageGroupName}.java",
+		"generator": "org.bitbucket.fermenter.stout.mda.generator.message.MessageGroupJavaGenerator",
 		"metadataContext": "local",
 		"overwritable": true
 	},

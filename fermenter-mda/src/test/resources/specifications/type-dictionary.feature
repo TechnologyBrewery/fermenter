@@ -1,4 +1,4 @@
-@typeDictionary 
+@typeDictionary
 Feature: Specify dictionary types to support model-driven file generation 
 
 Scenario Outline: Create a valid type dictionary file 

@@ -2,12 +2,10 @@ package org.bitbucket.fermenter.stout.bizobj;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.MissingResourceException;
 import java.util.UUID;
 
 import org.bitbucket.fermenter.stout.messages.Message;
 import org.bitbucket.fermenter.stout.messages.MessageManager;
-import org.bitbucket.fermenter.stout.messages.MessageUtils;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -40,22 +38,13 @@ public abstract class BasePersistentSpringBO<PK extends Serializable, BO, JPA ex
             return persistedBizObj;
         } else {
         	if (getLogger().isWarnEnabled()) {
-                getLogger().warn("Attempt to save BO of type [" + this.getClass() + "] with PK = [" + this.getKey()
-                        + "] was ignored due to collected errors");
+                getLogger().warn("Attempt to save BO of type [{}] with PK = [{}] was ignored due to collected errors", this.getClass(), this.getKey());
             }
             if (getLogger().isInfoEnabled()) {
-                Collection<Message> messages = MessageManager.getMessages().getErrorMessages();
+                Collection<Message> messages = MessageManager.getMessages().getErrors();
                 for (Message message : messages) {
-                    String summary = message.getKey();
-                    try {
-                        summary = MessageUtils.getSummaryMessage(message.getKey(), message.getInserts(), this.getClass());
-                    } catch (MissingResourceException e) {
-                        // Just swallowing this because it would just add confusion
-                        // to log errors about the error logging
-                    }
-                    getLogger().info("Encountered the following error when trying to save persistent object: "
-                            + this.toString() + "\n\t"
-                            + summary);
+                    String displayText = message.getDisplayText();
+                    getLogger().info("Encountered the following error when trying to save persistent object: {}\n\t{}", this, displayText);
                 }
 
             }

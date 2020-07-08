@@ -1,0 +1,71 @@
+package ${basePackage}.message;
+
+import org.bitbucket.fermenter.stout.messages.MetaMessage;
+
+/**
+ * Message Group ${messageGroup.name} with an enumeration for each message.
+ * 
+ * Generated Code - DO NOT MODIFY
+ */ 
+public enum ${messageGroup.capitalizedName} implements MetaMessage {
+
+#foreach ($message in $messageGroup.messages)		
+	${message.uppercasedName}("${message.name}", "${message.text}")#if ($foreach.isLast());#else,
+	#end
+#end
+	
+	private String name; 
+	private String text;
+
+	/**
+	 * Creates new instance of a message.
+	 * 
+	 * @param name the raw name for this message (naturally formatted) 
+	 * @param text the raw message (with inserts, if desired) to set for this message
+	 */
+	${messageGroup.capitalizedName}(String name, String text) {
+		this.name = name;
+		this.text = text;
+	}
+
+   	/**
+   	 * Gets the underlying raw text associated with this ${messageGroup.name} enum instance.
+   	 * 
+   	 * @return underlying raw text associated with this ${messageGroup.name} enum instance.
+   	 */
+   	public String getText() {
+   		return text;
+   	}
+   	
+   	/**
+   	 * {@inheritDoc)
+   	 */
+   	@Override
+   	public String toString() {
+   		return name;
+   	}
+
+    /**
+     * Retrieves the name of the enumerated value whose associated underlying
+     * value is equal to the input value.
+     *
+     * @param value The search value that should match an enum instance's
+     * associated underlying value
+     * @return The name of the matching enum instance
+     */
+    public static ${messageGroup.name} fromTextString(String value) {
+        ${messageGroup.name} enumInstance;
+        switch (value) {
+        #foreach ($message in $messageGroup.messages)
+        case "${message.name}":
+            enumInstance = ${message.uppercasedName};
+            break;
+        #end
+        default:
+            enumInstance = null;
+            break;
+        }
+        return enumInstance;
+    }
+	
+}

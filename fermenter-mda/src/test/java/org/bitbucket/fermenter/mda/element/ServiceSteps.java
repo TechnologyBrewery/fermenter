@@ -11,10 +11,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.aeonbits.owner.KrauseningConfigFactory;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
+import org.bitbucket.fermenter.mda.metamodel.MetamodelConfig;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceUrl;
 import org.bitbucket.fermenter.mda.metamodel.ModelRepositoryConfiguration;
 import org.bitbucket.fermenter.mda.metamodel.element.Operation;
@@ -45,9 +47,12 @@ public class ServiceSteps {
     private static final String DEFAULT_PACKAGE = "org.example";
     private static final String DEFAULT_OPERATION = "defaultOperation";
     private static final boolean IS_PAGED_RESPONSE_ENABLED = true;
+    
+    private static final MetamodelConfig config = KrauseningConfigFactory.create(MetamodelConfig.class);
+    
     private ObjectMapper objectMapper = new ObjectMapper();
     private MessageTracker messageTracker = MessageTracker.getInstance();
-    private File servicesDirectory = new File("target/temp-metadata", "services");
+    private File servicesDirectory = new File("target/temp-metadata", config.getServicesRelativePath());
 
     private String currentBasePackage;
 
@@ -56,6 +61,8 @@ public class ServiceSteps {
     protected GenerationException encounteredException;
     protected DefaultModelInstanceRepository metadataRepo;
 
+    // Also uses CommonSteps for setup and tear down    
+    
     @After("@service")
     public void cleanUp() {
         loadedService = null;

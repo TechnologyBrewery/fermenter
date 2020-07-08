@@ -9,7 +9,7 @@ package org.bitbucket.fermenter.stout.messages;
  * @author Counterpointe Solutions, Inc.
  *
  */
-public class NotSpringManagedDefaultMessages extends AbstractDefaultMessages {
+public class NotSpringManagedDefaultMessages extends Messages {
 
     private static final long serialVersionUID = -7009148808862619790L;
 

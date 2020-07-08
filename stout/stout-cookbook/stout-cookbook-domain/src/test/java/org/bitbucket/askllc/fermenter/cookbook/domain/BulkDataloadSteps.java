@@ -18,9 +18,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationExampleBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.ValidationExampleMaintenanceService;
 import org.bitbucket.fermenter.stout.messages.Message;
-import org.bitbucket.fermenter.stout.messages.MessageUtils;
 import org.bitbucket.fermenter.stout.messages.Messages;
-import org.bitbucket.fermenter.stout.messages.MessagesSet;
 import org.bitbucket.fermenter.stout.mock.MockRequestScope;
 import org.bitbucket.fermenter.stout.service.ServiceResponse;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
@@ -162,7 +160,7 @@ public class BulkDataloadSteps {
     @Then("^each data value is not saved and an error is thrown$")
     public void each_data_value_is_not_saved_and_an_error_is_thrown() throws Throwable {
         assertTrue("Response should come with error messages, but it didnt.",
-                valueServiceResponse.getMessages().hasErrorMessages());
+                valueServiceResponse.getMessages().hasErrors());
 
         List<ValidationExampleBO> examples = ValidationExampleBO.grabAllWithRequiredField();
         assertEquals("No ValidationExampleBO record should have been persisted", examples.size(), 0);
@@ -198,7 +196,7 @@ public class BulkDataloadSteps {
     @Then("^each data value is not updated and an error is thrown$")
     public void each_data_value_is_not_updated_and_an_error_is_thrown() throws Throwable {
         assertTrue("Response should come with error messages, but it didnt.",
-                valueServiceResponse.getMessages().hasErrorMessages());
+                valueServiceResponse.getMessages().hasErrors());
 
         List<ValidationExampleBO> examples = ValidationExampleBO.grabAllWithRequiredField();
         assertEquals("No ValidationExampleBO record should have been updated have null required field", 8,
@@ -222,7 +220,7 @@ public class BulkDataloadSteps {
     @Then("^each data value is not deleted and an error is thrown$")
     public void each_data_value_is_not_deleted_and_an_error_is_thrown() throws Throwable {
         assertTrue("Response should come with error messages, but it didnt.",
-                voidServiceResponse.getMessages().hasErrorMessages());
+                voidServiceResponse.getMessages().hasErrors());
 
         List<ValidationExampleBO> examples = ValidationExampleBO.getAllValidationExamples();
         assertEquals("No ValidationExampleBO record should have been deleted", 8, examples.size());
@@ -290,7 +288,7 @@ public class BulkDataloadSteps {
     public void a_message_is_created_with_the_object_s_primary_key() throws Throwable {
         Collection<Message> errors = getErrorMessages();
         for (Message error : errors) {
-            String errorText = MessageUtils.getSummaryMessage(error.getKey(), error.getInserts(), this.getClass());
+            String errorText = error.getDisplayText();
             assertTrue("Bulk error did not contain the primary key: " + messageTestBO.getKey(), errorText.contains(messageTestBO.getKey() + ""));
         }
     }
@@ -352,7 +350,7 @@ public class BulkDataloadSteps {
     public void a_message_is_created_with_the_objects_primary_keys() throws Throwable {
         Collection<Message> errors = getErrorMessages();
         for (Message error : errors) {
-            String errorText = MessageUtils.getSummaryMessage(error.getKey(), error.getInserts(), this.getClass());
+            String errorText = error.getDisplayText();;
             for(ValidationExampleBO object : bulkUpdateObjects) {
                 if(object.getRequiredField() == null) {
                     assertTrue("Bulk update error did not contain the primary key: " + object.getKey(), errorText.contains(object.getKey() + ""));
@@ -362,14 +360,14 @@ public class BulkDataloadSteps {
     }
 
     private Collection<Message> getErrorMessages() {
-        Messages messages = new MessagesSet();
-        if (serviceResponse.getMessages().getErrorMessageCount() > 0) {
+        Messages messages = new Messages();
+        if (serviceResponse.getMessages().getErrorCount() > 0) {
             messages = serviceResponse.getMessages();
         } else {
             assertTrue("No error messages found", false);
         }
-        if (messages.hasErrorMessages()) {
-            return messages.getErrorMessages();
+        if (messages.hasErrors()) {
+            return messages.getErrors();
         } else {
             return null;
         }

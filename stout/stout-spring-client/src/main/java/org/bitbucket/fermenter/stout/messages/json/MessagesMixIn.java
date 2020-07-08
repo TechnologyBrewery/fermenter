@@ -15,32 +15,20 @@ public abstract class MessagesMixIn {
 
 	@JsonProperty("messages")
 	abstract Collection<Message> getAllMessages();
-
+	
 	@JsonProperty("messages")
-	abstract void setAllMessages(Collection<Message> messages);
+	abstract void addAllMessages(Collection<Message> messages);
+	
+	@JsonIgnore
+	abstract int getErrorCount();
 
 	@JsonIgnore
-	abstract int getErrorMessageCount();
+	abstract Collection<Message> getErrors();
 
 	@JsonIgnore
-	abstract int getErrorMessageCount(String property);
+	abstract int getInfoCount();
 
 	@JsonIgnore
-	abstract Collection<Message> getErrorMessages();
-
-	@JsonIgnore
-	abstract Collection<Message> getErrorMessages(String property);
-
-	@JsonIgnore
-	abstract int getInformationalMessageCount();
-
-	@JsonIgnore
-	abstract int getInformationalMessageCount(String property);
-
-	@JsonIgnore
-	abstract Collection<Message> getInformationalMessages();
-
-	@JsonIgnore
-	abstract Collection<Message> getInformationalMessages(String property);
+	abstract Collection<Message> getInfos();
 
 }

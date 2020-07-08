@@ -19,7 +19,6 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationExampleCh
 import org.bitbucket.askllc.fermenter.cookbook.domain.enumeration.SimpleDomainEnumeration;
 import org.bitbucket.askllc.fermenter.cookbook.domain.enumeration.ValuedEnumerationExample;
 import org.bitbucket.fermenter.stout.messages.Message;
-import org.bitbucket.fermenter.stout.messages.MessageUtils;
 import org.bitbucket.fermenter.stout.messages.Messages;
 import org.bitbucket.fermenter.stout.service.ServiceResponse;
 import org.slf4j.Logger;
@@ -94,11 +93,10 @@ public final class TestUtils {
 	public static void assertNoErrorMessages(ServiceResponse response) {
 		if (response != null) {
 			Messages messages = response.getMessages();
-			boolean hasErrorMessages = messages.hasErrorMessages();
+			boolean hasErrorMessages = messages.hasErrors();
 			if (hasErrorMessages) {
-				for (Message message : messages.getErrorMessages()) {
-					LOGGER.error(MessageUtils.getSummaryMessage(message.getKey(), message.getInserts(),
-							SimpleDomainBO.class));
+				for (Message message : messages.getErrors()) {
+					LOGGER.error(message.getDisplayText());
 				}
 			}
 			assertFalse(hasErrorMessages);
@@ -110,6 +108,6 @@ public final class TestUtils {
 		Messages messages = response.getMessages();
 		assertNotNull("Messages object on service response wrapper was unexpected null", messages);
 		assertEquals("An unexpected number of error messages were found", expectedNumErrorMessages,
-				messages.getErrorMessageCount());
+				messages.getErrorCount());
 	}
 }

@@ -11,6 +11,10 @@ import org.bitbucket.fermenter.mda.metamodel.element.Enum;
 import org.bitbucket.fermenter.mda.metamodel.element.EnumElement;
 import org.bitbucket.fermenter.mda.metamodel.element.Field;
 import org.bitbucket.fermenter.mda.metamodel.element.FieldElement;
+import org.bitbucket.fermenter.mda.metamodel.element.Message;
+import org.bitbucket.fermenter.mda.metamodel.element.MessageElement;
+import org.bitbucket.fermenter.mda.metamodel.element.MessageGroup;
+import org.bitbucket.fermenter.mda.metamodel.element.MessageGroupElement;
 import org.bitbucket.fermenter.mda.metamodel.element.Operation;
 import org.bitbucket.fermenter.mda.metamodel.element.OperationElement;
 import org.bitbucket.fermenter.mda.metamodel.element.Parameter;
@@ -142,6 +146,8 @@ public final class JsonUtils {
             module.addAbstractTypeMapping(Validation.class, ValidationElement.class);
             module.addAbstractTypeMapping(Reference.class, ReferenceElement.class);
             module.addAbstractTypeMapping(Relation.class, RelationElement.class);
+            module.addAbstractTypeMapping(MessageGroup.class, MessageGroupElement.class);
+            module.addAbstractTypeMapping(Message.class, MessageElement.class);
 
             ObjectMapper localMapper = new ObjectMapper();
             localMapper.registerModule(module);

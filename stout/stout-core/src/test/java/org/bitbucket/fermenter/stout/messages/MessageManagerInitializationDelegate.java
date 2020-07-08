@@ -7,7 +7,7 @@ package org.bitbucket.fermenter.stout.messages;
 public class MessageManagerInitializationDelegate {
 
 	public static void initializeMessageManager() {
-		MessageManager.initialize(new DefaultMessages());
+		MessageManager.initialize(new Messages());
 	}
 
 	public static void cleanupMessageManager() {

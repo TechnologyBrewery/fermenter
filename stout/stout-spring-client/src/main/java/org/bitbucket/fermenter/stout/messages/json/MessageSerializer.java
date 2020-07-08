@@ -2,11 +2,11 @@ package org.bitbucket.fermenter.stout.messages.json;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Map.Entry;
 
 import org.bitbucket.fermenter.stout.messages.Message;
-import org.bitbucket.fermenter.stout.messages.MessageUtils;
+import org.bitbucket.fermenter.stout.messages.MetaMessage;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -19,47 +19,42 @@ import com.fasterxml.jackson.databind.SerializerProvider;
  */
 public class MessageSerializer extends JsonSerializer<Message> {
 
-	private Class<?> messageResourceBundleClazz;
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Class<Message> handledType() {
+        return Message.class;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void serialize(Message message, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+        jgen.writeStartObject();
+        
+        MetaMessage metaMessage = message.getMetaMessage();
+        jgen.writeObjectField("name", metaMessage.toString());        
+        
+        jgen.writeStringField("severity", message.getSeverity() != null ? message.getSeverity().toString() : null);
 
-	public MessageSerializer(Class<?> messageResourceBundleClazz) {
-		this.messageResourceBundleClazz = messageResourceBundleClazz;
-	}
-
-	@Override
-	public Class<Message> handledType() {
-		return Message.class;
-	}
-
-	@Override
-	public void serialize(Message value, JsonGenerator jgen, SerializerProvider provider)
-			throws IOException, JsonGenerationException {
-		jgen.writeStartObject();
-		jgen.writeStringField("key", value.getKey());
-		jgen.writeStringField("severity", value.getSeverity() != null ? value.getSeverity().toString() : null);
-
-		jgen.writeArrayFieldStart("properties");
-		Collection<String> properties = value.getProperties();
-		if (properties != null) {
-			for (String property : properties) {
-				jgen.writeString(property);
-			}
-		}
-		jgen.writeEndArray();
-
-		jgen.writeArrayFieldStart("inserts");
-		Collection<Object> inserts = value.getInserts();
-		if (inserts != null) {
-			for (Object insert : inserts) {
-				jgen.writeObject(insert);
-			}
-		}
-		jgen.writeEndArray();
-
-		jgen.writeStringField("summaryMessage",
-				MessageUtils.getSummaryMessage(value.getKey(), value.getInserts(), this.messageResourceBundleClazz));
-		jgen.writeStringField("detailMessage",
-				MessageUtils.getDetailMessage(value.getKey(), value.getInserts(), this.messageResourceBundleClazz));
-		jgen.writeEndObject();
-	}
+        jgen.writeArrayFieldStart("inserts");
+        Collection<Entry<String, String>> inserts = message.getAllInserts();
+        for (Entry<String, String> insert : inserts) {
+            jgen.writeStartObject();            
+            String name = insert.getKey();
+            String value = insert.getValue();
+            jgen.writeStringField(name, value);            
+            jgen.writeEndObject();
+            
+        }
+        jgen.writeEndArray();
+       
+        jgen.writeObjectField("rawText", metaMessage.getText());    
+        
+        jgen.writeStringField("displayMessage", message.getDisplayText());
+        jgen.writeEndObject();
+    }
 
 }

@@ -13,9 +13,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 // TODO: Rename for auth
-public abstract class AbstractMsgMgrAwareService {
+public abstract class AbstractMessageManagerAwareService {
 
-    private static final Logger logger = LoggerFactory.getLogger(AbstractMsgMgrAwareService.class);
+    private static final Logger logger = LoggerFactory.getLogger(AbstractMessageManagerAwareService.class);
 
     protected static StoutBehaviorConfig stoutBehaviorConfig = KrauseningConfigFactory
             .create(StoutBehaviorConfig.class);

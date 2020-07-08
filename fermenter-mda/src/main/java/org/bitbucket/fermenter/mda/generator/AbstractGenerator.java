@@ -143,6 +143,10 @@ public abstract class AbstractGenerator implements Generator {
     protected final String replaceEnumerationName(String original, String enumerationName) {
         return StringUtils.replace(original, "${enumerationName}", enumerationName);
     }
+    
+    protected final String replaceMessageGroupName(String original, String messageGroupName) {
+        return StringUtils.replace(original, "${messageGroupName}", messageGroupName);
+    }    
 
     protected final String replaceArtifactId(String original, String artifactId) {
         return StringUtils.replace(original, "${" + ARTIFACT_ID + "}", artifactId);

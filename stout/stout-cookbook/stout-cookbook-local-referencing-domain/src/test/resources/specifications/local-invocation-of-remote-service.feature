@@ -4,7 +4,7 @@ Feature: Local Invocation of Remote Service
   Tests the ability to have a local call binding for delegates that allows two domains projects to be co-deployed in order to short-circuit remoting
   
   # Most, if not all, scenarios in this file should also be added to stout-cookbook-domain-client's invocation-of-remote-service.feature
-
+	
   Scenario: test local optimization of a method with a void return type
     When a service with a void return type is invoked
     Then a single informational messages is returned indicating successful invocation
@@ -60,7 +60,7 @@ Feature: Local Invocation of Remote Service
   Scenario: test local optimization of a method with both a standard type and entity parameter
     When a service with both a standard type and entity parameter is invoked
     Then a single informational messages is returned indicating successful invocation 
-    
-  Scenario: test error messages are converyed across local calls
+  
+  Scenario: test error messages are conveyed across local calls
     When a service that generates an single error message is invoked
     Then a single error messages is returned indicating a busines-logic troubled invocation          

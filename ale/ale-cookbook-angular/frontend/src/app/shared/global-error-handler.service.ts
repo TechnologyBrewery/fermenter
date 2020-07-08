@@ -19,7 +19,7 @@ export class GlobalErrorHandler implements ErrorHandlerApi {
       error = <BusinessError>error;
       // show error handler dialog
       for(const message of error.messages.messages) {
-        console.error(message.detailMessage);
+        console.error(message.displayText);
         this.errorsToShowToUser.next(message);
       }
 
@@ -46,8 +46,7 @@ export class GlobalErrorHandler implements ErrorHandlerApi {
       }
       const message = new FermenterMessage();
       message.severity = 'CRITICAL';
-      message.summaryMessage = 'Sever connection error';
-      message.detailMessage = msg;
+      message.displayText = 'Sever connection error';
       this.errorsToShowToUser.next(message);
     }
     console.error(msg);

@@ -18,7 +18,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.BusinessKeyDelegate;
 import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.BusinessKeyedExampleMaintenanceDelegate;
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.BusinessKeyedExample;
-import org.bitbucket.fermenter.stout.mock.MockRequestScope;
+import org.bitbucket.fermenter.stout.messages.MessageManagerInitializationDelegate;
 import org.bitbucket.fermenter.stout.page.PageWrapper;
 import org.bitbucket.fermenter.stout.page.json.FindByExampleCriteria;
 import org.bitbucket.fermenter.stout.sort.OrderWrapper;
@@ -45,9 +45,6 @@ public class LocalMaintenanceInvocationSteps {
 
     @Inject
     private BusinessKeyDelegate businessDelegate;
-    
-    @Inject
-    private MockRequestScope mockRequestScope;    
 
     private String businessKey;
     private Collection<BusinessKeyedExample> createdInstances = new ArrayList<>();
@@ -62,6 +59,8 @@ public class LocalMaintenanceInvocationSteps {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         assertNotNull("Could not access maintenance delegate!", maintenanceDelegate);
+        
+        MessageManagerInitializationDelegate.initializeMessageManager();
     }
 
     @After("@localInvocationOfRemoteMaintenanceService")
@@ -70,7 +69,7 @@ public class LocalMaintenanceInvocationSteps {
             maintenanceDelegate.bulkDelete(createdInstances);
         }
 
-        mockRequestScope.cleanMessageManager();
+        MessageManagerInitializationDelegate.cleanupMessageManager();
 
     }
 

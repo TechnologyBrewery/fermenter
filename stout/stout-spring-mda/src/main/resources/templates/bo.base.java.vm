@@ -1,6 +1,8 @@
 package ${basePackage}.bizobj;
 
+#if ($entity.isNonPersistentParentEntity())
 import java.io.Serializable;
+#end
 import java.util.List;
 import java.util.HashSet;
 import java.util.Set;
@@ -34,13 +36,12 @@ import org.bitbucket.fermenter.stout.bizobj.BasePersistentSpringBO;
 import org.bitbucket.fermenter.stout.bizobj.PersistentBusinessObject;
 import org.bitbucket.fermenter.stout.exception.UnrecoverableException;
 import org.bitbucket.fermenter.stout.messages.Message;
-import org.bitbucket.fermenter.stout.messages.MessageFactory;
 import org.bitbucket.fermenter.stout.messages.MessageManager;
+import org.bitbucket.fermenter.stout.messages.ServiceMessages;
 import org.bitbucket.fermenter.stout.messages.Severity;
 import org.bitbucket.fermenter.stout.util.MetamodelInstanceUtil;
 import org.bitbucket.fermenter.stout.util.QueryUtils;
 import org.bitbucket.fermenter.stout.messages.CoreMessages;
-import org.bitbucket.fermenter.stout.messages.MessageUtils;
 
 import org.hibernate.annotations.Type;
 
@@ -75,6 +76,7 @@ import org.hibernate.annotations.Type;
 
     #if (!$entity.isNonPersistentParentEntity())
 import ${basePackage}.persist.${entity.name}Repository;
+
     #end
 #end
 
@@ -387,7 +389,8 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
         
         if (count == null || count <=0) {
             count = QueryUtils.QUERY_LIMIT;
-            MessageUtils.createInformationalMessage("find.by.example.count.override", null, null);
+            Message countOverrideMessage = new Message(ServiceMessages.FIND_BY_EXAMPLE_COUNT_OVERRIDE, Severity.INFO);
+            MessageManager.addMessage(countOverrideMessage);
         }
         
         // Figure out if there is a default sort that can be used
@@ -433,21 +436,27 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
         if(probe == null) {
             // default to find all if no probe is specified
             probe = new ${entity.name}BO();
+            
         }
         
         if (startPage == null) {
-            Message msg = MessageUtils.createErrorMessage("find.by.example.requires.start.page", null, null);
-            MessageManager.addMessage(msg);
+            Message requiresStartPage = new Message(ServiceMessages.FIND_BY_EXAMPLE_REQUIRES_START_PAGE, Severity.ERROR);
+            MessageManager.addMessage(requiresStartPage);
+			
         } else if (count == null) {
-            Message msg = MessageUtils.createErrorMessage("find.by.example.requires.count", null, null);
-            MessageManager.addMessage(msg);
+            Message requiresCount = new Message(ServiceMessages.FIND_BY_EXAMPLE_REQUIRES_COUNT, Severity.ERROR);
+            MessageManager.addMessage(requiresCount);
+            
         } else if (sort == null) {
-            Message msg = MessageUtils.createErrorMessage("find.by.example.requires.sort", null, null);
-            MessageManager.addMessage(msg);
+			Message requiresSort = new Message(ServiceMessages.FIND_BY_EXAMPLE_REQUIRES_SORT, Severity.ERROR);
+            MessageManager.addMessage(requiresSort);
+            
         } else {
             Pageable pageable = new PageRequest(startPage, count, sort);
-            result = findByExample(probe, containsMatch, pageable);    
+            result = findByExample(probe, containsMatch, pageable);
+                
         }
+        
         return result;
     }
 
@@ -899,13 +908,13 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
                 #if ($reference.foreignKeyFields.iterator().hasNext())
                 if ((${reference.name}Ref != null && ${reference.name}Ref.getKey() != null)) {
                     ${reference.type}BO found${reference.type}Ref = ${reference.type}BO.findByPrimaryKey(${reference.name}Ref.getKey());
-                    this.checkIfReferenceExists(found${reference.type}Ref);
+                    this.checkIfReferenceExists("${reference.name}", found${reference.type}Ref);
                 }
                 #elseif ($reference.isRequired() )
-                this.checkIfReferenceExists(${reference.name}Ref);
+                this.checkIfReferenceExists("${reference.name}", ${reference.name}Ref);
                 #else
                 if (${reference.name}Ref != null) {
-                    this.checkIfReferenceExists(${reference.name}Ref);
+                    this.checkIfReferenceExists("${reference.name}", ${reference.name}Ref);
                 }
                 #end
             #end
@@ -915,13 +924,13 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
                 #if ($reference.foreignKeyFields.iterator().hasNext())
                 if ((${reference.name}Ref != null && ${reference.name}Key != null)) {
                     ${reference.type} found${reference.type}Ref = ${reference.name}Delegate.findByPrimaryKey(${reference.name}Key);
-                    this.checkIfReferenceExists(found${reference.type}Ref);
+                    this.checkIfReferenceExists("${reference.name}", found${reference.type}Ref);
                 }
                 #elseif ($reference.isRequired() )
-                this.checkIfReferenceExists(${reference.name}Ref);
+                this.checkIfReferenceExists("${reference.name}", ${reference.name}Ref);
                 #else
                 if (${reference.name}Ref != null) {
-                    this.checkIfReferenceExists(${reference.name}Ref);
+                    this.checkIfReferenceExists("${reference.name}", ${reference.name}Ref);
                 }
                 #end
             #end

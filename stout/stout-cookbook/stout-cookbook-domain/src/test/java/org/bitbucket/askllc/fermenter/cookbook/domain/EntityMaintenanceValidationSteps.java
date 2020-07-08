@@ -20,7 +20,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
@@ -90,15 +89,15 @@ public class EntityMaintenanceValidationSteps {
     public void the_entity_with_the_id_is_returned_without_any_errors(String idInput) throws Throwable {
         NonUUIDKeyEntityBO persistedEntity = valueServiceResponse.getValue();
         assertFalse("error messages were encountered when finding an entity with the primary key " + idInput,
-                valueServiceResponse.getMessages().hasErrorMessages());
+                valueServiceResponse.getMessages().hasErrors());
         assertNotNull("an entity with the id " + idInput + " is not returned", persistedEntity);
         assertEquals("the entity returned does not have the id " + idInput, idInput, persistedEntity.getKey());
     }
 
     @Then("^an error message and HTTP Status (\\d+) is thrown$")
-    public void an_error_message_and_HTTP_Status_is_thrown(String status) throws Throwable {
+    public void an_error_message_and_HTTP_Status_is_thrown(String status) throws Throwable {    
         assertTrue("error messages should have been encountered",
-                valueServiceResponse.getMessages().hasErrorMessages());
+                valueServiceResponse.getMessages().hasErrors());
         assertTrue("an error was not thrown when findByPrimaryKey returned with null", errorThrown);
     }
 }

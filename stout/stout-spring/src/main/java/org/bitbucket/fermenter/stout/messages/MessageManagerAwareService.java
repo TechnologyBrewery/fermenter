@@ -1,7 +1,5 @@
 package org.bitbucket.fermenter.stout.messages;
 
-import java.util.Collection;
-
 import org.bitbucket.fermenter.stout.service.ServiceResponse;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +13,8 @@ public class MessageManagerAwareService {
     }
 
     public ServiceResponse addAllMessagesToResponse(ServiceResponse response) {
-        Messages messages = MessageManager.getMessages();
-        Collection<Message> message = messages.getAllMessages();
-        for (Message msg : message) {
-            response.getMessages().addMessage(msg);
-        }
+        Messages messages = MessageManager.getMessages();        
+        response.getMessages().addMessages(messages);
         MessageManager.cleanup();
         return response;
     }

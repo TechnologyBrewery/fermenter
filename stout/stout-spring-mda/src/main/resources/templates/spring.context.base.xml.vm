@@ -41,13 +41,13 @@
 	
 	<bean id="contextHolder" class="org.bitbucket.fermenter.stout.util.SpringApplicationContextHolder"/>
 	
-	<!-- Enables business services to be injected with an instance of DefaultMessages that is instantiated 
+	<!-- Enables business services to be injected with an instance of Messages that is instantiated 
 		 per web request. Request scoped Spring beans require the configuration of a 
 		 org.springframework.web.context.request.RequestContextListener in the application's web.xml or if
 		 operating in a unit test, the test class should be marked with 
 		 a @org.springframework.test.context.web.WebAppConfiguration annotation
 	  -->
-	<bean id="requestScopedMessages" class="org.bitbucket.fermenter.stout.messages.DefaultMessages" scope="request">
+	<bean id="requestScopedMessages" class="org.bitbucket.fermenter.stout.messages.Messages" scope="request">
 		<aop:scoped-proxy/>
     </bean>
 

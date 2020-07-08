@@ -209,7 +209,7 @@ describe('Ale Reference Domain Maintenance Service Error Handling', () => {
       mockResponse.value = testLocalDomain;
       mockResponse.messages = new FermenterMessages();
       const mockMessage = new FermenterMessage();
-      mockMessage.key = 'something.invalid';
+      mockMessage.name = 'something.invalid';
       mockMessage.severity = 'ERROR';
       mockResponse.messages.messages.push(mockMessage);
 
@@ -267,7 +267,7 @@ describe('Ale Reference Domain Maintenance Service Error Handling', () => {
       mockResponse.value = undefined;
       mockResponse.messages = new FermenterMessages();
       const mockMessage = new FermenterMessage();
-      mockMessage.key = 'something.invalid';
+      mockMessage.name = 'something.invalid';
       mockMessage.severity = 'ERROR';
       mockResponse.messages.messages.push(mockMessage);
 
@@ -325,7 +325,7 @@ describe('Ale Reference Domain Maintenance Service Error Handling', () => {
       mockResponse.value = testLocalDomain;
       mockResponse.messages = new FermenterMessages();
       const mockMessage = new FermenterMessage();
-      mockMessage.key = 'something.INFORMATIONAL';
+      mockMessage.name = 'something.INFORMATIONAL';
       mockMessage.severity = 'INFO';
       mockResponse.messages.messages = [mockMessage];
 

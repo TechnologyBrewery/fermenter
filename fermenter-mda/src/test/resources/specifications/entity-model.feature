@@ -124,18 +124,19 @@ Feature: Specify entities for use in model-driven file generation
       | name | package         | fieldName            | transient |
       | Bar  | test.entity.alt | isPersistentField    | true      |
       | Blah | test.entity.alt | isNotPersistentField | false     |
+      | Blah | test.entity.alt | isNotPersistentField |           |
 
   Scenario Outline: validate that fields default to persistent if not explicitly specified
-    Given an entity named "<name>" in "<package>" with "<fieldName>" that has no transient value specified
+    Given an entity named "<name>" in "<package>" with a "<fieldName>" that has no transient value set
     When entities are read
     Then an entity metamodel instance is returned for the name "<name>" in "<package>" with the following field:
-      | fieldName   | transientValue      |
-      | <fieldName> | <expectedTransient> |
+      | name        | transientValue |
+      | <fieldName> | <transient>    |
 
     Examples: 
-      | name | package         | fieldName            | expectedTransient |
-      | Bar  | test.entity.alt | isPersistentField    | false             |
-      | Blah | test.entity.alt | isNotPersistentField | false             |
+      | name | package         | fieldName            | transient |
+      | Bar  | test.entity.alt | doNotPersistMe       | false     |
+      | Blah | test.entity.alt | isNotPersistentField | false     |
 
   Scenario Outline: specify a field via a JSON metamodel that has an enumeration type
     Given an entity named "<name>" in "<package>" with a field:

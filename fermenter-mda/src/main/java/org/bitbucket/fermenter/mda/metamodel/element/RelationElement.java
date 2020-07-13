@@ -37,9 +37,6 @@ public class RelationElement implements Relation {
     protected Multiplicity multiplicity;
 
     @JsonInclude(Include.NON_NULL)
-    protected String localColumn;
-
-    @JsonInclude(Include.NON_NULL)
     protected FetchMode fetchMode;
 
     /**
@@ -74,13 +71,6 @@ public class RelationElement implements Relation {
         return multiplicity;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getLocalColumn() {
-        return localColumn;
-    }
 
     /**
      * {@inheritDoc}
@@ -149,16 +139,6 @@ public class RelationElement implements Relation {
             messageTracker.addErrorMessage("Could not map multiplicity '" + multiplicityAsString
                     + "' to one of the known multiplicity types! (" + Multiplicity.options() + ") ");
         }
-    }
-
-    /**
-     * Sets the local column value.
-     * 
-     * @param localColumn
-     *            localColumn value
-     */
-    public void setLocalColumn(String localColumn) {
-        this.localColumn = localColumn;
     }
 
     /**

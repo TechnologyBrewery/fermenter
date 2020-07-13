@@ -164,9 +164,6 @@
 					"package": {
 						"type": "string"					
 					},
-					"localColumn": {
-						"type": "string"
-					},
 					"documentation": {
 						"type": "string"
 					},

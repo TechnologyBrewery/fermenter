@@ -38,14 +38,6 @@ public interface Relation extends Validatable {
 	Multiplicity getMultiplicity();
 
 	/**
-	 * Returns the column name in which the primary key will be stored in this
-	 * referencing entity.
-	 * 
-	 * @return local column name
-	 */
-	String getLocalColumn();
-
-	/**
 	 * Returns the fetch mode (eager or lazy) for this relation.
 	 * 
 	 * @return fetch mode

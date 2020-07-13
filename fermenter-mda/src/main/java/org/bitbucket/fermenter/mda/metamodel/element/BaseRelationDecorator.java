@@ -58,14 +58,6 @@ public class BaseRelationDecorator implements Relation {
      * {@inheritDoc}
      */
     @Override
-    public String getLocalColumn() {
-        return wrapped.getLocalColumn();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public FetchMode getFetchMode() {
         return wrapped.getFetchMode();
     }

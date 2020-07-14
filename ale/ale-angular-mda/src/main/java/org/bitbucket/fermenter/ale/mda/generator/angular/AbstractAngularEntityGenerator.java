@@ -15,7 +15,7 @@ public abstract class AbstractAngularEntityGenerator extends AbstractEntityGener
     @Override
     public void generate(GenerationContext context) {
         DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
-                .getMetadataRepostory(DefaultModelInstanceRepository.class);
+                .getMetamodelRepository(DefaultModelInstanceRepository.class);
         String baseFileName = context.getOutputFile();
 
         // Key piece - need to generate for all artifacts and WITHOUT having a

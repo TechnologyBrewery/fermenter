@@ -5,11 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.bitbucket.fermenter.mda.metadata.AbstractMetadataRepository;
-import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
 import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
-import org.bitbucket.fermenter.mda.metamodel.element.Entity;
 import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
 import org.bitbucket.fermenter.mda.metamodel.element.Field;
 import org.bitbucket.fermenter.mda.metamodel.element.MetamodelType;
@@ -26,6 +23,9 @@ public final class JavaElementUtils {
 
     /** Needs to be a {@link List} and not {@link Collection} due to JAX-RS parameter requirements. */
     static final String PARAM_COLLECTION_TYPE = "List";
+    
+    private static DefaultModelInstanceRepository modelInstanceRepository = ModelInstanceRepositoryManager
+            .getMetamodelRepository(DefaultModelInstanceRepository.class);
 
     private JavaElementUtils() {
         // prevent instantiation of all static class
@@ -61,10 +61,7 @@ public final class JavaElementUtils {
      *         org.bitbucket.fermenter.transfer.FooClass)
      */
     static String getJavaImportByPackageAndType(String packageName, String type, boolean basePackageLocal) {
-        MetamodelType metamodelType = MetamodelType.getMetamodelType(packageName, type);
-
-        DefaultModelInstanceRepository modelInstanceRepository = ModelInstanceRepositoryManager
-                .getMetadataRepostory(DefaultModelInstanceRepository.class);
+        MetamodelType metamodelType = MetamodelType.getMetamodelType(packageName, type);        
 
         String javaImportType = null;
         if (metamodelType == null) {
@@ -129,68 +126,15 @@ public final class JavaElementUtils {
         return getJavaShortName(fullyQualifiedJavaClass);
     }
 
-    @Deprecated
-    static String getJavaImportType(String appName, String type) {
-        String javaImportType = null;
-        if (VOID.equals(type)) {
-            javaImportType = VOID;
-
-        } else {
-            // Attempt to resolve primitive type
-            javaImportType = JavaTypeManager.getJavaType(type);
-
-            if (javaImportType == null) {
-                // Assume it's an application entity or enumeration at this point
-                DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
-                        .getMetadataRepostory(DefaultModelInstanceRepository.class);
-                Entity e = metadataRepository.getEntity(appName, type);
-                if (e != null) {
-                    javaImportType = createFullyQualifiedName(type + "BO", ".bizobj.", appName);
-                } else {
-                    DefaultModelInstanceRepository newRepository = ModelInstanceRepositoryManager
-                            .getMetadataRepostory(DefaultModelInstanceRepository.class);
-                    Enumeration enumeration = newRepository.getEnumeration(type);
-                    if (enumeration != null) {
-                        if (StringUtils.isNotBlank(enumeration.getPackage())) {
-                            javaImportType = enumeration.getPackage() + ENUMERATION + type;
-                        } else {
-                            javaImportType = createFullyQualifiedName(type, ENUMERATION, appName);
-                        }
-                    } else {
-                        e = metadataRepository.getEntity(type);
-                        if ((e != null) && (StringUtils.isNotBlank(e.getPackage()))) {
-                            javaImportType = e.getPackage() + ".transfer." + type;
-                        } else {
-                            javaImportType = type;
-                        }
-                    }
-
-                }
-            }
-        }
-
-        return javaImportType;
-    }
-
-    static String createFullyQualifiedName(String type, String nestedPackage) {
-        AbstractMetadataRepository metadataRepository = ModelInstanceRepositoryManager
-                .getMetadataRepostory(MetadataRepository.class);
-        return createFullyQualifiedName(type, nestedPackage, metadataRepository.getArtifactId());
+    static String createFullyQualifiedName(String type, String nestedPackage) {       
+        return createFullyQualifiedName(type, nestedPackage, modelInstanceRepository.getArtifactId());
     }
 
     static String createFullyQualifiedName(String type, String nestedPackage, String packageName) {
         StringBuilder sb = new StringBuilder();
-        // sb.append(PackageManager.getBasePackage(applicationName));
         sb.append(packageName);
         sb.append(nestedPackage).append(type);
         return sb.toString();
-    }
-
-    @Deprecated
-    public static String getJavaType(String appName, String type) {
-        String javaType = getJavaImportType(appName, type);
-        return getJavaShortName(javaType);
-
     }
 
     /**

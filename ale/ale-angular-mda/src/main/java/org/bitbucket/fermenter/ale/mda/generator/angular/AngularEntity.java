@@ -5,32 +5,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bitbucket.fermenter.mda.metamodel.element.BaseEntityDecorator;
 import org.bitbucket.fermenter.mda.metamodel.element.Entity;
 import org.bitbucket.fermenter.mda.metamodel.element.Field;
-import org.bitbucket.fermenter.mda.metamodel.element.Parent;
 import org.bitbucket.fermenter.mda.metamodel.element.Reference;
 import org.bitbucket.fermenter.mda.metamodel.element.Relation;
 
-public class AngularEntity implements Entity, AngularNamedElement {
+public class AngularEntity extends BaseEntityDecorator implements Entity, AngularNamedElement {
 
     private static final String ID_FIELD_DOES_NOT_EXIST = "ID_FIELD_DOES_NOT_EXIST";
-    private Entity entity;
     private Map<String, AngularField> allFieldMap;
     private Map<String, AngularAssociation> decoratedAssociationsMap;
 
-    public AngularEntity(Entity entity) {
-        this.entity = entity;
-    }
-
-    @Override
-    public String getPackage() {
-        return entity.getPackage();
+    public AngularEntity(Entity wrapped) {
+        super(wrapped);
     }
 
     public Map<String, AngularAssociation> getAssociations() {
         if (decoratedAssociationsMap == null) {
-            List<Relation> entityRelations = entity.getRelations();
-            List<Reference> entityReferences = entity.getReferences();
+            List<Relation> entityRelations = getRelations();
+            List<Reference> entityReferences = getReferences();
             if ((entityRelations == null || entityRelations.isEmpty())
                     && (entityReferences == null || entityReferences.isEmpty())) {
                 decoratedAssociationsMap = Collections.<String, AngularAssociation> emptyMap();
@@ -51,11 +45,6 @@ public class AngularEntity implements Entity, AngularNamedElement {
         return decoratedAssociationsMap;
     }
 
-    @Override
-    public Field getIdentifier() {
-        return entity.getIdentifier();
-    }
-
     public String getIdFieldName() {
         String idFieldName = ID_FIELD_DOES_NOT_EXIST;
         Field identifier = getIdentifier();
@@ -72,8 +61,8 @@ public class AngularEntity implements Entity, AngularNamedElement {
             if (identifier != null) {
                 entityFieldMap.put(identifier.getName(), identifier);
             }
-            if (entity.getFields() != null) {
-                for (Field field : entity.getFields())
+            if (getFields() != null) {
+                for (Field field : getFields())
                     entityFieldMap.put(field.getName(), field);
             }
             if ((entityFieldMap == null) || (entityFieldMap.isEmpty())) {
@@ -91,80 +80,8 @@ public class AngularEntity implements Entity, AngularNamedElement {
     }
 
     @Override
-    public String getDocumentation() {
-        return entity.getDocumentation();
-    }
-
-    @Override
-    public String getTable() {
-        return entity.getTable();
-    }
-
-    @Override
-    public List<Field> getFields() {
-        return entity.getFields();
-    }
-
-    @Override
-    public List<Relation> getRelations() {
-        return entity.getRelations();
-    }
-
-    @Override
-    public Relation getRelation(String type) {
-        return entity.getRelation(type);
-    }
-
-    @Override
-    public List<Entity> getInverseRelations() {
-        return entity.getInverseRelations();
-    }
-
-    @Override
-    public List<Reference> getReferences() {
-        return entity.getReferences();
-    }
-
-    @Override
     public Boolean isTransient() {
-        return (entity.isTransient() == null) ? Boolean.FALSE : entity.isTransient();
-    }
-
-    @Override
-    public Parent getParent() {
-        return entity.getParent();
-    }
-
-    @Override
-    public Boolean isNonPersistentParentEntity() {
-        return (entity.isNonPersistentParentEntity() == null) ? Boolean.FALSE : entity.isNonPersistentParentEntity();
-    }
-
-    @Override
-    public Boolean isChildOfNonPersistentParentEntity() {
-        return (entity.isChildOfNonPersistentParentEntity() == null) ? Boolean.FALSE
-                : entity.isChildOfNonPersistentParentEntity();
-    }
-
-    @Override
-    public String getName() {
-        return entity.getName();
-    }
-
-    @Override
-    public String getFileName() {
-        return entity.getFileName();
-    }
-
-    @Override
-    public void validate() {
-        entity.validate();
-
-    }
-
-    @Override
-    public LockStrategy getLockStrategy() {
-        return entity.getLockStrategy();
+        return (wrapped.isTransient() == null) ? Boolean.FALSE : wrapped.isTransient();
     }
 
 }

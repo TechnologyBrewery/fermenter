@@ -225,7 +225,7 @@ public class SimpleDomainMaintenanceIT extends RunTestsWithinArquillianWar {
         TestUtils.assertNoErrorMessages(deleteResult);
 
         try {
-            ValueServiceResponse<SimpleDomainBO> foundResult = simpleDomainService.findByPrimaryKey(id);
+            simpleDomainService.findByPrimaryKey(id);
         } catch (WebApplicationException e) {
             assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
         }

@@ -37,9 +37,6 @@ public class RelationElement implements Relation {
     protected Multiplicity multiplicity;
 
     @JsonInclude(Include.NON_NULL)
-    protected String localColumn;
-
-    @JsonInclude(Include.NON_NULL)
     protected FetchMode fetchMode;
 
     /**
@@ -74,13 +71,6 @@ public class RelationElement implements Relation {
         return multiplicity;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getLocalColumn() {
-        return localColumn;
-    }
 
     /**
      * {@inheritDoc}
@@ -152,16 +142,6 @@ public class RelationElement implements Relation {
     }
 
     /**
-     * Sets the local column value.
-     * 
-     * @param localColumn
-     *            localColumn value
-     */
-    public void setLocalColumn(String localColumn) {
-        this.localColumn = localColumn;
-    }
-
-    /**
      * Sets the fetch mode value.
      * 
      * @param fetchModeAsString
@@ -182,7 +162,7 @@ public class RelationElement implements Relation {
     @Override
     public Field getParentIdentifier(String parentEntityName) {
         DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
-                .getMetadataRepostory(DefaultModelInstanceRepository.class);
+                .getMetamodelRepository(DefaultModelInstanceRepository.class);
         Map<String, Entity> entities = metadataRepository.getEntities(getPackage());
         Entity parentEntity = entities.get(parentEntityName);
 

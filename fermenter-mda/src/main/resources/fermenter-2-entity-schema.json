@@ -95,8 +95,11 @@
 							"scale": {
 								"type": "integer"
 							},						
-							"format": {
-								"type": "string"
+							"formats": {
+								"type": "array",
+								"items": {
+									"type": "string"
+								}
 							}
 						}
 					},
@@ -160,9 +163,6 @@
 					},
 					"package": {
 						"type": "string"					
-					},
-					"localColumn": {
-						"type": "string"
 					},
 					"documentation": {
 						"type": "string"

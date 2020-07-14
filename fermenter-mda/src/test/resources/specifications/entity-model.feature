@@ -175,18 +175,18 @@ Feature: Specify entities for use in model-driven file generation
       | name | column |
       | id   | BAR_ID |
     And an entity named "<name>" in "<package>" with a relation:
-      | documentation   | type   | relationPackage   | localColumn   | fetchMode   | multiplicity   |
-      | <documentation> | <type> | <relationPackage> | <localColumn> | <fetchMode> | <multiplicity> |
+      | documentation   | type   | relationPackage   | fetchMode   | multiplicity   |
+      | <documentation> | <type> | <relationPackage> | <fetchMode> | <multiplicity> |
     When entities are read
     Then an entity metamodel instance is returned for the name "<name>" in "<package>" with the following relation:
-      | documentation   | type   | relationPackage   | localColumn   | fetchMode   | multiplicity   |
-      | <documentation> | <type> | <relationPackage> | <localColumn> | <fetchMode> | <multiplicity> |
+      | documentation   | type   | relationPackage   | fetchMode   | multiplicity   |
+      | <documentation> | <type> | <relationPackage> | <fetchMode> | <multiplicity> |
 
     Examples: 
-      | name | package         | documentation | type  | relationPackage | localColumn | fetchMode | multiplicity |
-      | Foo  | test.entity     | 1-M to Delta  | Delta | greek.stuff     | DELTA_ID    | eager     | 1-M          |
-      | Bar  | test.entity.alt | 1-M to Gamma  | Gamma | greek.stuff     | GAMMA_ID    | lazy      | 1-1          |
-      | BB   | test.entity.alt | foo           | Gamma | greek.stuff     | GAMMA_ID    | lazy      | M-M          |
+      | name | package         | documentation | type  | relationPackage | fetchMode | multiplicity |
+      | Foo  | test.entity     | 1-M to Delta  | Delta | greek.stuff     | eager     | 1-M          |
+      | Bar  | test.entity.alt | 1-M to Gamma  | Gamma | greek.stuff     | lazy      | 1-1          |
+      | BB   | test.entity.alt | foo           | Gamma | greek.stuff     | lazy      | M-M          |
 
   Scenario Outline: Multiplicity is defaulted to 1-M when it is not present
     Given an entity named "<name>" in "<package>" with a valid relation that does not specify multiplicity

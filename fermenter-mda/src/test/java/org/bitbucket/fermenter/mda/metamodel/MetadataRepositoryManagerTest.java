@@ -23,10 +23,10 @@ public class MetadataRepositoryManagerTest {
     public void testTestMetadataReposistory() {
         TestMetadataRepository testRepository = new TestMetadataRepository(null);
         TestMetadataRepository managedRespository = ModelInstanceRepositoryManager
-                .getMetadataRepostory(TestMetadataRepository.class);
+                .getMetamodelRepository(TestMetadataRepository.class);
         assertNull(managedRespository);
         ModelInstanceRepositoryManager.setRepository(testRepository);
-        managedRespository = ModelInstanceRepositoryManager.getMetadataRepostory(TestMetadataRepository.class);
+        managedRespository = ModelInstanceRepositoryManager.getMetamodelRepository(TestMetadataRepository.class);
         assertEquals(testRepository, managedRespository);
 
     }
@@ -40,11 +40,11 @@ public class MetadataRepositoryManagerTest {
         ModelInstanceRepositoryManager.setRepository(testRepository);
 
         ModelInstanceRepository managedDefaultRespository = ModelInstanceRepositoryManager
-                .getMetadataRepostory(DefaultModelInstanceRepository.class);
+                .getMetamodelRepository(DefaultModelInstanceRepository.class);
         assertEquals(defaultRepository, managedDefaultRespository);
 
         TestMetadataRepository managedTestRespository = ModelInstanceRepositoryManager
-                .getMetadataRepostory(TestMetadataRepository.class);
+                .getMetamodelRepository(TestMetadataRepository.class);
         assertEquals(testRepository, managedTestRespository);
 
     }
@@ -56,7 +56,7 @@ public class MetadataRepositoryManagerTest {
         ModelInstanceRepository newDefaultRepository = new DefaultModelInstanceRepository(null);
         ModelInstanceRepositoryManager.setRepository(newDefaultRepository);
         ModelInstanceRepository managedDefaultRespository = ModelInstanceRepositoryManager
-                .getMetadataRepostory(DefaultModelInstanceRepository.class);
+                .getMetamodelRepository(DefaultModelInstanceRepository.class);
         assertEquals(newDefaultRepository, managedDefaultRespository);
 
     }
@@ -67,7 +67,7 @@ public class MetadataRepositoryManagerTest {
 
         ModelInstanceRepositoryManager.clear();
         ModelInstanceRepository managedDefaultRespository = ModelInstanceRepositoryManager
-                .getMetadataRepostory(DefaultModelInstanceRepository.class);
+                .getMetamodelRepository(DefaultModelInstanceRepository.class);
         assertNull(managedDefaultRespository);
 
     }
@@ -75,10 +75,10 @@ public class MetadataRepositoryManagerTest {
     private void setNewDefaultMetadataRepository() {
         ModelInstanceRepository defaultRepository = new DefaultModelInstanceRepository(null);
         ModelInstanceRepository managedRespository = ModelInstanceRepositoryManager
-                .getMetadataRepostory(DefaultModelInstanceRepository.class);
+                .getMetamodelRepository(DefaultModelInstanceRepository.class);
         assertNull(managedRespository);
         ModelInstanceRepositoryManager.setRepository(defaultRepository);
-        managedRespository = ModelInstanceRepositoryManager.getMetadataRepostory(DefaultModelInstanceRepository.class);
+        managedRespository = ModelInstanceRepositoryManager.getMetamodelRepository(DefaultModelInstanceRepository.class);
         assertEquals(defaultRepository, managedRespository);
     }
 

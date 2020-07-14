@@ -1,19 +1,22 @@
 package ${basePackage}.transfer.json;
 
 import org.slf4j.Logger;
-
+#if (!$entity.inverseRelations.isEmpty())
 import com.fasterxml.jackson.annotation.JsonBackReference;
+#end
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+#if( !$entity.relations.isEmpty() )
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+#end
 
 import ${basePackage}.bizobj.*;
 #if (!$entity.isTransient() && !$entity.isNonPersistentParentEntity())
 import ${basePackage}.persist.${entity.name}Repository;
 #end
 
-#if( !$relations.isEmpty() )  
+#if( !$entity.relations.isEmpty() )  
 import java.util.Set;
 #end
 
@@ -43,9 +46,9 @@ public abstract class ${entity.name}BaseMixIn {
 	private ${entity.name}Repository repository;
 #end
 	
-#foreach ( $idField in $entity.idFields.values() )
+#if ( $entity.hasIdentifier() )
 	@JsonProperty
-	private ${idField.javaType} ${idField.name};
+	private ${entity.identifier.javaType} ${entity.identifier.name};
 #end
 #foreach ( $field in $entity.fields )
 	@JsonProperty	
@@ -57,7 +60,7 @@ public abstract class ${entity.name}BaseMixIn {
 #foreach ($relation in $entity.relations)
 	@JsonManagedReference(value="${entity.name}-${relation.type}")
 	@JsonInclude(JsonInclude.Include.NON_EMPTY)
-	private Set<${relation.type}BO> ${relation.label}s;
+	private Set<${relation.type}BO> ${relation.uncapitalizedType}s;
 #end
 #foreach ($inverseRelation in $entity.inverseRelations)
 	@JsonBackReference(value="${inverseRelation.name}-${entity.name}")
@@ -82,13 +85,12 @@ public abstract class ${entity.name}BaseMixIn {
   #end
 #end
 
-#if ( !$entity.idFields.isEmpty() )
-  #set ($idField = ${entity.idFields.values().iterator().next()})
+#if ($entity.hasIdentifier())
 	@JsonIgnore
-	public abstract ${idField.javaType} getKey();
+	public abstract ${entity.identifier.javaType} getKey();
 	
 	@JsonIgnore
-	public abstract void setKey(${idField.javaType} ${idField.name});
+	public abstract void setKey(${entity.identifier.javaType} ${entity.identifier.name});
 	
 #end
 	

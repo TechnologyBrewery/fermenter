@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.bitbucket.fermenter.mda.metadata.MetadataRepository;
-import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 import org.bitbucket.fermenter.mda.metamodel.element.BaseOperationDecorator;
 import org.bitbucket.fermenter.mda.metamodel.element.Operation;
 import org.bitbucket.fermenter.mda.metamodel.element.Parameter;
@@ -31,9 +29,6 @@ public class JavaOperation extends BaseOperationDecorator implements Operation, 
     protected static final String FEIGN_ANNOTATION= "Param";
     protected static final String JAXRS_ANNOTATION= "QueryParam";
     protected static final String DATE_PARAMETER= "Date";
-
-    protected MetadataRepository metadataRepository = ModelInstanceRepositoryManager
-            .getMetadataRepostory(MetadataRepository.class);
 
     protected List<Parameter> decoratedParameterList;
 

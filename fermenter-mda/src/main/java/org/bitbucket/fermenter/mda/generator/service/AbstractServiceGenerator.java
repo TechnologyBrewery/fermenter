@@ -20,7 +20,7 @@ public abstract class AbstractServiceGenerator extends AbstractGenerator {
     @Override
     public void generate(GenerationContext context) {
         DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
-                .getMetadataRepostory(DefaultModelInstanceRepository.class);
+                .getMetamodelRepository(DefaultModelInstanceRepository.class);
 
         Map<String, Service> services = metadataRepository.getServicesByContext(metadataContext);
 

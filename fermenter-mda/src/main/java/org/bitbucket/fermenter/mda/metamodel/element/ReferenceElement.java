@@ -1,7 +1,6 @@
 package org.bitbucket.fermenter.mda.metamodel.element;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,8 +33,6 @@ public class ReferenceElement extends NamespacedMetamodelElement implements Refe
 
     @JsonIgnore
     private List<Field> foreignKeys;
-    @JsonIgnore
-    private Map<String, Field> fkOverrides = new HashMap<>();
 
     /**
      * {@inheritDoc}
@@ -140,7 +137,7 @@ public class ReferenceElement extends NamespacedMetamodelElement implements Refe
         if (foreignKeys == null) {
             foreignKeys = new ArrayList<>();
             DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
-                    .getMetadataRepostory(DefaultModelInstanceRepository.class);
+                    .getMetamodelRepository(DefaultModelInstanceRepository.class);
             
             Map<String, Entity> referenceEntities = metadataRepository.getEntities(getPackage());
             Entity entity = referenceEntities.get(getType());
@@ -150,32 +147,14 @@ public class ReferenceElement extends NamespacedMetamodelElement implements Refe
 
             Field fkidentifier = entity.getIdentifier();
             if (fkidentifier != null) { // can be null for transient
-                if (fkOverrides.size() == 0) {
+                FieldElement newId = new FieldElement();
+                newId.setType(fkidentifier.getType());
+                newId.setName(fkidentifier.getName());
 
-                    FieldElement newId = new FieldElement();
-                    newId.setType(fkidentifier.getType());
-                    newId.setName(fkidentifier.getName());
-
-                    if (entity.isTransient() == null || !entity.isTransient()) {
-                        newId.setColumn(this.localColumn != null ? this.localColumn : fkidentifier.getColumn());
-                    }
-                    foreignKeys.add(newId);
-
-                } else {
-                    // Apply overrides
-
-                    FieldElement newId = new FieldElement();
-                    Field override = (Field) fkOverrides.get(fkidentifier.getName());
-                    newId.setType(fkidentifier.getType());
-
-                    newId.setName(override.getName());
-                    if (entity.isTransient() == null || !entity.isTransient()) {
-                        newId.setColumn(override.getColumn());
-                    }
-                    newId.setValidation(fkidentifier.getValidation());
-                    foreignKeys.add(newId);
-
+                if (entity.isTransient() == null || !entity.isTransient()) {
+                    newId.setColumn(this.localColumn != null ? this.localColumn : fkidentifier.getColumn());
                 }
+                foreignKeys.add(newId);
             } else {
                 if (entity.isTransient() == null || !entity.isTransient()) {
                     throw new NullPointerException("Reference to '" + type + "' does not have a Identifier!");

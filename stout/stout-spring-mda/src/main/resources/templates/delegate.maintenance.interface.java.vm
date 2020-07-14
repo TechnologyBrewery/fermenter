@@ -18,13 +18,6 @@ import $import;
  * Generated from delegate.maintenance.interface.java.vm
  */
 public interface ${entity.name}MaintenanceDelegate {
-    #if ( !$entity.idFields.isEmpty() )
-        #set ($idFieldJavaType = ${entity.idFields.values().iterator().next().javaType})
-        #set ($idFieldName = ${entity.idFields.values().iterator().next().name})
-    #else
-        #set ($idFieldJavaType = 'String')
-        #set ($idFieldName = 'id')
-    #end
 
     /**
      * Find the ${entity.name} by primary key
@@ -32,7 +25,7 @@ public interface ${entity.name}MaintenanceDelegate {
      * @param ${id.name} The primary key value ${id.name} for the ${entity.name} to retrieve
      * @return a service response containing the retrieved entity and/or any collected messages
      */
-    ${entity.name} findByPrimaryKey(@Param("id") ${idFieldJavaType} ${idFieldName});
+    ${entity.name} findByPrimaryKey(@Param("id") ${entity.identifier.javaType} ${entity.identifier.name});
 
     /**
      * Create the provided instance.
@@ -45,11 +38,11 @@ public interface ${entity.name}MaintenanceDelegate {
     /**
      * Save or update the provided instance.
      *
-     * @param ${idFieldName} The primary key value ${idFieldName} for the ${entity.name}
+     * @param ${entity.identifier.name} The primary key value ${entity.identifier.name} for the ${entity.name}
      * @param entity The ${entity.name} instance to save
      * @return a service response containing the saved entity and/or any collected messages
      */
-    ${entity.name} update(@Param("id") ${idFieldJavaType} ${idFieldName}, ${entity.name} entity);
+    ${entity.name} update(@Param("id") ${entity.identifier.javaType} ${entity.identifier.name}, ${entity.name} entity);
 
     /**
      * Find by example
@@ -89,10 +82,10 @@ public interface ${entity.name}MaintenanceDelegate {
     /**
      * Deletes the ${entity.name} entity with the provided primary key value.
      *
-     * @param ${idFieldName} The primary key value ${idFieldName} for the ${entity.name} to delete
+     * @param ${entity.identifier.name} The primary key value ${entity.identifier.name} for the ${entity.name} to delete
      * @return response wrapper containing any collected messages
      */
-    void delete(@Param("id") ${idFieldJavaType} ${idFieldName});
+    void delete(@Param("id") ${entity.identifier.javaType} ${entity.identifier.name});
     
     /**
      * Create a collection of ${entity.name} instances.

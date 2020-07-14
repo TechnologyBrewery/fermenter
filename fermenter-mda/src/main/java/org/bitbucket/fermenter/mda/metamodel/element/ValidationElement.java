@@ -1,6 +1,8 @@
 package org.bitbucket.fermenter.mda.metamodel.element;
 
-import org.bitbucket.fermenter.mda.metadata.element.Format;
+import java.text.Format;
+import java.util.Collection;
+
 import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 
@@ -42,11 +44,11 @@ public class ValidationElement extends NamespacedMetamodelElement implements Val
 	private Integer scale;
 
 	@JsonInclude(Include.NON_NULL)
-	private String format;
+	private Collection<String> formats;
 
 	@JsonIgnore
 	private DefaultModelInstanceRepository repository = ModelInstanceRepositoryManager
-			.getMetadataRepostory(DefaultModelInstanceRepository.class);
+			.getMetamodelRepository(DefaultModelInstanceRepository.class);
 
 	/**
 	 * Override to make optional (for base types) and not write if null.
@@ -112,8 +114,8 @@ public class ValidationElement extends NamespacedMetamodelElement implements Val
 
 	@Override
 	@JsonInclude(Include.NON_NULL)
-	public String getFormat() {
-		return format;
+	public Collection<String> getFormats() {
+		return formats;
 	}
 
 	/**
@@ -181,10 +183,10 @@ public class ValidationElement extends NamespacedMetamodelElement implements Val
 	/**
 	 * Format name for regular expression matching.
 	 * 
-	 * @param format format name (reference to {@link Format}).
+	 * @param formats format name (reference to {@link Format}).
 	 */
-	public void setFormat(String format) {
-		this.format = format;
+	public void setFormats(Collection<String> formats) {
+		this.formats = formats;
 	}
 
 	/**
@@ -210,7 +212,7 @@ public class ValidationElement extends NamespacedMetamodelElement implements Val
 	 */
 	public boolean hasValue() {
 		return maxLength != null || minLength != null || maxValue != null || minValue != null || scale != null
-				|| format != null || documentation != null;
+				|| formats != null || documentation != null;
 	}
 	
 	/**

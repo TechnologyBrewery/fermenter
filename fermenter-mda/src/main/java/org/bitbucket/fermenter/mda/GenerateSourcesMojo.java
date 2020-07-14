@@ -32,7 +32,6 @@ import org.bitbucket.fermenter.mda.element.Target;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
 import org.bitbucket.fermenter.mda.generator.Generator;
 import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
-import org.bitbucket.fermenter.mda.metamodel.LegacyMetadataConverter;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceUrl;
@@ -202,31 +201,23 @@ public class GenerateSourcesMojo extends AbstractMojo {
 
     private void initializeMetadata() throws Exception {
         ModelRepositoryConfiguration config = createMetadataConfiguration();
-
-        // first load the legacy repository:
-        ModelInstanceRepository legacyRepository = GenerateSourcesHelper.loadLegacyMetadataRepository(config,
-                mavenLoggerDelegate);
-
+      
         // This is a stand-in to prevent NPEs for some optional functionality
         // that we want in the end product,
         // but doesn't matter for the conversion:
         ModelInstanceRepositoryManager.setRepository(new DefaultModelInstanceRepository(config));
 
-        LegacyMetadataConverter converter = new LegacyMetadataConverter();
-        converter.convert(project.getArtifactId(), basePackage, mainSourceRoot);
-
         // then load the new repository:
-        ModelInstanceRepository newRepository = GenerateSourcesHelper.loadMetadataRepository(config,
+        ModelInstanceRepository newRepository = GenerateSourcesHelper.loadMetamodelRepository(config,
                 metadataRepositoryImpl, mavenLoggerDelegate);
 
         long start = System.currentTimeMillis();
-        LOG.info("START: validating legacy and new metadata repository implementation...");
+        LOG.info("START: validating metamodel repository implementation...");
 
-        legacyRepository.validate();
         newRepository.validate();
 
         long stop = System.currentTimeMillis();
-        LOG.info("COMPLETE: validation of legacy and new metadata repository in " + (stop - start) + "ms");
+        LOG.info("COMPLETE: validation of metamodel repository in " + (stop - start) + "ms");
 
     }
 

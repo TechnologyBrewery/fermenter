@@ -287,7 +287,6 @@ public class EntitySteps extends AbstractEntitySteps {
         RelationElement entityRelation = new RelationElement();
         entityRelation.setType(relation.type);
         entityRelation.setPackage(relation.relationPackage);
-        entityRelation.setLocalColumn(relation.localColumn);
         entityRelation.setDocumentation(relation.documentation);
         entityRelation.setMultiplicity(relation.multiplicity);
         entityRelation.setFetchMode(relation.fetchMode);
@@ -435,8 +434,6 @@ public class EntitySteps extends AbstractEntitySteps {
         assertEquals("Relation type did not match!", expectedRelation.type, foundRelation.getType());
         assertEquals("Relation type package did not match!", expectedRelation.relationPackage,
                 foundRelation.getPackage());
-        assertEquals("Relation local column did not match!", expectedRelation.localColumn,
-                foundRelation.getLocalColumn());
         assertEquals("Relation multiplicity did not match!", Multiplicity.fromString(expectedRelation.multiplicity),
                 foundRelation.getMultiplicity());
         assertEquals("Relation fetchMode did not match!", FetchMode.fromString(expectedRelation.fetchMode),

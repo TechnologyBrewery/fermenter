@@ -62,7 +62,7 @@ public class ParentElement extends NamespacedMetamodelElement implements Parent 
         }
 
         DefaultModelInstanceRepository modelRespository = ModelInstanceRepositoryManager
-                .getMetadataRepostory(DefaultModelInstanceRepository.class);
+                .getMetamodelRepository(DefaultModelInstanceRepository.class);
         Entity parentEntity = modelRespository.getEntity(packageName, type);
         if (parentEntity == null) {
             messageTracker.addErrorMessage("Parent type of '" + type + "' could not be found!");

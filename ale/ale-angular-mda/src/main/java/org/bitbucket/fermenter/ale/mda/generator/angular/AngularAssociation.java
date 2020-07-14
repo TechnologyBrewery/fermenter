@@ -89,15 +89,6 @@ public class AngularAssociation implements Relation {
     }
 
     @Override
-    public String getLocalColumn() {
-        if (reference != null) {
-            return reference.getLocalColumn();
-        } else {
-            return relation.getLocalColumn();
-        }
-    }
-
-    @Override
     public Field getParentIdentifier(String parentEntityName) {
         if (relation != null) {
             return relation.getParentIdentifier(relation.getType());

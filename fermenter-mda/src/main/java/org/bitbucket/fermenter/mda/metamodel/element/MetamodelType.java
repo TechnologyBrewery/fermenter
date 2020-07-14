@@ -12,7 +12,7 @@ public enum MetamodelType {
     SIMPLE_TYPE, ENUMERATION, ENTITY, DICTIONARY_TYPE;
 
     private static DefaultModelInstanceRepository modelInstanceRepository = ModelInstanceRepositoryManager
-            .getMetadataRepostory(DefaultModelInstanceRepository.class);
+            .getMetamodelRepository(DefaultModelInstanceRepository.class);
 
     /**
      * Returns the metamodel type for the passed package and name combination.

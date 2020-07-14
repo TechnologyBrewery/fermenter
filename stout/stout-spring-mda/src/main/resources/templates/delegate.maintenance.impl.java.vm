@@ -42,13 +42,6 @@ import $import;
  */
 @Service
 public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceServiceDelegate implements ${entity.name}MaintenanceDelegate {
-    #if ( !$entity.idFields.isEmpty() )
-        #set ($idFieldJavaType = ${entity.idFields.values().iterator().next().javaType})
-        #set ($idFieldName = ${entity.idFields.values().iterator().next().name})
-    #else
-        #set ($idFieldJavaType = 'String')
-        #set ($idFieldName = 'id')
-    #end
 
     /** Fully qualified name of the domain service to check for and potentially use to locally optimized delegate calls. */
     private static final String LOCAL_SERVICE_NAME = "${basePackage}.service.rest.${entity.name}MaintenanceService";
@@ -59,7 +52,7 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
     private static Class<?> businessObjectClass;
     private static ObjectMapper objectMapper;
 
-    private static final LevelOneCacheManager<${idFieldJavaType}, ${entity.name}> levelOneCacheManager = new LevelOneCacheManager<>();
+    private static final LevelOneCacheManager<${entity.identifier.javaType}, ${entity.name}> levelOneCacheManager = new LevelOneCacheManager<>();
     private static final CachePropertiesConfig cachePropertiesConfig = KrauseningConfigFactory.create(CachePropertiesConfig.class);
     private static final boolean IS_CACHE_ENABLED = cachePropertiesConfig.is${entity.name}CachingEnabled();
     
@@ -71,8 +64,8 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
     /**
      * {@inheritDoc}
      */
-    public ${entity.name} findByPrimaryKey(${idFieldJavaType} ${idFieldName}) {
-        if (${idFieldName} == null) {
+    public ${entity.name} findByPrimaryKey(${entity.identifier.javaType} ${entity.identifier.name}) {
+        if (${entity.identifier.name} == null) {
             throw new UnrecoverableException("Cannot lookup an instance with a null primary key!");
         }
     
@@ -80,26 +73,26 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
         ${entity.name} retrievedInstance = null;
         if (checkLevelOneCache()) {
             // first check for a changed, but not committed instance (in-transaction cache):
-            LevelOneCache<${idFieldJavaType}, ${entity.name}> levelOneCache = levelOneCacheManager.getCacheForCurrentTransaction();
-            retrievedInstance = levelOneCache.retrieve(${idFieldName});
-            skipLookupDueToInTransactionDelete = levelOneCache.getPendingDeletes().contains(${idFieldName});
+            LevelOneCache<${entity.identifier.javaType}, ${entity.name}> levelOneCache = levelOneCacheManager.getCacheForCurrentTransaction();
+            retrievedInstance = levelOneCache.retrieve(${entity.identifier.name});
+            skipLookupDueToInTransactionDelete = levelOneCache.getPendingDeletes().contains(${entity.identifier.name});
             
         }
         
         if (retrievedInstance == null && IS_CACHE_ENABLED) {
             // if nothing is pending, check the level 2 (cross-transaction) cache:
-            retrievedInstance = ${entity.name}Cache.getFromCache(${idFieldName});
+            retrievedInstance = ${entity.name}Cache.getFromCache(${entity.identifier.name});
             
         } 
         
         if (retrievedInstance == null && !skipLookupDueToInTransactionDelete) {
             ValueServiceResponse<${entity.name}> response;
             if (isLocalInvocationAvailable()) {
-                Object[] params = {${idFieldName}};
+                Object[] params = {${entity.identifier.name}};
                 Object rawResponse = localServiceWrapper.invokeLocalService("findByPrimaryKey", params);
                 response = (ValueServiceResponse<${entity.name}>)LocalOptimizationUtil.convertResponseToTransferObjectViaJson(rawResponse, ${entity.name}.class, objectMapper);            
             } else {
-                response = ${entity.name.toLowerCase()}Resource.findByPrimaryKey(${idFieldName});
+                response = ${entity.name.toLowerCase()}Resource.findByPrimaryKey(${entity.identifier.name});
             }
             MessageManager.addMessages(response.getMessages());
             ${entity.name}Cache.addToCache(response.getValue());
@@ -117,15 +110,15 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
         
         if (checkLevelOneCache()) {
             // queue up for creation upon transaction commit (or flush):
-            LevelOneCache<${idFieldJavaType}, ${entity.name}> levelOneCache = levelOneCacheManager.getCacheForCurrentTransaction();
-            #if ( $idField.hasGenerator() )
+            LevelOneCache<${entity.identifier.javaType}, ${entity.name}> levelOneCache = levelOneCacheManager.getCacheForCurrentTransaction();
+            #if ( $entity.identifier.hasGenerator() )
             // you will need to manually flush if you want this instance to be available for reselect via the cache 
             // as the generated primary key will not be assigned until it is flushed.  If you want Stout to support an
             // "insert on create" for generated keys, please enter an issue.  As of now, it does not support this option.
             levelOneCache.create(entity);
 #else
             // with a non-generated key, we can make this available for retrieval without flushing:
-            levelOneCache.createAndCache(entity.get${entity.idFields.values().iterator().next().capitalizedName}(), entity);
+            levelOneCache.createAndCache(entity.get${entity.identifier.capitalizedName}(), entity);
 #end            
             synchronizeTransaction();
             
@@ -155,8 +148,8 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
         MessageManager.addMessages(response.getMessages());
         if(!response.hasErrors()) {
              if (checkLevelOneCache()) {                
-                LevelOneCache<${idFieldJavaType}, ${entity.name}> levelOneCache = levelOneCacheManager.getCacheForCurrentTransaction();
-                levelOneCache.cache(created${entity.name}.get${entity.idFields.values().iterator().next().capitalizedName}(), created${entity.name});
+                LevelOneCache<${entity.identifier.javaType}, ${entity.name}> levelOneCache = levelOneCacheManager.getCacheForCurrentTransaction();
+                levelOneCache.cache(created${entity.name}.get${entity.identifier.capitalizedName}(), created${entity.name});
             }
         
             ${entity.name}Cache.addToCache(created${entity.name});
@@ -167,38 +160,38 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
     /**
      * {@inheritDoc}
      */
-    public ${entity.name} update(${idFieldJavaType} ${idFieldName}, ${entity.name} entity) {
+    public ${entity.name} update(${entity.identifier.javaType} ${entity.identifier.name}, ${entity.name} entity) {
         ${entity.name} updated${entity.name} = null;
         
         if (checkLevelOneCache()) {
             // queue up for creation upon transaction commit (or flush):
-            LevelOneCache<${idFieldJavaType}, ${entity.name}> levelOneCache = levelOneCacheManager.getCacheForCurrentTransaction();
-            levelOneCache.update(${idFieldName}, entity);
+            LevelOneCache<${entity.identifier.javaType}, ${entity.name}> levelOneCache = levelOneCacheManager.getCacheForCurrentTransaction();
+            levelOneCache.update(${entity.identifier.name}, entity);
             
             updated${entity.name} = entity;
             synchronizeTransaction();
             
         } else {
-            updated${entity.name} = performUpdate(${idFieldName}, entity);
+            updated${entity.name} = performUpdate(${entity.identifier.name}, entity);
             
         }
 
         return updated${entity.name};
     }
     
-    private ${entity.name} performUpdate(${idFieldJavaType} ${idFieldName}, ${entity.name} entity) {
-        ValueServiceResponse<${entity.name}> response = ${entity.name.toLowerCase()}Resource.update(${idFieldName}, entity);
+    private ${entity.name} performUpdate(${entity.identifier.javaType} ${entity.identifier.name}, ${entity.name} entity) {
+        ValueServiceResponse<${entity.name}> response = ${entity.name.toLowerCase()}Resource.update(${entity.identifier.name}, entity);
         ${entity.name} created${entity.name} = response.getValue();
         MessageManager.addMessages(response.getMessages());
         if(!response.hasErrors()) {
             if (checkLevelOneCache()) {                
-                LevelOneCache<${idFieldJavaType}, ${entity.name}> levelOneCache = levelOneCacheManager.getCacheForCurrentTransaction();
-                levelOneCache.cache(${idFieldName}, entity);
+                LevelOneCache<${entity.identifier.javaType}, ${entity.name}> levelOneCache = levelOneCacheManager.getCacheForCurrentTransaction();
+                levelOneCache.cache(${entity.identifier.name}, entity);
             }
         
             ${entity.name}Cache.addToCache(created${entity.name});
         } else {
-            ${entity.name}Cache.removeFromCache(${idFieldName});
+            ${entity.name}Cache.removeFromCache(${entity.identifier.name});
         }
         return created${entity.name};
     }
@@ -206,28 +199,28 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
     /**
      * {@inheritDoc}
      */
-    public void delete(${idFieldJavaType} ${idFieldName}) {
+    public void delete(${entity.identifier.javaType} ${entity.identifier.name}) {
         if (checkLevelOneCache()) {
             // queue up for deletion upon transaction commit (or flush):
-            LevelOneCache<${idFieldJavaType}, ${entity.name}> levelOneCache = levelOneCacheManager.getCacheForCurrentTransaction();
-            levelOneCache.delete(${idFieldName});            
+            LevelOneCache<${entity.identifier.javaType}, ${entity.name}> levelOneCache = levelOneCacheManager.getCacheForCurrentTransaction();
+            levelOneCache.delete(${entity.identifier.name});            
             synchronizeTransaction();
             
         } else {
-            performDelete(${idFieldName});
+            performDelete(${entity.identifier.name});
         }
     }
 
-    private void performDelete(${idFieldJavaType} ${idFieldName}) {
+    private void performDelete(${entity.identifier.javaType} ${entity.identifier.name}) {
         VoidServiceResponse response = null;
         if (isLocalInvocationAvailable()) {
-            Object[] params = {${idFieldName}};
+            Object[] params = {${entity.identifier.name}};
             Object rawResponse = localServiceWrapper.invokeLocalService("delete", params);
             response = (VoidServiceResponse)rawResponse;            
         } else {
-            response = ${entity.name.toLowerCase()}Resource.delete(${idFieldName});
+            response = ${entity.name.toLowerCase()}Resource.delete(${entity.identifier.name});
         }
-        ${entity.name}Cache.removeFromCache(${idFieldName});
+        ${entity.name}Cache.removeFromCache(${entity.identifier.name});
         MessageManager.addMessages(response.getMessages());
     }
 
@@ -334,10 +327,10 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
     
        if (checkLevelOneCache()) {
             // queue up for creation upon transaction commit (or flush):
-            LevelOneCache<${idFieldJavaType}, ${entity.name}> levelOneCache = levelOneCacheManager.getCacheForCurrentTransaction();
+            LevelOneCache<${entity.identifier.javaType}, ${entity.name}> levelOneCache = levelOneCacheManager.getCacheForCurrentTransaction();
             for (${entity.name} entity : entities) {
-                if (entity.get${entity.idFields.values().iterator().next().capitalizedName}() != null) {
-                    levelOneCache.update(entity.get${entity.idFields.values().iterator().next().capitalizedName}(), entity);
+                if (entity.get${entity.identifier.capitalizedName}() != null) {
+                    levelOneCache.update(entity.get${entity.identifier.capitalizedName}(), entity);
                 } else {
                     levelOneCache.create(entity);
                 }
@@ -370,10 +363,10 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
             values = response.getValue();
             if(!response.hasErrors()) {
                 if (checkLevelOneCache()) {                
-                    LevelOneCache<${idFieldJavaType}, ${entity.name}> levelOneCache = levelOneCacheManager.getCacheForCurrentTransaction();                    
+                    LevelOneCache<${entity.identifier.javaType}, ${entity.name}> levelOneCache = levelOneCacheManager.getCacheForCurrentTransaction();                    
                     
                     for (${entity.name} update : values) {
-                        levelOneCache.cache(update.get${entity.idFields.values().iterator().next().capitalizedName}(), update);
+                        levelOneCache.cache(update.get${entity.identifier.capitalizedName}(), update);
                     }
                 }
                 ${entity.name}Cache.addToCache(values);
@@ -389,8 +382,8 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
      */
     public void bulkDelete(Collection<${entity.name}> entities) {
         if (checkLevelOneCache()) {
-            LevelOneCache<${idFieldJavaType}, ${entity.name}> levelOneCache = levelOneCacheManager.getCacheForCurrentTransaction();
-            Collection<${idFieldJavaType}> deletesAsIds = convertDeleteEntitiesToIds(entities);
+            LevelOneCache<${entity.identifier.javaType}, ${entity.name}> levelOneCache = levelOneCacheManager.getCacheForCurrentTransaction();
+            Collection<${entity.identifier.javaType}> deletesAsIds = convertDeleteEntitiesToIds(entities);
             levelOneCache.delete(deletesAsIds);
             synchronizeTransaction();
             
@@ -413,30 +406,30 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
             }
             
             for (${entity.name} ${entity.name.toLowerCase()} : entities) {
-                ${entity.name}Cache.removeFromCache(${entity.name.toLowerCase()}.get${entity.idFields.values().iterator().next().capitalizedName}());
+                ${entity.name}Cache.removeFromCache(${entity.name.toLowerCase()}.get${entity.identifier.capitalizedName}());
             }
             
             MessageManager.addMessages(response.getMessages());
         }
     }
     
-    protected Collection<${entity.name}> convertDeleteIdsToEntities(Collection<${idFieldJavaType}> pendingDeletes) {
+    protected Collection<${entity.name}> convertDeleteIdsToEntities(Collection<${entity.identifier.javaType}> pendingDeletes) {
         Collection<${entity.name}> deletesAsEntities = new ArrayList<>();
         // TODO: change when the API for bulk delete changes to ids:
-        for (${idFieldJavaType} id : pendingDeletes) {
+        for (${entity.identifier.javaType} id : pendingDeletes) {
             ${entity.name} entityWrapper = new ${entity.name}();
-            entityWrapper.set${entity.idFields.values().iterator().next().capitalizedName}(id);
+            entityWrapper.set${entity.identifier.capitalizedName}(id);
             deletesAsEntities.add(entityWrapper);
         }
         
         return deletesAsEntities;
     }
     
-    protected Collection<${idFieldJavaType}> convertDeleteEntitiesToIds(Collection<${entity.name}> pendingDeletes) {
-        Collection<${idFieldJavaType}> deletesAsIds = new ArrayList<>();
+    protected Collection<${entity.identifier.javaType}> convertDeleteEntitiesToIds(Collection<${entity.name}> pendingDeletes) {
+        Collection<${entity.identifier.javaType}> deletesAsIds = new ArrayList<>();
         // TODO: change when the API for bulk delete changes to ids:
         for (${entity.name} entity : pendingDeletes) {
-            deletesAsIds.add(entity.get${entity.idFields.values().iterator().next().capitalizedName}());
+            deletesAsIds.add(entity.get${entity.identifier.capitalizedName}());
         }
         
         return deletesAsIds;
@@ -446,7 +439,7 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
      * {@inheritDoc}
      */
     public void flushInsertsAndUpdates() {
-        LevelOneCache<${idFieldJavaType}, ${entity.name}> levelOneCache = levelOneCacheManager.getCacheForCurrentTransaction();
+        LevelOneCache<${entity.identifier.javaType}, ${entity.name}> levelOneCache = levelOneCacheManager.getCacheForCurrentTransaction();
                 
         Collection<${entity.name}> pendingSaveOrUpdates = levelOneCache.getPendingInserts();
         pendingSaveOrUpdates.addAll(levelOneCache.getPendingUpdates());
@@ -460,9 +453,9 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
      * {@inheritDoc}
      */
     public void flushDeletes() {
-        LevelOneCache<${idFieldJavaType}, ${entity.name}> levelOneCache = levelOneCacheManager.getCacheForCurrentTransaction();
+        LevelOneCache<${entity.identifier.javaType}, ${entity.name}> levelOneCache = levelOneCacheManager.getCacheForCurrentTransaction();
 
-        Collection<${idFieldJavaType}> pendingDeletes = levelOneCache.getPendingDeletes();
+        Collection<${entity.identifier.javaType}> pendingDeletes = levelOneCache.getPendingDeletes();
         Collection<${entity.name}> deletesAsEntities = convertDeleteIdsToEntities(pendingDeletes);                
         performBulkDelete(deletesAsEntities);
         

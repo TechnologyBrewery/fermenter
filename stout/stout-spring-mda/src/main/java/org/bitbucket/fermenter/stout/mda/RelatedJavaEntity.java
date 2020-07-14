@@ -1,9 +1,5 @@
 package org.bitbucket.fermenter.stout.mda;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.commons.lang3.StringUtils;
 import org.bitbucket.fermenter.mda.metamodel.element.Entity;
 import org.bitbucket.fermenter.mda.metamodel.element.Field;
@@ -13,7 +9,7 @@ public class RelatedJavaEntity extends JavaEntity {
 
     private Entity entity;
     private Entity parentEntity;
-    private Map<String, Field> decoratedIdFieldMap;
+    private Field decoratedIdentifier;
 
     public RelatedJavaEntity(Entity entity, Entity parentEntity) {
         super(entity);
@@ -27,33 +23,24 @@ public class RelatedJavaEntity extends JavaEntity {
         return StringUtils.uncapitalize(entity.getName());
     }
 
-    public Map getIdFields() {
+    @Override
+    public Field getIdentifier() {
         if (isSelfRelation().booleanValue()) {
-            if (decoratedIdFieldMap == null) {
+            if (decoratedIdentifier == null) {
                 Field idField = entity.getIdentifier();
-                if ((idField == null)) {
-                    decoratedIdFieldMap = Collections.emptyMap();
-
-                } else {
-                    decoratedIdFieldMap = new HashMap<>();
-                    decoratedIdFieldMap.put(idField.getName(), new SelfReferenceField(idField));
-                }
+                decoratedIdentifier = new SelfReferenceField(idField);
             }
 
         } else {
             Relation relation = entity.getRelation(parentEntity.getName());
             Field parentIdentifier = relation.getParentIdentifier(entity.getName());
-            decoratedIdFieldMap = new HashMap<>();
-            decoratedIdFieldMap.put(parentIdentifier.getName(), parentIdentifier);
+            decoratedIdentifier = parentIdentifier;
 
         }
 
-        return decoratedIdFieldMap;
+        return decoratedIdentifier;
     }
-
-    public Field getIdField(String name) {
-        return (Field) getIdFields().get(name);
-    }
+    
 
     class SelfReferenceField extends JavaField {
 

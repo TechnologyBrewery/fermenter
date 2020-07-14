@@ -50,7 +50,10 @@
     "type" : "string",
     "column" : "REGEX_ZIPCODE_EXAMPLE",
     "validation" : {
-      "format" : "zipCode"
+      "formats" : [
+      	"^\\d{5}?$",
+		"^\\d{5}([\\-]\\d{4})?$"
+      ]
     }
   }, {
     "name" : "characterExample",
@@ -80,7 +83,9 @@
     "type" : "string",
     "column" : "REGEX_EXAMPLE",
     "validation" : {
-      "format" : "email"
+      "formats" : [
+      	"^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$"
+      ]
     }
   }, {
     "name" : "longExample",

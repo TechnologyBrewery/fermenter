@@ -28,7 +28,7 @@ public abstract class AbstractAllOrderedEntitiesAwareGenerator extends AbstractG
         vc.put("basePackage", context.getBasePackage());
 
         DefaultModelInstanceRepository metamodelRepository = ModelInstanceRepositoryManager
-                .getMetadataRepostory(DefaultModelInstanceRepository.class);
+                .getMetamodelRepository(DefaultModelInstanceRepository.class);
 
         Set<Entity> entities = metamodelRepository.getEntitiesByDependencyOrder(metadataContext);
         vc.put("entities", entities);

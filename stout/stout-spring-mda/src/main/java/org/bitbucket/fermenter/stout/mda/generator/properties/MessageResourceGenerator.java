@@ -14,7 +14,7 @@ public class MessageResourceGenerator extends AbstractGenerator {
 
     public void generate(GenerationContext context) {
         DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
-                .getMetadataRepostory(DefaultModelInstanceRepository.class);
+                .getMetamodelRepository(DefaultModelInstanceRepository.class);
 
         String fileName;
         String basefileName = context.getOutputFile();

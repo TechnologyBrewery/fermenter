@@ -21,5 +21,11 @@
     "type" : "string",
     "transient" : true,
     "column" : "NONE_NEEDED"
+  }, {
+    "name" : "transientFieldDefaultValue",
+    "documentation" : "Testing the default value of a transient field",
+    "type" : "integer",
+    "transient" : true,
+    "defaultValue" : "3"
   } ]
 }

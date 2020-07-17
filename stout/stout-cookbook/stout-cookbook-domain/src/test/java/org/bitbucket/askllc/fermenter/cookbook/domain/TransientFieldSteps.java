@@ -3,7 +3,9 @@ package org.bitbucket.askllc.fermenter.cookbook.domain;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
+import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.TransientEntityExampleBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.TransientFieldExampleBO;
+import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationReferencedObjectBO;
 import org.bitbucket.fermenter.stout.messages.MessageManagerInitializationDelegate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,11 +20,18 @@ import cucumber.api.java.en.When;
 public class TransientFieldSteps {
     private String userString;
     private TransientFieldExampleBO transientFieldExampleBO;
+    private TransientEntityExampleBO transientEntityExampleBO;
+    private static final int DEFAULT_VALUE = 3;
+    private int modifiedValue;
+    private int actualValue;
 
-    @After("@fieldValidation")
+    @After("@transientField")
     public void cleanupMsgMgr() throws Exception {
         MessageManagerInitializationDelegate.cleanupMessageManager();
         TransientFieldExampleBO.deleteAllTransientFieldExamples();
+        ValidationReferencedObjectBO.deleteAllValidationExamples();
+        transientFieldExampleBO = null;
+        transientEntityExampleBO = null;
     }
 
     @Given("^a field is marked as transient and I assign \"([^\"]*)\" to the field value$")
@@ -45,5 +54,47 @@ public class TransientFieldSteps {
         assertNotEquals("Transient field should not be persisted", transientFieldExampleBO.getTransientField(), retrievedTransientFieldObj.getTransientField());
     }
 
+    @Given("^a persistent entity has a transient field with a default value$")
+    public void a_persistent_entity_has_a_transient_field_with_a_default_value() throws Throwable {
+        transientFieldExampleBO = new TransientFieldExampleBO();
+        transientFieldExampleBO = transientFieldExampleBO.save();
+    }
+
+    @Given("^a transient entity has a field with a default value$")
+    public void a_transient_entity_has_a_field_with_a_default_value() throws Throwable {
+        transientEntityExampleBO = new TransientEntityExampleBO();
+        ValidationReferencedObjectBO referenceObject = new ValidationReferencedObjectBO();
+        transientEntityExampleBO.setRequiredReference(referenceObject.save());
+    }
+
+    @Given("^the value of the field has been modified$")
+    public void the_value_of_the_field_has_been_modified() throws Throwable {
+        modifiedValue = DEFAULT_VALUE + 1;
+        if (transientFieldExampleBO != null) {
+            transientFieldExampleBO.setTransientFieldDefaultValue(modifiedValue);
+        } else if (transientEntityExampleBO != null) {
+            transientEntityExampleBO.setDefaultValueField(modifiedValue);
+        }
+    }
+
+    @When("^the entity is retrieved$")
+    public void the_entity_is_retrieved() throws Throwable {
+        if (transientFieldExampleBO != null) {
+            actualValue = transientFieldExampleBO.getTransientFieldDefaultValue();
+        } else if (transientEntityExampleBO != null) {
+            actualValue = transientEntityExampleBO.getDefaultValueField();
+        }
+    }
+
+    @Then("^the value of the field is equal to the default$")
+    public void the_value_of_the_field_is_equal_to_the_default() throws Throwable {
+        assertEquals("Returned value did not equal the default!", DEFAULT_VALUE, actualValue);
+    }
+
+    @Then("^the field has the new value$")
+    public void the_field_has_the_new_value() throws Throwable {
+        assertNotEquals("Returned value equaled the default when it should not!", DEFAULT_VALUE, actualValue);
+        assertEquals("Returned value did not match the modified value!", modifiedValue, actualValue);
+    }
 
 }

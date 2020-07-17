@@ -8,7 +8,10 @@
 	<Loggers>
 		<Root level="warn">
 			<AppenderRef ref="Console" />
-		</Root>	
+		</Root>
+		<Logger name="org.pac4j" level="info" additivity="false">
+			<AppenderRef ref="Console" />
+		</Logger>
 		<Logger name="org.bitbucket.askllc.fermenter" level="debug" additivity="false">
 			<AppenderRef ref="Console" />
 		</Logger>

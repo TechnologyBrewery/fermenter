@@ -18,6 +18,7 @@ import javax.ws.rs.core.Response.Status;
 import org.apache.commons.lang.RandomStringUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.ValidationExampleMaintenanceDelegate;
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.ValidationExample;
+import org.bitbucket.fermenter.stout.authn.AuthenticationTestUtils;
 import org.bitbucket.fermenter.stout.messages.Message;
 import org.bitbucket.fermenter.stout.messages.MessageManager;
 import org.bitbucket.fermenter.stout.messages.MessageManagerInitializationDelegate;
@@ -26,9 +27,6 @@ import org.bitbucket.fermenter.stout.service.ServiceResponse;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
 import org.bitbucket.fermenter.stout.test.MessageTestUtils;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,8 +57,7 @@ public class ClientBulkDataloadSteps {
 
     @Before("@clientBulkDataload")
     public void setUp() {
-        Authentication authentication = new UsernamePasswordAuthenticationToken("testUser", "somePassword");
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        AuthenticationTestUtils.login("testUser");
         assertNotNull("Missing needed maitenance manager delegate!", validationExampleMaintenanceDelegate);
 
         MessageManagerInitializationDelegate.initializeMessageManager();
@@ -77,6 +74,8 @@ public class ClientBulkDataloadSteps {
         allMixedExamples.clear();
         invalidExamplesForErrorValidation.clear();
         MessageManagerInitializationDelegate.cleanupMessageManager();
+        
+        AuthenticationTestUtils.logout();
     }
 
     @Given("^the following valid data$")

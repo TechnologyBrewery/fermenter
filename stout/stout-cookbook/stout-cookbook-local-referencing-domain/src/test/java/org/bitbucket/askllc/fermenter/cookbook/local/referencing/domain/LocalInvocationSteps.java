@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.ContractTestDelegate;
 import org.bitbucket.askllc.fermenter.cookbook.domain.enumeration.SimpleDomainEnumeration;
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.SimpleDomain;
+import org.bitbucket.fermenter.stout.authn.AuthenticationTestUtils;
 import org.bitbucket.fermenter.stout.messages.Message;
 import org.bitbucket.fermenter.stout.messages.MessageManager;
 import org.bitbucket.fermenter.stout.messages.MessageManagerInitializationDelegate;
@@ -22,9 +23,6 @@ import org.bitbucket.fermenter.stout.messages.Messages;
 import org.bitbucket.fermenter.stout.page.PageWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,8 +54,7 @@ public class LocalInvocationSteps {
 
     @Before("@localInvocationOfRemoteService")
     public void setUp() throws Exception {
-        Authentication authentication = new UsernamePasswordAuthenticationToken("testUser", "abc123");
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        AuthenticationTestUtils.login("testUser");
 
         assertNotNull("Could not access service delegate!", delegate);
 
@@ -74,6 +71,8 @@ public class LocalInvocationSteps {
         MessageManagerInitializationDelegate.cleanupMessageManager();
         
         this.messages = null;
+        
+        AuthenticationTestUtils.logout();
     }
 
     @When("^a service with a void return type is invoked$")

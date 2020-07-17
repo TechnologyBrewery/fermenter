@@ -100,7 +100,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>stout-spring-authentication</artifactId>
+            <artifactId>stout-authentication</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -134,7 +134,7 @@
             <version>${project.version}</version>
             <type>test-jar</type>
             <scope>test</scope>
-        </dependency>
+        </dependency>   
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>stout-test</artifactId>

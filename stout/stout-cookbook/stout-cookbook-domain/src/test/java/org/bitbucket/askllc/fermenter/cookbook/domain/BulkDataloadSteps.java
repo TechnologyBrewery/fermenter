@@ -17,15 +17,13 @@ import javax.ws.rs.core.Response.Status;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationExampleBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.ValidationExampleMaintenanceService;
+import org.bitbucket.fermenter.stout.authn.AuthenticationTestUtils;
 import org.bitbucket.fermenter.stout.messages.Message;
 import org.bitbucket.fermenter.stout.messages.Messages;
 import org.bitbucket.fermenter.stout.mock.MockRequestScope;
 import org.bitbucket.fermenter.stout.service.ServiceResponse;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,12 +53,11 @@ public class BulkDataloadSteps {
     private List<ValidationExampleBO> bulkUpdateObjects = new ArrayList<ValidationExampleBO>();
 
     @Inject
-    private MockRequestScope mockRequestScope;
+    private MockRequestScope mockRequestScope;    
 
     @Before("@bulkDataload")
     public void setUp() {
-        Authentication authentication = new UsernamePasswordAuthenticationToken("testUser", "somePassword");
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        AuthenticationTestUtils.login("testUser");
         mockRequestScope.cleanMessageManager();
     }
 
@@ -74,6 +71,8 @@ public class BulkDataloadSteps {
         mockRequestScope.cleanMessageManager();
         messageTestBO = null;
         bulkUpdateObjects = null;
+        
+        AuthenticationTestUtils.logout();
     }
 
     @Given("^the following valid data$")

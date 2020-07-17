@@ -5,8 +5,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
-import org.springframework.security.access.prepost.PreAuthorize;
-
 /**
  * Interface for the ContentRepositoryExample service that may be modified by developers to encapsulate any service
  * operations that are not supported for definition in this domain's meta-model.
@@ -35,7 +33,6 @@ public interface ContentRepositoryExampleService extends ContentRepositoryExampl
      * 
      * @return streaming content
      */
-    @PreAuthorize("hasPermission(authentication, 'read')")
     @GET
     @Path(STREAM_CONTENT_EXAMPLE_PATH)
     @Produces("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")

@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.SimpleDomainMaintenanceService;
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.SimpleDomainManagerService;
+import org.bitbucket.fermenter.stout.authn.AuthenticationTestUtils;
 import org.bitbucket.fermenter.stout.page.PageWrapper;
 import org.bitbucket.fermenter.stout.page.json.FindByExampleCriteria;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
@@ -18,6 +19,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import cucumber.api.java.After;
+import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -41,9 +43,16 @@ public class ServicePagingSupportSteps {
     private PageWrapper<SimpleDomainBO> responseValue;
     private ValueServiceResponse<PageWrapper<SimpleDomainBO>> response;
 
+    @Before("@pagingSupport")
+    public void setup() {
+        AuthenticationTestUtils.login("testUser");
+    }
+    
     @After("@pagingSupport")
     public void cleanup() {
         simpleDomainManagerService.deleteAllSimpleDomains();
+        
+        AuthenticationTestUtils.logout();
     }
 
     @Given("^there are (\\d+) simple domain BOs in the system$")

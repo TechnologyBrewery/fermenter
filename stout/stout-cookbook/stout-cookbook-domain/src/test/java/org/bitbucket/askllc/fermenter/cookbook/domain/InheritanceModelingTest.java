@@ -16,15 +16,13 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.MappedSuperclassPar
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.MappedSubclassAMaintenanceService;
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.MappedSubclassBMaintenanceService;
+import org.bitbucket.fermenter.stout.authn.AuthenticationTestUtils;
 import org.bitbucket.fermenter.stout.messages.AbstractMsgMgrAwareTestSupport;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -47,13 +45,14 @@ public class InheritanceModelingTest extends AbstractMsgMgrAwareTestSupport {
     
     @Before
     public void setUp() {
-        Authentication authentication = new UsernamePasswordAuthenticationToken("testUser", "somePassword");
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        AuthenticationTestUtils.login("testUser");
     }
     @After
     public void deleteAllInheritanceModelingTestExamples() {
     	MappedSubclassABO.deleteAllMappedSubclassA();
     	MappedSubclassBBO.deleteAllMappedSubclassB();
+    	
+    	AuthenticationTestUtils.logout();
     }
 
     @Test

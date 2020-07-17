@@ -19,6 +19,7 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationReference
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationReferencedObjectBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.SimpleDomainMaintenanceService;
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.ValidationReferenceExampleMaintenanceService;
+import org.bitbucket.fermenter.stout.authn.AuthenticationTestUtils;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.test.MessageTestUtils;
 import org.bitbucket.fermenter.stout.util.QueryUtils;
@@ -26,6 +27,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import cucumber.api.java.After;
+import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -49,7 +51,12 @@ public class FindByExampleDefaultsSteps {
     private List<SimpleDomainBO> expectedSimpleDomains;
 
     private Collection<SimpleDomainBO> actualSimpleDomains;
-
+    
+    @Before("@findByExampleDefaults")
+    public void setUp() {
+        AuthenticationTestUtils.login("testUser");
+    }
+    
     @After("@findByExampleDefaults")
     public void tearDown() {
         
@@ -66,6 +73,8 @@ public class FindByExampleDefaultsSteps {
         if (referenceInCommon != null) {
             referenceInCommon.delete();
         }
+        
+        AuthenticationTestUtils.logout();
     }
 
     @Given("^entities that have something in common$")

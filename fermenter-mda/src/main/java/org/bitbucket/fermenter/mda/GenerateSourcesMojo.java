@@ -3,9 +3,11 @@ package org.bitbucket.fermenter.mda;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -30,10 +32,7 @@ import org.bitbucket.fermenter.mda.GenerateSourcesHelper.LoggerDelegate;
 import org.bitbucket.fermenter.mda.element.ExpandedProfile;
 import org.bitbucket.fermenter.mda.element.Target;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
-import org.bitbucket.fermenter.mda.generator.Generator;
-import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepository;
-import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceUrl;
 import org.bitbucket.fermenter.mda.metamodel.ModelRepositoryConfiguration;
 
@@ -116,20 +115,37 @@ public class GenerateSourcesMojo extends AbstractMojo {
         }
     };
 
+    @Override
     public void execute() throws MojoExecutionException {
         GenerateSourcesHelper.suppressKrauseningWarnings();
 
         try {
             setup();
-        } catch (Exception ex) {
-            throw new MojoExecutionException("Error setting up generator", ex);
+            GenerateSourcesHelper.performSourceGeneration(profile, profiles, this::createGenerationContext,
+                    this::handleInvalidProfile, mavenLoggerDelegate);
+        } catch (Exception e) {
+            String message = "Error while performing source generation";
+            // NB logging and re-throwing isn't usually a best practice as it
+            // can result in duplicative error logging and clutter, but here it
+            // can be helpful in providing additional context about an error
+            // without needing to re-run Maven with -e or -X turned on
+            getLog().error(message, e);
+            throw new MojoExecutionException(message, e);
         }
-
-        generateSources();
-
     }
 
-    private void setup() throws Exception {
+    /**
+     * Performs all setup activities required to load and validate metamodels
+     * prior to code generation, including loading generation targets and
+     * profiles, automatically adding src/generated/java to the project's list
+     * of source directories, and loading/validating metamodels into the
+     * appropriate {@link ModelInstaceRepository}.
+     * 
+     * @throws MojoExecutionException
+     *             any unexpected error occurs during metamodel loading and
+     *             validation.
+     */
+    private void setup() throws MojoExecutionException {
         if (metadataDependencies == null) {
             metadataDependencies = new ArrayList<>();
         }
@@ -140,19 +156,28 @@ public class GenerateSourcesMojo extends AbstractMojo {
         project.addCompileSourceRoot(generatedCompileSourceRoot);
 
         try {
-            initializeMetadata();
+            ModelRepositoryConfiguration config = createMetadataConfiguration();
+            ModelInstanceRepository newRepository = GenerateSourcesHelper.loadMetamodelRepository(config,
+                    metadataRepositoryImpl, mavenLoggerDelegate);
 
-            engine = new VelocityEngine();
-            engine.setProperty(RuntimeConstants.RESOURCE_LOADERS, "classpath");
-            engine.setProperty("resource.loader.classpath.class", ClasspathResourceLoader.class.getName());
-            engine.init();
-        } catch (Exception ex) {
-            String errMsg = "Unable to setup code generator";
-            getLog().error(errMsg, ex);
-            throw new MojoExecutionException(errMsg, ex);
+            GenerateSourcesHelper.validateMetamodelRepository(newRepository, mavenLoggerDelegate);
+        } catch (MalformedURLException | ClassNotFoundException | NoSuchMethodException | InstantiationException
+                | IllegalAccessException | InvocationTargetException e) {
+            throw new MojoExecutionException("Could not successfully load metamodel repository", e);
         }
+
+        engine = new VelocityEngine();
+        engine.setProperty(RuntimeConstants.RESOURCE_LOADERS, "classpath");
+        engine.setProperty("resource.loader.classpath.class", ClasspathResourceLoader.class.getName());
+        engine.init();
     }
 
+    /**
+     * Scans the classpath for any targets.json files and loads all defined
+     * {@link Target} configurations.
+     * 
+     * @throws MojoExecutionException
+     */
     private void loadTargets() throws MojoExecutionException {
         Enumeration<URL> targetEnumeration = null;
         try {
@@ -174,6 +199,12 @@ public class GenerateSourcesMojo extends AbstractMojo {
         }
     }
 
+    /**
+     * Scans the classpath for any profiles.json files and loads all defined
+     * {@link Profile} configurations.
+     * 
+     * @throws MojoExecutionException
+     */
     private void loadProfiles() throws MojoExecutionException {
         Enumeration<URL> profileEnumeration = null;
         try {
@@ -199,28 +230,18 @@ public class GenerateSourcesMojo extends AbstractMojo {
         }
     }
 
-    private void initializeMetadata() throws Exception {
-        ModelRepositoryConfiguration config = createMetadataConfiguration();
-      
-        // This is a stand-in to prevent NPEs for some optional functionality
-        // that we want in the end product,
-        // but doesn't matter for the conversion:
-        ModelInstanceRepositoryManager.setRepository(new DefaultModelInstanceRepository(config));
-
-        // then load the new repository:
-        ModelInstanceRepository newRepository = GenerateSourcesHelper.loadMetamodelRepository(config,
-                metadataRepositoryImpl, mavenLoggerDelegate);
-
-        long start = System.currentTimeMillis();
-        LOG.info("START: validating metamodel repository implementation...");
-
-        newRepository.validate();
-
-        long stop = System.currentTimeMillis();
-        LOG.info("COMPLETE: validation of metamodel repository in " + (stop - start) + "ms");
-
-    }
-
+    /**
+     * Creates a {@link ModelRepositoryConfiguration} utilized by the
+     * appropriate {@link ModelInstanceRepository} for metamodel loading. This
+     * method primarily extracts the metamodel dependencies specified in the
+     * &lt;metadataDependencies&gt; and &lt;targetModelInstances&gt;
+     * configurations and enables them to be appropriately referenced through
+     * the created {@link ModelRepositoryConfiguration}.
+     *
+     * @return appropriately configured {@link ModelRepositoryConfiguration}
+     *         that may be used for metamodel processing.
+     * @throws MalformedURLException
+     */
     private ModelRepositoryConfiguration createMetadataConfiguration() throws MalformedURLException {
         ModelRepositoryConfiguration config = new ModelRepositoryConfiguration();
         config.setArtifactId(project.getArtifactId());
@@ -263,53 +284,56 @@ public class GenerateSourcesMojo extends AbstractMojo {
         return config;
     }
 
-    private void generateSources() throws MojoExecutionException {
-        long start = System.currentTimeMillis();
-        ExpandedProfile p = profiles.get(profile);
-
-        if (p == null) {
-            StringBuilder sb = new StringBuilder();
-            for (ExpandedProfile profileValue : profiles.values()) {
-                sb.append("\t- ").append(profileValue.getName()).append("\n");
-            }
-            getLog().error("<plugin>\n" + "\t<groupId>org.bitbucket.askllc.fermenter</groupId>\n"
-                    + "\t<artifactId>fermenter-mda</artifactId>\n" + "\t...\n" + "\t<configuration>\n" + "\t\t<profile>"
-                    + profile + "</profile>   <-----------  INVALID PROFILE!\n" + "\t\t...\n" + "Profile '" + profile
-                    + "' is invalid.  Please choose one of the following valid profiles:\n" + sb.toString());
-
-            throw new MojoExecutionException("Invalid profile specified: '" + profile + "'");
-        } else {
-            getLog().info("Generating code for profile '" + p.getName() + "'");
-
+    /**
+     * Handles the specification of an invalid or non-existent generation
+     * profile by providing diagnostic error logging and returning the
+     * appropriate exception to throw.
+     * 
+     * @param targetProfile
+     *            invalid profile specified in the fermenter-mda plugin
+     *            declaration.
+     * @param allProfiles
+     *            all valid {@link Profile}s based on the fermenter-mda plugin
+     *            configuration.
+     * @return a {@link MojoExecutionException} to throw and halt the build.
+     */
+    private Exception handleInvalidProfile(String targetProfile, Collection<ExpandedProfile> allProfiles) {
+        StringBuilder sb = new StringBuilder();
+        for (ExpandedProfile profileValue : allProfiles) {
+            sb.append("\t- ").append(profileValue.getName()).append("\n");
         }
+        
+        getLog().error("<plugin>\n" 
+                        + "\t<groupId>org.bitbucket.askllc.fermenter</groupId>\n"
+                        + "\t<artifactId>fermenter-mda</artifactId>\n" + "\t...\n" 
+                        + "\t<configuration>\n" 
+                        + "\t\t<profile>" + targetProfile + "</profile>   <-----------  INVALID PROFILE!\n" 
+                        + "\t\t...\n" + "Profile '" + targetProfile + "' is invalid.  Please choose one of the following valid profiles:\n" + sb.toString());
 
-        // For each target, instantiate a generator and call generate
-        for (Target t : p.getTargets()) {
-            getLog().debug("\tExecuting target '" + t.getName() + "'");
-
-            GenerationContext context = new GenerationContext(t);
-            context.setBasePackage(basePackage);
-            context.setGeneratedSourceDirectory(generatedSourceRoot);
-            context.setMainSourceDirectory(mainSourceRoot);
-            context.setEngine(engine);
-            context.setGroupId(project.getGroupId());
-            context.setArtifactId(project.getArtifactId());
-            context.setVersion(project.getVersion());
-
-            try {
-                Class<?> clazz = Class.forName(t.getGenerator());
-                Generator generator = (Generator) clazz.newInstance();
-                generator.setMetadataContext(t.getMetadataContext());
-                generator.generate(context);
-            } catch (Exception ex) {
-                throw new MojoExecutionException("Error while generating", ex);
-            }
-        }
-
-        if (LOG.isInfoEnabled()) {
-            long stop = System.currentTimeMillis();
-            LOG.info("Generation completed in " + (stop - start) + "ms");
-        }
+        return new MojoExecutionException("Invalid profile specified: '" + targetProfile + "'");    
     }
-
+    
+    /**
+     * Creates a new {@link GenerationContext} object based on the given
+     * {@link Target} which captures key configuration details needed to
+     * generate the source file(s) modeled by the given {@link Target} and it's
+     * {@link Generator}.
+     * 
+     * @param target
+     *            generation {@link Target} being processed.
+     * @return {@link GenerationContext} that can be provided to the given
+     *         {@link Target}'s {@link Generator} to execute code generation.
+     */
+    private GenerationContext createGenerationContext(Target target) {
+        GenerationContext context = new GenerationContext(target);
+        context.setBasePackage(basePackage);
+        context.setGeneratedSourceDirectory(generatedSourceRoot);
+        context.setMainSourceDirectory(mainSourceRoot);
+        context.setEngine(engine);
+        context.setGroupId(project.getGroupId());
+        context.setArtifactId(project.getArtifactId());
+        context.setVersion(project.getVersion());
+        return context;
+    }
+   
 }

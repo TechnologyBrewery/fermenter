@@ -303,12 +303,16 @@ public class GenerateSourcesMojo extends AbstractMojo {
             sb.append("\t- ").append(profileValue.getName()).append("\n");
         }
         
-        getLog().error("<plugin>\n" 
+        getLog().error("\n<plugin>\n" 
                         + "\t<groupId>org.bitbucket.askllc.fermenter</groupId>\n"
-                        + "\t<artifactId>fermenter-mda</artifactId>\n" + "\t...\n" 
+                        + "\t<artifactId>fermenter-mda</artifactId>\n" 
+                        + "\t...\n" 
                         + "\t<configuration>\n" 
-                        + "\t\t<profile>" + targetProfile + "</profile>   <-----------  INVALID PROFILE!\n" 
-                        + "\t\t...\n" + "Profile '" + targetProfile + "' is invalid.  Please choose one of the following valid profiles:\n" + sb.toString());
+                        + "\t\t<profile>" + targetProfile + "</profile>   <-----------  INVALID PROFILE!\n"
+                        + "\t\t...\n"
+                        + "\t</configuration>\n"
+                        + "</plugin>\n"
+                        + "Profile '" + targetProfile + "' is invalid.  Please choose one of the following valid profiles:\n" + sb.toString());
 
         return new MojoExecutionException("Invalid profile specified: '" + targetProfile + "'");    
     }

@@ -10,7 +10,6 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import javax.inject.Inject;
-import javax.transaction.Status;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
@@ -20,10 +19,8 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.NonUUIDKeyE
 import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.impl.DelegateMaintenanceTransactionSynchronization;
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.CachedEntityExample;
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.NonUUIDKeyEntity;
+import org.bitbucket.fermenter.stout.authn.AuthenticationTestUtils;
 import org.bitbucket.fermenter.stout.messages.MessageManagerInitializationDelegate;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,8 +57,7 @@ public class LevelOneCacheRestClientSteps {
 
     @Before("@levelOneRestCache")
     public void setUp() {
-        Authentication authentication = new UsernamePasswordAuthenticationToken("testUser", "somePassword");
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        AuthenticationTestUtils.login("testUser");
         assertNotNull("Missing needed maintenance delegate!", entityMaintenanceDelegate);
 
     }
@@ -75,6 +71,8 @@ public class LevelOneCacheRestClientSteps {
         isBusinessKeyed = false;
 
         businessKeyedEntity = null;
+        
+        AuthenticationTestUtils.logout();
         
     }
 

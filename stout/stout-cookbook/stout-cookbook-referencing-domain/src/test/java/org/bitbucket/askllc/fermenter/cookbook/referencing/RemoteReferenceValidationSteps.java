@@ -1,6 +1,5 @@
 package org.bitbucket.askllc.fermenter.cookbook.referencing;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -12,7 +11,6 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response.Status;
 
 import org.bitbucket.askllc.fermenter.cookbook.domain.ReferenceValidationSteps;
 import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.ValidationReferencedObjectMaintenanceDelegate;
@@ -20,15 +18,11 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.ValidationReferen
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.ValidationTransientReferencedObject;
 import org.bitbucket.askllc.fermenter.cookbook.referencing.domain.bizobj.LocalDomainBO;
 import org.bitbucket.askllc.fermenter.cookbook.referencing.domain.bizobj.LocalTransientDomainBO;
+import org.bitbucket.fermenter.stout.authn.AuthenticationTestUtils;
 import org.bitbucket.fermenter.stout.messages.MessageManager;
 import org.bitbucket.fermenter.stout.messages.MessageManagerInitializationDelegate;
-import org.bitbucket.fermenter.stout.mock.MockRequestScope;
-import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.test.MessageTestUtils;
 import org.jboss.arquillian.test.api.ArquillianResource;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import cucumber.api.java.After;
@@ -56,8 +50,7 @@ public class RemoteReferenceValidationSteps {
     
     @Before("@remoteReferenceValidation")
     public void setUp() {
-        Authentication authentication = new UsernamePasswordAuthenticationToken("testUser", "somePassword");
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        AuthenticationTestUtils.login("testUser");
         assertNotNull("Missing needed delegate!", referenceMaintenanceDelegate);
         MessageManagerInitializationDelegate.cleanupMessageManager();
     }
@@ -81,6 +74,9 @@ public class RemoteReferenceValidationSteps {
         MessageManagerInitializationDelegate.cleanupMessageManager();
         errorThrownValidate = false;
         errorThrownSave = false;
+        
+        AuthenticationTestUtils.logout();
+        
     }
     
     @Given("^the \"([^\"]*)\" has a remote reference to an existing \"([^\"]*)\"$")

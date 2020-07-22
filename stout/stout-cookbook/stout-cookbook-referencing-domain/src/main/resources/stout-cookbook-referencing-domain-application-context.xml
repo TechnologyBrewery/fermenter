@@ -17,7 +17,11 @@
 		 base-stout-cookbook-referencing-domain-application-context.xml -->
 
 	<import resource="classpath:base-stout-cookbook-referencing-domain-application-context.xml" />
-
+	
+	<context:component-scan base-package="org.bitbucket.fermenter.stout.authn">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Component" />
+	</context:component-scan>	
+	
 	<!-- Allows Spring to wire up and instantiate transactional rest client 
 		components marked with @Component -->
 	<context:component-scan base-package="org.bitbucket.fermenter.stout.client.service">

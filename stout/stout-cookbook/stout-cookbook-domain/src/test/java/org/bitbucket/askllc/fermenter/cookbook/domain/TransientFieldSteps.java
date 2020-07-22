@@ -3,11 +3,7 @@ package org.bitbucket.askllc.fermenter.cookbook.domain;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-import java.math.BigDecimal;
-
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.TransientFieldExampleBO;
-import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationExampleBO;
-import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationExampleChildBO;
 import org.bitbucket.fermenter.stout.messages.MessageManagerInitializationDelegate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;

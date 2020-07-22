@@ -16,12 +16,14 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.RandomUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.SimpleDomainManagerService;
+import org.bitbucket.fermenter.stout.authn.AuthenticationTestUtils;
 import org.bitbucket.fermenter.stout.messages.MessageManagerInitializationDelegate;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import cucumber.api.java.After;
+import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -39,12 +41,18 @@ public class DateParameterSteps {
     
     @Inject
     private SimpleDomainManagerService simpleDomainMgr;
-
-
+    
+    @Before("@dateParameter")
+    public void setUp() {
+        AuthenticationTestUtils.login("testUser");
+    }
+    
     @After("@dateParameter")
     public void cleanupMsgMgr() throws Exception {
         SimpleDomainBO.deleteAllSimpleDomain();
         MessageManagerInitializationDelegate.cleanupMessageManager();
+        
+        AuthenticationTestUtils.logout();
     }
 
     @Given("^there are simple domains with dates in the past, present, and future$")

@@ -12,6 +12,7 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.ValidationR
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.ValidationReferencedObject;
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.ValidationTransientReferencedObject;
 import org.bitbucket.askllc.fermenter.cookbook.referencing.domain.bizobj.LocalDomainBO;
+import org.bitbucket.fermenter.stout.authn.AuthenticationTestUtils;
 import org.bitbucket.fermenter.stout.test.MessageTestUtils;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
@@ -21,9 +22,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 // Kicks off a test cookbook-domain war that can be used as the target of rest calls: 
@@ -45,8 +43,7 @@ public class RemoteReferenceRetrievalIT extends RunTestsOutsideOfArquillianWar {
     
     @Before
     public void setUp() {
-        Authentication authentication = new UsernamePasswordAuthenticationToken("testUser", "somePassword");
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        AuthenticationTestUtils.login("testUser");
     }
 
     @After
@@ -59,6 +56,8 @@ public class RemoteReferenceRetrievalIT extends RunTestsOutsideOfArquillianWar {
         }
         
         MessageTestUtils.assertNoErrorMessages();
+        
+        AuthenticationTestUtils.logout();
     }
 
     @Test

@@ -11,9 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.client.cache.StringKeyedEntityCache;
 import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.StringKeyedEntityMaintenanceDelegate;
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.StringKeyedEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.bitbucket.fermenter.stout.authn.AuthenticationTestUtils;
 import org.springframework.test.context.ContextConfiguration;
 
 import cucumber.api.java.After;
@@ -34,8 +32,7 @@ public class StringKeyedEntityCachingSteps {
 
     @Before("@stringKeyedEntityCaching")
     public void setUp() {
-        Authentication authentication = new UsernamePasswordAuthenticationToken("testUser", "somePassword");
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        AuthenticationTestUtils.login("testUser");
         stringKeyExample = new StringKeyedEntity();
     }
 
@@ -45,6 +42,8 @@ public class StringKeyedEntityCachingSteps {
             maintenanceDelegate.delete(stringKeyExample.getId());
         }
         StringKeyedEntityCache.invalidateCache();
+        
+        AuthenticationTestUtils.logout();
     }
 
     @Given("^a referenced entity with a string key with blank spaces exists in the foreign domain$")

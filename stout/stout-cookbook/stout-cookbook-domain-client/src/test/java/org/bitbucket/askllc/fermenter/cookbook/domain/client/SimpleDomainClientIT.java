@@ -19,6 +19,7 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.RunTestsWithinArquillianWa
 import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.SimpleDomainMaintenanceDelegate;
 import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.SimpleDomainManagerDelegate;
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.SimpleDomain;
+import org.bitbucket.fermenter.stout.authn.AuthenticationTestUtils;
 import org.bitbucket.fermenter.stout.page.PageWrapper;
 import org.bitbucket.fermenter.stout.page.json.FindByExampleCriteria;
 import org.bitbucket.fermenter.stout.sort.OrderWrapper;
@@ -32,9 +33,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 // Kicks off a test cookbook-domain war that can be used as the target of rest calls: 
@@ -56,14 +54,15 @@ public class SimpleDomainClientIT extends RunTestsWithinArquillianWar {
 
     @Before
     public void setUp() {
-        Authentication authentication = new UsernamePasswordAuthenticationToken("testUser", "somePassword");
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        AuthenticationTestUtils.login("testUser");
     }    
     
     @After
     public void deleteSimpleDomains() throws Exception {
         delegate.deleteAllSimpleDomains();
         MessageTestUtils.assertNoErrorMessages();
+        
+        AuthenticationTestUtils.logout();
     }
 
     @Test

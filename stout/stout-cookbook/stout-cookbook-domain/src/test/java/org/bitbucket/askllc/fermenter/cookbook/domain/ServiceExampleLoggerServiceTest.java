@@ -1,23 +1,21 @@
 package org.bitbucket.askllc.fermenter.cookbook.domain;
 
-
-
 import static org.junit.Assert.assertNotNull;
 
 import javax.inject.Inject;
 
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.ServiceExampleLoggerService;
+import org.bitbucket.fermenter.stout.authn.AuthenticationTestUtils;
 import org.bitbucket.fermenter.stout.messages.AbstractMsgMgrAwareTestSupport;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({ "classpath:stout-cookbook-domain-application-context.xml", "classpath:h2-spring-ds-context.xml" })
@@ -39,8 +37,12 @@ public class ServiceExampleLoggerServiceTest extends AbstractMsgMgrAwareTestSupp
 	
     @Before
     public void setUp() {
-        Authentication authentication = new UsernamePasswordAuthenticationToken("testUser", "somePassword");
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        AuthenticationTestUtils.login("testUser");
+    }
+    
+    @After
+    public void tearDown() {
+        AuthenticationTestUtils.logout();
     }
     
 	@Test

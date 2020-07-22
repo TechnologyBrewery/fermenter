@@ -33,6 +33,7 @@ public abstract class AbstractArquillianTestSupport {
         war.addAsWebInfResource("base-stout-cookbook-domain-application-context.xml");
         war.addAsWebInfResource("stout-cookbook-domain-application-context.xml");
         war.addAsWebInfResource("h2-tomcat-ds-context.xml", "context.xml");
+        war.addAsWebInfResource("shiro.ini");
         war.addAsWebResource("log4j2.xml");
         war.setWebXML("web.xml");
         return war;

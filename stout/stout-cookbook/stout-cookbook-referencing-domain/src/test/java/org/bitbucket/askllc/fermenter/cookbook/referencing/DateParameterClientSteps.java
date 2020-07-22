@@ -12,11 +12,9 @@ import javax.inject.Inject;
 import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.SimpleDomainMaintenanceDelegate;
 import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.SimpleDomainManagerDelegate;
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.SimpleDomain;
+import org.bitbucket.fermenter.stout.authn.AuthenticationTestUtils;
 import org.bitbucket.fermenter.stout.messages.MessageManagerInitializationDelegate;
 import org.bitbucket.fermenter.stout.test.MessageTestUtils;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import cucumber.api.java.After;
@@ -39,8 +37,7 @@ public class DateParameterClientSteps {
 
     @Before("@dateParameterClient")
     public void setUp() {
-        Authentication authentication = new UsernamePasswordAuthenticationToken("testUser", "somePassword");
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        AuthenticationTestUtils.login("testUser");
         assertNotNull("Missing needed manager delegate!", delegate);
         assertNotNull("Missing needed maintenance delegate!", maintenanceDelegate);
         MessageManagerInitializationDelegate.cleanupMessageManager();
@@ -50,6 +47,8 @@ public class DateParameterClientSteps {
     public void cleanUp() throws Exception {
         delegate.deleteAllSimpleDomains();
         MessageManagerInitializationDelegate.cleanupMessageManager();
+        
+        AuthenticationTestUtils.logout();
     }
 
     @Given("^a simple domain with today's date$")

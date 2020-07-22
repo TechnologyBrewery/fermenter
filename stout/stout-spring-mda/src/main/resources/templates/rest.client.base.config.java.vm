@@ -17,14 +17,14 @@ import ${basePackage}.client.resource.${service.name}Resource;
 #end
 import org.bitbucket.fermenter.stout.util.ObjectMapperManager;
 
+import org.bitbucket.fermenter.stout.authn.IdentityManager;
 import org.bitbucket.fermenter.stout.util.Slf4jLogger;
-import org.bitbucket.krausening.Krausening;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.core.context.SecurityContextHolder;
-import java.util.Properties;
 import org.aeonbits.owner.KrauseningConfigFactory;
 import org.bitbucket.fermenter.stout.util.FeignErrorTranslator;
+
+import javax.inject.Inject;
 
 /**
  * Configuration for the REST Client.
@@ -33,6 +33,9 @@ import org.bitbucket.fermenter.stout.util.FeignErrorTranslator;
  */
 @Configuration
 public class RestClient${configName}BaseConfig {
+
+    @Inject
+    private IdentityManager identityManager;
 
 #foreach( $entity in $entities )
 	#if (!$entity.isTransient() && !$entity.isNonPersistentParentEntity())
@@ -71,7 +74,7 @@ public class RestClient${configName}BaseConfig {
                 .decoder(feignDecoder())
                 .encoder(feignEncoder())
                 .logger(new Slf4jLogger(getClass()))
-                .requestInterceptor(new HeaderInterceptorForwarder());
+                .requestInterceptor(new HeaderInterceptorForwarder(identityManager));
     }
 
     /**
@@ -110,14 +113,23 @@ public class RestClient${configName}BaseConfig {
     }
 
     /**
-     * Adds username header to all requests so they don't have to be configured at each endpoint
+     * Adds username header to all requests so they don't have to be configured at each endpoint.
      */
     static class HeaderInterceptorForwarder implements RequestInterceptor {
-        @Override
-        public void apply(RequestTemplate template) {
-            if (SecurityContextHolder.getContext().getAuthentication() != null) {
-                template.header("username", SecurityContextHolder.getContext().getAuthentication().getName());
-            }
+    
+	    private IdentityManager identityManager;
+	    
+	    public HeaderInterceptorForwarder(IdentityManager identityManager) {
+            this.identityManager = identityManager;
         }
+
+		@Override
+		public void apply(RequestTemplate template) {
+			String username = identityManager.getSubjectName();
+			if (username != null) {
+				template.header("username", username);
+			}
+		}				
+			
     }
 }

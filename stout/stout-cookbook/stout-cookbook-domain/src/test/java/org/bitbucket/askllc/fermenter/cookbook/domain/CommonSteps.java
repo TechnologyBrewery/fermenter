@@ -11,6 +11,7 @@ import cucumber.api.java.After;
 @ContextConfiguration({ "classpath:application-test-context.xml", "classpath:h2-spring-ds-context.xml" })
 @Transactional
 public class CommonSteps {
+    
     @Inject
     private MockRequestScope mockRequestScope;
     

@@ -9,9 +9,7 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.client.cache.CachedEntityE
 import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.CachedEntityExampleMaintenanceDelegate;
 import org.bitbucket.askllc.fermenter.cookbook.domain.client.service.SimpleDomainMaintenanceDelegate;
 import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.CachedEntityExample;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.bitbucket.fermenter.stout.authn.AuthenticationTestUtils;
 import org.springframework.test.context.ContextConfiguration;
 
 import cucumber.api.java.After;
@@ -27,16 +25,15 @@ public class EntityCachingSteps {
     CachedEntityExampleMaintenanceDelegate maintenanceDelegate;
 
     @Inject
-    SimpleDomainMaintenanceDelegate simpleDomainMaintenanceDelegate;
-
+    SimpleDomainMaintenanceDelegate simpleDomainMaintenanceDelegate; 
+    
     CachedEntityExample exampleEntity;
     CachedEntityExample firstLookUp;
     CachedEntityExample secondLookUp;
 
     @Before("@referenceCaching")
     public void setUp() {
-        Authentication authentication = new UsernamePasswordAuthenticationToken("testUser", "somePassword");
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        AuthenticationTestUtils.login("testUser");
         exampleEntity = new CachedEntityExample();
         exampleEntity.setName("TEST NAME");
     }
@@ -47,6 +44,8 @@ public class EntityCachingSteps {
             maintenanceDelegate.delete(exampleEntity.getId());
         }
         CachedEntityExampleCache.invalidateCache();
+        
+        AuthenticationTestUtils.logout();
     }
 
     @Given("^a referenced entity exists in the foreign domain$")

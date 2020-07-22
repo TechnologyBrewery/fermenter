@@ -9,11 +9,9 @@ import javax.ws.rs.core.Response;
 
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.NonUUIDKeyEntityBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.ContentRepositoryExampleService;
+import org.bitbucket.fermenter.stout.authn.AuthenticationTestUtils;
 import org.bitbucket.fermenter.stout.content.ContentRepositoryStream;
 import org.bitbucket.fermenter.stout.mock.MockRequestScope;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
@@ -32,15 +30,15 @@ public class ContentStreamingSteps {
 
     @Before("@clientContentStreaming")
     public void setUp() {
-        Authentication authentication = new UsernamePasswordAuthenticationToken("testUser",
-                "somePassword");
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        AuthenticationTestUtils.login("testUser");
     }
 
     @After("@clientContentStreaming")
     public void cleanUp() {
         mockRequestScope.cleanMessageManager();
         NonUUIDKeyEntityBO.deleteAllNonUUIDKeyEntities();
+        
+        AuthenticationTestUtils.logout();
     }
 
     @When("^I request a file stream from the content respository$")

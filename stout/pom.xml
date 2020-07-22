@@ -52,6 +52,7 @@
 	<modules>
 		<module>stout-build-tools</module>
 		<module>stout-core</module>
+		<module>stout-authentication</module>
 		<module>stout-test</module>
 		<module>stout-authzforce-attribute-extension</module>
 		<module>stout-authzforce</module>		
@@ -59,7 +60,6 @@
 		<module>stout-spring-util</module>
 		<module>stout-spring-client</module>
 		<module>stout-spring</module>
-		<module>stout-spring-authentication</module>
 		<module>stout-oak</module>
 		<module>stout-web-container-mda</module>
 		<module>stout-cookbook</module>
@@ -250,21 +250,6 @@
 				<version>Hopper-SR3</version>
 				<scope>import</scope>
 				<type>pom</type>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.security</groupId>
-				<artifactId>spring-security-core</artifactId>
-				<version>${spring.security.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.security</groupId>
-				<artifactId>spring-security-web</artifactId>
-				<version>${spring.security.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.security</groupId>
-				<artifactId>spring-security-config</artifactId>
-				<version>${spring.security.version}</version>
 			</dependency>
 
 			<dependency>

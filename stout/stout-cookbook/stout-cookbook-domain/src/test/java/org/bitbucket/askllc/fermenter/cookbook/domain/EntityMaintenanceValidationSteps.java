@@ -11,11 +11,9 @@ import javax.ws.rs.core.Response.Status;
 
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.NonUUIDKeyEntityBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.NonUUIDKeyEntityMaintenanceService;
+import org.bitbucket.fermenter.stout.authn.AuthenticationTestUtils;
 import org.bitbucket.fermenter.stout.mock.MockRequestScope;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,14 +38,15 @@ public class EntityMaintenanceValidationSteps {
 
     @Before("@entityValidation")
     public void setUp() {
-        Authentication authentication = new UsernamePasswordAuthenticationToken("testUser", "somePassword");
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        AuthenticationTestUtils.login("testUser");
     }
 
     @After("@entityValidation")
     public void cleanUp() {
         mockRequestScope.cleanMessageManager();
         NonUUIDKeyEntityBO.deleteAllNonUUIDKeyEntities();
+        
+        AuthenticationTestUtils.logout();
     }
 
     @Given("^an entity exists in the system with the id \"([^\"]*)\"$")

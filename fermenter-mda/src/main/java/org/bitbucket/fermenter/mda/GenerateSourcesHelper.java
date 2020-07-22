@@ -6,15 +6,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import org.bitbucket.fermenter.mda.GenerateSourcesHelper.LoggerDelegate.LogLevel;
 import org.bitbucket.fermenter.mda.element.ExpandedProfile;
 import org.bitbucket.fermenter.mda.element.Profile;
 import org.bitbucket.fermenter.mda.element.Target;
+import org.bitbucket.fermenter.mda.generator.GenerationContext;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
+import org.bitbucket.fermenter.mda.generator.Generator;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 import org.bitbucket.fermenter.mda.metamodel.ModelRepositoryConfiguration;
@@ -107,6 +112,8 @@ public final class GenerateSourcesHelper {
      * implementation class. If any errors have been collected by the
      * {@link MessageTracker}, a {@link GenerationException} will be thrown.
      * 
+     * @see {@link #validateMetamodelRepository(ModelInstanceRepository, LoggerDelegate)}.
+     * 
      * @param config
      *            configures the {@link ModelInstanceRepository} that will be
      *            used to load metamodels.
@@ -156,6 +163,97 @@ public final class GenerateSourcesHelper {
         return repository;
     }
 
+    /**
+     * Validates all metamodels loaded into the given
+     * {@link ModelInstanceRepository} to preemptively identify any model
+     * definition errors, such as metamodel schema violations, model references
+     * to invalid types or entities, etc. <br>
+     * <b>Pre-condition:</b> The provided {@link ModelInstanceRepository} must
+     * be correctly initialized via
+     * {@link #loadMetamodelRepository(ModelRepositoryConfiguration, String, LoggerDelegate)}
+     * prior to invoking this method.
+     * 
+     * @see {@link #loadMetamodelRepository(ModelRepositoryConfiguration, String, LoggerDelegate)}.
+     * @param metamodelRepository
+     *            metamodel repository desired for validation which has been
+     *            initialized with the relevant metamodel definitions.
+     * @param logger
+     *            build tool specific logging implementation to which logging
+     *            will be delegated.
+     */
+    public static void validateMetamodelRepository(ModelInstanceRepository metamodelRepository, LoggerDelegate logger) {
+        long start = System.currentTimeMillis();
+        logger.log(LogLevel.INFO, "START: validating metamodel repository...");
+
+        metamodelRepository.validate();
+
+        long stop = System.currentTimeMillis();
+        logger.log(LogLevel.INFO, "COMPLETE: validation of metamodel repository in " + (stop - start) + "ms");
+    }
+    
+    /**
+     * Executes code generation on the targets defined within the provided
+     * profile, delegating to the appropriate {@link Generator} instances. <br>
+     * <b>Pre-condition:</b> It is assumed that all metamodels have been loaded
+     * into the appropriate {@link ModelInstanceRepository} instance and
+     * validated.
+     * 
+     * @param targetProfile
+     *            {@link Profile} defining the desired source code, resources,
+     *            etc. to generate.
+     * @param profiles
+     *            all valid {@link Profile}s that are available for code
+     *            generation.
+     * @param createGenerationContext
+     *            {@link Function} that creates the appropriate
+     *            {@link GenerationContext} based on a given {@link Target}.
+     *            Enables build tool specific logic for populating the
+     *            {@link GenerationContext}.
+     * @param handleInvalidProfile
+     *            enables developers to provide build tool specific handling the
+     *            specification of an invalid profile. This {@link Function}
+     *            receives the invalid profile that was specified and all valid
+     *            {@link Profile}s as input parameters, and may optionally
+     *            return an {@link Exception}, which will be thrown if non-null.
+     * @param logger
+     *            build tool specific logging implementation to which logging
+     *            will be delegated.
+     * @throws Exception
+     *             an invalid profile was specified or an unexpected error
+     *             occurred during {@link Generator} creation and processing.
+     */
+    public static void performSourceGeneration(String targetProfile, Map<String, ExpandedProfile> profiles,
+            Function<Target, GenerationContext> createGenerationContext,
+            BiFunction<String, Collection<ExpandedProfile>, Exception> handleInvalidProfile, LoggerDelegate logger)
+            throws Exception {
+        long start = System.currentTimeMillis();
+        ExpandedProfile profile = profiles.get(targetProfile);
+
+        // First validate the profile specified by the developer
+        if (profile == null) {
+            Exception invalidProfileException = handleInvalidProfile.apply(targetProfile, profiles.values());
+            if (invalidProfileException != null) {
+                throw invalidProfileException;
+            }
+        } else {
+            logger.log(LogLevel.INFO, "Generating code for profile '" + profile.getName() + "'");
+
+            // For each target, instantiate a generator and call generate
+            for (Target target : profile.getTargets()) {
+                logger.log(LogLevel.DEBUG, "\tExecuting target '" + target.getName() + "'");
+                GenerationContext context = createGenerationContext.apply(target);
+                Class<?> clazz = Class.forName(target.getGenerator());
+                Generator generator = (Generator) clazz.newInstance();
+                generator.setMetadataContext(target.getMetadataContext());
+                generator.generate(context);
+            }
+
+            long stop = System.currentTimeMillis();
+            logger.log(LogLevel.INFO, "Generation completed in " + (stop - start) + "ms");
+        }
+
+    }
+    
     /**
      * We don't have great fine-grained control of logging inside the plugin, so
      * default some Krausening values when they aren't specified so warnings

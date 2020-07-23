@@ -1,0 +1,38 @@
+package org.bitbucket.askllc.fermenter.cookbook.domain.rules.runtime;
+
+import org.kie.api.KieServices;
+import org.kie.api.builder.*;
+import org.kie.api.runtime.KieContainer;
+import org.kie.api.runtime.KieSession;
+import org.kie.internal.io.ResourceFactory;
+
+public class DroolsRuntime {
+    private static final String RULES_PATH = "/com/rules/"; 
+    private KieServices kieServices=KieServices.Factory.get();
+    private KieContainer kContainer;
+    
+    public DroolsRuntime() {
+        getKieRepository();
+        KieFileSystem kieFileSystem = kieServices.newKieFileSystem();
+
+        kieFileSystem.write(ResourceFactory.newClassPathResource("rules/recommendations.drl"));
+        KieBuilder kb = kieServices.newKieBuilder(kieFileSystem);
+        kb.buildAll();
+        KieModule kieModule = kb.getKieModule();
+
+        this.kContainer = kieServices.newKieContainer(kieModule.getReleaseId());
+    }
+
+    private void getKieRepository() {
+        final KieRepository kieRepository = kieServices.getRepository();
+        kieRepository.addKieModule(new KieModule() {
+            public ReleaseId getReleaseId() {
+                return kieRepository.getDefaultReleaseId();
+            }
+        });
+    }
+
+    public KieSession getRecommendationKieSession(){
+        return this.kContainer.newKieSession();
+    }
+}

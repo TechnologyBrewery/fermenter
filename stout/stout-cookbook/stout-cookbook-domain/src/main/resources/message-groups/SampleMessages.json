@@ -33,6 +33,10 @@
 		{
 			"name": "contract.test",
 			"text": "This message can be used to convey information or error messages in support of general service contract testing.  Contract test method ${methodName}"
+		},
+		{
+			"name": "example.service.failure",
+			"text": "The process that you have attempted to run has failed. This is for attempt ${attemptNumber}"
 		}
 	]
 }

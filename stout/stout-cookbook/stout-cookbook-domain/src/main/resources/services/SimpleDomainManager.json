@@ -26,6 +26,15 @@
       "type" : "void"
     }
   }, {
+    "name" : "CreateErrorMessageForGlobalErrorHandler",
+    "parameters" : [ {
+      "name" : "numErrorMessagesToGenerate",
+      "type" : "integer"
+    } ],
+    "return" : {
+      "type" : "void"
+    }
+  }, {
     "name" : "SaveSimpleDomainEntityAndPropagateErrorMessages",
     "parameters" : [ {
       "name" : "targetNameValue",

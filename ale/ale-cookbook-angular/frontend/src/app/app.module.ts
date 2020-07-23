@@ -1,9 +1,10 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SimpleDomainComponent } from './simple-domain/simple-domain.component';
+import { MatIconRegistry } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
 import { FormsModule } from '@angular/forms';
@@ -38,5 +39,10 @@ import { BeerExampleComponent } from './beer-example-page/beer-example-page.comp
   bootstrap: [AppComponent],
   entryComponents: [ErrorDialogComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(matIconRegistry: MatIconRegistry, domSanitizer: DomSanitizer) {
+    // Note: for the error icons to appear, developers will need to add the following
+    matIconRegistry.addSvgIcon('error', domSanitizer.bypassSecurityTrustResourceUrl('./assets/error-icon.svg'));
+  }
+ }
 // TODO: https://alligator.io/angular/providers-shared-modules/

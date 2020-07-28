@@ -1,0 +1,19 @@
+{
+  "package" : "rules.groupA",
+  "name" : "BeerLabelingRuleA",
+  "ruleGroup": "groupA",
+  "defaultStatement": "$BeerExampleEntity: BeerExampleEntity(beerType.contains('IPA'))",
+  "defaultProcessing": "$BeerExampleEntity.setBeerType('A: ' + $BeerExampleEntity.getBeerType())",
+  "operations" : [{
+    "name" : "labelMyBeer",
+    "documentation" : "Adds a label to a beer type if it's an IPA",
+    "parameters" : [ {
+      "name" : "beerExampleEntity",
+      "type" : "BeerExampleEntity"
+    } ],
+    "return" : {
+      "type" : "BeerExampleEntity"
+    }
+  }
+]
+}

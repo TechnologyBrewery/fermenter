@@ -12,6 +12,7 @@ import org.bitbucket.fermenter.mda.metamodel.element.DictionaryType;
 import org.bitbucket.fermenter.mda.metamodel.element.Entity;
 import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
 import org.bitbucket.fermenter.mda.metamodel.element.MessageGroup;
+import org.bitbucket.fermenter.mda.metamodel.element.Rule;
 import org.bitbucket.fermenter.mda.metamodel.element.Service;
 import org.bitbucket.fermenter.mda.util.MessageTracker;
 
@@ -27,6 +28,7 @@ public class DefaultModelInstanceRepository extends AbstractModelInstanceReposit
     private ServiceModelInstanceManager serviceManager = ServiceModelInstanceManager.getInstance();
     private DictionaryModelInstanceManager dictionaryManager = DictionaryModelInstanceManager.getInstance();
     private MessageGroupModelInstanceManager messageGroupManager = MessageGroupModelInstanceManager.getInstance();
+    private RuleModelInstanceManager ruleManager = RuleModelInstanceManager.getInstance();
 
     /**
      * Creates a new instance w/ the base package of the current project. This package name will become the default
@@ -50,6 +52,7 @@ public class DefaultModelInstanceRepository extends AbstractModelInstanceReposit
         serviceManager.reset();
         entityManager.reset();
         messageGroupManager.reset();
+        ruleManager.reset();
         
         Collection<ModelInstanceUrl> modelInstanceUrls = config.getMetamodelInstanceLocations().values();
         for (ModelInstanceUrl modelInstanceUrl : modelInstanceUrls) {
@@ -59,6 +62,7 @@ public class DefaultModelInstanceRepository extends AbstractModelInstanceReposit
             serviceManager.loadMetadata(modelInstanceUrl, config);
             entityManager.loadMetadata(modelInstanceUrl, config);
             messageGroupManager.loadMetadata(modelInstanceUrl, config);
+            ruleManager.loadMetadata(modelInstanceUrl, config);
 
             if (log.isInfoEnabled()) {
                 long stop = System.currentTimeMillis();
@@ -100,6 +104,10 @@ public class DefaultModelInstanceRepository extends AbstractModelInstanceReposit
         
         for (MessageGroup messageGroup : messageGroupManager.getMetadataElementWithoutPackage().values()) {
             messageGroup.validate();
+        }
+
+        for (Rule rule : ruleManager.getMetadataElementWithoutPackage().values()) {
+            rule.validate();
         }
 
         MessageTracker messageTracker = MessageTracker.getInstance();
@@ -401,5 +409,64 @@ public class DefaultModelInstanceRepository extends AbstractModelInstanceReposit
     public Map<String, MessageGroup> getMessageGroupsByContext(String context) {
         return messageGroupManager.getMetadataElementByContext(context);
     }    
+
+    /**
+     * Gets a rule by name from the current package.
+     * 
+     * @param name
+     *            name of the rule to look up.
+     * @return instance of the {@link Rule} or null if none is found with the request name.
+     */
+    public Rule getRule(String name) {
+        return ruleManager.getMetadataElementByPackageAndName(config.getBasePackage(), name);
+
+    }
+
+    /**
+     * Gets an rule by name from the current package.
+     * 
+     * @param name
+     *            name of the rule to look up.
+     * @param packageName
+     *            the package in which to look for the request element.
+     * @return instance of the {@link Rule} or null if none is found with the request name.
+     */
+    public Rule getRule(String packageName, String name) {
+        return ruleManager.getMetadataElementByPackageAndName(packageName, name);
+
+    }
+
+    /**
+     * Gets all rules from the specified package.
+     * 
+     * @param packageName
+     *            the requested package
+     * @return all rules within the request package, keyed by name
+     */
+    public Map<String, Rule> getRules(String packageName) {
+        return ruleManager.getMetadataElementByPackage(packageName);
+    }
+
+    /**
+     * Gets all rules from the specified artifact id.
+     * 
+     * @param artifactId
+     *            the requested artifact id
+     * @return all rules within the request artifact id, keyed by name
+     */
+    public Map<String, Rule> getRulesByArtifactId(String artifactId) {
+        return ruleManager.getMetadataByArtifactIdMap(artifactId);
+    }
+
+    /**
+     * Retrieves rules based on a generation context.
+     * 
+     * @param context
+     *            type of generation target context being used
+     * @return map of rules
+     */
+    public Map<String, Rule> getRulesByContext(String context) {
+        return ruleManager.getMetadataElementByContext(context);
+    }
 
 }

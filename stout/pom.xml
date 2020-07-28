@@ -46,7 +46,6 @@
 			-DKRAUSENING_BASE=${project.basedir}/src/test/resources/krausening/base
 			-DKRAUSENING_EXTENSTIONS=${project.basedir}/src/test/resources/krausening/extensions</wildfly.argline>
 		<wildfly.location>${project.basedir}/target/wildfly-${wildfly.version}</wildfly.location>
-
 	</properties>
 
 	<modules>
@@ -348,6 +347,7 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
+			
 		</dependencies>
 	</dependencyManagement>
 

@@ -164,6 +164,9 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
 
 	private List<URL> getMetadataResourcesFromDirectory(String name) throws URISyntaxException, IOException {
 		List<URL> metadataResources = new ArrayList<>();
+		if(!name.endsWith("/")) {
+            name += "/";
+		}
 		File metamodelDir = new File(new URI(name + this.getMetadataLocation()));
 		if (metamodelDir.isDirectory()) {
 			String[] suffixFilter = { METAMODEL_SUFFIX };

@@ -318,5 +318,37 @@
         "generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
         "metadataContext": "local",
         "overwritable": false
-    }
+	},
+    {
+        "name": "droolsRuntime",
+        "templateName": "templates/runtime.drools.vm",
+        "outputFile": "${basePackage}/rules/runtime/DroolsRuntime.java",
+        "generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticJavaGenerator",
+        "metadataContext": "local",
+        "overwritable": false
+	},
+    {
+        "name": "droolsKModuleConfig",
+        "templateName": "templates/drools.kmodule.xml.vm",
+        "outputFile": "META-INF/kmodule.xml",
+        "generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
+        "metadataContext": "local",
+        "overwritable": true
+	},
+    {
+        "name": "droolsRules",
+        "templateName": "templates/drools.rule.drl.vm",
+        "outputFile": "rules/default/default.drl",
+        "generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
+        "metadataContext": "local",
+        "overwritable": true
+	},
+    {
+        "name": "droolsRulesDrl",
+        "templateName": "templates/drools.rules.session.drl.vm",
+        "outputFile": "${basePackage}/rules/${ruleGroupName}/${ruleName}Rule.drl",
+        "generator": "org.bitbucket.fermenter.stout.mda.generator.rule.RuleGenerator",
+        "metadataContext": "targeted",
+        "overwritable": true
+	}
 ]

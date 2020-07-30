@@ -1,0 +1,99 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"id": "#rule",
+	"title": "Rule",
+	"type": "object",
+	"additionalProperties": false,
+	"properties": {
+		"name": {
+			"type": "string"
+		},
+		"package": {
+			"type": "string"
+		},
+		"documentation": {
+			"type": "string"
+		},
+		"defaultStatement": {
+			"type": "string"
+		},
+		"defaultProcessing": {
+			"type": "string"
+		},
+		"operations": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"documentation": {
+						"type": "string"
+					},
+					"transactionAttribute": {
+						"type": "string"
+					},
+					"compressedWithGzip": {
+						"type": "boolean"
+					}
+				},
+				"return": {
+					"type": "object",
+					"properties": {
+						"type": {
+							"type": "string"
+						},
+						"package": {
+							"type": "string"
+						},
+						"many": {
+							"type": "boolean"
+						},
+						"responseEncoding": {
+							"type": "string"
+						}			
+					},
+					"required": [
+						"type"
+					]
+				},
+				"parameters": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"name": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"package": {
+								"type": "string"
+							},
+							"defaultStatement": {
+								"type": "string"
+							},
+							"many": {
+								"type": "boolean"
+							},
+							"documentation": {
+								"type": "string"
+							}					
+						},
+						"required": [
+							"name", "type"
+						]
+					}
+				}
+			},
+			"required": [
+				"name", "return"
+			]
+		}
+	},
+	"required": [
+		"name", "package", "operations"
+	]
+}

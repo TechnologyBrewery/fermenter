@@ -81,6 +81,18 @@
 			},
 			{
 				"name": "pdpPolicy"
+			},
+			{
+				"name": "droolsRuntime"
+			},
+			{
+				"name": "droolsKModuleConfig"
+			},
+			{
+				"name": "droolsRules"
+			},
+			{
+				"name": "droolsRulesDrl"
 			}
 		]
 	},

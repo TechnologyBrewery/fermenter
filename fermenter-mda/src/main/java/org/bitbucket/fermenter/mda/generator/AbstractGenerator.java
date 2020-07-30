@@ -140,6 +140,14 @@ public abstract class AbstractGenerator implements Generator {
         return StringUtils.replace(original, "${serviceName}", serviceName);
     }
 
+    protected final String replaceRuleName(String original, String ruleName) {
+        return StringUtils.replace(original, "${ruleName}", ruleName);
+    }
+
+    protected final String replaceRuleGroup(String original, String ruleGroupName) {
+        return StringUtils.replace(original, "${ruleGroupName}", ruleGroupName);
+    }
+
     protected final String replaceEnumerationName(String original, String enumerationName) {
         return StringUtils.replace(original, "${enumerationName}", enumerationName);
     }

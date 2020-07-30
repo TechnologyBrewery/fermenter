@@ -14,6 +14,10 @@
     <artifactId>stout-cookbook-domain</artifactId>
     <packaging>jar</packaging>
 
+	<properties>
+		<drools.version>7.40.0.Final</drools.version>
+	</properties>
+
     <build>
         <resources>
             <resource>
@@ -251,6 +255,20 @@
             <artifactId>arquillian-suite-extension</artifactId>
             <scope>test</scope>
         </dependency>
-
+		<dependency>
+			<groupId>org.kie</groupId>
+			<artifactId>kie-ci</artifactId>
+			<version>${drools.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.drools</groupId>
+			<artifactId>drools-core</artifactId>
+			<version>${drools.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.drools</groupId>
+			<artifactId>drools-compiler</artifactId>
+			<version>${drools.version}</version>
+		</dependency>
     </dependencies>
 </project>

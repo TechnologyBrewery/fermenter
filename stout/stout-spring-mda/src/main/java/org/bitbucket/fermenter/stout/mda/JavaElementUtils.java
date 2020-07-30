@@ -62,13 +62,11 @@ public final class JavaElementUtils {
      */
     static String getJavaImportByPackageAndType(String packageName, String type, boolean basePackageLocal) {
         MetamodelType metamodelType = MetamodelType.getMetamodelType(packageName, type);        
-
         String javaImportType = null;
         if (metamodelType == null) {
             javaImportType = VOID;
 
         } else if (MetamodelType.ENTITY.equals(metamodelType)) {
-
             String basePackage = modelInstanceRepository.getBasePackage();
             String entityPackage = StringUtils.isBlank(packageName) ? basePackage : packageName;
             if (basePackage.equals(entityPackage) && basePackageLocal) {
@@ -79,7 +77,6 @@ public final class JavaElementUtils {
                 javaImportType = entityPackage + ".transfer." + type;
 
             }
-
         } else if (MetamodelType.ENUMERATION.equals(metamodelType)) {
             Enumeration enumeration = modelInstanceRepository.getEnumeration(type);
             javaImportType = enumeration.getPackage() + ENUMERATION + type;

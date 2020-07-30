@@ -63,4 +63,12 @@ public interface MetamodelConfig extends KrauseningConfig {
     @DefaultValue("org.bitbucket.fermenter.mda.metamodel.DefaultUrlResolver")
     public String getUrlResolver();
 
+    /**
+     * Returns the locations within src/main/resources where rule model instances can be found.
+     * 
+     * @return path location to rules
+     */
+    @Key("rules.relative.path")
+    @DefaultValue("rules")
+    public String getRulesRelativePath();
 }

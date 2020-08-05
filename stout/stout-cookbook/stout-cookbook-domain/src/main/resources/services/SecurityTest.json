@@ -1,0 +1,29 @@
+{
+  "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "name" : "SecurityTest",
+  "operations" : [{
+    "name" : "echoUsername",
+    "documentation" : "Returns the currently authenticated username",
+    "parameters" : [],
+    "return" : {
+      "type" : "string"
+    }
+  },
+  {
+    "name" : "logoutThenEchoUsername",
+    "documentation" : "Returns the currently authenticated username after invoking a programmatic logout",
+    "parameters" : [],
+    "return" : {
+      "type" : "string"
+    }
+  },
+  {
+    "name" : "logoutThenInvokeAuthorizationProtectedOperation",
+    "documentation" : "Tries to illegally perform an operation that uses authorization AFTER logging the user out",
+    "parameters" : [],
+    "return" : {
+      "type" : "void"
+    }
+  }
+]
+}

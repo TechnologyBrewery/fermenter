@@ -159,7 +159,7 @@ public final class JsonWebTokenUtil {
                 issuer = cert.getIssuerDN().getName();
             } else {
                 issuer = "unspecified";
-                logger.warn("No signing certificate found, defaulting to" + issuer);
+                logger.warn("No signing certificate found, defaulting to {}", issuer);
             }
         }
 

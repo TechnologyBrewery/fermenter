@@ -20,9 +20,11 @@ import org.apache.shiro.subject.Subject;
 public class StoutTestSubject implements Subject {
 
     private String principal;
+    private boolean isAuthenticated;
 
     public StoutTestSubject(String principal) {
         this.principal = principal;
+        isAuthenticated = true;
     }
 
     @Override
@@ -140,7 +142,7 @@ public class StoutTestSubject implements Subject {
 
     @Override
     public boolean isAuthenticated() {
-        return true;
+        return isAuthenticated;
     }
 
     @Override
@@ -163,7 +165,7 @@ public class StoutTestSubject implements Subject {
 
     @Override
     public void logout() {
-        // Auto-generated method stub
+        isAuthenticated = false;
 
     }
 

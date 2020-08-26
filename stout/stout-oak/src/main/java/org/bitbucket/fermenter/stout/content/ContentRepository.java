@@ -4,6 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -47,6 +52,7 @@ public class ContentRepository {
     private static ContentConfig config = KrauseningConfigFactory.create(ContentConfig.class);
 
     private DocumentNodeStore nodeStore;
+    private static DocumentNodeStore priorNodeStore;
     private Repository repository;
     private KrauseningBasedSpringConfig krauseningBasedSpringConfig;
 
@@ -68,11 +74,31 @@ public class ContentRepository {
     @PostConstruct
     void initRepository() {
         long start = System.currentTimeMillis();
+
+        if (priorNodeStore != null) {
+            logger.warn(
+                    "A previously instaniated node store was encountered - you likely have multiple active Spring contexts in this classpath!");
+            priorNodeStore.dispose();
+            priorNodeStore = null;
+            logger.warn("Prior node store removed.");
+        }
+
         DataSource jdbcDataSource = krauseningBasedSpringConfig.krauseningDataSource();
         ContentRepositoryLeaseFailureHandler failureHandler = new ContentRepositoryLeaseFailureHandler(this);
         nodeStore = RDBDocumentNodeStoreBuilder.newRDBDocumentNodeStoreBuilder().setRDBConnection(jdbcDataSource)
                 .setLeaseFailureHandler(failureHandler).build();
-        repository = new Jcr(new Oak(nodeStore)).createRepository();
+
+        // We generally don't want to track static variables in a Spring-managed "singleton". That said, there is an
+        // edge case where multiple instances
+        // can be created (e.g., mixing JUnit and Cucumber tests) and it creates long delays (~10s) while one
+        // ContentRepostory waits for lease expiration
+        // on the prior repository. As such, this fail-safe helps eliminate this case and has logging to note the issue
+        // to the user above.
+        priorNodeStore = nodeStore;
+
+        Oak oak = new Oak(nodeStore);
+        oak.with(defaultStoutScheduledExecutor());
+        repository = new Jcr(oak).createRepository();
 
         long stop = System.currentTimeMillis();
         logger.info("Created a new connection to the underlying Oak repository in {}ms", (stop - start));
@@ -184,7 +210,7 @@ public class ContentRepository {
     }
 
     /**
-     * Removes a file for the given folder/file name combination
+     * Removes a file for the given folder/file name combination.
      * 
      * @param folderName
      *            folder in which the file resides
@@ -239,7 +265,7 @@ public class ContentRepository {
         if (repository == null) {
             // in this case, we probably had to tear the repository down due to a database being unavailable.
             // to prevent that from becoming a recurring issue (especially in development environments), we
-            // lazily reinstantiate here to prevent a boom-bust cycle w/ the repo. The cost is a little bit of
+            // lazily re-instantiate here to prevent a boom-bust cycle w/ the repo. The cost is a little bit of
             // a timing hit on the first request to the ContentRepository after a connectivity issue:
             initRepository();
         }
@@ -275,13 +301,40 @@ public class ContentRepository {
 
     }
 
-    private Node getFileByName(String folderName, String fileName, Session session)
-            throws RepositoryException, PathNotFoundException {
+    private Node getFileByName(String folderName, String fileName, Session session) throws RepositoryException {
         Node root = session.getRootNode();
 
         Node folder = findOrCreateFolder(root, folderName);
         Node file = folder.getNode(fileName);
         return file;
+    }
+
+    /**
+     * Default {@code ScheduledExecutorService} used for scheduling background tasks. This default spawns up to the
+     * number specified in {@link ContentConfig}'s numberOfSchedulerThreads property on an as-needed basis. Idle threads
+     * are pruned after one minute.
+     * 
+     * @return fresh ScheduledExecutorService
+     */
+    private static ScheduledExecutorService defaultStoutScheduledExecutor() {
+        ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(config.getNumberOfSchedulerThreads(),
+                new ThreadFactory() {
+                    private final AtomicInteger counter = new AtomicInteger();
+
+                    @Override
+                    public Thread newThread(Runnable r) {
+                        Thread thread = new Thread(r, createName());
+                        thread.setDaemon(true);
+                        return thread;
+                    }
+
+                    private String createName() {
+                        return "stout-oak-scheduled-executor-" + counter.getAndIncrement();
+                    }
+                });
+        executor.setKeepAliveTime(1, TimeUnit.MINUTES);
+        executor.allowCoreThreadTimeOut(true);
+        return executor;
     }
 
 }

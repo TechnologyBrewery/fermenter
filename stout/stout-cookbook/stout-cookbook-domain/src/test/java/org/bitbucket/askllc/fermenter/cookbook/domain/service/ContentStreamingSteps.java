@@ -12,12 +12,16 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.ContentReposi
 import org.bitbucket.fermenter.stout.authn.AuthenticationTestUtils;
 import org.bitbucket.fermenter.stout.content.ContentRepositoryStream;
 import org.bitbucket.fermenter.stout.mock.MockRequestScope;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
+@ContextConfiguration({ "classpath:application-test-context.xml", "classpath:h2-spring-ds-context.xml" })
+@Transactional
 public class ContentStreamingSteps {
 
     @Inject
@@ -27,7 +31,7 @@ public class ContentStreamingSteps {
     private MockRequestScope mockRequestScope;
     
     private String resultingContent;
-
+    
     @Before("@clientContentStreaming")
     public void setUp() {
         AuthenticationTestUtils.login("testUser");

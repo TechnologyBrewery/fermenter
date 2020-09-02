@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bitbucket.askllc.fermenter</groupId>
@@ -15,7 +16,7 @@
 		concepts to be modeled and spawn any number of generated source files. In turn, this allows developers
 		to focus more time on business logic, less time on technical underpinnings, and achieve extremely high levels
 		of architectural conformity.  
-	</description>
+    </description>
     <url>https://bitbucket.org/askllc/fermenter</url>
 
     <licenses>
@@ -59,6 +60,7 @@
         <module>fermenter-mda</module>
         <module>stout</module>
         <module>ale</module>
+        <module>docker</module>
     </modules>
 
     <properties>
@@ -98,11 +100,11 @@
                 <scope>compile</scope>
             </dependency>
             <dependency>
-				<groupId>org.apache.commons</groupId>
-				<artifactId>commons-collections4</artifactId>
-				<version>4.4</version>
-				<scope>compile</scope>
-			</dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>4.4</version>
+                <scope>compile</scope>
+            </dependency>
             <dependency>
                 <groupId>com.github.ben-manes.caffeine</groupId>
                 <artifactId>caffeine</artifactId>

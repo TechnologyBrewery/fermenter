@@ -1,0 +1,14 @@
+version: '2'
+
+services:
+  web:
+    image: fermenter/docker
+    ports:
+      # Tomcat port
+      - "8080:8080"
+      # Tomcat debug port
+      - "8787:8787"
+      # VisualVM profiling port
+      - "9090:9090"
+    environment:
+      - "JAVA_OPTS=$JAVA_OPTS -DKRAUSENING_BASE=/usr/local/tomcat/conf/krausening/base -DKRAUSENING_EXTENSIONS=/usr/local/tomcat/conf/krausening/docker-local"

@@ -89,7 +89,7 @@ public class BaseOperationDecorator implements Operation {
      */
     @Override
     public Boolean isCompressedWithGZip() {
-        return wrapped.isCompressedWithGZip();
+        return wrapped.isCompressedWithGZip() != null && wrapped.isCompressedWithGZip();
     }
 
 }

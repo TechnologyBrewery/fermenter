@@ -1,9 +1,5 @@
 package org.bitbucket.fermenter.stout.mda;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
 import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
@@ -12,6 +8,10 @@ import org.bitbucket.fermenter.mda.metamodel.element.Field;
 import org.bitbucket.fermenter.mda.metamodel.element.MetamodelType;
 import org.bitbucket.fermenter.mda.metamodel.element.Parameter;
 import org.bitbucket.fermenter.stout.mda.java.JavaTypeManager;
+
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 public final class JavaElementUtils {
 
@@ -23,9 +23,6 @@ public final class JavaElementUtils {
 
     /** Needs to be a {@link List} and not {@link Collection} due to JAX-RS parameter requirements. */
     static final String PARAM_COLLECTION_TYPE = "List";
-    
-    private static DefaultModelInstanceRepository modelInstanceRepository = ModelInstanceRepositoryManager
-            .getMetamodelRepository(DefaultModelInstanceRepository.class);
 
     private JavaElementUtils() {
         // prevent instantiation of all static class
@@ -61,7 +58,9 @@ public final class JavaElementUtils {
      *         org.bitbucket.fermenter.transfer.FooClass)
      */
     static String getJavaImportByPackageAndType(String packageName, String type, boolean basePackageLocal) {
-        MetamodelType metamodelType = MetamodelType.getMetamodelType(packageName, type);        
+        MetamodelType metamodelType = MetamodelType.getMetamodelType(packageName, type);
+
+        DefaultModelInstanceRepository modelInstanceRepository = getModelInstanceRepository();
 
         String javaImportType = null;
         if (metamodelType == null) {
@@ -127,7 +126,7 @@ public final class JavaElementUtils {
     }
 
     static String createFullyQualifiedName(String type, String nestedPackage) {       
-        return createFullyQualifiedName(type, nestedPackage, modelInstanceRepository.getArtifactId());
+        return createFullyQualifiedName(type, nestedPackage, getModelInstanceRepository().getArtifactId());
     }
 
     static String createFullyQualifiedName(String type, String nestedPackage, String packageName) {
@@ -352,5 +351,10 @@ public final class JavaElementUtils {
      */
     static boolean checkImportAgainstDefaults(String importValue) {
         return (importValue != null && !importValue.startsWith("java.lang."));
+    }
+
+    static DefaultModelInstanceRepository getModelInstanceRepository() {
+        return ModelInstanceRepositoryManager
+            .getMetamodelRepository(DefaultModelInstanceRepository.class);
     }
 }

@@ -1,7 +1,6 @@
 package org.bitbucket.fermenter.ale.mda.generator.angular;
 
-import java.util.Map;
-
+import com.google.common.base.CaseFormat;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bitbucket.fermenter.mda.PackageManager;
@@ -11,12 +10,9 @@ import org.bitbucket.fermenter.mda.metamodel.element.BaseFieldDecorator;
 import org.bitbucket.fermenter.mda.metamodel.element.Entity;
 import org.bitbucket.fermenter.mda.metamodel.element.Field;
 
-import com.google.common.base.CaseFormat;
+import java.util.Map;
 
 public class AngularField extends BaseFieldDecorator implements Field {
-
-    private DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
-            .getMetamodelRepository(DefaultModelInstanceRepository.class);
 
     public AngularField(Field wrapped) {
         super(wrapped);
@@ -49,7 +45,7 @@ public class AngularField extends BaseFieldDecorator implements Field {
      * {@inheritDoc}
      */
     public Boolean isEnumeration() {
-        return metadataRepository.getEnumeration(getPackage(), getType()) != null;
+        return getModelInstanceRepository().getEnumeration(getPackage(), getType()) != null;
     }
 
     public String getTypeLowerHyphen() {
@@ -61,6 +57,7 @@ public class AngularField extends BaseFieldDecorator implements Field {
     }
 
     public boolean isExternal() {
+        DefaultModelInstanceRepository metadataRepository = getModelInstanceRepository();
         String currentProject = metadataRepository.getArtifactId();
         String basePackage = PackageManager.getBasePackage(currentProject);
         Map<String, Entity> referenceEntities = metadataRepository.getEntities(getPackage());
@@ -86,6 +83,11 @@ public class AngularField extends BaseFieldDecorator implements Field {
         }
 
         return sb.toString();
+    }
+
+    static DefaultModelInstanceRepository getModelInstanceRepository() {
+        return ModelInstanceRepositoryManager
+            .getMetamodelRepository(DefaultModelInstanceRepository.class);
     }
 
 }

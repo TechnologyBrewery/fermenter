@@ -1,8 +1,12 @@
 package org.bitbucket.fermenter.stout.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.aeonbits.owner.KrauseningConfigFactory;
 import org.bitbucket.fermenter.stout.config.QueryConfig;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 /**
  * Provides common support for limiting queries.
@@ -24,7 +28,8 @@ public final class QueryUtils {
      * @return default page request
      */
     public static PageRequest getDefaultPageRequest() {
-        return new PageRequest(DEFAULT_PAGE, QUERY_LIMIT);
+        List<Sort.Order> orders = new ArrayList<>();
+        return PageRequest.of(DEFAULT_PAGE, QUERY_LIMIT);
     }
 
 }

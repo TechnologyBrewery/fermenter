@@ -22,17 +22,17 @@
 		<authzforce.api.version>15.0.0</authzforce.api.version>
 		<authzforce.model.version>7.2.0</authzforce.model.version>
 		<krausening.version>7</krausening.version>
-		<jackson.version>2.9.5</jackson.version>
+		<jackson.version>2.11.2</jackson.version>
 		<jjwt.version>0.10.5</jjwt.version>
-		<log4j.version>2.7</log4j.version>
+		<log4j.version>2.13.3</log4j.version>
 		<narayana.version>5.9.5.Final</narayana.version>
-		<spring.version>4.3.12.RELEASE</spring.version>
-		<spring.security.version>4.2.4.RELEASE</spring.security.version>
+		<spring.version>5.2.9.RELEASE</spring.version>
+		<spring.security.version>5.4.0</spring.security.version>
         <aspectj.version>1.8.9</aspectj.version>
 		<jacoco.it.execution.data.file>${project.build.directory}/jacoco-it.exec</jacoco.it.execution.data.file>
 		<jacoco.test.execution.data.file>${project.build.directory}/jacoco.exec</jacoco.test.execution.data.file>
 		<jacoco.version>0.7.7.201606060606</jacoco.version>
-		<resteasy.version>3.6.1.Final</resteasy.version>
+		<resteasy.version>4.5.8.Final</resteasy.version>
 		<!-- Based on the resteasy version that is used -->
 		<jaxrs.version>1.0.1.Final</jaxrs.version>
 		<weld.version>2.1.2.Final</weld.version>
@@ -159,21 +159,33 @@
 				<version>${jackson.version}</version>
 				<scope>compile</scope>
 			</dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-jaxrs-json-provider</artifactId>
+                <version>${jackson.version}</version>
+                <scope>compile</scope>
+            </dependency>
 			<dependency>
 				<groupId>com.fasterxml.jackson.datatype</groupId>
 				<artifactId>jackson-datatype-hibernate5</artifactId>
 				<version>${jackson.version}</version>
 				<scope>compile</scope>
 			</dependency>
-			<dependency>
+            <dependency>
+                <groupId>org.jboss.resteasy</groupId>
+                <artifactId>resteasy-core</artifactId>
+                <version>${resteasy.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
 				<groupId>org.jboss.resteasy</groupId>
 				<artifactId>resteasy-jackson2-provider</artifactId>
-				<version>${resteasy.version}</version>
-				<scope>compile</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.jboss.resteasy</groupId>
-				<artifactId>resteasy-jaxrs</artifactId>
 				<version>${resteasy.version}</version>
 				<scope>compile</scope>
 			</dependency>
@@ -186,12 +198,6 @@
 			<dependency>
 				<groupId>org.jboss.resteasy</groupId>
 				<artifactId>resteasy-spring</artifactId>
-				<version>${resteasy.version}</version>
-				<scope>compile</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.jboss.resteasy</groupId>
-				<artifactId>jaxrs-api</artifactId>
 				<version>${resteasy.version}</version>
 				<scope>compile</scope>
 			</dependency>
@@ -246,7 +252,7 @@
 			<dependency>
 				<groupId>org.springframework.data</groupId>
 				<artifactId>spring-data-releasetrain</artifactId>
-				<version>Hopper-SR3</version>
+				<version>Neumann-SR4</version>
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>
@@ -254,13 +260,13 @@
 			<dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-validator</artifactId>
-				<version>5.3.4.Final</version>
+				<version>5.4.3.Final</version>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-core</artifactId>
-				<version>5.2.5.Final</version>
+				<version>5.4.21.Final</version>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>

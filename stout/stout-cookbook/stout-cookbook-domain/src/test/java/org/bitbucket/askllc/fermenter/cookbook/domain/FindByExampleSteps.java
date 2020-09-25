@@ -33,7 +33,7 @@ public class FindByExampleSteps {
 
     private static final Integer SIZE_DEFAULT = 50;
 
-    private static final Sort SORT_DEFAULT = new Sort(Sort.Direction.ASC, "name");
+    private static final Sort SORT_DEFAULT = Sort.by(Sort.Direction.ASC, "name");
 
     private long numOfSimpleDomainsCreated;
     private SimpleDomainBO probe;
@@ -109,9 +109,9 @@ public class FindByExampleSteps {
     @Given("^a sort by \"([^\"]*)\" column$")
     public void a_sort_by_column(String sortColumn) throws Throwable {
         if (sort == null) {
-            sort = new Sort(Sort.Direction.ASC, sortColumn);
+            sort = Sort.by(Sort.Direction.ASC, sortColumn);
         } else {
-            sort = sort.and(new Sort(Sort.Direction.ASC, sortColumn));
+            sort = sort.and(Sort.by(Sort.Direction.ASC, sortColumn));
         }
     }
 

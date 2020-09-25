@@ -77,11 +77,11 @@ public class SimpleDomainBO extends SimpleDomainBaseBO {
     }
 
     public static List<SimpleDomainBO> findAll(int pageIndex, int pageSize) {
-        return getDefaultRepository().findAllEagerFetchRelations(new PageRequest(pageIndex, pageSize)).getContent();
+        return getDefaultRepository().findAllEagerFetchRelations(PageRequest.of(pageIndex, pageSize)).getContent();
     }
 
     public static Page<SimpleDomainBO> findAllPaged(int pageIndex, int pageSize) {
-        return getDefaultRepository().findAll(new PageRequest(pageIndex, pageSize));
+        return getDefaultRepository().findAll(PageRequest.of(pageIndex, pageSize));
     }
 
     public static void deleteAll() {
@@ -142,7 +142,7 @@ public class SimpleDomainBO extends SimpleDomainBaseBO {
     }
 
     public static Page<SimpleDomainBO> findByNamePaged(String nameFilter, Integer pageIndex, Integer pageSize) {
-        Pageable pageable = new PageRequest(pageIndex, pageSize);
+        Pageable pageable = PageRequest.of(pageIndex, pageSize);
         return getDefaultRepository().findByNameContains(nameFilter, pageable);
     }
 

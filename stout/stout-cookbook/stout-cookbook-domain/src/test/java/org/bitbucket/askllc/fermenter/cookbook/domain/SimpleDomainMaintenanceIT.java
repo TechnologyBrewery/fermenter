@@ -32,8 +32,8 @@ import org.jboss.arquillian.extension.rest.client.ArquillianResteasyResource;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
-import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
+import org.jboss.resteasy.client.jaxrs.internal.ResteasyClientBuilderImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,7 +46,7 @@ public class SimpleDomainMaintenanceIT extends RunTestsWithinArquillianWar {
 
     @Before
     public void deleteSimpleDomains() throws Exception {
-        ResteasyClient client = new ResteasyClientBuilder().build();
+        ResteasyClient client = new ResteasyClientBuilderImpl().build();
         client.target(deploymentURL.toURI()).path("rest").path("SimpleDomainManagerService")
                 .path("deleteAllSimpleDomains").request().header("username", "testUser").post(null).close();
     }

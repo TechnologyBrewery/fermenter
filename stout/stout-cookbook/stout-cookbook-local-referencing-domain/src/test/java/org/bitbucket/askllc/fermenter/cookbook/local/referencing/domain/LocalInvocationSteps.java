@@ -219,6 +219,12 @@ public class LocalInvocationSteps {
                 multiplePagedEntitiesResponseValue.getNumberOfElements().intValue());
         assertEquals("Multiple paged values should have been returned!", 2,
                 multiplePagedEntitiesResponseValue.getContent().size());
+		List<SimpleDomain> returnedTransferObjects = multiplePagedEntitiesResponseValue.getContent();
+
+		if (returnedTransferObjects.size() > 0) {
+			assertEquals("Incorrect entity type returned", SimpleDomain.class,
+					returnedTransferObjects.get(0).getClass());
+		}
     }
 
     @Then("^a single informational messages is returned indicating successful invocation$")
@@ -247,8 +253,11 @@ public class LocalInvocationSteps {
 
     private void stopAndLogInvocationTimer() {
         stop = System.currentTimeMillis();
-        Message message = messages.getAllMessages().iterator().next();
-        logger.info("**LOCAL** Invocation of {} took {}ms", message.getInserts().iterator().next(), (stop - start));
+        
+        if (messages.getAllMessages().size() > 0) {
+            Message message = messages.getAllMessages().iterator().next();
+            logger.info("**LOCAL** Invocation of {} took {}ms", message.getInserts().iterator().next(), (stop - start));
+        }
     }
 
 }

@@ -92,7 +92,11 @@ public class ${service.name}DelegateImpl implements ${service.name}Delegate {
 		Object rawResponse = localServiceWrapper.invokeLocalService("${operation.uncapitalizedName}", params);
 		
 	#if($operation.return.isPagedResponse())
+		#if($operation.return.isEntity())
+		response = (ValueServiceResponse<PageWrapper<${operation.return.javaType}>>)LocalOptimizationUtil.convertResponseToTransferObjectPageWrapperViaJson(rawResponse, ${operation.return.javaType}.class, objectMapper);
+		#else
         response = (ValueServiceResponse<PageWrapper<${operation.return.javaType}>>)rawResponse;
+        #end
 	#elseif($operation.return.isMany())
 		#if($operation.return.isEntity())
 		response = (ValueServiceResponse<Collection<${operation.return.javaType}>>)LocalOptimizationUtil.convertResponseToTransferObjectListViaJson(rawResponse, ${operation.return.javaType}.class, objectMapper);

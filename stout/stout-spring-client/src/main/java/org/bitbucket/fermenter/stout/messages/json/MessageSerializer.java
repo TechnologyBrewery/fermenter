@@ -1,15 +1,14 @@
 package org.bitbucket.fermenter.stout.messages.json;
 
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Map.Entry;
-
-import org.bitbucket.fermenter.stout.messages.Message;
-import org.bitbucket.fermenter.stout.messages.MetaMessage;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import org.bitbucket.fermenter.stout.messages.Message;
+import org.bitbucket.fermenter.stout.messages.MetaMessage;
+
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Map.Entry;
 
 /**
  * Serializes {@link Message} objects by marshalling all attributes of {@link Message} objects (i.e. key, severity,
@@ -53,7 +52,7 @@ public class MessageSerializer extends JsonSerializer<Message> {
        
         jgen.writeObjectField("rawText", metaMessage.getText());    
         
-        jgen.writeStringField("displayMessage", message.getDisplayText());
+        jgen.writeStringField("displayText", message.getDisplayText());
         jgen.writeEndObject();
     }
 

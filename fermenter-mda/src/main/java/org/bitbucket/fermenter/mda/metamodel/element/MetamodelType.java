@@ -11,9 +11,6 @@ public enum MetamodelType {
 
     SIMPLE_TYPE, ENUMERATION, ENTITY, DICTIONARY_TYPE;
 
-    private static DefaultModelInstanceRepository modelInstanceRepository = ModelInstanceRepositoryManager
-            .getMetamodelRepository(DefaultModelInstanceRepository.class);
-
     /**
      * Returns the metamodel type for the passed package and name combination.
      * 
@@ -25,6 +22,7 @@ public enum MetamodelType {
      */
     public static MetamodelType getMetamodelType(String packageName, String name) {
         MetamodelType metamodelType = null;
+        DefaultModelInstanceRepository modelInstanceRepository = getModelInstanceRepository();
         
         String lookupPackageName = packageName == null ? modelInstanceRepository.getBasePackage() : packageName; 
         
@@ -43,6 +41,11 @@ public enum MetamodelType {
         }
 
         return metamodelType;
+    }
+
+    static DefaultModelInstanceRepository getModelInstanceRepository() {
+        return ModelInstanceRepositoryManager
+            .getMetamodelRepository(DefaultModelInstanceRepository.class);
     }
 
 }

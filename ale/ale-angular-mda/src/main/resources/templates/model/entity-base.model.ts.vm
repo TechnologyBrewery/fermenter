@@ -1,7 +1,7 @@
 #foreach ( $association in $entity.associations.values() )
 import { ${association.type} } from '../../shared/model/${association.typeLowerHyphen}.model';
 #end
-#foreach ( $field in $entity.allFields)
+#foreach ( $field in $entity.allImportFields)
 #if($field.isEnumeration())
 import { $field.type } from '../enum/${field.typeLowerHyphen}.model';
 #end

@@ -1,5 +1,6 @@
 package org.bitbucket.fermenter.ale.mda.generator.angular;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +16,7 @@ public class AngularEntity extends BaseEntityDecorator implements Entity, Angula
 
     private static final String ID_FIELD_DOES_NOT_EXIST = "ID_FIELD_DOES_NOT_EXIST";
     private Map<String, AngularField> allFieldMap;
+    private Map<String, AngularField> importFieldMap;
     private Map<String, AngularAssociation> decoratedAssociationsMap;
 
     public AngularEntity(Entity wrapped) {
@@ -77,6 +79,35 @@ public class AngularEntity extends BaseEntityDecorator implements Entity, Angula
             }
         }
         return allFieldMap;
+    }
+    
+    public Map<String, AngularField> getAllImportFields() {
+        if (importFieldMap == null) {
+            Map<String, Field> entityFieldMap = new HashMap<>();
+            List<String> importedTypes = new ArrayList<>();
+            Field identifier = getIdentifier();
+            if (identifier != null) {
+                entityFieldMap.put(identifier.getName(), identifier);
+            }
+            if (getFields() != null) {
+                for (Field field : getFields()) {
+                    entityFieldMap.put(field.getName(), field);
+                }
+            }
+            if ((entityFieldMap == null) || (entityFieldMap.isEmpty())) {
+                importFieldMap = Collections.<String, AngularField> emptyMap();
+            } else {
+                importFieldMap = new HashMap<>((int) (entityFieldMap.size() * 1.25));
+                for (Field f : entityFieldMap.values()) {
+                    if (!importedTypes.contains(f.getType())) {
+                        importedTypes.add(f.getType());
+                        importFieldMap.put(f.getName(), new AngularField(f));
+                    }
+
+                }
+            }
+        }
+        return importFieldMap;
     }
 
     @Override

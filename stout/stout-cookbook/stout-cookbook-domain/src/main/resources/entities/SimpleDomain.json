@@ -53,6 +53,11 @@
     "column" : "SIMPLE_DOMAIN_ENUM"
   }, {
     "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "name" : "anotherEnumeratedValueLikeTheFirst",
+    "type" : "SimpleDomainEnumeration",
+    "column" : "SIMPLE_DOMAIN_ENUM_TOO"
+  }, {
+    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
     "name" : "anotherEnumeratedValue",
     "type" : "ValuedEnumerationExample",
     "column" : "VALUE_EXAMPLE_ENUM"

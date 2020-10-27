@@ -13,10 +13,18 @@ public class MessageManagerAwareService {
     }
 
     public ServiceResponse addAllMessagesToResponse(ServiceResponse response) {
-        Messages messages = MessageManager.getMessages();        
+        Messages messages = MessageManager.getMessages();
         response.getMessages().addMessages(messages);
         MessageManager.cleanup();
         return response;
+    }
+
+    public void addAllMessages(ServiceResponse response) {
+        MessageManager.addMessages(response.getMessages());
+    }
+
+    public void addAllMessages(Messages messages) {
+        MessageManager.addMessages(messages);
     }
 
 }

@@ -7,17 +7,18 @@ import ${basePackage}.client.service.${service.name}Delegate;
 import $import;
 #end
 
-import org.bitbucket.fermenter.stout.messages.MessageManager;
+import org.bitbucket.fermenter.stout.messages.MessageManagerAwareService;
 import org.bitbucket.fermenter.stout.client.service.LocalOptimizationUtil;
 import org.bitbucket.fermenter.stout.client.service.LocalOptimizationServiceWrapper;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
 import org.bitbucket.fermenter.stout.page.PageWrapper;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import javax.inject.Inject;
 
 /**
  * Service implementation for ${service.name} entity maintenance.
@@ -36,8 +37,11 @@ public class ${service.name}DelegateImpl implements ${service.name}Delegate {
 	private static LocalOptimizationServiceWrapper localServiceWrapper;
 	private static ObjectMapper objectMapper;
 
-    @Autowired
+    @Inject
     private ${service.name}Resource ${service.name.toLowerCase()}Resource;
+	
+    @Inject
+    private MessageManagerAwareService messageManagerAwareService;
 	
 	/** 
 	 * Check for and then cache decision on whether the delegate should make RESTful call or locally optimized Java calls.
@@ -121,7 +125,7 @@ public class ${service.name}DelegateImpl implements ${service.name}Delegate {
 			);
 	}
 		
-		MessageManager.addMessages(response.getMessages());
+		messageManagerAwareService.addAllMessages(response);
 	#if(!$operation.isResponseTypeVoid())		
 		return response.getValue();
 	#end

@@ -7,7 +7,7 @@ import ${basePackage}.client.cache.${entity.name}Cache;
 import ${basePackage}.client.config.CachePropertiesConfig;
 import org.aeonbits.owner.KrauseningConfigFactory;
 
-import org.bitbucket.fermenter.stout.messages.MessageManager;
+import org.bitbucket.fermenter.stout.messages.MessageManagerAwareService;
 import org.bitbucket.fermenter.stout.client.service.AbstractMaintenanceServiceDelegate;
 import org.bitbucket.fermenter.stout.client.service.LevelOneCache;
 import org.bitbucket.fermenter.stout.client.service.LevelOneCacheManager;
@@ -58,6 +58,9 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
     
     @Inject
     private ${entity.name}MaintenanceResource ${entity.name.toLowerCase()}Resource;
+	
+    @Inject
+    private MessageManagerAwareService messageManagerAwareService;
     
     private DelegateMaintenanceTransactionSynchronization delegateMaintenanceTransactionSynchronization = new DelegateMaintenanceTransactionSynchronization();
 
@@ -65,6 +68,7 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
      * {@inheritDoc}
      */
     public ${entity.name} findByPrimaryKey(${entity.identifier.javaType} ${entity.identifier.name}) {
+	    
         if (${entity.identifier.name} == null) {
             throw new UnrecoverableException("Cannot lookup an instance with a null primary key!");
         }
@@ -94,7 +98,7 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
             } else {
                 response = ${entity.name.toLowerCase()}Resource.findByPrimaryKey(${entity.identifier.name});
             }
-            MessageManager.addMessages(response.getMessages());
+            messageManagerAwareService.addAllMessages(response);
             ${entity.name}Cache.addToCache(response.getValue());
             retrievedInstance = response.getValue();
         }
@@ -106,6 +110,7 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
      * {@inheritDoc}
      */
     public ${entity.name} create(${entity.name} entity) {
+	    
         ${entity.name} created${entity.name} = entity;
         
         if (checkLevelOneCache()) {
@@ -145,7 +150,7 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
         }    
             
         ${entity.name} created${entity.name} = response.getValue();
-        MessageManager.addMessages(response.getMessages());
+        messageManagerAwareService.addAllMessages(response);
         if(!response.hasErrors()) {
              if (checkLevelOneCache()) {                
                 LevelOneCache<${entity.identifier.javaType}, ${entity.name}> levelOneCache = levelOneCacheManager.getCacheForCurrentTransaction();
@@ -161,6 +166,7 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
      * {@inheritDoc}
      */
     public ${entity.name} update(${entity.identifier.javaType} ${entity.identifier.name}, ${entity.name} entity) {
+	    
         ${entity.name} updated${entity.name} = null;
         
         if (checkLevelOneCache()) {
@@ -182,7 +188,7 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
     private ${entity.name} performUpdate(${entity.identifier.javaType} ${entity.identifier.name}, ${entity.name} entity) {
         ValueServiceResponse<${entity.name}> response = ${entity.name.toLowerCase()}Resource.update(${entity.identifier.name}, entity);
         ${entity.name} created${entity.name} = response.getValue();
-        MessageManager.addMessages(response.getMessages());
+        messageManagerAwareService.addAllMessages(response);
         if(!response.hasErrors()) {
             if (checkLevelOneCache()) {                
                 LevelOneCache<${entity.identifier.javaType}, ${entity.name}> levelOneCache = levelOneCacheManager.getCacheForCurrentTransaction();
@@ -200,6 +206,7 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
      * {@inheritDoc}
      */
     public void delete(${entity.identifier.javaType} ${entity.identifier.name}) {
+	    
         if (checkLevelOneCache()) {
             // queue up for deletion upon transaction commit (or flush):
             LevelOneCache<${entity.identifier.javaType}, ${entity.name}> levelOneCache = levelOneCacheManager.getCacheForCurrentTransaction();
@@ -221,13 +228,14 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
             response = ${entity.name.toLowerCase()}Resource.delete(${entity.identifier.name});
         }
         ${entity.name}Cache.removeFromCache(${entity.identifier.name});
-        MessageManager.addMessages(response.getMessages());
+        messageManagerAwareService.addAllMessages(response);
     }
 
     /**
      * {@inheritDoc}
      */
     public PageWrapper<${entity.name}> findByExample(FindByExampleCriteria<${entity.name}> criteria) {
+	    
         ValueServiceResponse<PageWrapper<${entity.name}>> response = null;
         if (isLocalInvocationAvailable()) {
             Object[] params = {LocalOptimizationUtil.convertToBusinessObjectViaJson(criteria, objectMapper)};
@@ -237,7 +245,7 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
         } else {
             response = ${entity.name.toLowerCase()}Resource.findByExample(criteria);
         }
-        MessageManager.addMessages(response.getMessages());
+        messageManagerAwareService.addAllMessages(response);
         return response.getValue();
     }
 
@@ -245,6 +253,7 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
      * {@inheritDoc}
      */
     public Collection<${entity.name}> findByExampleContains(${entity.name} probe) {
+	    
         probe = initializeProbeIfNullForFeignRequestBody(probe);
 
         ValueServiceResponse<Collection<${entity.name}>> response  = null;
@@ -256,7 +265,7 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
         } else {
             response = ${entity.name.toLowerCase()}Resource.findByExampleContains(probe);
         }
-        MessageManager.addMessages(response.getMessages());
+        messageManagerAwareService.addAllMessages(response);
         return response.getValue();
     }
     
@@ -264,6 +273,7 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
      * {@inheritDoc}
      */
     public PageWrapper<${entity.name}> findByExampleContainsPaged(${entity.name} probe, int startPage, int count) {
+	    
         ValueServiceResponse<PageWrapper<${entity.name}>> response  = null;
         if (isLocalInvocationAvailable()) {
             Object[] params = {LocalOptimizationUtil.convertToBusinessObjectViaJson(probe, objectMapper), startPage, count};
@@ -273,7 +283,7 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
         } else {
             response = ${entity.name.toLowerCase()}Resource.findByExampleContainsPaged(probe, startPage, count);
         }
-        MessageManager.addMessages(response.getMessages());
+        messageManagerAwareService.addAllMessages(response);
         return response.getValue();
     }
     
@@ -281,6 +291,7 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
      * {@inheritDoc}
      */
     public Collection<${entity.name}> findByExampleMatches(${entity.name} probe) {
+	    
         probe = initializeProbeIfNullForFeignRequestBody(probe);
         ValueServiceResponse<Collection<${entity.name}>> response  = null;
         if (isLocalInvocationAvailable()) {
@@ -291,7 +302,7 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
         } else {
             response = ${entity.name.toLowerCase()}Resource.findByExampleMatches(probe);
         }
-        MessageManager.addMessages(response.getMessages());
+        messageManagerAwareService.addAllMessages(response);
         return response.getValue();
     }
     
@@ -299,6 +310,7 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
      * {@inheritDoc}
      */
     public PageWrapper<${entity.name}> findByExampleMatchesPaged(${entity.name} probe, int startPage, int count) {
+	    
         ValueServiceResponse<PageWrapper<${entity.name}>> response  = null;
         if (isLocalInvocationAvailable()) {
             Object[] params = {LocalOptimizationUtil.convertToBusinessObjectViaJson(probe, objectMapper), startPage, count};
@@ -308,7 +320,7 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
         } else {
             response = ${entity.name.toLowerCase()}Resource.findByExampleMatchesPaged(probe, startPage, count);
         }
-        MessageManager.addMessages(response.getMessages());
+        messageManagerAwareService.addAllMessages(response);
         return response.getValue();
     }
 
@@ -322,7 +334,8 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
    /**
      * {@inheritDoc}
      */
-    public Collection<${entity.name}> bulkSaveOrUpdate(Collection<${entity.name}> entities) {        
+    public Collection<${entity.name}> bulkSaveOrUpdate(Collection<${entity.name}> entities) {
+	            
         Collection<${entity.name}> resultantEntities = entities;
     
        if (checkLevelOneCache()) {
@@ -359,7 +372,7 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
             } else {
                 response = ${entity.name.toLowerCase()}Resource.bulkSaveOrUpdate(entities);
             }
-            MessageManager.addMessages(response.getMessages());
+            messageManagerAwareService.addAllMessages(response);
             values = response.getValue();
             if(!response.hasErrors()) {
                 if (checkLevelOneCache()) {                
@@ -381,6 +394,7 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
      * {@inheritDoc}
      */
     public void bulkDelete(Collection<${entity.name}> entities) {
+	    
         if (checkLevelOneCache()) {
             LevelOneCache<${entity.identifier.javaType}, ${entity.name}> levelOneCache = levelOneCacheManager.getCacheForCurrentTransaction();
             Collection<${entity.identifier.javaType}> deletesAsIds = convertDeleteEntitiesToIds(entities);
@@ -409,7 +423,7 @@ public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceSe
                 ${entity.name}Cache.removeFromCache(${entity.name.toLowerCase()}.get${entity.identifier.capitalizedName}());
             }
             
-            MessageManager.addMessages(response.getMessages());
+            messageManagerAwareService.addAllMessages(response);
         }
     }
     

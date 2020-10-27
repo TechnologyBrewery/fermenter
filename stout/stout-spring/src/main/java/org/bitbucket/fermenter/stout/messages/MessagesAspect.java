@@ -48,6 +48,15 @@ public class MessagesAspect {
             MessageManager.setIsCreatedLocally();
         }
     }
+    
+    @Before("execution(* org.bitbucket.fermenter.stout.messages.MessageManagerAwareService.addAllMessages(*)) && publicMethod()")
+    public void interceptAddMessagesToMessageManager(JoinPoint joinPoint) {
+        
+        if (!isRequestScopeAvailable() && !MessageManager.isCreatedLocally()) {
+            MessageManager.initialize(new NotSpringManagedDefaultMessages());
+            MessageManager.setIsCreatedLocally();
+        }
+    }
 
     private boolean isRequestScopeAvailable() {
         return RequestContextHolder.getRequestAttributes() != null;

@@ -26,7 +26,7 @@
 		<jjwt.version>0.10.5</jjwt.version>
 		<log4j.version>2.13.3</log4j.version>
 		<narayana.version>5.9.5.Final</narayana.version>
-		<spring.version>5.2.9.RELEASE</spring.version>
+		<spring.version>5.2.8.RELEASE</spring.version>
 		<spring.security.version>5.4.0</spring.security.version>
         <aspectj.version>1.8.9</aspectj.version>
 		<jacoco.it.execution.data.file>${project.build.directory}/jacoco-it.exec</jacoco.it.execution.data.file>

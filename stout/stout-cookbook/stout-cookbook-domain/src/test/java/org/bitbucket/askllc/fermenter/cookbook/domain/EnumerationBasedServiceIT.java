@@ -22,9 +22,9 @@ import org.junit.runner.RunWith;
 @RunWith(Arquillian.class)
 public class EnumerationBasedServiceIT extends RunTestsWithinArquillianWar {
 
-	@ArquillianResource
+    @ArquillianResource
 	private URL deploymentURL;
-
+	
 	@Test
 	@RunAsClient
 	public void testSingleParameterService(@ArquillianResteasyResource ResteasyWebTarget webTarget) throws Exception {

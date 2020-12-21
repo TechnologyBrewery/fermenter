@@ -31,6 +31,9 @@ public class MessagesAspect {
         // messages already
         if (!isRequestScopeAvailable() && MessageManager.isCreatedLocally()) {
             // Don't reinitialize the messages if we're in an async thread and using local messages
+        } else  if (!isRequestScopeAvailable() && !MessageManager.isCreatedLocally()) {
+            MessageManager.initialize(new NotSpringManagedDefaultMessages());
+            MessageManager.setIsCreatedLocally();
         } else {
             try {
                 proceedingJoinPoint.proceed();

@@ -47,6 +47,13 @@
     "overwritable": true
   },
   {
+    "name": "globalErrorHandlerBase",
+    "templateName": "templates/global-error-handler-base.service.ts.vm",
+    "outputFile": "shared/global-error-handler-base.service.ts",
+    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "overwritable": true
+  },
+  {
     "name": "globalErrorHandler",
     "templateName": "templates/global-error-handler.service.ts.vm",
     "outputFile": "shared/global-error-handler.service.ts",
@@ -169,6 +176,34 @@
     "name": "pageWrapperModel",
     "templateName": "templates/model/page-wrapper.model.ts.vm",
     "outputFile": "shared/model/page-wrapper.model.ts",
+    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "overwritable": false
+  },
+  {
+    "name": "errorDialogComponentTs",
+    "templateName": "templates/error-dialog/error-dialog.component.ts.vm",
+    "outputFile": "shared/error-dialog/error-dialog.component.ts",
+    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "overwritable": false
+  },
+  {
+    "name": "errorDialogComponentHtml",
+    "templateName": "templates/error-dialog/error-dialog.component.html.vm",
+    "outputFile": "shared/error-dialog/error-dialog.component.html",
+    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "overwritable": false
+  },
+  {
+    "name": "errorDialogComponentCss",
+    "templateName": "templates/error-dialog/error-dialog.component.css.vm",
+    "outputFile": "shared/error-dialog/error-dialog.component.css",
+    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "overwritable": false
+  },
+  {
+    "name": "errorIcon",
+    "templateName": "templates/error-icon.svg.vm",
+    "outputFile": "assets/error-icon.svg",
     "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
     "overwritable": false
   }

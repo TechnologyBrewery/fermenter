@@ -22,6 +22,7 @@ import org.apache.commons.lang3.RandomUtils;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainChildBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.enumeration.SimpleDomainEnumeration;
+import org.bitbucket.askllc.fermenter.cookbook.domain.message.SampleMessages;
 import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.SimpleDomainManagerService;
 import org.bitbucket.fermenter.stout.messages.CoreMessages;
 import org.bitbucket.fermenter.stout.messages.Message;
@@ -89,6 +90,18 @@ public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServi
         for (int iter = 0; iter < numErrorMessagesToGenerate; iter++) {
             Message message = new Message(CoreMessages.UNKNOWN_EXCEPTION_OCCURRED, Severity.ERROR);
             message.addInsert("differentiateFromOtherInstances", RandomStringUtils.random(10));
+            MessageManager.addMessage(message);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void createErrorMessageForGlobalErrorHandlerImpl(Integer numErrorMessagesToGenerate) {
+        for (int i = 0; i < numErrorMessagesToGenerate; i++) {
+            Message message = new Message(SampleMessages.EXAMPLE_SERVICE_FAILURE, Severity.ERROR);
+            message.addInsert("attemptNumber", "" + i);
             MessageManager.addMessage(message);
         }
     }

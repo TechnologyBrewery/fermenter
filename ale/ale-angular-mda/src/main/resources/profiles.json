@@ -62,7 +62,19 @@
         "name": "errorHandlerApi"
       },
       {
+        "name": "globalErrorHandlerBase"
+      },
+      {
         "name": "globalErrorHandler"
+      },
+      {
+        "name": "errorDialogComponentTs"
+      },
+      {
+        "name": "errorDialogComponentHtml"
+      },
+      {
+        "name": "errorDialogComponentCss"
       }, 
       {
         "name": "sortOrderDirectionEnum"
@@ -72,6 +84,9 @@
       },
       {
         "name": "pageWrapperModel"
+      },
+      {
+        "name": "errorIcon"
       }
     ]
   },

@@ -154,7 +154,7 @@ export class SimpleDomainComponent implements OnInit {
     this.validationMaintService.post(validation).subscribe();
 
     this.simpleDomainManagerService
-      .createAndPropagateErrorMessages(3)
+      .createErrorMessageForGlobalErrorHandler(3)
       .subscribe(data => {
         // if there is a fermenter error or other error it should by default, be caught and handled by the global error handler.
         alert('YOU SHOULD NEVER SEE THIS ALERT');

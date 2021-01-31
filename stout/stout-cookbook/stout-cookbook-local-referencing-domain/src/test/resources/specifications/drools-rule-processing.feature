@@ -1,4 +1,4 @@
-@droolsRuleProcessing
+@droolsRuleProcessing @manual
 Feature: Drools rule processing
 
   Scenario: Drools runtime can retrieve sessions defined in session definition model

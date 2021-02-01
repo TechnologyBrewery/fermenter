@@ -216,8 +216,8 @@
 			<artifactId>cucumber-spring</artifactId>
 			<scope>test</scope>
 		</dependency>
-        
-        <dependency>
+
+		<dependency>
 			<groupId>org.jboss.shrinkwrap</groupId>
 			<artifactId>shrinkwrap-bom</artifactId>
 			<version>1.2.6</version>
@@ -239,6 +239,7 @@
 		<dependency>
 			<groupId>org.jboss.shrinkwrap.resolver</groupId>
 			<artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+			<version>2.2.7</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -273,6 +274,18 @@
 		<dependency>
 			<groupId>org.jboss.arquillian.extension</groupId>
 			<artifactId>arquillian-rest-client-impl-3x</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.6</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.21</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

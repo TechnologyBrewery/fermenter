@@ -16,7 +16,7 @@ import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 public abstract class AbstractArquillianTestSupport {
 
     public static WebArchive createDeployment() {
-        File[] mavenDependencies = Maven.configureResolver().loadPomFromFile("pom.xml", "integration-test")
+        File[] mavenDependencies = Maven.configureResolver().workOffline(true).loadPomFromFile("pom.xml", "integration-test")
                 .importRuntimeAndTestDependencies().resolve().withTransitivity().asFile();
 
         WebArchive war = ShrinkWrap.create(WebArchive.class, "cookbook-domain.war");

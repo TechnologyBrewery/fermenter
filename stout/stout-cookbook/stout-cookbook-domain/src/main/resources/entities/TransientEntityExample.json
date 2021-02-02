@@ -12,6 +12,10 @@
     "name" : "anEnumeratedValue",
     "type" : "SimpleDomainEnumeration",
     "column" : "SIMPLE_DOMAIN_ENUM"
+  }, {
+    "name" : "defaultValueField",
+    "type" : "integer",
+    "defaultValue" : "3"
   } ],
   "references" : [ {
     "name" : "requiredReference",

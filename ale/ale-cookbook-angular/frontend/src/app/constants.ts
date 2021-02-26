@@ -1,5 +1,11 @@
 import { Injectable } from '@angular/core';
 
+export const ROUTE_CODES = {
+  SIMPLE_PAGE: 'simple-domain',
+  E2E_PAGE: 'e2e-tests',
+  BEER_EXAMPLE: 'beer-example'
+};
+
 @Injectable()
 export class Constants {
   public STOUT_COOKBOOK_DOMAIN_END_POINT = '/cookbook/rest';

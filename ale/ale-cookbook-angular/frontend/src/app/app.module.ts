@@ -17,7 +17,9 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { E2eTestsPageComponent } from './e2e-tests-page/e2e-tests-page.component';
 import { BeerExampleComponent } from './beer-example-page/beer-example-page.component';
 import { E2eTestRunnerComponent } from './e2e-tests-page/e2e-test-runner/e2e-test-runner.component';
-
+import { BeerExampleEntityBeerTypeFormComponent } from './generated/ui/beer-example-entity/beer-type/form/beer-example-entity-beer-type-form.component';
+import { SimpleDomainTheLong1FormComponent } from './generated/ui/simple-domain/the-long1/form/simple-domain-the-long1-form.component';
+import { ReactiveFormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,7 +28,9 @@ import { E2eTestRunnerComponent } from './e2e-tests-page/e2e-test-runner/e2e-tes
     ErrorDialogComponent,
     E2eTestsPageComponent,
     BeerExampleComponent,
-    E2eTestRunnerComponent
+    E2eTestRunnerComponent,
+    BeerExampleEntityBeerTypeFormComponent,
+    SimpleDomainTheLong1FormComponent
   ],
   imports: [
     BrowserModule,
@@ -35,7 +39,8 @@ import { E2eTestRunnerComponent } from './e2e-tests-page/e2e-test-runner/e2e-tes
     MaterialModule,
     FormsModule,
     HttpClientModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    ReactiveFormsModule
   ],
   providers: [SimpleDomainMaintenanceService, GlobalErrorHandler],
   bootstrap: [AppComponent],

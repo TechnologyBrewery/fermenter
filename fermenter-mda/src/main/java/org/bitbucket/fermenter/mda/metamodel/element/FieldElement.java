@@ -43,6 +43,9 @@ public class FieldElement extends MetamodelElement implements Field {
     // (internal field name does not match the external API name due to keyword collision):
     protected Boolean isTransient;
 
+    @JsonInclude(Include.NON_NULL)
+    protected String label;
+
     /**
      * {@inheritDoc}
      */
@@ -110,6 +113,14 @@ public class FieldElement extends MetamodelElement implements Field {
     @Override
     public Boolean isTransient() {
         return this.isTransient;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getLabel() {
+        return this.label;
     }
 
     /**
@@ -198,6 +209,16 @@ public class FieldElement extends MetamodelElement implements Field {
      */
     public void setTransient(Boolean transientValue) {
         this.isTransient = transientValue != null ? transientValue : Boolean.FALSE;
+    }
+
+    /**
+     * Sets the label.
+     * 
+     * @param label
+     *            label value
+     */
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     /**

@@ -12,7 +12,7 @@ import org.bitbucket.fermenter.mda.metamodel.element.Field;
 
 import java.util.Map;
 
-public class AngularField extends BaseFieldDecorator implements Field {
+public class AngularField extends BaseFieldDecorator implements Field, AngularNamedElement {
 
     public AngularField(Field wrapped) {
         super(wrapped);
@@ -36,7 +36,7 @@ public class AngularField extends BaseFieldDecorator implements Field {
     public String getCapitalizedName() {
         return StringUtils.capitalize(getName());
     }
-
+    
     public String getUppercasedType() {
         return getType().toUpperCase();
     }

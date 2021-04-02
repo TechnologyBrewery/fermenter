@@ -2,6 +2,7 @@ package org.bitbucket.fermenter.mda.element;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.List;
@@ -274,6 +275,7 @@ public class EntitySteps extends AbstractEntitySteps {
         newField.setDocumentation(field.documentation);
         newField.setColumn(field.column);
         newField.setTransient(field.transientValue);
+        newField.setLabel(field.label);
         ValidationElement type = new ValidationElement();
         type.setName(field.type);
         newField.setType(type);
@@ -392,6 +394,7 @@ public class EntitySteps extends AbstractEntitySteps {
                 assertEquals("Column name did not match!", expectedField.column, foundField.getColumn());
                 assertEquals("Documentation did not match!", expectedField.documentation,
                         foundField.getDocumentation());
+                assertTrue("Label did not match!", StringUtils.equals(expectedField.label, foundField.getLabel()));
                 break;
             }
         }
@@ -487,6 +490,7 @@ public class EntitySteps extends AbstractEntitySteps {
         public String type;
         public String column;
         public String generator;
+        public String label;
         public Boolean required;
         public Boolean transientValue;
     }

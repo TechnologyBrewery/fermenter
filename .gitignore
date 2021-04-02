@@ -5,11 +5,13 @@ build-tools/bin/
 .settings/
 target
 .classpath
+.factorypath
 **/src/generated
 **/bin/
 *.iml
 .idea/
 
+node_modules
 ale/ale-cookbook-angular/frontend/src/app/generated
 package-lock.json
 stout/stout-cookbook/stout-cookbook-test-generation/src/generated-test

@@ -99,17 +99,17 @@ Feature: Specify entities for use in model-driven file generation
 
   Scenario Outline: specify a field via a JSON metamodel
     Given an entity named "<name>" in "<package>" with a field:
-      | name        | documentation   | type   | column   |
-      | <fieldName> | <documentation> | <type> | <column> |
+      | name        | documentation   | type   | column   | label   |
+      | <fieldName> | <documentation> | <type> | <column> | <label> |
     When entities are read
     Then an entity metamodel instance is returned for the name "<name>" in "<package>" with the following field:
-      | name        | documentation   | type   | column   |
-      | <fieldName> | <documentation> | <type> | <column> |
+      | name        | documentation   | type   | column   | label   |
+      | <fieldName> | <documentation> | <type> | <column> | <label> |
 
     Examples: 
-      | name | package         | fieldName | documentation  | type    | column  |
-      | Bar  | test.entity.alt | summary   | Summary of Bar | string  | SUMMARY |
-      | Blah | test.entity.alt | stuff     | Stuff of Blah  | integer | STUFF   |
+      | name | package         | fieldName | documentation  | type    | column  | label   |
+      | Bar  | test.entity.alt | summary   | Summary of Bar | string  | SUMMARY | Summary |
+      | Blah | test.entity.alt | stuff     | Stuff of Blah  | integer | STUFF   |         |
 
   Scenario Outline: explicitly specify that a field is transient
     Given an entity named "<name>" in "<package>" with a field:

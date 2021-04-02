@@ -1,0 +1,26 @@
+import { Component, Input, EventEmitter, Output } from '@angular/core';
+
+@Component({
+  selector: 'app-${entity.nameLowerHyphen}-${field.nameLowerHyphen}-form',
+  templateUrl: './${entity.nameLowerHyphen}-${field.nameLowerHyphen}-form.component.html',
+  styleUrls: ['./${entity.nameLowerHyphen}-${field.nameLowerHyphen}-form.component.css']
+})
+
+export class ${entity.name}${field.capitalizedName}FormComponent {
+
+  ${field.name}Value = '';
+
+  @Input()
+  get ${field.name}() {
+    return this.${field.name}Value;
+  }
+
+  @Output() ${field.name}Change = new EventEmitter();
+
+  set ${field.name}(val) {
+    this.${field.name}Value = val;
+    this.${field.name}Change.emit(this.${field.name}Value);
+  }
+
+  constructor() {}
+}

@@ -54,6 +54,11 @@ public interface Field extends Metamodel {
      */
     String getDefaultValue();
 
+	/**
+     * @return Returns the label value.
+     */
+    String getLabel();
+
     
 	/**
 	 * @return Returns the generator.

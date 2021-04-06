@@ -17,7 +17,7 @@ public final class MetamodelUtils {
      * @param wrappedInstance
      *            instance that is being wrapped
      */
-    static void validateWrappedInstanceIsNonNull(Class<?> wrapperClass, Object wrappedInstance) {
+    public static void validateWrappedInstanceIsNonNull(Class<?> wrapperClass, Object wrappedInstance) {
         if (wrappedInstance == null) {
             throw new IllegalArgumentException(
                     wrapperClass.getSimpleName() + " must be instatiated with a non-null instance to wrap!");

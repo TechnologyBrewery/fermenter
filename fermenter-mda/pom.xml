@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<parent>
 		<groupId>org.bitbucket.askllc.fermenter</groupId>
@@ -12,16 +14,21 @@
 	<artifactId>fermenter-mda</artifactId>
 	<packaging>maven-plugin</packaging>
 
+	<properties>
+		<version.jackson>2.12.2</version.jackson>
+		<version.maven.core>3.6.3</version.maven.core>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.maven</groupId>
 			<artifactId>maven-core</artifactId>
-			<version>3.5.0</version>
+			<version>${version.maven.core}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.maven</groupId>
 			<artifactId>maven-plugin-api</artifactId>
-			<version>3.3.3</version>
+			<version>${version.maven.core}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.maven.plugin-tools</groupId>
@@ -32,7 +39,7 @@
 		<dependency>
 			<groupId>org.apache.velocity</groupId>
 			<artifactId>velocity-engine-core</artifactId>
-			<version>2.2</version>
+			<version>2.3</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-digester</groupId>
@@ -59,29 +66,28 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
-			<version>2.9.0</version>
+			<version>${version.jackson}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>2.9.0</version>
+			<version>${version.jackson}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.java-json-tools</groupId>
 			<artifactId>json-schema-validator</artifactId>
-			<version>2.2.8</version>
+			<version>2.2.14</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-databind</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
-			<!-- Keep in sync w/ Maven plugin dependencies to avoid maven-plugin-plugin 
-				errors: -->
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>20.0</version>
-		</dependency>
-		<dependency>
-		    <groupId>org.bitbucket.askllc.krausening</groupId>
-		    <artifactId>krausening</artifactId>
-		    <version>7</version>
+			<groupId>org.bitbucket.askllc.krausening</groupId>
+			<artifactId>krausening</artifactId>
+			<version>9</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -105,7 +111,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-plugin-plugin</artifactId>
-				<version>3.4</version>
+				<version>3.6.0</version>
 				<executions>
 					<execution>
 						<id>default-descriptor</id>
@@ -113,11 +119,12 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- Since we have cucumber surefire tests that run as part of the build, generate cucumber reports -->
-            <plugin>
-                <groupId>net.masterthought</groupId>
-                <artifactId>maven-cucumber-reporting</artifactId>
-            </plugin>
+			<!-- Since we have cucumber surefire tests that run as part of the build, 
+				generate cucumber reports -->
+			<plugin>
+				<groupId>net.masterthought</groupId>
+				<artifactId>maven-cucumber-reporting</artifactId>
+			</plugin>
 		</plugins>
 	</build>
 </project>

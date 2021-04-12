@@ -8,13 +8,13 @@ import org.bitbucket.fermenter.stout.sort.SortWrapper;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 
-public class SortMapper {
+public class SortConverter {
 
     
-    public static final Sort mapToSort(SortWrapper sortWrapper) {
+    public static final Sort convertToSpringSort(SortWrapper sortWrapper) {
         List<Order> orders = new ArrayList<>();
         for (OrderWrapper orderWrapper : sortWrapper.getOrders()) {
-            orders.add(OrderMapper.mapToOrder(orderWrapper));
+            orders.add(OrderConverter.convertToSpringOrder(orderWrapper));
         }
         return Sort.by(orders);
     }

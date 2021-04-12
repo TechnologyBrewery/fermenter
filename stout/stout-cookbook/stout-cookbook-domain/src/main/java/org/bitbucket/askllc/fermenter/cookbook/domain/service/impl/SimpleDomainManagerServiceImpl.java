@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -28,6 +29,8 @@ import org.bitbucket.fermenter.stout.messages.CoreMessages;
 import org.bitbucket.fermenter.stout.messages.Message;
 import org.bitbucket.fermenter.stout.messages.MessageManager;
 import org.bitbucket.fermenter.stout.messages.Severity;
+import org.bitbucket.fermenter.stout.page.PageConverter;
+import org.bitbucket.fermenter.stout.page.PageWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -46,7 +49,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServiceImpl
         implements SimpleDomainManagerService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SimpleDomainManagerServiceImpl.class);
+    private static final PageConverter<SimpleDomainBO> simpleDomainPageConverter = new PageConverter<>();
+    private static final Logger logger = LoggerFactory.getLogger(SimpleDomainManagerServiceImpl.class);
 
     /**
      * Demonstrates how a one-off service operation that requires elements not
@@ -202,7 +206,7 @@ public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServi
      */
     @Override
     protected void returnVoidImpl() {
-        LOGGER.info("did something, returning void");
+        logger.info("did something, returning void");
     }
 
     /**
@@ -210,7 +214,7 @@ public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServi
      */
     @Override
     protected void doSomethingWithPrimitiveInputsImpl(String inputStr, Integer inputInt) {
-        LOGGER.info("did something with {} and {} ", inputStr, inputInt);
+        logger.info("did something with {} and {} ", inputStr, inputInt);
 
     }
 
@@ -261,7 +265,7 @@ public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServi
 
     @Override
     protected void returnVoidForDateInputImpl(Date inputDate) {
-        LOGGER.info("made a call for SimpleDomain with {} ", inputDate);
+        logger.info("made a call for SimpleDomain with {} ", inputDate);
     }
 
     @Override
@@ -274,20 +278,45 @@ public class SimpleDomainManagerServiceImpl extends SimpleDomainManagerBaseServi
     }
 
     @Override
-    protected Page<SimpleDomainBO> getPagedSimpleDomainsImpl(Integer startPage, Integer count) {
-        return SimpleDomainBO.findAllPaged(startPage, count);
+    protected PageWrapper<SimpleDomainBO> getPagedSimpleDomainsImpl(Integer startPage, Integer count) {
+        Page<SimpleDomainBO> entities = SimpleDomainBO.findAllPaged(startPage, count);
+        return simpleDomainPageConverter.convertToPageWrapper(entities);
     }
 
     @Override
-    protected Page<SimpleDomainBO> getPagedSimpleDomainsWithParameterImpl(String nameFilter, Integer startPage,
+    protected PageWrapper<SimpleDomainBO> getPagedSimpleDomainsWithParameterImpl(String nameFilter, Integer startPage,
             Integer count) {
-        return SimpleDomainBO.findByNamePaged(nameFilter, startPage, count);
+        Page<SimpleDomainBO> entities = SimpleDomainBO.findByNamePaged(nameFilter, startPage, count);
+        return simpleDomainPageConverter.convertToPageWrapper(entities);
     }
 
     @Override
-    protected Page<SimpleDomainBO> getPagedSimpleDomainsAsPostImpl(SimpleDomainBO simpleDomain, String nameFilter,
+    protected PageWrapper<SimpleDomainBO> getPagedSimpleDomainsAsPostImpl(SimpleDomainBO simpleDomain,
+            String nameFilter, Integer startPage, Integer count) {
+        Page<SimpleDomainBO> entities = SimpleDomainBO.findByNamePaged(nameFilter, startPage, count);
+        return simpleDomainPageConverter.convertToPageWrapper(entities);
+    }
+
+    @Override
+    protected PageWrapper<SimpleDomainBO> getPagedResponseWithoutSpringPageImpl(Integer numberOfItemsInList,
             Integer startPage, Integer count) {
-        return SimpleDomainBO.findByNamePaged(nameFilter, startPage, count);
+        List<SimpleDomainBO> simpleDomains = new ArrayList<>();
+        for (int i = 0; i < count && i < numberOfItemsInList; i++) {
+            SimpleDomainBO simpleDomain = new SimpleDomainBO();
+            simpleDomain.setName(Integer.toString(i));
+            simpleDomains.add(simpleDomain);
+        }
+        PageWrapper<SimpleDomainBO> pageWrapper = new PageWrapper<>();
+        pageWrapper.setContent(simpleDomains);
+        pageWrapper.setFirst(true);
+        pageWrapper.setLast(count < numberOfItemsInList);
+        pageWrapper.setItemsPerPage(count);
+        pageWrapper.setNumberOfElements(simpleDomains.size());
+        pageWrapper.setStartPage(startPage);
+        pageWrapper.setTotalPages(numberOfItemsInList / count);
+        pageWrapper.setTotalResults(numberOfItemsInList.longValue());
+
+        return pageWrapper;
     }
 
     @Override

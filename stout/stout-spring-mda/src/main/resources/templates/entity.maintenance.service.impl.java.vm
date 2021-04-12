@@ -17,8 +17,7 @@ import org.bitbucket.fermenter.stout.messages.Messages;
 import org.bitbucket.fermenter.stout.messages.MessageManager;
 import org.bitbucket.fermenter.stout.page.json.FindByExampleCriteria;
 import org.bitbucket.fermenter.stout.page.PageWrapper;
-import org.bitbucket.fermenter.stout.page.PageMapper;
-import org.bitbucket.fermenter.stout.page.SortMapper;
+import org.bitbucket.fermenter.stout.page.SortConverter;
 import org.bitbucket.fermenter.stout.service.AbstractEntityMaintenanceService;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
 import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
@@ -27,7 +26,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 
 #foreach( $import in $service.imports )
@@ -165,10 +163,9 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractEntityMaintena
 	public ValueServiceResponse<PageWrapper<${entity.name}BO>> findByExample(FindByExampleCriteria<${entity.name}BO> criteria) {
 		messageManagerAwareService.initializeMessageManager(messages);
         assertAuthorization(PATH, Action.RETRIEVE);
-		Sort sort = SortMapper.mapToSort(criteria.getSortWrapper());
-		Page<${entity.name}BO> resultsAsPage = ${entity.name}BO.findByExample(criteria.getProbe(), criteria.getContainsMatch(), criteria.getStartPage(), criteria.getCount(), sort);
-		PageWrapper<${entity.name}BO> resultsAsPageWrapper = (new PageMapper<${entity.name}BO>()).mapToPageWrapper(resultsAsPage);
-		ValueServiceResponse<PageWrapper<${entity.name}BO>> response = new ValueServiceResponse<>(resultsAsPageWrapper);
+		Sort sort = SortConverter.convertToSpringSort(criteria.getSortWrapper());
+		PageWrapper<${entity.name}BO> resultsAsPage = ${entity.name}BO.findByExample(criteria.getProbe(), criteria.getContainsMatch(), criteria.getStartPage(), criteria.getCount(), sort);
+		ValueServiceResponse<PageWrapper<${entity.name}BO>> response = new ValueServiceResponse<>(resultsAsPage);
 		messageManagerAwareService.addAllMessagesToResponse(response);
 		
 		MessageManager.logMessages(logger, this.getClass());		
@@ -201,9 +198,8 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractEntityMaintena
 	public ValueServiceResponse<PageWrapper<${entity.name}BO>> findByExampleContainsPaged(${entity.name}BO probe, int startPage, int count) {
 		messageManagerAwareService.initializeMessageManager(messages);
         assertAuthorization(PATH, Action.RETRIEVE);
-		Page<${entity.name}BO> resultsAsPage = ${entity.name}BO.findByExampleContainsPaged(probe, startPage, count);
-        PageWrapper<${entity.name}BO> resultsAsPageWrapper = (new PageMapper<${entity.name}BO>()).mapToPageWrapper(resultsAsPage);
-		ValueServiceResponse<PageWrapper<${entity.name}BO>> response = new ValueServiceResponse<>(resultsAsPageWrapper);
+		PageWrapper<${entity.name}BO> resultsAsPage = ${entity.name}BO.findByExampleContainsPaged(probe, startPage, count);
+		ValueServiceResponse<PageWrapper<${entity.name}BO>> response = new ValueServiceResponse<>(resultsAsPage);
 		messageManagerAwareService.addAllMessagesToResponse(response);
 		
 		MessageManager.logMessages(logger, this.getClass());		
@@ -236,9 +232,8 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractEntityMaintena
 	public ValueServiceResponse<PageWrapper<${entity.name}BO>> findByExampleMatchesPaged(${entity.name}BO probe, int startPage, int count) {
         messageManagerAwareService.initializeMessageManager(messages);
         assertAuthorization(PATH, Action.RETRIEVE);
-        Page<${entity.name}BO> resultsAsPage = ${entity.name}BO.findByExampleMatchesPaged(probe, startPage, count);
-        PageWrapper<${entity.name}BO> resultsAsPageWrapper = (new PageMapper<${entity.name}BO>()).mapToPageWrapper(resultsAsPage);
-        ValueServiceResponse<PageWrapper<${entity.name}BO>> response = new ValueServiceResponse<>(resultsAsPageWrapper);
+        PageWrapper<${entity.name}BO> resultsAsPage = ${entity.name}BO.findByExampleMatchesPaged(probe, startPage, count);
+        ValueServiceResponse<PageWrapper<${entity.name}BO>> response = new ValueServiceResponse<>(resultsAsPage);
         messageManagerAwareService.addAllMessagesToResponse(response);
 		
 		MessageManager.logMessages(logger, this.getClass());		

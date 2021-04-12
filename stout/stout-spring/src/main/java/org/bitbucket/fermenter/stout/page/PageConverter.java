@@ -2,9 +2,9 @@ package org.bitbucket.fermenter.stout.page;
 
 import org.springframework.data.domain.Page;
 
-public class PageMapper<T> {
+public class PageConverter<T> {
 
-    public PageWrapper<T> mapToPageWrapper(Page page) {
+    public PageWrapper<T> convertToPageWrapper(Page<T> page) {
         PageWrapper<T> wrapper = new PageWrapper<>();
         wrapper.setContent(page.getContent());
         wrapper.setItemsPerPage(page.getSize());

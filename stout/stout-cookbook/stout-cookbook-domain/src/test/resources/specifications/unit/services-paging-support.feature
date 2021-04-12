@@ -48,6 +48,11 @@ Feature: Paging Support
             | 1         | 5    | false   | true   |
             | 0         | 10   | true    | true  |
 
+    Scenario: Paging services can return non-spring based pages
+        Given a list of 10 random items that are not stored in the database
+        When I ask for page 0 of 5 items
+        Then I get back the first 5 items in the list as a PageWrapper object without depending on spring paging
+
     Scenario: Page Index Error: Paging services throw an error if the page index is missing in the request
         When I request a paged service without providing a page index
         Then I get an error message back indicating that the page index is required

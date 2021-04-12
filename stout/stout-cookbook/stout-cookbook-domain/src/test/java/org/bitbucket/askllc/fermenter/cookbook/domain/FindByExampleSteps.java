@@ -14,7 +14,7 @@ import org.bitbucket.fermenter.stout.messages.Message;
 import org.bitbucket.fermenter.stout.messages.MessageManager;
 import org.bitbucket.fermenter.stout.messages.MessageManagerInitializationDelegate;
 import org.bitbucket.fermenter.stout.messages.Messages;
-import org.springframework.data.domain.Page;
+import org.bitbucket.fermenter.stout.page.PageWrapper;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +39,7 @@ public class FindByExampleSteps {
     private SimpleDomainBO probe;
     private Sort sort;
 
-    private Page<SimpleDomainBO> findByExampleResults;
+    private PageWrapper<SimpleDomainBO> findByExampleResults;
 
     @After("@findByExample")
     public void cleanupMsgMgr() throws Exception {
@@ -170,7 +170,7 @@ public class FindByExampleSteps {
     @And("^I should get \"([^\"]*)\" results because null probe defaults to all$")
     @Then("^I should get \"([^\"]*)\" results that match the probe inputs$")
     public void i_should_get_results(long countOfResults) throws Throwable {
-        assertEquals(countOfResults, findByExampleResults.getTotalElements());
+        assertEquals(countOfResults, findByExampleResults.getTotalResults().intValue());
     }
 
     @Then("^I should get an error message saying \"([^\"]*)\"$")
@@ -184,7 +184,7 @@ public class FindByExampleSteps {
 
     @Then("^all simple domains are returned$")
     public void all_simple_domains_are_returned() throws Throwable {
-        long numOfSimpleDomainsReturned = findByExampleResults.getTotalElements();
+        long numOfSimpleDomainsReturned = findByExampleResults.getTotalResults();
         assertEquals("Expected all simple domains to be returned", numOfSimpleDomainsCreated,
                 numOfSimpleDomainsReturned);
     }

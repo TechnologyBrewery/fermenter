@@ -4,9 +4,9 @@ import org.bitbucket.fermenter.stout.sort.OrderWrapper;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
 
-public class OrderMapper {
+public class OrderConverter {
 
-    public static final Order mapToOrder(OrderWrapper orderWrapper) {
+    public static final Order convertToSpringOrder(OrderWrapper orderWrapper) {
         Direction springDirection = Direction.fromString(orderWrapper.getDirection());
 
         Order order = null;

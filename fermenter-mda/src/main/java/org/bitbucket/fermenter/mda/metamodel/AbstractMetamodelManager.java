@@ -22,8 +22,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.bitbucket.fermenter.mda.exception.FermenterException;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.metamodel.element.Metamodel;
@@ -31,6 +29,8 @@ import org.bitbucket.fermenter.mda.metamodel.element.MetamodelElement;
 import org.bitbucket.fermenter.mda.metamodel.element.NamespacedMetamodel;
 import org.bitbucket.fermenter.mda.util.JsonUtils;
 import org.bitbucket.fermenter.mda.util.MessageTracker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -43,7 +43,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
 
-	private static final Log log = LogFactory.getLog(AbstractMetamodelManager.class);
+	private static final Logger logger = LoggerFactory.getLogger(AbstractMetamodelManager.class);
 
 	private static final String METAMODEL_SUFFIX = "json";
 	private Map<String, Map<String, T>> metadataByPackageMap = new HashMap<>();
@@ -55,6 +55,10 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
 	protected ModelRepositoryConfiguration repoConfiguration;
 
 	protected MetamodelConfig config = KrauseningConfigFactory.create(MetamodelConfig.class);
+	
+	protected boolean hasDirectoryModels;
+	protected boolean hasJarModels;
+	protected String delayedLocalDirectoryWarning;
 
 	/**
 	 * Resets this instance to ensure a clean set of metadata is available.
@@ -90,7 +94,7 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
 		}
 	}
 
-	protected void loadMetadata(ModelInstanceUrl modelInstanceUrl, ModelRepositoryConfiguration repoConfiguration) {
+	public void loadMetadata(ModelInstanceUrl modelInstanceUrl, ModelRepositoryConfiguration repoConfiguration) {
         this.repoConfiguration = repoConfiguration;
         if (StringUtils.isBlank(modelInstanceUrl.getUrl())) {
             messageTracker.addErrorMessage("Model instance for artifactId '" + modelInstanceUrl.getArtifactId()
@@ -103,13 +107,16 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
                 resources = getMetadataResources(modelInstanceUrl.getUrl());
 
             } catch (IOException | URISyntaxException e) {
-                log.error("Problem encountered loading model instances for " + modelInstanceUrl.getArtifactId(), e);
+                logger.error("Problem encountered loading model instances for " + modelInstanceUrl.getArtifactId(), e);
                 messageTracker.addWarningMessage("No " + getMetadataLocation() + " metadata found for '"
                         + modelInstanceUrl.getArtifactId() + "', skipping...");
 
             }
 
-            if (resources == null) {
+            if (resources == null || (!hasJarModels && !hasDirectoryModels)) {
+                if (delayedLocalDirectoryWarning != null) {
+                    logger.warn(delayedLocalDirectoryWarning);
+                }
                 return;
             }
            
@@ -120,7 +127,7 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
                     loadMetamodelFile(is, modelInstanceUrl.getArtifactId(), resource);
 	
 	            } catch (IOException | GenerationException e) {
-	                log.error("Problem encountered loading model instance " + resource.toExternalForm(), e);
+	                logger.error("Problem encountered loading model instance " + resource.toExternalForm(), e);
 	                messageTracker.addErrorMessage("Problem loading" + resource.toExternalForm()
 	                        + " model instance found in '" + modelInstanceUrl.getArtifactId() + "', skipping...");
 	                
@@ -156,6 +163,7 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
 			String entryName = newEntry.getName();
 			if (entryName.startsWith(this.getMetadataLocation()) && entryName.endsWith("." + METAMODEL_SUFFIX)) {
 				metadataResources.add(new URL(name + newEntry.getName()));
+				hasJarModels = true;
 			}
 		}
 
@@ -174,11 +182,12 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
 			if (CollectionUtils.isNotEmpty(files)) {
 				for (File file : files) {
 					metadataResources.add(file.toURI().toURL());
+					hasDirectoryModels =  true;
 				}
 			}
 
 		} else {
-			log.warn(metamodelDir.getCanonicalPath() + " is not a valid directory!");
+		    delayedLocalDirectoryWarning = metamodelDir.getCanonicalPath() + " is not a valid directory!";
 
 		}
 
@@ -215,15 +224,15 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
 	protected abstract Class<? extends T> getMetamodelClass();
 
 	/**
-	 * The metamodel name for use in log output (e.g., Enumeration, Entity).
+	 * The metamodel name for use in logger output (e.g., Enumeration, Entity).
 	 * 
 	 * @return metamodel string descriptor
 	 */
 	protected abstract String getMetamodelDescription();
 
 	protected void postLoadMetamodel() {
-		if (log.isInfoEnabled()) {
-			log.info("Loaded " + completeMetadataMap.size() + " " + getMetamodelDescription() + "(s)");
+		if (logger.isInfoEnabled()) {
+			logger.info("Loaded " + completeMetadataMap.size() + " " + getMetamodelDescription() + "(s)");
 		} 
 	}
 	
@@ -231,7 +240,7 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
 		return metadataByPackageMap.get(packageName);
 	}
 
-	protected Map<String, T> getMetadataByArtifactIdMap(String artifactId) {
+	public Map<String, T> getMetadataByArtifactIdMap(String artifactId) {
 		return metadataByArtifactIdMap.get(artifactId);
 	}
 
@@ -247,7 +256,7 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
 			packageMap = new HashMap<>();
 			metadataByPackageMap.put(packageName, packageMap);
 		} else if (packageMap.containsKey(name)) {
-		    log.warn("Metamodel " + name + " exists for package " + packageName + ". Replacing...");
+		    logger.warn("Metamodel " + name + " exists for package " + packageName + ". Replacing...");
 		    messageTracker.addWarningMessage("Metamodel " + name + " exists for package " + packageName + ". Replacing...");
 		}
 		packageMap.put(name, element);
@@ -257,13 +266,13 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
 			artifactIdMap = new HashMap<>();
 			metadataByArtifactIdMap.put(artifactId, artifactIdMap);
 		} else if (artifactIdMap.containsKey(name)) {
-		    log.warn("Metamodel " + name + " exists for artifact Id " + artifactId + ". Replacing...");
+		    logger.warn("Metamodel " + name + " exists for artifact Id " + artifactId + ". Replacing...");
 		    messageTracker.addWarningMessage("Metamodel " + name + " exists for artifact Id " + artifactId + ". Replacing...");
 		}
 		artifactIdMap.put(name, element);
 
 		if (getCompleteMetadataMap().containsKey(name)) {
-		    log.warn("Metamodel " + name + " exists. Replacing...");
+		    logger.warn("Metamodel " + name + " exists. Replacing...");
 		    messageTracker.addWarningMessage("Metamodel " + name + " exists. Replacing...");
 		}
 		completeMetadataMap.put(name, element);
@@ -334,7 +343,7 @@ public abstract class AbstractMetamodelManager<T extends NamespacedMetamodel> {
 			for (String artifactId : targetedArtifactIds) {
 				Map<String, T> targetedModelMap = getMetadataByArtifactIdMap(artifactId);
 				if (targetedModelMap == null || targetedModelMap.size() == 0) {
-					log.debug("No instances were found for targeted artifactId '" + artifactId + "'");
+					logger.debug("No instances were found for targeted artifactId '" + artifactId + "'");
 				} else {
 				    metamodelInstanceMap.putAll(targetedModelMap);    
 				}

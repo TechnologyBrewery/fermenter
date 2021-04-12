@@ -275,7 +275,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
                 if (metadataDependencies.contains(a.getArtifactId())) {
                     URL url = a.getFile().toURI().toURL();
                     metadataUrls.put(a.getArtifactId(), new ModelInstanceUrl(a.getArtifactId(), url.toString()));
-                    PackageManager.addMapping(a.getArtifactId(), url);
+                    PackageManager.addMapping(a.getArtifactId(), url, a.getGroupId());
                     LOG.info("Adding metadataDependency to current set of metadata: " + a.getArtifactId());
                 }
             }
@@ -337,6 +337,8 @@ public class GenerateSourcesMojo extends AbstractMojo {
         context.setGroupId(project.getGroupId());
         context.setArtifactId(project.getArtifactId());
         context.setVersion(project.getVersion());
+        context.setDescriptiveName(project.getName());
+        
         return context;
     }
    

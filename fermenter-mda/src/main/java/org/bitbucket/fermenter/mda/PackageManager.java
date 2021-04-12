@@ -8,15 +8,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PackageManager {
 
-    private static final Log LOG = LogFactory.getLog(PackageManager.class.getName());
-    
+    private static final Logger logger = LoggerFactory.getLogger(PackageManager.class);
+
     private static final PackageManager instance = new PackageManager();
-    
+
     private Map<String, String> artifactIdToBasePackage = new HashMap<>();
 
     private PackageManager() {
@@ -33,15 +33,19 @@ public class PackageManager {
         return instance.artifactIdToBasePackage.get(artifactId);
     }
 
-    public static void addMapping(String artifactId, URL url) {
-        try (InputStream stream = processURL(url)){
+    public static void addMapping(String artifactId, URL url, String defaultPackageName) {
+        try (InputStream stream = processURL(url)) {
             Properties props = new Properties();
             props.load(stream);
 
             instance.artifactIdToBasePackage.put(artifactId, props.getProperty("basePackage"));
+
         } catch (IOException ex) {
-            LOG.warn("Could not find package properties for artifactId '" + artifactId + "' at URL "
-                    + url.getPath());
+            logger.debug("Could not find package properties for artifactId '{}' at URL {}", artifactId, url.getPath());
+            logger.debug("Using default package name ('{}') for artifactId '{}' instead", defaultPackageName,
+                    artifactId);
+            instance.artifactIdToBasePackage.put(artifactId, defaultPackageName);
+
         }
     }
 

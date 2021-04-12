@@ -80,7 +80,7 @@ public abstract class AbstractGenerator implements Generator {
         }
     }
 
-    private File getBaseFile(GenerationContext gc) {
+    protected File getBaseFile(GenerationContext gc) {
         File baseFile;
         if (gc.isOverwritable()) {
             baseFile = gc.getGeneratedSourceDirectory();
@@ -107,7 +107,8 @@ public abstract class AbstractGenerator implements Generator {
         String camelCasedArtifactId = getCamelCasedArtifactId(gc);
         vc.put(CAMEL_CASED_ARTIFACT_ID, camelCasedArtifactId);
         vc.put(CAPITALIZED_CAMEL_CASED_ARTIFACT_ID, StringUtils.capitalize(camelCasedArtifactId));
-        vc.put(UPPER_UNDERSCORE_ARTIFACT_ID, CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, camelCasedArtifactId));
+        vc.put(UPPER_UNDERSCORE_ARTIFACT_ID,
+                CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, camelCasedArtifactId));
         return vc;
 
     }
@@ -120,6 +121,28 @@ public abstract class AbstractGenerator implements Generator {
         this.metadataContext = metadataContext;
     }
 
+    protected String deriveArtifactIdFromCamelCase(String camelCasedString) {
+        StringBuilder artifactId = new StringBuilder();
+        String[] splitStrings = StringUtils.splitByCharacterTypeCamelCase(camelCasedString);
+
+        boolean isFirst = true;
+        for (String segment : splitStrings) {
+
+            if (isFirst) {
+                isFirst = false;
+
+            } else {
+                artifactId.append('-');
+
+            }
+
+            artifactId.append(StringUtils.uncapitalize(segment));
+
+        }
+
+        return artifactId.toString();
+    }
+
     private String getCamelCasedArtifactId(GenerationContext gc) {
         String upperCaseSubsequentWords = WordUtils.capitalizeFully(gc.getArtifactId(), '-');
         String lowerCaseFirstLetter = WordUtils.uncapitalize(upperCaseSubsequentWords);
@@ -128,33 +151,85 @@ public abstract class AbstractGenerator implements Generator {
 
     protected abstract String getOutputSubFolder();
 
+    protected final String replace(String targetVariableName, String original, String replacement) {
+        return StringUtils.replace(original, "${" + targetVariableName + "}", replacement);
+    }
+
     protected final String replaceBasePackage(String original, String basePackage) {
         return StringUtils.replace(original, "${basePackage}", basePackage);
     }
 
+    /**
+     * Use replace(String targetVariableName, String original, String replacement) instead.
+     * 
+     * @param original
+     * @param entityName
+     * @return
+     */
+    @Deprecated
     protected final String replaceEntityName(String original, String entityName) {
         return StringUtils.replace(original, "${entityName}", entityName);
     }
 
+    /**
+     * Use replace(String targetVariableName, String original, String replacement) instead.
+     * 
+     * @param original
+     * @param serviceName
+     * @return
+     */
+    @Deprecated
     protected final String replaceServiceName(String original, String serviceName) {
         return StringUtils.replace(original, "${serviceName}", serviceName);
     }
 
+    /**
+     * Use replace(String targetVariableName, String original, String replacement) instead.
+     * 
+     * @param original
+     * @param ruleName
+     * @return
+     */
+    @Deprecated
     protected final String replaceRuleName(String original, String ruleName) {
         return StringUtils.replace(original, "${ruleName}", ruleName);
     }
 
+    /**
+     * Use replace(String targetVariableName, String original, String replacement) instead.
+     * 
+     * @param original
+     * @param ruleGroupName
+     * @return
+     */
+    @Deprecated
     protected final String replaceRuleGroup(String original, String ruleGroupName) {
         return StringUtils.replace(original, "${ruleGroupName}", ruleGroupName);
     }
 
+    /**
+     * Use replace(String targetVariableName, String original, String replacement) instead.
+     * 
+     * @param original
+     * @param enumerationName
+     * @return
+     */
+    @Deprecated
     protected final String replaceEnumerationName(String original, String enumerationName) {
         return StringUtils.replace(original, "${enumerationName}", enumerationName);
     }
-    
+
+    /**
+     * Use replace(String targetVariableName, String original, String replacement) instead.
+     * 
+     * @param original
+     * @param messageGroupName
+     * @return
+     */
+    @Deprecated
     protected final String replaceMessageGroupName(String original, String messageGroupName) {
         return StringUtils.replace(original, "${messageGroupName}", messageGroupName);
-    }    
+    }
 
     protected final String replaceArtifactId(String original, String artifactId) {
         return StringUtils.replace(original, "${" + ARTIFACT_ID + "}", artifactId);

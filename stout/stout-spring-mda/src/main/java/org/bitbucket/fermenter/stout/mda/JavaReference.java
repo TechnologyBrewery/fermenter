@@ -1,12 +1,5 @@
 package org.bitbucket.fermenter.stout.mda;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.apache.commons.lang3.StringUtils;
 import org.bitbucket.fermenter.mda.PackageManager;
 import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
@@ -16,14 +9,18 @@ import org.bitbucket.fermenter.mda.metamodel.element.Entity;
 import org.bitbucket.fermenter.mda.metamodel.element.Field;
 import org.bitbucket.fermenter.mda.metamodel.element.Reference;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+
 /**
  * Decorates a {@link Reference} with convenience methods for Java code
  * generation.
  */
 public class JavaReference extends BaseReferenceDecorator implements Reference, JavaNamedElement {
-
-	private DefaultModelInstanceRepository modelInstanceRepository = ModelInstanceRepositoryManager
-			.getMetamodelRepository(DefaultModelInstanceRepository.class);
 
 	/**
 	 * {@inheritDoc}
@@ -54,6 +51,7 @@ public class JavaReference extends BaseReferenceDecorator implements Reference, 
 	}
 
 	public boolean isExternal() {
+	    DefaultModelInstanceRepository modelInstanceRepository = getModelInstanceRepository();
 		String currentProject = modelInstanceRepository.getArtifactId();
 		String basePackage = PackageManager.getBasePackage(currentProject);
 		Map<String, Entity> referenceEntities = modelInstanceRepository.getEntities(getPackage());
@@ -64,6 +62,7 @@ public class JavaReference extends BaseReferenceDecorator implements Reference, 
 	}
 
 	public String getImportPrefix() {
+	    DefaultModelInstanceRepository modelInstanceRepository = getModelInstanceRepository();
 		Map<String, Entity> referenceEntities = modelInstanceRepository.getEntities(getPackage());
 		Entity referenceEntity = referenceEntities.get(getType());
 		String currentPackage = referenceEntity.getPackage();
@@ -116,5 +115,10 @@ public class JavaReference extends BaseReferenceDecorator implements Reference, 
 
 		return condition;
 	}
+
+    static DefaultModelInstanceRepository getModelInstanceRepository() {
+        return ModelInstanceRepositoryManager
+            .getMetamodelRepository(DefaultModelInstanceRepository.class);
+    }
 
 }

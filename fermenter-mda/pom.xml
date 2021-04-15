@@ -119,7 +119,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- Since we have cucumber surefire tests that run as part of the build, 
+			<!-- Since we have cucumber surefire tests that run as part of the build,
 				generate cucumber reports -->
 			<plugin>
 				<groupId>net.masterthought</groupId>

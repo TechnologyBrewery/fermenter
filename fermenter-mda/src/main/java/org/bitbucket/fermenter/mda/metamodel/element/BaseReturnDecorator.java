@@ -64,7 +64,7 @@ public class BaseReturnDecorator implements Return {
      */
     @Override
     public Boolean isMany() {
-        return wrapped.isMany();
+        return wrapped.isMany() != null && wrapped.isMany();
     }
     
     /**

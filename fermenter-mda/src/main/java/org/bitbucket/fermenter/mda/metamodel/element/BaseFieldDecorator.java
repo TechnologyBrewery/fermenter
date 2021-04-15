@@ -1,9 +1,9 @@
 package org.bitbucket.fermenter.mda.metamodel.element;
 
-import java.util.Collection;
-
 import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
+
+import java.util.Collection;
 
 /**
  * Provides baseline decorator functionality for {@link Field}.
@@ -19,9 +19,6 @@ public class BaseFieldDecorator implements Field {
     protected static final Integer DEFAULT_SCALE = 5;
 
     protected Field wrapped;
-
-    protected DefaultModelInstanceRepository repository = ModelInstanceRepositoryManager
-            .getMetamodelRepository(DefaultModelInstanceRepository.class);
 
     /**
      * New decorator for {@link Field}.
@@ -244,8 +241,13 @@ public class BaseFieldDecorator implements Field {
      * @return if this field is a named {@link Enumeration}.
      */
     public boolean isNamedEnumeration() {
-        Enumeration enumeration = repository.getEnumeration(getPackage(), getType());
+        Enumeration enumeration = getModelInstanceRepository().getEnumeration(getPackage(), getType());
         return enumeration != null && enumeration.isNamed();
+    }
+
+    private DefaultModelInstanceRepository getModelInstanceRepository() {
+        return ModelInstanceRepositoryManager
+            .getMetamodelRepository(DefaultModelInstanceRepository.class);
     }
 
 }

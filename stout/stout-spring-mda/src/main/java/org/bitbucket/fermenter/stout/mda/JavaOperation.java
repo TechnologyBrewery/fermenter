@@ -1,13 +1,5 @@
 package org.bitbucket.fermenter.stout.mda;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.bitbucket.fermenter.mda.metamodel.element.BaseOperationDecorator;
 import org.bitbucket.fermenter.mda.metamodel.element.Operation;
@@ -17,6 +9,14 @@ import org.bitbucket.fermenter.mda.metamodel.element.Transaction;
 import org.jboss.resteasy.annotations.GZIP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Decorates a {@link Operation} with Java-specific capabilities.

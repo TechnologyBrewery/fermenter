@@ -29,8 +29,12 @@ public class MessagesAspect {
 
         // See if we're running in an async thread and have set up the local
         // messages already
-        if (!isRequestScopeAvailable() && MessageManager.isCreatedLocally()) {
+        boolean isRequestScopeAvailable = isRequestScopeAvailable();
+        if (!isRequestScopeAvailable && MessageManager.isCreatedLocally()) {
             // Don't reinitialize the messages if we're in an async thread and using local messages
+        } else  if (!isRequestScopeAvailable && !MessageManager.isCreatedLocally()) {
+            MessageManager.initialize(new NotSpringManagedDefaultMessages());
+            MessageManager.setIsCreatedLocally();
         } else {
             try {
                 proceedingJoinPoint.proceed();
@@ -43,6 +47,15 @@ public class MessagesAspect {
     @Before("execution(* org.bitbucket.fermenter.stout.messages.MessageManagerAwareService.addAllMessagesToResponse(*)) && publicMethod()")
     public void interceptAddMessagesToResponse(JoinPoint joinPoint) {
 
+        if (!isRequestScopeAvailable() && !MessageManager.isCreatedLocally()) {
+            MessageManager.initialize(new NotSpringManagedDefaultMessages());
+            MessageManager.setIsCreatedLocally();
+        }
+    }
+    
+    @Before("execution(* org.bitbucket.fermenter.stout.messages.MessageManagerAwareService.addAllMessages(*)) && publicMethod()")
+    public void interceptAddMessagesToMessageManager(JoinPoint joinPoint) {
+        
         if (!isRequestScopeAvailable() && !MessageManager.isCreatedLocally()) {
             MessageManager.initialize(new NotSpringManagedDefaultMessages());
             MessageManager.setIsCreatedLocally();

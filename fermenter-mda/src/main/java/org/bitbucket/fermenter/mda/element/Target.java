@@ -27,6 +27,9 @@ public class Target implements ValidatedElement {
 	
 	@JsonProperty(required = false, defaultValue = "false")
 	private boolean overwritable;
+	
+	@JsonProperty(required = false, defaultValue = "main")
+    private String artifactType;	
 
 	public String getGenerator() {
 		return generator;
@@ -75,7 +78,15 @@ public class Target implements ValidatedElement {
 	public void setTemplateName(String templateName) {
 		this.templateName = templateName;
 	}
-	
+		
+    public String getArtifactType() {
+        return (artifactType != null) ? artifactType : "main";
+    }
+
+    public void setArtifactType(String artifactType) {
+        this.artifactType = artifactType;
+    }
+
     /**
      * {@inheritDoc}
      */

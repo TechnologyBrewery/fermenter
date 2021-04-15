@@ -156,6 +156,20 @@
 				"name": "clientEnumerations"
 			}
 		]
+	},
+	{
+		"name": "test-generation-example",
+		"targetReferences": [
+			{
+				"name": "cucumberSampleFeatureFile"
+			},
+			{
+        		"name": "cucumberSurefireHarness"
+        	},
+    		{
+        		"name": "cucumberSampleSteps"
+        	}
+		]
 	}
 ]
 

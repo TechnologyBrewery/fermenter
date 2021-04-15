@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
  * Generated Code - DO NOT MODIFY
  */
 @Configuration
-@ComponentScan(basePackages = "${basePackage}.client")
+@ComponentScan(basePackages = {"${basePackage}.client", "org.bitbucket.fermenter.stout.messages"})
 public class App${configName}Config {
 
 }

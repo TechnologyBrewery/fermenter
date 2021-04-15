@@ -101,10 +101,15 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.bitbucket.askllc.fermenter.stout</groupId>
-			<artifactId>stout-spring-client</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+            <groupId>org.bitbucket.askllc.fermenter.stout</groupId>
+            <artifactId>stout-spring</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bitbucket.askllc.fermenter.stout</groupId>
+            <artifactId>stout-spring-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.module</groupId>
 			<artifactId>jackson-module-jsonSchema</artifactId>
@@ -270,12 +275,7 @@
 			<version>1.1.0.Alpha1</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.bitbucket.askllc.fermenter.stout</groupId>
-			<artifactId>stout-spring</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
+
 		<!-- Cucumber test dependencies -->
 		<dependency>
 			<groupId>info.cukes</groupId>

@@ -12,3 +12,4 @@ target
 
 ale/ale-cookbook-angular/frontend/src/app/generated
 package-lock.json
+stout/stout-cookbook/stout-cookbook-test-generation/src/generated-test

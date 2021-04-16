@@ -82,10 +82,20 @@ public abstract class AbstractGenerator implements Generator {
 
     protected File getBaseFile(GenerationContext gc) {
         File baseFile;
+        boolean isTest = "test".equalsIgnoreCase(gc.getArtifactType());
         if (gc.isOverwritable()) {
-            baseFile = gc.getGeneratedSourceDirectory();
+            if (isTest) {
+                baseFile = gc.getGeneratedTestSourceDirectory();
+            } else {
+                baseFile = gc.getGeneratedSourceDirectory();
+
+            }
         } else {
-            baseFile = gc.getMainSourceDirectory();
+            if (isTest) {
+                baseFile = gc.getTestSourceDirectory();
+            } else {
+                baseFile = gc.getMainSourceDirectory();
+            }
         }
         return baseFile;
     }

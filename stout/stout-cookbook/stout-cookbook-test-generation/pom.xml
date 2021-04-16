@@ -1,0 +1,81 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.bitbucket.askllc.fermenter.stout</groupId>
+		<artifactId>stout-cookbook-parent</artifactId>
+		<version>2.2.0-SNAPSHOT</version>
+	</parent>
+
+	<name>Fermenter::Stout::Cookbook::Test Generation</name>
+	<description>An application of the MDA generation to create test artifacts</description>
+
+	<artifactId>stout-cookbook-test-generation</artifactId>
+	<packaging>jar</packaging>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.bitbucket.askllc.fermenter</groupId>
+				<artifactId>fermenter-mda</artifactId>
+				<version>${project.version}</version>
+				<configuration>
+					<basePackage>org.bitbucket.askllc.fermenter.cookbook.domain</basePackage>
+					<profile>test-generation-example</profile>
+					<metadataDependencies>
+						<metadataDependency>stout-cookbook-domain</metadataDependency>
+					</metadataDependencies>
+					<targetModelInstances>
+						<targetModelInstance>stout-cookbook-domain</targetModelInstance>
+					</targetModelInstances>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>${project.groupId}</groupId>
+						<artifactId>stout-cookbook-domain</artifactId>
+						<version>${project.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>${project.groupId}</groupId>
+						<artifactId>stout-spring-mda</artifactId>
+						<version>${project.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>com.googlecode.maven-java-formatter-plugin</groupId>
+				<artifactId>maven-java-formatter-plugin</artifactId>
+			</plugin>
+			<plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+            </plugin>		
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+	
+		<!-- Cucumber test dependencies -->
+		<dependency>
+			<groupId>info.cukes</groupId>
+			<artifactId>cucumber-java</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>info.cukes</groupId>
+			<artifactId>cucumber-junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>

@@ -10,10 +10,13 @@ public final class GenerationContext {
     private String templateName;
     private String outputFile;
     private boolean overwritable;
+    private String artifactType;
     private boolean append;
     private String basePackage;
     private File mainSourceDirectory;
     private File generatedSourceDirectory;
+    private File generatedTestSourceDirectory;
+    private File testSourceDirectory;
     private VelocityEngine engine;
     private String groupId;
     private String artifactId;
@@ -38,6 +41,7 @@ public final class GenerationContext {
         this.templateName = target.getTemplateName();
         this.outputFile = target.getOutputFile();
         this.overwritable = target.isOverwritable();
+        this.artifactType = target.getArtifactType();
     }
 
     public File getGeneratedSourceDirectory() {
@@ -48,12 +52,28 @@ public final class GenerationContext {
         this.generatedSourceDirectory = generatedSourceDirectory;
     }
 
+    public File getGeneratedTestSourceDirectory() {
+        return generatedTestSourceDirectory;
+    }
+
+    public void setGeneratedTestSourceDirectory(File generatedTestSourceDirectory) {
+        this.generatedTestSourceDirectory = generatedTestSourceDirectory;
+    }
+
     public File getMainSourceDirectory() {
         return mainSourceDirectory;
     }
 
     public void setMainSourceDirectory(File mainSourceDirectory) {
         this.mainSourceDirectory = mainSourceDirectory;
+    }
+
+    public File getTestSourceDirectory() {
+        return testSourceDirectory;
+    }
+
+    public void setTestSourceDirectory(File testSourceDirectory) {
+        this.testSourceDirectory = testSourceDirectory;
     }
 
     public String getOutputFile() {
@@ -63,6 +83,14 @@ public final class GenerationContext {
     public void setOutputFile(String outputFile) {
         this.outputFile = outputFile;
     }
+    
+    public String getArtifactType() {
+        return artifactType;
+    }
+
+    public void setArtifactType(String artifactType) {
+        this.artifactType = artifactType;
+    }    
 
     public boolean isOverwritable() {
         return overwritable;

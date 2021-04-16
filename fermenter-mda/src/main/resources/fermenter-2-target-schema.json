@@ -22,6 +22,9 @@
 		},
 		"overwritable": {
 			"type": ["boolean", "null"]
+		},
+		"artifactType": {
+			"type": ["string", "null"]
 		}
 	},
 	"required": ["name", "templateName", "outputFile", "generator"]

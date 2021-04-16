@@ -78,6 +78,12 @@ public class GenerateSourcesMojo extends AbstractMojo {
 
     @Parameter(required = true, readonly = true, defaultValue = "${project.basedir}/src/generated")
     private File generatedSourceRoot;
+    
+    @Parameter(required = true, readonly = true, defaultValue = "${project.basedir}/src/test")
+    private File testSourceRoot;
+    
+    @Parameter(required = true, readonly = true, defaultValue = "${project.basedir}/src/generated-test")
+    private File generatedTestSourceRoot;       
 
     @Parameter(required = true, readonly = true, defaultValue = "org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository")
     private String metadataRepositoryImpl;
@@ -333,6 +339,8 @@ public class GenerateSourcesMojo extends AbstractMojo {
         context.setBasePackage(basePackage);
         context.setGeneratedSourceDirectory(generatedSourceRoot);
         context.setMainSourceDirectory(mainSourceRoot);
+        context.setTestSourceDirectory(testSourceRoot);
+        context.setGeneratedTestSourceDirectory(generatedTestSourceRoot);
         context.setEngine(engine);
         context.setGroupId(project.getGroupId());
         context.setArtifactId(project.getArtifactId());

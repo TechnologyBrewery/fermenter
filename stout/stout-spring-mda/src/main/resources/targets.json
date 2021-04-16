@@ -350,5 +350,32 @@
         "generator": "org.bitbucket.fermenter.stout.mda.generator.rule.RuleGenerator",
         "metadataContext": "targeted",
         "overwritable": true
+	},
+    {
+        "name": "cucumberSurefireHarness",
+        "templateName": "templates/cucumber.surefire.harness.java.vm",
+        "outputFile": "${basePackage}/TestCucumber.java",
+        "generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticJavaGenerator",
+        "metadataContext": "targeted",
+        "overwritable": true,
+        "artifactType": "test"
+	},
+    {
+        "name": "cucumberSampleFeatureFile",
+        "templateName": "templates/cucumber.sample.feature.vm",
+        "outputFile": "specifications/sample.feature",
+        "generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
+        "metadataContext": "targeted",
+        "overwritable": false,
+        "artifactType": "test"
+	},
+    {
+        "name": "cucumberSampleSteps",
+        "templateName": "templates/cucumber.sample.steps.java.vm",
+        "outputFile": "${basePackage}/SampleSteps.java",
+        "generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticJavaGenerator",
+        "metadataContext": "targeted",
+        "overwritable": false,
+        "artifactType": "test"
 	}
 ]

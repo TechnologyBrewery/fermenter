@@ -24,9 +24,9 @@ public class TargetSteps {
     protected Target target;
     protected GenerationException encounteredException;
 
-    @Given("^a target described by \"([^\"]*)\", \"([^\"]*)\", \"([^\"]*)\", \"([^\"]*)\", \"([^\"]*)\"$")
+    @Given("^a target described by \"([^\"]*)\", \"([^\"]*)\", \"([^\"]*)\", \"([^\"]*)\", \"([^\"]*)\", \"([^\"]*)\"$")
     public void a_target_described_by(String name, String generator, String templateName, String outputFile,
-            String overwritable) throws Throwable {
+            String overwritable, String artifactType) throws Throwable {
         Target newTarget = new Target();
         if (StringUtils.isNotBlank(name)) {
             newTarget.setName(name);
@@ -43,6 +43,9 @@ public class TargetSteps {
         if (StringUtils.isNotBlank(overwritable)) {
             newTarget.setOverwritable(Boolean.valueOf(overwritable));
         }
+        if (StringUtils.isNotBlank(artifactType)) {
+            newTarget.setArtifactType(artifactType);
+        }
 
         targetFile = new File(FileUtils.getTempDirectory(), templateName + "-target.json");
         objectMapper.writeValue(targetFile, newTarget);
@@ -50,18 +53,23 @@ public class TargetSteps {
 
     }
 
+    @Given("^a target described with without an artifact type value$")
+    public void a_target_described_with_without_an_artifact_type_value() throws Throwable {
+        a_target_described_by("testArtfiactTypeDefaulting", "o.b.c.f.FooGenerator", "template.java.vm", "SomeFile.Java",
+                Boolean.TRUE.toString(), null);
+    }
+
     @When("^targets are read$")
     public void targets_are_read() throws Throwable {
         encounteredException = null;
-        
+
         try {
             target = JsonUtils.readAndValidateJson(targetFile, Target.class);
             assertNotNull("Could not read target file!", target);
-            
+
         } catch (GenerationException e) {
             encounteredException = e;
         }
-        
 
     }
 
@@ -74,5 +82,10 @@ public class TargetSteps {
     public void the_generator_throws_an_exception_about_invalid_metadata() throws Throwable {
         assertNotNull("A GenerationException should have been thrown!", encounteredException);
     }
-    
+
+    @Then("^a valid target is available and has an artifact type of \"([^\"]*)\"$")
+    public void a_valid_target_is_available_and_has_an_artifact_type_of(String expectedArtifactType) throws Throwable {
+        assertEquals(expectedArtifactType, target.getArtifactType());
+    }
+
 }

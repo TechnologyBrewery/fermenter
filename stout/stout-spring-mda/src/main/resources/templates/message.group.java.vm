@@ -6,6 +6,8 @@ import org.bitbucket.fermenter.stout.messages.MetaMessage;
  * Message Group ${messageGroup.name} with an enumeration for each message.
  * 
  * Generated Code - DO NOT MODIFY
+ *
+ * Generated from: ${templateName}
  */ 
 public enum ${messageGroup.capitalizedName} implements MetaMessage {
 

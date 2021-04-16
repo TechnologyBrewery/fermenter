@@ -5,7 +5,7 @@
 	RuleCombiningAlgId="urn:oasis:names:tc:xacml:3.0:rule-combining-algorithm:deny-overrides"
 	Version="1.0">
 	<Description>
-		Policies for ${artifactId}
+		Policies for ${artifactId}.  Originally generated from: ${templateName}
 	</Description>
 	<Target />
 	<!--<Rule Effect="Permit"

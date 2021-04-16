@@ -38,7 +38,8 @@ import $import;
  * Service implementation for ${entity.name} entity maintenance.
  *
  * Generated Code - DO NOT MODIFY
- * Generated from delegate.maintenance.impl.java.vm
+ *
+ * Generated from: ${templateName}
  */
 @Service
 public class ${entity.name}MaintenanceDelegateImpl extends AbstractMaintenanceServiceDelegate implements ${entity.name}MaintenanceDelegate {

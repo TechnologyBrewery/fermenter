@@ -44,7 +44,8 @@ import ${basePackage}.service.rest.${entity.name}MaintenanceService;
  * for ${entity.name} business objects.
  *
  * Generated Code - DO NOT MODIFY
- * Generated from entity.maintenance.service.impl.java.vm
+ *
+ * Generated from: ${templateName}
  */
 @Service 
 public class ${entity.name}MaintenanceServiceImpl extends AbstractEntityMaintenanceService implements ${entity.name}MaintenanceService {

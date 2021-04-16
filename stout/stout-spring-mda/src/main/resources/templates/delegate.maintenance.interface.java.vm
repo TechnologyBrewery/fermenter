@@ -15,7 +15,8 @@ import $import;
  * Service delegate interface for ${entity.name} entity maintenance.
  *
  * Generated Code - DO NOT MODIFY
- * Generated from delegate.maintenance.interface.java.vm
+ *
+ * Generated from ${templateName}
  */
 public interface ${entity.name}MaintenanceDelegate {
 

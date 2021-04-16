@@ -17,6 +17,8 @@ import java.time.ZoneId;
 			
 dialect  "mvel"
 
+# Generated from: ${templateName}
+
 rule "Feeling Sick - Stay Home"
     when
         $BeerExampleEntity: BeerExampleEntity(beerType == "IPA")

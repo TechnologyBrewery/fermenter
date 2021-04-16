@@ -9,7 +9,7 @@ import { FermenterMessage } from './model/fermenter-message.model';
 * Error Handler for Angular frontend
 *
 * Generated Code - DO MODIFY
-* Template = global-error-handler-base.service.ts.vm
+* Template = ${templateName}
 *******************************************************/
 @Injectable()
 export class GlobalErrorHandlerBase implements ErrorHandlerApi {

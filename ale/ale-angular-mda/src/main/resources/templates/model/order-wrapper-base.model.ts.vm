@@ -4,7 +4,7 @@ import { OrderDirection } from './order-direction.enum'
  * Order Wrapper Model Base
  *
  * Generated Code - DO NOT MODIFY
- * Template = order-wrapper-base.model.ts.vm
+ * Template = ${templateName}
  *******************************************************/
 export class OrderWrapperBase {
   public property: string;

@@ -105,7 +105,8 @@ import ${reference.importPrefix}.client.service.${reference.type}MaintenanceDele
 #end
  *
  * Generated Code - DO NOT MODIFY
- * Generated from bo.base.java.vm
+ *
+ * Generated from ${templateName}
  */
 #if ( $entity.isTransient())
     #if ($entity.hasParent())

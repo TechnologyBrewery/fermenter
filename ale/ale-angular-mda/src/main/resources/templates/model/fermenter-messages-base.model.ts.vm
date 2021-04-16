@@ -4,7 +4,7 @@ import { FermenterMessage } from '../../shared/model/fermenter-message.model';
 * Fermenter Messages Model Base
 *
 * Generated Code - DO NOT MODIFY
-* Template = fermenter-messages-base.model.ts.vm
+* Template = ${templateName}
 *******************************************************/
 export class FermenterMessagesBase {
   

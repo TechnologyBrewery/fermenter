@@ -15,7 +15,8 @@ import $import;
  * @see ${basePackage}.service.rest.${service.name}Service
  *
  * GENERATED STUB CODE - PLEASE *DO* MODIFY
- * Generated from service.impl.java.vm
+ *
+ * Originally Generated from: ${templateName}
  */
 @Service
 public class ${service.name}ServiceImpl extends ${service.name}BaseServiceImpl implements ${service.name}Service {

@@ -1,5 +1,7 @@
 # You'll want to specify your authorization properties to point to the configuration file, which should ideally be located
 # outside of your deployment so authorization can be configured without redeploying:
+#
+# Originally generated from: ${templateName} 
 
 pdp.configuration.location=classpath:authorization/${artifactId}-pdp.xml
 #attribute.definition.location=src/main/resources/authorization/attributes

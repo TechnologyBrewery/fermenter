@@ -11,7 +11,7 @@ import { $field.type } from '../enum/${field.typeLowerHyphen}.model';
 * Base BO for Angular frontend for ${entity.name}
 *
 * Generated Code - DO NOT MODIFY
-* Template = entity-base.model.ts.vm
+* Template = ${templateName}
 *
 * NOTE: saving, updating, deleting actions need to be done
 *       through either maintenance or business services and

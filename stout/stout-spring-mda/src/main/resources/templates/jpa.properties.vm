@@ -2,6 +2,8 @@
 # Developer/Deployer responsibility to complete and place in the appropriate Krausening directory
 # Refer to http://docs.jboss.org/hibernate/orm/current/userguide/html_single/Hibernate_User_Guide.html#configurations-general 
 # for more details
+#
+# Generated from: ${templateName}
 
 # Required properties
 #hibernate.dialect=org.hibernate.dialect.H2Dialect

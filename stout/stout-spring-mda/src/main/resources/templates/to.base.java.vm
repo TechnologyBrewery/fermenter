@@ -34,6 +34,8 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 #end
  *
  * Generated Code - DO NOT MODIFY
+ *
+ * Generated from: ${templateName}
  */
 
 #if($entity.isNonPersistentParentEntity())

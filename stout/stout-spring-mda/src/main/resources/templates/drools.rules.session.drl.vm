@@ -19,6 +19,8 @@ import java.time.ZoneId;
 			
 dialect  "mvel"
 
+# Generated from: ${templateName}
+
 rule "${rule.name}"
     when
         ${rule.defaultStatement}

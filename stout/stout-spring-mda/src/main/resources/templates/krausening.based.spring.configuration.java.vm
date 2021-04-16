@@ -14,6 +14,8 @@ import org.springframework.context.annotation.Configuration;
  * within Spring's application context.
  * 
  * *** GENERATED CODE - DO NOT MODIFY! ***
+ *
+ * Generated from: ${templateName}
  */
 @Configuration(value="${camelCasedArtifactId}KrauseningProps")
 public class ${capitalizedCamelCasedArtifactId}KrauseningBasedSpringConfig extends KrauseningBasedSpringConfig {

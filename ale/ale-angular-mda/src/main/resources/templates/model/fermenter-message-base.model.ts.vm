@@ -2,7 +2,7 @@
 * Fermenter Message Model Base
 *
 * Generated Code - DO NOT MODIFY
-* Template = fermenter-message-base.model.ts.vm
+* Template = ${templateName}
 *******************************************************/
 export class FermenterMessageBase {
   public displayMessage: string;

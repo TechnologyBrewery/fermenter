@@ -14,6 +14,7 @@ package ${basePackage}.transfer.json;
  *
  * GENERATED STUB CODE - PLEASE *DO* MODIFY
  *
+ * Originally generated from: ${templateName}
  */
 public abstract class ${entity.name}MixIn extends ${entity.name}BaseMixIn { 
 		

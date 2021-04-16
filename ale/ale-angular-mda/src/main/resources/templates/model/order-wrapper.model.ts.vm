@@ -4,7 +4,7 @@ import { OrderWrapperBase } from '../../generated/model-base/order-wrapper-base.
  * Order Wrapper Model
  * 
  * Generated Code - DO MODIFY
- * Template = order-wrapper.model.ts.vm
+ * Template = ${templateName}
  *******************************************************/
 export class OrderWrapper extends OrderWrapperBase {
   constructor(property?: string) {

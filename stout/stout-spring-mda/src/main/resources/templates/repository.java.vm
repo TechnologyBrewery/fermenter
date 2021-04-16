@@ -10,6 +10,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * Data access repository for the ${entity.name} business object.
  * 
  * GENERATED STUB CODE - PLEASE *DO* MODIFY
+ *
+ * Originally Generated from: ${templateName}
  */ 
 public interface ${entity.name}Repository extends JpaRepository<${entity.name}BO, ${entity.identifier.javaType}>, JpaSpecificationExecutor<${entity.name}BO> {
 	

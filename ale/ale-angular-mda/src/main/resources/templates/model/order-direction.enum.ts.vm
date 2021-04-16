@@ -2,7 +2,7 @@
  * Order Direction Enum
  * 
  * Generated Code - DO NOT MODIFY
- * Template = order-direction.enum.ts.vm
+ * Template = ${templateName}
  *******************************************************/
 export enum OrderDirection {
     ASC = "asc",

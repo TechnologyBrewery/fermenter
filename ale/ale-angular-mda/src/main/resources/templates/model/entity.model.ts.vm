@@ -4,7 +4,7 @@ import { ${entity.name}Base } from '../../generated/model-base/${entity.nameLowe
 * BO for Angular frontend for ${entity.name}
 *
 * Generated Code - DO MODIFY
-* Template = entity.model.ts.vm
+* Template = ${templateName}
 *******************************************************/
 export class ${entity.name} extends ${entity.name}Base {
   constructor(${entity.nameLowerCamel}?: ${entity.name}) {

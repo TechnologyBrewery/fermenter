@@ -6,7 +6,7 @@ import { SortWrapper } from './sort-wrapper.model'
  * This is used to specify criteria to find entities using the find by example maintenance service.
  * 
  * Generated Code - DO MODIFY
- * Template = find-by-example-criteria.model.ts.vm
+ * Template = ${templateName}
  *******************************************************/
 export class FindByExampleCriteria<T> extends FindByExampleCriteriaBase<T> {
   constructor(sortWrapper: SortWrapper, probe?: T, containsMatch?: boolean, startPage?: number, count?: number) {

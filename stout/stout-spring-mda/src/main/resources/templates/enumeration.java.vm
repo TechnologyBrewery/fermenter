@@ -6,6 +6,8 @@ import org.apache.commons.lang3.StringUtils;
  * Enumeration ${enumeration.name}.
  * 
  * Generated Code - DO NOT MODIFY
+ *
+ * Generated from: ${templateName}
  */ 
 public enum ${enumeration.name} {
 

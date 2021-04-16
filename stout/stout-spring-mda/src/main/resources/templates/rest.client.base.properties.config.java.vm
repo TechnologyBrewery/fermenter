@@ -6,6 +6,8 @@ import org.aeonbits.owner.KrauseningConfig;
  * Contains rest client property configuration.
  * 
  * Generated Code - DO NOT MODIFY
+ *
+ * Generated from: ${templateName}
  */
 @KrauseningConfig.KrauseningSources("rest-client-endpoints.properties")
 public interface RestClientBasePropertiesConfig extends KrauseningConfig {

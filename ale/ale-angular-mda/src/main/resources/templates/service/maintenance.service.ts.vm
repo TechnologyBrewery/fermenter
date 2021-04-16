@@ -15,7 +15,7 @@ import { BusinessError } from '../../../generated/business-error.model';
  * Maintenance (CRUD) services for ${entity.name}
  *
  * Generated Code - DO NOT MODIFY
- * Template = maintenance.service.ts.vm
+ * Template = ${templateName}
  *******************************************************/
 
 @Injectable({

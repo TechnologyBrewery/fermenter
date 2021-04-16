@@ -3,6 +3,8 @@
  * Enumeration for Angular Frontend for ${enumeration.name}.
  *
  * Generated Code - DO NOT MODIFY
+ * 
+ * Generated from: ${templateName}
  */
 export enum ${enumeration.name} {
 #foreach ($enum in $enumeration.enums)

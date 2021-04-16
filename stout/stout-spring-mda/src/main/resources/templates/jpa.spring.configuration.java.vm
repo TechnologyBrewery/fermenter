@@ -13,6 +13,8 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
  * Creates all the needed JPA configuration for this domain.
  * 
  * *** GENERATED CODE - DO NOT MODIFY! ***
+ *
+ * Generated from: ${templateName}
  */ 
 @Configuration
 @EnableJpaRepositories(

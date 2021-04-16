@@ -31,7 +31,7 @@ import ${basePackage}.service.rest.${service.name}Service;
  * Service implementation class for the ${service.name} service
  * @see ${basePackage}.service.rest.${service.name}Service
  * 
- * Generated from service.base.impl.java.vm
+ * Generated from: ${templateName}
  */ 
 public abstract class ${service.name}BaseServiceImpl extends AbstractMessageManagerAwareService implements ${service.name}Service {
 

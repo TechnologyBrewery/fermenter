@@ -17,7 +17,8 @@ import org.bitbucket.fermenter.stout.page.PageWrapper;
  * Resource for ${service.name} client.
  *
  * Generated Code - DO NOT MODIFY
- * Generated from delegate.service.resource.java.vm
+ *
+ * Generated from: ${templateName}
  */
 public interface ${service.name}Resource {
 #foreach( $operation in $service.operations )

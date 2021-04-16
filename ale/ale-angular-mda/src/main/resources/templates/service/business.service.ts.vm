@@ -20,7 +20,7 @@ import { ${import.type} } from '../../enum/${import.typeLowerHyphen}.model';
  * Business services for ${service.name}Service
  *
  * Generated Code - DO NOT MODIFY
- * Template = business.service.ts.vm
+ * Template = ${templateName}
  *******************************************************/
 @Injectable({
   providedIn: 'root'

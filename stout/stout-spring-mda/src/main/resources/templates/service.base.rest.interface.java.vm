@@ -25,7 +25,8 @@ import org.bitbucket.fermenter.stout.page.PageWrapper;
  * Interface for the ${service.name} service.
  *
  * Generated Code - DO NOT MODIFY
- * Generated from service.base.rest.interface.java.vm
+ * 
+ * Generated from: ${templateName}
  */
 public interface ${service.name}BaseService {
 

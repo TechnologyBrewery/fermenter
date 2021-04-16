@@ -6,6 +6,8 @@ package ${basePackage}.transfer;
  * @see ${basePackage}.transfer.${entity.name}Base
  *
  * GENERATED STUB CODE - PLEASE *DO* MODIFY
+ *
+ * Originally generated from: ${templateName}
  */
 #if($entity.isNonPersistentParentEntity())
 public abstract class ${entity.name} extends ${entity.name}Base {

@@ -6,6 +6,9 @@ import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.kie.internal.io.ResourceFactory;
 
+/**
+ * Generated from: ${templateName}
+ */
 public class DroolsRuntime {
     private static final String RULES_PATH = "/com/rules/"; 
     private KieServices kieServices=KieServices.Factory.get();

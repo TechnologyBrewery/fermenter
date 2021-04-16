@@ -9,6 +9,8 @@ import cucumber.api.java.en.When;
 /**
  * Sample for implementing Cucumber steps.  
  * For more information, see: https://cucumber.io/docs/guides/10-minute-tutorial/
+ * 
+ * Originally generated from: ${templateName}
  */ 
 public class SampleSteps {
     private String today;

@@ -24,7 +24,8 @@ import javax.inject.Inject;
  * Service implementation for ${service.name} entity maintenance.
  *
  * Generated Code - DO NOT MODIFY
- * Generated from delegate.service.imple.java.vm
+ *
+ * Generated from: ${templateName}
  */
 @Service
 public class ${service.name}DelegateImpl implements ${service.name}Delegate {

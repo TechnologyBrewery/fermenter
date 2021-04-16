@@ -6,7 +6,7 @@ import { Constants } from '../../constants';
  * This is used to specify criteria to find entities using the find by example maintenance service.
  * 
  * Generated Code - DO NOT MODIFY
- * Template = find-by-example-criteria-base.model.ts.vm
+ * Template = ${templateName}
  *******************************************************/
 export class FindByExampleCriteriaBase<T> {
 

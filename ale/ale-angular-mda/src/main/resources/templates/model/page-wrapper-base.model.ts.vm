@@ -2,7 +2,7 @@
  * Page Wrapper Model Base
  * 
  * Generated Code - DO NOT MODIFY
- * Template = page-wrapper-base.model.ts.vm
+ * Template = ${templateName}
  *******************************************************/
 export class PageWrapperBase<T> {
 

@@ -17,6 +17,8 @@ import ${basePackage}.transfer.json.*;
 
 /**
  * Manages and customizes the Jackson {@link ObjectMapper} instance for this project.
+ *
+ * Generated from: ${templateName}
  */
 public final class ObjectMapperManager {
 	

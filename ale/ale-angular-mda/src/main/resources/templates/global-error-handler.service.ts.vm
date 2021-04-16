@@ -9,7 +9,7 @@ import { GlobalErrorHandlerBase } from './global-error-handler-base.service';
 * Error Handler for Angular frontend
 *
 * Generated Code - DO MODIFY
-* Template = entity.model.ts.vm
+* Template = ${templateName}
 *******************************************************/
 @Injectable()
 export class GlobalErrorHandler extends GlobalErrorHandlerBase {

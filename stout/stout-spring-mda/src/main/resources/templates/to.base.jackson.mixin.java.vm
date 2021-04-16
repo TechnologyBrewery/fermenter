@@ -31,6 +31,8 @@ import ${import};
 #end
  *
  * Generated Code - DO NOT MODIFY
+ *
+ * Generated from: ${templateName}
  */
 #if($entity.isChildOfNonPersistentParentEntity())
 public abstract class ${entity.name}BaseMixIn extends ${entity.getParent().getType()}MixIn {

@@ -18,7 +18,7 @@ import ${basePackage}.client.config.CachePropertiesConfig;
 /**
  * Rest client cache for ${entity.name}.
  *
- * Generated from cache.java.vm
+ * Generated from ${templateName}
  */
 public class ${entity.name}Cache {
 

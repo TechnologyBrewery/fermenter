@@ -19,7 +19,8 @@ import $import;
  * Resource for ${entity.name} entity maintenance.
  *
  * Generated Code - DO NOT MODIFY
- * Generated from delegate.maintenance.resource.java.vm
+ *
+ * Generated from: ${templateName}
  */
 public interface ${entity.name}MaintenanceResource {
 

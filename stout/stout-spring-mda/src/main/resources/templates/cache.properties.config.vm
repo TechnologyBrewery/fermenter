@@ -6,7 +6,8 @@ import org.aeonbits.owner.KrauseningConfig;
  * Contains rest client property configuration.
  * 
  * Generated Code - DO NOT MODIFY
- * Generated from cache.properties.config.vm
+ *
+ * Generated from ${templateName}
  */
 @KrauseningConfig.KrauseningSources("rest-client-caching.properties")
 public interface CachePropertiesConfig extends KrauseningConfig {

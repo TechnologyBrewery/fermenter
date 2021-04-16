@@ -12,6 +12,13 @@ import org.springframework.stereotype.Service;
 
 import ${basePackage}.transfer.json.ObjectMapperManager;
 
+/**
+ * Allows RestEasy to use the Stout-customized and managed ObejctMapper.
+ *
+ * Generated code - DO NOT MODIFY
+ *
+ * Generated from: ${templateName}
+ */
 @Service
 @Provider
 @Consumes({MediaType.APPLICATION_JSON, "application/*+json", "text/json"})

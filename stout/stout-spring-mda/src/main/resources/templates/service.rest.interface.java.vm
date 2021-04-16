@@ -10,6 +10,8 @@ import javax.ws.rs.Path;
  * @see ${basePackage}.service.rest.${service.name}BaseService
  * 
  * GENERATED STUB CODE - PLEASE *DO* MODIFY
+ *
+ * Originally Generated from: ${templateName}
  */
 @Path(${service.name}Service.PATH)
 public interface ${service.name}Service extends ${service.name}BaseService {

@@ -36,7 +36,8 @@ import java.util.Collection;
  * invocation.
  *
  * Generated Code - DO NOT MODIFY
- * Generated from entity.maintenance.service.rest.interface.java.vm
+ *
+ * Generated from: ${templateName}
  */
 @Path(${entity.name}MaintenanceService.PATH)
 public interface ${entity.name}MaintenanceService {

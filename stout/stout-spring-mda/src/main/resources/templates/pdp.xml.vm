@@ -4,6 +4,9 @@
 	xmlns:ext="http://fermenter.bitbucket.org/stout/authz/attribute/2"
 	xmlns:xacml="urn:oasis:names:tc:xacml:3.0:core:schema:wd-17"
 	version="6.0.0">
+	
+	<!-- Originally generated from: ${templateName}  -->
+	
 	<attributeProvider id="stoutAttributeExtension" xsi:type="ext:StoutAttributeExtension">
 		<xacml:Attributes Category="urn:oasis:names:tc:xacml:1.0:subject-category:access-subject"/>
 	</attributeProvider>

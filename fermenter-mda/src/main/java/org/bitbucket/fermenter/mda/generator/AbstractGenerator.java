@@ -25,6 +25,7 @@ public abstract class AbstractGenerator implements Generator {
     protected static final String CAPITALIZED_CAMEL_CASED_ARTIFACT_ID = "capitalizedCamelCasedArtifactId";
     protected static final String CAMEL_CASED_ARTIFACT_ID = "camelCasedArtifactId";
     private static final String UPPER_UNDERSCORE_ARTIFACT_ID = "upperUnderscoreArtifactId";
+    private static final String TEMPLATE_NAME = "templateName"; 
 
     protected String metadataContext;
 
@@ -101,11 +102,11 @@ public abstract class AbstractGenerator implements Generator {
     }
 
     /**
-     * Provides common velocity attributes from the project perspective
+     * Provides common velocity attributes from the project perspective.
      * 
      * @param gc
      *            The generation context for this generator
-     * @return A defaulted <tt>VelocityContext</tt> instance
+     * @return A defaulted {@link VelocityContext} instance
      */
     protected VelocityContext getNewVelocityContext(GenerationContext gc) {
         VelocityContext vc = new VelocityContext();
@@ -113,6 +114,7 @@ public abstract class AbstractGenerator implements Generator {
         vc.put(GROUP_ID, gc.getGroupId());
         vc.put(ARTIFACT_ID, gc.getArtifactId());
         vc.put(VERSION, gc.getVersion());
+        vc.put(TEMPLATE_NAME, gc.getTemplateName());
 
         String camelCasedArtifactId = getCamelCasedArtifactId(gc);
         vc.put(CAMEL_CASED_ARTIFACT_ID, camelCasedArtifactId);

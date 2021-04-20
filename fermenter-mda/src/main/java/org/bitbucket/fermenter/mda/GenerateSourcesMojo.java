@@ -346,6 +346,9 @@ public class GenerateSourcesMojo extends AbstractMojo {
         context.setArtifactId(project.getArtifactId());
         context.setVersion(project.getVersion());
         context.setDescriptiveName(project.getName());
+        if (project.getScm() != null) {
+            context.setScmUrl(project.getScm().getUrl());
+        }
         
         return context;
     }

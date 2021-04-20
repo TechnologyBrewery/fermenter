@@ -22,6 +22,7 @@ public final class GenerationContext {
     private String artifactId;
     private String version;
     private String descriptiveName;
+    private String scmUrl;
 
     public VelocityEngine getEngine() {
         return engine;
@@ -158,6 +159,14 @@ public final class GenerationContext {
 
     public void setDescriptiveName(String descriptiveName) {
         this.descriptiveName = descriptiveName;
+    }
+
+    public String getScmUrl() {
+        return scmUrl;
+    }
+
+    public void setScmUrl(String scmUrl) {
+        this.scmUrl = scmUrl;
     }
 
 }

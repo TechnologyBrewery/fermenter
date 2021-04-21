@@ -7,6 +7,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bitbucket.fermenter.mda.element.ValidatedElement;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
+import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
 import org.bitbucket.fermenter.mda.metamodel.element.Enum;
 import org.bitbucket.fermenter.mda.metamodel.element.EnumElement;
 import org.bitbucket.fermenter.mda.metamodel.element.Field;
@@ -47,12 +48,13 @@ public final class JsonUtils {
 
     private static final Log LOG = LogFactory.getLog(JsonUtils.class);
 
-    private static ObjectMapper objectMapper = getObjectMapper();
+    private static final JsonUtils singletonInstance = new JsonUtils();
+
+    private ObjectMapper cachedObjectMapper;
 
     private JsonUtils() {
-        // prevent instantiation of final class with all static methods
     }
-    
+
     /**
      * Read a Json stream and validate it based on the pass type.
      * 
@@ -62,9 +64,10 @@ public final class JsonUtils {
      *            type to validate against
      * @return instance of the type or a {@link GenerationException}
      */
-    public static <T extends ValidatedElement> T readAndValidateJsonByUrl(URL jsonUrl, Class<?> type) {
+    public static <T extends ValidatedElement> T readAndValidateJsonByUrl(URL jsonUrl, Class<T> type) {
         try {
-            T instance = objectMapper.readValue(jsonUrl, (Class<T>)type);            
+            ObjectMapper objectMapper = singletonInstance.cachedObjectMapper;            
+            T instance = objectMapper.readValue(jsonUrl, type);
             boolean valid = isValid(objectMapper.readTree(jsonUrl), instance, new File(jsonUrl.getFile()));
             if (!valid) {
                 if (LOG.isDebugEnabled()) {
@@ -90,6 +93,7 @@ public final class JsonUtils {
      */
     public static <T extends ValidatedElement> T readAndValidateJson(File jsonFile, Class<T> type) {
         try {
+            ObjectMapper objectMapper = singletonInstance.cachedObjectMapper;
             T instance = objectMapper.readValue(jsonFile, type);
             boolean valid = isValid(objectMapper.readTree(jsonFile), instance, jsonFile);
             if (!valid) {
@@ -109,6 +113,7 @@ public final class JsonUtils {
             throws Exception {
         ProcessingReport report = null;
 
+        ObjectMapper objectMapper = singletonInstance.cachedObjectMapper;
         final ValidationConfiguration cfg = ValidationConfiguration.newBuilder()
                 .setDefaultVersion(SchemaVersion.DRAFTV4).freeze();
         JsonValidator validator = JsonSchemaFactory.newBuilder().setValidationConfiguration(cfg).freeze()
@@ -129,12 +134,24 @@ public final class JsonUtils {
     }
 
     /**
+     * Allows the object mapper to be customized for extension purposes. If you are extending
+     * {@link DefaultModelInstanceRepository}, then you should call likely call getObjectMapper() first, then add on to
+     * it. If not, you will likely want to override with your object custom {@link ObjectMapper}.
+     * 
+     * @param objectMapper
+     *            {@link ObjectMapper} for loaded json files to use
+     */
+    public static void setObjectMapper(ObjectMapper objectMapper) {
+        singletonInstance.cachedObjectMapper = objectMapper;
+    }
+
+    /**
      * Returns an {@link ObjectMapper} that has configurations for fermenter metamodel interfaces.
      * 
      * @return ObjectMapper singleton
      */
     public static ObjectMapper getObjectMapper() {
-        if (objectMapper == null) {
+        if (singletonInstance.cachedObjectMapper == null) {
 
             SimpleModule module = new SimpleModule();
             module.addAbstractTypeMapping(Enum.class, EnumElement.class);
@@ -152,10 +169,10 @@ public final class JsonUtils {
             ObjectMapper localMapper = new ObjectMapper();
             localMapper.registerModule(module);
 
-            objectMapper = localMapper;
+            singletonInstance.cachedObjectMapper = localMapper;
         }
 
-        return objectMapper;
+        return singletonInstance.cachedObjectMapper;
     }
 
 }

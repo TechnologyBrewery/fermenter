@@ -1,6 +1,8 @@
 package org.bitbucket.fermenter.mda.generator;
 
 import java.io.File;
+import java.util.Collections;
+import java.util.Map;
 
 import org.apache.velocity.app.VelocityEngine;
 import org.bitbucket.fermenter.mda.element.Target;
@@ -23,6 +25,7 @@ public final class GenerationContext {
     private String version;
     private String descriptiveName;
     private String scmUrl;
+    private Map<String, String> propertyVariables;
 
     public VelocityEngine getEngine() {
         return engine;
@@ -84,14 +87,14 @@ public final class GenerationContext {
     public void setOutputFile(String outputFile) {
         this.outputFile = outputFile;
     }
-    
+
     public String getArtifactType() {
         return artifactType;
     }
 
     public void setArtifactType(String artifactType) {
         this.artifactType = artifactType;
-    }    
+    }
 
     public boolean isOverwritable() {
         return overwritable;
@@ -167,6 +170,19 @@ public final class GenerationContext {
 
     public void setScmUrl(String scmUrl) {
         this.scmUrl = scmUrl;
+    }
+
+    /**
+     * Returns the property variables or an empty map for null-safe use.
+     * 
+     * @return property variables.
+     */
+    public Map<String, String> getPropertyVariables() {
+        return propertyVariables != null ? propertyVariables : Collections.emptyMap();
+    }
+
+    public void setPropertyVariables(Map<String, String> propertyVariables) {
+        this.propertyVariables = propertyVariables;
     }
 
 }

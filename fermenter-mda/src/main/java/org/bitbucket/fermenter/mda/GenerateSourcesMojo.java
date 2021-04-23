@@ -87,6 +87,12 @@ public class GenerateSourcesMojo extends AbstractMojo {
 
     @Parameter(required = true, readonly = true, defaultValue = "org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository")
     private String metadataRepositoryImpl;
+    
+    /**
+     * List of general properties to pass to the {@link GenerationContext}.
+     */
+    @Parameter
+    private Map<String, String> propertyVariables;
 
     private VelocityEngine engine;
 
@@ -349,6 +355,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
         if (project.getScm() != null) {
             context.setScmUrl(project.getScm().getUrl());
         }
+        context.setPropertyVariables(propertyVariables);
         
         return context;
     }

@@ -15,6 +15,7 @@ public final class GenerationContext {
     private String artifactType;
     private boolean append;
     private String basePackage;
+    private File projectDirectory;
     private File mainSourceDirectory;
     private File generatedSourceDirectory;
     private File generatedTestSourceDirectory;
@@ -46,6 +47,14 @@ public final class GenerationContext {
         this.outputFile = target.getOutputFile();
         this.overwritable = target.isOverwritable();
         this.artifactType = target.getArtifactType();
+    }
+
+    public File getProjectDirectory() {
+        return projectDirectory;
+    }
+
+    public void setProjectDirectory(File projectDirectory) {
+        this.projectDirectory = projectDirectory;
     }
 
     public File getGeneratedSourceDirectory() {

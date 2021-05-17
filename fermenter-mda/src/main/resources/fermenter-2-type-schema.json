@@ -1,0 +1,19 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"id":"#type",
+	"title": "Type",
+	"type": "object",
+	"additionalProperties": false,
+	"properties": {
+		"name": {
+			"type": "string"
+		},
+		"fullyQualifiedImplementation": {
+			"type": "string"
+		},
+		"shortImplementation": {
+			"type": "string"
+		}
+	},
+	"required": ["name"]
+}

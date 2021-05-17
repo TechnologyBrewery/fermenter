@@ -1,13 +1,13 @@
 package org.bitbucket.fermenter.stout.mda;
 
 import org.apache.commons.lang3.StringUtils;
+import org.bitbucket.fermenter.mda.TypeManager;
 import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
 import org.bitbucket.fermenter.mda.metamodel.element.Field;
 import org.bitbucket.fermenter.mda.metamodel.element.MetamodelType;
 import org.bitbucket.fermenter.mda.metamodel.element.Parameter;
-import org.bitbucket.fermenter.stout.mda.java.JavaTypeManager;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -83,7 +83,7 @@ public final class JavaElementUtils {
 
         } else {
             // Attempt to resolve primitive type:
-            javaImportType = JavaTypeManager.getJavaType(type);
+            javaImportType = TypeManager.getFullyQualifiedType(type);
         }
 
         return javaImportType;

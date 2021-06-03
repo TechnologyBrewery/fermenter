@@ -47,12 +47,13 @@ Feature: Specify services for use in model-driven file generation
         Then an operation "<operationName>" is found on service "<name>" in "<package>" with parameters "<parameters>" of type "<parameterTypes>"
 
         Examples:
-            | name            | package         | operationName | parameters | parameterTypes        |
-            | SomeAction      | my.action       | operationA    | p1         | string                |
-            | SomeOtherAction | my.action.other | operationB    | p2         | boolean               |
-            | SomeAction2     | my.action.other | operationB    | p3         | date                  |
-            | MultiParam1     | my.action.other | operationC    | p4, p5     | date, string          |
-            | MultiParam2     | my.action.other | operationD    | p6, p7, p8 | boolean, date, string |
+            | name            | package            | operationName  | parameters | parameterTypes        |
+            | SomeAction      | my.action          | operationA     | p1         | string                |
+            | SomeOtherAction | my.action.other    | operationB     | p2         | boolean               |
+            | SomeAction2     | my.action.other    | operationB     | p3         | date                  |
+            | MultiParam1     | my.action.other    | operationC     | p4, p5     | date, string          |
+            | MultiParam2     | my.action.other    | operationD     | p6, p7, p8 | boolean, date, string |
+            | DocumentUpload  | my.action.document | uploadDocument | p1         | document              |
 
     Scenario Outline: Use a base type as an operation return type in a service metamodel
         Given a service named "<name>" in "<package>" with an operation "<operationName>" with the return type "<returnType>"

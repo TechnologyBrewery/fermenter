@@ -115,7 +115,7 @@ public class ServicePagingSupportSteps {
         response = simpleDomainManagerService.getPagedResponseWithoutSpringPage(numberOfItemsInList, pageIndex, pageSize);
     }
 
-    @Then("^I get back the first (\\d+) in the list as a PageWrapper object without depending on spring paging$")
+    @Then("^I get back the first (\\d+) items in the list as a PageWrapper object without depending on spring paging$")
     public void i_get_back_the_first_items_in_the_list_without_needing_to_depend_on_spring_paging(int numberOfItemsExpected)
             throws Throwable {
         assertEquals(numberOfItemsExpected, response.getValue().getContent().size());

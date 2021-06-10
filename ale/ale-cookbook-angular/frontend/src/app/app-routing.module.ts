@@ -3,23 +3,24 @@ import { Routes, RouterModule } from '@angular/router';
 import { SimpleDomainComponent } from './simple-domain/simple-domain.component';
 import { E2eTestsPageComponent } from './e2e-tests-page/e2e-tests-page.component';
 import { BeerExampleComponent } from './beer-example-page/beer-example-page.component';
+import { ROUTE_CODES } from './constants';
 
 const routes: Routes = [
   {
-    path: 'simple-domain',
+    path: ROUTE_CODES.SIMPLE_PAGE,
     component: SimpleDomainComponent
   },
   {
-    path: 'e2e-tests',
+    path: ROUTE_CODES.E2E_PAGE,
     component: E2eTestsPageComponent
   },
   {
-    path: 'beer-example',
+    path: ROUTE_CODES.BEER_EXAMPLE,
     component: BeerExampleComponent
   },
   {
     path: '',
-    redirectTo: 'simple-domain',
+    redirectTo: ROUTE_CODES.SIMPLE_PAGE,
     pathMatch: 'full'
   }
 ];

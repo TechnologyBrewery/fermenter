@@ -4,7 +4,7 @@ import { SimpleDomainMaintenanceService } from '../generated/service/maintenance
 import { FindByExampleCriteria } from '../shared/model/find-by-example-criteria.model';
 import { SimpleDomain } from '../shared/model/simple-domain.model';
 import { SortWrapper } from '../shared/model/sort-wrapper.model';
-import { FermenterResponse } from '../shared/model/fermenter-response.model';
+import { e2eTestStatus } from './e2e-test-status.enum';
 
 @Component({
   selector: 'app-e2e-tests-page',
@@ -12,32 +12,35 @@ import { FermenterResponse } from '../shared/model/fermenter-response.model';
   styleUrls: ['./e2e-tests-page.component.css']
 })
 export class E2eTestsPageComponent implements OnInit {
-  addSimpleDomainTestResult = 'PENDING';
-  getSimpleDomainTestResult = 'PENDING';
-  updateSimpleDomainTestResult = 'PENDING';
-  deleteSimpleDomainTestResult = 'PENDING';
-  countSimpleDomainTestResult = 'PENDING';
-  findByExampleContainsTestResult = 'PENDING';
-  nullParamTestResult = 'PENDING';
-  listParamTestResult = 'PENDING';
-  getPagedResponseTestResult = 'PENDING';
-  deletedAllSimpleDomainsStatus = 'PENDING';
-  TEST_PASSED = 'PASSED';
-  TEST_FAILED = 'FAILED';
+  public e2eTestStatus = e2eTestStatus;
+  addSimpleDomainTestResult = e2eTestStatus.TEST_PENDING;
+  getSimpleDomainTestResult = e2eTestStatus.TEST_PENDING;
+  updateSimpleDomainTestResult = e2eTestStatus.TEST_PENDING;
+  deleteSimpleDomainTestResult = e2eTestStatus.TEST_PENDING;
+  countSimpleDomainTestResult = e2eTestStatus.TEST_PENDING;
+  findByExampleContainsTestResult = e2eTestStatus.TEST_PENDING;
+  nullParamTestResult = e2eTestStatus.TEST_PENDING;
+  listParamTestResult = e2eTestStatus.TEST_PENDING;
+  getPagedResponseTestResult = e2eTestStatus.TEST_PENDING;
+  deletedAllSimpleDomainsStatus = e2eTestStatus.TEST_PENDING;
+
+  deleteAll = this.simpleDomainManagerService.deleteAllSimpleDomains();
 
   constructor(
     private simpleDomainService: SimpleDomainMaintenanceService,
     private simpleDomainManagerService: SimpleDomainManagerService
-  ) {}
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   runAddSimpleDomainTest() {
     const testSimpleDomain = new SimpleDomain();
     testSimpleDomain.name = this.getRandomString();
     this.simpleDomainService.post(testSimpleDomain).subscribe(response => {
       if (response.value.name === testSimpleDomain.name) {
-        this.addSimpleDomainTestResult = this.TEST_PASSED;
+        this.deleteAll.subscribe(() => {
+          this.addSimpleDomainTestResult = e2eTestStatus.TEST_PASSED;
+        });
       }
     });
   }
@@ -50,7 +53,9 @@ export class E2eTestsPageComponent implements OnInit {
         .get(postResponse.value.id)
         .subscribe(getResponse => {
           if (getResponse.name === testSimpleDomain.name) {
-            this.getSimpleDomainTestResult = this.TEST_PASSED;
+            this.deleteAll.subscribe(() => {
+              this.getSimpleDomainTestResult = e2eTestStatus.TEST_PASSED;
+            });
           }
         });
     });
@@ -67,7 +72,9 @@ export class E2eTestsPageComponent implements OnInit {
         .put(postResponse.value.id, postResponse.value)
         .subscribe(putResponse => {
           if (putResponse.value.name === updatedName) {
-            this.updateSimpleDomainTestResult = this.TEST_PASSED;
+            this.deleteAll.subscribe(() => {
+              this.updateSimpleDomainTestResult = e2eTestStatus.TEST_PASSED;
+            });
           }
         });
     });
@@ -81,7 +88,9 @@ export class E2eTestsPageComponent implements OnInit {
       this.simpleDomainService
         .delete(postResponse.value.id)
         .subscribe(putResponse => {
-          this.deleteSimpleDomainTestResult = this.TEST_PASSED;
+          this.deleteAll.subscribe(() => {
+            this.deleteSimpleDomainTestResult = e2eTestStatus.TEST_PASSED;
+          });
         });
     });
   }
@@ -96,9 +105,11 @@ export class E2eTestsPageComponent implements OnInit {
         .getSimpleDomainCount()
         .subscribe(countResponse => {
           if (countResponse === 1) {
-            this.countSimpleDomainTestResult = this.TEST_PASSED;
+            this.deleteAll.subscribe(() => {
+              this.countSimpleDomainTestResult = e2eTestStatus.TEST_PASSED;
+            });
           } else {
-            this.countSimpleDomainTestResult = this.TEST_FAILED;
+            this.countSimpleDomainTestResult = e2eTestStatus.TEST_FAILED;
           }
         });
     });
@@ -122,12 +133,8 @@ export class E2eTestsPageComponent implements OnInit {
       10000
     );
 
-    const findByExampleRestCall = this.simpleDomainService.findByExample(
-      findCriteria
-    );
-    const postRestCallToSetupTestData = this.simpleDomainService.post(
-      testSimpleDomain
-    );
+    const findByExampleRestCall = this.simpleDomainService.findByExample(findCriteria);
+    const postRestCallToSetupTestData = this.simpleDomainService.post(testSimpleDomain);
 
     postRestCallToSetupTestData.subscribe(postResponse => {
       findByExampleRestCall.subscribe(findResponse => {
@@ -136,19 +143,13 @@ export class E2eTestsPageComponent implements OnInit {
           findResponse.content[0].name.indexOf(name) >= 0;
 
         if (findByExampleContainsFoundTestSimpleDomain) {
-          this.findByExampleContainsTestResult = this.TEST_PASSED;
+          this.deleteAll.subscribe(() => {
+            this.findByExampleContainsTestResult = e2eTestStatus.TEST_PASSED;
+          });
         } else {
-          this.findByExampleContainsTestResult = this.TEST_FAILED;
-          console.error(
-            'Failed to find ' +
-              name +
-              ' found (' +
-              findResponse.numberOfElements +
-              ') simple domains'
-          );
+          this.findByExampleContainsTestResult = e2eTestStatus.TEST_FAILED;
+          console.error('Failed to find ' + name + ' found (' + findResponse.numberOfElements + ') simple domains');
         }
-        // delete test data once done
-        this.simpleDomainService.delete(postResponse.value.id).subscribe();
       });
     });
   }
@@ -158,9 +159,11 @@ export class E2eTestsPageComponent implements OnInit {
       .provideNullInputFromFrontend(null)
       .subscribe(inputWasNull => {
         if (inputWasNull) {
-          this.nullParamTestResult = this.TEST_PASSED;
+          this.deleteAll.subscribe(() => {
+            this.nullParamTestResult = e2eTestStatus.TEST_PASSED;
+          });
         } else {
-          this.nullParamTestResult = this.TEST_FAILED;
+          this.nullParamTestResult = e2eTestStatus.TEST_FAILED;
         }
       });
   }
@@ -170,7 +173,9 @@ export class E2eTestsPageComponent implements OnInit {
     this.simpleDomainManagerService
       .listAsParamFromFrontend(array)
       .subscribe(inputWasList => {
-        this.listParamTestResult = inputWasList ? this.TEST_PASSED : this.TEST_FAILED;
+        this.deleteAll.subscribe(() => {
+          this.listParamTestResult = inputWasList ? e2eTestStatus.TEST_PASSED : e2eTestStatus.TEST_FAILED;
+        });
       });
   }
 
@@ -183,29 +188,24 @@ export class E2eTestsPageComponent implements OnInit {
       this.simpleDomainManagerService
         .getPagedSimpleDomains(0, pageSizeRequested)
         .subscribe(pagedResponse => {
-          if(pagedResponse.content[0].name !== testSimpleDomain.name) {
-            this.getPagedResponseTestResult = this.TEST_FAILED;
-          } else if (!pagedResponse.first) {
-            this.getPagedResponseTestResult = this.TEST_FAILED;
-          } else if (pagedResponse.itemsPerPage !== pageSizeRequested) {
-            this.getPagedResponseTestResult = this.TEST_FAILED;
-          } else if (pagedResponse.numberOfElements !== 1) {
-            this.getPagedResponseTestResult = this.TEST_FAILED;
-          } else if (pagedResponse.totalResults !== 1) {
-            this.getPagedResponseTestResult = this.TEST_FAILED;
+          const testFailed = pagedResponse.content[0].name !== testSimpleDomain.name ||
+            !pagedResponse.first || pagedResponse.itemsPerPage !== pageSizeRequested ||
+            pagedResponse.numberOfElements !== 1 || pagedResponse.totalResults !== 1;
+          if (testFailed) {
+            this.getPagedResponseTestResult = e2eTestStatus.TEST_FAILED;
           } else {
-            this.getPagedResponseTestResult = this.TEST_PASSED;
+            this.deleteAll.subscribe(() => {
+              this.getPagedResponseTestResult = e2eTestStatus.TEST_PASSED;
+            });
           }
         });
     });
   }
 
   deleteAllSimpleDomains() {
-    this.simpleDomainManagerService
-      .deleteAllSimpleDomains()
-      .subscribe(response => {
-        this.deletedAllSimpleDomainsStatus = 'DONE';
-      });
+    this.deleteAll.subscribe(() => {
+      this.deletedAllSimpleDomainsStatus = e2eTestStatus.TEST_DONE;
+    });
   }
 
   getRandomString() {

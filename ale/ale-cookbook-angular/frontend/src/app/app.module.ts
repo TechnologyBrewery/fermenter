@@ -16,6 +16,7 @@ import { ErrorDialogComponent } from './shared/error-dialog/error-dialog.compone
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { E2eTestsPageComponent } from './e2e-tests-page/e2e-tests-page.component';
 import { BeerExampleComponent } from './beer-example-page/beer-example-page.component';
+import { E2eTestRunnerComponent } from './e2e-tests-page/e2e-test-runner/e2e-test-runner.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { BeerExampleComponent } from './beer-example-page/beer-example-page.comp
     GlobalErrorHandlerComponent,
     ErrorDialogComponent,
     E2eTestsPageComponent,
-    BeerExampleComponent
+    BeerExampleComponent,
+    E2eTestRunnerComponent
   ],
   imports: [
     BrowserModule,
@@ -41,8 +43,9 @@ import { BeerExampleComponent } from './beer-example-page/beer-example-page.comp
 })
 export class AppModule {
   constructor(matIconRegistry: MatIconRegistry, domSanitizer: DomSanitizer) {
+    matIconRegistry.addSvgIconSet(domSanitizer.bypassSecurityTrustResourceUrl('./assets/mdi.svg'));
     // Note: for the error icons to appear, developers will need to add the following
     matIconRegistry.addSvgIcon('error', domSanitizer.bypassSecurityTrustResourceUrl('./assets/error-icon.svg'));
   }
- }
+}
 // TODO: https://alligator.io/angular/providers-shared-modules/

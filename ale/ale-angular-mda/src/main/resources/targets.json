@@ -49,7 +49,7 @@
   {
     "name": "globalErrorHandlerBase",
     "templateName": "templates/global-error-handler-base.service.ts.vm",
-    "outputFile": "shared/global-error-handler-base.service.ts",
+    "outputFile": "generated/global-error-handler-base.service.ts",
     "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
     "overwritable": true
   },

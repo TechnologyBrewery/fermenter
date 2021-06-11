@@ -9,5 +9,11 @@
     "column" : "PLACEHOLDER_ID",
     "required" : true,
     "generator" : "uuid"
-  }
+  },
+  "fields" : [ {
+    "name" : "customTypedField",
+    "documentation" : "use a custom type from a local types.json file",
+    "type" : "customDecimal",
+    "column" : "CUSTOM_FIELD"
+  } ]
 }

@@ -87,6 +87,9 @@ public class GenerateSourcesMojo extends AbstractMojo {
 
     @Parameter(required = true, readonly = true, defaultValue = "${project.basedir}")
     private File projectRoot;
+    
+    @Parameter(required = true, readonly = true, defaultValue = "${project.basedir}/src/main/resources/types.json")
+    private File localTypes;    
 
     @Parameter(required = true, readonly = true, defaultValue = "org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository")
     private String metadataRepositoryImpl;
@@ -167,6 +170,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
 
         loadTargets();
         loadProfiles();
+        TypeManager.getInstance().loadLocalTypes(localTypes);
 
         project.addCompileSourceRoot(generatedCompileSourceRoot);
 

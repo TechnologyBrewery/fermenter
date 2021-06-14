@@ -1,5 +1,6 @@
 package org.bitbucket.fermenter.mda;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -57,6 +58,27 @@ public class TypeManager {
 
         } catch (IOException e) {
             throw new GenerationException("Could not load types.json!", e);
+        }
+    }
+
+    /**
+     * Allows local types to be loaded into the TypeManager.
+     * 
+     * @param localTypes
+     *            file with local types
+     */
+    public void loadLocalTypes(File localTypes) {
+        try {
+            logger.info("Checking for local types at: {}...", localTypes.getCanonicalFile());
+
+            if (localTypes.exists()) {
+                URL localTypeUrl = localTypes.toURI().toURL();
+                logger.info("Loading types from: {}", localTypeUrl);
+                processTypesFile(localTypeUrl);
+            }
+
+        } catch (IOException e) {
+            throw new GenerationException("Could not load local types!", e);
         }
     }
 

@@ -8,7 +8,8 @@ import org.bitbucket.fermenter.mda.metamodel.element.ServiceElement;
  */
 class ServiceModelInstanceManager extends AbstractMetamodelManager<Service> {
 
-    private static final ServiceModelInstanceManager instance = new ServiceModelInstanceManager();
+    private static ThreadLocal<ServiceModelInstanceManager> threadBoundInstance = ThreadLocal
+            .withInitial(ServiceModelInstanceManager::new);
 
     /**
      * Returns the singleton instance of this class.
@@ -16,7 +17,16 @@ class ServiceModelInstanceManager extends AbstractMetamodelManager<Service> {
      * @return singleton
      */
     public static ServiceModelInstanceManager getInstance() {
-        return instance;
+        return threadBoundInstance.get();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void reset() {
+        super.reset();
+        threadBoundInstance.remove();
     }
 
     /**

@@ -8,7 +8,8 @@ import org.bitbucket.fermenter.mda.metamodel.element.DictionaryTypeElement;
  */
 class DictionaryModelInstanceManager extends AbstractMetamodelManager<DictionaryType> {
 
-    private static final DictionaryModelInstanceManager instance = new DictionaryModelInstanceManager();
+    private static ThreadLocal<DictionaryModelInstanceManager> threadBoundInstance = ThreadLocal
+            .withInitial(DictionaryModelInstanceManager::new);
 
     /**
      * Returns the singleton instance of this class.
@@ -16,7 +17,16 @@ class DictionaryModelInstanceManager extends AbstractMetamodelManager<Dictionary
      * @return singleton
      */
     public static DictionaryModelInstanceManager getInstance() {
-        return instance;
+        return threadBoundInstance.get();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void reset() {
+        super.reset();
+        threadBoundInstance.remove();
     }
 
     /**

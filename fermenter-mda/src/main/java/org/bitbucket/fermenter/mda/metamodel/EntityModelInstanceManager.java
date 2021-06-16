@@ -21,7 +21,8 @@ import org.bitbucket.fermenter.mda.metamodel.element.RelationElement;
  */
 class EntityModelInstanceManager extends AbstractMetamodelManager<Entity> {
 
-    private static final EntityModelInstanceManager instance = new EntityModelInstanceManager();
+    private static ThreadLocal<EntityModelInstanceManager> threadBoundInstance = ThreadLocal
+            .withInitial(EntityModelInstanceManager::new);
 
     /**
      * Returns the singleton instance of this class.
@@ -29,7 +30,16 @@ class EntityModelInstanceManager extends AbstractMetamodelManager<Entity> {
      * @return singleton
      */
     public static EntityModelInstanceManager getInstance() {
-        return instance;
+        return threadBoundInstance.get();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void reset() {
+        super.reset();
+        threadBoundInstance.remove();
     }
 
     /**

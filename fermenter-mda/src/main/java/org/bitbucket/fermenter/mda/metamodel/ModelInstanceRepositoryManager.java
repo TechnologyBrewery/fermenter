@@ -8,26 +8,32 @@ import java.util.Map;
  */
 public final class ModelInstanceRepositoryManager {
 
-    private static Map<String, Object> instanceMap = new HashMap<>();
+    private static ThreadLocal<Map<String, Object>> threadBoundInstance = ThreadLocal.withInitial(HashMap::new);
 
     private ModelInstanceRepositoryManager() {
-
+        // prevent private instantiation of all static class
     }
 
     /**
-     * Adds a repository.  Only one repository of each type will be kept.
-     * @param respository repository to add
+     * Adds a repository. Only one repository of each type will be kept.
+     * 
+     * @param respository
+     *            repository to add
      */
     public static void setRepository(ModelInstanceRepository respository) {
+        Map<String, Object> instanceMap = threadBoundInstance.get();
         instanceMap.put(respository.getClass().toString(), respository);
     }
 
     /**
      * Returns the stored repository for a given class.
-     * @param type class to lookup
+     * 
+     * @param type
+     *            class to lookup
      * @return instance of that class
      */
     public static <V> V getMetamodelRepository(Class<V> type) {
+        Map<String, Object> instanceMap = threadBoundInstance.get();
         return type.cast(instanceMap.get(type.toString()));
     }
 
@@ -35,7 +41,7 @@ public final class ModelInstanceRepositoryManager {
      * For testing only.
      */
     static void clear() {
-        instanceMap = new HashMap<>();
+        threadBoundInstance.remove();
     }
 
 }

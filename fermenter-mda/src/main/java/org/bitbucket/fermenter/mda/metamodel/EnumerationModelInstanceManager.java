@@ -8,7 +8,8 @@ import org.bitbucket.fermenter.mda.metamodel.element.EnumerationElement;
  */
 class EnumerationModelInstanceManager extends AbstractMetamodelManager<Enumeration> {
 
-    private static final EnumerationModelInstanceManager instance = new EnumerationModelInstanceManager();
+    private static ThreadLocal<EnumerationModelInstanceManager> threadBoundInstance = ThreadLocal
+            .withInitial(EnumerationModelInstanceManager::new);
 
     /**
      * Returns the singleton instance of this class.
@@ -16,7 +17,16 @@ class EnumerationModelInstanceManager extends AbstractMetamodelManager<Enumerati
      * @return singleton
      */
     public static EnumerationModelInstanceManager getInstance() {
-        return instance;
+        return threadBoundInstance.get();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void reset() {
+        super.reset();
+        threadBoundInstance.remove();
     }
 
     /**

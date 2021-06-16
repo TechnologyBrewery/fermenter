@@ -8,7 +8,8 @@ import org.bitbucket.fermenter.mda.metamodel.element.MessageGroupElement;
  */
 class MessageGroupModelInstanceManager extends AbstractMetamodelManager<MessageGroup> {
 
-    private static final MessageGroupModelInstanceManager instance = new MessageGroupModelInstanceManager();
+    private static ThreadLocal<MessageGroupModelInstanceManager> threadBoundInstance = ThreadLocal
+            .withInitial(MessageGroupModelInstanceManager::new);
 
     /**
      * Returns the singleton instance of this class.
@@ -16,7 +17,16 @@ class MessageGroupModelInstanceManager extends AbstractMetamodelManager<MessageG
      * @return singleton
      */
     public static MessageGroupModelInstanceManager getInstance() {
-        return instance;
+        return threadBoundInstance.get();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void reset() {
+        super.reset();
+        threadBoundInstance.remove();
     }
 
     /**

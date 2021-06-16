@@ -284,4 +284,11 @@ public final class GenerateSourcesHelper {
             System.setProperty(Krausening.KRAUSENING_PASSWORD, "stub");
         }
     }
+    
+    public static void cleanUp() {
+        PackageManager.cleanUp();
+        TypeManager.cleanUp();
+        MessageTracker.cleanUp();
+    }
+    
 }

@@ -99,6 +99,7 @@
 			<groupId>org.bitbucket.askllc.fermenter.ale</groupId>
 			<artifactId>ale-cookbook-angular</artifactId>
 			<version>${project.version}</version>
+			<type>war</type>
 		</dependency>
 	</dependencies>
 

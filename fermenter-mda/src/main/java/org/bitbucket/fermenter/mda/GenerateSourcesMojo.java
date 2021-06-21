@@ -39,7 +39,7 @@ import org.bitbucket.fermenter.mda.metamodel.ModelRepositoryConfiguration;
 /**
  * Executes the Fermenter MDA process.
  */
-@Mojo(name = "generate-sources", defaultPhase = LifecyclePhase.GENERATE_SOURCES, requiresDependencyResolution = ResolutionScope.COMPILE)
+@Mojo(name = "generate-sources", defaultPhase = LifecyclePhase.GENERATE_SOURCES, requiresDependencyResolution = ResolutionScope.COMPILE, threadSafe = true)
 public class GenerateSourcesMojo extends AbstractMojo {
 
     private static final org.apache.commons.logging.Log LOG = LogFactory.getLog(GenerateSourcesMojo.class);
@@ -149,7 +149,13 @@ public class GenerateSourcesMojo extends AbstractMojo {
             // without needing to re-run Maven with -e or -X turned on
             getLog().error(message, e);
             throw new MojoExecutionException(message, e);
+            
+        } finally {
+            GenerateSourcesHelper.cleanUp();
+            
         }
+        
+
     }
 
     /**

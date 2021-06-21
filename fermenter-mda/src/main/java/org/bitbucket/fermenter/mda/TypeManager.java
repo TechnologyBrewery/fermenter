@@ -25,7 +25,7 @@ public class TypeManager {
 
     private static final String UNDEFINED_TYPE = "<undefined type>";
     private static final Logger logger = LoggerFactory.getLogger(TypeManager.class);
-    private static TypeManager instance = new TypeManager();
+    private static ThreadLocal<TypeManager> threadBoundInstance = ThreadLocal.withInitial(TypeManager::new);
 
     private Map<String, Type> types = new HashMap<>();
 
@@ -35,7 +35,11 @@ public class TypeManager {
      * @return type manager
      */
     public static TypeManager getInstance() {
-        return instance;
+        return threadBoundInstance.get();
+    }
+
+    public static void cleanUp() {
+        threadBoundInstance.remove();
     }
 
     private TypeManager() {

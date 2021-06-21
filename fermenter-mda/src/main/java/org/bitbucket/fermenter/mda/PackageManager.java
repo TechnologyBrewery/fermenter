@@ -15,11 +15,15 @@ public class PackageManager {
 
     private static final Logger logger = LoggerFactory.getLogger(PackageManager.class);
 
-    private static final PackageManager instance = new PackageManager();
+    private static ThreadLocal<PackageManager> threadBoundInstance = ThreadLocal.withInitial(PackageManager::new);
 
     private Map<String, String> artifactIdToBasePackage = new HashMap<>();
 
     private PackageManager() {
+    }
+
+    private static PackageManager getInstance() {
+        return threadBoundInstance.get();
     }
 
     /**
@@ -30,7 +34,7 @@ public class PackageManager {
      * @return The returned base package or null if one does not exist
      */
     public static String getBasePackage(String artifactId) {
-        return instance.artifactIdToBasePackage.get(artifactId);
+        return getInstance().artifactIdToBasePackage.get(artifactId);
     }
 
     public static void addMapping(String artifactId, URL url, String defaultPackageName) {
@@ -38,23 +42,23 @@ public class PackageManager {
             Properties props = new Properties();
             props.load(stream);
 
-            instance.artifactIdToBasePackage.put(artifactId, props.getProperty("basePackage"));
+            getInstance().artifactIdToBasePackage.put(artifactId, props.getProperty("basePackage"));
 
         } catch (IOException ex) {
             logger.debug("Could not find package properties for artifactId '{}' at URL {}", artifactId, url.getPath());
             logger.debug("Using default package name ('{}') for artifactId '{}' instead", defaultPackageName,
                     artifactId);
-            instance.artifactIdToBasePackage.put(artifactId, defaultPackageName);
+            getInstance().artifactIdToBasePackage.put(artifactId, defaultPackageName);
 
         }
     }
 
     public static void addMapping(String artifactId, String basePackage) {
-        instance.artifactIdToBasePackage.put(artifactId, basePackage);
+        getInstance().artifactIdToBasePackage.put(artifactId, basePackage);
     }
 
     public static String getPackageForArtifactId(String artifactId) {
-        return instance.artifactIdToBasePackage.get(artifactId);
+        return getInstance().artifactIdToBasePackage.get(artifactId);
     }
 
     private static InputStream processURL(URL url) throws IOException {
@@ -67,6 +71,13 @@ public class PackageManager {
         }
 
         return url.openStream();
+    }
+
+    /**
+     * Cleans up thread local resources.
+     */
+    public static void cleanUp() {
+        threadBoundInstance.remove();
     }
 
 }

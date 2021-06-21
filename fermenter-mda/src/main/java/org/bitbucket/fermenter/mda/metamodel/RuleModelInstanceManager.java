@@ -8,7 +8,8 @@ import org.bitbucket.fermenter.mda.metamodel.element.RuleElement;
  */
 class RuleModelInstanceManager extends AbstractMetamodelManager<Rule> {
 
-    private static final RuleModelInstanceManager instance = new RuleModelInstanceManager();
+    private static ThreadLocal<RuleModelInstanceManager> threadBoundInstance = ThreadLocal
+            .withInitial(RuleModelInstanceManager::new);
 
     /**
      * Returns the singleton instance of this class.
@@ -16,7 +17,16 @@ class RuleModelInstanceManager extends AbstractMetamodelManager<Rule> {
      * @return singleton
      */
     public static RuleModelInstanceManager getInstance() {
-        return instance;
+        return threadBoundInstance.get();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void reset() {
+        super.reset();
+        threadBoundInstance.remove();
     }
 
     /**

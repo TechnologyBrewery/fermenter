@@ -5,7 +5,7 @@ import { SimpleDomainMaintenanceService } from '../generated/service/maintenance
 import { FindByExampleCriteria } from '../shared/model/find-by-example-criteria.model';
 import { SortWrapper } from '../shared/model/sort-wrapper.model';
 import { PageWrapper } from '../shared/model/page-wrapper.model';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { SimpleDomainManagerService } from '../generated/service/business/simple-domain-manager.service';
 import { ValidationExample } from '../shared/model/validation-example.model';
 import { ValidationExampleMaintenanceService } from '../generated/service/maintenance/validation-example-maintenance.service';
@@ -155,7 +155,7 @@ export class SimpleDomainComponent implements OnInit {
 
     this.simpleDomainManagerService
       .createErrorMessageForGlobalErrorHandler(3)
-      .subscribe(data => {
+      .subscribe(() => {
         // if there is a fermenter error or other error it should by default, be caught and handled by the global error handler.
         alert('YOU SHOULD NEVER SEE THIS ALERT');
       });

@@ -1,13 +1,11 @@
-import { TestBed, async } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { LocalDomain } from '../shared/model/local-domain.model';
-import { ValidationReferencedObject } from '../shared/model/validation-referenced-object.model';
-import { reference } from '@angular/core/src/render3';
+import {TestBed, waitForAsync} from '@angular/core/testing';
+import {RouterTestingModule} from '@angular/router/testing';
+import {LocalDomain} from '../shared/model/local-domain.model';
 
 
 describe('Ale - support generation of multiple domains… ' +
-'should create a local domain entity from the second domain model (reference-domain)', () => {
-  beforeEach(async(() => {
+  'should create a local domain entity from the second domain model (reference-domain)', () => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule]
     }).compileComponents();

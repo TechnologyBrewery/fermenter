@@ -2,7 +2,7 @@
   <mat-card-title id="title">List of Simple Domains</mat-card-title>
   <mat-card-content>
     <div>
-      <form (ngSubmit)="onSubmit()">
+      <form (submit)="onSubmit()">
         <mat-form-field>
           <input matInput placeholder="New Simple Domain Name" [(ngModel)]="simpleDomainAdding.name" id="simpleDomainName" name="simpleDomainName">
         </mat-form-field>
@@ -12,7 +12,7 @@
     </div>
     <br/>
     <div>
-      <form (ngSubmit)="filterList()">
+      <form (submit)="filterList()">
         <mat-form-field>
           <input matInput placeholder="Filter on ID" id="filterListById" name="filterListById" [(ngModel)]="filterListById">
         </mat-form-field>
@@ -25,7 +25,7 @@
         <mat-list-item [id]="simpleDomain.id" *ngFor="let simpleDomain of simpleDomains">
           <div class="center">
             <span class="small-padding line-item" *ngIf="!editingSimpleDomain(simpleDomain)">{{simpleDomain.name}}</span>
-            <form (ngSubmit)="onEditSubmit()" *ngIf="editingSimpleDomain(simpleDomain)" class="line-item">
+            <form (submit)="onEditSubmit()" *ngIf="editingSimpleDomain(simpleDomain)" class="line-item">
               <mat-form-field class="small-padding">
                 <input matInput placeholder="Edit Name" id="editField" name="editField" [(ngModel)]="simpleDomainEditing.name">
               </mat-form-field>

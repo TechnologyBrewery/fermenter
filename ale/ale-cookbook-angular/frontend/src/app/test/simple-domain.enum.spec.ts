@@ -1,10 +1,10 @@
-import { TestBed, async } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SimpleDomainEnumeration } from '../generated/enum/simple-domain-enumeration.model';
 import { ValuedEnumerationExample } from '../generated/enum/valued-enumeration-example.model';
 
 describe('Ale Simple Domain Enumeration Serialization', () => {
-    beforeEach(async(() => {
+    beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             imports: [RouterTestingModule]
         }).compileComponents();

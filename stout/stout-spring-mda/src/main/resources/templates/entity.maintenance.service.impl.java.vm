@@ -102,25 +102,13 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractEntityMaintena
 	public VoidServiceResponse delete(${entity.identifier.javaType} ${entity.identifier.name}) {
 		messageManagerAwareService.initializeMessageManager(messages);
 		assertAuthorization(PATH, Action.DELETE);
-		VoidServiceResponse response = performDelete(${entity.identifier.name});
+        ${entity.name}BO.deleteByPrimaryKey(${entity.identifier.name});
+        VoidServiceResponse response = new VoidServiceResponse();
+		messageManagerAwareService.addAllMessagesToResponse(response);
+		//VoidServiceResponse response = performDelete(${entity.identifier.name});
 		MessageManager.logMessages(logger, this.getClass());
 		return response;
-	}
-	
-	private VoidServiceResponse performDelete(${entity.identifier.javaType} ${entity.identifier.name}) {
-		${entity.name}BO entityToDelete = ${entity.name}BO.findByPrimaryKey(${entity.identifier.name});
-		if (entityToDelete != null) {
-			entityToDelete.delete();
-			
-		} else {
-		    addInvalidKeyErrorMessage(${entity.identifier.name});
-			
-		}
-		
-		VoidServiceResponse response = new VoidServiceResponse();
-		messageManagerAwareService.addAllMessagesToResponse(response);
-		return response;
-	}		
+	}	
 	 	
 	/**
 	 * {@inheritDoc}
@@ -288,35 +276,18 @@ public class ${entity.name}MaintenanceServiceImpl extends AbstractEntityMaintena
     public VoidServiceResponse bulkDelete(Collection<${entity.name}BO> entities) {
         messageManagerAwareService.initializeMessageManager(messages);
         assertAuthorization(PATH, Action.DELETE);
-        VoidServiceResponse responses = new VoidServiceResponse();
-        String keyList = null;
-        
-        Set<${entity.identifier.javaType}> keySet = new HashSet<>();        
-        for (${entity.name}BO entity : entities) {
-            keySet.add(entity.getKey());
-        }
-        
-        
-        for (${entity.identifier.javaType} key : keySet) {
-            VoidServiceResponse response = performDelete(key);
-            if (response.getMessages().hasErrors()) {
-                keyList = addToFailedKeys(keyList, key);
-            }
-        }
-
-        if (keyList != null) {
-        	addBulkOperationErrorMessage("Bulk Delete", keyList);
-            messageManagerAwareService.addAllMessagesToResponse(responses);            
-        }
+        ${entity.name}BO.bulkDelete(entities);
+        VoidServiceResponse response = new VoidServiceResponse();
+        messageManagerAwareService.addAllMessagesToResponse(response);
         
         MessageManager.logMessages(logger, this.getClass());
         
-        if (responses.getMessages().hasErrors() || CollectionUtils.isEmpty(entities)) {
-            Response statusResponse = Response.status(Response.Status.BAD_REQUEST).entity(responses).build();
+        if (response.getMessages().hasErrors() || CollectionUtils.isEmpty(entities)) {
+            Response statusResponse = Response.status(Response.Status.BAD_REQUEST).entity(response).build();
             throw new BadRequestException(statusResponse);
         }
         
-        return responses;
+        return response;
     } 
     
     private String addToFailedKeys(String keyList, ${entity.identifier.javaType} key) {

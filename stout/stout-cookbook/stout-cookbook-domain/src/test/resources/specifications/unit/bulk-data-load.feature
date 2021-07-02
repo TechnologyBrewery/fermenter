@@ -45,11 +45,6 @@ Feature: Support Bulk Data Load
     When the valid and invalid data is sent over in bulk to be updated
     Then each data value is not updated and an error is thrown
 
-  Scenario: Collections of data are not deleted if any data is invalid
-    Given valid data already exists in the system
-    When the valid and invalid data is sent over in bulk to be deleted
-    Then each data value is not deleted and an error is thrown
-
   Scenario: Empty collections of data attempting to get created return a HTTP 400
     When the empty data is sent over in bulk to be created
     Then a HTTP 400 error is returned
@@ -67,17 +62,7 @@ Feature: Support Bulk Data Load
     When the object is bulk updated with an invalid field
     Then a message is created with the object's primary key
 
-  Scenario: The primary key is added to the message manager when a bulk delete fails
-    Given an object created with valid fields
-    When the object is bulk deleted with an invalid field
-    Then a message is created with the object's primary key
-
   Scenario: The primary key is added to the message manager when a bulk update fails for multiple objects
     Given three objects are created with valid fields
     When two objects are bulk updated with an invalid field
-    Then a message is created with the objects' primary keys
-
-  Scenario: The primary key is added to the message manager when a bulk delete fails for multiple objects
-    Given three objects are created with valid fields
-    When two objects are bulk deleted after they are no longer in the database
     Then a message is created with the objects' primary keys

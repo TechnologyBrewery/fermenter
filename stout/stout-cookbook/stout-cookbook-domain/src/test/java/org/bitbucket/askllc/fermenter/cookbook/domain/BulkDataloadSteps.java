@@ -291,20 +291,6 @@ public class BulkDataloadSteps {
             assertTrue("Bulk error did not contain the primary key: " + messageTestBO.getKey(), errorText.contains(messageTestBO.getKey() + ""));
         }
     }
-
-    @When("^the object is bulk deleted with an invalid field$")
-    @Transactional(propagation = Propagation.SUPPORTS)
-    public void the_object_is_bulk_deleted_with_an_invalid_field() throws Throwable {
-        validationExampleMaintenanceService.delete(messageTestBO.getKey());
-        Collection<ValidationExampleBO> updateList = new ArrayList<>();
-        updateList.add(messageTestBO);
-        try {
-            validationExampleMaintenanceService.bulkDelete(updateList);
-        } catch (WebApplicationException e) {
-            assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus()); 
-            serviceResponse = ((VoidServiceResponse) e.getResponse().getEntity());
-        }
-    }
     
     @Given("^three objects are created with valid fields$")
     public void three_objects_are_created_with_valid_fields() throws Throwable {
@@ -328,20 +314,6 @@ public class BulkDataloadSteps {
         } catch (WebApplicationException e) {
             assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
             serviceResponse = ((ValueServiceResponse) e.getResponse().getEntity());
-        }
-    }
-    
-    @When("^two objects are bulk deleted after they are no longer in the database$")
-    @Transactional(propagation = Propagation.SUPPORTS)
-    public void two_objects_are_bulk_deleted_after_they_are_no_longer_in_the_database() throws Throwable {
-        for(int i = 0; i < 2; i++) {
-            validationExampleMaintenanceService.delete(bulkUpdateObjects.get(i).getKey());
-        }
-        try {
-            validationExampleMaintenanceService.bulkDelete(bulkUpdateObjects);
-        } catch (WebApplicationException e) {
-            assertEquals(Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
-            serviceResponse = ((VoidServiceResponse) e.getResponse().getEntity());
         }
     }
 

@@ -3,6 +3,7 @@ package ${basePackage}.bizobj;
 #if ($entity.isNonPersistentParentEntity())
 import java.io.Serializable;
 #end
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.HashSet;
@@ -261,6 +262,47 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
         return foundBO;
     }
     #end
+
+    /**
+	 * Find and delete by primary key.
+	 * @param key
+	 */
+    public static void deleteByPrimaryKey(${entity.identifier.javaType} key) {
+        if(key != null) {
+            ${entity.name}BO foundBO = ${entity.name}BO.findByPrimaryKey(key);
+            if (foundBO != null) {
+                foundBO.delete();
+            }
+        }
+    }
+
+    /**
+	 * Bulk find and delete entities.
+	 * @param entities
+	 */
+    public static void bulkDelete(Collection<${entity.name}BO> entities) {
+        if(entities != null && !entities.isEmpty()) {
+            for(${entity.name}BO entity : entities) {
+                if(entity != null && entity.getKey() != null) {
+                    deleteByPrimaryKey(entity.getKey());
+                }
+            }
+        }
+    }
+
+    /**
+	 * Bulk find and delete entities based on entityKeys.
+	 * @param entities
+	 */
+    public static void bulkDeleteKeys(Collection<${entity.identifier.javaType}> entityKeys) {
+        if(entityKeys != null && !entityKeys.isEmpty()) {
+            for(${entity.identifier.javaType} entityKey : entityKeys) {
+                if(entityKey != null) {
+                    deleteByPrimaryKey(entityKey);
+                }
+            }
+        }
+    }
     
     /**
      * Method that does a findByExample looking for any objects that contain the

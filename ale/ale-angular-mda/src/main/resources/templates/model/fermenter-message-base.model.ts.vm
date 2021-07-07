@@ -5,7 +5,7 @@
 * Template = ${templateName}
 *******************************************************/
 export class FermenterMessageBase {
-  public displayMessage: string;
+  public displayText: string;
   public inserts: Map<string, string>;
   public name: string;
   public severity: string;
@@ -14,7 +14,7 @@ export class FermenterMessageBase {
 
   constructor(message?: FermenterMessageBase) {
     if (message) {
-      this.displayMessage = message.displayMessage;
+      this.displayText = message.displayText;
       this.inserts = message.inserts;
       this.name = message.name;
       this.severity = message.severity;

@@ -1,11 +1,11 @@
-import { TestBed, async } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SimpleDomain } from '../shared/model/simple-domain.model';
 import { ValidationReferenceExample } from '../shared/model/validation-reference-example.model';
 import { LocalDomain } from '../shared/model/local-domain.model';
 
 describe('Ale Simple Domain Model Generation Validation', () => {
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule]
     }).compileComponents();

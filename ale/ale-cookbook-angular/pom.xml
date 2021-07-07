@@ -15,9 +15,9 @@
     <packaging>war</packaging>
 
     <properties>
-        <frontend-plugin.version>1.6</frontend-plugin.version>
-        <node.version>v8.12.0</node.version>
-        <npm.version>6.4.1</npm.version>
+        <frontend-plugin.version>1.12.0</frontend-plugin.version>
+        <node.version>v14.17.1</node.version>
+        <pnpm.version>v6.9.1</pnpm.version>
         <embedded.tomcat.version>8.5.33</embedded.tomcat.version>
         <skip.ui>false</skip.ui>
     </properties>
@@ -35,7 +35,7 @@
                         <!-- the workingDirectory is the folder where the angular app will be should be <project-folder-webapp>/frontend -->
                         <workingDirectory>frontend</workingDirectory>
                         <nodeVersion>${node.version}</nodeVersion>
-                        <npmVersion>${npm.version}</npmVersion>
+                        <pnpmVersion>${pnpm.version}</pnpmVersion>
                         <!-- the folder where it will be installed -->
                         <installDirectory>target</installDirectory>
                     </configuration>
@@ -105,16 +105,16 @@
                 <executions>
                     <!-- install node and npm, then run an npm install, then run npm build for angular -->
                     <execution>
-                        <id>install node and npm</id>
+                        <id>install node and pnpm</id>
                         <goals>
-                            <goal>install-node-and-npm</goal>
+                            <goal>install-node-and-pnpm</goal>
                         </goals>
                         <phase>generate-resources</phase>
                     </execution>
                     <execution>
-                        <id>npm install</id>
+                        <id>pnpm install</id>
                         <goals>
-                            <goal>npm</goal>
+                            <goal>pnpm</goal>
                         </goals>
                         <configuration>
                             <arguments>install</arguments>
@@ -124,7 +124,7 @@
                     <execution>
                         <id>angular cli build</id>
                         <goals>
-                            <goal>npm</goal>
+                            <goal>pnpm</goal>
                         </goals>
                         <phase>generate-resources</phase>
                         <configuration>

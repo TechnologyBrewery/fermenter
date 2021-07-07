@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { GlobalErrorHandler } from '../global-error-handler.service';
 import { debounceTime, tap } from 'rxjs/operators';
 import { FermenterMessage } from '../model/fermenter-message.model';

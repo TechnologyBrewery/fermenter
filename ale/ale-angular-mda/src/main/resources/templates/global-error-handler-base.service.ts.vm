@@ -24,7 +24,6 @@ export class GlobalErrorHandlerBase implements ErrorHandlerApi {
       error = <BusinessError>error;
       // show error handler dialog
       for(const message of error.messages.messages) {
-        console.error(message.displayMessage);
         this.errorsToShowToUser.next(message);
       }
 
@@ -51,7 +50,7 @@ export class GlobalErrorHandlerBase implements ErrorHandlerApi {
       }
       const message = new FermenterMessage();
       message.severity = 'CRITICAL';
-      message.displayMessage = msg;
+      message.displayText = msg;
       this.errorsToShowToUser.next(message);
     }
     console.error(msg);

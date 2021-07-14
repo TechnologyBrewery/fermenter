@@ -25,7 +25,6 @@ import org.bitbucket.fermenter.stout.messages.MessageManagerInitializationDelega
 import org.bitbucket.fermenter.stout.messages.Messages;
 import org.bitbucket.fermenter.stout.service.ServiceResponse;
 import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
-import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
 import org.bitbucket.fermenter.stout.test.MessageTestUtils;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
@@ -186,58 +185,12 @@ public class ClientBulkDataloadSteps {
         }
     }
 
-    @When("^the valid and invalid data is sent over in bulk to be deleted$")
-    public void the_valid_and_invalid_data_is_sent_over_in_bulk_to_be_deleted() throws Throwable {
-   
-        Collection<ValidationExample> invalidExamplesForDeletion = new ArrayList<>();
-        for (ValidationExample persisted : savedExamples) {
-            ValidationExample copy = new ValidationExample();
-            copy.setId(persisted.getId());
-            copy.setRequiredField(persisted.getRequiredField());
-            invalidExamplesForDeletion.add(copy);
-        }
-        
-        for (ValidationExample entity : invalidExamplesForDeletion) {
-            entity.setId(UUID.randomUUID());
-        }
-        try {
-            validationExampleMaintenanceDelegate.bulkDelete(invalidExamplesForDeletion);
-        } catch (WebApplicationException e) {
-            bulkDeleteSuccess = false;
-            assertEquals("Invalid error status", Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
-            errorServiceResponse = (VoidServiceResponse) e.getResponse().getEntity();
-        }
-    }
-
     @When("^the empty data is sent over in bulk to be created$")
     public void the_empty_data_is_sent_over_in_bulk_to_be_created() throws Throwable {
         try {
             validationExampleMaintenanceDelegate.bulkSaveOrUpdate(emptyExamples);
         } catch (WebApplicationException e) {
             errorCaught = true;
-        }
-    }
-
-    @When("^the empty data is sent over in bulk to be deleted$")
-    public void the_empty_data_is_sent_over_in_bulk_to_be_deleted() throws Throwable {
-        try {
-            validationExampleMaintenanceDelegate.bulkDelete(emptyExamples);
-        } catch (WebApplicationException e) {
-            errorCaught = true;
-        }
-    }
-
-    @When("^the object is bulk deleted with an invalid field$")
-    public void the_object_is_bulk_deleted_with_an_invalid_field() throws Throwable {
-        exampleTest.setRequiredField(null);
-        Collection<ValidationExample> updateList = new ArrayList<>();
-        updateList.add(exampleTest);
-        try {
-            validationExampleMaintenanceDelegate.bulkDelete(updateList);
-        } catch (WebApplicationException e) {
-            errorCaught = true;
-            assertEquals("Invalid error status", Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
-            errorServiceResponse = ((VoidServiceResponse) e.getResponse().getEntity());
         }
     }
 
@@ -257,29 +210,6 @@ public class ClientBulkDataloadSteps {
             assertEquals("Invalid error status", Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
             errorServiceResponse = ((ValueServiceResponse) e.getResponse().getEntity());
         }
-    }
-
-    @When("^two objects are bulk deleted after they are no longer in the database$")
-    public void two_objects_are_bulk_deleted_after_they_are_no_longer_in_the_database() throws Throwable {
-
-        for (ValidationExample persisted : savedExamples) {
-            ValidationExample copy = new ValidationExample();
-            copy.setId(persisted.getId());
-            invalidExamplesForErrorValidation.add(copy);
-            validationExampleMaintenanceDelegate.delete(persisted.getId());
-        }
-
-        for (ValidationExample persisted : savedExamples) {
-            validationExampleMaintenanceDelegate.delete(persisted.getId());
-        }
-        try {
-            validationExampleMaintenanceDelegate.bulkDelete(savedExamples);
-        } catch (WebApplicationException e) {
-            errorCaught = true;
-            assertEquals("Invalid error status",Status.BAD_REQUEST.getStatusCode(), e.getResponse().getStatus());
-            errorServiceResponse = ((VoidServiceResponse) e.getResponse().getEntity());
-        }
-        savedExamples.clear();
     }
 
     @When("^the object is bulk updated with an invalid field$")
@@ -346,16 +276,6 @@ public class ClientBulkDataloadSteps {
                 errorServiceResponse.getMessages().hasErrors());
 
         MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ClientBulkDataloadSteps.class);
-    }
-
-    @Then("^each data value is not deleted and an error is thrown$")
-    public void each_data_value_is_not_deleted_and_an_error_is_thrown() throws Throwable {
-        assertFalse("Bulk delete is successful when expecting failure", bulkDeleteSuccess);
-        assertTrue("Response should come with error messages, but it didnt.",
-                errorServiceResponse.getMessages().hasErrors());
-
-        MessageTestUtils.logErrors("Error Messages", MessageManager.getMessages(), ClientBulkDataloadSteps.class);
-
     }
 
     @Then("^a HTTP (\\d+) error is returned$")

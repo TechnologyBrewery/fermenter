@@ -9,7 +9,8 @@
     "lint": "ng lint",
     "e2e": "watch 'ng e2e' src e2e --wait=2",
     "e2e:debug": "ng e2e -c=debug",
-    "e2e:ci": "ng e2e -c=ci"
+    "e2e:ci": "ng e2e -c=ci",
+    "postinstall": "ngcc"
   },
   "private": true,
   "dependencies": {

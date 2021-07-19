@@ -16,8 +16,8 @@
 
     <properties>
         <frontend-plugin.version>1.12.0</frontend-plugin.version>
-        <node.version>v14.17.1</node.version>
-        <pnpm.version>v6.9.1</pnpm.version>
+        <node.version>v14.17.3</node.version>
+        <pnpm.version>v6.10.2</pnpm.version>
         <embedded.tomcat.version>8.5.33</embedded.tomcat.version>
         <skip.ui>false</skip.ui>
     </properties>
@@ -119,6 +119,26 @@
                         <configuration>
                             <arguments>install</arguments>
                             <installDirectory>target</installDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>angular build test code</id>
+                        <goals>
+                            <goal>pnpm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <arguments>run test:headless-no-tests</arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>angular tests</id>
+                        <goals>
+                            <goal>pnpm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <arguments>run test:headless</arguments>
                         </configuration>
                     </execution>
                     <execution>

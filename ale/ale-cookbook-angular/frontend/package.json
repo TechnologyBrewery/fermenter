@@ -4,13 +4,14 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --base-href /cookbook/",
-    "build": "ng test --karma-config src/karma-headless.conf.js && ng build --base-href /cookbook/ --deployUrl /cookbook/",
+    "build": "ng build --base-href /cookbook/ --deploy-url /cookbook/",
     "test": "ng test",
+    "test:headless": "ng test --karma-config src/karma-headless.conf.js --no-progress",
+    "test:headless-no-tests": "ng test --main src/no-tests.ts --karma-config src/karma-headless-no-tests.conf.js --no-progress",
     "lint": "ng lint",
     "e2e": "watch 'ng e2e' src e2e --wait=2",
     "e2e:debug": "ng e2e -c=debug",
-    "e2e:ci": "ng e2e -c=ci",
-    "postinstall": "ngcc"
+    "e2e:ci": "ng e2e -c=ci"
   },
   "private": true,
   "dependencies": {

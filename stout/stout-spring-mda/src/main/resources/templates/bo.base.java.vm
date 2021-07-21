@@ -216,6 +216,10 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
             hasCheckedTableMismatch = true;
         }
     }
+#elseif ( $entity.isTransient() )
+    protected ${entity.name}BaseBO() {
+        defaultFieldValues();
+    }
 #end
 
 
@@ -674,9 +678,6 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
      * @return The ${field.name}
      */
     public ${field.javaType} get${field.capitalizedName}() {
-    #if ( $field.hasDefaultValue() )
-        setDefault${field.capitalizedName}();
-    #end
         return ${field.name};
     }
     

@@ -12,5 +12,9 @@
     "name" : "someOtherName",
     "documentation" : "The friendly domain moniker",
     "type" : "string"
+  }, {
+    "name" : "defaultValueField",
+    "type" : "integer",
+    "defaultValue" : "3"
   } ]
 }

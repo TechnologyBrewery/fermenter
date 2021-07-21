@@ -12,12 +12,12 @@ import org.slf4j.LoggerFactory;
  * @see org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.TransientFieldExampleBaseBO
  *
  * GENERATED STUB CODE - PLEASE *DO* MODIFY
- * Generated from bo.java.vm
+ *
+ * Originally generated from templates/bo.java.vm
  */
 @Entity
 @Table(name="TRANSIENT_FIELD_ENTITY")
 public class TransientFieldExampleBO extends TransientFieldExampleBaseBO {
-
 	
 	private static final Logger logger = LoggerFactory.getLogger(TransientFieldExampleBO.class);
 
@@ -26,10 +26,6 @@ public class TransientFieldExampleBO extends TransientFieldExampleBaseBO {
 		SpringAutowiringUtil.autowireBizObj(this);
 	}
 	
-    public static void deleteAllTransientFieldExamples() {
-        getDefaultRepository().deleteAllInBatch();
-    }
-
 	@Override
 	protected Logger getLogger() {
 		return logger;
@@ -48,4 +44,9 @@ public class TransientFieldExampleBO extends TransientFieldExampleBaseBO {
 	protected void complexValidation() {
         /* add complex validation logic here */
 	}
+
+    public static void deleteAllTransientFieldExamples() {
+        getDefaultRepository().deleteAllInBatch();
+    }
+
 }

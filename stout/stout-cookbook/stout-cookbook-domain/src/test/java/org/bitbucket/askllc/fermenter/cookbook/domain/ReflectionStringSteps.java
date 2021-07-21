@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.IdentityKeyedEntityBO;
-import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.TransientEntityExampleBO;
+import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.TransientSubEntityExampleBO;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,8 +34,8 @@ public class ReflectionStringSteps {
     public void the_object_is_type(String currentObjectType) throws Throwable {
         if (currentObjectType.equals("IdentityKeyedEntityBO")) {
             springObject = new IdentityKeyedEntityBO();
-        } else if (currentObjectType.equals("TransientEntityExampleBO")) {
-            springObject = new TransientEntityExampleBO();
+        } else if (currentObjectType.equals("TransientSubEntityExampleBO")) {
+            springObject = new TransientSubEntityExampleBO();
         }
         assertNotNull("Incorrect type declaration: " + currentObjectType, springObject);
 

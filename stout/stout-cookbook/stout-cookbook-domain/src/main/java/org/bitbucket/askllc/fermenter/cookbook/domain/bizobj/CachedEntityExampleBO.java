@@ -12,31 +12,41 @@ import org.slf4j.LoggerFactory;
  * @see org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.CachedEntityExampleBaseBO
  *
  * GENERATED STUB CODE - PLEASE *DO* MODIFY
+ *
+ * Originally generated from templates/bo.java.vm
  */
 @Entity
 @Table(name="CACHED_ENTITY_EXAMPLE")
 public class CachedEntityExampleBO extends CachedEntityExampleBaseBO {
 	
+	private static final Logger logger = LoggerFactory.getLogger(CachedEntityExampleBO.class);
+
 	public CachedEntityExampleBO() {
 		super();
 		SpringAutowiringUtil.autowireBizObj(this);
 	}
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(CachedEntityExampleBO.class);
-	
 	@Override
 	protected Logger getLogger() {
-		return LOGGER;
+		return logger;
 	}
-
+    
+    /**
+    * Lifecycle method that is invoked when saving CachedEntityExample via a creation or update, 
+    * only if the entity's fields were validated successfully. 
+    * 
+    * If CachedEntityExample requires additional business logic in order to validate its data prior to saving, 
+    * implement that logic here.
+    * 
+    * @see <a href="https://fermenter.atlassian.net/wiki/spaces/FER/pages/62128129/Stout#Stout-Savelifecycle">Stout: Save Lifecycle</a>
+    */
 	@Override
 	protected void complexValidation() {
-	    setCalculatedField(getCalculatedField() + 1);
+        setCalculatedField(getCalculatedField() + 1);
 	}
-	
-	
 	
 	public static CachedEntityExampleBO findByName(String name) {
 	    return getDefaultRepository().findByName(name);
 	}
+
 }

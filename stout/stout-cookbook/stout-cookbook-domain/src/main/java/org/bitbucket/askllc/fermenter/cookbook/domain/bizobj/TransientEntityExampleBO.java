@@ -1,9 +1,7 @@
 package org.bitbucket.askllc.fermenter.cookbook.domain.bizobj;
 
 
-import java.io.Serializable;
-import javax.persistence.MappedSuperclass;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.bitbucket.fermenter.stout.util.SpringAutowiringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,10 +10,10 @@ import org.slf4j.LoggerFactory;
  * @see org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.TransientEntityExampleBaseBO
  *
  * GENERATED STUB CODE - PLEASE *DO* MODIFY
- * Generated from bo.java.vm
+ *
+ * Originally generated from templates/bo.java.vm
  */
-public class TransientEntityExampleBO extends TransientEntityExampleBaseBO {
-	
+public abstract class TransientEntityExampleBO extends TransientEntityExampleBaseBO {
 	
 	private static final Logger logger = LoggerFactory.getLogger(TransientEntityExampleBO.class);
 

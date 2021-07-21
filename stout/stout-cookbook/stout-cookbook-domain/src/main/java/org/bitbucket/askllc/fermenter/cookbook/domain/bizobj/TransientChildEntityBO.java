@@ -10,20 +10,21 @@ import org.slf4j.LoggerFactory;
  * @see org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.TransientChildEntityBaseBO
  *
  * GENERATED STUB CODE - PLEASE *DO* MODIFY
- * Generated from bo.java.vm
+ *
+ * Originally generated from templates/bo.java.vm
  */
 public class TransientChildEntityBO extends TransientChildEntityBaseBO {
 	
+	private static final Logger logger = LoggerFactory.getLogger(TransientChildEntityBO.class);
+
 	public TransientChildEntityBO() {
 		super();
 		SpringAutowiringUtil.autowireBizObj(this);
 	}
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(TransientChildEntityBO.class);
-	
 	@Override
 	protected Logger getLogger() {
-		return LOGGER;
+		return logger;
 	}
     
     /**

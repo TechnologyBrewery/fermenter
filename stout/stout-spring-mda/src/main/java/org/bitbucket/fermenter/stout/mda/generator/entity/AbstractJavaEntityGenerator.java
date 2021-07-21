@@ -15,6 +15,7 @@ public abstract class AbstractJavaEntityGenerator extends AbstractEntityGenerato
 		vc.put("entity", javaEntity);
 		vc.put("basePackage", generationContext.getBasePackage());
 		vc.put("StringUtils", StringUtils.class);
+		vc.put("templateName", generationContext.getTemplateName());
 	}
 	
     protected String getOutputSubFolder() {

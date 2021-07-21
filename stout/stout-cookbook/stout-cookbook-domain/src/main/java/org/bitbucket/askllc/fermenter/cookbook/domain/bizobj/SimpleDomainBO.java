@@ -23,16 +23,17 @@ import org.springframework.data.domain.Pageable;
 
 /**
  * Business object for the SimpleDomain entity.
- * 
  * @see org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.SimpleDomainBaseBO
  *
- *      GENERATED STUB CODE - PLEASE *DO* MODIFY
+ * GENERATED STUB CODE - PLEASE *DO* MODIFY
+ *
+ * Originally generated from templates/bo.java.vm
  */
 @Entity
-@Table(name = "SIMPLE_DOMAIN")
+@Table(name="SIMPLE_DOMAIN")
 public class SimpleDomainBO extends SimpleDomainBaseBO {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(SimpleDomainBO.class);
+	
+	private static final Logger logger = LoggerFactory.getLogger(SimpleDomainBO.class);
 
     /**
      * Developers may create additional persistent properties and/or
@@ -49,23 +50,18 @@ public class SimpleDomainBO extends SimpleDomainBaseBO {
     @NotNull
     private Date updatedAt;
 
-    public SimpleDomainBO() {
-        super();
-        SpringAutowiringUtil.autowireBizObj(this);
-    }
+	public SimpleDomainBO() {
+		super();
+		SpringAutowiringUtil.autowireBizObj(this);
+	}
+	
+	@Override
+	protected Logger getLogger() {
+		return logger;
+	}
 
     public static void deleteAllSimpleDomain() {
         getDefaultRepository().deleteAllInBatch();
-    }
-
-    @Override
-    protected Logger getLogger() {
-        return LOGGER;
-    }
-
-    @Override
-    protected void complexValidation() {
-
     }
 
     public static List<SimpleDomainBO> findAllLazyLoadSimpleDomainChild() {
@@ -146,4 +142,18 @@ public class SimpleDomainBO extends SimpleDomainBaseBO {
         return getDefaultRepository().findByNameContains(nameFilter, pageable);
     }
 
+    
+    /**
+    * Lifecycle method that is invoked when saving SimpleDomain via a creation or update, 
+    * only if the entity's fields were validated successfully. 
+    * 
+    * If SimpleDomain requires additional business logic in order to validate its data prior to saving, 
+    * implement that logic here.
+    * 
+    * @see <a href="https://fermenter.atlassian.net/wiki/spaces/FER/pages/62128129/Stout#Stout-Savelifecycle">Stout: Save Lifecycle</a>
+    */
+	@Override
+	protected void complexValidation() {
+        /* add complex validation logic here */
+	}
 }

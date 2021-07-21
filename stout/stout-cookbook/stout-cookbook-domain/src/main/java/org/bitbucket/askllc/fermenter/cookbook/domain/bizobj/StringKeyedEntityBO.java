@@ -12,21 +12,23 @@ import org.slf4j.LoggerFactory;
  * @see org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.StringKeyedEntityBaseBO
  *
  * GENERATED STUB CODE - PLEASE *DO* MODIFY
+ *
+ * Originally generated from templates/bo.java.vm
  */
 @Entity
 @Table(name="STRING_KEYED_ENTITY")
 public class StringKeyedEntityBO extends StringKeyedEntityBaseBO {
 	
+	private static final Logger logger = LoggerFactory.getLogger(StringKeyedEntityBO.class);
+
 	public StringKeyedEntityBO() {
 		super();
 		SpringAutowiringUtil.autowireBizObj(this);
 	}
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(StringKeyedEntityBO.class);
-	
 	@Override
 	protected Logger getLogger() {
-		return LOGGER;
+		return logger;
 	}
     
     /**

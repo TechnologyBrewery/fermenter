@@ -3,8 +3,8 @@ package org.bitbucket.askllc.fermenter.cookbook.domain;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.TransientEntityExampleBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.TransientFieldExampleBO;
+import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.TransientSubEntityExampleBO;
 import org.bitbucket.askllc.fermenter.cookbook.domain.bizobj.ValidationReferencedObjectBO;
 import org.bitbucket.fermenter.stout.messages.MessageManagerInitializationDelegate;
 import org.springframework.test.context.ContextConfiguration;
@@ -20,7 +20,7 @@ import cucumber.api.java.en.When;
 public class TransientFieldSteps {
     private String userString;
     private TransientFieldExampleBO transientFieldExampleBO;
-    private TransientEntityExampleBO transientEntityExampleBO;
+    private TransientSubEntityExampleBO transientSubEntityExampleBO;
     private static final int DEFAULT_VALUE = 3;
     private int modifiedValue;
     private int actualValue;
@@ -31,7 +31,7 @@ public class TransientFieldSteps {
         TransientFieldExampleBO.deleteAllTransientFieldExamples();
         ValidationReferencedObjectBO.deleteAllValidationExamples();
         transientFieldExampleBO = null;
-        transientEntityExampleBO = null;
+        transientSubEntityExampleBO = null;
     }
 
     @Given("^a field is marked as transient and I assign \"([^\"]*)\" to the field value$")
@@ -62,9 +62,9 @@ public class TransientFieldSteps {
 
     @Given("^a transient entity has a field with a default value$")
     public void a_transient_entity_has_a_field_with_a_default_value() throws Throwable {
-        transientEntityExampleBO = new TransientEntityExampleBO();
+        transientSubEntityExampleBO = new TransientSubEntityExampleBO();
         ValidationReferencedObjectBO referenceObject = new ValidationReferencedObjectBO();
-        transientEntityExampleBO.setRequiredReference(referenceObject.save());
+        transientSubEntityExampleBO.setRequiredReference(referenceObject.save());
     }
 
     @Given("^the value of the field has been modified$")
@@ -72,8 +72,8 @@ public class TransientFieldSteps {
         modifiedValue = DEFAULT_VALUE + 1;
         if (transientFieldExampleBO != null) {
             transientFieldExampleBO.setTransientFieldDefaultValue(modifiedValue);
-        } else if (transientEntityExampleBO != null) {
-            transientEntityExampleBO.setDefaultValueField(modifiedValue);
+        } else if (transientSubEntityExampleBO != null) {
+            transientSubEntityExampleBO.setDefaultValueField(modifiedValue);
         }
     }
 
@@ -81,8 +81,8 @@ public class TransientFieldSteps {
     public void the_entity_is_retrieved() throws Throwable {
         if (transientFieldExampleBO != null) {
             actualValue = transientFieldExampleBO.getTransientFieldDefaultValue();
-        } else if (transientEntityExampleBO != null) {
-            actualValue = transientEntityExampleBO.getDefaultValueField();
+        } else if (transientSubEntityExampleBO != null) {
+            actualValue = transientSubEntityExampleBO.getDefaultValueField();
         }
     }
 

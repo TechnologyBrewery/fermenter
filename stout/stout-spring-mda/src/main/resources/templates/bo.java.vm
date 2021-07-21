@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 #end
 
-#if ( $entity.isNonPersistentParentEntity() )
+#if ($entity.isNonPersistentParentEntity() && !$entity.isTransient())
 import java.io.Serializable;
 import javax.persistence.MappedSuperclass;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -28,16 +28,13 @@ import org.slf4j.LoggerFactory;
 @Table(name="${entity.table}")
 #end
 #if (!$entity.isNonPersistentParentEntity())
-	#if ($entity.isTransient())
-public abstract class ${entity.name}BO extends ${entity.name}BaseBO {
-	#else 
 public class ${entity.name}BO extends ${entity.name}BaseBO {
-	#end
-
-#else
+#elseif(!$entity.isTransient())
 @MappedSuperclass
 public abstract class ${entity.name}BO<PK extends Serializable, BO, JPA extends JpaRepository<BO, PK>> 
 		extends ${entity.name}BaseBO<PK, BO, JPA> {
+#else
+public abstract class ${entity.name}BO extends ${entity.name}BaseBO {
 #end	
 	
 	private static final Logger logger = LoggerFactory.getLogger(${entity.name}BO.class);

@@ -678,7 +678,11 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
      * @return The ${field.name}
      */
     public ${field.javaType} get${field.capitalizedName}() {
+        #if($field.javaType == 'String')
+        return StringUtils.trim(${field.name});
+        #else
         return ${field.name};
+        #end
     }
     
     /**
@@ -697,6 +701,8 @@ public abstract class ${entity.name}BaseBO extends ${entity.persistentEntityPare
         }else {
             this.${field.name} = ${field.name}.setScale($field.getScale(), RoundingMode.HALF_EVEN);
         }
+        #elseif($field.javaType == 'String')
+        this.${field.name} = StringUtils.trim(${field.name});
         #else
         this.${field.name} = ${field.name};
         #end

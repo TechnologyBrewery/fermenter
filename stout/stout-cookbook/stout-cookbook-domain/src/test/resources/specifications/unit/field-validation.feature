@@ -282,3 +282,8 @@ Feature: Field Level Validation Requirements
       | -123456789.123456789 | 3     | -123456789.123  |
       | 12.30                | 3     | 12.300          |
       | 123.123456789012     | 10    | 123.1234567890  |
+      
+  Scenario: Trim String fields automatically
+    Given a String value with extra white space for a field
+    When the String value for the field is set and retrieved
+    Then the white space has been removed

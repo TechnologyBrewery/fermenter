@@ -476,6 +476,22 @@ public class FieldValidationSteps {
         cleanUpMessages();
     }
     
+    @Given("^a String value with extra white space for a field$")
+    public void a_String_value_with_extra_white_space_for_a_field() throws Throwable {
+        example = new ValidationExampleBO();
+        example.setRequiredField("hello world    ");
+    }
+
+    @When("^the String value for the field is set and retrieved$")
+    public void the_String_value_for_the_field_is_set_and_retrieved() throws Throwable {
+        // do nothing
+    }
+
+    @Then("^the white space has been removed$")
+    public void the_white_space_has_been_removed() throws Throwable {
+        assertEquals("hello world", example.getRequiredField());
+    }
+    
     public void cleanUpMessages() {
         MessageManagerInitializationDelegate.cleanupMessageManager();
     }

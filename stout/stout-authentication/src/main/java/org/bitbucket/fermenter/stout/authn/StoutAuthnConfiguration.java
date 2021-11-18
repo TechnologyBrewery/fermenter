@@ -13,5 +13,4 @@ public class StoutAuthnConfiguration {
     public IdentityManager getIdentityManager() {
         return new IdentityManager();
     }
-
 }

@@ -31,8 +31,8 @@ public abstract class AbstractFieldGenerator extends AbstractGenerator {
                         VelocityContext vc = getNewVelocityContext(context);
                         populateVelocityContext(vc, entity, field, context);
 
-                        String fileName = replace("entityName", baseFileName, entity.getNameLowerHyphen());
-                        fileName = replace("fieldName", fileName, field.getNameLowerHyphen());
+                        String fileName = replace("entityName", baseFileName, entity.getName());
+                        fileName = replace("fieldName", fileName, field.getName());
                         context.setOutputFile(fileName);
 
                         generateFile(context, vc);

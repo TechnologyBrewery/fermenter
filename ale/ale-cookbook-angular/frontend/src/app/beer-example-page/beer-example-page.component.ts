@@ -11,6 +11,7 @@ import { BeerExampleEntityMaintenanceService } from '../generated/service/mainte
 })
 export class BeerExampleComponent implements OnInit {
   brewedBeers = new Array<BeerExampleEntity>();
+  testVariable = '';
 
   constructor(
     private beerServiceExampleService: BeerServiceExampleService,

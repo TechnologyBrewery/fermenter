@@ -9,6 +9,9 @@
         "name": "angular-base"
       },
       {
+        "name": "angular-fields"
+      },
+      {
         "name": "angular-services"
       }
     ]
@@ -101,6 +104,20 @@
       },
       {
         "name": "enums"
+      }
+    ]
+  },
+  {
+    "name": "angular-fields",
+    "targetReferences": [
+      {
+        "name": "entityFieldFormHtml"
+      },
+      {
+        "name": "entityFieldFormTs"
+      },
+      {
+        "name": "entityFieldFormCss"
       }
     ]
   },

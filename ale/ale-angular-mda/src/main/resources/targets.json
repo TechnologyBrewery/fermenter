@@ -206,5 +206,26 @@
     "outputFile": "assets/error-icon.svg",
     "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
     "overwritable": false
+  },
+  {
+    "name": "entityFieldFormHtml",
+    "templateName": "templates/ui/form/entity-field-form.component.html.vm",
+    "outputFile": "generated/ui/${entityName}/${fieldName}/form/${entityName}-${fieldName}-form.component.html",
+    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularFieldUiGenerator",
+    "overwritable": true
+  },
+  {
+    "name": "entityFieldFormTs",
+    "templateName": "templates/ui/form/entity-field-form.component.ts.vm",
+    "outputFile": "generated/ui/${entityName}/${fieldName}/form/${entityName}-${fieldName}-form.component.ts",
+    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularFieldUiGenerator",
+    "overwritable": true
+  },
+  {
+    "name": "entityFieldFormCss",
+    "templateName": "templates/ui/form/entity-field-form.component.css.vm",
+    "outputFile": "generated/ui/${entityName}/${fieldName}/form/${entityName}-${fieldName}-form.component.css",
+    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularFieldUiGenerator",
+    "overwritable": true
   }
 ]

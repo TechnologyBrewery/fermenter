@@ -1,0 +1,9 @@
+<div fxLayout="column" fxLayoutGap="10px">
+  <mat-form-field>
+    <mat-label>${field.label}</mat-label>
+    <input matInput [(ngModel)]="${field.name}" type="text">
+#if (${field.documentation})
+    <mat-hint>${field.documentation}</mat-hint>
+#end
+  </mat-form-field>
+</div>

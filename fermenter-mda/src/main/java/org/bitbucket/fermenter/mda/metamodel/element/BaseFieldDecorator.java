@@ -124,6 +124,23 @@ public class BaseFieldDecorator implements Field {
      * {@inheritDoc}
      */
     @Override
+    public String getLabel() {
+        return wrapped.getLabel();
+    }
+
+    /**
+     * Returns whether or not this field has a label.
+     * 
+     * @return has a label
+     */
+    public boolean hasLabel() {
+        return (getLabel() != null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String getDefaultValue() {
         return wrapped.getDefaultValue();
     }

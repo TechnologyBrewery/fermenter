@@ -32,11 +32,13 @@
     "name" : "theLong1",
     "documentation" : "A relevant number for this domain",
     "type" : "long",
-    "column" : "LONG1"
+    "column" : "LONG1",
+    "label" : "The Long 1"
   }, {
     "name" : "aMESSYNameThatConfusesJson",
     "type" : "string",
-    "column" : "MESSY_NAMED_FIELD"
+    "column" : "MESSY_NAMED_FIELD",
+    "label" : "Testing Field"
   }, {
     "name" : "type",
     "documentation" : "A simple domain classification",

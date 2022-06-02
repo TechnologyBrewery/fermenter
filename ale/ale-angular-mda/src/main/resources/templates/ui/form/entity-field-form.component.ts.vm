@@ -8,7 +8,11 @@ import { Component, Input, EventEmitter, Output } from '@angular/core';
 
 export class ${entity.name}${field.capitalizedName}FormComponent {
 
+#if( $field.angularType == "Date" )
+  ${field.name}Value: Date;
+#else
   ${field.name}Value = '';
+#end
 
   @Input()
   get ${field.name}() {

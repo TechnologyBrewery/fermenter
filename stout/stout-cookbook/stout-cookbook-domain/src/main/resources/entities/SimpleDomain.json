@@ -22,7 +22,8 @@
     "name" : "theDate1",
     "documentation" : "An important date for this domain",
     "type" : "date",
-    "column" : "DATE1"
+    "column" : "DATE1",
+    "label": "The First Date"
   }, {
     "name" : "name",
     "documentation" : "The friendly domain moniker",

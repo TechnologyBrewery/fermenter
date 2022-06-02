@@ -1,7 +1,13 @@
 <div fxLayout="column" fxLayoutGap="10px">
   <mat-form-field>
     <mat-label>${field.label}</mat-label>
+#if( $field.angularType == "Date" )
+    <input matInput [matDatepicker]="picker">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+#else
     <input matInput [(ngModel)]="${field.name}" type="text">
+#end
 #if (${field.documentation})
     <mat-hint>${field.documentation}</mat-hint>
 #end

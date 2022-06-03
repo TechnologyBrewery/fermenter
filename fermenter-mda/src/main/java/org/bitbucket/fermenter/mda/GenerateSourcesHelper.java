@@ -14,7 +14,9 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.bitbucket.fermenter.mda.GenerateSourcesHelper.LoggerDelegate.LogLevel;
+import org.bitbucket.fermenter.mda.element.ExpandedFamily;
 import org.bitbucket.fermenter.mda.element.ExpandedProfile;
+import org.bitbucket.fermenter.mda.element.Family;
 import org.bitbucket.fermenter.mda.element.Profile;
 import org.bitbucket.fermenter.mda.element.Target;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
@@ -54,6 +56,31 @@ public final class GenerateSourcesHelper {
         }
 
         void log(LogLevel level, String message);
+    }
+
+    /**
+     * Loads all {@link Family}s contained within the given
+     * {@link InputStream}, which is expected to reference the desired
+     * families.json file to load.
+     *
+     * @param familiesStream
+     *            {@link InputStream} referencing families.json file desired to
+     *            load.
+     * @param logger
+     *            build tool specific logging implementation to which logging
+     *            will be delegated.
+     * @return {@link Map} containing all loaded {@link ExpandedFamily}s with
+     *         their corresponding name as the map key.
+     * @throws IOException
+     */
+    public static Map<String, ExpandedFamily> loadFamilies(InputStream familiesStream,
+                                                           Map<String, ExpandedFamily> families) throws IOException {
+        List<Family> loadedFamilies = OBJECT_MAPPER.readValue(familiesStream, new TypeReference<List<Family>>() {});
+        for (Family f : loadedFamilies) {
+            families.put(f.getName(), new ExpandedFamily(f));
+        }
+
+        return families;
     }
 
     /**

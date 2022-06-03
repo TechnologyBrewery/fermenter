@@ -29,6 +29,7 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.bitbucket.fermenter.mda.GenerateSourcesHelper.LoggerDelegate;
+import org.bitbucket.fermenter.mda.element.ExpandedFamily;
 import org.bitbucket.fermenter.mda.element.ExpandedProfile;
 import org.bitbucket.fermenter.mda.element.Target;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
@@ -47,6 +48,8 @@ public class GenerateSourcesMojo extends AbstractMojo {
     private Map<String, ExpandedProfile> profiles = new HashMap<>();
 
     private Map<String, Target> targets = new HashMap<>();
+
+    private Map<String, ExpandedFamily> families = new HashMap<>();
 
     @Parameter(required = true, readonly = true, defaultValue = "${project}")
     private MavenProject project;
@@ -176,6 +179,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
 
         loadTargets();
         loadProfiles();
+        loadFamilies();
         TypeManager.getInstance().loadLocalTypes(localTypes);
 
         project.addCompileSourceRoot(generatedCompileSourceRoot);
@@ -197,13 +201,46 @@ public class GenerateSourcesMojo extends AbstractMojo {
         engine.init();
     }
 
+
+    /**
+     * Scans the classpath for any families.json files and loads all defined
+     * {@link Family} configurations.
+     *
+     * @throws MojoExecutionException
+     */
+    public void loadFamilies() throws MojoExecutionException {
+        Enumeration<URL> familyEnumeration = null;
+        try {
+            familyEnumeration = getClass().getClassLoader().getResources("families.json");
+        } catch (IOException ioe) {
+            throw new MojoExecutionException("Unable to find families", ioe);
+        }
+
+        URL familiesResource;
+        while (familyEnumeration.hasMoreElements()) {
+            familiesResource = familyEnumeration.nextElement();
+            getLog().info(String.format("Loading families from: %s", familiesResource.toString()));
+
+            try (InputStream familiesStream = familiesResource.openStream()) {
+                families = GenerateSourcesHelper.loadFamilies(familiesStream, families);
+            } catch (IOException e) {
+                throw new MojoExecutionException("Unable to parse families.json", e);
+            }
+        }
+
+        for (ExpandedFamily f : families.values()) {
+            f.dereference(families, profiles);
+        }
+
+    }
+
     /**
      * Scans the classpath for any targets.json files and loads all defined
      * {@link Target} configurations.
      * 
      * @throws MojoExecutionException
      */
-    private void loadTargets() throws MojoExecutionException {
+    public void loadTargets() throws MojoExecutionException {
         Enumeration<URL> targetEnumeration = null;
         try {
             targetEnumeration = getClass().getClassLoader().getResources("targets.json");
@@ -230,7 +267,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
      * 
      * @throws MojoExecutionException
      */
-    private void loadProfiles() throws MojoExecutionException {
+    public void loadProfiles() throws MojoExecutionException {
         Enumeration<URL> profileEnumeration = null;
         try {
             profileEnumeration = getClass().getClassLoader().getResources("profiles.json");
@@ -372,6 +409,18 @@ public class GenerateSourcesMojo extends AbstractMojo {
         context.setPropertyVariables(propertyVariables);
         
         return context;
+    }
+
+    public Map<String, ExpandedFamily> getFamilies() {
+        return families;
+    }
+
+    public Map<String, ExpandedProfile> getProfiles() {
+        return profiles;
+    }
+
+    public Map<String, Target> getTargets() {
+        return targets;
     }
    
 }

@@ -18,7 +18,9 @@ public class Profile implements ValidatedElement {
     protected Collection<TargetReference> targetReferences = new ArrayList<>();
     
     protected Collection<ProfileReference> profileReferences = new ArrayList<>();
-    
+
+    protected Collection<FamilyReference> familyReferences = new ArrayList<>();
+
     public String getName() {
         return name;
     }
@@ -41,6 +43,14 @@ public class Profile implements ValidatedElement {
 
     public void setProfileReferences(Collection<ProfileReference> includeReferences) {
         this.profileReferences = includeReferences;
+    }
+
+    public Collection<FamilyReference> getFamilyReferences() {
+        return familyReferences;
+    }
+
+    public void setFamilyReferences(Collection<FamilyReference> familyReferences) {
+        this.familyReferences = familyReferences;
     }
 
     /**

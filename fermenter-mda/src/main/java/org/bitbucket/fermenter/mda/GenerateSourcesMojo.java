@@ -66,6 +66,10 @@ public class GenerateSourcesMojo extends AbstractMojo {
     @Parameter(required = true)
     private String basePackage;
 
+    private String targetsFileLocation = "targets.json";
+    private String profilesFileLocation = "profiles.json";
+    private String familiesFileLocation = "families.json";
+
     /**
      * Represents the artifactIds that will be targeted for generation if the
      * metadataContext equals 'targeted'.
@@ -96,7 +100,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
 
     @Parameter(required = true, readonly = true, defaultValue = "org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository")
     private String metadataRepositoryImpl;
-    
+
     /**
      * List of general properties to pass to the {@link GenerationContext}.
      */
@@ -211,7 +215,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
     public void loadFamilies() throws MojoExecutionException {
         Enumeration<URL> familyEnumeration = null;
         try {
-            familyEnumeration = getClass().getClassLoader().getResources("families.json");
+            familyEnumeration = getClass().getClassLoader().getResources(familiesFileLocation);
         } catch (IOException ioe) {
             throw new MojoExecutionException("Unable to find families", ioe);
         }
@@ -224,7 +228,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
             try (InputStream familiesStream = familiesResource.openStream()) {
                 families = GenerateSourcesHelper.loadFamilies(familiesStream, families);
             } catch (IOException e) {
-                throw new MojoExecutionException("Unable to parse families.json", e);
+                throw new MojoExecutionException("Unable to parse " + familiesFileLocation, e);
             }
         }
 
@@ -243,7 +247,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
     public void loadTargets() throws MojoExecutionException {
         Enumeration<URL> targetEnumeration = null;
         try {
-            targetEnumeration = getClass().getClassLoader().getResources("targets.json");
+            targetEnumeration = getClass().getClassLoader().getResources(targetsFileLocation);
         } catch (IOException ioe) {
             throw new MojoExecutionException("Unable to find targets", ioe);
         }
@@ -256,7 +260,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
             try (InputStream targetsStream = targetsResource.openStream()) {
                 targets = GenerateSourcesHelper.loadTargets(targetsStream, targets);
             } catch (IOException e) {
-                throw new MojoExecutionException("Unable to parse targets.json", e);
+                throw new MojoExecutionException("Unable to parse " + targetsFileLocation, e);
             }
         }
     }
@@ -270,7 +274,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
     public void loadProfiles() throws MojoExecutionException {
         Enumeration<URL> profileEnumeration = null;
         try {
-            profileEnumeration = getClass().getClassLoader().getResources("profiles.json");
+            profileEnumeration = getClass().getClassLoader().getResources(profilesFileLocation);
         } catch (IOException ioe) {
             throw new MojoExecutionException("Unable to find profiles", ioe);
         }
@@ -283,7 +287,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
             try (InputStream profilesStream = profilesResource.openStream()) {
                 profiles = GenerateSourcesHelper.loadProfiles(profilesStream, profiles);
             } catch (IOException e) {
-                throw new MojoExecutionException("Unable to parse profiles.json", e);
+                throw new MojoExecutionException("Unable to parse " + profilesFileLocation, e);
             }
         }
 
@@ -421,6 +425,50 @@ public class GenerateSourcesMojo extends AbstractMojo {
 
     public Map<String, Target> getTargets() {
         return targets;
+    }
+
+    public String getProfile() {
+        return profile;
+    }
+
+    public void setProfile(String profile) {
+        this.profile = profile;
+    }
+
+    public String getBasePackage() {
+        return basePackage;
+    }
+
+    public void setBasePackage(String basePackage) {
+        this.basePackage = basePackage;
+    }
+
+    public Map<String, String> getPropertyVariables() {
+        return propertyVariables;
+    }
+
+    public void setPropertyVariables(Map<String, String> propertyVariables) {
+        this.propertyVariables = propertyVariables;
+    }
+
+    public String getTargetsFileLocation() {
+        return targetsFileLocation;
+    }
+
+    public void setTargetsFileLocation(String targetsFileLocation) {
+        this.targetsFileLocation = targetsFileLocation;
+    }
+
+    public String getProfilesFileLocation() {
+        return profilesFileLocation;
+    }
+
+    public void setProfilesFileLocation(String profilesFileLocation) {
+        this.profilesFileLocation = profilesFileLocation;
+    }
+
+    public MavenProject getProject() {
+        return project;
     }
    
 }

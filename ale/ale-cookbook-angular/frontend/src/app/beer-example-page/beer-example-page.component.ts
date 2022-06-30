@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { BeerExampleEntity } from '../shared/model/beer-example-entity.model';
 import { FermenterResponse } from '../shared/model/fermenter-response.model';
 import { BeerServiceExampleService } from '../generated/service/business/beer-service-example.service';
-import { BeerExampleEntityMaintenanceService } from '../generated/service/maintenance/beer-example-entity-maintenance.service'; 
+import { BeerExampleEntityMaintenanceService } from '../generated/service/maintenance/beer-example-entity-maintenance.service';
 
 @Component({
   selector: 'beer-example-page',
@@ -12,6 +12,7 @@ import { BeerExampleEntityMaintenanceService } from '../generated/service/mainte
 export class BeerExampleComponent implements OnInit {
   brewedBeers = new Array<BeerExampleEntity>();
   testVariable = '';
+  dateVariable = new Date();
 
   constructor(
     private beerServiceExampleService: BeerServiceExampleService,
@@ -32,5 +33,5 @@ export class BeerExampleComponent implements OnInit {
       this.brewedBeers = this.brewedBeers.filter(obj => obj !== beer);
     })
   }
-  
+
 }

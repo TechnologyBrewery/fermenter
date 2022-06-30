@@ -20,6 +20,7 @@ import { E2eTestRunnerComponent } from './e2e-tests-page/e2e-test-runner/e2e-tes
 import { BeerExampleEntityBeerTypeFormComponent } from './generated/ui/beer-example-entity/beer-type/form/beer-example-entity-beer-type-form.component';
 import { SimpleDomainTheLong1FormComponent } from './generated/ui/simple-domain/the-long1/form/simple-domain-the-long1-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { SimpleDomainTheDate1FormComponent } from './generated/ui/simple-domain/the-date1/form/simple-domain-the-date1-form.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,7 +31,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     BeerExampleComponent,
     E2eTestRunnerComponent,
     BeerExampleEntityBeerTypeFormComponent,
-    SimpleDomainTheLong1FormComponent
+    SimpleDomainTheLong1FormComponent,
+    SimpleDomainTheDate1FormComponent
   ],
   imports: [
     BrowserModule,

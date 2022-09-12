@@ -12,6 +12,8 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.logging.LogFactory;
@@ -365,7 +367,8 @@ public class GenerateSourcesMojo extends AbstractMojo {
      */
     private Exception handleInvalidProfile(String targetProfile, Collection<ExpandedProfile> allProfiles) {
         StringBuilder sb = new StringBuilder();
-        for (ExpandedProfile profileValue : allProfiles) {
+        Set<ExpandedProfile> orderedProfiles = new TreeSet<>(allProfiles);
+        for (ExpandedProfile profileValue : orderedProfiles) {
             sb.append("\t- ").append(profileValue.getName()).append("\n");
         }
         

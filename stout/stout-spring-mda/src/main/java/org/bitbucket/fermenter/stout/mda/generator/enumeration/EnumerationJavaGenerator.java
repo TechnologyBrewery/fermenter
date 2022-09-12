@@ -15,7 +15,7 @@ public class EnumerationJavaGenerator extends AbstractGenerator {
 
     public void generate(GenerationContext context) {
         DefaultModelInstanceRepository metadataRepository = ModelInstanceRepositoryManager
-                .getMetamodelRepository(DefaultModelInstanceRepository.class);
+            .getMetamodelRepository(DefaultModelInstanceRepository.class);
         Map<String, Enumeration> enumerations = metadataRepository.getEnumerations(metadataRepository.getBasePackage());
 
         JavaEnumeration javaEnumeration;
@@ -31,7 +31,7 @@ public class EnumerationJavaGenerator extends AbstractGenerator {
             vc.put("enumeration", javaEnumeration);
             vc.put("basePackage", context.getBasePackage());
 
-            fileName = replaceEnumerationName(basefileName, enumeration.getName());
+            fileName = replace("enumerationName", basefileName, enumeration.getName());
             context.setOutputFile(fileName);
 
             generateFile(context, vc);

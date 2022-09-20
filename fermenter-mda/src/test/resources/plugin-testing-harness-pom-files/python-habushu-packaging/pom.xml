@@ -1,0 +1,35 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <name>Model-Driven Architecture Code Generator::Generate Python Project with Habushu Packaging Test</name>
+    <groupId>org.bitbucket.askllc.fermenter</groupId>
+    <artifactId>python-habushu-packaging</artifactId>
+    <version>1.0.0</version>
+    <packaging>habushu</packaging>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.bitbucket.askllc.fermenter</groupId>
+                <artifactId>fermenter-mda</artifactId>
+                <version>${project.version}</version>
+                <configuration>
+                    <profile>foo</profile>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.bitbucket.cpointe.habushu</groupId>
+                <artifactId>habushu-maven-plugin</artifactId>
+                <version>2.0.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <pythonVersion>3.9.13</pythonVersion>
+                </configuration>
+            </plugin>
+        </plugins>
+
+    </build>
+
+</project>

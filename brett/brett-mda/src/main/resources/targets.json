@@ -1,0 +1,44 @@
+[
+  {
+    "name": "poetry-pyproject-toml",
+    "templateName": "templates/pyproject.toml.vm",
+    "outputFile": "pyproject.toml",
+    "generator": "org.bitbucket.fermenter.brett.HabushuRootLevelResourceGenerator",
+    "metadataContext": "local",
+    "overwritable": false
+  },
+  {
+    "name": "top-level-regular-package-init",
+    "templateName": "templates/init.py.vm",
+    "outputFile": "__init__.py",
+    "generator": "org.bitbucket.fermenter.brett.PythonModuleGenerator",
+    "metadataContext": "local",
+    "overwritable": false
+  },
+  {
+    "name": "generated-regular-package-init",
+    "templateName": "templates/init.py.vm",
+    "outputFile": "__init__.py",
+    "generator": "org.bitbucket.fermenter.brett.PythonModuleGenerator",
+    "metadataContext": "local",
+    "overwritable": true
+  },
+  {
+    "name": "example-behave-bdd-feature",
+    "templateName": "templates/behave.feature.vm",
+    "outputFile": "features/example.feature",
+    "generator": "org.bitbucket.fermenter.brett.PythonModuleGenerator",
+    "metadataContext": "local",
+    "overwritable": false,
+    "artifactType": "test"
+  },
+  {
+    "name": "example-behave-bdd-steps",
+    "templateName": "templates/init.py.vm",
+    "outputFile": "features/steps/example_steps.py",
+    "generator": "org.bitbucket.fermenter.brett.PythonModuleGenerator",
+    "metadataContext": "local",
+    "overwritable": false,
+    "artifactType": "test"
+  }
+]

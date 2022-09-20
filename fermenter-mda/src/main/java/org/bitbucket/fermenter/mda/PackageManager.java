@@ -57,9 +57,6 @@ public class PackageManager {
         getInstance().artifactIdToBasePackage.put(artifactId, basePackage);
     }
 
-    public static String getPackageForArtifactId(String artifactId) {
-        return getInstance().artifactIdToBasePackage.get(artifactId);
-    }
 
     private static InputStream processURL(URL url) throws IOException {
         String sUrl = url.toString();

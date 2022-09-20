@@ -1,4 +1,4 @@
-package org.bitbucket.fermenter.mda.element;
+package org.bitbucket.fermenter.mda;
 
 import org.junit.runner.RunWith;
 

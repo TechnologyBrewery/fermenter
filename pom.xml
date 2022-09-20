@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bitbucket.askllc.fermenter</groupId>
@@ -8,14 +9,14 @@
 
     <name>Fermenter</name>
     <description>
-		In brewing, a fermenter is a vessel in which unfinished ingredients become nearly finished beer. 
-		In Model Driven Architecture, Fermenter is a project that converts functional concepts into nearly finished
-		applications. This approach allows for the quick definition and assembly of applications with the focus on 
-		functional concepts rather than technical underpinnings. Fermenter is an MDA engine that allows common 
-		concepts to be modeled and spawn any number of generated source files. In turn, this allows developers
-		to focus more time on business logic, less time on technical underpinnings, and achieve extremely high levels
-		of architectural conformity.  
-	</description>
+        In brewing, a fermenter is a vessel in which unfinished ingredients become nearly finished beer.
+        In Model Driven Architecture, Fermenter is a project that converts functional concepts into nearly finished
+        applications. This approach allows for the quick definition and assembly of applications with the focus on
+        functional concepts rather than technical underpinnings. Fermenter is an MDA engine that allows common
+        concepts to be modeled and spawn any number of generated source files. In turn, this allows developers
+        to focus more time on business logic, less time on technical underpinnings, and achieve extremely high levels
+        of architectural conformity.
+    </description>
     <url>https://bitbucket.org/askllc/fermenter</url>
 
     <licenses>
@@ -164,7 +165,8 @@
                     <configuration>
                         <systemPropertyVariables>
                             <KRAUSENING_BASE>${project.basedir}/src/test/resources/krausening/base</KRAUSENING_BASE>
-                            <KRAUSENING_EXTENSIONS>${project.basedir}/src/test/resources/krausening/extensions</KRAUSENING_EXTENSIONS>
+                            <KRAUSENING_EXTENSIONS>${project.basedir}/src/test/resources/krausening/extensions
+                            </KRAUSENING_EXTENSIONS>
                             <KRAUSENING_PASSWORD>dev</KRAUSENING_PASSWORD>
                         </systemPropertyVariables>
                     </configuration>
@@ -176,7 +178,8 @@
                     <configuration>
                         <systemPropertyVariables>
                             <KRAUSENING_BASE>${project.basedir}/src/test/resources/krausening/base</KRAUSENING_BASE>
-                            <KRAUSENING_EXTENSIONS>${project.basedir}/src/test/resources/krausening/extensions</KRAUSENING_EXTENSIONS>
+                            <KRAUSENING_EXTENSIONS>${project.basedir}/src/test/resources/krausening/extensions
+                            </KRAUSENING_EXTENSIONS>
                             <KRAUSENING_PASSWORD>dev</KRAUSENING_PASSWORD>
                         </systemPropertyVariables>
                     </configuration>
@@ -204,6 +207,36 @@
                         </execution>
                     </executions>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>3.0.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>3.0.0-M6</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.sonatype.plugins</groupId>
+                    <artifactId>nexus-staging-maven-plugin</artifactId>
+                    <version>1.6.13</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.2.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>3.4.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>3.0.1</version>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -222,18 +255,23 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.3</version>
                 <configuration>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                     <useReleaseProfile>false</useReleaseProfile>
-                    <releaseProfiles>ossrh-release</releaseProfiles>
+                    <releaseProfiles>ossrh-release,with-python-support</releaseProfiles>
+                    <!-- During release preparation, Habushu will automatically update the versions of Habushu modules
+                        within their pyproject.toml configurations, however the maven-release-plugin will only commit
+                        updates to pom.xml files.  In order to version control both pom.xml and pyproject.toml files
+                        that are updated during release preparation, customize the preparation and completion goals
+                        to additionally execute the scm:checkin goals -->
+                    <preparationGoals>clean verify scm:checkin -Dmessage="[maven-release-plugin] prepare release"</preparationGoals>
+                    <completionGoals>clean verify scm:checkin -Dmessage="[maven-release-plugin] prepare for next development iteration"</completionGoals>
                     <goals>deploy</goals>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.8</version>
                 <extensions>true</extensions>
                 <configuration>
                     <serverId>ossrh</serverId>
@@ -310,7 +348,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>3.0.1</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
@@ -323,20 +360,21 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.10.4</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
                                 <goals>
                                     <goal>jar</goal>
                                 </goals>
+                                <configuration>
+                                    <failOnError>false</failOnError>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -351,27 +389,17 @@
             </build>
         </profile>
         <profile>
-            <id>disable-java8-doclint</id>
-            <activation>
-                <jdk>[1.8,)</jdk>
-            </activation>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-javadoc-plugin</artifactId>
-                            <configuration>
-                                <!-- NB JDK 8 Javadoc linter is very strict, so deactivate it if we're using Java 8 -->
-                                <additionalparam>-Xdoclint:none</additionalparam>
-                            </configuration>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-            </build>
-            <properties>
-                <additionalparam>-Xdoclint:none</additionalparam>
-            </properties>
+            <!-- Require developers to opt-in for Python/Habushu support since it may not be needed
+                for all projects and Habushu requires the installation of build tool dependencies (i.e. Poetry)
+                that cannot be automatically installed through Maven -->
+            <id>with-python-support</id>
+            <modules>
+                <module>fermenter-mda</module>
+                <module>stout</module>
+                <module>ale</module>
+                <module>docker</module>
+                <module>brett</module>
+            </modules>
         </profile>
     </profiles>
 </project>

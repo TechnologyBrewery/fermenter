@@ -1,0 +1,29 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.bitbucket.askllc.fermenter</groupId>
+        <artifactId>root</artifactId>
+        <version>2.5.0-SNAPSHOT</version>
+    </parent>
+
+    <groupId>org.bitbucket.askllc.fermenter.brett</groupId>
+    <artifactId>brett</artifactId>
+    <packaging>pom</packaging>
+
+    <name>Fermenter::Brett</name>
+    <description>
+        Brett utilizes fermenter-mda to generate Python projects that align with the project structure and best
+        practices prescribed by Habushu. As Brettanomyces (i.e. Brett) is a yeast that can yield unpredictable
+        fermentations, Brett's Fermenter MDA module can bring enterprise development and configuration management best
+        practices to the often unpredictable world of Python development.
+    </description>
+
+    <modules>
+        <module>brett-mda</module>
+        <module>brett-cookbook</module>
+    </modules>
+
+</project>

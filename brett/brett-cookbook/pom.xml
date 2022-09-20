@@ -1,0 +1,77 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.bitbucket.askllc.fermenter.brett</groupId>
+        <artifactId>brett</artifactId>
+        <version>2.5.0-SNAPSHOT</version>
+    </parent>
+
+    <name>Fermenter::Brett::Brett Cookbook</name>
+    <description>
+        Demonstrative Cookbook project that shows how the Fermenter MDA generation templates and profiles contained
+        within brett-mda may be utilized to generate a Habushu-compliant Python project.
+    </description>
+
+    <artifactId>brett-cookbook</artifactId>
+    <packaging>habushu</packaging>
+
+    <properties>
+        <habushu.version>2.1.0</habushu.version>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.bitbucket.askllc.fermenter</groupId>
+                <artifactId>fermenter-mda</artifactId>
+                <version>${project.version}</version>
+                <configuration>
+                    <profile>base-habushu-support-with-example-bdd-feature</profile>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>${project.groupId}</groupId>
+                        <artifactId>brett-mda</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <!-- As we're generating out the required Poetry/Habushu project
+                    configurations and structure through the utilized Fermenter MDA profile,
+                    generate all files during the validate phase *before* Habushu peforms
+                    Poetry specific intialization checks in the subsequent initialize phase -->
+                    <execution>
+                        <id>generate-python-sources</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>generate-sources</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.bitbucket.cpointe.habushu</groupId>
+                <artifactId>habushu-maven-plugin</artifactId>
+                <version>${habushu.version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <pythonVersion>3.9.13</pythonVersion>
+                    <!-- Skip publishing brett-cookbook to a PyPI repository -->
+                    <skipDeploy>true</skipDeploy>
+                </configuration>
+            </plugin>
+            <!-- Activated via the ossrh-release profile in the root POM, override the
+             maven-gpg-plugin configuration here to ensure that its execution is skipped -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

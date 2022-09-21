@@ -1,0 +1,21 @@
+# GENERATED STUB - PLEASE ***DO*** MODIFY
+
+[tool.poetry]
+name = "${packageName}"
+version = "1.0.0.dev"
+description = "Description of ${packageName}"
+authors = ["Your Name <you@example.com>"]
+
+# Ensure that generated code is included in package archives
+include = ["src/${packageFolderName}/generated/*/**"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+[tool.poetry.dev-dependencies]
+black = "^22.3.0"
+behave = "^1.2.6"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

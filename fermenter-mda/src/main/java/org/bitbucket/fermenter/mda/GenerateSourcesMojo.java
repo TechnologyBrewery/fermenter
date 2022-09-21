@@ -16,6 +16,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.LogFactory;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.AbstractMojo;
@@ -31,13 +32,13 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.bitbucket.fermenter.mda.GenerateSourcesHelper.LoggerDelegate;
-import org.bitbucket.fermenter.mda.element.ExpandedFamily;
-import org.bitbucket.fermenter.mda.element.ExpandedProfile;
-import org.bitbucket.fermenter.mda.element.Target;
+import org.bitbucket.fermenter.mda.element.*;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
+import org.bitbucket.fermenter.mda.generator.Generator;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceUrl;
 import org.bitbucket.fermenter.mda.metamodel.ModelRepositoryConfiguration;
+import org.bitbucket.fermenter.mda.util.MessageTracker;
 
 /**
  * Executes the Fermenter MDA process.
@@ -65,8 +66,16 @@ public class GenerateSourcesMojo extends AbstractMojo {
     @Parameter
     private List<String> metadataDependencies;
 
-    @Parameter(required = true)
+    @Parameter
     private String basePackage;
+
+    /**
+     * Captures the target programming language in which source code artifacts will be generated. This
+     * configuration drives the automatic configuration of {@link #mainSourceRoot}, {@link #generatedSourceRoot},
+     * {@link #generatedTestSourceRoot}, and other language specific structural elements.
+     */
+    @Parameter(required = true, defaultValue = "java")
+    private String language;
 
     private String targetsFileLocation = "targets.json";
     private String profilesFileLocation = "profiles.json";
@@ -79,26 +88,23 @@ public class GenerateSourcesMojo extends AbstractMojo {
     @Parameter(required = false)
     private List<String> targetModelInstances;
 
-    @Parameter(required = true, readonly = true, defaultValue = "${project.basedir}/src/generated/java")
-    private String generatedCompileSourceRoot;
-
-    @Parameter(required = true, readonly = true, defaultValue = "${project.basedir}/src/main")
+    @Parameter(required = true, defaultValue = "${project.basedir}/src/main")
     private File mainSourceRoot;
 
-    @Parameter(required = true, readonly = true, defaultValue = "${project.basedir}/src/generated")
+    @Parameter(required = true, defaultValue = "${project.basedir}/src/generated")
     private File generatedSourceRoot;
-    
-    @Parameter(required = true, readonly = true, defaultValue = "${project.basedir}/src/test")
+
+    @Parameter(required = true, defaultValue = "${project.basedir}/src/test")
     private File testSourceRoot;
-    
-    @Parameter(required = true, readonly = true, defaultValue = "${project.basedir}/src/generated-test")
-    private File generatedTestSourceRoot;       
+
+    @Parameter(required = true, defaultValue = "${project.basedir}/src/generated-test")
+    private File generatedTestSourceRoot;
 
     @Parameter(required = true, readonly = true, defaultValue = "${project.basedir}")
     private File projectRoot;
-    
-    @Parameter(required = true, readonly = true, defaultValue = "${project.basedir}/src/main/resources/types.json")
-    private File localTypes;    
+
+    @Parameter(required = true, defaultValue = "${project.basedir}/src/main/resources/types.json")
+    private File localTypes;
 
     @Parameter(required = true, readonly = true, defaultValue = "org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository")
     private String metadataRepositoryImpl;
@@ -122,22 +128,22 @@ public class GenerateSourcesMojo extends AbstractMojo {
         public void log(LogLevel level, String message) {
             Log log = getLog();
             switch (level) {
-            case TRACE:
-            case DEBUG:
-                log.debug(message);
-                break;
-            case INFO:
-                log.info(message);
-                break;
-            case WARN:
-                log.warn(message);
-                break;
-            case ERROR:
-                log.error(message);
-                break;
-            default:
-                log.info(message);
-                break;
+                case TRACE:
+                case DEBUG:
+                    log.debug(message);
+                    break;
+                case INFO:
+                    log.info(message);
+                    break;
+                case WARN:
+                    log.warn(message);
+                    break;
+                case ERROR:
+                    log.error(message);
+                    break;
+                default:
+                    log.info(message);
+                    break;
             }
         }
     };
@@ -149,7 +155,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
         try {
             setup();
             GenerateSourcesHelper.performSourceGeneration(profile, profiles, this::createGenerationContext,
-                    this::handleInvalidProfile, mavenLoggerDelegate);
+                this::handleInvalidProfile, mavenLoggerDelegate);
         } catch (Exception e) {
             String message = "Error while performing source generation";
             // NB logging and re-throwing isn't usually a best practice as it
@@ -158,12 +164,11 @@ public class GenerateSourcesMojo extends AbstractMojo {
             // without needing to re-run Maven with -e or -X turned on
             getLog().error(message, e);
             throw new MojoExecutionException(message, e);
-            
+
         } finally {
             GenerateSourcesHelper.cleanUp();
-            
+
         }
-        
 
     }
 
@@ -172,32 +177,40 @@ public class GenerateSourcesMojo extends AbstractMojo {
      * prior to code generation, including loading generation targets and
      * profiles, automatically adding src/generated/java to the project's list
      * of source directories, and loading/validating metamodels into the
-     * appropriate {@link ModelInstaceRepository}.
-     * 
-     * @throws MojoExecutionException
-     *             any unexpected error occurs during metamodel loading and
-     *             validation.
+     * appropriate {@link ModelInstanceRepository}.
+     *
+     * @throws MojoExecutionException any unexpected error occurs during metamodel loading and
+     *                                validation.
      */
     private void setup() throws MojoExecutionException {
         if (metadataDependencies == null) {
             metadataDependencies = new ArrayList<>();
         }
 
+        updateMojoConfigsBasedOnLanguage();
+        validateMojoConfigs();
+
         loadTargets();
         loadProfiles();
         loadFamilies();
         TypeManager.getInstance().loadLocalTypes(localTypes);
 
-        project.addCompileSourceRoot(generatedCompileSourceRoot);
+        if (isGeneratingJavaProject()) {
+            try {
+                project.addCompileSourceRoot(getJavaCompilePathForGeneratedSource());
+            } catch (IOException e) {
+                throw new MojoExecutionException("Could not add generated Java source root to project compilation path list", e);
+            }
+        }
 
         try {
             ModelRepositoryConfiguration config = createMetadataConfiguration();
             ModelInstanceRepository newRepository = GenerateSourcesHelper.loadMetamodelRepository(config,
-                    metadataRepositoryImpl, mavenLoggerDelegate);
+                metadataRepositoryImpl, mavenLoggerDelegate);
 
             GenerateSourcesHelper.validateMetamodelRepository(newRepository, mavenLoggerDelegate);
         } catch (MalformedURLException | ClassNotFoundException | NoSuchMethodException | InstantiationException
-                | IllegalAccessException | InvocationTargetException e) {
+                 | IllegalAccessException | InvocationTargetException e) {
             throw new MojoExecutionException("Could not successfully load metamodel repository", e);
         }
 
@@ -243,7 +256,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
     /**
      * Scans the classpath for any targets.json files and loads all defined
      * {@link Target} configurations.
-     * 
+     *
      * @throws MojoExecutionException
      */
     public void loadTargets() throws MojoExecutionException {
@@ -270,7 +283,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
     /**
      * Scans the classpath for any profiles.json files and loads all defined
      * {@link Profile} configurations.
-     * 
+     *
      * @throws MojoExecutionException
      */
     public void loadProfiles() throws MojoExecutionException {
@@ -307,7 +320,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
      * the created {@link ModelRepositoryConfiguration}.
      *
      * @return appropriately configured {@link ModelRepositoryConfiguration}
-     *         that may be used for metamodel processing.
+     * that may be used for metamodel processing.
      * @throws MalformedURLException
      */
     private ModelRepositoryConfiguration createMetadataConfiguration() throws MalformedURLException {
@@ -326,7 +339,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
 
         if ((targetedArtifactIds.size() > 1) || (!targetedArtifactIds.contains(project.getArtifactId()))) {
             LOG.info("Generation targets (" + targetedArtifactIds.size()
-                    + ") are different from project's local metadata (" + targetedArtifactIds.toString() + ")");
+                + ") are different from project's local metadata (" + targetedArtifactIds.toString() + ")");
         }
 
         config.setTargetModelInstances(targetedArtifactIds);
@@ -353,16 +366,53 @@ public class GenerateSourcesMojo extends AbstractMojo {
     }
 
     /**
+     * Helper method that automatically updates appropriate Mojo configurations based on the specified target language,
+     * which is configured via {@link #language}. Specifically, this method overrides the various file locations in
+     * which generated code is placed to align with the expected file structures required by each language associated
+     * DevOps and build tooling.
+     */
+    protected void updateMojoConfigsBasedOnLanguage() {
+        if (isGeneratingPythonProject()) {
+            String pythonPackageFolder = getPythonPackageFolderForProject();
+            this.mainSourceRoot = new File(this.projectRoot, String.format("src/%s", pythonPackageFolder));
+            this.generatedSourceRoot = new File(this.projectRoot, String.format("src/%s/generated", pythonPackageFolder));
+            this.testSourceRoot = new File(this.projectRoot, "tests");
+            this.generatedTestSourceRoot = new File(this.projectRoot, "tests");
+            this.localTypes = new File(mainSourceRoot, "resources/types.json");
+            if (StringUtils.isEmpty(this.basePackage)) {
+                this.basePackage = pythonPackageFolder;
+            }
+        }
+    }
+
+    /**
+     * Performs complex validation on user-provided configurations to this Mojo, outside of metamodel validation.
+     *
+     * @throws MojoExecutionException unrecoverable validation error was detected.
+     */
+    protected void validateMojoConfigs() throws MojoExecutionException {
+        MessageTracker messageTracker = MessageTracker.getInstance();
+        if (isGeneratingJavaProject()) {
+            if (StringUtils.isEmpty(basePackage)) {
+                messageTracker.addErrorMessage("<basePackage> must be specified for Java-based projects");
+            }
+        }
+
+        if (messageTracker.hasErrors()) {
+            messageTracker.emitMessages(mavenLoggerDelegate);
+            throw new MojoExecutionException("Provided configuration was invalid!");
+        }
+    }
+
+    /**
      * Handles the specification of an invalid or non-existent generation
      * profile by providing diagnostic error logging and returning the
      * appropriate exception to throw.
-     * 
-     * @param targetProfile
-     *            invalid profile specified in the fermenter-mda plugin
-     *            declaration.
-     * @param allProfiles
-     *            all valid {@link Profile}s based on the fermenter-mda plugin
-     *            configuration.
+     *
+     * @param targetProfile invalid profile specified in the fermenter-mda plugin
+     *                      declaration.
+     * @param allProfiles   all valid {@link Profile}s based on the fermenter-mda plugin
+     *                      configuration.
      * @return a {@link MojoExecutionException} to throw and halt the build.
      */
     private Exception handleInvalidProfile(String targetProfile, Collection<ExpandedProfile> allProfiles) {
@@ -371,31 +421,30 @@ public class GenerateSourcesMojo extends AbstractMojo {
         for (ExpandedProfile profileValue : orderedProfiles) {
             sb.append("\t- ").append(profileValue.getName()).append("\n");
         }
-        
-        getLog().error("\n<plugin>\n" 
-                        + "\t<groupId>org.bitbucket.askllc.fermenter</groupId>\n"
-                        + "\t<artifactId>fermenter-mda</artifactId>\n" 
-                        + "\t...\n" 
-                        + "\t<configuration>\n" 
-                        + "\t\t<profile>" + targetProfile + "</profile>   <-----------  INVALID PROFILE!\n"
-                        + "\t\t...\n"
-                        + "\t</configuration>\n"
-                        + "</plugin>\n"
-                        + "Profile '" + targetProfile + "' is invalid.  Please choose one of the following valid profiles:\n" + sb.toString());
 
-        return new MojoExecutionException("Invalid profile specified: '" + targetProfile + "'");    
+        getLog().error("\n<plugin>\n"
+            + "\t<groupId>org.bitbucket.askllc.fermenter</groupId>\n"
+            + "\t<artifactId>fermenter-mda</artifactId>\n"
+            + "\t...\n"
+            + "\t<configuration>\n"
+            + "\t\t<profile>" + targetProfile + "</profile>   <-----------  INVALID PROFILE!\n"
+            + "\t\t...\n"
+            + "\t</configuration>\n"
+            + "</plugin>\n"
+            + "Profile '" + targetProfile + "' is invalid.  Please choose one of the following valid profiles:\n" + sb.toString());
+
+        return new MojoExecutionException("Invalid profile specified: '" + targetProfile + "'");
     }
-    
+
     /**
      * Creates a new {@link GenerationContext} object based on the given
      * {@link Target} which captures key configuration details needed to
      * generate the source file(s) modeled by the given {@link Target} and it's
      * {@link Generator}.
-     * 
-     * @param target
-     *            generation {@link Target} being processed.
+     *
+     * @param target generation {@link Target} being processed.
      * @return {@link GenerationContext} that can be provided to the given
-     *         {@link Target}'s {@link Generator} to execute code generation.
+     * {@link Target}'s {@link Generator} to execute code generation.
      */
     private GenerationContext createGenerationContext(Target target) {
         GenerationContext context = new GenerationContext(target);
@@ -414,8 +463,49 @@ public class GenerateSourcesMojo extends AbstractMojo {
             context.setScmUrl(project.getScm().getUrl());
         }
         context.setPropertyVariables(propertyVariables);
-        
+
         return context;
+    }
+
+    /**
+     * Boolean value indicating whether this Mojo is being invoked to generate a Java-based project.
+     *
+     * @return
+     */
+    protected boolean isGeneratingJavaProject() {
+        return "java".equalsIgnoreCase(this.language) && !"habushu".equals(this.getProject().getPackaging());
+    }
+
+    /**
+     * Boolean value indicating whether this Mojo is being invoked to generate a Python-based project.
+     *
+     * @return
+     */
+    protected boolean isGeneratingPythonProject() {
+        return "python".equalsIgnoreCase(this.language) || "habushu".equals(this.project.getPackaging());
+    }
+
+    /**
+     * Gets the normalized package folder name of the relevant Python project being generated that aligns with
+     * PEP-8 naming conventions (dashes may be in published package names, but in the actual package folder hierarchy,
+     * dashes should be replaced with underscores).
+     *
+     * @return
+     */
+    protected String getPythonPackageFolderForProject() {
+        return StringUtils.replace(this.getProject().getArtifactId(), "-", "_");
+    }
+
+    /**
+     * Retrieves the compile path at which generated Java source files will be placed. <br>
+     *
+     * <b>Pre-condition:</b> The target project being generated is Java-based
+     *
+     * @return
+     * @throws IOException
+     */
+    protected String getJavaCompilePathForGeneratedSource() throws IOException {
+        return new File(this.generatedSourceRoot, "java").getCanonicalPath();
     }
 
     public Map<String, ExpandedFamily> getFamilies() {
@@ -473,5 +563,12 @@ public class GenerateSourcesMojo extends AbstractMojo {
     public MavenProject getProject() {
         return project;
     }
-   
+
+    protected File getMainSourceRoot() {
+        return mainSourceRoot;
+    }
+
+    protected File getGeneratedSourceRoot() {
+        return generatedSourceRoot;
+    }
 }

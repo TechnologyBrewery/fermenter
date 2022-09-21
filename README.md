@@ -16,19 +16,26 @@ To get started, you define the model elements you need and select a framework to
 Add our Maven plugin to your build and run your build like you normally do.
 
 ### Step 3 - Update Generated Source with Business Logic ###
-Fermenter will generate source into *src/generated/<appropriate sub-folder>*, representing the concepts and framework you have configured.  Update business logic, typically in *src/main/<appropriate sub-folder>* and you're done!
+Fermenter will generate source into the folder structure appropriate for the type of project being generated (i.e.  `src/generated/<appropriate sub-folder>` for Java-based projects), representing the concepts and framework you have configured.  Update modifiable stubs with business logic, which are similarly generated into the appropriate location (i.e. `src/main/<appropriate sub-folder>` for Java-based projects) and you're done!
 
 ## Stout ##
 Fermenter's default framework, called `stout`, blends best practices from Spring, Jackson, JPA, and other libraries to construct cohesive Java Servlet compatible web applications.  The resulting generated source uses object oriented concepts to stub out locations for business logic and provides key extension points to modify default functionality where necessary.  Please see the `stout-cookbook-domain` module for examples of all the model concepts in action.  Additionally, you can use the `integration-test` Maven profile to automatically download and execute the examples in a live Tomcat container.
+
+## Ale ##
+
+Ale is a Fermenter framework that makes it easier for developers to utilize [Angular](https://angular.io/) best practices and leverage a consistent frontend base layer. Generated base layer support includes entity models, services, and some basic UI components which allows for less time to be spent writing scaffolding and more time to be spent on complex high-value visualization areas.  See the `ale-cookbook-angular` module for a demonstrative example of how Ale may be used.
+
+## Brett ##
+
+Contrary to how Brettanomyces (i.e. "Brett") is a yeast that can yield unpredictable results when brewing, the `brett` Fermenter framework helps developers institute enterprise development and configuration management best practices to the often unpredictable world of Python development.  `brett` facilitates the generation of Python projects that align with [Habushu](https://bitbucket.org/cpointe/habushu/) standards.  Due to the Habushu's usage of Python build tools that currently must be manually installed, Fermenter developers must opt-in to build `brett` modules by using  `with-python-support` Maven profile (i.e. `mvn clean install -Pwith-python-support`). See the `brett-cookbook` for an example of how `brett` combines Fermenter-driven Python module generation with an automated DevOps lifecycle managed through Habushu.
 
 # Distribution Channel
 
 Want Fermenter in your project? As demonstrated in the `stout-cookbook-domain` project, add the following Maven plugin declaration and dependency to your project from Maven Central: 
 
-```
-#!xml
+```xml
 <properties>
-	<fermenter.version>2.0.0.CR6</fermenter.version>
+	<fermenter.version>2.5.0</fermenter.version>
 </properties>
 <build>
 	<plugins>
@@ -62,12 +69,11 @@ Want Fermenter in your project? As demonstrated in the `stout-cookbook-domain` p
 
 Fermenter uses both the `maven-release-plugin` and the `nexus-staging-maven-plugin` to facilitate the release and deployment of new Fermenter builds. In order to perform a release, you must:
 
-1.) Obtain a [JIRA](https://issues.sonatype.org/secure/Dashboard.jspa) account with Sonatype OSSRH and access to the `org.bitbucket.askllc` project group
+1. Obtain a [JIRA](https://issues.sonatype.org/secure/Dashboard.jspa) account with Sonatype OSSRH and access to the `org.bitbucket.askllc` project group
 
-2.) Ensure that your Sonatype OSSRH JIRA account credentials are specified in your `settings.xml`:
+2. Ensure that your Sonatype OSSRH JIRA account credentials are specified in your `settings.xml`:
 
-```
-#!xml
+```xml
 <settings>
   <servers>
     <server>
@@ -79,14 +85,16 @@ Fermenter uses both the `maven-release-plugin` and the `nexus-staging-maven-plug
 </settings>
 ```
 
-3.) Install `gpg` and distribute your key pair - see [here](http://central.sonatype.org/pages/working-with-pgp-signatures.html).  OS X users may need to execute:
+3. Install `gpg` and distribute your key pair - see [here](http://central.sonatype.org/pages/working-with-pgp-signatures.html).  OS X users may need to execute:
 
 ```
 #!bash
 export GPG_TTY=`tty`;
 ```
 
-4.) Execute `mvn release:clean release:prepare`, answer the prompts for the versions and tags, and perform `mvn release:perform`
+4. As [Habushu](https://bitbucket.org/cpointe/habushu/) modules that support `brett` are built as a part of the release process, ensure that all of prerequisite tools needed by [Habushu](https://bitbucket.org/cpointe/habushu/) are installed.
+
+5. Execute `mvn -Pwith-python-support release:clean release:prepare`, answer the prompts for the versions and tags, and perform `mvn release:perform`
 
 ## Licensing
 Fermenter is available under the [MIT License](http://opensource.org/licenses/mit-license.php).

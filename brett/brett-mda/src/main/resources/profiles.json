@@ -1,0 +1,32 @@
+[
+  {
+    "name": "base-habushu-support",
+    "targetReferences": [
+      {
+        "name": "poetry-pyproject-toml"
+      },
+      {
+        "name": "top-level-regular-package-init"
+      },
+      {
+        "name": "generated-regular-package-init"
+      }
+    ]
+  },
+  {
+    "name": "base-habushu-support-with-example-bdd-feature",
+    "profileReferences": [
+      {
+        "name": "base-habushu-support"
+      }
+    ],
+    "targetReferences": [
+      {
+        "name": "example-behave-bdd-feature"
+      },
+      {
+        "name": "example-behave-bdd-steps"
+      }
+    ]
+  }
+]

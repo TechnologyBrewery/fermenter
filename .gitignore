@@ -10,8 +10,11 @@ target
 **/bin/
 *.iml
 .idea/
+.DS_Store
 
 node_modules
 ale/ale-cookbook-angular/frontend/src/app/generated
 package-lock.json
 stout/stout-cookbook/stout-cookbook-test-generation/src/generated-test
+dist
+brett/brett-cookbook/src/brett_cookbook/generated

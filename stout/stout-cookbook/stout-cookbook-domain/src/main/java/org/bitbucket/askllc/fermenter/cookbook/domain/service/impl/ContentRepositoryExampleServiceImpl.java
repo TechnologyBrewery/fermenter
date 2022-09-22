@@ -12,6 +12,7 @@ import org.bitbucket.askllc.fermenter.cookbook.domain.service.rest.ContentReposi
 import org.bitbucket.fermenter.stout.authz.Action;
 import org.bitbucket.fermenter.stout.content.ContentRepository;
 import org.bitbucket.fermenter.stout.content.ContentRepositoryStream;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
 /**
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
  *      GENERATED STUB CODE - PLEASE *DO* MODIFY
  */
 @Service
+@ComponentScan(basePackages = {"org.bitbucket.fermenter.stout.content"})
 public class ContentRepositoryExampleServiceImpl extends ContentRepositoryExampleBaseServiceImpl
         implements ContentRepositoryExampleService {
 

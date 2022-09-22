@@ -12,11 +12,11 @@
         http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
     
     <import resource="stout-cookbook-domain-application-context.xml" />
-    
+
      <context:component-scan base-package="org.bitbucket.fermenter.stout.mock">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/>
     </context:component-scan>
-    
+
 	<bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
     	<property name="scopes">
         	<map>
@@ -26,5 +26,4 @@
         	</map>
     	</property>
 	</bean>
-
 </beans>

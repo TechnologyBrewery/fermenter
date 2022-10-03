@@ -64,6 +64,7 @@
 
     <properties>
         <cucumber.version>1.2.5</cucumber.version>
+        <habushu.version>2.1.0</habushu.version>
         <log4j.version>2.7</log4j.version>
         <maven.compiler.source>11</maven.compiler.source>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -248,6 +249,12 @@
             <plugin>
                 <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.bitbucket.cpointe.habushu</groupId>
+                <artifactId>habushu-maven-plugin</artifactId>
+                <version>2.1.0</version>
+                <extensions>true</extensions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

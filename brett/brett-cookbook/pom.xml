@@ -17,10 +17,6 @@
     <artifactId>brett-cookbook</artifactId>
     <packaging>habushu</packaging>
 
-    <properties>
-        <habushu.version>2.1.0</habushu.version>
-    </properties>
-
     <build>
         <plugins>
             <plugin>
@@ -54,8 +50,6 @@
             <plugin>
                 <groupId>org.bitbucket.cpointe.habushu</groupId>
                 <artifactId>habushu-maven-plugin</artifactId>
-                <version>${habushu.version}</version>
-                <extensions>true</extensions>
                 <configuration>
                     <pythonVersion>3.9.13</pythonVersion>
                     <!-- Skip publishing brett-cookbook to a PyPI repository -->

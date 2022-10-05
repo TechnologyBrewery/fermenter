@@ -1,24 +1,11 @@
 package org.bitbucket.fermenter.mda;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.LogFactory;
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.versioning.ComparableVersion;
+import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.descriptor.PluginDescriptor;
@@ -39,6 +26,14 @@ import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceUrl;
 import org.bitbucket.fermenter.mda.metamodel.ModelRepositoryConfiguration;
 import org.bitbucket.fermenter.mda.util.MessageTracker;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.*;
 
 /**
  * Executes the Fermenter MDA process.
@@ -100,8 +95,12 @@ public class GenerateSourcesMojo extends AbstractMojo {
     @Parameter(required = true, defaultValue = "${project.basedir}/src/generated-test")
     private File generatedTestSourceRoot;
 
-    @Parameter(required = true, readonly = true, defaultValue = "${project.basedir}")
-    private File projectRoot;
+    /**
+     * Local path from which metadata will be loaded. Defaults to "{@link #mainSourceRoot}/resources"
+     * via {@link #getLocalMetadataRoot()}.
+     */
+    @Parameter
+    private File localMetadataRoot;
 
     @Parameter(required = true, defaultValue = "${project.basedir}/src/main/resources/types.json")
     private File localTypes;
@@ -344,7 +343,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
 
         config.setTargetModelInstances(targetedArtifactIds);
         Map<String, ModelInstanceUrl> metadataUrls = config.getMetamodelInstanceLocations();
-        String projectUrl = new File(mainSourceRoot, "resources").toURI().toURL().toString();
+        String projectUrl = getLocalMetadataRoot().toURI().toURL().toString();
         metadataUrls.put(project.getArtifactId(), new ModelInstanceUrl(project.getArtifactId(), projectUrl));
         PackageManager.addMapping(project.getArtifactId(), basePackage);
 
@@ -374,10 +373,10 @@ public class GenerateSourcesMojo extends AbstractMojo {
     protected void updateMojoConfigsBasedOnLanguage() {
         if (isGeneratingPythonProject()) {
             String pythonPackageFolder = getPythonPackageFolderForProject();
-            this.mainSourceRoot = new File(this.projectRoot, String.format("src/%s", pythonPackageFolder));
-            this.generatedSourceRoot = new File(this.projectRoot, String.format("src/%s/generated", pythonPackageFolder));
-            this.testSourceRoot = new File(this.projectRoot, "tests");
-            this.generatedTestSourceRoot = new File(this.projectRoot, "tests");
+            this.mainSourceRoot = new File(project.getBasedir(), String.format("src/%s", pythonPackageFolder));
+            this.generatedSourceRoot = new File(project.getBasedir(), String.format("src/%s/generated", pythonPackageFolder));
+            this.testSourceRoot = new File(project.getBasedir(), "tests");
+            this.generatedTestSourceRoot = new File(project.getBasedir(), "tests");
             this.localTypes = new File(mainSourceRoot, "resources/types.json");
             if (StringUtils.isEmpty(this.basePackage)) {
                 this.basePackage = pythonPackageFolder;
@@ -449,7 +448,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
     private GenerationContext createGenerationContext(Target target) {
         GenerationContext context = new GenerationContext(target);
         context.setBasePackage(basePackage);
-        context.setProjectDirectory(projectRoot);
+        context.setProjectDirectory(project.getBasedir());
         context.setGeneratedSourceDirectory(generatedSourceRoot);
         context.setMainSourceDirectory(mainSourceRoot);
         context.setTestSourceDirectory(testSourceRoot);
@@ -478,11 +477,31 @@ public class GenerateSourcesMojo extends AbstractMojo {
 
     /**
      * Boolean value indicating whether this Mojo is being invoked to generate a Python-based project.
+     * This may be explicitly specified via the {@link #language} configuration or if it is detected
+     * that the project uses a recent version of the Habushu Maven plugin.
      *
      * @return
      */
     protected boolean isGeneratingPythonProject() {
-        return "python".equalsIgnoreCase(this.language) || "habushu".equals(this.project.getPackaging());
+        return "python".equalsIgnoreCase(this.language)
+            || ("habushu".equals(this.project.getPackaging()) && !isLegacyHabushuProject());
+    }
+
+    /**
+     * Boolean value indicating whether this Mojo is being invoked on a project that is a legacy
+     * Habushu project.  More specifically, the determination is based on if a version of the
+     * {@code org.bitbucket.cpointe:habushu-maven-plugin} with a version less than {@code 2.0.0}
+     * is included in the POM's {@code <build>}.
+     *
+     * @return
+     */
+    protected boolean isLegacyHabushuProject() {
+        Plugin habushuMavenPlugin = this.project.getPlugin("org.bitbucket.cpointe.habushu:habushu-maven-plugin");
+        if (habushuMavenPlugin != null) {
+            ComparableVersion habushuVersion = new ComparableVersion(habushuMavenPlugin.getVersion());
+            return habushuVersion.compareTo(new ComparableVersion("2.0.0")) < 0;
+        }
+        return false;
     }
 
     /**
@@ -506,6 +525,17 @@ public class GenerateSourcesMojo extends AbstractMojo {
      */
     protected String getJavaCompilePathForGeneratedSource() throws IOException {
         return new File(this.generatedSourceRoot, "java").getCanonicalPath();
+    }
+
+    /**
+     * Retrieves the location within this project from which local metadata definitions will be loaded.
+     * If {@link #localMetadataRoot} is not configured, this will default to "{@link #mainSourceRoot}/resources"
+     * (i.e. {@code src/main/resources}).
+     *
+     * @return
+     */
+    protected File getLocalMetadataRoot() {
+        return localMetadataRoot != null ? localMetadataRoot : new File(mainSourceRoot, "resources");
     }
 
     public Map<String, ExpandedFamily> getFamilies() {

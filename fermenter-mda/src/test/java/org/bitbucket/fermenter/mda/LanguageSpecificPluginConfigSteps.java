@@ -49,9 +49,19 @@ public class LanguageSpecificPluginConfigSteps {
 
     @Then("^Fermenter Maven plugin uses \"([^\"]*)\" as the main source root folder, \"([^\"]*)\" as the generated source root folder, and \"([^\"]*)\" as the base package$")
     public void fermenter_Maven_plugin_uses_as_the_main_source_root_folder_as_the_generated_source_root_folder_and_as_the_base_package(String mainSourceRoot, String generatedSourceRoot, String namespace) throws Throwable {
-        validatePluginConfig(generateSourcesMojo.getMainSourceRoot(), new File(mavenProjectBaseDir, mainSourceRoot), "mainSourceRoot");
-        validatePluginConfig(generateSourcesMojo.getGeneratedSourceRoot(), new File(mavenProjectBaseDir, generatedSourceRoot), "generatedSourceRoot");
-        Assert.assertEquals("Namespace/base package did not match the expected value", namespace, generateSourcesMojo.getBasePackage());
+        validatePluginConfig(generateSourcesMojo.getMainSourceRoot(),
+            new File(mavenProjectBaseDir, mainSourceRoot), "mainSourceRoot");
+        validatePluginConfig(generateSourcesMojo.getGeneratedSourceRoot(),
+            new File(mavenProjectBaseDir, generatedSourceRoot), "generatedSourceRoot");
+        Assert.assertEquals("Namespace/base package did not match the expected value", namespace,
+            generateSourcesMojo.getBasePackage());
+    }
+
+    @Then("^Fermenter Maven plugin uses \"([^\"]*)\" as the local metadata root folder$")
+    public void fermenter_Maven_plugin_uses_as_the_local_metadata_root_folder(String localMetadataRoot) throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        validatePluginConfig(generateSourcesMojo.getLocalMetadataRoot(),
+            new File(mavenProjectBaseDir, localMetadataRoot), "localMetadataRoot");
     }
 
     protected void validatePluginConfig(File actualPluginConfigFile, File expectedPluginConfigFile, String configDescription) throws IOException {
@@ -74,4 +84,5 @@ public class LanguageSpecificPluginConfigSteps {
     public void a_validation_error_is_detected() throws Throwable {
         Assert.assertEquals("No validation error was detected", true, validationFailure);
     }
+
 }

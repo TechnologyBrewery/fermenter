@@ -70,13 +70,13 @@ public class ModifiedDefaultMatchingChecker implements MatchingChecker {
         final int nb = names.length;
         for (int i = 0; i < nb; i++) {
             String name = names[i].trim();
-            
+
             // If this name is a key-value map entry incoming from a Shiro
             // configuration file, parse it to obtain just the key as a name
             if (name.indexOf(":") != -1) {
                 name = convertNameFromMapEntryToString(name);
             }
-            
+
             if (DefaultMatchers.HSTS.equalsIgnoreCase(name)) {
                 matchers.add(STRICT_TRANSPORT_MATCHER);
             } else if (DefaultMatchers.NOSNIFF.equalsIgnoreCase(name)) {
@@ -97,7 +97,7 @@ public class ModifiedDefaultMatchingChecker implements MatchingChecker {
                 matchers.add(CSRF_TOKEN_MATCHER);
             } else if (DefaultMatchers.ALLOW_AJAX_REQUESTS.equalsIgnoreCase(name)) {
                 matchers.add(CORS_MATCHER);
-            // we don't add any matcher for none
+                // we don't add any matcher for none
             } else if (!DefaultMatchers.NONE.equalsIgnoreCase(name)) {
                 Matcher result = null;
                 for (final Map.Entry<String, Matcher> entry : allMatchers.entrySet()) {
@@ -137,11 +137,11 @@ public class ModifiedDefaultMatchingChecker implements MatchingChecker {
             allMatchers.put(name, matcher);
         }
     }
-    
+
     /**
      * Convert the incoming name of a Matcher from a key-value map entry 
      * (which Shiro uses/expects), to a String entry (which PAC4J uses/expects).
-     * 
+     *
      * Example:
      * 'nocache:$noCacheMatcher' -> 'nocache'
      * @param nameToModify the incoming Matcher name

@@ -15,7 +15,7 @@
 	<packaging>jar</packaging>
 
 	<properties>
-		<drools.version>7.40.0.Final</drools.version>
+		<drools.version>8.28.0.Beta</drools.version>
 	</properties>
 
 	<build>
@@ -197,6 +197,12 @@
 			<version>1.6.7</version>
 			<scope>test</scope>
 		</dependency>
+        <!--Dependency for cukespace-core-->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.15.3</version>
+        </dependency>
 
 		<!-- Arquillian Dependencies -->
 		<dependency>

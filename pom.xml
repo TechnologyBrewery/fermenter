@@ -95,7 +95,7 @@
             <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
-                <version>2.5</version>
+                <version>2.11.0</version>
                 <scope>compile</scope>
             </dependency>
             <dependency>
@@ -110,10 +110,16 @@
                 <version>2.7.0</version>
                 <scope>compile</scope>
             </dependency>
+            <!-- Dependency of Json Schema Validator -->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>31.1-jre</version>
+            </dependency>
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
-                <version>4.12</version>
+                <version>4.13.2</version>
                 <scope>test</scope>
             </dependency>
             <dependency>

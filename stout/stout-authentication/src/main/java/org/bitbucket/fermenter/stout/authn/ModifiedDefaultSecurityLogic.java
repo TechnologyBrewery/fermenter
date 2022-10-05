@@ -19,7 +19,7 @@ import org.pac4j.core.matching.checker.MatchingChecker;
  * <p>Finally, if the user is still not authenticated (no profile), he is redirected to the appropriate identity provider
  * if the first defined client is an indirect one in the <code>clients</code> configuration. Otherwise, a 401 error page is displayed.</p>
  */
-public class ModifiedDefaultSecurityLogic<R, C extends WebContext> extends DefaultSecurityLogic<R, C> {
+public class ModifiedDefaultSecurityLogic<R, C extends WebContext> extends DefaultSecurityLogic {
     
     public static final ModifiedDefaultSecurityLogic INSTANCE = new ModifiedDefaultSecurityLogic();
 

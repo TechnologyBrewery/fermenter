@@ -22,17 +22,17 @@
 		<authzforce.api.version>15.0.0</authzforce.api.version>
 		<authzforce.model.version>7.2.0</authzforce.model.version>
 		<krausening.version>13</krausening.version>
-		<jackson.version>2.11.2</jackson.version>
+		<jackson.version>2.13.4</jackson.version>
 		<jjwt.version>0.10.5</jjwt.version>
-		<log4j.version>2.13.3</log4j.version>
+		<log4j.version>2.19.0</log4j.version>
 		<narayana.version>5.9.5.Final</narayana.version>
-		<spring.version>5.2.8.RELEASE</spring.version>
+		<spring.version>5.3.23</spring.version>
 		<spring.security.version>5.4.0</spring.security.version>
         <aspectj.version>1.9.9.1</aspectj.version>
 		<jacoco.it.execution.data.file>${project.build.directory}/jacoco-it.exec</jacoco.it.execution.data.file>
 		<jacoco.test.execution.data.file>${project.build.directory}/jacoco.exec</jacoco.test.execution.data.file>
 		<jacoco.version>0.7.7.201606060606</jacoco.version>
-		<resteasy.version>4.5.8.Final</resteasy.version>
+		<resteasy.version>4.7.7.Final</resteasy.version>
 		<!-- Based on the resteasy version that is used -->
 		<jaxrs.version>1.0.1.Final</jaxrs.version>
 		<weld.version>2.1.2.Final</weld.version>
@@ -100,19 +100,19 @@
 			<dependency>
 				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
-				<version>2.5</version>
+				<version>2.11.0</version>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-dbcp2</artifactId>
-				<version>2.1.1</version>
+				<version>2.9.0</version>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>commons-beanutils</groupId>
 				<artifactId>commons-beanutils</artifactId>
-				<version>1.9.3</version>
+				<version>1.9.4</version>
 				<scope>compile</scope>
 			</dependency>
 			
@@ -126,7 +126,7 @@
 			<dependency>
 				<groupId>javax</groupId>
 				<artifactId>javaee-api</artifactId>
-				<version>7.0</version>
+				<version>8.0.1</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
@@ -254,21 +254,26 @@
 			<dependency>
 				<groupId>org.springframework.data</groupId>
 				<artifactId>spring-data-releasetrain</artifactId>
-				<version>Neumann-SR4</version>
+				<version>Neumann-SR7</version>
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>
 
 			<dependency>
-				<groupId>org.hibernate</groupId>
+				<groupId>org.hibernate.validator</groupId>
 				<artifactId>hibernate-validator</artifactId>
-				<version>5.4.3.Final</version>
+				<version>6.2.5.Final</version>
 				<scope>compile</scope>
 			</dependency>
+            <dependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>2.0.1.Final</version>
+            </dependency>
 			<dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-core</artifactId>
-				<version>5.4.21.Final</version>
+				<version>5.4.33.Final</version>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
@@ -355,11 +360,6 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
-            <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>18.0</version>
-            </dependency>
             <!--JBAX Dependencies -->
             <dependency>
                 <groupId>com.sun.xml.bind</groupId>
@@ -370,6 +370,12 @@
                 <groupId>javax.xml.bind</groupId>
                 <artifactId>jaxb-api</artifactId>
                 <version>${xml.bind.version}</version>
+            </dependency>
+            <!-- pac4j-oidc dependency-->
+            <dependency>
+                <groupId>net.minidev</groupId>
+                <artifactId>json-smart</artifactId>
+                <version>2.4.8</version>
             </dependency>
             <dependency>
                 <groupId>com.sun.xml.bind</groupId>

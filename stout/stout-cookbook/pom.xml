@@ -25,7 +25,7 @@
     </modules>
 
     <properties>
-        <embedded.tomcat.version>8.5.33</embedded.tomcat.version>
+        <embedded.tomcat.version>9.0.68</embedded.tomcat.version>
     </properties>
 
     <dependencyManagement>

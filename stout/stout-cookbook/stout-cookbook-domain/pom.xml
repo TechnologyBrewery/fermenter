@@ -242,8 +242,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.jboss.arquillian.container</groupId>
-			<artifactId>arquillian-tomcat-embedded-8</artifactId>
-			<version>1.0.0.CR7</version>
+			<artifactId>arquillian-tomcat-embedded-9</artifactId>
+			<version>1.1.0.Final</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

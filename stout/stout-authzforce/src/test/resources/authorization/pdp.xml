@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pdp xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://authzforce.github.io/core/xmlns/pdp/6.0"
+	xmlns="http://authzforce.github.io/core/xmlns/pdp/7"
 	xmlns:ext="http://fermenter.bitbucket.org/stout/authz/attribute/2"
 	xmlns:xacml="urn:oasis:names:tc:xacml:3.0:core:schema:wd-17"
-	version="6.0.0">
+	version="7.1">
 	<attributeProvider id="stoutAttributeExtension" xsi:type="ext:StoutAttributeExtension">
 		<xacml:Attributes Category="urn:oasis:names:tc:xacml:1.0:subject-category:access-subject"/>
 	</attributeProvider>
-	<rootPolicyProvider id="rootPolicyProvider" xsi:type="StaticRootPolicyProvider" policyLocation="classpath:authorization/policies/test-policy.xml" />
+	<policyProvider id="rootPolicyProvider" xsi:type="StaticPolicyProvider">
+        <policyLocation>classpath:authorization/policies/test-policy.xml</policyLocation>
+    </policyProvider>
 </pdp>

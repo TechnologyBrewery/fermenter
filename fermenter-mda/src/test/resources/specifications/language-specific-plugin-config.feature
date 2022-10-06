@@ -18,3 +18,15 @@ Feature: Automatically re-configure target generation folders based on the speci
         When the project's pom.xml is processed
         And the invalid Fermenter Maven plugin configuration is attempted to be validated
         Then a validation error is detected
+
+    Scenario Outline: Local metadata location is automatically defaulted and may be overridden
+        Given a Maven project named "<projectName>" with Fermenter Maven plugin configuration
+        When the project's pom.xml is processed
+        And the Fermenter Maven plugin configuration is validated
+        Then Fermenter Maven plugin uses "<localMetadataRoot>" as the local metadata root folder
+
+        Examples:
+            | projectName                    | localMetadataRoot                      |
+            | python-habushu-packaging       | src/python_habushu_packaging/resources |
+            | java-default-config            | src/main/resources                     |
+            | override-local-metadata-config | src/metadata                           |

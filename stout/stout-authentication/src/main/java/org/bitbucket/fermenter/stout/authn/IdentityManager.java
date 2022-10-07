@@ -35,7 +35,7 @@ public class IdentityManager {
         if (principal != null) {
             if (principal instanceof Pac4jPrincipal) {
                 Pac4jPrincipal pac4JPrincipal = (Pac4jPrincipal) principal;
-                CommonProfile profile = pac4JPrincipal.getProfile();
+                CommonProfile profile = (CommonProfile) pac4JPrincipal.getProfile();
                 subjectName = profile.getUsername();
 
                 if (subjectName == null) {

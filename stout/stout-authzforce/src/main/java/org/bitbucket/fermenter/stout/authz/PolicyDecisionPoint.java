@@ -11,11 +11,7 @@ import java.util.concurrent.TimeUnit;
 import org.aeonbits.owner.KrauseningConfigFactory;
 import org.bitbucket.fermenter.stout.authz.config.AuthorizationConfig;
 import org.bitbucket.fermenter.stout.exception.UnrecoverableException;
-import org.ow2.authzforce.core.pdp.api.AttributeFqn;
-import org.ow2.authzforce.core.pdp.api.AttributeFqns;
-import org.ow2.authzforce.core.pdp.api.DecisionRequest;
-import org.ow2.authzforce.core.pdp.api.DecisionRequestBuilder;
-import org.ow2.authzforce.core.pdp.api.DecisionResult;
+import org.ow2.authzforce.core.pdp.api.*;
 import org.ow2.authzforce.core.pdp.api.value.AttributeBag;
 import org.ow2.authzforce.core.pdp.api.value.Bags;
 import org.ow2.authzforce.core.pdp.api.value.StandardDatatypes;
@@ -109,6 +105,7 @@ public class PolicyDecisionPoint {
             DecisionRequest decisionRequest = requestBuilder.build(false);
 
             DecisionResult result = pdpEngine.evaluate(decisionRequest);
+            Optional<IndeterminateEvaluationException> causeForIndeterminate = result.getCauseForIndeterminate();
             decision = result.getDecision();
             
             decisionCache.put(cacheKey, decision);

@@ -25,7 +25,7 @@ import io.buji.pac4j.filter.SecurityFilter;
  *
  */
 public class ModifiedSecurityFilter extends SecurityFilter {
-    
+
     @Override
     public void doFilter(final ServletRequest servletRequest, final ServletResponse servletResponse, final FilterChain filterChain) throws IOException, ServletException {
 

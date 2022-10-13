@@ -18,7 +18,7 @@
         <frontend-plugin.version>1.12.0</frontend-plugin.version>
         <node.version>v14.17.3</node.version>
         <pnpm.version>v6.10.2</pnpm.version>
-        <embedded.tomcat.version>8.5.33</embedded.tomcat.version>
+        <embedded.tomcat.version>9.0.68</embedded.tomcat.version>
         <skip.ui>false</skip.ui>
     </properties>
 

@@ -1,5 +1,5 @@
 # must derive from base image or FROM SCRATCH
-FROM tomcat:8-jdk8
+FROM tomcat:9-jdk11
 
 # Add the Microsoft default fonts
 RUN apt-get update && apt-get install -y vim

@@ -18,9 +18,9 @@
 	</description>
 
 	<properties>
-		<authzforce.version>13.0.0</authzforce.version>
-		<authzforce.api.version>15.0.0</authzforce.api.version>
-		<authzforce.model.version>7.2.0</authzforce.model.version>
+		<authzforce.version>16.0.0</authzforce.version>
+		<authzforce.api.version>17.0.0</authzforce.api.version>
+		<authzforce.model.version>7.6.1</authzforce.model.version>
 		<krausening.version>13</krausening.version>
 		<jackson.version>2.13.4</jackson.version>
 		<jjwt.version>0.10.5</jjwt.version>

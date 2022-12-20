@@ -14,7 +14,7 @@ import com.google.common.collect.ImmutableList;
  * Represents a fully expanded version of the metadata in {@link Profile}. For instance, it dereferences the targets and
  * included profiles to provide a full set to actual targets referenced in a {@link Profile}.
  */
-public class ExpandedProfile {
+public class ExpandedProfile implements Comparable {
 
     private static MessageTracker messageTracker = MessageTracker.getInstance();
 
@@ -113,5 +113,13 @@ public class ExpandedProfile {
             }
         }
     }
-
+    @Override
+    public int compareTo(Object o) {
+        if(o instanceof ExpandedProfile) {
+            ExpandedProfile profile = (ExpandedProfile) o;
+            return getName().compareTo(profile.getName());
+        } else {
+            return 1;
+        }
+    }
 }

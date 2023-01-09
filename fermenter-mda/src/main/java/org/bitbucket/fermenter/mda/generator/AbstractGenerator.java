@@ -2,6 +2,7 @@ package org.bitbucket.fermenter.mda.generator;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.StringWriter;
 import java.io.Writer;
 
 import org.apache.commons.io.FileUtils;
@@ -43,14 +44,17 @@ public abstract class AbstractGenerator implements Generator {
 
             boolean isCleanWrite = false;
             if (destinationFile.exists()) {
-                if (!gc.isOverwritable()) {
+                if (gc.isVersioned()) {
+                    Versioner.invoke(gc, vc, baseFileName);
+                    return;
+                }
+                else if (!gc.isOverwritable()) {
                     // never overwrite a CM-ed (by declaration) file
                     return;
                 } else if (destinationFile.lastModified() < templateLastModified) {
                     // if the template is newer that the destination file, just overwrite
                     isCleanWrite = true;
                 }
-
             } else {
                 isCleanWrite = true;
             }
@@ -58,7 +62,6 @@ public abstract class AbstractGenerator implements Generator {
             File outputFile = (isCleanWrite || gc.isAppend()) ? destinationFile : tempFile;
 
             outputFile.getParentFile().mkdirs();
-
             Writer fw = new FileWriter(outputFile, true);
             template.merge(vc, fw);
             fw.close();
@@ -89,7 +92,6 @@ public abstract class AbstractGenerator implements Generator {
                 baseFile = gc.getGeneratedTestSourceDirectory();
             } else {
                 baseFile = gc.getGeneratedSourceDirectory();
-
             }
         } else {
             if (isTest) {

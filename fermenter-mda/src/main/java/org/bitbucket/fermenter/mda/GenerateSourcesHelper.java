@@ -6,9 +6,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Properties;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -22,6 +25,7 @@ import org.bitbucket.fermenter.mda.element.Target;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.generator.Generator;
+import org.bitbucket.fermenter.mda.generator.Versioner;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 import org.bitbucket.fermenter.mda.metamodel.ModelRepositoryConfiguration;
@@ -42,6 +46,8 @@ public final class GenerateSourcesHelper {
     protected static final String METAMODEL_PROPERTIES = "metamodel.properties";
     
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
+    public static LoggerDelegate logger;
 
     private GenerateSourcesHelper() {
 
@@ -66,9 +72,6 @@ public final class GenerateSourcesHelper {
      * @param familiesStream
      *            {@link InputStream} referencing families.json file desired to
      *            load.
-     * @param logger
-     *            build tool specific logging implementation to which logging
-     *            will be delegated.
      * @return {@link Map} containing all loaded {@link ExpandedFamily}s with
      *         their corresponding name as the map key.
      * @throws IOException
@@ -90,9 +93,6 @@ public final class GenerateSourcesHelper {
      * @param targetsStream
      *            {@link InputStream} referencing targets.json file desired to
      *            load.
-     * @param logger
-     *            build tool specific logging implementation to which logging
-     *            will be delegated.
      * @return {@link Map} containing all loaded {@link Target}s with their
      *         corresponding name as the map key.
      * @throws IOException
@@ -115,9 +115,6 @@ public final class GenerateSourcesHelper {
      * @param profilesStream
      *            {@link InputStream} referencing profiles.json file desired to
      *            load.
-     * @param logger
-     *            build tool specific logging implementation to which logging
-     *            will be delegated.
      * @return {@link Map} containing all loaded {@link ExpandedProfile}s with
      *         their corresponding name as the map key.
      * @throws IOException
@@ -163,6 +160,8 @@ public final class GenerateSourcesHelper {
     public static ModelInstanceRepository loadMetamodelRepository(ModelRepositoryConfiguration config,
             String modelInstanceRepositoryImplClazz, LoggerDelegate logger) throws ClassNotFoundException,
             NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+
+        GenerateSourcesHelper.logger = logger;
 
         long start = System.currentTimeMillis();
         logger.log(LogLevel.INFO, String.format("START: loading metamodel repository implementation: %s ...",
@@ -224,34 +223,31 @@ public final class GenerateSourcesHelper {
      * <b>Pre-condition:</b> It is assumed that all metamodels have been loaded
      * into the appropriate {@link ModelInstanceRepository} instance and
      * validated.
-     * 
-     * @param targetProfile
-     *            {@link Profile} defining the desired source code, resources,
-     *            etc. to generate.
-     * @param profiles
-     *            all valid {@link Profile}s that are available for code
-     *            generation.
-     * @param createGenerationContext
-     *            {@link Function} that creates the appropriate
-     *            {@link GenerationContext} based on a given {@link Target}.
-     *            Enables build tool specific logic for populating the
-     *            {@link GenerationContext}.
-     * @param handleInvalidProfile
-     *            enables developers to provide build tool specific handling the
-     *            specification of an invalid profile. This {@link Function}
-     *            receives the invalid profile that was specified and all valid
-     *            {@link Profile}s as input parameters, and may optionally
-     *            return an {@link Exception}, which will be thrown if non-null.
-     * @param logger
-     *            build tool specific logging implementation to which logging
-     *            will be delegated.
-     * @throws Exception
-     *             an invalid profile was specified or an unexpected error
-     *             occurred during {@link Generator} creation and processing.
+     *
+     * @param targetProfile           {@link Profile} defining the desired source code, resources,
+     *                                etc. to generate.
+     * @param profiles                all valid {@link Profile}s that are available for code
+     *                                generation.
+     * @param createGenerationContext {@link Function} that creates the appropriate
+     *                                {@link GenerationContext} based on a given {@link Target}.
+     *                                Enables build tool specific logic for populating the
+     *                                {@link GenerationContext}.
+     * @param handleInvalidProfile    enables developers to provide build tool specific handling the
+     *                                specification of an invalid profile. This {@link Function}
+     *                                receives the invalid profile that was specified and all valid
+     *                                {@link Profile}s as input parameters, and may optionally
+     *                                return an {@link Exception}, which will be thrown if non-null.
+     * @param logger                  build tool specific logging implementation to which logging
+     *                                will be delegated.
+     * @throws Exception an invalid profile was specified or an unexpected error
+     *                   occurred during {@link Generator} creation and processing.
      */
-    public static void performSourceGeneration(String targetProfile, Map<String, ExpandedProfile> profiles,
-            Function<Target, GenerationContext> createGenerationContext,
-            BiFunction<String, Collection<ExpandedProfile>, Exception> handleInvalidProfile, LoggerDelegate logger)
+    public static void performSourceGeneration(String targetProfile,
+                                               Map<String, ExpandedProfile> profiles,
+                                               Function<Target, GenerationContext> createGenerationContext,
+                                               BiFunction<String, Collection<ExpandedProfile>, Exception> handleInvalidProfile,
+                                               LoggerDelegate logger,
+                                               File projectDir)
             throws Exception {
         long start = System.currentTimeMillis();
         ExpandedProfile profile = profiles.get(targetProfile);
@@ -265,20 +261,31 @@ public final class GenerateSourcesHelper {
         } else {
             logger.log(LogLevel.INFO, "Generating code for profile '" + profile.getName() + "'");
 
+            Set<Path> cached = Versioner.getVersionFileList(projectDir);
+            boolean skipVersioning = false;
+            boolean autoDelete = false;
+
             // For each target, instantiate a generator and call generate
             for (Target target : profile.getTargets()) {
                 logger.log(LogLevel.DEBUG, "\tExecuting target '" + target.getName() + "'");
                 GenerationContext context = createGenerationContext.apply(target);
+                skipVersioning = context.shouldSkipVersioning();
+                autoDelete = context.shouldDeleteUngeneratedVersionedFiles();
                 Class<?> clazz = Class.forName(target.getGenerator());
-                Generator generator = (Generator) clazz.newInstance();
+                Generator generator = (Generator) clazz.getDeclaredConstructor().newInstance();
                 generator.setMetadataContext(target.getMetadataContext());
                 generator.generate(context);
+                cached.remove(Paths.get(Versioner.FERM_CACHE_ROOT, context.getOutputFile() + Versioner.FERM_FILE_SUFFIX));
+                cached.remove(Paths.get(Versioner.FERM_CACHE_ROOT, context.getOutputFile() + Versioner.DIGEST_SUFFIX));
+            }
+
+            if (!skipVersioning) {
+                Versioner.processNonGeneratedCacheMembers(cached, projectDir, logger, autoDelete);
             }
 
             long stop = System.currentTimeMillis();
             logger.log(LogLevel.INFO, "Generation completed in " + (stop - start) + "ms");
         }
-
     }
     
     /**

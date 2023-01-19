@@ -48,8 +48,14 @@
 			"required": [
 				"name"
 			]
-		}
-	},
+		},
+    "deprecated": {
+      "type": "boolean"
+    },
+    "warningMessage": {
+      "type": ["string", "null"]
+    }
+  },
 	"required": [
 		"name"
 	]

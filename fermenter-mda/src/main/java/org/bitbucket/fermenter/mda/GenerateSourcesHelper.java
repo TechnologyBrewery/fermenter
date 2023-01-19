@@ -259,6 +259,16 @@ public final class GenerateSourcesHelper {
                 throw invalidProfileException;
             }
         } else {
+            if (profile.isDeprecated()) {
+                //default warning message if none is provided
+                if (profile.getWarningMessage() == null || profile.getWarningMessage().isBlank()) {
+                    logger.log(LogLevel.WARN, "The profile '" + profile.getName() + "' is deprecated, " +
+                        "please replace all references to it.");
+                } else {
+                    logger.log(LogLevel.WARN, profile.getWarningMessage());
+                }
+            }
+
             logger.log(LogLevel.INFO, "Generating code for profile '" + profile.getName() + "'");
 
             Set<Path> cached = Versioner.getVersionFileList(projectDir);

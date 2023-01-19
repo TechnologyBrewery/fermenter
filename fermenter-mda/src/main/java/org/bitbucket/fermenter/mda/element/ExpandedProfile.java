@@ -34,6 +34,10 @@ public class ExpandedProfile implements Comparable {
         return profile.getName();
     }
 
+    public boolean isDeprecated() { return profile.isDeprecated(); }
+
+    public String getWarningMessage() { return profile.getWarningMessage(); }
+
     public void addTarget(Target target) {
         targets.put(target.getName(), target);
     }

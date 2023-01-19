@@ -14,6 +14,12 @@ public class Profile implements ValidatedElement {
 
     @JsonProperty(required = true)
     protected String name;
+
+    @JsonProperty(required = false, defaultValue = "false")
+    protected boolean deprecated;
+
+    @JsonProperty(required = false)
+    protected String warningMessage;
     
     protected Collection<TargetReference> targetReferences = new ArrayList<>();
     
@@ -24,7 +30,10 @@ public class Profile implements ValidatedElement {
     public String getName() {
         return name;
     }
-    
+
+    public boolean isDeprecated() { return deprecated; }
+
+    public String getWarningMessage() { return warningMessage; }
     public void setName(String name) {
         this.name = name;
     }    

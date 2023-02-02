@@ -30,6 +30,8 @@ import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 import org.bitbucket.fermenter.mda.metamodel.ModelRepositoryConfiguration;
 import org.bitbucket.fermenter.mda.util.MessageTracker;
+import org.bitbucket.fermenter.mda.util.PriorityMessage;
+import org.bitbucket.fermenter.mda.util.PriorityMessageService;
 import org.bitbucket.krausening.Krausening;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -46,6 +48,8 @@ public final class GenerateSourcesHelper {
     protected static final String METAMODEL_PROPERTIES = "metamodel.properties";
     
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
+    private static final PriorityMessageService PRIORITY_MESSAGE_SERVICE = new PriorityMessageService();
 
     public static LoggerDelegate logger;
 
@@ -260,13 +264,22 @@ public final class GenerateSourcesHelper {
             }
         } else {
             if (profile.isDeprecated()) {
+                //creates the priority message to be replayed at the end of the build
+                PriorityMessage priorityMessage = new PriorityMessage();
+                priorityMessage.setFilePath(projectDir.toString() + "/pom.xml");
+
                 //default warning message if none is provided
                 if (profile.getWarningMessage() == null || profile.getWarningMessage().isBlank()) {
-                    logger.log(LogLevel.WARN, "The profile '" + profile.getName() + "' is deprecated, " +
-                        "please replace all references to it.");
+                    String warningMessage = "The profile '" + profile.getName() + "' is deprecated, " +
+                        "please replace all references to it.";
+                    logger.log(LogLevel.WARN, warningMessage);
+                    priorityMessage.setMessage(warningMessage);
                 } else {
                     logger.log(LogLevel.WARN, profile.getWarningMessage());
+                    priorityMessage.setMessage(profile.getWarningMessage());
                 }
+
+                PRIORITY_MESSAGE_SERVICE.addPriorityMessage(priorityMessage);
             }
 
             logger.log(LogLevel.INFO, "Generating code for profile '" + profile.getName() + "'");

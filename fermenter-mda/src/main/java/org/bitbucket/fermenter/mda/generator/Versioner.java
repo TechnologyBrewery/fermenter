@@ -214,6 +214,6 @@ public class Versioner {
         GenerateSourcesHelper.logger.log(
             GenerateSourcesHelper.LoggerDelegate.LogLevel.WARN,
             String.format("Template change detected for %s.  To resolve version changes, run the build with " +
-                "the -Dfermenter.resolveVersionConflicts=true -Dfermenter.resetVersionHistory arguments.", outputFile));
+                "the -Dfermenter.performVersionResolution=true -Dfermenter.resetVersionHistory arguments.", outputFile));
     }
 }

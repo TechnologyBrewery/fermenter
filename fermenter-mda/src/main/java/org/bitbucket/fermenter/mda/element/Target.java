@@ -27,9 +27,6 @@ public class Target implements ValidatedElement {
 	
 	@JsonProperty(required = false, defaultValue = "false")
 	private boolean overwritable;
-
-    @JsonProperty(defaultValue = "false")
-    private boolean versioned;
 	
 	@JsonProperty(required = false, defaultValue = "main")
     private String artifactType;	
@@ -41,10 +38,6 @@ public class Target implements ValidatedElement {
 	public void setGenerator(String generator) {
 		this.generator = generator;
 	}
-
-    public boolean isVersioned() { return versioned; }
-
-    public void setVersioned(boolean versioned) { this.versioned = versioned; }
 
 	public String getName() {
 		return name;

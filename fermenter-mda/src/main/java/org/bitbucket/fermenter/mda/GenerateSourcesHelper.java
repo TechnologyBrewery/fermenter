@@ -25,7 +25,6 @@ import org.bitbucket.fermenter.mda.element.Target;
 import org.bitbucket.fermenter.mda.generator.GenerationContext;
 import org.bitbucket.fermenter.mda.generator.GenerationException;
 import org.bitbucket.fermenter.mda.generator.Generator;
-import org.bitbucket.fermenter.mda.generator.Versioner;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
 import org.bitbucket.fermenter.mda.metamodel.ModelRepositoryConfiguration;
@@ -284,31 +283,20 @@ public final class GenerateSourcesHelper {
 
             logger.log(LogLevel.INFO, "Generating code for profile '" + profile.getName() + "'");
 
-            Set<Path> cached = Versioner.getVersionFileList(projectDir);
-            boolean skipVersioning = false;
-            boolean autoDelete = false;
-
             // For each target, instantiate a generator and call generate
             for (Target target : profile.getTargets()) {
                 logger.log(LogLevel.DEBUG, "\tExecuting target '" + target.getName() + "'");
                 GenerationContext context = createGenerationContext.apply(target);
-                skipVersioning = context.shouldSkipVersioning();
-                autoDelete = context.shouldDeleteUngeneratedVersionedFiles();
                 Class<?> clazz = Class.forName(target.getGenerator());
                 Generator generator = (Generator) clazz.getDeclaredConstructor().newInstance();
                 generator.setMetadataContext(target.getMetadataContext());
                 generator.generate(context);
-                cached.remove(Paths.get(Versioner.FERM_CACHE_ROOT, context.getOutputFile() + Versioner.FERM_FILE_SUFFIX));
-                cached.remove(Paths.get(Versioner.FERM_CACHE_ROOT, context.getOutputFile() + Versioner.DIGEST_SUFFIX));
-            }
-
-            if (!skipVersioning) {
-                Versioner.processNonGeneratedCacheMembers(cached, projectDir, logger, autoDelete);
             }
 
             long stop = System.currentTimeMillis();
             logger.log(LogLevel.INFO, "Generation completed in " + (stop - start) + "ms");
         }
+
     }
     
     /**

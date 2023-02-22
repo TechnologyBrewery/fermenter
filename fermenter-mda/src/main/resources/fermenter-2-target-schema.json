@@ -23,9 +23,6 @@
 		"overwritable": {
 			"type": ["boolean", "null"]
 		},
-    "versioned": {
-      "type": ["boolean", "null"]
-    },
 		"artifactType": {
 			"type": ["string", "null"]
 		}

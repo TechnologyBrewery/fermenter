@@ -12,12 +12,6 @@ public final class GenerationContext {
     private String templateName;
     private String outputFile;
     private boolean overwritable;
-    private boolean versioned;
-    private File versionCacheFile;
-    private boolean skipVersioning;
-    private boolean skipVersioningInitializationMerge;
-    private boolean deleteUngeneratedVersionedFiles;
-    private boolean resolveVersionConficts;
     private String artifactType;
     private boolean append;
     private String basePackage;
@@ -52,7 +46,6 @@ public final class GenerationContext {
         this.templateName = target.getTemplateName();
         this.outputFile = target.getOutputFile();
         this.overwritable = target.isOverwritable();
-        this.versioned = target.isVersioned();
         this.artifactType = target.getArtifactType();
     }
 
@@ -119,27 +112,6 @@ public final class GenerationContext {
     public void setOverwritable(boolean overwritable) {
         this.overwritable = overwritable;
     }
-
-    public boolean isVersioned() { return versioned; }
-
-    public void setVersioned(boolean versioned) { this.versioned = versioned; }
-    public boolean shouldSkipVersioning() { return skipVersioning; }
-
-    public void setSkipVersioning(boolean skipVersioning) { this.skipVersioning = skipVersioning; }
-
-    public boolean shouldSkipVersioningInitializationMerge() { return skipVersioningInitializationMerge; }
-
-    public void setSkipVersioningInitializationMerge(boolean skipVersioningInitializationMerge) {
-        this.skipVersioningInitializationMerge = skipVersioningInitializationMerge;
-    }
-
-    public void setDeleteUngeneratedVersionedFiles(boolean autodelete) { this.deleteUngeneratedVersionedFiles = autodelete; }
-
-    public boolean shouldDeleteUngeneratedVersionedFiles() { return this.deleteUngeneratedVersionedFiles; }
-
-    public void setResolveVersionConficts(boolean resolveVersionConficts) { this.resolveVersionConficts = resolveVersionConficts; }
-
-    public boolean shouldResolveVersionConflicts() { return this.resolveVersionConficts; }
 
     public String getTemplateName() {
         return templateName;

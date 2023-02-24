@@ -64,18 +64,6 @@ public class GenerateSourcesMojo extends AbstractMojo {
     @Parameter
     private String basePackage;
 
-    @Parameter(defaultValue = "false", property = "fermenter.skipVersioning")
-    private boolean skipVersioning;
-
-    @Parameter(defaultValue = "false", property = "fermenter.skipInitializationMerge")
-    private boolean skipInitializationMerge;
-
-    @Parameter(defaultValue = "false", property = "fermenter.resolveVersionConflicts")
-    private boolean resolveVersionConflicts;
-
-    @Parameter(defaultValue = "false", property = "fermenter.deleteUngeneratedVersionedFiles")
-    private boolean deleteUngeneratedVersionedFiles;
-
     /**
      * Captures the target programming language in which source code artifacts will be generated. This
      * configuration drives the automatic configuration of {@link #mainSourceRoot}, {@link #generatedSourceRoot},
@@ -466,10 +454,6 @@ public class GenerateSourcesMojo extends AbstractMojo {
         context.setTestSourceDirectory(testSourceRoot);
         context.setGeneratedTestSourceDirectory(generatedTestSourceRoot);
         context.setEngine(engine);
-        context.setDeleteUngeneratedVersionedFiles(deleteUngeneratedVersionedFiles);
-        context.setResolveVersionConficts(resolveVersionConflicts);
-        context.setSkipVersioning(skipVersioning);
-        context.setSkipVersioningInitializationMerge(skipInitializationMerge);
         context.setGroupId(project.getGroupId());
         context.setArtifactId(project.getArtifactId());
         context.setVersion(project.getVersion());

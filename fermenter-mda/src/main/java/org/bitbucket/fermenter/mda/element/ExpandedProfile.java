@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.bitbucket.fermenter.mda.util.MessageTracker;
 
 import com.google.common.collect.ImmutableList;
@@ -14,7 +15,7 @@ import com.google.common.collect.ImmutableList;
  * Represents a fully expanded version of the metadata in {@link Profile}. For instance, it dereferences the targets and
  * included profiles to provide a full set to actual targets referenced in a {@link Profile}.
  */
-public class ExpandedProfile implements Comparable {
+public class ExpandedProfile implements Comparable<ExpandedProfile> {
 
     private static MessageTracker messageTracker = MessageTracker.getInstance();
 
@@ -117,13 +118,14 @@ public class ExpandedProfile implements Comparable {
             }
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public int compareTo(Object o) {
-        if(o instanceof ExpandedProfile) {
-            ExpandedProfile profile = (ExpandedProfile) o;
-            return getName().compareTo(profile.getName());
-        } else {
-            return 1;
-        }
+    public int compareTo(ExpandedProfile other) {
+        CompareToBuilder compareToBuilder = new CompareToBuilder().append(this.getName(), other.getName());
+        return compareToBuilder.toComparison();
     }
+
 }

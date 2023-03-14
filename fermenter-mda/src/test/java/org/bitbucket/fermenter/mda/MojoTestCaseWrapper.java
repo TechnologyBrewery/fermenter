@@ -1,19 +1,33 @@
 package org.bitbucket.fermenter.mda;
 
+import org.apache.commons.io.input.XmlStreamReader;
 import org.apache.maven.DefaultMaven;
 import org.apache.maven.Maven;
+import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.apache.maven.execution.*;
 import org.apache.maven.plugin.Mojo;
+import org.apache.maven.plugin.descriptor.MojoDescriptor;
+import org.apache.maven.plugin.descriptor.PluginDescriptor;
+import org.apache.maven.plugin.descriptor.PluginDescriptorBuilder;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.ProjectBuilder;
 import org.apache.maven.project.ProjectBuildingRequest;
+import org.apache.maven.repository.RepositorySystem;
+import org.apache.maven.session.scope.internal.SessionScope;
+import org.codehaus.plexus.component.configurator.ComponentConfigurator;
+import org.codehaus.plexus.component.repository.ComponentDescriptor;
+import org.codehaus.plexus.util.InterpolationFilterReader;
 import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.internal.impl.SimpleLocalRepositoryManagerFactory;
 import org.eclipse.aether.repository.LocalRepository;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStream;
 import java.util.Arrays;
+import java.util.HashMap;
 
 /**
  * Wraps the default behavior provided by the Maven plugin testing harness through {@link AbstractMojoTestCase} to
@@ -74,6 +88,10 @@ public class MojoTestCaseWrapper extends AbstractMojoTestCase {
         MavenSession session;
         try {
             session = newMavenSession();
+            // seed the session so it can be injected during initialization
+            SessionScope sessionScope = getContainer().lookup(SessionScope.class);
+            sessionScope.enter();
+            sessionScope.seed(MavenSession.class, session);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -26,7 +26,9 @@ import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepository;
 import org.bitbucket.fermenter.mda.metamodel.ModelInstanceUrl;
 import org.bitbucket.fermenter.mda.metamodel.ModelRepositoryConfiguration;
 import org.bitbucket.fermenter.mda.util.MessageTracker;
+import org.bitbucket.fermenter.mda.reporting.StatisticsService;
 
+import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,6 +50,9 @@ public class GenerateSourcesMojo extends AbstractMojo {
     private Map<String, Target> targets = new HashMap<>();
 
     private Map<String, ExpandedFamily> families = new HashMap<>();
+
+    @Inject
+    private StatisticsService statisticsService;
 
     @Parameter(required = true, readonly = true, defaultValue = "${project}")
     private MavenProject project;
@@ -447,6 +452,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
      */
     private GenerationContext createGenerationContext(Target target) {
         GenerationContext context = new GenerationContext(target);
+        context.setStatisticsService(statisticsService);
         context.setBasePackage(basePackage);
         context.setProjectDirectory(project.getBasedir());
         context.setGeneratedSourceDirectory(generatedSourceRoot);

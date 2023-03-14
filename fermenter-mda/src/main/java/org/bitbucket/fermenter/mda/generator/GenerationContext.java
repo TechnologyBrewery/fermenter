@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.apache.velocity.app.VelocityEngine;
 import org.bitbucket.fermenter.mda.element.Target;
+import org.bitbucket.fermenter.mda.reporting.StatisticsService;
 
 public final class GenerationContext {
 
@@ -27,6 +28,7 @@ public final class GenerationContext {
     private String descriptiveName;
     private String scmUrl;
     private Map<String, String> propertyVariables;
+    private StatisticsService statisticsService;
 
     public VelocityEngine getEngine() {
         return engine;
@@ -194,4 +196,11 @@ public final class GenerationContext {
         this.propertyVariables = propertyVariables;
     }
 
+    public StatisticsService getStatisticsService() {
+        return statisticsService;
+    }
+
+    public void setStatisticsService(StatisticsService statisticsService) {
+        this.statisticsService = statisticsService;
+    }
 }

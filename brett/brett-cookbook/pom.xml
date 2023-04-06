@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.bitbucket.askllc.fermenter.brett</groupId>
         <artifactId>brett</artifactId>
-        <version>2.6.1-SNAPSHOT</version>
+        <version>2.7.0</version>
     </parent>
 
     <name>Fermenter::Brett::Brett Cookbook</name>

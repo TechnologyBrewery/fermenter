@@ -2,7 +2,7 @@
 
 [tool.poetry]
 name = "brett-cookbook"
-version = "2.6.1.dev"
+version = "2.7.0"
 description = "Description of brett-cookbook"
 authors = ["Your Name <you@example.com>"]
 

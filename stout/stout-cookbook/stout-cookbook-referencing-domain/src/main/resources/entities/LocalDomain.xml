@@ -3,7 +3,7 @@
 
 <entity>
 	<name>LocalDomain</name>
-	<namespace>org.bitbucket.askllc.fermenter.cookbook.referencing.domain</namespace>
+	<namespace>org.technologybrewery.fermenter.cookbook.referencing.domain</namespace>
 	<documentation>A local persistent domain with external references to persistent and transient entities</documentation>
 	<table>LOCAL_DOMAIN</table>
 

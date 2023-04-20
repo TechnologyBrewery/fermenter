@@ -1,5 +1,5 @@
 {
-  "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "package" : "org.technologybrewery.fermenter.cookbook.domain",
   "name" : "BusinessKey",
   "operations" : [{
     "name" : "findByBusinessKey",
@@ -9,7 +9,7 @@
       "documentation" : "business key field of the entity to retrieve"
     } ],
     "return" : {
-      "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+      "package" : "org.technologybrewery.fermenter.cookbook.domain",
       "type" : "BusinessKeyedExample"
     }
   }]

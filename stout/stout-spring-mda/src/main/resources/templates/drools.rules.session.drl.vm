@@ -3,7 +3,7 @@ package rules.${rule.ruleGroup}
 #foreach( $import in $rule.imports )
 import $import;
 #end
-import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.BeerExampleEntity;
+import org.technologybrewery.fermenter.cookbook.domain.transfer.BeerExampleEntity;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;

@@ -1,5 +1,5 @@
 {
-  "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "package" : "org.technologybrewery.fermenter.cookbook.domain",
   "name" : "SimpleDomain",
   "table" : "SIMPLE_DOMAIN",
   "documentation" : "A simple domain entity with a generated id field, fields of different types, and a 1-M relation",
@@ -50,28 +50,28 @@
     "type" : "boolean",
     "column" : "STANDARD_BOOLEAN"
   }, {
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : "org.technologybrewery.fermenter.cookbook.domain",
     "name" : "anEnumeratedValue",
     "type" : "SimpleDomainEnumeration",
     "column" : "SIMPLE_DOMAIN_ENUM"
   }, {
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : "org.technologybrewery.fermenter.cookbook.domain",
     "name" : "anotherEnumeratedValueLikeTheFirst",
     "type" : "SimpleDomainEnumeration",
     "column" : "SIMPLE_DOMAIN_ENUM_TOO"
   }, {
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : "org.technologybrewery.fermenter.cookbook.domain",
     "name" : "anotherEnumeratedValue",
     "type" : "ValuedEnumerationExample",
     "column" : "VALUE_EXAMPLE_ENUM"
   } ],
   "relations" : [ {
     "type" : "SimpleDomainEagerChild",
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : "org.technologybrewery.fermenter.cookbook.domain",
     "multiplicity" : "1-M"
   }, {
     "type" : "SimpleDomainChild",
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : "org.technologybrewery.fermenter.cookbook.domain",
     "multiplicity" : "1-M",
     "fetchMode" : "lazy"
   } ]

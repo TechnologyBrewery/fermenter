@@ -2,8 +2,8 @@ package ${basePackage}.client.service;
 
 import feign.Param;
 import ${basePackage}.transfer.${entity.name};
-import org.bitbucket.fermenter.stout.page.PageWrapper;
-import org.bitbucket.fermenter.stout.page.json.FindByExampleCriteria;
+import org.technologybrewery.fermenter.stout.page.PageWrapper;
+import org.technologybrewery.fermenter.stout.page.json.FindByExampleCriteria;
 
 import java.util.Collection;
 

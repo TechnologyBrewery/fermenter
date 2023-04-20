@@ -7,12 +7,12 @@ import ${basePackage}.client.service.${service.name}Delegate;
 import $import;
 #end
 
-import org.bitbucket.fermenter.stout.messages.MessageManagerAwareService;
-import org.bitbucket.fermenter.stout.client.service.LocalOptimizationUtil;
-import org.bitbucket.fermenter.stout.client.service.LocalOptimizationServiceWrapper;
-import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
-import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
-import org.bitbucket.fermenter.stout.page.PageWrapper;
+import org.technologybrewery.fermenter.stout.messages.MessageManagerAwareService;
+import org.technologybrewery.fermenter.stout.client.service.LocalOptimizationUtil;
+import org.technologybrewery.fermenter.stout.client.service.LocalOptimizationServiceWrapper;
+import org.technologybrewery.fermenter.stout.service.ValueServiceResponse;
+import org.technologybrewery.fermenter.stout.service.VoidServiceResponse;
+import org.technologybrewery.fermenter.stout.page.PageWrapper;
 
 import org.springframework.stereotype.Service;
 

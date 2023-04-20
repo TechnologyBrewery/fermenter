@@ -21,7 +21,7 @@ public interface CachePropertiesConfig extends KrauseningConfig {
     int getCacheMaxSizePerBO();
     
     /**
-     * Fully qualified class name that implements {@link org.bitbucket.fermenter.stout.client.service.CustomFlushOrderProvider}
+     * Fully qualified class name that implements {@link org.technologybrewery.fermenter.stout.client.service.CustomFlushOrderProvider}
      * to customize the order in which entities are flushed by the level 1 rest client cache.  The values provided via
      * this class will be prioritized and then blended with the generated flushed order.
      *

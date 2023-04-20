@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <name>Model-Driven Architecture Code Generator::Override Local Metadata Root for Habushu Project Test</name>
-    <groupId>org.bitbucket.askllc.fermenter</groupId>
+    <groupId>org.technologybrewery.fermenter</groupId>
     <artifactId>override-local-metadata-config</artifactId>
     <version>1.0.0</version>
     <packaging>habushu</packaging>
@@ -12,7 +12,7 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.bitbucket.askllc.fermenter</groupId>
+                <groupId>org.technologybrewery.fermenter</groupId>
                 <artifactId>fermenter-mda</artifactId>
                 <version>${project.version}</version>
                 <configuration>
@@ -21,13 +21,9 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.bitbucket.cpointe.habushu</groupId>
+                <groupId>org.technologybrewery.habushu</groupId>
                 <artifactId>habushu-maven-plugin</artifactId>
-                <version>2.1.0</version>
                 <extensions>true</extensions>
-                <configuration>
-                    <pythonVersion>3.9.13</pythonVersion>
-                </configuration>
             </plugin>
         </plugins>
 

@@ -1,5 +1,5 @@
 {
-  "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "package" : "org.technologybrewery.fermenter.cookbook.domain",
   "name" : "DefaultValueExample",
   "table" : "DEFAULT_VALUE",
   "documentation" : "A simple domain entity with a generated id field, fields of different types, and default values assigned to many of its fields",

@@ -1,11 +1,11 @@
-package org.bitbucket.fermenter.stout.mda;
+package org.technologybrewery.fermenter.stout.mda;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.bitbucket.fermenter.mda.metamodel.element.BaseOperationDecorator;
-import org.bitbucket.fermenter.mda.metamodel.element.Operation;
-import org.bitbucket.fermenter.mda.metamodel.element.Parameter;
-import org.bitbucket.fermenter.mda.metamodel.element.Return;
-import org.bitbucket.fermenter.mda.metamodel.element.Transaction;
+import org.technologybrewery.fermenter.mda.metamodel.element.BaseOperationDecorator;
+import org.technologybrewery.fermenter.mda.metamodel.element.Operation;
+import org.technologybrewery.fermenter.mda.metamodel.element.Parameter;
+import org.technologybrewery.fermenter.mda.metamodel.element.Return;
+import org.technologybrewery.fermenter.mda.metamodel.element.Transaction;
 import org.jboss.resteasy.annotations.GZIP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -268,7 +268,7 @@ public class JavaOperation extends BaseOperationDecorator implements Operation, 
                 imports.add(List.class.getName());
             }
             if (DATE_PARAMETER.equalsIgnoreCase(parameter.getJavaType())) {
-                imports.add(org.bitbucket.fermenter.stout.util.ToDateExpander.class.getName());
+                imports.add(org.technologybrewery.fermenter.stout.util.ToDateExpander.class.getName());
             }
             String importValue = parameter.getImport();
             if (JavaElementUtils.checkImportAgainstDefaults(importValue)) {

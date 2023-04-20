@@ -1,5 +1,5 @@
 {
-  "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "package" : "org.technologybrewery.fermenter.cookbook.domain",
   "name" : "StringKeyedEntity",
   "table" : "STRING_KEYED_ENTITY",
   "documentation" : "Entity that demonstrates using a string as a primary key",

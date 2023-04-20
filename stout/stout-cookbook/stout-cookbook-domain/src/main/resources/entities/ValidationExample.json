@@ -1,5 +1,5 @@
 {
-  "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "package" : "org.technologybrewery.fermenter.cookbook.domain",
   "name" : "ValidationExample",
   "table" : "VALIDATION_EXAMPLE",
   "identifier" : {
@@ -98,7 +98,7 @@
   } ],
   "relations" : [ {
     "type" : "ValidationExampleChild",
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : "org.technologybrewery.fermenter.cookbook.domain",
     "multiplicity" : "1-M"
   } ]
 }

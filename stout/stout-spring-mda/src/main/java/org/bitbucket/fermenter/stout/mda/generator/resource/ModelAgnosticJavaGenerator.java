@@ -1,7 +1,7 @@
-package org.bitbucket.fermenter.stout.mda.generator.resource;
+package org.technologybrewery.fermenter.stout.mda.generator.resource;
 
-import org.bitbucket.fermenter.mda.generator.AbstractModelAgnosticGenerator;
-import org.bitbucket.fermenter.stout.mda.java.JavaGeneratorUtil;
+import org.technologybrewery.fermenter.mda.generator.AbstractModelAgnosticGenerator;
+import org.technologybrewery.fermenter.stout.mda.java.JavaGeneratorUtil;
 
 public class ModelAgnosticJavaGenerator extends AbstractModelAgnosticGenerator {
 

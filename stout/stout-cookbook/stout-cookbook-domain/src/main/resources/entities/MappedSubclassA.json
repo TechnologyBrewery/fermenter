@@ -1,10 +1,10 @@
 {
-  "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "package" : "org.technologybrewery.fermenter.cookbook.domain",
   "name" : "MappedSubclassA",
   "table" : "MAPPED_SUBCLASS_A",
   "documentation" : "Sub entity of MappedSuperclassParent demonstrating an inheritance hierarchy with a mapped superclass strategy",
   "parent" : {
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : "org.technologybrewery.fermenter.cookbook.domain",
     "type" : "MappedSuperclassParent",
     "inheritanceStrategy" : "mapped-superclass"
   },
@@ -24,7 +24,7 @@
   "references" : [ {
     "name" : "refToIntKeyedEntity",
     "type" : "IntegerKeyedEntity",
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : "org.technologybrewery.fermenter.cookbook.domain",
     "localColumn" : "INT_KEYED_ENTITY_INT_KEYED_ENTITY_ID",
     "required" : true
   } ]

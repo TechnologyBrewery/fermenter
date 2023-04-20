@@ -1,8 +1,8 @@
-package org.bitbucket.fermenter.stout.mda;
+package org.technologybrewery.fermenter.stout.mda;
 
 import org.apache.commons.lang3.StringUtils;
-import org.bitbucket.fermenter.mda.metamodel.element.BaseRelationDecorator;
-import org.bitbucket.fermenter.mda.metamodel.element.Relation;
+import org.technologybrewery.fermenter.mda.metamodel.element.BaseRelationDecorator;
+import org.technologybrewery.fermenter.mda.metamodel.element.Relation;
 
 public class JavaRelation extends BaseRelationDecorator implements Relation {
 

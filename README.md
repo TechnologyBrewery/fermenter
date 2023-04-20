@@ -1,5 +1,5 @@
 # Fermenter #
-[![Maven Central](https://img.shields.io/maven-central/v/org.bitbucket.askllc.fermenter/root.svg)](https://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.bitbucket.askllc.fermenter%22%20AND%20a%3A%22root%22)
+[![Maven Central](https://img.shields.io/maven-central/v/org.technologybrewery.fermenter/root.svg)](https://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.technologybrewery.fermenter%22%20AND%20a%3A%22root%22)
 [![License](https://img.shields.io/github/license/mashape/apistatus.svg)](https://opensource.org/licenses/mit)
 
 In brewing, a fermenter is a vessel in which unfinished ingredients become nearly finished beer. In Model Driven Architecture, Fermenter is a project that converts functional concepts into nearly finished applications. This approach allows for the quick definition and assembly of applications with the focus on functional concepts rather than technical underpinnings.
@@ -27,7 +27,7 @@ Ale is a Fermenter framework that makes it easier for developers to utilize [Ang
 
 ## Brett ##
 
-Contrary to how Brettanomyces (i.e. "Brett") is a yeast that can yield unpredictable results when brewing, the `brett` Fermenter framework helps developers institute enterprise development and configuration management best practices to the often unpredictable world of Python development.  `brett` facilitates the generation of Python projects that align with [Habushu](https://bitbucket.org/cpointe/habushu/) standards.  Due to the Habushu's usage of Python build tools that currently must be manually installed, Fermenter developers must opt-in to build `brett` modules by using  `with-python-support` Maven profile (i.e. `mvn clean install -Pwith-python-support`). See the `brett-cookbook` for an example of how `brett` combines Fermenter-driven Python module generation with an automated DevOps lifecycle managed through Habushu.
+Contrary to how Brettanomyces (i.e. "Brett") is a yeast that can yield unpredictable results when brewing, the `brett` Fermenter framework helps developers institute enterprise development and configuration management best practices to the often unpredictable world of Python development.  `brett` facilitates the generation of Python projects that align with [Habushu](https://github.com/TechnologyBrewery/habushu/) standards.  Due to the Habushu's usage of Python build tools that currently must be manually installed, Fermenter developers must opt-in to build `brett` modules by using  `with-python-support` Maven profile (i.e. `mvn clean install -Pwith-python-support`). See the `brett-cookbook` for an example of how `brett` combines Fermenter-driven Python module generation with an automated DevOps lifecycle managed through Habushu.
 
 # Distribution Channel
 
@@ -40,7 +40,7 @@ Want Fermenter in your project? As demonstrated in the `stout-cookbook-domain` p
 <build>
 	<plugins>
 		<plugin>
-			<groupId>org.bitbucket.askllc.fermenter</groupId>
+			<groupId>org.technologybrewery.fermenter</groupId>
 			<artifactId>fermenter-mda</artifactId>
 			<version>${fermenter.version}</version>
 			<configuration>
@@ -59,7 +59,7 @@ Want Fermenter in your project? As demonstrated in the `stout-cookbook-domain` p
 </build>
 ...
 <dependency>
-    <groupId>org.bitbucket.askllc.fermenter</groupId>
+    <groupId>org.technologybrewery.fermenter</groupId>
     <artifactId>stout-spring</artifactId>
     <version>${fermenter.version}</version>
 </dependency>
@@ -69,7 +69,7 @@ Want Fermenter in your project? As demonstrated in the `stout-cookbook-domain` p
 
 Fermenter uses both the `maven-release-plugin` and the `nexus-staging-maven-plugin` to facilitate the release and deployment of new Fermenter builds. In order to perform a release, you must:
 
-1. Obtain a [JIRA](https://issues.sonatype.org/secure/Dashboard.jspa) account with Sonatype OSSRH and access to the `org.bitbucket.askllc` project group
+1. Obtain a [JIRA](https://issues.sonatype.org/secure/Dashboard.jspa) account with Sonatype OSSRH and access to the `org.technologybrewery` project group
 
 2. Ensure that your Sonatype OSSRH JIRA account credentials are specified in your `settings.xml`:
 
@@ -92,12 +92,9 @@ Fermenter uses both the `maven-release-plugin` and the `nexus-staging-maven-plug
 export GPG_TTY=`tty`;
 ```
 
-4. As [Habushu](https://bitbucket.org/cpointe/habushu/) modules that support `brett` are built as a part of the release process, ensure that all of prerequisite tools needed by [Habushu](https://bitbucket.org/cpointe/habushu/) are installed.
+4. As [Habushu](https://github.com/TechnologyBrewery/habushu/) modules that support `brett` are built as a part of the release process, ensure that all of prerequisite tools needed by [Habushu](https://github.com/TechnologyBrewery/habushu/) are installed.
 
 5. Execute `mvn -Pwith-python-support release:clean release:prepare`, answer the prompts for the versions and tags, and perform `mvn release:perform`
 
 ## Licensing
 Fermenter is available under the [MIT License](http://opensource.org/licenses/mit-license.php).
-
-## Session Beer
-Fermenter would like to thank [Counterpointe Solutions](http://cpointe-inc.com/) for providing continuous integration and static code analysis services for Fermenter.

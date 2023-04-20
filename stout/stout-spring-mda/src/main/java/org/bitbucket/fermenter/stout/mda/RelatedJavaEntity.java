@@ -1,9 +1,9 @@
-package org.bitbucket.fermenter.stout.mda;
+package org.technologybrewery.fermenter.stout.mda;
 
 import org.apache.commons.lang3.StringUtils;
-import org.bitbucket.fermenter.mda.metamodel.element.Entity;
-import org.bitbucket.fermenter.mda.metamodel.element.Field;
-import org.bitbucket.fermenter.mda.metamodel.element.Relation;
+import org.technologybrewery.fermenter.mda.metamodel.element.Entity;
+import org.technologybrewery.fermenter.mda.metamodel.element.Field;
+import org.technologybrewery.fermenter.mda.metamodel.element.Relation;
 
 public class RelatedJavaEntity extends JavaEntity {
 
@@ -55,7 +55,7 @@ public class RelatedJavaEntity extends JavaEntity {
         /**
          * Prevents this field from having the same column name as its parent
          * 
-         * @see org.bitbucket.fermenter.stout.mda.element.java.JavaField#getColumn()
+         * @see org.technologybrewery.fermenter.stout.mda.element.java.JavaField#getColumn()
          */
         public String getColumn() {
             if (overriddenColumnName == null) {

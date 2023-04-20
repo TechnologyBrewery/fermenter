@@ -1,11 +1,11 @@
-package org.bitbucket.fermenter.stout.mda.generator.message;
+package org.technologybrewery.fermenter.stout.mda.generator.message;
 
 import org.apache.velocity.VelocityContext;
-import org.bitbucket.fermenter.mda.generator.GenerationContext;
-import org.bitbucket.fermenter.mda.generator.message.AbstractMessageGroupGenerator;
-import org.bitbucket.fermenter.mda.metamodel.element.MessageGroup;
-import org.bitbucket.fermenter.stout.mda.JavaMessageGroup;
-import org.bitbucket.fermenter.stout.mda.java.JavaGeneratorUtil;
+import org.technologybrewery.fermenter.mda.generator.GenerationContext;
+import org.technologybrewery.fermenter.mda.generator.message.AbstractMessageGroupGenerator;
+import org.technologybrewery.fermenter.mda.metamodel.element.MessageGroup;
+import org.technologybrewery.fermenter.stout.mda.JavaMessageGroup;
+import org.technologybrewery.fermenter.stout.mda.java.JavaGeneratorUtil;
 
 /**
  * Iterates through message group instances, passing {@link JavaMessageGroup}s instance to the templates.

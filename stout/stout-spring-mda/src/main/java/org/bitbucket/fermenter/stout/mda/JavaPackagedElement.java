@@ -1,4 +1,4 @@
-package org.bitbucket.fermenter.stout.mda;
+package org.technologybrewery.fermenter.stout.mda;
 
 /**
  * Defines common and default methods for a packaged Java element.

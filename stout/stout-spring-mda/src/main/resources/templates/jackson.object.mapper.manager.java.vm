@@ -6,11 +6,11 @@ import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
-import org.bitbucket.fermenter.stout.messages.Message;
-import org.bitbucket.fermenter.stout.messages.Messages;
-import org.bitbucket.fermenter.stout.messages.json.MessageDeserializer;
-import org.bitbucket.fermenter.stout.messages.json.MessageSerializer;
-import org.bitbucket.fermenter.stout.messages.json.MessagesMixIn;
+import org.technologybrewery.fermenter.stout.messages.Message;
+import org.technologybrewery.fermenter.stout.messages.Messages;
+import org.technologybrewery.fermenter.stout.messages.json.MessageDeserializer;
+import org.technologybrewery.fermenter.stout.messages.json.MessageSerializer;
+import org.technologybrewery.fermenter.stout.messages.json.MessagesMixIn;
 
 import ${basePackage}.bizobj.*;
 import ${basePackage}.transfer.json.*;

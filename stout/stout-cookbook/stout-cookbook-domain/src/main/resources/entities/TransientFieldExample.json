@@ -1,5 +1,5 @@
 {
-  "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "package" : "org.technologybrewery.fermenter.cookbook.domain",
   "name" : "TransientFieldExample",
   "table" : "TRANSIENT_FIELD_ENTITY",
   "documentation" : "Entity that demonstrates the use of a transient field",

@@ -1,5 +1,5 @@
 {
-  "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "package" : "org.technologybrewery.fermenter.cookbook.domain",
   "name" : "ServiceEntityExample",
   "table" : "SERVICE_ENTITY_EXAMPLE",
   "documentation" : "Entity that demonstrates uses a generated value primary key",

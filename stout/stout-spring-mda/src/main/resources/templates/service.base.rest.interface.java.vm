@@ -17,9 +17,9 @@ import javax.ws.rs.core.MediaType;
 import java.math.BigDecimal;
 import org.jboss.resteasy.annotations.cache.NoCache;
 
-import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
-import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
-import org.bitbucket.fermenter.stout.page.PageWrapper;
+import org.technologybrewery.fermenter.stout.service.ValueServiceResponse;
+import org.technologybrewery.fermenter.stout.service.VoidServiceResponse;
+import org.technologybrewery.fermenter.stout.page.PageWrapper;
 
 /**
  * Interface for the ${service.name} service.

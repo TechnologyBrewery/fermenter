@@ -4,18 +4,18 @@
     <modelVersion>4.0.0</modelVersion>
 
     <name>Model-Driven Architecture Code Generator::Generate Java Project with Default Configurations Test</name>
-    <groupId>org.bitbucket.askllc.fermenter</groupId>
+    <groupId>org.technologybrewery.fermenter</groupId>
     <artifactId>java-default-config</artifactId>
     <version>1.0.0</version>
 
     <build>
         <plugins>
             <plugin>
-                <groupId>org.bitbucket.askllc.fermenter</groupId>
+                <groupId>org.technologybrewery.fermenter</groupId>
                 <artifactId>fermenter-mda</artifactId>
                 <version>${project.version}</version>
                 <configuration>
-                    <basePackage>org.bitbucket.fermenter</basePackage>
+                    <basePackage>org.technologybrewery.fermenter</basePackage>
                     <profile>foo</profile>
                 </configuration>
             </plugin>

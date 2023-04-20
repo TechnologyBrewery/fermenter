@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.bitbucket.askllc.fermenter.stout</groupId>
+        <groupId>org.technologybrewery.fermenter.stout</groupId>
         <artifactId>stout</artifactId>
         <version>2.7.1-SNAPSHOT</version>
     </parent>
@@ -48,7 +48,7 @@
         <pluginManagement>
             <plugins>
                 <plugin>
-                    <groupId>org.bitbucket.askllc.fermenter</groupId>
+                    <groupId>org.technologybrewery.fermenter</groupId>
                     <artifactId>fermenter-mda</artifactId>
                     <executions>
                         <execution>

@@ -1,5 +1,5 @@
 {
-  "package" : "org.bitbucket.askllc.fermenter.cookbook.referencing.domain",
+  "package" : "org.technologybrewery.fermenter.cookbook.referencing.domain",
   "name" : "LocalDomain",
   "table" : "LOCAL_DOMAIN",
   "documentation" : "A local persistent domain with external references to persistent and transient entities",
@@ -19,13 +19,13 @@
   "references" : [ {
     "name" : "externalReference",
     "type" : "ValidationReferencedObject",
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : "org.technologybrewery.fermenter.cookbook.domain",
     "localColumn" : "VALIDATION_REF_OBJECT_VALIDATION_REF_OBJECT_ID",
     "required" : true
   }, {
     "name" : "externalTransientReference",
     "type" : "ValidationTransientReferencedObject",
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : "org.technologybrewery.fermenter.cookbook.domain",
     "required" : true
   } ]
 }

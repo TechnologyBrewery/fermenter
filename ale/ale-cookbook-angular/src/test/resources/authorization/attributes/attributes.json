@@ -4,6 +4,6 @@
 		"category": "subject",
 		"type": "string",
 		"required": "false",
-		"attributePointClass": "org.bitbucket.fermenter.stout.authz.NoOpAttributePoint"
+		"attributePointClass": "org.technologybrewery.fermenter.stout.authz.NoOpAttributePoint"
 	}
 ]

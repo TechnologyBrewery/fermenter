@@ -1,5 +1,5 @@
 {
-  "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "package" : "org.technologybrewery.fermenter.cookbook.domain",
   "name" : "SimpleDomainChild",
   "table" : "SIMPLE_DOMAIN_CHILD",
   "documentation" : "Child end of the 1-M relationship with SimpleDomain",

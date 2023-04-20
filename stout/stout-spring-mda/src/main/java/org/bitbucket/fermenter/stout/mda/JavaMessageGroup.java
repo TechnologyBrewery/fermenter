@@ -1,13 +1,13 @@
-package org.bitbucket.fermenter.stout.mda;
+package org.technologybrewery.fermenter.stout.mda;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.bitbucket.fermenter.mda.metamodel.element.BaseMessageGroupDecorator;
-import org.bitbucket.fermenter.mda.metamodel.element.Message;
-import org.bitbucket.fermenter.mda.metamodel.element.MessageGroup;
+import org.technologybrewery.fermenter.mda.metamodel.element.BaseMessageGroupDecorator;
+import org.technologybrewery.fermenter.mda.metamodel.element.Message;
+import org.technologybrewery.fermenter.mda.metamodel.element.MessageGroup;
 
 /**
  * Decorates a message group for easier Java rendering.

@@ -4,8 +4,8 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
-import org.bitbucket.fermenter.stout.util.KrauseningBasedSpringConfig;
-import org.bitbucket.krausening.Krausening;
+import org.technologybrewery.fermenter.stout.util.KrauseningBasedSpringConfig;
+import org.technologybrewery.krausening.Krausening;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -31,7 +31,7 @@ public class ${capitalizedCamelCasedArtifactId}KrauseningBasedSpringConfig exten
 	 * {@inheritDoc}
 	 */
     public ${capitalizedCamelCasedArtifactId}KrauseningBasedSpringConfig(String jpaPropertiesFileName, String dataSourcePropertiesFileName) {
-        super(jpaPropertiesFileName, dataSourcePropertiesFileName);
+        super(jpaPropertiesFileName, dataSourcePropertiesFileName, "org.technologybrewery.fermenter.stout.util.DataSourceConfig");
     }
     
 	/**

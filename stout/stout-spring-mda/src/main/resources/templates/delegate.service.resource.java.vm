@@ -9,9 +9,9 @@ import javax.ws.rs.core.MediaType;
 import $import;
 #end
 
-import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
-import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
-import org.bitbucket.fermenter.stout.page.PageWrapper;
+import org.technologybrewery.fermenter.stout.service.ValueServiceResponse;
+import org.technologybrewery.fermenter.stout.service.VoidServiceResponse;
+import org.technologybrewery.fermenter.stout.page.PageWrapper;
 
 /**
  * Resource for ${service.name} client.

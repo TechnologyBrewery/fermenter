@@ -1,4 +1,4 @@
-package org.bitbucket.fermenter.stout.mda;
+package org.technologybrewery.fermenter.stout.mda;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,9 +8,9 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.bitbucket.fermenter.mda.metamodel.element.BaseServiceDecorator;
-import org.bitbucket.fermenter.mda.metamodel.element.Operation;
-import org.bitbucket.fermenter.mda.metamodel.element.Service;
+import org.technologybrewery.fermenter.mda.metamodel.element.BaseServiceDecorator;
+import org.technologybrewery.fermenter.mda.metamodel.element.Operation;
+import org.technologybrewery.fermenter.mda.metamodel.element.Service;
 
 /**
  * Decorates a {@link Service} with Java-specific capabilities.

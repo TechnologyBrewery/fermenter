@@ -1,5 +1,5 @@
 {
-  "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "package" : "org.technologybrewery.fermenter.cookbook.domain",
   "name" : "ContentRepositoryExample",
   "documentation" : "A service that exposes content via a RESTful service with the Stout Content Repository backing",
   "operations" : []

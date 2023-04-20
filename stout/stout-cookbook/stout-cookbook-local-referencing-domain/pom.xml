@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.bitbucket.askllc.fermenter.stout</groupId>
+		<groupId>org.technologybrewery.fermenter.stout</groupId>
 		<artifactId>stout-cookbook-parent</artifactId>
 		<version>2.7.1-SNAPSHOT</version>
 	</parent>
@@ -17,11 +17,11 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.bitbucket.askllc.fermenter</groupId>
+				<groupId>org.technologybrewery.fermenter</groupId>
 				<artifactId>fermenter-mda</artifactId>
 				<version>${project.version}</version>
 				<configuration>
-					<basePackage>org.bitbucket.askllc.fermenter.cookbook.local.referencing.domain</basePackage>
+					<basePackage>org.technologybrewery.fermenter.cookbook.local.referencing.domain</basePackage>
 					<profile>domain</profile>
 					<metadataDependencies>
 						<metadataDependency>stout-cookbook-domain</metadataDependency>

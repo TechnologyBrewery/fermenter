@@ -1,5 +1,5 @@
 {
-  "package" : "org.bitbucket.askllc.fermenter.cookbook.local.referencing.domain",
+  "package" : "org.technologybrewery.fermenter.cookbook.local.referencing.domain",
   "name" : "Placeholder",
   "table" : "PLACEHOLDER",
   "documentation" : "Generate an entity so we can not only test local call\n\t\toptimization",

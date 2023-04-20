@@ -1,6 +1,6 @@
-package org.bitbucket.fermenter.stout.mda;
+package org.technologybrewery.fermenter.stout.mda;
 
-import org.bitbucket.fermenter.mda.metamodel.element.Return;
+import org.technologybrewery.fermenter.mda.metamodel.element.Return;
 
 /**
  * Decorates a {@link Return} with Java-specific capabilities that focus on treating the operation as a *remote* Java

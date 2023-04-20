@@ -24,7 +24,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.bitbucket.fermenter.stout.transfer.TransferObject;
+import org.technologybrewery.fermenter.stout.transfer.TransferObject;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 /**

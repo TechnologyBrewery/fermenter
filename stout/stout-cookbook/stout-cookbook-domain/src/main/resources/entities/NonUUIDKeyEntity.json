@@ -1,5 +1,5 @@
 {
-  "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "package" : "org.technologybrewery.fermenter.cookbook.domain",
   "name" : "NonUUIDKeyEntity",
   "table" : "NON_UUID_KEY_ENTITY",
   "documentation" : "Entity that uses a non-generated value primary key",

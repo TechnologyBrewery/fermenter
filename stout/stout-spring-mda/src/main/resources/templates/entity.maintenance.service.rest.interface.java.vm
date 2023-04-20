@@ -22,10 +22,10 @@ import javax.ws.rs.DefaultValue;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
-import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
-import org.bitbucket.fermenter.stout.page.json.FindByExampleCriteria;
-import org.bitbucket.fermenter.stout.page.PageWrapper;
+import org.technologybrewery.fermenter.stout.service.ValueServiceResponse;
+import org.technologybrewery.fermenter.stout.service.VoidServiceResponse;
+import org.technologybrewery.fermenter.stout.page.json.FindByExampleCriteria;
+import org.technologybrewery.fermenter.stout.page.PageWrapper;
 
 import java.math.BigDecimal;
 import java.util.Collection;

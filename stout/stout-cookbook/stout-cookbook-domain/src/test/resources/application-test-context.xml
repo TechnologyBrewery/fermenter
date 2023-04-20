@@ -13,7 +13,7 @@
     
     <import resource="stout-cookbook-domain-application-context.xml" />
 
-     <context:component-scan base-package="org.bitbucket.fermenter.stout.mock">
+     <context:component-scan base-package="org.technologybrewery.fermenter.stout.mock">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/>
     </context:component-scan>
 
@@ -21,7 +21,7 @@
     	<property name="scopes">
         	<map>
             	<entry key="request">
-                	<bean class="org.bitbucket.fermenter.stout.mock.MockRequestScope"/>
+                	<bean class="org.technologybrewery.fermenter.stout.mock.MockRequestScope"/>
             	</entry>
         	</map>
     	</property>

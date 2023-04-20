@@ -1,5 +1,5 @@
 {
-    "package": "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package": "org.technologybrewery.fermenter.cookbook.domain",
     "name": "ContractTest",
     "documentation": "Operations to help test various generation permutations for generation test coverage",
     "operations": [
@@ -21,7 +21,7 @@
             "name": "entityResponseMethod",
             "parameters": [],
             "return": {
-                "package": "org.bitbucket.askllc.fermenter.cookbook.domain",
+                "package": "org.technologybrewery.fermenter.cookbook.domain",
                 "type": "SimpleDomain"
             }
         },
@@ -29,7 +29,7 @@
             "name": "enumerationResponseMethod",
             "parameters": [],
             "return": {
-                "package": "org.bitbucket.askllc.fermenter.cookbook.domain",
+                "package": "org.technologybrewery.fermenter.cookbook.domain",
                 "type": "SimpleDomainEnumeration"
             }
         },
@@ -45,7 +45,7 @@
             "name": "multipleEntitiesResponseMethod",
             "parameters": [],
             "return": {
-                "package": "org.bitbucket.askllc.fermenter.cookbook.domain",
+                "package": "org.technologybrewery.fermenter.cookbook.domain",
                 "type": "SimpleDomain",
                 "many": true
             }
@@ -63,7 +63,7 @@
             "name": "multipleEntitiesPagedResponseMethod",
             "parameters": [],
             "return": {
-                "package": "org.bitbucket.askllc.fermenter.cookbook.domain",
+                "package": "org.technologybrewery.fermenter.cookbook.domain",
                 "type": "SimpleDomain",
                 "many": true,
                 "pagedResponse": true
@@ -93,7 +93,7 @@
             "parameters": [
                 {
                     "name": "entity",
-                    "package": "org.bitbucket.askllc.fermenter.cookbook.domain",
+                    "package": "org.technologybrewery.fermenter.cookbook.domain",
                     "type": "SimpleDomain",
                     "documentation": "An entity parameter"
                 }
@@ -107,7 +107,7 @@
             "parameters": [
                 {
                     "name": "enumeration",
-                    "package": "org.bitbucket.askllc.fermenter.cookbook.domain",
+                    "package": "org.technologybrewery.fermenter.cookbook.domain",
                     "type": "SimpleDomainEnumeration",
                     "documentation": "An object that is a parameter"
                 }
@@ -125,7 +125,7 @@
                 },
                 {
                     "name": "entity",
-                    "package": "org.bitbucket.askllc.fermenter.cookbook.domain",
+                    "package": "org.technologybrewery.fermenter.cookbook.domain",
                     "type": "SimpleDomain",
                     "documentation": "An entity parameter"
                 }
@@ -152,7 +152,7 @@
             "parameters": [
                 {
                     "name": "entity",
-                    "package": "org.bitbucket.askllc.fermenter.cookbook.domain",
+                    "package": "org.technologybrewery.fermenter.cookbook.domain",
                     "type": "SimpleDomain",
                     "documentation": "An entity parameter",
                     "many": true

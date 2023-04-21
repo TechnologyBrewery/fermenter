@@ -48,8 +48,8 @@
     </developers>
 
     <scm>
-        <connection>scm:git:ssh://git@github.com:TechnologyBrewery/fermenter.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com:TechnologyBrewery/fermenter.git</developerConnection>
+        <connection>scm:git:ssh://git@github.com/TechnologyBrewery/fermenter.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/TechnologyBrewery/fermenter.git</developerConnection>
         <url>https://github.com/TechnologyBrewery/fermenter</url>
         <tag>HEAD</tag>
     </scm>

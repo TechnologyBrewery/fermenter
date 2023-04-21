@@ -1,7 +1,7 @@
 [
 	{
 		"name": "customDecimal",
-		"fullyQualifiedImplementation": "org.bitbucket.askllc.fermenter.cookbook.local.referencing.domain.bizobj.CustomDecimal",
+		"fullyQualifiedImplementation": "org.technologybrewery.fermenter.cookbook.local.referencing.domain.bizobj.CustomDecimal",
 		"shortImplementation": "CustomDecimal"
 	}
 ]

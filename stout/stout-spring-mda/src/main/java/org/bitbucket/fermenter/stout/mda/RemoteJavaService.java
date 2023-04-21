@@ -1,12 +1,12 @@
-package org.bitbucket.fermenter.stout.mda;
+package org.technologybrewery.fermenter.stout.mda;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.bitbucket.fermenter.mda.metamodel.element.Operation;
-import org.bitbucket.fermenter.mda.metamodel.element.Service;
+import org.technologybrewery.fermenter.mda.metamodel.element.Operation;
+import org.technologybrewery.fermenter.mda.metamodel.element.Service;
 
 /**
  * Decorates a {@link Service} with Java-specific capabilities that focus on treating the operation as a *remote* Java

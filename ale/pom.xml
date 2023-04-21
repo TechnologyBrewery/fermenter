@@ -3,12 +3,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.bitbucket.askllc.fermenter</groupId>
+        <groupId>org.technologybrewery.fermenter</groupId>
         <artifactId>root</artifactId>
         <version>2.7.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>org.bitbucket.askllc.fermenter.ale</groupId>
+    <groupId>org.technologybrewery.fermenter.ale</groupId>
     <artifactId>ale</artifactId>
     <packaging>pom</packaging>
 

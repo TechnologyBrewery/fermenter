@@ -6,10 +6,10 @@
 		</Console>
 	</Appenders>
 	<Loggers>
-		<Logger name="org.bitbucket.askllc.fermenter" level="info" additivity="false">
+		<Logger name="org.technologybrewery.fermenter" level="info" additivity="false">
 			<AppenderRef ref="Console" />
 		</Logger>
-		<Logger name="org.bitbucket.askllc.fermenter.cookbook.domain" level="debug" additivity="false ">
+		<Logger name="org.technologybrewery.fermenter.cookbook.domain" level="debug" additivity="false ">
 			<AppenderRef ref="Console"/>
 		</Logger>		
 		<Root level="warn">

@@ -20,7 +20,7 @@
 		 base-stout-cookbook-domain-application-context.xml -->
 
 	<bean id="contentRepository"
-		class="org.bitbucket.fermenter.stout.content.ContentRepository">
+		class="org.technologybrewery.fermenter.stout.content.ContentRepository">
 		<constructor-arg index="0" ref="stoutCookbookDomainKrauseningProps" />
 	</bean>
 </beans>

@@ -4,14 +4,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <name>Model-Driven Architecture Code Generator::Generate Python Project with Python Language Config Test</name>
-    <groupId>org.bitbucket.askllc.fermenter</groupId>
+    <groupId>org.technologybrewery.fermenter</groupId>
     <artifactId>python-language-config</artifactId>
     <version>1.0.0</version>
 
     <build>
         <plugins>
             <plugin>
-                <groupId>org.bitbucket.askllc.fermenter</groupId>
+                <groupId>org.technologybrewery.fermenter</groupId>
                 <artifactId>fermenter-mda</artifactId>
                 <version>${project.version}</version>
                 <configuration>

@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.bitbucket.askllc.fermenter.ale</groupId>
+        <groupId>org.technologybrewery.fermenter.ale</groupId>
         <artifactId>ale</artifactId>
         <version>2.7.1-SNAPSHOT</version>
     </parent>
@@ -44,7 +44,7 @@
         </pluginManagement>
         <plugins>
             <plugin>
-                <groupId>org.bitbucket.askllc.fermenter</groupId>
+                <groupId>org.technologybrewery.fermenter</groupId>
                 <artifactId>fermenter-mda</artifactId>
                 <version>${project.version}</version>
                 <executions>
@@ -64,7 +64,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <basePackage>org.bitbucket.askllc.fermenter.cookbook.ale</basePackage>
+                    <basePackage>org.technologybrewery.fermenter.cookbook.ale</basePackage>
                     <profile>angular</profile>
                     <mainSourceRoot>frontend</mainSourceRoot>
                     <generatedBasedir>frontend/src/app/generated</generatedBasedir>
@@ -85,12 +85,12 @@
                         <version>${project.version}</version>
                     </dependency>
                     <dependency>
-                        <groupId>org.bitbucket.askllc.fermenter.stout</groupId>
+                        <groupId>org.technologybrewery.fermenter.stout</groupId>
                         <artifactId>stout-cookbook-domain</artifactId>
                         <version>${project.version}</version>
                     </dependency>
                     <dependency>
-                        <groupId>org.bitbucket.askllc.fermenter.stout</groupId>
+                        <groupId>org.technologybrewery.fermenter.stout</groupId>
                         <artifactId>stout-cookbook-referencing-domain</artifactId>
                         <version>${project.version}</version>
                     </dependency>
@@ -167,7 +167,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.bitbucket.askllc.fermenter.stout</groupId>
+            <groupId>org.technologybrewery.fermenter.stout</groupId>
             <artifactId>stout-cookbook-domain</artifactId>
             <version>${project.version}</version>
         </dependency>

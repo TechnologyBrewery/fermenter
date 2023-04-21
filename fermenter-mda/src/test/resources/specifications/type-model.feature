@@ -9,7 +9,7 @@ Feature: Specify types to support model-driven file generation
     Examples: 
       | name   | fullyQualifiedImplementation       | shortImplementation |
       | string | java.lang.String                   | String              |
-      | myType | org.bitbucket.fermenter.CustomType | CustomType          |
+      | myType | org.technologybrewery.fermenter.CustomType | CustomType          |
 
   Scenario Outline: Type name is not provided
     Given a type described by "<name>", "<fullyQualifiedImplementation>", "<shortImplementation>"
@@ -19,4 +19,4 @@ Feature: Specify types to support model-driven file generation
     Examples: 
       | name | fullyQualifiedImplementation       | shortImplementation |
       |      | java.lang.String                   | String              |
-      |      | org.bitbucket.fermenter.CustomType | CustomType          |
+      |      | org.technologybrewery.fermenter.CustomType | CustomType          |

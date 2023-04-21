@@ -1,5 +1,5 @@
 {
-  "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "package" : "org.technologybrewery.fermenter.cookbook.domain",
   "name" : "ForeignKeyWithoutColumnDefinition",
   "table" : "FK_WITHOUT_COLUMN_DEFINITION",
   "identifier" : {

@@ -1,5 +1,5 @@
 {
-  "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "package" : "org.technologybrewery.fermenter.cookbook.domain",
   "name" : "SimpleDomainManager",
   "documentation" : "A collection of operations for the SimpleDomain",
   "operations" : [ {
@@ -44,7 +44,7 @@
       "type" : "integer"
     } ],
     "return" : {
-      "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+      "package" : "org.technologybrewery.fermenter.cookbook.domain",
       "type" : "SimpleDomain"
     }
   }, {
@@ -52,7 +52,7 @@
     "transactionAttribute" : "Supports",
     "parameters" : [ ],
     "return" : {
-      "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+      "package" : "org.technologybrewery.fermenter.cookbook.domain",
       "type" : "SimpleDomain",
       "many" : true
     }
@@ -74,20 +74,20 @@
     "transactionAttribute" : "Required",
     "parameters" : [ {
       "name" : "simpleDomain",
-      "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+      "package" : "org.technologybrewery.fermenter.cookbook.domain",
       "type" : "SimpleDomain",
       "documentation" : "An object that is a parameter"
     } ],
     "compressedWithGZip" : true,
     "return" : {
-      "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+      "package" : "org.technologybrewery.fermenter.cookbook.domain",
       "type" : "SimpleDomain"
     }
   }, {
     "name" : "ReturnNullEntity",
     "parameters" : [ ],
     "return" : {
-      "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+      "package" : "org.technologybrewery.fermenter.cookbook.domain",
       "type" : "SimpleDomain"
     }
   }, {
@@ -95,7 +95,7 @@
     "transactionAttribute" : "Supports",
     "parameters" : [ ],
     "return" : {
-      "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+      "package" : "org.technologybrewery.fermenter.cookbook.domain",
       "type" : "SimpleDomain",
       "many" : true
     }
@@ -120,7 +120,7 @@
     "documentation" : "An operation that demonstrates some important business\n\t\t\t\tfunction. Returns the altered domain.",
     "parameters" : [ {
       "name" : "someBusinessEntity",
-      "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+      "package" : "org.technologybrewery.fermenter.cookbook.domain",
       "type" : "SimpleDomain",
       "documentation" : "The entity on which we should perform some business\n\t\t\t\t\t\toperation"
     }, {
@@ -129,7 +129,7 @@
       "documentation" : "Critical data to supplement the business entity"
     } ],
     "return" : {
-      "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+      "package" : "org.technologybrewery.fermenter.cookbook.domain",
       "type" : "SimpleDomain"
     }
   }, {
@@ -137,7 +137,7 @@
     "documentation" : "Returns the number of provided SimpleDomain entities",
     "parameters" : [ {
       "name" : "input",
-      "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+      "package" : "org.technologybrewery.fermenter.cookbook.domain",
       "type" : "SimpleDomain",
       "many" : true
     } ],
@@ -158,7 +158,7 @@
       "documentation" : "Maximum number of results to return"
     } ],
     "return" : {
-      "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+      "package" : "org.technologybrewery.fermenter.cookbook.domain",
       "type" : "SimpleDomain",
       "many" : true
     }
@@ -189,7 +189,7 @@
       "type" : "date"
     } ],
     "return" : {
-      "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+      "package" : "org.technologybrewery.fermenter.cookbook.domain",
       "type" : "SimpleDomain",
       "many" : true
     }
@@ -200,7 +200,7 @@
       "type" : "date"
     } ],
     "return" : {
-      "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+      "package" : "org.technologybrewery.fermenter.cookbook.domain",
       "type" : "SimpleDomain",
       "many" : true
     }
@@ -211,7 +211,7 @@
       "type" : "date"
      } ],
     "return" : {
-      "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+      "package" : "org.technologybrewery.fermenter.cookbook.domain",
       "type" : "SimpleDomain",
       "many" : true
     }
@@ -241,7 +241,7 @@
       "type" : "string"
     } ],
     "return" : {
-      "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+      "package" : "org.technologybrewery.fermenter.cookbook.domain",
       "type" : "SimpleDomain",
       "many" : true
     }
@@ -257,7 +257,7 @@
       "type" : "string"
     } ],
     "return" : {
-      "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+      "package" : "org.technologybrewery.fermenter.cookbook.domain",
       "type" : "SimpleDomain"
     }
   }, {
@@ -277,7 +277,7 @@
     "transactionAttribute" : "Supports",
     "parameters" : [],
     "return" : {
-        "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+        "package" : "org.technologybrewery.fermenter.cookbook.domain",
         "type" : "SimpleDomain",
         "pagedResponse": true
     }
@@ -292,7 +292,7 @@
         }
     ],
     "return" : {
-        "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+        "package" : "org.technologybrewery.fermenter.cookbook.domain",
         "type" : "SimpleDomain",
         "pagedResponse": true
     }
@@ -303,7 +303,7 @@
     "parameters" : [
         {
             "name" : "simpleDomain",
-            "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+            "package" : "org.technologybrewery.fermenter.cookbook.domain",
             "type" : "SimpleDomain",
             "documentation" : "An object that is a parameter"
         },
@@ -313,7 +313,7 @@
         }
     ],
     "return" : {
-        "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+        "package" : "org.technologybrewery.fermenter.cookbook.domain",
         "type" : "SimpleDomain",
         "pagedResponse": true
     }
@@ -329,7 +329,7 @@
         }
     ],
     "return" : {
-        "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+        "package" : "org.technologybrewery.fermenter.cookbook.domain",
         "type" : "SimpleDomain",
         "pagedResponse": true
     }

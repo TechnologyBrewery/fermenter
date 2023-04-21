@@ -21,10 +21,10 @@
 	
 	<!-- Allows Spring to wire up and instantiate transactional rest client 
 		components marked with @Component -->
-	<context:component-scan base-package="org.bitbucket.fermenter.stout.client.service">
+	<context:component-scan base-package="org.technologybrewery.fermenter.stout.client.service">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Component" />
 	</context:component-scan>	
 	
-	<context:component-scan base-package="org.bitbucket.askllc.fermenter.cookbook.domain.client"/>
+	<context:component-scan base-package="org.technologybrewery.fermenter.cookbook.domain.client"/>
 
 </beans>

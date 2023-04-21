@@ -1,8 +1,8 @@
-package org.bitbucket.fermenter.stout.mda;
+package org.technologybrewery.fermenter.stout.mda;
 
 import org.apache.commons.lang3.StringUtils;
-import org.bitbucket.fermenter.mda.metamodel.element.BaseMessageDecorator;
-import org.bitbucket.fermenter.mda.metamodel.element.Message;
+import org.technologybrewery.fermenter.mda.metamodel.element.BaseMessageDecorator;
+import org.technologybrewery.fermenter.mda.metamodel.element.Message;
 
 /**
  * Decorates an message constant for easier Java rendering.

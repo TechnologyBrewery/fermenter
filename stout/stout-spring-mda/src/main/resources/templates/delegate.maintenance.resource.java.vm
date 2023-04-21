@@ -4,10 +4,10 @@ import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
 import ${basePackage}.transfer.${entity.name};
-import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
-import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
-import org.bitbucket.fermenter.stout.page.json.FindByExampleCriteria;
-import org.bitbucket.fermenter.stout.page.PageWrapper;
+import org.technologybrewery.fermenter.stout.service.ValueServiceResponse;
+import org.technologybrewery.fermenter.stout.service.VoidServiceResponse;
+import org.technologybrewery.fermenter.stout.page.json.FindByExampleCriteria;
+import org.technologybrewery.fermenter.stout.page.PageWrapper;
 
 import java.util.Collection;
 

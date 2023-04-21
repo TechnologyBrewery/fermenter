@@ -1,5 +1,5 @@
 {
-  "package" : "org.bitbucket.askllc.fermenter.cookbook.referencing.domain",
+  "package" : "org.technologybrewery.fermenter.cookbook.referencing.domain",
   "name" : "DoubleIndirectionDomain",
   "table" : "DOUBLE_INDIRECTION",
   "documentation" : "A domain that reference an external domain that in turn references another external domain",
@@ -19,7 +19,7 @@
   "references" : [ {
     "name" : "externalDomain",
     "type" : "LocalDomain",
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.referencing.domain",
+    "package" : "org.technologybrewery.fermenter.cookbook.referencing.domain",
     "localColumn" : "LOCAL_DOMAIN_LOCAL_DOMAIN_ID",
     "required" : true
   } ]

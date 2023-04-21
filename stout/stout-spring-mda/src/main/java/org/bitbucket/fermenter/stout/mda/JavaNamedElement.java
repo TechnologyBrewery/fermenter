@@ -1,4 +1,4 @@
-package org.bitbucket.fermenter.stout.mda;
+package org.technologybrewery.fermenter.stout.mda;
 
 import org.apache.commons.lang3.StringUtils;
 

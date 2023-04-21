@@ -1,4 +1,4 @@
-package org.bitbucket.fermenter.stout.mda.java;
+package org.technologybrewery.fermenter.stout.mda.java;
 
 /**
  * Encapsulates any constants or utility methods that may be used across different generators responsible for generating

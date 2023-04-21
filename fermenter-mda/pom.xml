@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
-        <groupId>org.bitbucket.askllc.fermenter</groupId>
+        <groupId>org.technologybrewery.fermenter</groupId>
         <artifactId>root</artifactId>
         <version>2.7.1-SNAPSHOT</version>
     </parent>
@@ -92,9 +92,9 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>org.bitbucket.askllc.krausening</groupId>
+            <groupId>org.technologybrewery.krausening</groupId>
             <artifactId>krausening</artifactId>
-            <version>13</version>
+            <version>16</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

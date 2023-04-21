@@ -1,10 +1,10 @@
-package org.bitbucket.fermenter.stout.mda;
+package org.technologybrewery.fermenter.stout.mda;
 
 import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.lang3.StringUtils;
-import org.bitbucket.fermenter.mda.metamodel.element.BaseReturnDecorator;
-import org.bitbucket.fermenter.mda.metamodel.element.Return;
+import org.technologybrewery.fermenter.mda.metamodel.element.BaseReturnDecorator;
+import org.technologybrewery.fermenter.mda.metamodel.element.Return;
 
 /**
  * Decorates a {@link Return} with Java-specific capabilities.

@@ -1,5 +1,5 @@
 {
-  "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "package" : "org.technologybrewery.fermenter.cookbook.domain",
   "name" : "ForeignKeyColumnConventions",
   "table" : "FK_COLUMN_CONVENTIONS",
   "identifier" : {
@@ -18,16 +18,16 @@
   "references" : [ {
     "name" : "withoutFKDef",
     "type" : "ForeignKeyWithoutColumnDefinition",
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : "org.technologybrewery.fermenter.cookbook.domain",
     "localColumn" : "FK_WITHOUT_COLUMN_DEFINITION_FK_WITHOUT_COLUMN_DEFINITION_ID"
   }, {
     "name" : "withFKDef",
     "type" : "ForeignKeyWithColumnDefinition",
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain"
+    "package" : "org.technologybrewery.fermenter.cookbook.domain"
   }, {
     "name" : "foreignKeyColumnCustomName",
     "type" : "ForeignKeyColumnCustomName",
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : "org.technologybrewery.fermenter.cookbook.domain",
     "localColumn" : "SOME_COLUMN_NAME"
   } ]
 }

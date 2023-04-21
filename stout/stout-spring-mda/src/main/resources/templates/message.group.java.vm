@@ -1,6 +1,6 @@
 package ${basePackage}.message;
 
-import org.bitbucket.fermenter.stout.messages.MetaMessage;
+import org.technologybrewery.fermenter.stout.messages.MetaMessage;
 
 /**
  * Message Group ${messageGroup.name} with an enumeration for each message.

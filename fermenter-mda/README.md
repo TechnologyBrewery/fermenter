@@ -11,23 +11,23 @@ There are three ways in which to leverage the `fermenter-mda` plugin:
 ## With Local Metadata  ##
 In the following snippet shows the `fermenter-mda` plugin within a Maven build.  The major points are:
 
-* configuration -> basePackage: specify the base package for generated sources.  In this case, all files generated will have a package that starts with `org.bitbucket.askllc.fermenter.cookbook.domain`
+* configuration -> basePackage: specify the base package for generated sources.  In this case, all files generated will have a package that starts with `org.technologybrewery.fermenter.cookbook.domain`
 * configuration -> profile: specify the generation 'profile' that will control what exactly gets generated
 * dependency -> a dependency that contains the needed profile.xml and associated targets.xml files used for `fermenter-mda` generation
 
 ```
 #!xml
 	<plugin>
-		<groupId>org.bitbucket.askllc.fermenter</groupId>
+		<groupId>org.technologybrewery.fermenter</groupId>
 		<artifactId>fermenter-mda</artifactId>
 		<version>${fermenter.version}</version>
 		<configuration>
-			<basePackage>org.bitbucket.askllc.fermenter.cookbook.domain</basePackage>
+			<basePackage>org.technologybrewery.fermenter.cookbook.domain</basePackage>
 			<profile>cookbook-domain</profile>
 		</configuration>
 		<dependencies>
 			<dependency>
-				<groupId>org.bitbucket.askllc.fermenter</groupId>
+				<groupId>org.technologybrewery.fermenter</groupId>
 				<artifactId>stout-cookbook-profile</artifactId>
 				<version>${fermenter.version}</version>
 			</dependency>
@@ -45,11 +45,11 @@ In the following snippet shows the `fermenter-mda` plugin within a Maven build. 
 ```
 #!xml
 	<plugin>
-		<groupId>org.bitbucket.askllc.fermenter</groupId>
+		<groupId>org.technologybrewery.fermenter</groupId>
 		<artifactId>fermenter-mda</artifactId>
 		<version>${fermenter.version}</version>
 		<configuration>
-			<basePackage>org.bitbucket.askllc.fermenter.cookbook.domain.client</basePackage>
+			<basePackage>org.technologybrewery.fermenter.cookbook.domain.client</basePackage>
 			<profile>cookbook-domain-client</profile>
 			<metadataDependencies>
 				<metadataDependency>MAVEN ARTIFACTID OF JAR CONTAINING FERMENTER METADATA</metadataDependency>
@@ -57,7 +57,7 @@ In the following snippet shows the `fermenter-mda` plugin within a Maven build. 
 		</configuration>
 		<dependencies>
 			<dependency>
-				<groupId>org.bitbucket.askllc.fermenter</groupId>
+				<groupId>org.technologybrewery.fermenter</groupId>
 				<artifactId>stout-cookbook-profile</artifactId>
 				<version>${fermenter.version}</version>
 			</dependency>

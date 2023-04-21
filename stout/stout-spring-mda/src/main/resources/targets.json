@@ -3,7 +3,7 @@
 		"name": "dataAccessRepositories",
 		"templateName": "templates/repository.java.vm",
 		"outputFile": "${basePackage}/persist/${entityName}Repository.java",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.entity.PersistentEntityJavaGenerator",
+		"generator": "org.technologybrewery.fermenter.stout.mda.generator.entity.PersistentEntityJavaGenerator",
 		"metadataContext": "local",
 		"overwritable": false
 	},
@@ -11,7 +11,7 @@
 		"name": "objectMapperManager",
 		"templateName": "templates/jackson.object.mapper.manager.java.vm",
 		"outputFile": "${basePackage}/transfer/json/ObjectMapperManager.java",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.entity.AllEntitiesAwareJavaGenerator",
+		"generator": "org.technologybrewery.fermenter.stout.mda.generator.entity.AllEntitiesAwareJavaGenerator",
 		"metadataContext": "local",
 		"overwritable": true
 	},
@@ -19,7 +19,7 @@
 		"name": "baseSpringContext",
 		"templateName": "templates/spring.context.base.xml.vm",
 		"outputFile": "base-${artifactId}-application-context.xml",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
+		"generator": "org.technologybrewery.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
 		"metadataContext": "local",
 		"overwritable": true
 	},
@@ -27,7 +27,7 @@
 		"name": "enumerations",
 		"templateName": "templates/enumeration.java.vm",
 		"outputFile": "${basePackage}/enumeration/${enumerationName}.java",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.enumeration.EnumerationJavaGenerator",
+		"generator": "org.technologybrewery.fermenter.stout.mda.generator.enumeration.EnumerationJavaGenerator",
 		"metadataContext": "local",
 		"overwritable": true
 	},
@@ -35,7 +35,7 @@
 		"name": "clientEnumerations",
 		"templateName": "templates/enumeration.java.vm",
 		"outputFile": "${basePackage}/enumeration/${enumerationName}.java",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.enumeration.EnumerationJavaGenerator",
+		"generator": "org.technologybrewery.fermenter.stout.mda.generator.enumeration.EnumerationJavaGenerator",
 		"metadataContext": "targeted",
 		"overwritable": true
 	},
@@ -43,7 +43,7 @@
 		"name": "baseRestServiceInterfaces",
 		"templateName": "templates/service.base.rest.interface.java.vm",
 		"outputFile": "${basePackage}/service/rest/${serviceName}BaseService.java",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.service.ServiceJavaGenerator",
+		"generator": "org.technologybrewery.fermenter.stout.mda.generator.service.ServiceJavaGenerator",
 		"metadataContext": "local",
 		"overwritable": true
 	},
@@ -51,7 +51,7 @@
 		"name": "baseServiceImpl",
 		"templateName": "templates/service.base.impl.java.vm",
 		"outputFile": "${basePackage}/service/impl/${serviceName}BaseServiceImpl.java",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.service.ServiceJavaGenerator",
+		"generator": "org.technologybrewery.fermenter.stout.mda.generator.service.ServiceJavaGenerator",
 		"metadataContext": "local",
 		"overwritable": true
 	},
@@ -59,7 +59,7 @@
 		"name": "baseTransferObjectJacksonMixIns",
 		"templateName": "templates/to.base.jackson.mixin.java.vm",
 		"outputFile": "${basePackage}/transfer/json/${entityName}BaseMixIn.java",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.entity.EntityJavaGenerator",
+		"generator": "org.technologybrewery.fermenter.stout.mda.generator.entity.EntityJavaGenerator",
 		"metadataContext": "local",
 		"overwritable": true
 	},
@@ -67,7 +67,7 @@
 		"name": "krauseningBasedSpringConfiguration",
 		"templateName": "templates/krausening.based.spring.configuration.java.vm",
 		"outputFile": "${basePackage}/persist/${capitalizedCamelCasedArtifactId}KrauseningBasedSpringConfig.java",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticJavaGenerator",
+		"generator": "org.technologybrewery.fermenter.stout.mda.generator.resource.ModelAgnosticJavaGenerator",
 		"metadataContext": "local",
 		"overwritable": true
 	},
@@ -75,7 +75,7 @@
 		"name": "jpaSpringConfiguration",
 		"templateName": "templates/jpa.spring.configuration.java.vm",
 		"outputFile": "${basePackage}/persist/${capitalizedCamelCasedArtifactId}JpaConfiguration.java",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticJavaGenerator",
+		"generator": "org.technologybrewery.fermenter.stout.mda.generator.resource.ModelAgnosticJavaGenerator",
 		"metadataContext": "local",
 		"overwritable": true
 	},
@@ -83,7 +83,7 @@
 		"name": "jpaProperties",
 		"templateName": "templates/jpa.properties.vm",
 		"outputFile": "krausening/jpa.properties",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
+		"generator": "org.technologybrewery.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
 		"metadataContext": "local",
 		"overwritable": false
 	},
@@ -91,7 +91,7 @@
 		"name": "businessObjects",
 		"templateName": "templates/bo.java.vm",
 		"outputFile": "${basePackage}/bizobj/${entityName}BO.java",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.entity.EntityJavaGenerator",
+		"generator": "org.technologybrewery.fermenter.stout.mda.generator.entity.EntityJavaGenerator",
 		"metadataContext": "local",
 		"overwritable": false
 	},
@@ -99,7 +99,7 @@
 		"name": "baseBusinessObjects",
 		"templateName": "templates/bo.base.java.vm",
 		"outputFile": "${basePackage}/bizobj/${entityName}BaseBO.java",		
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.entity.EntityJavaGenerator",
+		"generator": "org.technologybrewery.fermenter.stout.mda.generator.entity.EntityJavaGenerator",
 		"metadataContext": "local",
 		"overwritable": true
 	},
@@ -107,7 +107,7 @@
 		"name": "messageGroups",
 		"templateName": "templates/message.group.java.vm",
 		"outputFile": "${basePackage}/message/${messageGroupName}.java",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.message.MessageGroupJavaGenerator",
+		"generator": "org.technologybrewery.fermenter.stout.mda.generator.message.MessageGroupJavaGenerator",
 		"metadataContext": "local",
 		"overwritable": true
 	},
@@ -115,7 +115,7 @@
 		"name": "entityMaintenanceServiceImpls",
 		"templateName": "templates/entity.maintenance.service.impl.java.vm",
 		"outputFile": "${basePackage}/service/impl/${entityName}MaintenanceServiceImpl.java",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.entity.PersistentEntityJavaGenerator",
+		"generator": "org.technologybrewery.fermenter.stout.mda.generator.entity.PersistentEntityJavaGenerator",
 		"metadataContext": "local",
 		"overwritable": true
 	},
@@ -123,7 +123,7 @@
 		"name": "springContextImpl",
 		"templateName": "templates/spring.context.impl.xml.vm",
 		"outputFile": "${artifactId}-application-context.xml",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
+		"generator": "org.technologybrewery.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
 		"metadataContext": "local",
 		"overwritable": false
 	},
@@ -131,7 +131,7 @@
 		"name": "restEntityMaintenanceServiceInterfaces",
 		"templateName": "templates/entity.maintenance.service.rest.interface.java.vm",
 		"outputFile": "${basePackage}/service/rest/${entityName}MaintenanceService.java",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.entity.PersistentEntityJavaGenerator",
+		"generator": "org.technologybrewery.fermenter.stout.mda.generator.entity.PersistentEntityJavaGenerator",
 		"metadataContext": "local",
 		"overwritable": true
 	},
@@ -139,7 +139,7 @@
 		"name": "dataSourceProperties",
 		"templateName": "templates/data.source.properties.vm",
 		"outputFile": "krausening/data-source.properties",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
+		"generator": "org.technologybrewery.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
 		"metadataContext": "local",
 		"overwritable": false
 	},
@@ -147,7 +147,7 @@
 		"name": "transferObjectJacksonMixIns",
 		"templateName": "templates/to.jackson.mixin.java.vm",
 		"outputFile": "${basePackage}/transfer/json/${entityName}MixIn.java",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.entity.EntityJavaGenerator",
+		"generator": "org.technologybrewery.fermenter.stout.mda.generator.entity.EntityJavaGenerator",
 		"metadataContext": "local",
 		"overwritable": false
 	},
@@ -155,7 +155,7 @@
 		"name": "restServiceInterfaces",
 		"templateName": "templates/service.rest.interface.java.vm",
 		"outputFile": "${basePackage}/service/rest/${serviceName}Service.java",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.service.ServiceJavaGenerator",
+		"generator": "org.technologybrewery.fermenter.stout.mda.generator.service.ServiceJavaGenerator",
 		"metadataContext": "local",
 		"overwritable": false
 	},
@@ -163,7 +163,7 @@
 		"name": "jacksonObjectMapperResteasyProvider",
 		"templateName": "templates/jackson.object.mapper.resteasy.provider.java.vm",
 		"outputFile": "${basePackage}/service/rest/${capitalizedCamelCasedArtifactId}ResteasyProvider.java",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticJavaGenerator",
+		"generator": "org.technologybrewery.fermenter.stout.mda.generator.resource.ModelAgnosticJavaGenerator",
 		"metadataContext": "local",
 		"overwritable": true
 	},
@@ -171,7 +171,7 @@
 		"name": "serviceImpl",
 		"templateName": "templates/service.impl.java.vm",
 		"outputFile": "${basePackage}/service/impl/${serviceName}ServiceImpl.java",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.service.ServiceJavaGenerator",
+		"generator": "org.technologybrewery.fermenter.stout.mda.generator.service.ServiceJavaGenerator",
 		"metadataContext": "local",
 		"overwritable": false
 	},
@@ -179,7 +179,7 @@
 		"name": "restClientAppConfig",
 		"templateName": "templates/rest.client.app.config.java.vm",
 		"outputFile": "${basePackage}/client/config/App${artifactId}Config.java",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.crosscutting.AppConfigGenerator",
+		"generator": "org.technologybrewery.fermenter.stout.mda.generator.crosscutting.AppConfigGenerator",
 		"metadataContext": "targeted",
 		"overwritable": true
 	},
@@ -187,7 +187,7 @@
 		"name": "baseTransferObjects",
 		"templateName": "templates/to.base.java.vm",
 		"outputFile": "${basePackage}/transfer/${entityName}Base.java",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.entity.EntityJavaGenerator",
+		"generator": "org.technologybrewery.fermenter.stout.mda.generator.entity.EntityJavaGenerator",
 		"metadataContext": "targeted",
 		"overwritable": true
 	},
@@ -195,7 +195,7 @@
 		"name": "transferObjects",
 		"templateName": "templates/to.java.vm",
 		"outputFile": "${basePackage}/transfer/${entityName}.java",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.entity.EntityJavaGenerator",
+		"generator": "org.technologybrewery.fermenter.stout.mda.generator.entity.EntityJavaGenerator",
 		"metadataContext": "targeted",
 		"overwritable": false
 	},
@@ -203,7 +203,7 @@
         "name": "restClientBaseConfig",
         "templateName": "templates/rest.client.base.config.java.vm",
         "outputFile": "${basePackage}/client/config/RestClient${artifactId}BaseConfig.java",
-        "generator": "org.bitbucket.fermenter.stout.mda.generator.crosscutting.AppConfigGenerator",
+        "generator": "org.technologybrewery.fermenter.stout.mda.generator.crosscutting.AppConfigGenerator",
         "metadataContext": "targeted",
         "overwritable": true
     },
@@ -211,7 +211,7 @@
         "name": "restClientBasePropertiesConfig",
         "templateName": "templates/rest.client.base.properties.config.java.vm",
         "outputFile": "${basePackage}/client/config/RestClientBasePropertiesConfig.java",
-        "generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticJavaGenerator",
+        "generator": "org.technologybrewery.fermenter.stout.mda.generator.resource.ModelAgnosticJavaGenerator",
         "metadataContext": "targeted",
         "overwritable": true
     },
@@ -219,7 +219,7 @@
 		"name": "delegateMaintenanceResource",
 		"templateName": "templates/delegate.maintenance.resource.java.vm",
 		"outputFile": "${basePackage}/client/resource/${entityName}MaintenanceResource.java",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.entity.PersistentEntityJavaGenerator",
+		"generator": "org.technologybrewery.fermenter.stout.mda.generator.entity.PersistentEntityJavaGenerator",
 		"metadataContext": "targeted",
 		"overwritable": true
 	},
@@ -227,7 +227,7 @@
 		"name": "delegateMaintenanceInterface",
 		"templateName": "templates/delegate.maintenance.interface.java.vm",
 		"outputFile": "${basePackage}/client/service/${entityName}MaintenanceDelegate.java",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.entity.PersistentEntityJavaGenerator",
+		"generator": "org.technologybrewery.fermenter.stout.mda.generator.entity.PersistentEntityJavaGenerator",
 		"metadataContext": "targeted",
 		"overwritable": true
 	},
@@ -235,7 +235,7 @@
 		"name": "delegateMaintenanceImpl",
 		"templateName": "templates/delegate.maintenance.impl.java.vm",
 		"outputFile": "${basePackage}/client/service/impl/${entityName}MaintenanceDelegateImpl.java",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.entity.PersistentEntityJavaGenerator",
+		"generator": "org.technologybrewery.fermenter.stout.mda.generator.entity.PersistentEntityJavaGenerator",
 		"metadataContext": "targeted",
 		"overwritable": true
 	},
@@ -243,7 +243,7 @@
 		"name": "delegateMaintenanceTxSyncrhonization",
 		"templateName": "templates/delegate.maintenance.tx.synchronization.java.vm",
 		"outputFile": "${basePackage}/client/service/impl/DelegateMaintenanceTransactionSynchronization.java",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.entity.AllOrderedEntitiesAwareJavaGenerator",
+		"generator": "org.technologybrewery.fermenter.stout.mda.generator.entity.AllOrderedEntitiesAwareJavaGenerator",
 		"metadataContext": "targeted",
 		"overwritable": true
 	},
@@ -251,7 +251,7 @@
         "name": "caches",
         "templateName": "templates/cache.java.vm",
         "outputFile": "${basePackage}/client/cache/${entityName}Cache.java",
-        "generator": "org.bitbucket.fermenter.stout.mda.generator.entity.PersistentEntityJavaGenerator",
+        "generator": "org.technologybrewery.fermenter.stout.mda.generator.entity.PersistentEntityJavaGenerator",
         "metadataContext": "targeted",
         "overwritable": true
     },
@@ -259,7 +259,7 @@
         "name": "cacheConfig",
         "templateName": "templates/cache.properties.config.vm",
         "outputFile": "${basePackage}/client/config/CachePropertiesConfig.java",
-        "generator": "org.bitbucket.fermenter.stout.mda.generator.entity.AllEntitiesAwareJavaGenerator",
+        "generator": "org.technologybrewery.fermenter.stout.mda.generator.entity.AllEntitiesAwareJavaGenerator",
         "metadataContext": "targeted",
         "overwritable": true
     },
@@ -267,7 +267,7 @@
 		"name": "delegateServiceResource",
 		"templateName": "templates/delegate.service.resource.java.vm",
 		"outputFile": "${basePackage}/client/resource/${serviceName}Resource.java",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.service.ServiceDelegateJavaGenerator",
+		"generator": "org.technologybrewery.fermenter.stout.mda.generator.service.ServiceDelegateJavaGenerator",
 		"metadataContext": "targeted",
 		"overwritable": true
 	},	
@@ -275,7 +275,7 @@
 		"name": "delegateServiceInterface",
 		"templateName": "templates/delegate.service.interface.java.vm",
 		"outputFile": "${basePackage}/client/service/${serviceName}Delegate.java",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.service.ServiceDelegateJavaGenerator",
+		"generator": "org.technologybrewery.fermenter.stout.mda.generator.service.ServiceDelegateJavaGenerator",
 		"metadataContext": "targeted",
 		"overwritable": true
 	},
@@ -283,7 +283,7 @@
 		"name": "delegateServiceImpl",
 		"templateName": "templates/delegate.service.impl.java.vm",
 		"outputFile": "${basePackage}/client/service/impl/${serviceName}DelegateImpl.java",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.service.ServiceDelegateJavaGenerator",
+		"generator": "org.technologybrewery.fermenter.stout.mda.generator.service.ServiceDelegateJavaGenerator",
 		"metadataContext": "targeted",
 		"overwritable": true
 	},
@@ -291,7 +291,7 @@
 		"name": "pdpXml",
 		"templateName": "templates/pdp.xml.vm",
 		"outputFile": "authorization/${artifactId}-pdp.xml",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
+		"generator": "org.technologybrewery.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
 		"metadataContext": "local",
 		"overwritable": false
 	},
@@ -299,7 +299,7 @@
 		"name": "pdpAttributesJson",
 		"templateName": "templates/pdp.default.attributes.json.vm",
 		"outputFile": "authorization/attributes/attributes.json",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
+		"generator": "org.technologybrewery.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
 		"metadataContext": "local",
 		"overwritable": false
 	},
@@ -307,7 +307,7 @@
 		"name": "pdpAuthorizationProperties",
 		"templateName": "templates/pdp.stout.authorization.properties.vm",
 		"outputFile": "krausening/stout-authorization.properties",
-		"generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
+		"generator": "org.technologybrewery.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
 		"metadataContext": "local",
 		"overwritable": false
 	},
@@ -315,7 +315,7 @@
         "name": "pdpPolicy",
         "templateName": "templates/pdp.policy.xml.vm",
         "outputFile": "authorization/policies/${artifactId}-policy.xml",
-        "generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
+        "generator": "org.technologybrewery.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
         "metadataContext": "local",
         "overwritable": false
 	},
@@ -323,7 +323,7 @@
         "name": "droolsRuntime",
         "templateName": "templates/runtime.drools.vm",
         "outputFile": "${basePackage}/rules/runtime/DroolsRuntime.java",
-        "generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticJavaGenerator",
+        "generator": "org.technologybrewery.fermenter.stout.mda.generator.resource.ModelAgnosticJavaGenerator",
         "metadataContext": "local",
         "overwritable": false
 	},
@@ -331,7 +331,7 @@
         "name": "droolsKModuleConfig",
         "templateName": "templates/drools.kmodule.xml.vm",
         "outputFile": "META-INF/kmodule.xml",
-        "generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
+        "generator": "org.technologybrewery.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
         "metadataContext": "local",
         "overwritable": true
 	},
@@ -339,7 +339,7 @@
         "name": "droolsRules",
         "templateName": "templates/drools.rule.drl.vm",
         "outputFile": "rules/default/default.drl",
-        "generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
+        "generator": "org.technologybrewery.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
         "metadataContext": "local",
         "overwritable": true
 	},
@@ -347,7 +347,7 @@
         "name": "droolsRulesDrl",
         "templateName": "templates/drools.rules.session.drl.vm",
         "outputFile": "${basePackage}/rules/${ruleGroupName}/${ruleName}Rule.drl",
-        "generator": "org.bitbucket.fermenter.stout.mda.generator.rule.RuleGenerator",
+        "generator": "org.technologybrewery.fermenter.stout.mda.generator.rule.RuleGenerator",
         "metadataContext": "targeted",
         "overwritable": true
 	},
@@ -355,7 +355,7 @@
         "name": "cucumberSurefireHarness",
         "templateName": "templates/cucumber.surefire.harness.java.vm",
         "outputFile": "${basePackage}/TestCucumber.java",
-        "generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticJavaGenerator",
+        "generator": "org.technologybrewery.fermenter.stout.mda.generator.resource.ModelAgnosticJavaGenerator",
         "metadataContext": "targeted",
         "overwritable": true,
         "artifactType": "test"
@@ -364,7 +364,7 @@
         "name": "cucumberSampleFeatureFile",
         "templateName": "templates/cucumber.sample.feature.vm",
         "outputFile": "specifications/sample.feature",
-        "generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
+        "generator": "org.technologybrewery.fermenter.stout.mda.generator.resource.ModelAgnosticResourceGenerator",
         "metadataContext": "targeted",
         "overwritable": false,
         "artifactType": "test"
@@ -373,7 +373,7 @@
         "name": "cucumberSampleSteps",
         "templateName": "templates/cucumber.sample.steps.java.vm",
         "outputFile": "${basePackage}/SampleSteps.java",
-        "generator": "org.bitbucket.fermenter.stout.mda.generator.resource.ModelAgnosticJavaGenerator",
+        "generator": "org.technologybrewery.fermenter.stout.mda.generator.resource.ModelAgnosticJavaGenerator",
         "metadataContext": "targeted",
         "overwritable": false,
         "artifactType": "test"

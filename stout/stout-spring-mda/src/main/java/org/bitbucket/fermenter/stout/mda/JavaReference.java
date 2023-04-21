@@ -1,13 +1,13 @@
-package org.bitbucket.fermenter.stout.mda;
+package org.technologybrewery.fermenter.stout.mda;
 
 import org.apache.commons.lang3.StringUtils;
-import org.bitbucket.fermenter.mda.PackageManager;
-import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
-import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
-import org.bitbucket.fermenter.mda.metamodel.element.BaseReferenceDecorator;
-import org.bitbucket.fermenter.mda.metamodel.element.Entity;
-import org.bitbucket.fermenter.mda.metamodel.element.Field;
-import org.bitbucket.fermenter.mda.metamodel.element.Reference;
+import org.technologybrewery.fermenter.mda.PackageManager;
+import org.technologybrewery.fermenter.mda.metamodel.DefaultModelInstanceRepository;
+import org.technologybrewery.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
+import org.technologybrewery.fermenter.mda.metamodel.element.BaseReferenceDecorator;
+import org.technologybrewery.fermenter.mda.metamodel.element.Entity;
+import org.technologybrewery.fermenter.mda.metamodel.element.Field;
+import org.technologybrewery.fermenter.mda.metamodel.element.Reference;
 
 import java.util.ArrayList;
 import java.util.Iterator;

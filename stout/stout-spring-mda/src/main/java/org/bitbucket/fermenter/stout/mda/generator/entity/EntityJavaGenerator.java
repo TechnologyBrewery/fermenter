@@ -1,6 +1,6 @@
-package org.bitbucket.fermenter.stout.mda.generator.entity;
+package org.technologybrewery.fermenter.stout.mda.generator.entity;
 
-import org.bitbucket.fermenter.stout.mda.java.JavaGeneratorUtil;
+import org.technologybrewery.fermenter.stout.mda.java.JavaGeneratorUtil;
 
 /**
  * Generator that processes a single file for each entity in the meta-model, regardless of whether the entity is

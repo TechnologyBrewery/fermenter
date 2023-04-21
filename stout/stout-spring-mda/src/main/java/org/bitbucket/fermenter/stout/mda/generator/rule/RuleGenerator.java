@@ -1,11 +1,11 @@
-package org.bitbucket.fermenter.stout.mda.generator.rule;
+package org.technologybrewery.fermenter.stout.mda.generator.rule;
 
 import org.apache.velocity.VelocityContext;
-import org.bitbucket.fermenter.mda.generator.GenerationContext;
-import org.bitbucket.fermenter.mda.generator.rule.AbstractRuleGenerator;
-import org.bitbucket.fermenter.mda.metamodel.element.Rule;
-import org.bitbucket.fermenter.stout.mda.JavaRule;
-import org.bitbucket.fermenter.stout.mda.java.JavaGeneratorUtil;
+import org.technologybrewery.fermenter.mda.generator.GenerationContext;
+import org.technologybrewery.fermenter.mda.generator.rule.AbstractRuleGenerator;
+import org.technologybrewery.fermenter.mda.metamodel.element.Rule;
+import org.technologybrewery.fermenter.stout.mda.JavaRule;
+import org.technologybrewery.fermenter.stout.mda.java.JavaGeneratorUtil;
 
 /**
  * Iterates through rule instances, passing {@link JavaRule}s instance to the templates.

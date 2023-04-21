@@ -7,19 +7,19 @@ import ${basePackage}.client.cache.${entity.name}Cache;
 import ${basePackage}.client.config.CachePropertiesConfig;
 import org.aeonbits.owner.KrauseningConfigFactory;
 
-import org.bitbucket.fermenter.stout.messages.MessageManagerAwareService;
-import org.bitbucket.fermenter.stout.client.service.AbstractMaintenanceServiceDelegate;
-import org.bitbucket.fermenter.stout.client.service.LevelOneCache;
-import org.bitbucket.fermenter.stout.client.service.LevelOneCacheManager;
-import org.bitbucket.fermenter.stout.client.service.LocalOptimizationUtil;
-import org.bitbucket.fermenter.stout.client.service.LocalOptimizationServiceWrapper;
-import org.bitbucket.fermenter.stout.exception.UnrecoverableException;
-import org.bitbucket.fermenter.stout.service.ValueServiceResponse;
-import org.bitbucket.fermenter.stout.service.VoidServiceResponse;
+import org.technologybrewery.fermenter.stout.messages.MessageManagerAwareService;
+import org.technologybrewery.fermenter.stout.client.service.AbstractMaintenanceServiceDelegate;
+import org.technologybrewery.fermenter.stout.client.service.LevelOneCache;
+import org.technologybrewery.fermenter.stout.client.service.LevelOneCacheManager;
+import org.technologybrewery.fermenter.stout.client.service.LocalOptimizationUtil;
+import org.technologybrewery.fermenter.stout.client.service.LocalOptimizationServiceWrapper;
+import org.technologybrewery.fermenter.stout.exception.UnrecoverableException;
+import org.technologybrewery.fermenter.stout.service.ValueServiceResponse;
+import org.technologybrewery.fermenter.stout.service.VoidServiceResponse;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.bitbucket.fermenter.stout.page.PageWrapper;
-import org.bitbucket.fermenter.stout.page.json.FindByExampleCriteria;
+import org.technologybrewery.fermenter.stout.page.PageWrapper;
+import org.technologybrewery.fermenter.stout.page.json.FindByExampleCriteria;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;

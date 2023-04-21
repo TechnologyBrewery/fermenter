@@ -3,7 +3,7 @@
 
 <entity>
 	<name>DoubleIndirectionDomain</name>
-	<namespace>org.bitbucket.askllc.fermenter.cookbook.indirection.domain</namespace>
+	<namespace>org.technologybrewery.fermenter.cookbook.indirection.domain</namespace>
 	<documentation>A domain that reference an external domain that in turn references another external domain</documentation>
 	<table>DOUBLE_INDIRECTION</table>
 

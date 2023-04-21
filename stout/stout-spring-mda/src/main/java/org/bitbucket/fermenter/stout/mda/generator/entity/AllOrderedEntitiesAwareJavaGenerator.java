@@ -1,7 +1,7 @@
-package org.bitbucket.fermenter.stout.mda.generator.entity;
+package org.technologybrewery.fermenter.stout.mda.generator.entity;
 
-import org.bitbucket.fermenter.mda.generator.entity.AbstractAllOrderedEntitiesAwareGenerator;
-import org.bitbucket.fermenter.stout.mda.java.JavaGeneratorUtil;
+import org.technologybrewery.fermenter.mda.generator.entity.AbstractAllOrderedEntitiesAwareGenerator;
+import org.technologybrewery.fermenter.stout.mda.java.JavaGeneratorUtil;
 
 public class AllOrderedEntitiesAwareJavaGenerator extends AbstractAllOrderedEntitiesAwareGenerator {
 

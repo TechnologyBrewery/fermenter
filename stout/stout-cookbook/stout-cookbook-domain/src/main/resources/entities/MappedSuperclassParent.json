@@ -1,5 +1,5 @@
 {
-  "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "package" : "org.technologybrewery.fermenter.cookbook.domain",
   "name" : "MappedSuperclassParent",
   "documentation" : "Parent entity demonstrating an inheritance hierarchy with a mapped superclass strategy",
   "fields" : [ {
@@ -11,7 +11,7 @@
   "references" : [ {
     "name" : "refToSimpleDomain",
     "type" : "SimpleDomain",
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : "org.technologybrewery.fermenter.cookbook.domain",
     "localColumn" : "SIMPLE_DOMAIN_SIMPLE_DOMAIN_ID",
     "required" : true
   } ]

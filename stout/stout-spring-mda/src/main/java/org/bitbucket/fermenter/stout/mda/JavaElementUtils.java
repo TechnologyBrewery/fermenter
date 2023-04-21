@@ -1,13 +1,13 @@
-package org.bitbucket.fermenter.stout.mda;
+package org.technologybrewery.fermenter.stout.mda;
 
 import org.apache.commons.lang3.StringUtils;
-import org.bitbucket.fermenter.mda.TypeManager;
-import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
-import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
-import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
-import org.bitbucket.fermenter.mda.metamodel.element.Field;
-import org.bitbucket.fermenter.mda.metamodel.element.MetamodelType;
-import org.bitbucket.fermenter.mda.metamodel.element.Parameter;
+import org.technologybrewery.fermenter.mda.TypeManager;
+import org.technologybrewery.fermenter.mda.metamodel.DefaultModelInstanceRepository;
+import org.technologybrewery.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
+import org.technologybrewery.fermenter.mda.metamodel.element.Enumeration;
+import org.technologybrewery.fermenter.mda.metamodel.element.Field;
+import org.technologybrewery.fermenter.mda.metamodel.element.MetamodelType;
+import org.technologybrewery.fermenter.mda.metamodel.element.Parameter;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -33,11 +33,11 @@ public final class JavaElementUtils {
      * reference.
      * 
      * @param packageName
-     *            package (e.g., org.bitbucket.fermenter)
+     *            package (e.g., org.technologybrewery.fermenter)
      * @param name
      *            class (e.f., FooClass)
-     * @return fully qualified name (e.g., org.bitbucket.fermenter.bizobj.FooClassBO,
-     *         org.bitbucket.fermenter.transfer.FooClass)
+     * @return fully qualified name (e.g., org.technologybrewery.fermenter.bizobj.FooClassBO,
+     *         org.technologybrewery.fermenter.transfer.FooClass)
      */
     static String getJavaImportByPackageAndType(String packageName, String name) {
         return getJavaImportByPackageAndType(packageName, name, true);
@@ -49,13 +49,13 @@ public final class JavaElementUtils {
      * will get a BO or TO import for an entity.
      * 
      * @param packageName
-     *            package (e.g., org.bitbucket.fermenter)
+     *            package (e.g., org.technologybrewery.fermenter)
      * @param name
      *            class (e.f., FooClass)
      * @param if
      *            the base package is local or not
-     * @return fully qualified name (e.g., org.bitbucket.fermenter.bizobj.FooClassBO,
-     *         org.bitbucket.fermenter.transfer.FooClass)
+     * @return fully qualified name (e.g., org.technologybrewery.fermenter.bizobj.FooClassBO,
+     *         org.technologybrewery.fermenter.transfer.FooClass)
      */
     static String getJavaImportByPackageAndType(String packageName, String type, boolean basePackageLocal) {
         MetamodelType metamodelType = MetamodelType.getMetamodelType(packageName, type);
@@ -95,7 +95,7 @@ public final class JavaElementUtils {
      * reference.
      * 
      * @param packageName
-     *            package (e.g., org.bitbucket.fermenter)
+     *            package (e.g., org.technologybrewery.fermenter)
      * @param name
      *            class (e.f., FooClass)
      * @return short name (e.g., FooClassBO, FooClass)
@@ -111,7 +111,7 @@ public final class JavaElementUtils {
      * BO or TO import for an entity.
      * 
      * @param packageName
-     *            package (e.g., org.bitbucket.fermenter)
+     *            package (e.g., org.technologybrewery.fermenter)
      * @param name
      *            class (e.f., FooClass)
      * @param if
@@ -138,7 +138,7 @@ public final class JavaElementUtils {
      * Utility to trim a fully qualified class name down to the short name
      * 
      * @param fullyQualifiedJavaClassName
-     *            fully qualified class name (e.g., org.bitbucket.fermenter.enumeration.BarEnumeration)
+     *            fully qualified class name (e.g., org.technologybrewery.fermenter.enumeration.BarEnumeration)
      * @return short class name (e.g., BarEnumeration)
      */
     static String getJavaShortName(String fullyQualifiedJavaClassName) {

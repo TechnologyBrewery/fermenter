@@ -7,5 +7,5 @@
 		</xs:documentation>
 	</xs:annotation>
 	<!-- Do not specify schema locations here. Define the schema locations in the XML catalog instead (see file 'catalog.xml'). -->
-	<xs:import namespace="http://fermenter.bitbucket.org/stout/authz/attribute/2" />
+	<xs:import namespace="http://fermenter.technologybrewery.org/stout/authz/attribute/2" />
 </xs:schema>

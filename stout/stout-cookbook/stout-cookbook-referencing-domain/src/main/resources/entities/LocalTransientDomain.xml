@@ -3,7 +3,7 @@
 
 <entity transient="true">
 	<name>LocalTransientDomain</name>
-	<namespace>org.bitbucket.askllc.fermenter.cookbook.referencing.domain</namespace>
+	<namespace>org.technologybrewery.fermenter.cookbook.referencing.domain</namespace>
 	<documentation>A transient local domain entity with external reference to a persistent entity</documentation>
 
 	<fields>

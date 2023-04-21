@@ -1,5 +1,5 @@
 {
-  "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "package" : "org.technologybrewery.fermenter.cookbook.domain",
   "name" : "TransientEntityExample",
   "transient" : true,
   "documentation" : "A non-persistent entity",
@@ -8,7 +8,7 @@
     "documentation" : "The friendly domain moniker",
     "type" : "string"
   }, {
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : "org.technologybrewery.fermenter.cookbook.domain",
     "name" : "anEnumeratedValue",
     "type" : "SimpleDomainEnumeration",
     "column" : "SIMPLE_DOMAIN_ENUM"
@@ -16,12 +16,12 @@
   "references" : [ {
     "name" : "requiredReference",
     "type" : "ValidationReferencedObject",
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : "org.technologybrewery.fermenter.cookbook.domain",
     "required" : true
   } ],
   "relations" : [ {
     "type" : "TransientChildEntity",
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : "org.technologybrewery.fermenter.cookbook.domain",
     "multiplicity" : "1-M"
   } ]
 }

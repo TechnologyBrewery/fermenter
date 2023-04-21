@@ -3,7 +3,7 @@
     "name": "entityBaseModel",
     "templateName": "templates/model/entity-base.model.ts.vm",
     "outputFile": "generated/model-base/${entityName}-base.model.ts",
-    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularEntityGenerator",
+    "generator": "org.technologybrewery.fermenter.ale.mda.generator.angular.AngularEntityGenerator",
     "metadataContext": "targeted",
     "overwritable": true
   },
@@ -11,7 +11,7 @@
     "name": "entityModel",
     "templateName": "templates/model/entity.model.ts.vm",
     "outputFile": "shared/model/${entityName}.model.ts",
-    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularEntityGenerator",
+    "generator": "org.technologybrewery.fermenter.ale.mda.generator.angular.AngularEntityGenerator",
     "metadataContext": "targeted",
     "overwritable": false
   },
@@ -19,7 +19,7 @@
     "name": "enums",
     "templateName": "templates/model/enumeration.ts.vm",
     "outputFile": "generated/enum/${enumerationName}.model.ts",
-    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularEnumerationGenerator",
+    "generator": "org.technologybrewery.fermenter.ale.mda.generator.angular.AngularEnumerationGenerator",
     "metadataContext": "targeted",
     "overwritable": true
   },
@@ -27,7 +27,7 @@
     "name": "maintenanceServices",
     "templateName": "templates/service/maintenance.service.ts.vm",
     "outputFile": "generated/service/maintenance/${entityName}-maintenance.service.ts",
-    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularMaintServiceGenerator",
+    "generator": "org.technologybrewery.fermenter.ale.mda.generator.angular.AngularMaintServiceGenerator",
     "metadataContext": "targeted",
     "overwritable": true
   },
@@ -35,7 +35,7 @@
     "name": "businessServices",
     "templateName": "templates/service/business.service.ts.vm",
     "outputFile": "generated/service/business/${serviceName}.service.ts",
-    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBusinessServiceGenerator",
+    "generator": "org.technologybrewery.fermenter.ale.mda.generator.angular.AngularBusinessServiceGenerator",
     "metadataContext": "targeted",
     "overwritable": true
   },
@@ -43,189 +43,189 @@
     "name": "errorHandlerApi",
     "templateName": "templates/error-handler-api.ts.vm",
     "outputFile": "generated/error-handler-api.ts",
-    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "generator": "org.technologybrewery.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
     "overwritable": true
   },
   {
     "name": "globalErrorHandlerBase",
     "templateName": "templates/global-error-handler-base.service.ts.vm",
     "outputFile": "generated/global-error-handler-base.service.ts",
-    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "generator": "org.technologybrewery.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
     "overwritable": true
   },
   {
     "name": "globalErrorHandler",
     "templateName": "templates/global-error-handler.service.ts.vm",
     "outputFile": "shared/global-error-handler.service.ts",
-    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "generator": "org.technologybrewery.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
     "overwritable": false
   },
   {
     "name": "constants",
     "templateName": "templates/constants.ts.vm",
     "outputFile": "constants.ts",
-    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "generator": "org.technologybrewery.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
     "overwritable": false
   },
   {
     "name": "fermenterMessageBaseModel",
     "templateName": "templates/model/fermenter-message-base.model.ts.vm",
     "outputFile": "generated/model-base/fermenter-message-base.model.ts",
-    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "generator": "org.technologybrewery.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
     "overwritable": true
   },
   {
     "name": "fermenterMessageModel",
     "templateName": "templates/model/fermenter-message.model.ts.vm",
     "outputFile": "shared/model/fermenter-message.model.ts",
-    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "generator": "org.technologybrewery.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
     "overwritable": false
   },
   {
     "name": "fermenterMessagesBaseModel",
     "templateName": "templates/model/fermenter-messages-base.model.ts.vm",
     "outputFile": "generated/model-base/fermenter-messages-base.model.ts",
-    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "generator": "org.technologybrewery.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
     "overwritable": true
   },
   {
     "name": "fermenterMessagesModel",
     "templateName": "templates/model/fermenter-messages.model.ts.vm",
     "outputFile": "shared/model/fermenter-messages.model.ts",
-    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "generator": "org.technologybrewery.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
     "overwritable": false
   },
   {
     "name": "businessErrorModel",
     "templateName": "templates/business-error.model.ts.vm",
     "outputFile": "generated/business-error.model.ts",
-    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "generator": "org.technologybrewery.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
     "overwritable": false
   },
   {
     "name": "fermenterBaseModel",
     "templateName": "templates/model/fermenter-response-base.model.ts.vm",
     "outputFile": "generated/model-base/fermenter-response-base.model.ts",
-    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "generator": "org.technologybrewery.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
     "overwritable": true
   },
   {
     "name": "fermenterModel",
     "templateName": "templates/model/fermenter-response.model.ts.vm",
     "outputFile": "shared/model/fermenter-response.model.ts",
-    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "generator": "org.technologybrewery.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
     "overwritable": false
   },
   {
     "name": "orderBaseModel",
     "templateName": "templates/model/order-wrapper-base.model.ts.vm",
     "outputFile": "generated/model-base/order-wrapper-base.model.ts",
-    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "generator": "org.technologybrewery.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
     "overwritable": true
   },
   {
     "name": "orderModel",
     "templateName": "templates/model/order-wrapper.model.ts.vm",
     "outputFile": "shared/model/order-wrapper.model.ts",
-    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "generator": "org.technologybrewery.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
     "overwritable": false
   },
   {
     "name": "sortBaseModel",
     "templateName": "templates/model/sort-wrapper-base.model.ts.vm",
     "outputFile": "generated/model-base/sort-wrapper-base.model.ts",
-    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "generator": "org.technologybrewery.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
     "overwritable": true
   },
   {
     "name": "sortModel",
     "templateName": "templates/model/sort-wrapper.model.ts.vm",
     "outputFile": "shared/model/sort-wrapper.model.ts",
-    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "generator": "org.technologybrewery.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
     "overwritable": false
   },
   {
     "name": "findByExampleCriteriaBaseModel",
     "templateName": "templates/model/find-by-example-criteria-base.model.ts.vm",
     "outputFile": "generated/model-base/find-by-example-criteria-base.model.ts",
-    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "generator": "org.technologybrewery.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
     "overwritable": true
   },
   {
     "name": "findByExampleCriteriaModel",
     "templateName": "templates/model/find-by-example-criteria.model.ts.vm",
     "outputFile": "shared/model/find-by-example-criteria.model.ts",
-    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "generator": "org.technologybrewery.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
     "overwritable": false
   },
   {
     "name": "sortOrderDirectionEnum",
     "templateName": "templates/model/order-direction.enum.ts.vm",
     "outputFile": "generated/model-base/order-direction.enum.ts",
-    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "generator": "org.technologybrewery.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
     "overwritable": true
   },
   {
     "name": "pageWrapperBaseModel",
     "templateName": "templates/model/page-wrapper-base.model.ts.vm",
     "outputFile": "generated/model-base/page-wrapper-base.model.ts",
-    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "generator": "org.technologybrewery.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
     "overwritable": true
   },
   {
     "name": "pageWrapperModel",
     "templateName": "templates/model/page-wrapper.model.ts.vm",
     "outputFile": "shared/model/page-wrapper.model.ts",
-    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "generator": "org.technologybrewery.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
     "overwritable": false
   },
   {
     "name": "errorDialogComponentTs",
     "templateName": "templates/error-dialog/error-dialog.component.ts.vm",
     "outputFile": "shared/error-dialog/error-dialog.component.ts",
-    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "generator": "org.technologybrewery.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
     "overwritable": false
   },
   {
     "name": "errorDialogComponentHtml",
     "templateName": "templates/error-dialog/error-dialog.component.html.vm",
     "outputFile": "shared/error-dialog/error-dialog.component.html",
-    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "generator": "org.technologybrewery.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
     "overwritable": false
   },
   {
     "name": "errorDialogComponentCss",
     "templateName": "templates/error-dialog/error-dialog.component.css.vm",
     "outputFile": "shared/error-dialog/error-dialog.component.css",
-    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "generator": "org.technologybrewery.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
     "overwritable": false
   },
   {
     "name": "errorIcon",
     "templateName": "templates/error-icon.svg.vm",
     "outputFile": "assets/error-icon.svg",
-    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
+    "generator": "org.technologybrewery.fermenter.ale.mda.generator.angular.AngularBaseGenerator",
     "overwritable": false
   },
   {
     "name": "entityFieldFormHtml",
     "templateName": "templates/ui/form/entity-field-form.component.html.vm",
     "outputFile": "generated/ui/${entityName}/${fieldName}/form/${entityName}-${fieldName}-form.component.html",
-    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularFieldUiGenerator",
+    "generator": "org.technologybrewery.fermenter.ale.mda.generator.angular.AngularFieldUiGenerator",
     "overwritable": true
   },
   {
     "name": "entityFieldFormTs",
     "templateName": "templates/ui/form/entity-field-form.component.ts.vm",
     "outputFile": "generated/ui/${entityName}/${fieldName}/form/${entityName}-${fieldName}-form.component.ts",
-    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularFieldUiGenerator",
+    "generator": "org.technologybrewery.fermenter.ale.mda.generator.angular.AngularFieldUiGenerator",
     "overwritable": true
   },
   {
     "name": "entityFieldFormCss",
     "templateName": "templates/ui/form/entity-field-form.component.css.vm",
     "outputFile": "generated/ui/${entityName}/${fieldName}/form/${entityName}-${fieldName}-form.component.css",
-    "generator": "org.bitbucket.fermenter.ale.mda.generator.angular.AngularFieldUiGenerator",
+    "generator": "org.technologybrewery.fermenter.ale.mda.generator.angular.AngularFieldUiGenerator",
     "overwritable": true
   }
 ]

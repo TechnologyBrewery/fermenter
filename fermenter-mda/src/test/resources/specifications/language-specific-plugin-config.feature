@@ -11,7 +11,7 @@ Feature: Automatically re-configure target generation folders based on the speci
             | projectName              | mainSourceRoot               | generatedSourceRoot                    | namespace                |
             | python-habushu-packaging | src/python_habushu_packaging | src/python_habushu_packaging/generated | python_habushu_packaging |
             | python-language-config   | src/python_language_config   | src/python_language_config/generated   | python_language_config   |
-            | java-default-config      | src/main                     | src/generated                          | org.bitbucket.fermenter  |
+            | java-default-config      | src/main                     | src/generated                          | org.technologybrewery.fermenter  |
 
     Scenario: Missing base package for Java project is detected as invalid
         Given a Maven project named "java-no-base-package" with Fermenter Maven plugin configuration

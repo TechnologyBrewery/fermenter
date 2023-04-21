@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
  * Generated from: ${templateName}
  */
 @Configuration
-@ComponentScan(basePackages = {"${basePackage}.client", "org.bitbucket.fermenter.stout.messages"})
+@ComponentScan(basePackages = {"${basePackage}.client", "org.technologybrewery.fermenter.stout.messages"})
 public class App${configName}Config {
 
 }

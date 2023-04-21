@@ -1,6 +1,6 @@
 package rules.default
 
-import org.bitbucket.askllc.fermenter.cookbook.domain.transfer.BeerExampleEntity;
+import org.technologybrewery.fermenter.cookbook.domain.transfer.BeerExampleEntity;
 
 import java.util.ArrayList;
 import java.util.Collections;

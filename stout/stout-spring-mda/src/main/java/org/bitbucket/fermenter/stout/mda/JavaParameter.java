@@ -1,8 +1,8 @@
-package org.bitbucket.fermenter.stout.mda;
+package org.technologybrewery.fermenter.stout.mda;
 
-import org.bitbucket.fermenter.mda.metamodel.element.BaseParameterDecorator;
-import org.bitbucket.fermenter.mda.metamodel.element.MetamodelType;
-import org.bitbucket.fermenter.mda.metamodel.element.Parameter;
+import org.technologybrewery.fermenter.mda.metamodel.element.BaseParameterDecorator;
+import org.technologybrewery.fermenter.mda.metamodel.element.MetamodelType;
+import org.technologybrewery.fermenter.mda.metamodel.element.Parameter;
 
 /**
  * Decorates a {@link Parameter} with Java-specific capabilities.

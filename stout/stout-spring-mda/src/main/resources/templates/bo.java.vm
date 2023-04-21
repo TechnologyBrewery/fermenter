@@ -10,7 +10,7 @@ import java.io.Serializable;
 import javax.persistence.MappedSuperclass;
 import org.springframework.data.jpa.repository.JpaRepository;
 #else
-import org.bitbucket.fermenter.stout.util.SpringAutowiringUtil;
+import org.technologybrewery.fermenter.stout.util.SpringAutowiringUtil;
 #end
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

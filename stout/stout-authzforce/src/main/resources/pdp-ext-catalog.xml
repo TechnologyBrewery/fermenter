@@ -8,5 +8,5 @@
 	<!-- PDP Extensions (<uri>'s 'name' attribute value must match the namespace indicated for the schema import 
 		in the PDP extensions schema (pdp-ext.xsd), do not specify any schemaLocation in this schema, only the namespace. 
 		-->
-	<uri name="http://fermenter.bitbucket.org/stout/authz/attribute/2" uri="classpath:org.bitbucket.fermenter.stout.authz.attribute.provider.xsd" />
+	<uri name="http://fermenter.technologybrewery.org/stout/authz/attribute/2" uri="classpath:org.technologybrewery.fermenter.stout.authz.attribute.provider.xsd" />
 </catalog>

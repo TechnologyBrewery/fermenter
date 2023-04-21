@@ -1,5 +1,5 @@
 {
-  "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+  "package" : "org.technologybrewery.fermenter.cookbook.domain",
   "name" : "ValidationReferenceExample",
   "table" : "VALIDATION_REF_EXAMPLE",
   "identifier" : {
@@ -17,7 +17,7 @@
   "references" : [ {
     "name" : "requiredReference",
     "type" : "ValidationReferencedObject",
-    "package" : "org.bitbucket.askllc.fermenter.cookbook.domain",
+    "package" : "org.technologybrewery.fermenter.cookbook.domain",
     "required" : true
   } ]
 }

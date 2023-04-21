@@ -1,15 +1,15 @@
-package org.bitbucket.fermenter.stout.mda.generator.enumeration;
+package org.technologybrewery.fermenter.stout.mda.generator.enumeration;
 
 import java.util.Map;
 
 import org.apache.velocity.VelocityContext;
-import org.bitbucket.fermenter.mda.generator.AbstractGenerator;
-import org.bitbucket.fermenter.mda.generator.GenerationContext;
-import org.bitbucket.fermenter.mda.metamodel.DefaultModelInstanceRepository;
-import org.bitbucket.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
-import org.bitbucket.fermenter.mda.metamodel.element.Enumeration;
-import org.bitbucket.fermenter.stout.mda.JavaEnumeration;
-import org.bitbucket.fermenter.stout.mda.java.JavaGeneratorUtil;
+import org.technologybrewery.fermenter.mda.generator.AbstractGenerator;
+import org.technologybrewery.fermenter.mda.generator.GenerationContext;
+import org.technologybrewery.fermenter.mda.metamodel.DefaultModelInstanceRepository;
+import org.technologybrewery.fermenter.mda.metamodel.ModelInstanceRepositoryManager;
+import org.technologybrewery.fermenter.mda.metamodel.element.Enumeration;
+import org.technologybrewery.fermenter.stout.mda.JavaEnumeration;
+import org.technologybrewery.fermenter.stout.mda.java.JavaGeneratorUtil;
 
 public class EnumerationJavaGenerator extends AbstractGenerator {
 

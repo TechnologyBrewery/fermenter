@@ -1,11 +1,11 @@
-package org.bitbucket.fermenter.stout.mda;
+package org.technologybrewery.fermenter.stout.mda;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.bitbucket.fermenter.mda.metamodel.element.BaseFieldDecorator;
-import org.bitbucket.fermenter.mda.metamodel.element.Field;
+import org.technologybrewery.fermenter.mda.metamodel.element.BaseFieldDecorator;
+import org.technologybrewery.fermenter.mda.metamodel.element.Field;
 
 /**
  * Decorates a {@link Field} with convenience methods for Java code generation.

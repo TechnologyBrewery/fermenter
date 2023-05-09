@@ -1,10 +1,11 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>org.technologybrewery</groupId>
         <artifactId>parent</artifactId>
-        <version>1</version>
+        <version>2</version>
     </parent>
 
     <groupId>org.technologybrewery.fermenter</groupId>
@@ -56,19 +57,16 @@
 
     <modules>
         <module>fermenter-mda</module>
-        <module>stout</module>
-        <module>ale</module>
-        <module>docker</module>
     </modules>
 
     <properties>
-        <cucumber.version>1.2.5</cucumber.version>
-        <habushu.version>2.1.0</habushu.version>
+        <cucumber.version>1.2.6</cucumber.version>
         <log4j.version>2.7</log4j.version>
-        <slf4j.version>2.0.1</slf4j.version>
+        <slf4j.version>2.0.7</slf4j.version>
     </properties>
 
     <dependencyManagement>
+        <!-- Leaving these here for the time being as we may merge some other high-level mda projects into sub-modules -->
         <dependencies>
             <dependency>
                 <groupId>org.slf4j</groupId>
@@ -85,7 +83,7 @@
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
-                <version>3.4</version>
+                <version>3.12.0</version>
                 <scope>compile</scope>
             </dependency>
             <dependency>
@@ -98,12 +96,6 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-collections4</artifactId>
                 <version>4.4</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.github.ben-manes.caffeine</groupId>
-                <artifactId>caffeine</artifactId>
-                <version>2.7.0</version>
                 <scope>compile</scope>
             </dependency>
             <!-- Dependency of Json Schema Validator -->
@@ -143,27 +135,6 @@
             <plugins>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-failsafe-plugin</artifactId>
-                    <version>3.0.0</version>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>integration-test</goal>
-                                <goal>verify</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <systemPropertyVariables>
-                            <KRAUSENING_BASE>${project.basedir}/src/test/resources/krausening/base</KRAUSENING_BASE>
-                            <KRAUSENING_EXTENSIONS>${project.basedir}/src/test/resources/krausening/extensions
-                            </KRAUSENING_EXTENSIONS>
-                            <KRAUSENING_PASSWORD>dev</KRAUSENING_PASSWORD>
-                        </systemPropertyVariables>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <configuration>
                         <systemPropertyVariables>
@@ -197,73 +168,14 @@
                         </execution>
                     </executions>
                 </plugin>
-                <plugin>
-                    <groupId>org.technologybrewery.habushu</groupId>
-                    <artifactId>habushu-maven-plugin</artifactId>
-                    <version>2.3.0</version>
-                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
             <plugin>
-                <groupId>org.technologybrewery.habushu</groupId>
-                <artifactId>habushu-maven-plugin</artifactId>
-                <extensions>true</extensions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <configuration>
-                    <autoVersionSubmodules>true</autoVersionSubmodules>
-                    <useReleaseProfile>false</useReleaseProfile>
-                    <releaseProfiles>ossrh-release,with-python-support</releaseProfiles>
-                    <!-- During release preparation, Habushu will automatically update the versions of Habushu modules
-                        within their pyproject.toml configurations, however the maven-release-plugin will only commit
-                        updates to pom.xml files.  In order to version control both pom.xml and pyproject.toml files
-                        that are updated during release preparation, customize the preparation and completion goals
-                        to additionally execute the scm:checkin goals -->
-                    <preparationGoals>clean verify scm:checkin -Dmessage="[maven-release-plugin] prepare release"</preparationGoals>
-                    <completionGoals>clean verify scm:checkin -Dmessage="[maven-release-plugin] prepare for next development iteration"</completionGoals>
-                    <goals>deploy</goals>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
                 <extensions>true</extensions>
-                <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                </configuration>
             </plugin>
         </plugins>
     </build>
-
-    <profiles>
-        <profile>
-            <id>integration-test</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-failsafe-plugin</artifactId>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <!-- Require developers to opt-in for Python/Habushu support since it may not be needed
-                for all projects and Habushu requires the installation of build tool dependencies (i.e. Poetry)
-                that cannot be automatically installed through Maven -->
-            <id>with-python-support</id>
-            <modules>
-                <module>fermenter-mda</module>
-                <module>stout</module>
-                <module>ale</module>
-                <module>docker</module>
-                <module>brett</module>
-            </modules>
-        </profile>
-    </profiles>
 </project>

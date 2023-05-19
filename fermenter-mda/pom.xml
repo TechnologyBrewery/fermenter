@@ -13,9 +13,10 @@
     <packaging>maven-plugin</packaging>
 
     <properties>
-        <version.jackson>2.13.4</version.jackson>
+        <version.jackson>2.15.0</version.jackson>
         <version.maven.core>3.8.6</version.maven.core>
-        <version.maven.plugin.tools>3.6.4</version.maven.plugin.tools>
+        <version.maven.plugin.tools>3.8.2</version.maven.plugin.tools>
+        <version.logback>1.4.7</version.logback>
     </properties>
 
     <dependencyManagement>
@@ -126,13 +127,13 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.3.3</version>
+            <version>${version.logback}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
-            <version>1.3.3</version>
+            <version>${version.logback}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

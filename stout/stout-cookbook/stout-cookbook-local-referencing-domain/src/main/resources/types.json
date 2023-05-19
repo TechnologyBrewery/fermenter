@@ -1,7 +1,0 @@
-[
-	{
-		"name": "customDecimal",
-		"fullyQualifiedImplementation": "org.technologybrewery.fermenter.cookbook.local.referencing.domain.bizobj.CustomDecimal",
-		"shortImplementation": "CustomDecimal"
-	}
-]

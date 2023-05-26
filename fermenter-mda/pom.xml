@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
         <groupId>org.technologybrewery.fermenter</groupId>
@@ -6,14 +7,14 @@
         <version>2.9.0-SNAPSHOT</version>
     </parent>
 
-    <name>Fermenter Model-Driven Architecture Code Generator</name>
+    <name>Fermenter::Model-Driven Architecture Code Generator</name>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>fermenter-mda</artifactId>
     <packaging>maven-plugin</packaging>
 
     <properties>
-        <version.jackson>2.15.0</version.jackson>
+        <version.jackson>2.15.1</version.jackson>
         <version.maven.core>3.8.6</version.maven.core>
         <version.maven.plugin.tools>3.8.2</version.maven.plugin.tools>
         <version.logback>1.4.7</version.logback>
@@ -134,6 +135,13 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
             <version>${version.logback}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <!-- trigger download of habushu-maven-plugin so it is available for testing: -->
+            <groupId>org.technologybrewery.habushu</groupId>
+            <artifactId>habushu-maven-plugin</artifactId>
+            <version>2.4.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

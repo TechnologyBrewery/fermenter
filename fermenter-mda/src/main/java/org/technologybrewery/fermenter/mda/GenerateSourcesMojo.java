@@ -110,7 +110,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
     @Parameter(required = true, defaultValue = "${project.basedir}/src/main/resources/types.json")
     private File localTypes;
 
-    @Parameter(required = true, readonly = true, defaultValue = "org.technologybrewery.fermenter.mda.metamodel.DefaultModelInstanceRepository")
+    @Parameter(required = true, defaultValue = "org.technologybrewery.fermenter.mda.metamodel.DefaultModelInstanceRepository")
     private String metadataRepositoryImpl;
 
     /**

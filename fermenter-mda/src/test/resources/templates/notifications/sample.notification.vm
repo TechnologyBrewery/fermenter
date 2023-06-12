@@ -1,0 +1,8 @@
+TEST OUTPUT: Manual Action Needed for ${key}
+
+#foreach ($item in $items)
+    Insert: ${item}
+#end
+
+    Programmatic Value added to Velocity Context: ${programmaticValue}
+

@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
         <groupId>org.technologybrewery.fermenter</groupId>
@@ -14,9 +13,9 @@
     <packaging>maven-plugin</packaging>
 
     <properties>
-        <version.jackson>2.15.1</version.jackson>
+        <version.jackson>2.15.2</version.jackson>
         <version.maven.core>3.8.6</version.maven.core>
-        <version.maven.plugin.tools>3.8.2</version.maven.plugin.tools>
+        <version.maven.plugin.tools>3.9.0</version.maven.plugin.tools>
         <version.logback>1.4.7</version.logback>
     </properties>
 
@@ -48,6 +47,12 @@
             <groupId>org.apache.maven.plugin-tools</groupId>
             <artifactId>maven-plugin-annotations</artifactId>
             <version>${version.maven.plugin.tools}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -137,13 +142,6 @@
             <version>${version.logback}</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <!-- trigger download of habushu-maven-plugin so it is available for testing: -->
-            <groupId>org.technologybrewery.habushu</groupId>
-            <artifactId>habushu-maven-plugin</artifactId>
-            <version>2.4.1</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <build>
@@ -156,6 +154,19 @@
                     <execution>
                         <id>default-descriptor</id>
                         <phase>process-classes</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.eclipse.sisu</groupId>
+                <artifactId>sisu-maven-plugin</artifactId>
+                <version>0.9.0.M2</version>
+                <executions>
+                    <execution>
+                        <id>generate-index</id>
+                        <goals>
+                            <goal>main-index</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>

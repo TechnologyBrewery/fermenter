@@ -1,12 +1,12 @@
 package org.technologybrewery.fermenter.mda.generator;
 
-import java.io.File;
-import java.util.Collections;
-import java.util.Map;
-
 import org.apache.velocity.app.VelocityEngine;
 import org.technologybrewery.fermenter.mda.element.Target;
 import org.technologybrewery.fermenter.mda.reporting.StatisticsService;
+
+import java.io.File;
+import java.util.Collections;
+import java.util.Map;
 
 public final class GenerationContext {
 
@@ -203,4 +203,5 @@ public final class GenerationContext {
     public void setStatisticsService(StatisticsService statisticsService) {
         this.statisticsService = statisticsService;
     }
+    
 }

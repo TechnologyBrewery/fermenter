@@ -18,15 +18,20 @@ import org.apache.maven.project.MavenProject;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
-import org.technologybrewery.fermenter.mda.element.*;
-import org.technologybrewery.fermenter.mda.element.*;
+import org.technologybrewery.fermenter.mda.element.ExpandedFamily;
+import org.technologybrewery.fermenter.mda.element.ExpandedProfile;
+import org.technologybrewery.fermenter.mda.element.Family;
+import org.technologybrewery.fermenter.mda.element.Profile;
+import org.technologybrewery.fermenter.mda.element.Target;
 import org.technologybrewery.fermenter.mda.generator.GenerationContext;
 import org.technologybrewery.fermenter.mda.generator.Generator;
 import org.technologybrewery.fermenter.mda.metamodel.ModelInstanceRepository;
 import org.technologybrewery.fermenter.mda.metamodel.ModelInstanceUrl;
 import org.technologybrewery.fermenter.mda.metamodel.ModelRepositoryConfiguration;
-import org.technologybrewery.fermenter.mda.util.MessageTracker;
+import org.technologybrewery.fermenter.mda.notification.NotificationCollector;
+import org.technologybrewery.fermenter.mda.notification.NotificationService;
 import org.technologybrewery.fermenter.mda.reporting.StatisticsService;
+import org.technologybrewery.fermenter.mda.util.MessageTracker;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -35,7 +40,14 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Executes the Fermenter MDA process.
@@ -53,6 +65,9 @@ public class GenerateSourcesMojo extends AbstractMojo {
 
     @Inject
     private StatisticsService statisticsService;
+
+    @Inject
+    private NotificationService notificationService;
 
     @Parameter(required = true, readonly = true, defaultValue = "${project}")
     private MavenProject project;
@@ -173,6 +188,11 @@ public class GenerateSourcesMojo extends AbstractMojo {
             GenerateSourcesHelper.cleanUp();
 
         }
+
+        // move notifications to the session between plugin invocations so they can be output
+        // at the end of the build:
+        notificationService.mergeNotificationsIntoSessionForCrossProjectStorage();
+        NotificationCollector.cleanup();
 
     }
 

@@ -95,9 +95,7 @@ deployment of new Fermenter builds. In order to perform a release, you must:
 export GPG_TTY=`tty`;
 ```
 
-4. As [Habushu](https://github.com/TechnologyBrewery/habushu/) modules that support `brett` are built as a part of the release process, ensure that all of prerequisite tools needed by [Habushu](https://github.com/TechnologyBrewery/habushu/) are installed.
-
-5. Execute `mvn -Pwith-python-support release:clean release:prepare`, answer the prompts for the versions and tags, and perform `mvn release:perform`
+4. Execute `mvn release:clean release:prepare`, answer the prompts for the versions and tags, and perform `mvn release:perform`
 
 ## Licensing
 Fermenter is available under the [MIT License](http://opensource.org/licenses/mit-license.php).

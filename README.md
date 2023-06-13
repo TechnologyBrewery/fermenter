@@ -1,6 +1,7 @@
 # Fermenter #
 [![Maven Central](https://img.shields.io/maven-central/v/org.technologybrewery.fermenter/root.svg)](https://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.technologybrewery.fermenter%22%20AND%20a%3A%22root%22)
 [![License](https://img.shields.io/github/license/mashape/apistatus.svg)](https://opensource.org/licenses/mit)
+[![Build (github)](https://github.com/TechnologyBrewery/fermenter/actions/workflows/maven.yaml/badge.svg)](https://github.com/TechnologyBrewery/fermenter/actions/workflows/maven.yaml)
 
 In brewing, a fermenter is a vessel in which unfinished ingredients become nearly finished beer. In Model Driven 
 Architecture, Fermenter is a project that converts functional concepts into nearly finished applications. This approach

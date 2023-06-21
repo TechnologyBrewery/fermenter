@@ -34,3 +34,9 @@ Feature: Support the ability to create notifications that can be output at the e
             | key                               | items     |
             | you've-got-to-hide-your-love-away | lennon    |
             | you-won't-see-me                  | mccartney |
+
+    @manual
+    Scenario: Collect per-project written manual action notifications and emit them at the end of the build
+        Given one or more Maven modules that create manual action notifications in their "target/manual-action-notifications" folder
+        When the end of the Maven build is reached
+        Then the notifications for the Maven modules that were part of the build are emitted to the console

@@ -13,7 +13,7 @@ public final class NotificationCollector {
     private static final ThreadLocal<Map<String, Map<String, Notification>>> NOTIFICATIONS = ThreadLocal.withInitial(ConcurrentHashMap::new);
 
     private NotificationCollector() {
-        // prevent private instationation of all static class
+        // prevent private instantiation of all static class
     }
 
     /**

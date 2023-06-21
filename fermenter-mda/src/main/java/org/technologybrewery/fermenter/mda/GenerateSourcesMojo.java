@@ -28,7 +28,6 @@ import org.technologybrewery.fermenter.mda.generator.Generator;
 import org.technologybrewery.fermenter.mda.metamodel.ModelInstanceRepository;
 import org.technologybrewery.fermenter.mda.metamodel.ModelInstanceUrl;
 import org.technologybrewery.fermenter.mda.metamodel.ModelRepositoryConfiguration;
-import org.technologybrewery.fermenter.mda.notification.NotificationCollector;
 import org.technologybrewery.fermenter.mda.notification.NotificationService;
 import org.technologybrewery.fermenter.mda.reporting.StatisticsService;
 import org.technologybrewery.fermenter.mda.util.MessageTracker;
@@ -189,10 +188,9 @@ public class GenerateSourcesMojo extends AbstractMojo {
 
         }
 
-        // move notifications to the session between plugin invocations so they can be output
+        // store notifications in the target directory between plugin invocations so they can be output
         // at the end of the build:
-        notificationService.mergeNotificationsIntoSessionForCrossProjectStorage();
-        NotificationCollector.cleanup();
+        notificationService.recordNotifications();
 
     }
 

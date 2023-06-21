@@ -40,6 +40,7 @@ public class MojoTestCaseWrapper extends AbstractMojoTestCase {
      */
     public MavenSession newMavenSession() throws Exception {
         MavenExecutionRequest request = new DefaultMavenExecutionRequest();
+        request.setBaseDirectory(new File( "target"));
         MavenExecutionResult result = new DefaultMavenExecutionResult();
 
         // Populates sensible defaults, including repository basedir and remote repos

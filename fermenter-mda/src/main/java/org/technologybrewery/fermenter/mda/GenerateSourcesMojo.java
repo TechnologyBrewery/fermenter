@@ -194,7 +194,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
 
         // store notifications in the target directory between plugin invocations so they can be output
         // at the end of the build:
-        notificationService.recordNotifications(project);
+        notificationService.recordNotifications(getProject());
 
     }
 

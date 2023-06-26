@@ -15,6 +15,12 @@ public interface Notification {
     String getKey();
 
     /**
+     * Returns a grouping that this notification should be displayed in conjunction with.
+     * @return group
+     */
+    String getGroup();
+
+    /**
      * Returns the list of action items to request from the user.
      *
      * @return the actions required

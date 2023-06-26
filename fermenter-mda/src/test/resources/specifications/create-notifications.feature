@@ -40,3 +40,9 @@ Feature: Support the ability to create notifications that can be output at the e
         Given one or more Maven modules that create manual action notifications in their "target/manual-action-notifications" folder
         When the end of the Maven build is reached
         Then the notifications for the Maven modules that were part of the build are emitted to the console
+
+    @manual
+    Scenario: Collect per-project written grouped manual action notifications and emit them at the end of the build as one notification per group
+        Given one or more Maven modules that create grouped manual action notifications in their "target/manual-action-notifications/group" folder
+        When the end of the Maven build is reached
+        Then the notifications for the Maven modules that were part of the build are emitted to the console as one notification per group

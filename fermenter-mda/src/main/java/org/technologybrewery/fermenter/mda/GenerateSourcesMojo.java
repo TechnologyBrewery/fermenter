@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.LogFactory;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.versioning.ComparableVersion;
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -134,6 +135,9 @@ public class GenerateSourcesMojo extends AbstractMojo {
     private Map<String, String> propertyVariables;
 
     private VelocityEngine engine;
+
+    @Parameter(property = "session", required = true, readonly = true)
+    protected MavenSession session;
 
     /**
      * Creates a {@link GenerateSourcesHelper.LoggerDelegate} implementation for use with
@@ -468,7 +472,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
      * @return {@link GenerationContext} that can be provided to the given
      * {@link Target}'s {@link Generator} to execute code generation.
      */
-    private GenerationContext createGenerationContext(Target target) {
+    protected GenerationContext createGenerationContext(Target target) {
         GenerationContext context = new GenerationContext(target);
         context.setStatisticsService(statisticsService);
         context.setBasePackage(basePackage);
@@ -486,6 +490,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
             context.setScmUrl(project.getScm().getUrl());
         }
         context.setPropertyVariables(propertyVariables);
+        context.setExecutionRootDirectory(session.getExecutionRootDirectory());
 
         return context;
     }

@@ -86,9 +86,9 @@ public class NotificationService extends AbstractMavenLifecycleParticipant {
      * Writes any encountered notifications to a file for use later.  These are written to the path defined by
      * NOTIFICATION_DIRECTORY_PATH.
      */
-    public void recordNotifications() {
+    public void recordNotifications(MavenProject project) {
         int manualActionCount = 0;
-        File projectParentFile = new File(NOTIFICATION_DIRECTORY_PATH);
+        File projectParentFile = new File(project.getBasedir(), NOTIFICATION_DIRECTORY_PATH);
         Map<String, Map<String, Notification>> collectorNotifications = NotificationCollector.getNotifications();
         for (Map.Entry<String, Map<String, Notification>> entry : collectorNotifications.entrySet()) {
             String fileName = entry.getKey();

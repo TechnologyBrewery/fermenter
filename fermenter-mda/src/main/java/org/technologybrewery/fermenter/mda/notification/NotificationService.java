@@ -3,9 +3,11 @@ package org.technologybrewery.fermenter.mda.notification;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.maven.AbstractMavenLifecycleParticipant;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.technologybrewery.fermenter.mda.generator.GenerationException;
@@ -16,10 +18,14 @@ import javax.inject.Singleton;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -31,7 +37,9 @@ import java.util.stream.Collectors;
 public class NotificationService extends AbstractMavenLifecycleParticipant {
 
     private static final Logger logger = LoggerFactory.getLogger(NotificationService.class);
-    private static final String NOTIFICATION_DIRECTORY_PATH = "target/manual-action-notifications/";
+    private static final String NOTIFICATION_DIR_NAME = "manual-action-notifications";
+    private static final String NOTIFICATION_DIRECTORY_PATH = "target/" + NOTIFICATION_DIR_NAME + "/";
+    public static final String GROUP = "group://";
 
     private MavenSession session;
 
@@ -95,9 +103,10 @@ public class NotificationService extends AbstractMavenLifecycleParticipant {
             Map<String, Notification> notificationsForFile = entry.getValue();
             int i = 0;
             for (Map.Entry<String, Notification> subMapEntry : notificationsForFile.entrySet()) {
-                File outputFile = new File(projectParentFile, FilenameUtils.getName(fileName + "-" + i++ + ".txt"));
+                File notificationParentFile = getNotificationParentFile(projectParentFile, subMapEntry.getValue());
+                File outputFile = new File(notificationParentFile, FilenameUtils.getName(fileName + "-" + i++ + ".txt"));
                 try {
-                    FileUtils.forceMkdir(projectParentFile);
+                    FileUtils.forceMkdir(notificationParentFile);
                     FileUtils.write(outputFile, subMapEntry.getValue().getNotificationAsString(), Charset.defaultCharset());
                     manualActionCount++;
                 } catch (IOException e) {
@@ -115,6 +124,25 @@ public class NotificationService extends AbstractMavenLifecycleParticipant {
         NotificationCollector.cleanup();
     }
 
+    /**
+     * Grouped notifications will be placed in a sub-folder of the group name.
+     *
+     * @param projectParentFile project parent file
+     * @param notification      notifcation
+     * @return appropriate parent file location
+     */
+    private File getNotificationParentFile(File projectParentFile, Notification notification) {
+        File result;
+        String group = notification.getGroup();
+        if (StringUtils.isBlank(group)) {
+            result = projectParentFile;
+        } else {
+            result = new File(projectParentFile, FilenameUtils.getName(group));
+        }
+
+        return result;
+    }
+
     private void displayNotifications() throws IOException {
         if (this.hideManualActions) {
             logger.debug("Hiding manual actions");
@@ -122,26 +150,38 @@ public class NotificationService extends AbstractMavenLifecycleParticipant {
         } else if (logger.isWarnEnabled()) {
             // Get all notifications, then display them by file being modified
             Map<String, List<File>> notificationMap = findNotificationForDisplay();
+            Map<String, List<File>> groupedNotificationMap = groupNotifications(notificationMap);
 
-            if (MapUtils.isNotEmpty(notificationMap)) {
+            if (MapUtils.isNotEmpty(groupedNotificationMap)) {
                 int i = 1;
                 logger.warn("Manual action steps were detected by fermenter-mda in {} module(s)", notificationMap.size());
                 logger.warn("");
-                for (Map.Entry<String, List<File>> entry : notificationMap.entrySet()) {
-                    logger.debug("Notifications for artifactId: {}", entry.getKey());
+                for (Map.Entry<String, List<File>> entry : groupedNotificationMap.entrySet()) {
+                    String key = entry.getKey();
+                    if (key.startsWith(GROUP)) {
+                        denoteNewManualAction(i);
+                        outputGroupNotification(entry, key);
 
-                    for (File notification : entry.getValue()) {
-                        logger.warn("------------------------------------------------------------------------");
-                        logger.warn("Manual Action #{}", i++);
-                        logger.warn("------------------------------------------------------------------------");
-                        logger.warn(FileUtils.readFileToString(notification, Charset.defaultCharset()));
+                    } else {
+                        for (File notification : entry.getValue()) {
+                            denoteNewManualAction(i);
+                            logger.warn(FileUtils.readFileToString(notification, Charset.defaultCharset()));
+                        }
                     }
+
+                    i++;
                 }
 
                 logger.warn("To disable these messages, please use -Dfermenter.hide.manual.actions=true");
 
             }
         }
+    }
+
+    private static void denoteNewManualAction(int i) {
+        logger.warn("------------------------------------------------------------------------");
+        logger.warn("Manual Action #{}", i);
+        logger.warn("------------------------------------------------------------------------");
     }
 
     private Map<String, List<File>> findNotificationForDisplay() {
@@ -153,13 +193,41 @@ public class NotificationService extends AbstractMavenLifecycleParticipant {
             if (projectNotificationDirectory.exists()) {
                 File[] fileArray = projectNotificationDirectory.listFiles();
                 if (fileArray != null) {
-                    resultMap.put(project.getArtifactId(), Arrays.stream(fileArray).collect(Collectors.toList()));
+                    Collection<File> files = FileUtils.listFiles(projectNotificationDirectory,
+                        FileFilterUtils.trueFileFilter(), FileFilterUtils.directoryFileFilter());
+                    resultMap.put(project.getArtifactId(), files.stream().collect(Collectors.toList()));
                 }
             }
         }
 
         return resultMap;
 
+    }
+
+    private Map<String, List<File>> groupNotifications(Map<String, List<File>> notificationMap) {
+        Map<String, List<File>> groupedNotificationMap = new HashMap<>();
+        for (Map.Entry<String, List<File>> entry : notificationMap.entrySet()) {
+            for (File file : entry.getValue()) {
+                String parentName = file.getParentFile().getName();
+                String key = Objects.equals(parentName, NOTIFICATION_DIR_NAME) ? file.getAbsolutePath() : GROUP + parentName;
+                List<File> fileList = groupedNotificationMap.computeIfAbsent(key, l -> new ArrayList<>());
+                fileList.add(file);
+            }
+        }
+
+        return groupedNotificationMap;
+    }
+
+    private static void outputGroupNotification(Map.Entry<String, List<File>> entry, String key) throws IOException {
+        String groupName = key.replace(GROUP, "");
+        String templateName = "templates/notifications/group-" + groupName + ".vm";
+        Set<String> groupItems = new HashSet<>();
+        for (File notification : entry.getValue()) {
+            groupItems.add(FileUtils.readFileToString(notification, Charset.defaultCharset()));
+        }
+
+        VelocityNotification groupNotification = new VelocityNotification(groupName, groupItems, templateName);
+        logger.warn(groupNotification.getNotificationAsString());
     }
 
 }

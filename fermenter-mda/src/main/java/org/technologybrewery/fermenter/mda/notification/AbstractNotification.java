@@ -9,6 +9,8 @@ public abstract class AbstractNotification implements Notification {
 
     protected String key;
 
+    protected String group;
+
     protected Set<String> items;
 
     /**
@@ -17,9 +19,14 @@ public abstract class AbstractNotification implements Notification {
      * @param key   notification identifier
      * @param items set of strings to use in the notification
      */
-    public AbstractNotification(String key, Set<String> items) {
+    protected AbstractNotification(String key, Set<String> items) {
         this.key = key;
         this.items = items;
+    }
+
+    protected AbstractNotification(String key, String group, Set<String> items) {
+        this(key, items);
+        this.group = group;
     }
 
     /**
@@ -28,6 +35,13 @@ public abstract class AbstractNotification implements Notification {
     @Override
     public String getKey() {
         return key;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getGroup() {
+        return group;
     }
 
     /**

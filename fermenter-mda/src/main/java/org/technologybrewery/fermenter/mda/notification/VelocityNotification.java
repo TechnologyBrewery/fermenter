@@ -5,6 +5,9 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
+import org.codehaus.plexus.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.technologybrewery.fermenter.mda.generator.GenerationException;
 
 import java.io.IOException;
@@ -18,6 +21,8 @@ import java.util.Set;
  * Template name is read off the classpath and should be referred relative to the classpath root path.
  */
 public class VelocityNotification extends AbstractNotification {
+
+    private static final Logger logger = LoggerFactory.getLogger(VelocityNotification.class);
 
     protected String velocityTemplate;
 
@@ -41,6 +46,17 @@ public class VelocityNotification extends AbstractNotification {
      */
     public VelocityNotification(String key, Set<String> items, String velocityTemplate) {
         super(key, items);
+        init(key, items, velocityTemplate);
+    }
+
+    public VelocityNotification(String key, String group, Set<String> items, String velocityTemplate) {
+        super(key, group, items);
+        init(key, items, velocityTemplate);
+
+        this.context.put("group", group);
+    }
+
+    private void init(String key, Set<String> items, String velocityTemplate) {
         this.velocityTemplate = velocityTemplate;
         this.context = new VelocityContext();
 
@@ -65,7 +81,14 @@ public class VelocityNotification extends AbstractNotification {
      */
     @Override
     public String getNotificationAsString() {
+        if (StringUtils.isBlank(velocityTemplate)) {
+            throw new GenerationException("Template location MUST be provided!");
+        }
+
         Template template = velocityEngine.getTemplate(velocityTemplate);
+        if (template == null) {
+            logger.error("No template found at {}!", velocityTemplate);
+        }
 
         try (Writer writer = new StringWriter()) {
             template.merge(context, writer);

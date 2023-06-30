@@ -1,5 +1,7 @@
 package org.technologybrewery.fermenter.mda.notification;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.Set;
 
 /**
@@ -42,6 +44,13 @@ public abstract class AbstractNotification implements Notification {
      */
     public String getGroup() {
         return group;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean hasGroup() {
+        return StringUtils.isNotBlank(group);
     }
 
     /**

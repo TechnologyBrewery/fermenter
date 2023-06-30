@@ -1,5 +1,7 @@
 package org.technologybrewery.fermenter.mda.notification;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -10,9 +12,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.technologybrewery.fermenter.mda.generator.GenerationException;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.util.Properties;
 import java.util.Set;
 
 /**
@@ -27,6 +33,8 @@ public class VelocityNotification extends AbstractNotification {
     protected String velocityTemplate;
 
     protected VelocityContext context;
+
+    protected Properties groupVelocityContextValues;
 
     protected static VelocityEngine velocityEngine;
 
@@ -77,26 +85,83 @@ public class VelocityNotification extends AbstractNotification {
     }
 
     /**
+     * Allows values to be passed to the *final* group notification.  To keep this simple and easy, only string-based
+     * values are being supported.  These will be serialized out between modules, then merged and pushed into the
+     * group VelocityContext.  Any conflicts will result in last up wins.
+     *
+     * @param key   The property key
+     * @param value The property value
+     */
+    public void addToExternalVelocityContextProperties(String key, String value) {
+        if (groupVelocityContextValues == null) {
+            if (StringUtils.isBlank(group)) {
+                throw new GenerationException("External Velocity Context Properties can ONLY be used when group is set!");
+
+            } else {
+                groupVelocityContextValues = new Properties();
+            }
+        }
+
+        groupVelocityContextValues.put(key, value);
+    }
+
+    private Properties getExternalVelocityContextProperties() {
+        return groupVelocityContextValues;
+    }
+
+    void writeExternalVelocityContextProperties(File parentFile) {
+        if (hasGroup()) {
+            Properties externalVelocityContextValues = getExternalVelocityContextProperties();
+            File propertiesFile = getGroupVelocityContenctPropertiesFile(parentFile);
+            try {
+                if (propertiesFile.exists()) {
+                    NotificationUtils.mergeExistingAndNewProperties(propertiesFile, externalVelocityContextValues);
+                } else {
+                    FileUtils.forceMkdirParent(propertiesFile);
+                }
+
+                try (Writer writer = Files.newBufferedWriter(propertiesFile.toPath(), Charset.defaultCharset())) {
+                    externalVelocityContextValues.store(writer, null);
+                }
+            } catch (IOException e) {
+                throw new GenerationException("Error writing group velocity context properties!", e);
+            }
+        }
+    }
+
+    File getGroupVelocityContenctPropertiesFile(File parentFile) {
+        String propertiesFileName = FilenameUtils.getName(String.format("group-%s.properties", group));
+        File parentDirectory = new File(parentFile, NotificationService.NOTIFICATION_DIRECTORY_PATH + group);
+        return new File(parentDirectory, propertiesFileName);
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
     public String getNotificationAsString() {
+        String notificationString;
         if (StringUtils.isBlank(velocityTemplate)) {
             throw new GenerationException("Template location MUST be provided!");
         }
 
         Template template = velocityEngine.getTemplate(velocityTemplate);
         if (template == null) {
-            logger.error("No template found at {}!", velocityTemplate);
+            String error = String.format("No template found at %s!", velocityTemplate);
+            logger.error(error);
+            notificationString = error;
+
+        } else {
+            try (Writer writer = new StringWriter()) {
+                template.merge(context, writer);
+
+                notificationString = writer.toString();
+
+            } catch (IOException e) {
+                throw new GenerationException("Could not process notification of manual action!", e);
+            }
         }
 
-        try (Writer writer = new StringWriter()) {
-            template.merge(context, writer);
-
-            return writer.toString();
-
-        } catch (IOException e) {
-            throw new GenerationException("Could not process notification of manual action!", e);
-        }
+        return notificationString;
     }
 }

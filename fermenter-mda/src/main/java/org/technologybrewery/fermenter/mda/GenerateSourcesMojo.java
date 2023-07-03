@@ -490,7 +490,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
             context.setScmUrl(project.getScm().getUrl());
         }
         context.setPropertyVariables(propertyVariables);
-        context.setExecutionRootDirectory(session.getExecutionRootDirectory());
+        context.setExecutionRootDirectory(new File (session.getExecutionRootDirectory()));
 
         return context;
     }

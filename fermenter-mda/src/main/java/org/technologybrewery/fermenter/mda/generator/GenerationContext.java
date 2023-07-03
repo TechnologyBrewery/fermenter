@@ -29,7 +29,7 @@ public final class GenerationContext {
     private String scmUrl;
     private Map<String, String> propertyVariables;
     private StatisticsService statisticsService;
-    private String executionRootDirectory;
+    private File executionRootDirectory;
 
     public VelocityEngine getEngine() {
         return engine;
@@ -205,11 +205,11 @@ public final class GenerationContext {
         this.statisticsService = statisticsService;
     }
 
-    public String getExecutionRootDirectory() {
+    public File getExecutionRootDirectory() {
         return executionRootDirectory;
     }
 
-    public void setExecutionRootDirectory(String executionRootDirectory){
+    public void setExecutionRootDirectory(File executionRootDirectory){
         this.executionRootDirectory = executionRootDirectory;
     }
     

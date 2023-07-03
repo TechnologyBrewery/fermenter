@@ -93,6 +93,11 @@ public class VelocityNotification extends AbstractNotification {
      * @param value The property value
      */
     public void addToExternalVelocityContextProperties(String key, String value) {
+        validateExternalVelocityContextProperties();
+        groupVelocityContextValues.put(key, value);
+    }
+
+    private void validateExternalVelocityContextProperties() {
         if (groupVelocityContextValues == null) {
             if (StringUtils.isBlank(group)) {
                 throw new GenerationException("External Velocity Context Properties can ONLY be used when group is set!");
@@ -101,11 +106,10 @@ public class VelocityNotification extends AbstractNotification {
                 groupVelocityContextValues = new Properties();
             }
         }
-
-        groupVelocityContextValues.put(key, value);
     }
 
     private Properties getExternalVelocityContextProperties() {
+        validateExternalVelocityContextProperties();
         return groupVelocityContextValues;
     }
 

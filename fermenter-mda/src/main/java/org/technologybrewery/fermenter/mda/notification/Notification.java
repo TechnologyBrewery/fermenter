@@ -16,9 +16,17 @@ public interface Notification {
 
     /**
      * Returns a grouping that this notification should be displayed in conjunction with.
+     *
      * @return group
      */
     String getGroup();
+
+    /**
+     * Determines if a group is set for this notification.
+     *
+     * @return true if set, false if not
+     */
+    boolean hasGroup();
 
     /**
      * Returns the list of action items to request from the user.

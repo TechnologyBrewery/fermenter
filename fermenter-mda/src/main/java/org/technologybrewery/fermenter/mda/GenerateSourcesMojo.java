@@ -492,6 +492,9 @@ public class GenerateSourcesMojo extends AbstractMojo {
         context.setPropertyVariables(propertyVariables);
         context.setExecutionRootDirectory(new File (session.getExecutionRootDirectory()));
 
+        String rootArtifactId = getRootArtifactId();
+        context.setRootArtifactId(rootArtifactId);
+
         return context;
     }
 
@@ -629,5 +632,11 @@ public class GenerateSourcesMojo extends AbstractMojo {
 
     protected File getGeneratedSourceRoot() {
         return generatedSourceRoot;
+    }
+
+    public String getRootArtifactId() {
+        MavenProject topLevelProject = session.getTopLevelProject();
+        String rootArtifactId = topLevelProject.getArtifactId();
+        return rootArtifactId;
     }
 }

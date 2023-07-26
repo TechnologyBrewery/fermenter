@@ -49,4 +49,8 @@ public class GenerationContextSteps {
         Assert.assertNotNull(context.getExecutionRootDirectory());
     }
 
+    @Then("^access to the root module's artifact ID is available$")
+    public void access_to_the_root_module_s_artifact_ID_is_available() throws Throwable {
+        Assert.assertEquals(context.getRootArtifactId(),"java-default-config");
+    }
 }

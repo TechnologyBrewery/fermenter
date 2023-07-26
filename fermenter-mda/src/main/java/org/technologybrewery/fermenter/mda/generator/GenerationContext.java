@@ -30,6 +30,7 @@ public final class GenerationContext {
     private Map<String, String> propertyVariables;
     private StatisticsService statisticsService;
     private File executionRootDirectory;
+    private String rootArtifactId;
 
     public VelocityEngine getEngine() {
         return engine;
@@ -211,6 +212,13 @@ public final class GenerationContext {
 
     public void setExecutionRootDirectory(File executionRootDirectory){
         this.executionRootDirectory = executionRootDirectory;
+    }
+    public String getRootArtifactId() {
+        return rootArtifactId;
+    }
+
+    public void setRootArtifactId(String rootArtifactId) {
+        this.rootArtifactId = rootArtifactId;
     }
     
 }

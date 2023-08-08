@@ -2,6 +2,7 @@ package org.technologybrewery.fermenter.mda.notification;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.File;
 import java.util.Set;
 
 /**
@@ -14,6 +15,8 @@ public abstract class AbstractNotification implements Notification {
     protected String group;
 
     protected Set<String> items;
+
+    protected File file;
 
     /**
      * New instance.
@@ -69,4 +72,20 @@ public abstract class AbstractNotification implements Notification {
         items.addAll(newItems);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public File getFile() {
+        return file;
+    }
+
+    /**
+     * Sets the file location to help lookup properties for groups.
+     *
+     * @param file file location
+     */
+    public void setFile(File file) {
+        this.file = file;
+    }
 }

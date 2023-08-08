@@ -24,6 +24,17 @@ Feature: Support the ability to create notifications that can be output at the e
             | we-can-work-it-out | lennon, mccartney |
 
     @manual
+    Scenario Outline: when multiple notification with the same key are read across modules, only one is emitted
+        Given a configuration that triggers multiple notifications with the "<key>" in different modules
+        When the MDA plugin runs
+        Then the resulting messages contains only one output for "<key>"
+
+        Examples:
+            | key               |
+            | the-white-album   |
+            | a-hard-days-night |
+
+    @manual
     Scenario Outline: Hide manual actions to suppress notification output
         Given a configuration that triggers a notification for manual action with a "<key>", "<items>", and programmatic value
         And hide manual actions is enabled

@@ -1,5 +1,8 @@
 package org.technologybrewery.fermenter.mda.notification;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.io.File;
 import java.util.Set;
 
 /**
@@ -48,5 +51,13 @@ public interface Notification {
      * @return notification content
      */
     String getNotificationAsString();
+
+    /**
+     * The file where the notification's JSON representation was stored, if applicable.
+     *
+     * @return json file location
+     */
+    @JsonIgnore
+    File getFile();
 
 }

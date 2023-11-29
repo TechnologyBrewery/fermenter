@@ -16,7 +16,7 @@
         <version.jackson>2.15.2</version.jackson>
         <version.maven.core>3.8.6</version.maven.core>
         <version.maven.plugin.tools>3.9.0</version.maven.plugin.tools>
-        <version.logback>1.4.8</version.logback>
+        <version.logback>1.4.12</version.logback>
     </properties>
 
     <dependencyManagement>

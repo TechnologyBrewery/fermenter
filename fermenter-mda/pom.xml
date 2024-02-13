@@ -13,10 +13,10 @@
     <packaging>maven-plugin</packaging>
 
     <properties>
-        <version.jackson>2.15.2</version.jackson>
+        <version.jackson>2.16.1</version.jackson>
         <version.maven.core>3.8.6</version.maven.core>
         <version.maven.plugin.tools>3.9.0</version.maven.plugin.tools>
-        <version.logback>1.4.8</version.logback>
+        <version.logback>1.4.14</version.logback>
     </properties>
 
     <dependencyManagement>
@@ -63,7 +63,7 @@
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
-            <version>1.2</version>
+            <version>1.3.0</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -101,7 +101,7 @@
         <dependency>
             <groupId>org.technologybrewery.krausening</groupId>
             <artifactId>krausening</artifactId>
-            <version>16</version>
+            <version>19</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

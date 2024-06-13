@@ -20,3 +20,8 @@ Feature: Support replay of priority messages to the user after session end
         Given no priority messages
         When the priority message(s) is(are) added to the maven session
         Then no priority messages should be displayed at session end
+
+    Scenario: Priority messages will not attempt to log when created outside of a Maven session
+        Given there is no active maven session
+        When the priority message(s) is(are) added to the maven session
+        Then no priority messages should be displayed at session end

@@ -190,4 +190,10 @@ public class PriorityMessageSteps {
         List<ILoggingEvent> logsList = listAppender.list;
         assertEquals(0, logsList.size());
     }
+
+    @Given("^there is no active maven session$")
+    public void there_is_no_active_maven_session() throws Throwable {
+        this.session = null;
+        this.priorityMessageService = new PriorityMessageService(this.session);
+    }
 }

@@ -54,6 +54,8 @@ public class PriorityMessageService {
 
         } catch (JsonProcessingException e) {
             logger.error("Unable to set priority message", e);
+        } catch (NullPointerException e) {
+            logger.error("No active Maven session available!", e);
         }
     }
 
@@ -73,6 +75,8 @@ public class PriorityMessageService {
             }
         } catch (JsonProcessingException e) {
             logger.error("Unable to get priority messages", e);
+        } catch (NullPointerException e) {
+            logger.error("No active Maven session available!", e);
         }
         return new ArrayList<PriorityMessage>();
     }

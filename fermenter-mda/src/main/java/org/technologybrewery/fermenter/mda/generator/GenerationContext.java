@@ -2,6 +2,7 @@ package org.technologybrewery.fermenter.mda.generator;
 
 import org.apache.velocity.app.VelocityEngine;
 import org.technologybrewery.fermenter.mda.element.Target;
+import org.technologybrewery.fermenter.mda.metamodel.ModelInstanceRepository;
 import org.technologybrewery.fermenter.mda.reporting.StatisticsService;
 
 import java.io.File;
@@ -31,6 +32,7 @@ public final class GenerationContext {
     private StatisticsService statisticsService;
     private File executionRootDirectory;
     private String rootArtifactId;
+    private ModelInstanceRepository modelInstanceRepository;
 
     public VelocityEngine getEngine() {
         return engine;
@@ -220,5 +222,9 @@ public final class GenerationContext {
     public void setRootArtifactId(String rootArtifactId) {
         this.rootArtifactId = rootArtifactId;
     }
+
+    public ModelInstanceRepository getModelInstanceRepository() { return this.modelInstanceRepository; }
+
+    public void setModelInstanceRepository(ModelInstanceRepository modelInstanceRepository) { this.modelInstanceRepository = modelInstanceRepository; }
     
 }

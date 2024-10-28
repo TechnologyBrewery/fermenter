@@ -142,6 +142,8 @@ public class GenerateSourcesMojo extends AbstractMojo {
     @Parameter(property = "session", required = true, readonly = true)
     protected MavenSession session;
 
+    private ModelInstanceRepository repository;
+
     /**
      * Creates a {@link GenerateSourcesHelper.LoggerDelegate} implementation for use with
      * {@link GenerateSourcesHelper} that delegates to the {@link Log} that has
@@ -233,11 +235,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
         }
 
         try {
-            ModelRepositoryConfiguration config = createMetadataConfiguration();
-            ModelInstanceRepository newRepository = GenerateSourcesHelper.loadMetamodelRepository(config,
-                metadataRepositoryImpl, mavenLoggerDelegate);
-
-            GenerateSourcesHelper.validateMetamodelRepository(newRepository, mavenLoggerDelegate);
+            buildModelInstanceRepository();
         } catch (MalformedURLException | ClassNotFoundException | NoSuchMethodException | InstantiationException
                  | IllegalAccessException | InvocationTargetException e) {
             throw new MojoExecutionException("Could not successfully load metamodel repository", e);
@@ -247,6 +245,27 @@ public class GenerateSourcesMojo extends AbstractMojo {
         engine.setProperty(RuntimeConstants.RESOURCE_LOADERS, "classpath");
         engine.setProperty("resource.loader.classpath.class", ClasspathResourceLoader.class.getName());
         engine.init();
+    }
+
+    /**
+     * Helper method to retrieve and validate the ModelInstanceRepository implementation class.
+     *
+     * @throws MalformedURLException
+     * @throws ClassNotFoundException
+     * @throws InvocationTargetException
+     * @throws NoSuchMethodException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     */
+    protected void buildModelInstanceRepository() throws MalformedURLException, ClassNotFoundException,
+        InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+
+        ModelRepositoryConfiguration config = createMetadataConfiguration();
+        ModelInstanceRepository newRepository = GenerateSourcesHelper.loadMetamodelRepository(config,
+            metadataRepositoryImpl, mavenLoggerDelegate);
+
+        GenerateSourcesHelper.validateMetamodelRepository(newRepository, mavenLoggerDelegate);
+        repository = newRepository;
     }
 
 
@@ -477,6 +496,7 @@ public class GenerateSourcesMojo extends AbstractMojo {
      */
     protected GenerationContext createGenerationContext(Target target) {
         GenerationContext context = new GenerationContext(target);
+        context.setModelInstanceRepository(repository);
         context.setStatisticsService(statisticsService);
         context.setBasePackage(basePackage);
         context.setProjectDirectory(project.getBasedir());

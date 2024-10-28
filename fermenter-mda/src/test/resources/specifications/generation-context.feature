@@ -10,3 +10,8 @@ Feature: Expose project data to generation context
         Given generation in a Maven submodule
         When the generation context is created
         Then access to the root module's artifact ID is available
+
+    Scenario: The Model Instance Repository implementation is available to generators
+        Given generation in a Maven submodule
+        When the generation context is created
+        Then access to the model instance repository implementation is available

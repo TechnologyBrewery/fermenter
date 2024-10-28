@@ -41,6 +41,7 @@ public class GenerationContextSteps {
         generateSourcesMojo = (GenerateSourcesMojo) mojoTestCase.lookupConfiguredMojo(new File(mavenProjectBaseDir, "pom.xml"), "generate-sources");
         generateSourcesMojo.updateMojoConfigsBasedOnLanguage();
         generateSourcesMojo.validateMojoConfigs();
+        generateSourcesMojo.buildModelInstanceRepository();
     }
 
     @When("the generation context is created")
@@ -57,5 +58,10 @@ public class GenerationContextSteps {
     @Then("access to the root module's artifact ID is available")
     public void access_to_the_root_module_s_artifact_ID_is_available() throws Throwable {
         assertEquals(context.getRootArtifactId(),"java-default-config");
+    }
+
+    @Then("access to the model instance repository implementation is available")
+    public void access_to_the_model_instance_repository_implementation_is_available() throws Throwable {
+        assertNotNull(context.getModelInstanceRepository());
     }
 }

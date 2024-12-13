@@ -62,6 +62,27 @@ public class MetadataRepositoryManagerTest {
     }
 
     @Test
+    public void testMetadataRepositoryExtension() {
+        // Set the repository to the lowest subclass
+        TestMetadataRepository testRepositoryExtensionB = new TestMetadataRepositoryExtensionB(null);
+        ModelInstanceRepositoryManager.setRepository(testRepositoryExtensionB);
+
+        // Get the repository extension with its superclass references
+        TestMetadataRepository managedTestRespository = ModelInstanceRepositoryManager
+                .getMetamodelRepository(TestMetadataRepository.class);
+        assertEquals(testRepositoryExtensionB, managedTestRespository);
+
+        managedTestRespository = ModelInstanceRepositoryManager
+                .getMetamodelRepository(TestMetadataRepositoryExtensionA.class);
+        assertEquals(testRepositoryExtensionB, managedTestRespository);
+
+        // Get the repository extension with its current class reference
+        managedTestRespository = ModelInstanceRepositoryManager
+                .getMetamodelRepository(TestMetadataRepositoryExtensionB.class);
+        assertEquals(testRepositoryExtensionB, managedTestRespository);
+    }
+
+    @Test
     public void testClearMetadataReposistoryManager() {
         setNewDefaultMetadataRepository();
 
@@ -105,4 +126,22 @@ class TestMetadataRepository extends AbstractModelInstanceRepository {
 
     }
 
+}
+
+/**
+ * Used for testing only.
+ */
+class TestMetadataRepositoryExtensionA extends TestMetadataRepository {
+    public TestMetadataRepositoryExtensionA(ModelRepositoryConfiguration config) {
+        super(config);
+    }
+}
+
+/**
+ * Used for testing only.
+ */
+class TestMetadataRepositoryExtensionB extends TestMetadataRepositoryExtensionA {
+    public TestMetadataRepositoryExtensionB(ModelRepositoryConfiguration config) {
+        super(config);
+    }
 }

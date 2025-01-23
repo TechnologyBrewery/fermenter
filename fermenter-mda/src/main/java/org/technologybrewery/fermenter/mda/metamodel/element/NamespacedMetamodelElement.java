@@ -2,6 +2,7 @@ package org.technologybrewery.fermenter.mda.metamodel.element;
 
 import java.util.Objects;
 
+import org.apache.commons.lang3.StringUtils;
 import org.technologybrewery.fermenter.mda.element.ValidatedElement;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -80,5 +81,13 @@ public abstract class NamespacedMetamodelElement extends MetamodelElement
 	public String toString() {
 		return MoreObjects.toStringHelper(this).add(PACKAGE, getPackage()).add(NAME, name).toString();
 	}
+
+    @Override
+    public void validate() {
+        super.validate();
+        if (StringUtils.isBlank(getPackage())) {
+            messageTracker.addErrorMessage("Package is a required attribute!");
+        }
+    }
 
 }

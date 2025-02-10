@@ -143,6 +143,30 @@
                         </systemPropertyVariables>
                     </configuration>
                 </plugin>
+                <plugin>
+                    <groupId>net.masterthought</groupId>
+                    <artifactId>maven-cucumber-reporting</artifactId>
+                    <version>5.8.5</version>
+                    <executions>
+                        <execution>
+                            <id>execution</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>generate</goal>
+                            </goals>
+                            <configuration>
+                                <projectName>fermenter</projectName>
+                                <outputDirectory>${project.build.directory}/cucumber-html-reports</outputDirectory>
+                                <inputDirectory>${project.build.directory}/cucumber-reports</inputDirectory>
+                                <jsonFiles>
+                                    <param>cucumber.json</param>
+                                </jsonFiles>
+                                <checkBuildResult>true</checkBuildResult>
+                                <treatUndefinedAsFailed>true</treatUndefinedAsFailed>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>

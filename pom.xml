@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.technologybrewery</groupId>
         <artifactId>parent</artifactId>
-        <version>10</version>
+        <version>14</version>
     </parent>
 
     <groupId>org.technologybrewery.fermenter</groupId>
@@ -180,11 +180,6 @@
                         -->
                     <release>11</release>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <extensions>true</extensions>
             </plugin>
         </plugins>
     </build>

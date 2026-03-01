@@ -13,7 +13,7 @@
     <packaging>maven-plugin</packaging>
 
     <properties>
-        <version.jackson>2.19.1</version.jackson>
+        <version.jackson>2.21.1</version.jackson>
         <version.maven.core>3.8.6</version.maven.core>
         <version.maven.plugin.tools>3.13.1</version.maven.plugin.tools>
         <version.logback>1.5.18</version.logback>
